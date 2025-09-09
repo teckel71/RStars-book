@@ -1,0 +1,1870 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 4 Estadística descriptiva. | Técnicas de Análisis de Datos Económicos con R</title>
+  <meta name="description" content="Libro de análisis de datos económicos." />
+  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 4 Estadística descriptiva. | Técnicas de Análisis de Datos Económicos con R" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://bookdown.org/teckel71/book/figuras/Portada_v2.PNG" />
+  <meta property="og:description" content="Libro de análisis de datos económicos." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 4 Estadística descriptiva. | Técnicas de Análisis de Datos Económicos con R" />
+  
+  <meta name="twitter:description" content="Libro de análisis de datos económicos." />
+  <meta name="twitter:image" content="https://bookdown.org/teckel71/book/figuras/Portada_v2.PNG" />
+
+<meta name="author" content="" />
+
+
+<meta name="date" content="2025-01-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="gráficos..html"/>
+<link rel="next" href="análisis-previo-de-datos..html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Técnicas de Análisis de Datos Económicos con R</a></li>
+
+<li class="divider"></li>
+<li><a href="index.html#section" id="toc-section"></a></li>
+<li class="chapter" data-level="" data-path="prefacio.html"><a href="prefacio.html"><i class="fa fa-check"></i>Prefacio</a></li>
+<li class="chapter" data-level="1" data-path="introducción..html"><a href="introducción..html"><i class="fa fa-check"></i><b>1</b> Introducción.</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introducción..html"><a href="introducción..html#llámalo-estadística."><i class="fa fa-check"></i><b>1.1</b> Llámalo Estadística.</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="introducción..html"><a href="introducción..html#concepto-de-estadística."><i class="fa fa-check"></i><b>1.1.1</b> Concepto de Estadística.</a></li>
+<li class="chapter" data-level="1.1.2" data-path="introducción..html"><a href="introducción..html#el-método-estadístico."><i class="fa fa-check"></i><b>1.1.2</b> El método estadístico.</a></li>
+<li class="chapter" data-level="1.1.3" data-path="introducción..html"><a href="introducción..html#economía-y-estadística."><i class="fa fa-check"></i><b>1.1.3</b> Economía y Estadística.</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="introducción..html"><a href="introducción..html#qué-es-r-y-cómo-nos-ayuda-a-analizar-datos-desde-el-punto-de-vista-estadístico"><i class="fa fa-check"></i><b>1.2</b> ¿Qué es R y cómo nos ayuda a analizar datos desde el punto de vista estadístico?</a></li>
+<li class="chapter" data-level="1.3" data-path="introducción..html"><a href="introducción..html#instalación-de-r-y-r-studio."><i class="fa fa-check"></i><b>1.3</b> Instalación de R y R-Studio.</a></li>
+<li class="chapter" data-level="1.4" data-path="introducción..html"><a href="introducción..html#r-y-rstudio.-comienzo-proyectos."><i class="fa fa-check"></i><b>1.4</b> R y RStudio. Comienzo: Proyectos.</a></li>
+<li class="chapter" data-level="1.5" data-path="introducción..html"><a href="introducción..html#scripts."><i class="fa fa-check"></i><b>1.5</b> Scripts.</a></li>
+<li class="chapter" data-level="1.6" data-path="introducción..html"><a href="introducción..html#funciones."><i class="fa fa-check"></i><b>1.6</b> Funciones.</a></li>
+<li class="chapter" data-level="1.7" data-path="introducción..html"><a href="introducción..html#paquetes-packages."><i class="fa fa-check"></i><b>1.7</b> Paquetes (packages).</a></li>
+<li class="chapter" data-level="1.8" data-path="introducción..html"><a href="introducción..html#help-sistema-de-ayuda."><i class="fa fa-check"></i><b>1.8</b> Help! (sistema de ayuda).</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html"><i class="fa fa-check"></i><b>2</b> Almacenando y manipulando datos.</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#objetos.-datos."><i class="fa fa-check"></i><b>2.1</b> Objetos. Datos.</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#vectores."><i class="fa fa-check"></i><b>2.1.1</b> Vectores.</a></li>
+<li class="chapter" data-level="2.1.2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#matrices."><i class="fa fa-check"></i><b>2.1.2</b> Matrices.</a></li>
+<li class="chapter" data-level="2.1.3" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#data-frames."><i class="fa fa-check"></i><b>2.1.3</b> Data frames.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#importando-datos."><i class="fa fa-check"></i><b>2.2</b> Importando datos.</a></li>
+<li class="chapter" data-level="2.3" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#dplyr."><i class="fa fa-check"></i><b>2.3</b> {dplyr}.</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#el-tidyverse.-cargando-dplyr."><i class="fa fa-check"></i><b>2.3.1</b> El Tidyverse. Cargando {dplyr}.</a></li>
+<li class="chapter" data-level="2.3.2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#seleccionando-columnas-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.2</b> Seleccionando columnas de un data frame.</a></li>
+<li class="chapter" data-level="2.3.3" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#seleccionando-casos-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.3</b> Seleccionando casos de un <em>data frame</em>.</a></li>
+<li class="chapter" data-level="2.3.4" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#ordenando-casos-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.4</b> Ordenando casos de un <em>data frame</em>.</a></li>
+<li class="chapter" data-level="2.3.5" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#cambiando-el-nombre-de-las-variables-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.5</b> Cambiando el nombre de las variables de un <em>data frame</em>.</a></li>
+<li class="chapter" data-level="2.3.6" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#añadiendo-variables-como-transformación-de-otras-variables-en-un-data-frame."><i class="fa fa-check"></i><b>2.3.6</b> <strong>Añadiendo variables como transformación de otras variables en un <em>data frame</em>.</strong></a></li>
+<li class="chapter" data-level="2.3.7" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#extrayendo-y-sintetizando-información-de-las-variables-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.7</b> Extrayendo y sintetizando información de las variables de un <em>data frame</em>.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#exportando-datos."><i class="fa fa-check"></i><b>2.4</b> Exportando datos.</a></li>
+<li class="chapter" data-level="2.5" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#materiales-para-realizar-las-prácticas-del-capítulo."><i class="fa fa-check"></i><b>2.5</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="gráficos..html"><a href="gráficos..html"><i class="fa fa-check"></i><b>3</b> Gráficos.</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="gráficos..html"><a href="gráficos..html#tidyverse-para-gráficos-ggplot2."><i class="fa fa-check"></i><b>3.1</b> Tidyverse para gráficos: ggplot2.</a></li>
+<li class="chapter" data-level="3.2" data-path="gráficos..html"><a href="gráficos..html#gráficos-de-una-variable-histogramas-gráficos-de-densidad-gráficos-de-caja-o-boxplots."><i class="fa fa-check"></i><b>3.2</b> Gráficos de una variable: histogramas, gráficos de densidad, gráficos de caja o <em>boxplots</em>.</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="gráficos..html"><a href="gráficos..html#histograma."><i class="fa fa-check"></i><b>3.2.1</b> Histograma.</a></li>
+<li class="chapter" data-level="3.2.2" data-path="gráficos..html"><a href="gráficos..html#gráfico-de-densidad."><i class="fa fa-check"></i><b>3.2.2</b> Gráfico de densidad.</a></li>
+<li class="chapter" data-level="3.2.3" data-path="gráficos..html"><a href="gráficos..html#gráfico-de-caja-o-box-plot."><i class="fa fa-check"></i><b>3.2.3</b> Gráfico de caja o <em>Box-Plot</em>.</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="gráficos..html"><a href="gráficos..html#gráficos-de-dos-variables."><i class="fa fa-check"></i><b>3.3</b> Gráficos de dos variables.</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="gráficos..html"><a href="gráficos..html#gráfico-de-dispersión-o-scatterplot."><i class="fa fa-check"></i><b>3.3.1</b> Gráfico de dispersión o <em>scatterplot</em>.</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="gráficos..html"><a href="gráficos..html#materiales-para-realizar-las-prácticas-del-capítulo.-1"><i class="fa fa-check"></i><b>3.4</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html"><i class="fa fa-check"></i><b>4</b> Estadística descriptiva.</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#análisis-univariante."><i class="fa fa-check"></i><b>4.1</b> Análisis univariante.</a></li>
+<li class="chapter" data-level="4.2" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#representando-datos-y-distribuciones-de-frecuencias-en-tablas-con-r."><i class="fa fa-check"></i><b>4.2</b> Representando datos y distribuciones de frecuencias en tablas con R.</a></li>
+<li class="chapter" data-level="4.3" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#medidas-de-posición."><i class="fa fa-check"></i><b>4.3</b> Medidas de posición.</a></li>
+<li class="chapter" data-level="4.4" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#medidas-de-dispersión-o-variabilidad."><i class="fa fa-check"></i><b>4.4</b> Medidas de dispersión o variabilidad.</a></li>
+<li class="chapter" data-level="4.5" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#medidas-de-forma."><i class="fa fa-check"></i><b>4.5</b> Medidas de forma.</a></li>
+<li class="chapter" data-level="4.6" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#materiales-para-realizar-las-prácticas-del-capítulo.-2"><i class="fa fa-check"></i><b>4.6</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html"><i class="fa fa-check"></i><b>5</b> Análisis previo de datos.</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#introducción.-1"><i class="fa fa-check"></i><b>5.1</b> Introducción.</a></li>
+<li class="chapter" data-level="5.2" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#análisis-de-una-variable."><i class="fa fa-check"></i><b>5.2</b> Análisis de una variable.</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#buscando-missing-values-y-outliers."><i class="fa fa-check"></i><b>5.2.1</b> Buscando <em>missing values</em> y <em>outliers</em>.</a></li>
+<li class="chapter" data-level="5.2.2" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#descripción-de-una-variable."><i class="fa fa-check"></i><b>5.2.2</b> Descripción de una variable.</a></li>
+<li class="chapter" data-level="5.2.3" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#normalidad."><i class="fa fa-check"></i><b>5.2.3</b> Normalidad.</a></li>
+<li class="chapter" data-level="5.2.4" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#resumen-los-4-gráficos-básicos-en-la-descripción-de-una-variable."><i class="fa fa-check"></i><b>5.2.4</b> Resumen: los 4 gráficos básicos en la descripción de una variable.</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#análisis-de-múltiples-variables."><i class="fa fa-check"></i><b>5.3</b> Análisis de múltiples variables.</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#localización-de-missing-values-y-outliers."><i class="fa fa-check"></i><b>5.3.1</b> Localización de <em>missing values</em> y <em>outliers</em>.</a></li>
+<li class="chapter" data-level="5.3.2" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#correlación-entre-variables."><i class="fa fa-check"></i><b>5.3.2</b> Correlación entre variables.</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#materiales-para-realizar-las-prácticas-del-capítulo.-3"><i class="fa fa-check"></i><b>5.4</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="componentes-principales..html"><a href="componentes-principales..html"><i class="fa fa-check"></i><b>6</b> Componentes principales.</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="componentes-principales..html"><a href="componentes-principales..html#introducción.-2"><i class="fa fa-check"></i><b>6.1</b> Introducción.</a></li>
+<li class="chapter" data-level="6.2" data-path="componentes-principales..html"><a href="componentes-principales..html#información-y-varianza."><i class="fa fa-check"></i><b>6.2</b> Información y varianza.</a></li>
+<li class="chapter" data-level="6.3" data-path="componentes-principales..html"><a href="componentes-principales..html#cálculo-de-componentes."><i class="fa fa-check"></i><b>6.3</b> Cálculo de componentes.</a></li>
+<li class="chapter" data-level="6.4" data-path="componentes-principales..html"><a href="componentes-principales..html#retención-de-componentes-principales."><i class="fa fa-check"></i><b>6.4</b> Retención de componentes principales.</a></li>
+<li class="chapter" data-level="6.5" data-path="componentes-principales..html"><a href="componentes-principales..html#puntuaciones-de-los-casos-scores"><i class="fa fa-check"></i><b>6.5</b> Puntuaciones de los casos (scores)</a></li>
+<li class="chapter" data-level="6.6" data-path="componentes-principales..html"><a href="componentes-principales..html#materiales-para-realizar-las-prácticas-del-capítulo.-4"><i class="fa fa-check"></i><b>6.6</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="análisis-clúster..html"><a href="análisis-clúster..html"><i class="fa fa-check"></i><b>7</b> Análisis Clúster.</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="análisis-clúster..html"><a href="análisis-clúster..html#introducción.-3"><i class="fa fa-check"></i><b>7.1</b> Introducción.</a></li>
+<li class="chapter" data-level="7.2" data-path="análisis-clúster..html"><a href="análisis-clúster..html#métodos-de-agrupación-jerárquicos."><i class="fa fa-check"></i><b>7.2</b> Métodos de agrupación jerárquicos.</a></li>
+<li class="chapter" data-level="7.3" data-path="análisis-clúster..html"><a href="análisis-clúster..html#métodos-de-agrupación-no-jerárquicos."><i class="fa fa-check"></i><b>7.3</b> Métodos de agrupación no-jerárquicos.</a></li>
+<li class="chapter" data-level="7.4" data-path="análisis-clúster..html"><a href="análisis-clúster..html#materiales-para-realizar-las-prácticas-del-capítulo.-5"><i class="fa fa-check"></i><b>7.4</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html"><i class="fa fa-check"></i><b>8</b> Análisis de la varianza.</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#introducción.-4"><i class="fa fa-check"></i><b>8.1</b> Introducción.</a></li>
+<li class="chapter" data-level="8.2" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#anova-de-un-solo-factor."><i class="fa fa-check"></i><b>8.2</b> ANOVA de un solo factor.</a></li>
+<li class="chapter" data-level="8.3" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#comparaciones-múltiples."><i class="fa fa-check"></i><b>8.3</b> Comparaciones múltiples.</a></li>
+<li class="chapter" data-level="8.4" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#y-si-no-se-cumplen-las-condiciones-para-realizar-el-contraste-f-de-anova"><i class="fa fa-check"></i><b>8.4</b> ¿Y si no se cumplen las condiciones para realizar el contraste F de ANOVA?</a></li>
+<li class="chapter" data-level="8.5" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#materiales-para-realizar-las-prácticas-del-capítulo.-6"><i class="fa fa-check"></i><b>8.5</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html"><i class="fa fa-check"></i><b>9</b> Análisis de Regresión Lineal Múltiple.</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html#introducción.-5"><i class="fa fa-check"></i><b>9.1</b> Introducción.</a></li>
+<li class="chapter" data-level="9.2" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html#especificación-del-mbr.-datos-de-corte-transversal."><i class="fa fa-check"></i><b>9.2</b> Especificación del MBR. Datos de corte transversal.</a></li>
+<li class="chapter" data-level="9.3" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html#materiales-para-realizar-las-prácticas-del-capítulo.-7"><i class="fa fa-check"></i><b>9.3</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html"><i class="fa fa-check"></i><b>10</b> Análisis de Datos Cualitativos.</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#introducción.-6"><i class="fa fa-check"></i><b>10.1</b> Introducción.</a></li>
+<li class="chapter" data-level="10.2" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#tablas-de-contingencia-y-asociación-entre-dos-atributos-o-factores."><i class="fa fa-check"></i><b>10.2</b> Tablas de contingencia, y asociación entre dos atributos o factores.</a></li>
+<li class="chapter" data-level="10.3" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#análisis-de-correspondencias."><i class="fa fa-check"></i><b>10.3</b> Análisis de correspondencias.</a></li>
+<li class="chapter" data-level="10.4" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#modelos-logaritmico-lineales-aplicados-a-tablas-de-contingencia."><i class="fa fa-check"></i><b>10.4</b> Modelos logaritmico-lineales aplicados a tablas de contingencia.</a></li>
+<li class="chapter" data-level="10.5" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#materiales-para-realizar-las-prácticas-del-capítulo.-8"><i class="fa fa-check"></i><b>10.5</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="bibliografía.html"><a href="bibliografía.html"><i class="fa fa-check"></i>Bibliografía</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Técnicas de Análisis de Datos Económicos con R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="estadística-descriptiva." class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Capítulo 4</span> Estadística descriptiva.<a href="estadística-descriptiva..html#estadística-descriptiva." class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>La Estadística Descriptiva es la parte de la Ciencia Estadística que se ocupa de la recopilación de datos, su depuración, y la caracterización mediante dichos datos de un conjunto de casos o individuos.</p>
+<p>Los datos se organizan en variables y/o atributos.</p>
+<p>Las <strong>variables</strong> son características de los casos o individuos en estudio que se plasman en valores que están expresados en <strong>escala métrica</strong>.
+Los <strong>atributos</strong> son características de los casos o individuos en estudio que se concretan en diversas categorías (si el atributo tiene <strong>escala nominal</strong>) o niveles (si el atributo tiene <strong>escala ordinal</strong>).
+Los atributos se denominan también variables cualitativas o factores.</p>
+<p>Centrándonos en las variables (características que afectan a un grupo de casos o individuos, y que se concretan en valores que poseen una escala métrica), podemos plantearnos el estudio de una única variable sin tener en cuenta la existencia de otras variables que caracterizan al mismo grupo de casos o individuos.
+En tal caso estaremos planteando un <strong>análisis estadístico univariante</strong>.
+Si nuestro análisis se centra en cómo dos variables caracterizan al mismo conjunto de individuos o casos, y la posible relación entre ambas, estaremos planteando un análisis bivariante.
+Generalizando, si estudiamos cómo un grupo de variables caracterizan de modo conjunto a un mismo grupo de casos o individuos, estaremos planteando un <strong>análisis estadístico multivariante</strong>.</p>
+<div id="análisis-univariante." class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Análisis univariante.<a href="estadística-descriptiva..html#análisis-univariante." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En el análisis estadístico univariante, estudiamos cómo una única característica (nos centraremos en una variable, aunque también puede tratarse de un atributo) afecta a un grupo de casos, individuos o elementos.
+Por ejemplo, la variable podría ser el salario percibido por un grupo de individuos que podría ser el conjunto de trabajadores en nómina en una empresa.
+Otro ejemplo podría ser el de la (variable) rentabilidad económica obtenida por un grupo de empresas pertenecientes a un determinado sector económico.</p>
+<p>El conjunto de pares formado por cada valor que puede tomar la variable en estudio (o categoría o nivel, en el caso de un atributo) y el número de casos que toman tal valor se denomina <strong>distribución de frecuencias</strong> de la variable.</p>
+<p>¿Cómo podemos estudiar el modo en que afecta una variable, de modo global, a un grupo de casos?
+Mediante el cálculo de una serie de <strong>medidas</strong>.
+Las medidas son instrumentos matemáticos que extraen y sintetizan la información contenida en una distribución de frecuencias.</p>
+<p>Hay diferentes tipos de medidas, principalmente las de <strong>posición</strong>, <strong>dispersión</strong> y <strong>forma</strong>.</p>
+<p>Antes de profundizar en las principales medidas, su significado y su obtención; vamos a indicar cómo se pueden presentar en R, mediante la creación de tablas, los datos referentes a un grupo de individuos y las variables o atributos que los caracterizan, y las distribuciones de frecuencias univariantes.</p>
+</div>
+<div id="representando-datos-y-distribuciones-de-frecuencias-en-tablas-con-r." class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Representando datos y distribuciones de frecuencias en tablas con R.<a href="estadística-descriptiva..html#representando-datos-y-distribuciones-de-frecuencias-en-tablas-con-r." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Para aprender a representar los datos referentes a las variables y atributos que caracterizan a un grupo de casos o individuos, y las distribuciones de frecuencias univariantes, vamos a suponer que trabajamos dentro de un proyecto que hemos creado previamente, de nombre “explora”.
+Dentro de la carpeta del proyecto guardaremos el <em>script</em> llamado “<a href="https://drive.google.com/file/d/1pfyGPGQRmgOyo9wrZ7fr_KAFj49ecXID/view?usp=sharing">explora_trabajadores.R</a>” y el archivo de <em>Microsoft® Excel®</em> llamado “<a href="https://docs.google.com/spreadsheets/d/1e_h8P_0sBuD5Nvw6nkeWtXXeiqItFfdI/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">trabajadores.xlsx</a>”.</p>
+<p>Las primeras líneas del script se refieren, como ya hemos visto en otras secciones del libro, a la limpieza de la memoria o environment, eliminando objetos que se hayan podido crear con anterioridad, y en la importación de los datos que hay en la hoja “Datos” de “trabajadores.xlsx”.
+Estos datos se almacenan en el <em>data frame</em> “datos”, y consisten en el registro del salario (variable SALARIO, expresada en cientos de euros), el nivel de estudios (atributo NESTUDIOS) y departamento al que se pertenece (atributo DEP), correspondientes a los 49 trabajadores de una determinada empresa:</p>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="estadística-descriptiva..html#cb133-1" tabindex="-1"></a><span class="co"># Script para la construcción de tablas de datos </span></span>
+<span id="cb133-2"><a href="estadística-descriptiva..html#cb133-2" tabindex="-1"></a><span class="co"># y trabajo con distribucionesde frecuencias univariantes.</span></span>
+<span id="cb133-3"><a href="estadística-descriptiva..html#cb133-3" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb133-4"><a href="estadística-descriptiva..html#cb133-4" tabindex="-1"></a></span>
+<span id="cb133-5"><a href="estadística-descriptiva..html#cb133-5" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb133-6"><a href="estadística-descriptiva..html#cb133-6" tabindex="-1"></a></span>
+<span id="cb133-7"><a href="estadística-descriptiva..html#cb133-7" tabindex="-1"></a><span class="do">## DATOS</span></span>
+<span id="cb133-8"><a href="estadística-descriptiva..html#cb133-8" tabindex="-1"></a></span>
+<span id="cb133-9"><a href="estadística-descriptiva..html#cb133-9" tabindex="-1"></a><span class="co"># Importando</span></span>
+<span id="cb133-10"><a href="estadística-descriptiva..html#cb133-10" tabindex="-1"></a></span>
+<span id="cb133-11"><a href="estadística-descriptiva..html#cb133-11" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb133-12"><a href="estadística-descriptiva..html#cb133-12" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;trabajadores.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;Datos&quot;</span>)</span></code></pre></div>
+<p>Como sabemos, R interpreta el nombre de los trabajadores como una variable más, en lugar de como la identificador de cada “fila” o caso.
+Para corregir esto, y hacer saber a R que la primera columna no es una variable, sino el nombre de cada fila (caso, en este caso trabajador), añadimos la línea:</p>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="estadística-descriptiva..html#cb134-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(datos, <span class="at">row.names =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p>Posteriormente, podremos comprobar que “datos” contiene el valor del salario, el nivel de estudios y la categoría de departamento para cada uno de los 49 trabajadores de la empresa:</p>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb135-1"><a href="estadística-descriptiva..html#cb135-1" tabindex="-1"></a><span class="fu">summary</span> (datos)</span></code></pre></div>
+<pre><code>##     SALARIO       NESTUDIOS             DEP           
+##  Min.   : 8.00   Length:49          Length:49         
+##  1st Qu.:12.00   Class :character   Class :character  
+##  Median :15.00   Mode  :character   Mode  :character  
+##  Mean   :16.04                                        
+##  3rd Qu.:20.00                                        
+##  Max.   :30.00</code></pre>
+<p>Sabemos que, simplemente escribiendo el nombre del <em>data frame</em>, aparecerán en la consola los datos almacenados en él.
+No obstante, esta presentación no es muy elegante para presentar los datos.
+Vamos a presentar tales datos de un modo más amigable, mediante la <strong>confección de una “tabla”</strong>.</p>
+<p>Un paquete de R muy popular para generar tablas de datos es <code>{knitr}</code>.
+Este paquete contiene la función <code>kable()</code>, que permite generar tablas en varios formatos y con diversas características que pueden ser personalizadas (como el título de la tabla).
+Si queremos personalizar más aún la apariencia de nuestras tablas, podemos usar las facilidades del paquete <code>{kableExtra}</code>, que complementa las posibilidades que ofrece la función <code>kable()</code> de <code>{knitr}</code>.</p>
+<p>Para hacer una tabla con nuestros casos y variables, es decir, para escribir nuestro <em>data frame</em> “datos” de un modo más elegante, primero activaremos los paquetes anteriores, y añadiremos una línea donde diremos el formato de la tabla a generar (en nuestro ejemplo, formato .html), todo con el siguiente código:</p>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="estadística-descriptiva..html#cb137-1" tabindex="-1"></a><span class="co"># Tabla de datos</span></span>
+<span id="cb137-2"><a href="estadística-descriptiva..html#cb137-2" tabindex="-1"></a></span>
+<span id="cb137-3"><a href="estadística-descriptiva..html#cb137-3" tabindex="-1"></a><span class="fu">library</span> (knitr)</span>
+<span id="cb137-4"><a href="estadística-descriptiva..html#cb137-4" tabindex="-1"></a><span class="fu">library</span> (kableExtra)</span></code></pre></div>
+<p>Después, generaremos nuestra tabla con los datos contenidos en el <em>data frame</em> “datos”.
+El código para generar la tabla, y el resultado, es el siguiente:</p>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="estadística-descriptiva..html#cb138-1" tabindex="-1"></a>    knitr.table.format <span class="ot">=</span> <span class="st">&quot;html&quot;</span></span>
+<span id="cb138-2"><a href="estadística-descriptiva..html#cb138-2" tabindex="-1"></a>    datos <span class="sc">%&gt;%</span></span>
+<span id="cb138-3"><a href="estadística-descriptiva..html#cb138-3" tabindex="-1"></a>        <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Trabajadores asalariados de la empresa&quot;</span>,</span>
+<span id="cb138-4"><a href="estadística-descriptiva..html#cb138-4" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Trabajador&quot;</span>, <span class="st">&quot;Salario&quot;</span>, <span class="st">&quot;Nivel de estudios&quot;</span>,</span>
+<span id="cb138-5"><a href="estadística-descriptiva..html#cb138-5" tabindex="-1"></a>                      <span class="st">&quot;Departamento&quot;</span>))  <span class="sc">%&gt;%</span></span>
+<span id="cb138-6"><a href="estadística-descriptiva..html#cb138-6" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F, <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="st">&quot;bordered&quot;</span>,</span>
+<span id="cb138-7"><a href="estadística-descriptiva..html#cb138-7" tabindex="-1"></a>                <span class="st">&quot;condensed&quot;</span>, <span class="at">position =</span> <span class="st">&quot;center&quot;</span>, <span class="at">font_size =</span> <span class="dv">11</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb138-8"><a href="estadística-descriptiva..html#cb138-8" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold=</span> T, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb138-9"><a href="estadística-descriptiva..html#cb138-9" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(datos)), <span class="at">bold=</span> F, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>)</span></code></pre></div>
+<table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-113">Table 4.1: </span><span id="tab:unnamed-chunk-113">Table 4.2: </span>Trabajadores asalariados de la empresa
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Trabajador
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Salario
+</th>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Nivel de estudios
+</th>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Departamento
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;">
+Andrés
+</td>
+<td style="text-align:right;text-align: center;">
+8
+</td>
+<td style="text-align:left;text-align: center;">
+Básicos
+</td>
+<td style="text-align:left;text-align: center;">
+Almacén
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Ángela
+</td>
+<td style="text-align:right;text-align: center;">
+8
+</td>
+<td style="text-align:left;text-align: center;">
+Medios
+</td>
+<td style="text-align:left;text-align: center;">
+Almacén
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Miguel
+</td>
+<td style="text-align:right;text-align: center;">
+9
+</td>
+<td style="text-align:left;text-align: center;">
+Básicos
+</td>
+<td style="text-align:left;text-align: center;">
+Almacén
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Luis
+</td>
+<td style="text-align:right;text-align: center;">
+9
+</td>
+<td style="text-align:left;text-align: center;">
+Básicos
+</td>
+<td style="text-align:left;text-align: center;">
+Almacén
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+María
+</td>
+<td style="text-align:right;text-align: center;">
+9
+</td>
+<td style="text-align:left;text-align: center;">
+Medios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Interna
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Lourdes
+</td>
+<td style="text-align:right;text-align: center;">
+10
+</td>
+<td style="text-align:left;text-align: center;">
+Medios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Interna
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Carlos
+</td>
+<td style="text-align:right;text-align: center;">
+10
+</td>
+<td style="text-align:left;text-align: center;">
+Medios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Interna
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Adriana
+</td>
+<td style="text-align:right;text-align: center;">
+10
+</td>
+<td style="text-align:left;text-align: center;">
+Medios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Interna
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Ricardo
+</td>
+<td style="text-align:right;text-align: center;">
+10
+</td>
+<td style="text-align:left;text-align: center;">
+Medios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Proveedores
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Juan José
+</td>
+<td style="text-align:right;text-align: center;">
+10
+</td>
+<td style="text-align:left;text-align: center;">
+Medios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Proveedores
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Daniel
+</td>
+<td style="text-align:right;text-align: center;">
+10
+</td>
+<td style="text-align:left;text-align: center;">
+Medios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Proveedores
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Pedro
+</td>
+<td style="text-align:right;text-align: center;">
+12
+</td>
+<td style="text-align:left;text-align: center;">
+Básicos
+</td>
+<td style="text-align:left;text-align: center;">
+Almacén
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Ana
+</td>
+<td style="text-align:right;text-align: center;">
+12
+</td>
+<td style="text-align:left;text-align: center;">
+Básicos
+</td>
+<td style="text-align:left;text-align: center;">
+Almacén
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Isabel
+</td>
+<td style="text-align:right;text-align: center;">
+12
+</td>
+<td style="text-align:left;text-align: center;">
+Básicos
+</td>
+<td style="text-align:left;text-align: center;">
+Almacén
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Manuel
+</td>
+<td style="text-align:right;text-align: center;">
+12
+</td>
+<td style="text-align:left;text-align: center;">
+Medios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Proveedores
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Isidro
+</td>
+<td style="text-align:right;text-align: center;">
+12
+</td>
+<td style="text-align:left;text-align: center;">
+Medios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Proveedores
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Carla
+</td>
+<td style="text-align:right;text-align: center;">
+12
+</td>
+<td style="text-align:left;text-align: center;">
+Medios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Proveedores
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Fernando
+</td>
+<td style="text-align:right;text-align: center;">
+12
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Clientes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Belén
+</td>
+<td style="text-align:right;text-align: center;">
+12
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Marketing
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Margarita
+</td>
+<td style="text-align:right;text-align: center;">
+15
+</td>
+<td style="text-align:left;text-align: center;">
+Básicos
+</td>
+<td style="text-align:left;text-align: center;">
+Almacén
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Andrea
+</td>
+<td style="text-align:right;text-align: center;">
+15
+</td>
+<td style="text-align:left;text-align: center;">
+Básicos
+</td>
+<td style="text-align:left;text-align: center;">
+Almacén
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Pablo
+</td>
+<td style="text-align:right;text-align: center;">
+15
+</td>
+<td style="text-align:left;text-align: center;">
+Medios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Interna
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Celia
+</td>
+<td style="text-align:right;text-align: center;">
+15
+</td>
+<td style="text-align:left;text-align: center;">
+Medios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Interna
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Alba
+</td>
+<td style="text-align:right;text-align: center;">
+15
+</td>
+<td style="text-align:left;text-align: center;">
+Medios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Interna
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Nicolás
+</td>
+<td style="text-align:right;text-align: center;">
+15
+</td>
+<td style="text-align:left;text-align: center;">
+Medios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Proveedores
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+David
+</td>
+<td style="text-align:right;text-align: center;">
+15
+</td>
+<td style="text-align:left;text-align: center;">
+Medios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Proveedores
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Elena
+</td>
+<td style="text-align:right;text-align: center;">
+15
+</td>
+<td style="text-align:left;text-align: center;">
+Medios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Proveedores
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Victoria
+</td>
+<td style="text-align:right;text-align: center;">
+15
+</td>
+<td style="text-align:left;text-align: center;">
+Medios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Proveedores
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Antonio
+</td>
+<td style="text-align:right;text-align: center;">
+15
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Clientes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Tomás
+</td>
+<td style="text-align:right;text-align: center;">
+15
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Clientes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Bartolomé
+</td>
+<td style="text-align:right;text-align: center;">
+20
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Almacén
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Irene
+</td>
+<td style="text-align:right;text-align: center;">
+20
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Proveedores
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Guadalupe
+</td>
+<td style="text-align:right;text-align: center;">
+20
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Proveedores
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Ignacio
+</td>
+<td style="text-align:right;text-align: center;">
+20
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Proveedores
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Ernesto
+</td>
+<td style="text-align:right;text-align: center;">
+20
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Marketing
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Abel
+</td>
+<td style="text-align:right;text-align: center;">
+20
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Clientes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Nieves
+</td>
+<td style="text-align:right;text-align: center;">
+20
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Clientes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Carolina
+</td>
+<td style="text-align:right;text-align: center;">
+20
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Clientes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Luisa
+</td>
+<td style="text-align:right;text-align: center;">
+22
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Clientes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Alberto
+</td>
+<td style="text-align:right;text-align: center;">
+22
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Marketing
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Paula
+</td>
+<td style="text-align:right;text-align: center;">
+22
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Almacén
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Sergio
+</td>
+<td style="text-align:right;text-align: center;">
+22
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Proveedores
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Estrella
+</td>
+<td style="text-align:right;text-align: center;">
+22
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Gestión Interna
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Alicia
+</td>
+<td style="text-align:right;text-align: center;">
+22
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Coordinación
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Marta
+</td>
+<td style="text-align:right;text-align: center;">
+25
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Dirección
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Alfonso
+</td>
+<td style="text-align:right;text-align: center;">
+25
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Dirección
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Mar
+</td>
+<td style="text-align:right;text-align: center;">
+25
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Dirección
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Martín
+</td>
+<td style="text-align:right;text-align: center;">
+25
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Dirección
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Blanca
+</td>
+<td style="text-align:right;text-align: center;">
+30
+</td>
+<td style="text-align:left;text-align: center;">
+Universitarios
+</td>
+<td style="text-align:left;text-align: center;">
+Dirección
+</td>
+</tr>
+</tbody>
+</table>
+<p>Primero llamamos al <em>data frame</em> a partir de cuyos datos vamos a generar la tabla, “datos”.
+Con el operador <em>pipe</em> <code>%&gt;%</code>, ligamos los datos del <em>data frame</em> al diseño la tabla realizado con la función <code>kable()</code> de <code>{knitr}</code>.
+<code>kable()</code> tiene diversos argumentos, entre los que destacan:</p>
+<ul>
+<li><p><code>caption =</code>: Este argumento informa del título de la tabla.</p></li>
+<li><p><code>col.names =</code>: Este argumento, opcional, fija el nombre para las columnas de la tabla, si no queremos que aparezcan los nombres “por defecto”, que son los nombres de cada columna en el propio <em>data frame</em>.</p></li>
+</ul>
+<p>Luego, con el operador <em>pipe</em> <code>%&gt;%</code> informamos de que vamos a completar o personalizar el diseño de esta tabla con otras funciones complementarias del paquete <code>{kableExtra}</code>.
+En primer lugar, utilizamos la función <code>kable_styling()</code>, que aporta algunas características adicionales a la tabla, según sus argumentos:</p>
+<ul>
+<li><p><code>full_width =</code> : este argumento ha de tener un valor lógico, y se refiere a si deseamos que la tabla ocupe todo el ancho del documento (TRUE) o solo lo necesario (FALSE).</p></li>
+<li><p><code>bootstrap_options =</code> : este argumento es de tipo alfanumérico, y sirve para fijar ciertas características estéticas complementarias.
+“striped” se refiere a que las filas aparezcan sombreadas de modo alternativo, “bordered” se refiere a que cada fila quede delimitada por unas finas líneas en la parte superior y en la inferior, “condensed” significa que la tabla tendrá un aspecto más compacto.</p></li>
+<li><p><code>position =</code> : este argumento se utiliza para situar la tabla centrada, a la izquierda del párrafo, o a la derecha.</p></li>
+<li><p><code>font_size =</code> : este argumento numérico se refiere al tamaño de los caracteres, lo cuál es importante a la hora de que una tabla “quepa” en un documento de deteminada anchura.</p></li>
+</ul>
+<p>Por último, hacemos uso dos veces de la función <code>row_spec()</code> del paquete <code>{kableExtra}</code>.
+Esta función sirve para personalizar algo más las filas concretas de la tabla que consideremos.
+El encabezado se identifica como la fila “0”.
+En el ejemplo, se ha utilizado esta función dos veces: una para el encabezado (el primer argumento de la función nos informa de las filas a las que se refiere, en esta ocasión la fila 0), y otra para el resto de filas (desde la fila 1 hasta la que contiene al último caso individuo, la fila con posición <code>nrow(datos)</code>).
+Los otros argumentos definen si se quiere que los caracteres aparezcan en negrita (<code>bold =</code> ) y cómo deben estar alineados los elementos, dentro de las columnas ( <code>align =</code> ).</p>
+<p>A veces, puede ocurrir que solo nos interese estudiar una variable (columna del data frame).
+Además, esm posible que el conjunto de casos sea muy numeroso, y que, adicionalmente, algunos de los valores de la variable que queremos estudiar estén repetidos para varios casos.
+Cuando esto ocurre, una opción interesante es, en lugar de representar en una tabla todos nuestros datos, <strong>representar la distribución de frecuencias</strong> de la variable (o atributo) que nos interesa.
+Es lo que vamos a hacer a continuación, tomando como variable a analizar la variable SALARIO.</p>
+<p>Lo primero a tener en cuenta es que, en las distribuciones de frecuencias, <strong>los valores de la variable suelen disponerse de menor a mayor</strong>.
+Para ello, previamente vamos a ordenar las filas del <em>data frame</em> “datos” según el valor que toma, en el caso correspondiente, la variable SALARIO y, si existen casos con el mismo valor de SALARIO, los ordenaremos por orden alfabético del nombre del caso (nombre del trabajador, o de la fila del <em>data frame</em>).
+Para realizar este reordenamiento de casos (filas) del <em>data frame</em> de un modo sencillo, vamos a utilizar la función <code>arrange()</code> del paquete <code>{deplyr}</code>:</p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="estadística-descriptiva..html#cb139-1" tabindex="-1"></a><span class="co"># Colocar los datos</span></span>
+<span id="cb139-2"><a href="estadística-descriptiva..html#cb139-2" tabindex="-1"></a></span>
+<span id="cb139-3"><a href="estadística-descriptiva..html#cb139-3" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb139-4"><a href="estadística-descriptiva..html#cb139-4" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(SALARIO, <span class="fu">row.names</span>(datos))</span></code></pre></div>
+<p>Una vez que los casos están ordenados en el data frame de menor a mayor valor de SALARIO, calcularemos, para cada valor del SALARIO, el número de casos que lo poseen, es decir, la frecuencia absoluta de cada valor de la variable SALARIO.
+Para ello, vamos a crear un objeto denominado “conteo” que va a ser de clase “tabla” de la variable SALARIO.
+Todo ello lo realizamos mediante la función <code>table()</code>, como se muestra a continuación:</p>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="estadística-descriptiva..html#cb140-1" tabindex="-1"></a>conteo <span class="ot">&lt;-</span> <span class="fu">table</span>(datos<span class="sc">$</span>SALARIO)</span>
+<span id="cb140-2"><a href="estadística-descriptiva..html#cb140-2" tabindex="-1"></a>conteo</span></code></pre></div>
+<pre><code>## 
+##  8  9 10 12 15 20 22 25 30 
+##  2  3  6  8 11  8  6  4  1</code></pre>
+<p>Al mostrar en la consola el objeto “tabla” conteo, vemos cómo se compone de dos filas de datos.
+La primera se corresponde con los valores que toma la variable SALARIO en los distintos casos, y la segunda es el número de casos (<strong>frecuencia absoluta</strong>) que toma cada valor.
+Es decir, el objeto “tabla” es la distribución de frecuencias de la variable SALARIO.</p>
+<p>Vamos a convertir este objeto “tabla” en un <em>data frame</em>, llamado “conteo_df”, con el objeto de poder representar de un modo más elegante la distribución de frecuencias.
+Para ello, ejecutaremos el código:</p>
+<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="estadística-descriptiva..html#cb142-1" tabindex="-1"></a><span class="co"># Convertir el resultado a un data frame para una mejor visualización</span></span>
+<span id="cb142-2"><a href="estadística-descriptiva..html#cb142-2" tabindex="-1"></a></span>
+<span id="cb142-3"><a href="estadística-descriptiva..html#cb142-3" tabindex="-1"></a>conteo_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(conteo)</span>
+<span id="cb142-4"><a href="estadística-descriptiva..html#cb142-4" tabindex="-1"></a>conteo_df</span></code></pre></div>
+<pre><code>##   Var1 Freq
+## 1    8    2
+## 2    9    3
+## 3   10    6
+## 4   12    8
+## 5   15   11
+## 6   20    8
+## 7   22    6
+## 8   25    4
+## 9   30    1</code></pre>
+<p>Al mostrar en la consola el data frame “conteo_df”, observamos que consta de dos columnas o variables.
+“Var1” recoge los valores que toma la variable SALARIO en el grupo de casos, y “Freq” es el conjunto de frecuencias absolutas de los diferentes valores.
+Para que se entienda mejor qué es cada columna, las renombraremos:</p>
+<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="estadística-descriptiva..html#cb144-1" tabindex="-1"></a><span class="co"># Renombrar las columnas para mayor claridad</span></span>
+<span id="cb144-2"><a href="estadística-descriptiva..html#cb144-2" tabindex="-1"></a></span>
+<span id="cb144-3"><a href="estadística-descriptiva..html#cb144-3" tabindex="-1"></a><span class="fu">colnames</span>(conteo_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Valor&quot;</span>, <span class="st">&quot;Frecuencia&quot;</span>)</span></code></pre></div>
+<p>A continuación, vamos a calcular el resto de frecuencias que suelen calcularse para una variable.
+La <strong>frecuencia total</strong>, N, que es la suma de todas las frecuencias absolutas, es decir, el número total de casos, se puede calcular fácilmente como:</p>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="estadística-descriptiva..html#cb145-1" tabindex="-1"></a><span class="co"># Calcular y guardar la frecuencia total</span></span>
+<span id="cb145-2"><a href="estadística-descriptiva..html#cb145-2" tabindex="-1"></a></span>
+<span id="cb145-3"><a href="estadística-descriptiva..html#cb145-3" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">sum</span>(conteo_df<span class="sc">$</span>Frecuencia)</span></code></pre></div>
+<p>La serie de frecuencias absolutas acumuladas se calcularán del siguiente modo:</p>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="estadística-descriptiva..html#cb146-1" tabindex="-1"></a><span class="co"># Calcular frecuencias absolutas acumuladas</span></span>
+<span id="cb146-2"><a href="estadística-descriptiva..html#cb146-2" tabindex="-1"></a></span>
+<span id="cb146-3"><a href="estadística-descriptiva..html#cb146-3" tabindex="-1"></a>conteo_df<span class="sc">$</span>Frecuencia_acum <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(conteo_df<span class="sc">$</span>Frecuencia)</span></code></pre></div>
+<p>Como sabemos, la última frecuencia absoluta acumulada debe coincidir con la frecuencia total.
+Por último, calcularemos las frecuencias relativas, que son las frecuencias absolutas divididas por la frecuencia total, y recogen la proporción de casos correspondientes al valor de la variable:</p>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="estadística-descriptiva..html#cb147-1" tabindex="-1"></a><span class="co"># Calcular frecuencias relativas</span></span>
+<span id="cb147-2"><a href="estadística-descriptiva..html#cb147-2" tabindex="-1"></a></span>
+<span id="cb147-3"><a href="estadística-descriptiva..html#cb147-3" tabindex="-1"></a>conteo_df<span class="sc">$</span>Frecuencia_R <span class="ot">&lt;-</span> conteo_df<span class="sc">$</span>Frecuencia <span class="sc">/</span> N</span>
+<span id="cb147-4"><a href="estadística-descriptiva..html#cb147-4" tabindex="-1"></a></span>
+<span id="cb147-5"><a href="estadística-descriptiva..html#cb147-5" tabindex="-1"></a><span class="co"># Calcular frecuencias relativas acumuladas</span></span>
+<span id="cb147-6"><a href="estadística-descriptiva..html#cb147-6" tabindex="-1"></a></span>
+<span id="cb147-7"><a href="estadística-descriptiva..html#cb147-7" tabindex="-1"></a>conteo_df<span class="sc">$</span>Frecuencia_R_acum <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(conteo_df<span class="sc">$</span>Frecuencia_R)</span></code></pre></div>
+<p>La suma de las frecuencias relativas es siempre 1 (el 100% de los casos).
+Además, la última frecuencia relativa acumulada siempre es, igualmente, 1.</p>
+<p>Ahora vamos a construir una tabla que recoja la distribución de frecuencias de la variable SALARIO (con los diversos tipos de frecuencias).
+Para ello, simplemente hemos de aplicar al data frame “conteo_df” las funciones <code>kable()</code> del paquete <code>{knitr}</code>, y el resto de funciones auxiliares del paquete <code>{kableExtra}</code>:</p>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="estadística-descriptiva..html#cb148-1" tabindex="-1"></a>conteo_df <span class="sc">%&gt;%</span></span>
+<span id="cb148-2"><a href="estadística-descriptiva..html#cb148-2" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Distribución de frecuencias de los salarios de la empresa&quot;</span>,</span>
+<span id="cb148-3"><a href="estadística-descriptiva..html#cb148-3" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;x(i) = Salario&quot;</span>, <span class="st">&quot;Frecuencia absoluta n(i)&quot;</span>,</span>
+<span id="cb148-4"><a href="estadística-descriptiva..html#cb148-4" tabindex="-1"></a>                      <span class="st">&quot;Frecuencia absoluta acum. N(i)&quot;</span>, <span class="st">&quot;Frecuencia relativa f(i)&quot;</span>,</span>
+<span id="cb148-5"><a href="estadística-descriptiva..html#cb148-5" tabindex="-1"></a>                      <span class="st">&quot;Frecuencia relativa acum. F(i)&quot;</span>),</span>
+<span id="cb148-6"><a href="estadística-descriptiva..html#cb148-6" tabindex="-1"></a>                      <span class="at">format.args =</span> <span class="fu">list</span>(<span class="at">decimal.mark =</span> <span class="st">&quot;.&quot;</span>, <span class="at">digits =</span> <span class="dv">2</span>))  <span class="sc">%&gt;%</span></span>
+<span id="cb148-7"><a href="estadística-descriptiva..html#cb148-7" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F, <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>,</span>
+<span id="cb148-8"><a href="estadística-descriptiva..html#cb148-8" tabindex="-1"></a>                <span class="st">&quot;bordered&quot;</span>, <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb148-9"><a href="estadística-descriptiva..html#cb148-9" tabindex="-1"></a>                <span class="at">position =</span> <span class="st">&quot;center&quot;</span>, <span class="at">font_size =</span> <span class="dv">11</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb148-10"><a href="estadística-descriptiva..html#cb148-10" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold=</span> T, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb148-11"><a href="estadística-descriptiva..html#cb148-11" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(conteo_df)), <span class="at">bold=</span> F, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>)</span></code></pre></div>
+<table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-122">Table 4.3: </span><span id="tab:unnamed-chunk-122">Table 4.4: </span>Distribución de frecuencias de los salarios de la empresa
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+x(i) = Salario
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Frecuencia absoluta n(i)
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Frecuencia absoluta acum. N(i)
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Frecuencia relativa f(i)
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Frecuencia relativa acum. F(i)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;">
+8
+</td>
+<td style="text-align:right;text-align: center;">
+2
+</td>
+<td style="text-align:right;text-align: center;">
+2
+</td>
+<td style="text-align:right;text-align: center;">
+0.04
+</td>
+<td style="text-align:right;text-align: center;">
+0.04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+9
+</td>
+<td style="text-align:right;text-align: center;">
+3
+</td>
+<td style="text-align:right;text-align: center;">
+5
+</td>
+<td style="text-align:right;text-align: center;">
+0.06
+</td>
+<td style="text-align:right;text-align: center;">
+0.10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+10
+</td>
+<td style="text-align:right;text-align: center;">
+6
+</td>
+<td style="text-align:right;text-align: center;">
+11
+</td>
+<td style="text-align:right;text-align: center;">
+0.12
+</td>
+<td style="text-align:right;text-align: center;">
+0.22
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+12
+</td>
+<td style="text-align:right;text-align: center;">
+8
+</td>
+<td style="text-align:right;text-align: center;">
+19
+</td>
+<td style="text-align:right;text-align: center;">
+0.16
+</td>
+<td style="text-align:right;text-align: center;">
+0.39
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+15
+</td>
+<td style="text-align:right;text-align: center;">
+11
+</td>
+<td style="text-align:right;text-align: center;">
+30
+</td>
+<td style="text-align:right;text-align: center;">
+0.22
+</td>
+<td style="text-align:right;text-align: center;">
+0.61
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+20
+</td>
+<td style="text-align:right;text-align: center;">
+8
+</td>
+<td style="text-align:right;text-align: center;">
+38
+</td>
+<td style="text-align:right;text-align: center;">
+0.16
+</td>
+<td style="text-align:right;text-align: center;">
+0.78
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+22
+</td>
+<td style="text-align:right;text-align: center;">
+6
+</td>
+<td style="text-align:right;text-align: center;">
+44
+</td>
+<td style="text-align:right;text-align: center;">
+0.12
+</td>
+<td style="text-align:right;text-align: center;">
+0.90
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+25
+</td>
+<td style="text-align:right;text-align: center;">
+4
+</td>
+<td style="text-align:right;text-align: center;">
+48
+</td>
+<td style="text-align:right;text-align: center;">
+0.08
+</td>
+<td style="text-align:right;text-align: center;">
+0.98
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+30
+</td>
+<td style="text-align:right;text-align: center;">
+1
+</td>
+<td style="text-align:right;text-align: center;">
+49
+</td>
+<td style="text-align:right;text-align: center;">
+0.02
+</td>
+<td style="text-align:right;text-align: center;">
+1.00
+</td>
+</tr>
+</tbody>
+</table>
+<p>Hemos de advertir que en la función <code>kable()</code> se ha insertado un nuevo argumento, <code>format.args =</code> , que es una “lista” que controla aspectos de formato como si los decimales se indican con un punto o una coma, o el número de decimales a mostrar en la tabla.</p>
+<p>Hay ocasiones en las que la cantidad de valores diferentes que toma la variable analizada para los diferentes casos es muy elevado.
+Esto puede deberse, por ejemplo, a que el número de casos es muy elevado, o a que la variable es de naturaleza continua, y puede tomar una gran variedad de posibles valores (incluso infinitos).
+En estos casos, un modo de representar la distribución de frecuencias de la variable en una tabla de dimensión reducida es <strong>agrupando los valores en intervalos</strong>.
+Esto es lo que vamos a hacer ahora con la variable SALARIO.</p>
+<p>La primera tarea a realizar será formar los intervalos.
+Para ello podemos usar la función <code>cut()</code>, que permite decir el número de intervalos (de la misma amplitud) en que queremos dividir el intervalo que va desde el menor valor de la distribución (menor salario) al mayor valor (mayor salario).
+Por ejemplo, si deseamos agrupar los valores en 4 intervalos, el código será:</p>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="estadística-descriptiva..html#cb149-1" tabindex="-1"></a><span class="co"># Distribución de frecuencias agrupadas en intervalos</span></span>
+<span id="cb149-2"><a href="estadística-descriptiva..html#cb149-2" tabindex="-1"></a><span class="co"># del salario de los trabajadores de la empresa.</span></span>
+<span id="cb149-3"><a href="estadística-descriptiva..html#cb149-3" tabindex="-1"></a></span>
+<span id="cb149-4"><a href="estadística-descriptiva..html#cb149-4" tabindex="-1"></a><span class="co"># Crear los intervalos</span></span>
+<span id="cb149-5"><a href="estadística-descriptiva..html#cb149-5" tabindex="-1"></a>datos<span class="sc">$</span>intervalos <span class="ot">&lt;-</span> <span class="fu">cut</span>(datos<span class="sc">$</span>SALARIO, <span class="at">breaks =</span> <span class="dv">4</span>, <span class="at">include.lowest =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>El resultado del código anterior es una nueva columna en el <em>data frame</em> “datos”, llamada “intervalos”, que informa, para cada caso, cuál de los 4 intervalos calculados lo contiene.
+El argumento lógico <code>include.lowest =</code> se especifica para indicar que el intervalo inferior es cerrados por la izquierda.
+Lo usual es que, salvo este, el resto sean abiertos, es decir, que los casos que toman como valor de la variable un extremo de intervalo se contabilicen dentro del intervalo donde ese valor es el extremo superior.</p>
+<p>La columna “intervalos” es de la clase “factor”.
+Precisamente, los posibles “niveles” de ese factor son los 4 intervalos que se han creado con <code>cut()</code>:</p>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="estadística-descriptiva..html#cb150-1" tabindex="-1"></a><span class="co"># Obtener los niveles de los intervalos</span></span>
+<span id="cb150-2"><a href="estadística-descriptiva..html#cb150-2" tabindex="-1"></a></span>
+<span id="cb150-3"><a href="estadística-descriptiva..html#cb150-3" tabindex="-1"></a><span class="fu">levels</span>(datos<span class="sc">$</span>intervalos)</span></code></pre></div>
+<pre><code>## [1] &quot;[7.98,13.5]&quot; &quot;(13.5,19]&quot;   &quot;(19,24.5]&quot;   &quot;(24.5,30]&quot;</code></pre>
+<p>Es preciso advertir que el vector “limites” contiene elementos de clase caracter (aunque contengan cifras, ya que también contienen corchetes, paréntesis y comas).</p>
+<p>Las siguientes líneas de código son similares a las que vimos en el caso de distribuciones de frecuencias no agrupadas: se creará un objeto “tabla” para contabilizar el número de casos que pertenecen a cada intervalo (frecuencias absolutas), se transformará este objeto en un <em>data frame</em> para poder trabajar de un modo más fácil, y se cambiarán el nombre de las dos columnas para que se entienda mejor:</p>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="estadística-descriptiva..html#cb152-1" tabindex="-1"></a><span class="co"># Contar las frecuencias de cada intervalo</span></span>
+<span id="cb152-2"><a href="estadística-descriptiva..html#cb152-2" tabindex="-1"></a></span>
+<span id="cb152-3"><a href="estadística-descriptiva..html#cb152-3" tabindex="-1"></a>conteo_intervalos <span class="ot">&lt;-</span> <span class="fu">table</span>(datos<span class="sc">$</span>intervalos)</span>
+<span id="cb152-4"><a href="estadística-descriptiva..html#cb152-4" tabindex="-1"></a></span>
+<span id="cb152-5"><a href="estadística-descriptiva..html#cb152-5" tabindex="-1"></a><span class="co"># Convertir el resultado a un data frame para una mejor visualización</span></span>
+<span id="cb152-6"><a href="estadística-descriptiva..html#cb152-6" tabindex="-1"></a></span>
+<span id="cb152-7"><a href="estadística-descriptiva..html#cb152-7" tabindex="-1"></a>conteo_intervalos_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(conteo_intervalos)</span>
+<span id="cb152-8"><a href="estadística-descriptiva..html#cb152-8" tabindex="-1"></a></span>
+<span id="cb152-9"><a href="estadística-descriptiva..html#cb152-9" tabindex="-1"></a><span class="co"># Renombrar las columnas para mayor claridad</span></span>
+<span id="cb152-10"><a href="estadística-descriptiva..html#cb152-10" tabindex="-1"></a></span>
+<span id="cb152-11"><a href="estadística-descriptiva..html#cb152-11" tabindex="-1"></a><span class="fu">colnames</span>(conteo_intervalos_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Intervalo&quot;</span>, <span class="st">&quot;Frecuencia&quot;</span>)</span></code></pre></div>
+<p>Con todo lo anterior, se obtiene un <em>data frame</em> denominado “conteo_intervalos_df”, que contiene dos columnas: la columna “Intervalo”, con los 4 intervalos calculados, y la columna “Frecuencia”, con el número de casos que tienen un salario incluido dentro de cada intervalo salarial.</p>
+<p>Antes de proceder a diseñar la tabla de presentación de la distribución de frecuencia con <code>kable()</code>, vamos a obtener, para incluir en la tabla, otras informaciones que suelen ser presentadas junto a las frecuencias absolutas de cada intervalo.</p>
+<p>Una de estas informaciones es lo que denominamos “<strong>marca de clase</strong>” de un intervalo.
+La marca de clase de un intervalo de valores es simplemente el punto medio de dicho intervalo.</p>
+<p>La obtención en nuestro ejemplo de las marcas de clase puede resultar algo compleja, ya que hemos de recordar que los intervalos, tal y como están almacenados, son los niveles de una variable de clase “factor”:</p>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="estadística-descriptiva..html#cb153-1" tabindex="-1"></a>marca_clase <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">strsplit</span>(<span class="fu">as.character</span>(conteo_intervalos_df<span class="sc">$</span>Intervalo), <span class="st">&quot;,|</span><span class="sc">\\</span><span class="st">[|</span><span class="sc">\\</span><span class="st">(|</span><span class="sc">\\</span><span class="st">]&quot;</span>), <span class="cf">function</span>(x) {</span>
+<span id="cb153-2"><a href="estadística-descriptiva..html#cb153-2" tabindex="-1"></a>  <span class="fu">mean</span>(<span class="fu">as.numeric</span>(x[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>]))</span>
+<span id="cb153-3"><a href="estadística-descriptiva..html#cb153-3" tabindex="-1"></a>})</span></code></pre></div>
+<p>Explicaremos detenidamente el código anterior:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong><code>conteo_intervalos_df$Intervalo</code></strong>: Aquí se está accediendo a la columna “Intervalo” del <em>data frame</em> “conteo_intervalos_df”.</p></li>
+<li><p><strong><code>as.character(conteo_intervalos_df$Intervalo)</code></strong>: convierte los valores de la columna “Intervalo” a caracteres (<em>strings</em>).
+Esto es necesario porque la función <code>strsplit()</code> trabaja con cadenas de texto.</p></li>
+<li><p><strong><code>strsplit(as.character(conteo_intervalos_df$Intervalo), ",|\\[|\\(|\\]")</code></strong>: <code>strsplit()</code> divide cada cadena de texto en partes usando los delimitadores especificados.
+En este caso, se están utilizando como delimitadores las comas “,”, los corchetes “[” y ”]”, y el paréntesis de apertura “(”.
+El resultado es una lista de vectores de caracteres, donde cada vector contiene las partes de la cadena original que estaban separadas por los delimitadores.</p></li>
+<li><p><strong><code>sapply(..., function(x) { ... })</code></strong>: <code>sapply()</code> aplica una función a cada elemento de una lista y simplifica el resultado a un vector o matriz.
+Por otro lado, la función anónima <code>function(x) { ... }</code> se aplica a cada vector resultante de <code>strsplit()</code>.</p></li>
+<li><p><strong><code>function(x) { mean(as.numeric(x[2:3])) }</code></strong>: Esta es la función anónima que se aplica a cada vector “x”.
+Después, <strong><code>x[2:3]</code></strong> selecciona el segundo y tercer elemento del vector “x”.
+Estos elementos corresponden con los límites del intervalo.
+<strong><code>as.numeric(x[2:3])</code></strong> convierte estos elementos a números.
+<strong><code>mean(as.numeric(x[2:3]))</code></strong> calcula la media de estos dos números, que representa el punto medio del intervalo.</p></li>
+<li><p><strong><code>marca_clase &lt;- ...</code></strong>: Finalmente, el resultado de <code>sapply()</code> se asigna al vector”marca_clase”, que contendrá los puntos medios de los 4 intervalos.</p></li>
+</ol>
+<p>El resto de código integra el vector “marca_clase” en el <em>data frame</em> “conteo_intervalo_df” como una variable más, reodena con la función select() del paquete {dplyr} el orden de las columnas del <em>data frame</em>, calcula el resto de frecuencias (absoluta acumulada, relativa, relativa acumulada), y diseña la tabla de presentación de la distribución de frecuencias de los salarios de los trabajadores de la empresa; pero agrupada en 4 intervalos de valores.</p>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="estadística-descriptiva..html#cb154-1" tabindex="-1"></a><span class="co"># Agregar la columna &quot;marca_clase&quot; al data frame</span></span>
+<span id="cb154-2"><a href="estadística-descriptiva..html#cb154-2" tabindex="-1"></a></span>
+<span id="cb154-3"><a href="estadística-descriptiva..html#cb154-3" tabindex="-1"></a>conteo_intervalos_df<span class="sc">$</span>marca_clase <span class="ot">&lt;-</span> marca_clase</span>
+<span id="cb154-4"><a href="estadística-descriptiva..html#cb154-4" tabindex="-1"></a></span>
+<span id="cb154-5"><a href="estadística-descriptiva..html#cb154-5" tabindex="-1"></a><span class="co">#Cambiar el orden de las columnas en el data frame con dplyr</span></span>
+<span id="cb154-6"><a href="estadística-descriptiva..html#cb154-6" tabindex="-1"></a></span>
+<span id="cb154-7"><a href="estadística-descriptiva..html#cb154-7" tabindex="-1"></a>conteo_intervalos_df <span class="ot">&lt;-</span> conteo_intervalos_df <span class="sc">%&gt;%</span> <span class="fu">select</span>(Intervalo, marca_clase, Frecuencia)</span>
+<span id="cb154-8"><a href="estadística-descriptiva..html#cb154-8" tabindex="-1"></a></span>
+<span id="cb154-9"><a href="estadística-descriptiva..html#cb154-9" tabindex="-1"></a><span class="co"># Calcular y guardar la frecuencia total</span></span>
+<span id="cb154-10"><a href="estadística-descriptiva..html#cb154-10" tabindex="-1"></a></span>
+<span id="cb154-11"><a href="estadística-descriptiva..html#cb154-11" tabindex="-1"></a>N_agre <span class="ot">&lt;-</span> <span class="fu">sum</span>(conteo_intervalos_df<span class="sc">$</span>Frecuencia)</span>
+<span id="cb154-12"><a href="estadística-descriptiva..html#cb154-12" tabindex="-1"></a></span>
+<span id="cb154-13"><a href="estadística-descriptiva..html#cb154-13" tabindex="-1"></a><span class="co"># Calcular frecuencias absolutas acumuladas</span></span>
+<span id="cb154-14"><a href="estadística-descriptiva..html#cb154-14" tabindex="-1"></a></span>
+<span id="cb154-15"><a href="estadística-descriptiva..html#cb154-15" tabindex="-1"></a>conteo_intervalos_df<span class="sc">$</span>Frecuencia_acum <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(conteo_intervalos_df<span class="sc">$</span>Frecuencia)</span>
+<span id="cb154-16"><a href="estadística-descriptiva..html#cb154-16" tabindex="-1"></a></span>
+<span id="cb154-17"><a href="estadística-descriptiva..html#cb154-17" tabindex="-1"></a><span class="co"># Calcular frecuencias relativas</span></span>
+<span id="cb154-18"><a href="estadística-descriptiva..html#cb154-18" tabindex="-1"></a></span>
+<span id="cb154-19"><a href="estadística-descriptiva..html#cb154-19" tabindex="-1"></a>conteo_intervalos_df<span class="sc">$</span>Frecuencia_R <span class="ot">&lt;-</span> conteo_intervalos_df<span class="sc">$</span>Frecuencia <span class="sc">/</span> N_agre</span>
+<span id="cb154-20"><a href="estadística-descriptiva..html#cb154-20" tabindex="-1"></a></span>
+<span id="cb154-21"><a href="estadística-descriptiva..html#cb154-21" tabindex="-1"></a><span class="co"># Calcular frecuencias relativas acumuladas</span></span>
+<span id="cb154-22"><a href="estadística-descriptiva..html#cb154-22" tabindex="-1"></a></span>
+<span id="cb154-23"><a href="estadística-descriptiva..html#cb154-23" tabindex="-1"></a>conteo_intervalos_df<span class="sc">$</span>Frecuencia_R_acum <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(conteo_intervalos_df<span class="sc">$</span>Frecuencia_R)</span>
+<span id="cb154-24"><a href="estadística-descriptiva..html#cb154-24" tabindex="-1"></a></span>
+<span id="cb154-25"><a href="estadística-descriptiva..html#cb154-25" tabindex="-1"></a><span class="co"># Mostrar el resultado</span></span>
+<span id="cb154-26"><a href="estadística-descriptiva..html#cb154-26" tabindex="-1"></a></span>
+<span id="cb154-27"><a href="estadística-descriptiva..html#cb154-27" tabindex="-1"></a>conteo_intervalos_df <span class="sc">%&gt;%</span></span>
+<span id="cb154-28"><a href="estadística-descriptiva..html#cb154-28" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Distribución de frecuencias agrupadas en intervalos de los salarios de la empresa&quot;</span>,</span>
+<span id="cb154-29"><a href="estadística-descriptiva..html#cb154-29" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Intervalo salarial&quot;</span>, <span class="st">&quot;Marca de clase x(i)&quot;</span>, <span class="st">&quot;Frecuencia absoluta n(i)&quot;</span>,</span>
+<span id="cb154-30"><a href="estadística-descriptiva..html#cb154-30" tabindex="-1"></a>                      <span class="st">&quot;Frecuencia absoluta acum. N(i)&quot;</span>, <span class="st">&quot;Frecuencia relativa f(i)&quot;</span>,</span>
+<span id="cb154-31"><a href="estadística-descriptiva..html#cb154-31" tabindex="-1"></a>                      <span class="st">&quot;Frecuencia relativa acum. F(i)&quot;</span>),</span>
+<span id="cb154-32"><a href="estadística-descriptiva..html#cb154-32" tabindex="-1"></a>        <span class="at">format.args =</span> <span class="fu">list</span>(<span class="at">decimal.mark =</span> <span class="st">&quot;.&quot;</span>, <span class="at">digits =</span> <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb154-33"><a href="estadística-descriptiva..html#cb154-33" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F, <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>,</span>
+<span id="cb154-34"><a href="estadística-descriptiva..html#cb154-34" tabindex="-1"></a>                <span class="st">&quot;bordered&quot;</span>, <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb154-35"><a href="estadística-descriptiva..html#cb154-35" tabindex="-1"></a>                <span class="at">position =</span> <span class="st">&quot;center&quot;</span>, <span class="at">font_size =</span> <span class="dv">11</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb154-36"><a href="estadística-descriptiva..html#cb154-36" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold=</span> T, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb154-37"><a href="estadística-descriptiva..html#cb154-37" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(conteo_intervalos_df)), <span class="at">bold=</span> F, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>)</span></code></pre></div>
+<table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-129">Table 4.5: </span><span id="tab:unnamed-chunk-129">Table 4.6: </span>Distribución de frecuencias agrupadas en intervalos de los salarios de la empresa
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Intervalo salarial
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Marca de clase x(i)
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Frecuencia absoluta n(i)
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Frecuencia absoluta acum. N(i)
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Frecuencia relativa f(i)
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Frecuencia relativa acum. F(i)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;">
+[7.98,13.5]
+</td>
+<td style="text-align:right;text-align: center;">
+11
+</td>
+<td style="text-align:right;text-align: center;">
+19
+</td>
+<td style="text-align:right;text-align: center;">
+19
+</td>
+<td style="text-align:right;text-align: center;">
+0.39
+</td>
+<td style="text-align:right;text-align: center;">
+0.39
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+(13.5,19]
+</td>
+<td style="text-align:right;text-align: center;">
+16
+</td>
+<td style="text-align:right;text-align: center;">
+11
+</td>
+<td style="text-align:right;text-align: center;">
+30
+</td>
+<td style="text-align:right;text-align: center;">
+0.22
+</td>
+<td style="text-align:right;text-align: center;">
+0.61
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+(19,24.5]
+</td>
+<td style="text-align:right;text-align: center;">
+22
+</td>
+<td style="text-align:right;text-align: center;">
+14
+</td>
+<td style="text-align:right;text-align: center;">
+44
+</td>
+<td style="text-align:right;text-align: center;">
+0.29
+</td>
+<td style="text-align:right;text-align: center;">
+0.90
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+(24.5,30]
+</td>
+<td style="text-align:right;text-align: center;">
+27
+</td>
+<td style="text-align:right;text-align: center;">
+5
+</td>
+<td style="text-align:right;text-align: center;">
+49
+</td>
+<td style="text-align:right;text-align: center;">
+0.10
+</td>
+<td style="text-align:right;text-align: center;">
+1.00
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="medidas-de-posición." class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Medidas de posición.<a href="estadística-descriptiva..html#medidas-de-posición." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Las medidas de posición son instrumentos matemáticos que pretenden, mediante un único valor o muy pocos valores, <strong>caracterizar de modo global</strong> la distribución de frecuencias de una variable determinada.</p>
+<p>Las medidas de posición se pueden clasificar en medidas de posición central, y en medidas de posición no central (principalmente, los llamados cuantiles).</p>
+<p>Las principales <strong>medidas de posición central</strong> son: la media, la mediana y la moda.
+Dentro de la media, podemos distinguir la media aritmética, la geométrica y la armónica.
+De ellas, nos centraremos en la más común: la media aritmética.</p>
+<p>La <strong>media aritmética</strong> de la distribución de frecuencias de una variable X se calcula como:</p>
+<p><span class="math display">\[
+\overline{x} = \frac{1}{N} \sum_{i=1}^{h} x_i n_i
+\]</span></p>
+<p>Hemos de tener en cuenta en la fórmula anterior que N es la frecuencia total, y h es el número de valores diferentes que toma la variable.</p>
+<p>Si las frecuencias de todos los valores de la variable son 1 (distribución de frecuencias unitarias), lógicamente la media pasará a ser:</p>
+<p><span class="math display">\[
+\overline{x} = \frac{1}{N} \sum_{i=1}^{N} x_i
+\]</span> En R, la función para obtener la media de una variable es <code>mean()</code>.
+Así, para obtener el salario medio de la variable SALARIO de los trabajadoes de la empresa, ejecutaremos el código:</p>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="estadística-descriptiva..html#cb155-1" tabindex="-1"></a><span class="do">## MEDIDAS</span></span>
+<span id="cb155-2"><a href="estadística-descriptiva..html#cb155-2" tabindex="-1"></a></span>
+<span id="cb155-3"><a href="estadística-descriptiva..html#cb155-3" tabindex="-1"></a><span class="co"># Media aritmética.</span></span>
+<span id="cb155-4"><a href="estadística-descriptiva..html#cb155-4" tabindex="-1"></a></span>
+<span id="cb155-5"><a href="estadística-descriptiva..html#cb155-5" tabindex="-1"></a>media <span class="ot">&lt;-</span> <span class="fu">mean</span>(datos<span class="sc">$</span>SALARIO)</span>
+<span id="cb155-6"><a href="estadística-descriptiva..html#cb155-6" tabindex="-1"></a>media</span></code></pre></div>
+<pre><code>## [1] 16.04082</code></pre>
+<p>Como podemos observar, el salario medio de los trabajadores de la empresa, recogido en el valor “media”, es de 16.04 cientos de euros, es decir, 1604 euros.</p>
+<p>¿Qué significado tiene la media aritmética?
+La media aritmética es el “centro de gravedad” de la distribución, el punto de equilibrio, en el sentido de que, si todos los trabajadores ganaran el salario medio, no habría diferencias salariales aun cuando la “masa” salarial invertida por la empresa permanecería invariable.
+Es decir, la media aritmética supone un reparto igualitario de la masa total de la variable.</p>
+<p>Entre sus ventajas destaca el que, para variables (escala métrica) es siempre calculable y única.
+Como inconvenientes, que pierde su representatividad ante la existencia de casos atípicos o <em>outliers</em>, y que no se puede calcular en el caso de trabajar con atributos, variables cualitativas o factores (escalas nominal u ordinal).</p>
+<p>La <strong>mediana</strong> es el valor que se corresponde con el caso o casos que dividen a la distribución en dos grupos con el mismo número de casos (frecuencias), siempre teniendo en cuenta que, previamente, la distribución ha sido ordenada según los valores de la variable en estudio, de menor a mayor.
+Si la distribución tiene frecuencia total par, los casos “frontera” entre los dos grupos en que queda dividida la distribución son dos, por lo que, si estos casos asumen valores diferentes en la variable estudiada, podría ocurrir que hubiera dos medianas diferentes.
+En tal caso, se suele tomar, como convenio, el promedio de de ambos valores para tener una única mediana.</p>
+<p>En R, la función para obtener la mediana de una variable es <code>median()</code>.
+De este modo, para obtener el salario mediano de la variable SALARIO de los trabajadoes de la empresa, ejecutaremos el código:</p>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="estadística-descriptiva..html#cb157-1" tabindex="-1"></a><span class="co"># Mediana</span></span>
+<span id="cb157-2"><a href="estadística-descriptiva..html#cb157-2" tabindex="-1"></a></span>
+<span id="cb157-3"><a href="estadística-descriptiva..html#cb157-3" tabindex="-1"></a>mediana <span class="ot">&lt;-</span> <span class="fu">median</span>(datos<span class="sc">$</span>SALARIO)</span>
+<span id="cb157-4"><a href="estadística-descriptiva..html#cb157-4" tabindex="-1"></a>mediana</span></code></pre></div>
+<pre><code>## [1] 15</code></pre>
+<p>En el ejemplo de la variable SALARIO, la mediana es 15.
+Es decir, 15 es el salario percibido por el caso 25, que es el trabajador que divide la distribución de frecuencias en dos grupos de 24 trabajadores: 24 que ganan un salario menor o igual que el caso 25 (menos o igual que 15 cientos de euros), y otros 24 trabajadores que ganan más o lo mismo que el caso en la posición 25 (o sea, más o iagual que 15 cientos de euros).</p>
+<p>Como ventaja de la mediana contamos con que no es sensible a la existencia de casos atípicos o outliers, y que se puede calcular en el caso de atributos o factores en escala ordinal.
+Como desventajas tenemos que no tiene por qué ser única, y que no tiene en cuenta la totalidad de los valores de la distribución.</p>
+<p>Con <strong>la moda</strong> hacemos referencia al valor (o valores) que posee (o poseen) una mayorv frecuencia absoluta.</p>
+<p>En R, la moda se calcula mediante la función <code>Mode()</code> del paquete <code>{DescTools}</code>, que habremos de activar con <code>library()</code> (e instalar previamente, si aún no tenemos instalado este paquete):</p>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb159-1"><a href="estadística-descriptiva..html#cb159-1" tabindex="-1"></a><span class="co"># Moda</span></span>
+<span id="cb159-2"><a href="estadística-descriptiva..html#cb159-2" tabindex="-1"></a></span>
+<span id="cb159-3"><a href="estadística-descriptiva..html#cb159-3" tabindex="-1"></a><span class="fu">library</span>(DescTools)</span>
+<span id="cb159-4"><a href="estadística-descriptiva..html#cb159-4" tabindex="-1"></a>moda <span class="ot">&lt;-</span> <span class="fu">Mode</span>(datos<span class="sc">$</span>SALARIO)</span>
+<span id="cb159-5"><a href="estadística-descriptiva..html#cb159-5" tabindex="-1"></a>moda</span></code></pre></div>
+<pre><code>## [1] 15
+## attr(,&quot;freq&quot;)
+## [1] 11</code></pre>
+<p>Como podemos apreciar, la moda de la distribución es 15 (un salario de 1500 euros), que aparece en la distribución en 11 ocasiones (la frecuencia absoluta de ese salario es 11).</p>
+<p>La moda puede ser calculada en atributos o factores en escala nominal.
+Como inconveniente principal tenemos que no tiene por qué ser un valor único (existen distribuciones multimodales).</p>
+<p>Existen otras medidas que son de posición no central, principalmente lo que llamamos <strong>cuantiles</strong>.
+La naturaleza de loc cuantiles es fácil de comprender si los consideramos una generalización de la mediana.
+Ya sabemos que, ordenados los valores (y por tanto, los casos que toman dichos valores) de una distribución de frecuencias de una variable de menor a mayor, la mediana es el valor (o valores, porque pueden existir dos medianas, aunque vamos a suponer que solo hay una)) de la variable correspondiente al caso que divide a la distribución en dos grupos con el mismo número de frecuencias.
+Pues bien, si en lugar de dividir a la distribución de frecuencias en dos grupos con el mismo número de elementos, la dividimos en 4 grupos, estaremos hablando de tres valores correspondientes a los casos que delimitan a esos cuatro grupos.
+Estos valores serán los <strong>cuartiles</strong> de la distribución.</p>
+<p>Si queremos dividir la distribución de 9 valores de la variable que toman los casos “frontera” que separan a estos 10 grupos.
+Esos valores serán los <strong>deciles</strong>.
+Y si queremos dividir la distribución de frecuencias en 100 grupos con el mismo número de casos o individuos, estaríamos hablando de 99 valores de la variable que toman los casos “frontera” que separan a estos 100 grupos.
+Esos valores serán los <strong>percentiles</strong>.</p>
+<p>En R, la función para calcular los diferentes cuantiles es <code>quantile()</code>.
+Para calcular, por ejemplo, los cuartiles de la variable SALARIO, procederemos así:</p>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="estadística-descriptiva..html#cb161-1" tabindex="-1"></a><span class="co"># Calcular los cuartiles</span></span>
+<span id="cb161-2"><a href="estadística-descriptiva..html#cb161-2" tabindex="-1"></a>cuartiles <span class="ot">&lt;-</span> <span class="fu">quantile</span>(datos<span class="sc">$</span>SALARIO, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>))</span>
+<span id="cb161-3"><a href="estadística-descriptiva..html#cb161-3" tabindex="-1"></a>cuartiles</span></code></pre></div>
+<pre><code>## 25% 50% 75% 
+##  12  15  20</code></pre>
+<p>El argumento <code>probs =</code> informa de la proporción de los casos que han de quedar por detrás (con valores menores o iguales) de cada uno de los casos que hacen de “frontera” entre los grupos.
+En el caso de los cuartiles, estos son 0.25, 0.5 (este cuartil es, a su vez, la mediana de la distribución) y 0.75.
+Vemos cómo los cuartiles son 12, 15 y 20.</p>
+</div>
+<div id="medidas-de-dispersión-o-variabilidad." class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> Medidas de dispersión o variabilidad.<a href="estadística-descriptiva..html#medidas-de-dispersión-o-variabilidad." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Las medidas de dispersión cuantifican <strong>lo cerca o lejos que, en general, los valores asumidos por los casos de una distribución de frecuencias se hallan respecto a una medida de posición central</strong>.
+Si la medida de dispersión toma un valor muy elevado, querrá decir que la medida de posición central no representa bien a la distribución de frecuencias, ya que, en general, los casos toman valores alejados de dicha medida.</p>
+<p>La medida de posición central a la que suelen hacer referencia las medidas de dispersión es la media aritmética.</p>
+<p>Existen múltiples medidas de dispersión, que principalmente se dividen en <strong>medidas absolutas</strong> (que se expresan en ciertas unidades, como por ejemplo euros, o euros al cuadrado) y <strong>medidas relativas</strong> (que carecen de unidades y siven, por tanto, para comparar la dispersión entre distribuciones de frecuencias expresadas en distintas unidades).</p>
+<p>La medida de dispersión absoluta más utilizada es la <strong>varianza</strong>, cuya fórmula es:</p>
+<p><span class="math display">\[
+S^2 = \frac{1}{N} \sum_{i=1}^{h} (x_i - \overline{x})^2 n_i
+\]</span></p>
+<p>Hemos de tener en cuenta en la fórmula anterior que N es la frecuencia total, y h es el número de valores diferentes que toma la variable.</p>
+<p>Si las frecuencias de todos los valores de la variable son 1 (distribución de frecuencias unitarias), lógicamente la varianza pasará a ser:</p>
+<p><span class="math display">\[
+S^2 = \frac{1}{N} \sum_{i=1}^{N} (x_i - \overline{x})^2
+\]</span></p>
+<p>En realidad, la varianza es el promedio de las diferencias que existen entre los valores que toma la variable y la media aritmética de esta, diferencias que son elevadas al cuadrado para evitar la compensación entre diferencias por los signos.</p>
+<p>Una limitación de la varianza viene referida a que, debido al exponente del paréntesis, puede tomar valores muy elevados.
+Para evitar el inconveniente, una medida alternativa es la <strong>desviación típica</strong>, que queda definida como la raíz cuadrada positiva de la varianza:</p>
+<p><span class="math display">\[
+S = +\sqrt{S^2}
+\]</span></p>
+<p>Otra media de dispersión muy utilizada, sobre todo en <em>Econometría</em>, es la <em>varianza insesgada</em> o <strong>cuasivarianza</strong>, cuya fórmula es:</p>
+<p><span class="math display">\[
+{\overline{S}}^2 = \frac{1}{N-1} \sum_{i=1}^{h} (x_i - \overline{x})^2 n_i
+\]</span></p>
+<p>Como siempre, si las frecuencias de todos los valores de la variable son 1 (distribución de frecuencias unitarias), lógicamente la cuasivarianza pasará a ser:</p>
+<p><span class="math display">\[
+{\overline{S}}^2 = \frac{1}{N-1} \sum_{i=1}^{N} (x_i - \overline{x})^2
+\]</span></p>
+<p>En cuanto a una medida de dispersión relativa, cabe nombrar al <strong>coeficiente de variación de Pearson</strong>, definido como el cociente entre la desviación típica y la media aritmética (en valor absoluto):</p>
+<p><span class="math display">\[
+V = \frac{S}{|\overline{x}|}
+\]</span></p>
+<p>El coeficiente de variación informa del número de medias aritméticas que “caben” en la desviación típica de una distribución de frecuencias.
+A mayor coeficiente, mayor dispersión y menor representatividad de la media aritmética con respecto a la distribución.
+Además, pueden compararse coeficientes de distribuciones expresadas en unidades diferentes (medida relativa).</p>
+<p>A continuación, vamos a calcular varianza, desviación típica, cuasivarianza, y coeficiente de variación en R.
+Para ello, hemos de tener en cuenta que la función <code>var()</code> de R, en realidad, calcula la cuasivarianza.
+Para obtener la varianza, pues, hemos de realizar una corrección (en realidad, para un número de casos muy grande, ambas medidas prácticamente coinciden):</p>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="estadística-descriptiva..html#cb163-1" tabindex="-1"></a><span class="co"># Varianza</span></span>
+<span id="cb163-2"><a href="estadística-descriptiva..html#cb163-2" tabindex="-1"></a></span>
+<span id="cb163-3"><a href="estadística-descriptiva..html#cb163-3" tabindex="-1"></a>varianza <span class="ot">&lt;-</span> <span class="fu">var</span>(datos<span class="sc">$</span>SALARIO)<span class="sc">*</span>(N<span class="dv">-1</span>)<span class="sc">/</span>N <span class="co"># recordar que la frecuencia total N ya fue calculada</span></span>
+<span id="cb163-4"><a href="estadística-descriptiva..html#cb163-4" tabindex="-1"></a>varianza</span></code></pre></div>
+<pre><code>## [1] 30.48813</code></pre>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="estadística-descriptiva..html#cb165-1" tabindex="-1"></a><span class="co"># Desviación típica</span></span>
+<span id="cb165-2"><a href="estadística-descriptiva..html#cb165-2" tabindex="-1"></a></span>
+<span id="cb165-3"><a href="estadística-descriptiva..html#cb165-3" tabindex="-1"></a>desv <span class="ot">&lt;-</span> varianza <span class="sc">^</span> (<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb165-4"><a href="estadística-descriptiva..html#cb165-4" tabindex="-1"></a>desv</span></code></pre></div>
+<pre><code>## [1] 5.521606</code></pre>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="estadística-descriptiva..html#cb167-1" tabindex="-1"></a><span class="co"># Cuasivarianza</span></span>
+<span id="cb167-2"><a href="estadística-descriptiva..html#cb167-2" tabindex="-1"></a></span>
+<span id="cb167-3"><a href="estadística-descriptiva..html#cb167-3" tabindex="-1"></a>cuasivarianza <span class="ot">&lt;-</span> <span class="fu">var</span> (datos<span class="sc">$</span>SALARIO)</span>
+<span id="cb167-4"><a href="estadística-descriptiva..html#cb167-4" tabindex="-1"></a>cuasivarianza</span></code></pre></div>
+<pre><code>## [1] 31.1233</code></pre>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="estadística-descriptiva..html#cb169-1" tabindex="-1"></a><span class="co"># Coeficiente de variación</span></span>
+<span id="cb169-2"><a href="estadística-descriptiva..html#cb169-2" tabindex="-1"></a></span>
+<span id="cb169-3"><a href="estadística-descriptiva..html#cb169-3" tabindex="-1"></a>cvariacion <span class="ot">&lt;-</span> desv <span class="sc">/</span> <span class="fu">abs</span>(media)</span>
+<span id="cb169-4"><a href="estadística-descriptiva..html#cb169-4" tabindex="-1"></a>cvariacion</span></code></pre></div>
+<pre><code>## [1] 0.3442222</code></pre>
+</div>
+<div id="medidas-de-forma." class="section level2 hasAnchor" number="4.5">
+<h2><span class="header-section-number">4.5</span> Medidas de forma.<a href="estadística-descriptiva..html#medidas-de-forma." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Las medidas de forma cuantifican el grado de deformación vertical y horizontal de la representación gráfica de una distribución de frecuencias.
+Son de dos tipos: medidas de asimetría y medidas de apuntamiento o curtosis.</p>
+<p>Las <strong>medidas de asimetría</strong> miden el grado de deformación vertical con respecto a un “eje de simetría”, que es aquel que pasa por el valor medio de la distribución.
+Si suponemos que la distribución es unimodal y campaniforme, tendremos los casos que se muestran en la figura:</p>
+<div class="float">
+<img src="figuras/asimetr%C3%ADa.png" alt="Tipos de asimetría" />
+<div class="figcaption">Tipos de asimetría</div>
+</div>
+<p>El tipo y grado de asimetría se puede obtener mediante el <strong>coeficiente de asimetría de Fisher</strong>.
+Este coeficiente toma valor negativo si la distribución es <em>asimétrica negativa</em> (mayores frecuencias a la derecha de la media), valor positivo si la distribución es <em>asimétrica positiva</em> (mayores frecuencias a la izquierda de la media), y se acerca a 0 en caso de que la distribución seaaproximadamente <em>simétrica</em>, aunque pueden darse casos de distribuciones no simétricas con coeficiente 0.
+En R, se puede obtener el coeficiente de asimetría mediante la función <code>skewness()</code> del paquete <code>{moments}</code>:</p>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="estadística-descriptiva..html#cb171-1" tabindex="-1"></a><span class="co"># Coeficiente de asimetría de Fisher</span></span>
+<span id="cb171-2"><a href="estadística-descriptiva..html#cb171-2" tabindex="-1"></a></span>
+<span id="cb171-3"><a href="estadística-descriptiva..html#cb171-3" tabindex="-1"></a><span class="fu">library</span>(moments)</span>
+<span id="cb171-4"><a href="estadística-descriptiva..html#cb171-4" tabindex="-1"></a>asimetria <span class="ot">&lt;-</span> <span class="fu">skewness</span>(datos<span class="sc">$</span>SALARIO)</span>
+<span id="cb171-5"><a href="estadística-descriptiva..html#cb171-5" tabindex="-1"></a>asimetria</span></code></pre></div>
+<pre><code>## [1] 0.413764</code></pre>
+<p>El valor obtenido para la variable SALARIO de nuestra distribución de frecuencias de los trabajadores de la empresa es positivo, lo que indica asimetría positiva: las mayores frecuencias se localizan a la derecha de la media.
+Esto se puede comprobar fácilmente construyendo el histograma de la variable SALARIO y trazando una línea vertical que pase por la media salarial.
+Para ello usamos el paquete <code>{ggplot2}</code>:</p>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="estadística-descriptiva..html#cb173-1" tabindex="-1"></a><span class="fu">library</span> (ggplot2)</span>
+<span id="cb173-2"><a href="estadística-descriptiva..html#cb173-2" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> datos, <span class="at">map =</span> <span class="fu">aes</span>(<span class="at">x =</span> SALARIO)) <span class="sc">+</span></span>
+<span id="cb173-3"><a href="estadística-descriptiva..html#cb173-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">7</span>, <span class="at">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;orange&quot;</span>) <span class="sc">+</span></span>
+<span id="cb173-4"><a href="estadística-descriptiva..html#cb173-4" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(SALARIO)), <span class="at">colour =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb173-5"><a href="estadística-descriptiva..html#cb173-5" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;SALARIO MENSUAL&quot;</span>, <span class="at">subtitle =</span> <span class="st">&quot;trabajadores de la empresa XXX&quot;</span>)<span class="sc">+</span></span>
+<span id="cb173-6"><a href="estadística-descriptiva..html#cb173-6" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Salario (cientos de euros)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb173-7"><a href="estadística-descriptiva..html#cb173-7" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Frecuencias&quot;</span>)</span></code></pre></div>
+<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## ℹ Please use `linewidth` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-136-1.png" width="672" /></p>
+<p>Como comprobamos, la distribución es claramente asimétrica positiva.</p>
+<p>En cuanto a las <strong>medidas de curtosis</strong>, miden el grado de deformación horizontal con respecto a una distribución “tipo”, la distribución normal.
+Suponemos previamente que la distribución de frecuencias estudiada es campaniforme, unimodal y simétrica (o con ligera asimetría).
+Pueden darse los casos que se muestran en la figura:</p>
+<div class="float">
+<img src="figuras/curtosis.png" alt="Tipos de distribución según el apuntamiento o curtosis" />
+<div class="figcaption">Tipos de distribución según el apuntamiento o curtosis</div>
+</div>
+<p>El tipo y grado de apuntamiento o curtosis se puede obtener mediante el <strong>coeficiente de apuntamiento de Fisher</strong>.
+Este coeficiente toma valor negativo si la distribución es <em>platicúrtica</em> (más aplastada que la distribución normal), valor positivo si la distribución es <em>leptocúrtica</em> (más apuntada que la distribución normal), y se acerca a 0 en caso de que la distribución sea aproximadamente igual de apuntada que la distribución normal.
+En R, se puede obtener el coeficiente de asimetría mediante la función <code>kurtosis()</code> del paquete <code>{moments}</code>.
+Hay que tener en cuenta que para que esta versión coincida con lo dicho anteriormente, al valor calculado hay que restarle el valor “3”:</p>
+<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="estadística-descriptiva..html#cb175-1" tabindex="-1"></a><span class="co"># Coeficiente de apuntamiento o curtosis de Fisher</span></span>
+<span id="cb175-2"><a href="estadística-descriptiva..html#cb175-2" tabindex="-1"></a></span>
+<span id="cb175-3"><a href="estadística-descriptiva..html#cb175-3" tabindex="-1"></a>curtosis <span class="ot">&lt;-</span> <span class="fu">kurtosis</span>(datos<span class="sc">$</span>SALARIO) <span class="sc">-</span> <span class="dv">3</span></span>
+<span id="cb175-4"><a href="estadística-descriptiva..html#cb175-4" tabindex="-1"></a>curtosis</span></code></pre></div>
+<pre><code>## [1] -0.8232965</code></pre>
+<p>Se aprecia como el coeficiente (corregido) es menor que 0, por lo que la distribución de frecuencias de la variable SALARIO es platicúrtica (más “aplastada” que la distribución de frecuencias normal. También hay que tener en cuenta que debemos tener precaución en la aplicación del coeficiente, ya que vimos con anterioridad que la distribución no es aproximadamente simétrica. Gráficamente, podemos comprobar lo anterior representando el histograma y una curva normal que posea la misma moda (que ya calculamos anteriormente).
+Para que sean comparables, debemos transformar el eje “y” del gráfico, pasando de “frecuencias” a “densidad”, para lo cuál se incluye en el <code>geom_histogram()</code> el argumento <code>aes(y = ..density..)</code>:</p>
+<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb177-1"><a href="estadística-descriptiva..html#cb177-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> datos, <span class="at">map =</span> <span class="fu">aes</span>(<span class="at">x =</span> SALARIO)) <span class="sc">+</span></span>
+<span id="cb177-2"><a href="estadística-descriptiva..html#cb177-2" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">7</span>, <span class="at">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;orange&quot;</span>, <span class="fu">aes</span>(<span class="at">y =</span> ..density..)) <span class="sc">+</span></span>
+<span id="cb177-3"><a href="estadística-descriptiva..html#cb177-3" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> moda, <span class="at">sd =</span> <span class="fu">sd</span>(datos<span class="sc">$</span>SALARIO)), <span class="at">colour =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb177-4"><a href="estadística-descriptiva..html#cb177-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;SALARIO MENSUAL&quot;</span>, <span class="at">subtitle =</span> <span class="st">&quot;trabajadores de la empresa XXX&quot;</span>)<span class="sc">+</span></span>
+<span id="cb177-5"><a href="estadística-descriptiva..html#cb177-5" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Salario (cientos de euros)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb177-6"><a href="estadística-descriptiva..html#cb177-6" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Densidad&quot;</span>)</span></code></pre></div>
+<pre><code>## Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
+## ℹ Please use `after_stat(density)` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-138-1.png" width="672" /></p>
+</div>
+<div id="materiales-para-realizar-las-prácticas-del-capítulo.-2" class="section level2 hasAnchor" number="4.6">
+<h2><span class="header-section-number">4.6</span> Materiales para realizar las prácticas del capítulo.<a href="estadística-descriptiva..html#materiales-para-realizar-las-prácticas-del-capítulo.-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En esta sección se muestran los links de acceso a los diferentes materiales (<em>scripts</em>, datos…) necesarios para llevar a cabo los contenidos prácticos del capítulo.</p>
+<p><strong>Datos (en formato Microsoft (R) Excel (R)):</strong></p>
+<ul>
+<li>trabajadores.xlsx (<a href="https://docs.google.com/spreadsheets/d/1e_h8P_0sBuD5Nvw6nkeWtXXeiqItFfdI/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">obtener aquí</a>)</li>
+</ul>
+<p><strong>Scripts:</strong></p>
+<ul>
+<li>explora_trabajadores.R (<a href="https://drive.google.com/file/d/1pfyGPGQRmgOyo9wrZ7fr_KAFj49ecXID/view?usp=sharing">obtener aquí</a>)</li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="gráficos..html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="análisis-previo-de-datos..html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection",
+"toc_deph": 3
+},
+"table": {
+"number": false
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

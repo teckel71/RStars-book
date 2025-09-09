@@ -1,0 +1,1824 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 6 Componentes principales. | Técnicas de Análisis de Datos Económicos con R</title>
+  <meta name="description" content="Libro de análisis de datos económicos." />
+  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 6 Componentes principales. | Técnicas de Análisis de Datos Económicos con R" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://bookdown.org/teckel71/book/figuras/Portada_v2.PNG" />
+  <meta property="og:description" content="Libro de análisis de datos económicos." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 6 Componentes principales. | Técnicas de Análisis de Datos Económicos con R" />
+  
+  <meta name="twitter:description" content="Libro de análisis de datos económicos." />
+  <meta name="twitter:image" content="https://bookdown.org/teckel71/book/figuras/Portada_v2.PNG" />
+
+<meta name="author" content="" />
+
+
+<meta name="date" content="2025-01-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="análisis-previo-de-datos..html"/>
+<link rel="next" href="análisis-clúster..html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Técnicas de Análisis de Datos Económicos con R</a></li>
+
+<li class="divider"></li>
+<li><a href="index.html#section" id="toc-section"></a></li>
+<li class="chapter" data-level="" data-path="prefacio.html"><a href="prefacio.html"><i class="fa fa-check"></i>Prefacio</a></li>
+<li class="chapter" data-level="1" data-path="introducción..html"><a href="introducción..html"><i class="fa fa-check"></i><b>1</b> Introducción.</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introducción..html"><a href="introducción..html#llámalo-estadística."><i class="fa fa-check"></i><b>1.1</b> Llámalo Estadística.</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="introducción..html"><a href="introducción..html#concepto-de-estadística."><i class="fa fa-check"></i><b>1.1.1</b> Concepto de Estadística.</a></li>
+<li class="chapter" data-level="1.1.2" data-path="introducción..html"><a href="introducción..html#el-método-estadístico."><i class="fa fa-check"></i><b>1.1.2</b> El método estadístico.</a></li>
+<li class="chapter" data-level="1.1.3" data-path="introducción..html"><a href="introducción..html#economía-y-estadística."><i class="fa fa-check"></i><b>1.1.3</b> Economía y Estadística.</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="introducción..html"><a href="introducción..html#qué-es-r-y-cómo-nos-ayuda-a-analizar-datos-desde-el-punto-de-vista-estadístico"><i class="fa fa-check"></i><b>1.2</b> ¿Qué es R y cómo nos ayuda a analizar datos desde el punto de vista estadístico?</a></li>
+<li class="chapter" data-level="1.3" data-path="introducción..html"><a href="introducción..html#instalación-de-r-y-r-studio."><i class="fa fa-check"></i><b>1.3</b> Instalación de R y R-Studio.</a></li>
+<li class="chapter" data-level="1.4" data-path="introducción..html"><a href="introducción..html#r-y-rstudio.-comienzo-proyectos."><i class="fa fa-check"></i><b>1.4</b> R y RStudio. Comienzo: Proyectos.</a></li>
+<li class="chapter" data-level="1.5" data-path="introducción..html"><a href="introducción..html#scripts."><i class="fa fa-check"></i><b>1.5</b> Scripts.</a></li>
+<li class="chapter" data-level="1.6" data-path="introducción..html"><a href="introducción..html#funciones."><i class="fa fa-check"></i><b>1.6</b> Funciones.</a></li>
+<li class="chapter" data-level="1.7" data-path="introducción..html"><a href="introducción..html#paquetes-packages."><i class="fa fa-check"></i><b>1.7</b> Paquetes (packages).</a></li>
+<li class="chapter" data-level="1.8" data-path="introducción..html"><a href="introducción..html#help-sistema-de-ayuda."><i class="fa fa-check"></i><b>1.8</b> Help! (sistema de ayuda).</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html"><i class="fa fa-check"></i><b>2</b> Almacenando y manipulando datos.</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#objetos.-datos."><i class="fa fa-check"></i><b>2.1</b> Objetos. Datos.</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#vectores."><i class="fa fa-check"></i><b>2.1.1</b> Vectores.</a></li>
+<li class="chapter" data-level="2.1.2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#matrices."><i class="fa fa-check"></i><b>2.1.2</b> Matrices.</a></li>
+<li class="chapter" data-level="2.1.3" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#data-frames."><i class="fa fa-check"></i><b>2.1.3</b> Data frames.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#importando-datos."><i class="fa fa-check"></i><b>2.2</b> Importando datos.</a></li>
+<li class="chapter" data-level="2.3" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#dplyr."><i class="fa fa-check"></i><b>2.3</b> {dplyr}.</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#el-tidyverse.-cargando-dplyr."><i class="fa fa-check"></i><b>2.3.1</b> El Tidyverse. Cargando {dplyr}.</a></li>
+<li class="chapter" data-level="2.3.2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#seleccionando-columnas-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.2</b> Seleccionando columnas de un data frame.</a></li>
+<li class="chapter" data-level="2.3.3" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#seleccionando-casos-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.3</b> Seleccionando casos de un <em>data frame</em>.</a></li>
+<li class="chapter" data-level="2.3.4" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#ordenando-casos-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.4</b> Ordenando casos de un <em>data frame</em>.</a></li>
+<li class="chapter" data-level="2.3.5" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#cambiando-el-nombre-de-las-variables-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.5</b> Cambiando el nombre de las variables de un <em>data frame</em>.</a></li>
+<li class="chapter" data-level="2.3.6" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#añadiendo-variables-como-transformación-de-otras-variables-en-un-data-frame."><i class="fa fa-check"></i><b>2.3.6</b> <strong>Añadiendo variables como transformación de otras variables en un <em>data frame</em>.</strong></a></li>
+<li class="chapter" data-level="2.3.7" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#extrayendo-y-sintetizando-información-de-las-variables-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.7</b> Extrayendo y sintetizando información de las variables de un <em>data frame</em>.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#exportando-datos."><i class="fa fa-check"></i><b>2.4</b> Exportando datos.</a></li>
+<li class="chapter" data-level="2.5" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#materiales-para-realizar-las-prácticas-del-capítulo."><i class="fa fa-check"></i><b>2.5</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="gráficos..html"><a href="gráficos..html"><i class="fa fa-check"></i><b>3</b> Gráficos.</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="gráficos..html"><a href="gráficos..html#tidyverse-para-gráficos-ggplot2."><i class="fa fa-check"></i><b>3.1</b> Tidyverse para gráficos: ggplot2.</a></li>
+<li class="chapter" data-level="3.2" data-path="gráficos..html"><a href="gráficos..html#gráficos-de-una-variable-histogramas-gráficos-de-densidad-gráficos-de-caja-o-boxplots."><i class="fa fa-check"></i><b>3.2</b> Gráficos de una variable: histogramas, gráficos de densidad, gráficos de caja o <em>boxplots</em>.</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="gráficos..html"><a href="gráficos..html#histograma."><i class="fa fa-check"></i><b>3.2.1</b> Histograma.</a></li>
+<li class="chapter" data-level="3.2.2" data-path="gráficos..html"><a href="gráficos..html#gráfico-de-densidad."><i class="fa fa-check"></i><b>3.2.2</b> Gráfico de densidad.</a></li>
+<li class="chapter" data-level="3.2.3" data-path="gráficos..html"><a href="gráficos..html#gráfico-de-caja-o-box-plot."><i class="fa fa-check"></i><b>3.2.3</b> Gráfico de caja o <em>Box-Plot</em>.</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="gráficos..html"><a href="gráficos..html#gráficos-de-dos-variables."><i class="fa fa-check"></i><b>3.3</b> Gráficos de dos variables.</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="gráficos..html"><a href="gráficos..html#gráfico-de-dispersión-o-scatterplot."><i class="fa fa-check"></i><b>3.3.1</b> Gráfico de dispersión o <em>scatterplot</em>.</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="gráficos..html"><a href="gráficos..html#materiales-para-realizar-las-prácticas-del-capítulo.-1"><i class="fa fa-check"></i><b>3.4</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html"><i class="fa fa-check"></i><b>4</b> Estadística descriptiva.</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#análisis-univariante."><i class="fa fa-check"></i><b>4.1</b> Análisis univariante.</a></li>
+<li class="chapter" data-level="4.2" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#representando-datos-y-distribuciones-de-frecuencias-en-tablas-con-r."><i class="fa fa-check"></i><b>4.2</b> Representando datos y distribuciones de frecuencias en tablas con R.</a></li>
+<li class="chapter" data-level="4.3" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#medidas-de-posición."><i class="fa fa-check"></i><b>4.3</b> Medidas de posición.</a></li>
+<li class="chapter" data-level="4.4" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#medidas-de-dispersión-o-variabilidad."><i class="fa fa-check"></i><b>4.4</b> Medidas de dispersión o variabilidad.</a></li>
+<li class="chapter" data-level="4.5" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#medidas-de-forma."><i class="fa fa-check"></i><b>4.5</b> Medidas de forma.</a></li>
+<li class="chapter" data-level="4.6" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#materiales-para-realizar-las-prácticas-del-capítulo.-2"><i class="fa fa-check"></i><b>4.6</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html"><i class="fa fa-check"></i><b>5</b> Análisis previo de datos.</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#introducción.-1"><i class="fa fa-check"></i><b>5.1</b> Introducción.</a></li>
+<li class="chapter" data-level="5.2" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#análisis-de-una-variable."><i class="fa fa-check"></i><b>5.2</b> Análisis de una variable.</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#buscando-missing-values-y-outliers."><i class="fa fa-check"></i><b>5.2.1</b> Buscando <em>missing values</em> y <em>outliers</em>.</a></li>
+<li class="chapter" data-level="5.2.2" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#descripción-de-una-variable."><i class="fa fa-check"></i><b>5.2.2</b> Descripción de una variable.</a></li>
+<li class="chapter" data-level="5.2.3" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#normalidad."><i class="fa fa-check"></i><b>5.2.3</b> Normalidad.</a></li>
+<li class="chapter" data-level="5.2.4" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#resumen-los-4-gráficos-básicos-en-la-descripción-de-una-variable."><i class="fa fa-check"></i><b>5.2.4</b> Resumen: los 4 gráficos básicos en la descripción de una variable.</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#análisis-de-múltiples-variables."><i class="fa fa-check"></i><b>5.3</b> Análisis de múltiples variables.</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#localización-de-missing-values-y-outliers."><i class="fa fa-check"></i><b>5.3.1</b> Localización de <em>missing values</em> y <em>outliers</em>.</a></li>
+<li class="chapter" data-level="5.3.2" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#correlación-entre-variables."><i class="fa fa-check"></i><b>5.3.2</b> Correlación entre variables.</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#materiales-para-realizar-las-prácticas-del-capítulo.-3"><i class="fa fa-check"></i><b>5.4</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="componentes-principales..html"><a href="componentes-principales..html"><i class="fa fa-check"></i><b>6</b> Componentes principales.</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="componentes-principales..html"><a href="componentes-principales..html#introducción.-2"><i class="fa fa-check"></i><b>6.1</b> Introducción.</a></li>
+<li class="chapter" data-level="6.2" data-path="componentes-principales..html"><a href="componentes-principales..html#información-y-varianza."><i class="fa fa-check"></i><b>6.2</b> Información y varianza.</a></li>
+<li class="chapter" data-level="6.3" data-path="componentes-principales..html"><a href="componentes-principales..html#cálculo-de-componentes."><i class="fa fa-check"></i><b>6.3</b> Cálculo de componentes.</a></li>
+<li class="chapter" data-level="6.4" data-path="componentes-principales..html"><a href="componentes-principales..html#retención-de-componentes-principales."><i class="fa fa-check"></i><b>6.4</b> Retención de componentes principales.</a></li>
+<li class="chapter" data-level="6.5" data-path="componentes-principales..html"><a href="componentes-principales..html#puntuaciones-de-los-casos-scores"><i class="fa fa-check"></i><b>6.5</b> Puntuaciones de los casos (scores)</a></li>
+<li class="chapter" data-level="6.6" data-path="componentes-principales..html"><a href="componentes-principales..html#materiales-para-realizar-las-prácticas-del-capítulo.-4"><i class="fa fa-check"></i><b>6.6</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="análisis-clúster..html"><a href="análisis-clúster..html"><i class="fa fa-check"></i><b>7</b> Análisis Clúster.</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="análisis-clúster..html"><a href="análisis-clúster..html#introducción.-3"><i class="fa fa-check"></i><b>7.1</b> Introducción.</a></li>
+<li class="chapter" data-level="7.2" data-path="análisis-clúster..html"><a href="análisis-clúster..html#métodos-de-agrupación-jerárquicos."><i class="fa fa-check"></i><b>7.2</b> Métodos de agrupación jerárquicos.</a></li>
+<li class="chapter" data-level="7.3" data-path="análisis-clúster..html"><a href="análisis-clúster..html#métodos-de-agrupación-no-jerárquicos."><i class="fa fa-check"></i><b>7.3</b> Métodos de agrupación no-jerárquicos.</a></li>
+<li class="chapter" data-level="7.4" data-path="análisis-clúster..html"><a href="análisis-clúster..html#materiales-para-realizar-las-prácticas-del-capítulo.-5"><i class="fa fa-check"></i><b>7.4</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html"><i class="fa fa-check"></i><b>8</b> Análisis de la varianza.</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#introducción.-4"><i class="fa fa-check"></i><b>8.1</b> Introducción.</a></li>
+<li class="chapter" data-level="8.2" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#anova-de-un-solo-factor."><i class="fa fa-check"></i><b>8.2</b> ANOVA de un solo factor.</a></li>
+<li class="chapter" data-level="8.3" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#comparaciones-múltiples."><i class="fa fa-check"></i><b>8.3</b> Comparaciones múltiples.</a></li>
+<li class="chapter" data-level="8.4" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#y-si-no-se-cumplen-las-condiciones-para-realizar-el-contraste-f-de-anova"><i class="fa fa-check"></i><b>8.4</b> ¿Y si no se cumplen las condiciones para realizar el contraste F de ANOVA?</a></li>
+<li class="chapter" data-level="8.5" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#materiales-para-realizar-las-prácticas-del-capítulo.-6"><i class="fa fa-check"></i><b>8.5</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html"><i class="fa fa-check"></i><b>9</b> Análisis de Regresión Lineal Múltiple.</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html#introducción.-5"><i class="fa fa-check"></i><b>9.1</b> Introducción.</a></li>
+<li class="chapter" data-level="9.2" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html#especificación-del-mbr.-datos-de-corte-transversal."><i class="fa fa-check"></i><b>9.2</b> Especificación del MBR. Datos de corte transversal.</a></li>
+<li class="chapter" data-level="9.3" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html#materiales-para-realizar-las-prácticas-del-capítulo.-7"><i class="fa fa-check"></i><b>9.3</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html"><i class="fa fa-check"></i><b>10</b> Análisis de Datos Cualitativos.</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#introducción.-6"><i class="fa fa-check"></i><b>10.1</b> Introducción.</a></li>
+<li class="chapter" data-level="10.2" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#tablas-de-contingencia-y-asociación-entre-dos-atributos-o-factores."><i class="fa fa-check"></i><b>10.2</b> Tablas de contingencia, y asociación entre dos atributos o factores.</a></li>
+<li class="chapter" data-level="10.3" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#análisis-de-correspondencias."><i class="fa fa-check"></i><b>10.3</b> Análisis de correspondencias.</a></li>
+<li class="chapter" data-level="10.4" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#modelos-logaritmico-lineales-aplicados-a-tablas-de-contingencia."><i class="fa fa-check"></i><b>10.4</b> Modelos logaritmico-lineales aplicados a tablas de contingencia.</a></li>
+<li class="chapter" data-level="10.5" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#materiales-para-realizar-las-prácticas-del-capítulo.-8"><i class="fa fa-check"></i><b>10.5</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="bibliografía.html"><a href="bibliografía.html"><i class="fa fa-check"></i>Bibliografía</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Técnicas de Análisis de Datos Económicos con R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="componentes-principales." class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">Capítulo 6</span> Componentes principales.<a href="componentes-principales..html#componentes-principales." class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introducción.-2" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> Introducción.<a href="componentes-principales..html#introducción.-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A veces, menos es más. Esta es la filosofía que subyace a las <strong>técnicas de reducción de la dimensión</strong> de la información.</p>
+<p>Imaginemos una serie de casos (por ejemplo, las empresas de un sector económico) caracterizados por múltiples variables. Puede ocurrir que, paradójicamente, el contar con tantas variables haga difícil la caracterización de los casos. Esto ocurre cuando algunas de las variables aportan una información muy parecida sobre los mismos. Por ejemplo, es más difícil hacerse una idea del comportamiento global en el ámbito económico o financiero de un grupo de empresas si tenemos que atender a los valores que toman en un conjunto de 10 variables, que si solo tenemos que atender a un par de indicadores. Las técnicas de reducción de la dimensión de la información tratan, precisamente, de disminuir el número de variables necesarias para caracterizar un grupo de casos aprovechando la posibilidad de que las (múltiples) variables originales compartan información sobre los mismos. Es decir, la idea subyacente es pasar de un planteamiento basado en manejar muchas variables con información compartida o redundante (variables que “dicen lo mismo” sobre el comportamiento de los casos) a un planteamiento en el que hay <strong>menos variables</strong>, pero que <strong>no comparten información</strong> (variables que “dicen” cosas diferentes sobre el comportamiento de los casos). En este proceso es importante que la pérdida de información sea mínima, y que solo se pierda la información redundante o repetida.</p>
+<p>La principal técnica de reducción de la dimensión de la información es la de <strong>componentes principales,</strong> y es la que se expondrá y ejemplificará en el resto del capítulo. Pero antes, es preciso concretar la relación entre dos conceptos muy presentes en esta técnica: información y varianza.</p>
+</div>
+<div id="información-y-varianza." class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Información y varianza.<a href="componentes-principales..html#información-y-varianza." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En el apartado anterior hemos hablado de la posibilidad de que algunas variables compartan “información” sobre el comportamiento de los casos que constituyen nuestra muestra u objeto de estudio. Pero, ¿qué es, en este contexto, la “información”?</p>
+<p>La <strong><em>información</em></strong> que una variable contiene sobre un conjunto de casos puede entenderse como su <strong>capacidad para diferenciar a unos casos de otros</strong>.</p>
+<p>Observemos este ejemplo, en el que se representan los valores que toman un grupo de 20 empresas en 3 variables.</p>
+<div class="float">
+<img src="figuras/varianza.png" alt="Información y Varianza" />
+<div class="figcaption">Información y Varianza</div>
+</div>
+<p>En la variable 1, todas las empresas toman el mismo valor. Por tanto, la capacidad que tiene la variable para distinguir a los casos (empresas), unos de otros, es nula. Eso es debido a que, en definitiva, esta variable no contiene información sobre el grupo de 20 empresas.</p>
+<p>En la variable 2, existe cierta dispersión, aunque reducida, en los valores que adoptan los casos. Esto permite distinguir a unos de otros, aunque a veces con cierta dificultad. Por ejemplo, la empresa 17 se distingue del resto por ser la que tiene un valor (un poco) mayor. Aun así, como la dispersión es reducida, no se distinguen algunos casos de otros demasiado bien. En definitiva, la variable 2 contiene cierta cantidad de información sobre el conjunto de empresas de la muestra, aunque no demasiado grande.</p>
+<p>Por último, la variable 3 muestra una dispersión considerablemente mayor que las otras dos variables. Existe un amplio abanico de valores que toman los diferentes casos (empresas). Esto hace que puedan diferenciarse con facilidad, en general, unos de otros. Esta variable posee, por tanto, una cantidad de información superior respecto a las empresas, ya que observando los valores que toman en la variable pueden diferenciarse con facilidad unas de otras.</p>
+<p>Como conclusión, podemos establecer que cuanto mayor dispersión muestra una variable para un grupo de casos, mayor cantidad de información contiene sobre ellos, en el sentido de disfrutar de un mayor “poder” de diferenciación de unos casos respecto a otros.</p>
+<p>Una medida de la dispersión de una variable usualmente utilizada es la <strong>varianza</strong>. Por tanto, en cierta manera, la varianza sirve para medir la cantidad de información que contiene la variable: a mayor varianza, mayor dispersión. Y a mayor dispersión, mayor cantidad de información.</p>
+<p>En el ejemplo, puede observarse cómo la variable 3 es la que mayor varianza tiene, luego la variable 2, y la variable 1 tiene una varianza de 0 (y no posee información sobre las 20 empresas). Esta comparación de varianzas es válida siempre y cuando las tres variables estén expresadas en las mismas unidades, ya que la varianza es una medida de dispersión absoluta. Por ello, para poder comparar, hemos añadido también en el ejemplo una medida de dispersión relativa: el coeficiente de variación. Podemos comprobar cómo el mayor coeficiente de variación pertenece a la variable 3 (que es la que tiene una mayor cantidad de información), luego la variable 2 (que cuenta con menor cantidad de información), y por último la variable 1, con un coeficiente de 0 (no contiene información sobre las empresas).</p>
+</div>
+<div id="cálculo-de-componentes." class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> Cálculo de componentes.<a href="componentes-principales..html#cálculo-de-componentes." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Vamos a considerar una serie de variables (en escala métrica) que caracterizan a la población de empresas de producción eléctrica mediante tecnología eólica en lo referente a la idea de “solidez del negocio”. Hemos seleccionado una muestra de 60 empresas. Nuestro objetivo es obtener una combinación lineal de estas variables (“componente principal”) que recoja la mayor parte de la suma de varianzas de las variables originales (“comunalidad”), de manera que pueda usarse como un indicador que resume o sintetiza el grado de solidez del negocio de cada empresa, con una pérdida mínima de información.</p>
+<p>Las variables a partir de las cuales construiremos el indicador (“componente principal”) son:</p>
+<ul>
+<li><p><strong>RES:</strong> Resultado del ejercicio.</p></li>
+<li><p><strong>FPIOS:</strong> Fondos propios.</p></li>
+<li><p><strong>MARGEN:</strong> Margen de beneficio.</p></li>
+<li><p><strong>SOLVENCIA:</strong> Coeficiente de solvencia.</p></li>
+</ul>
+<p>Vamos a suponer que trabajamos dentro de un <strong>proyecto</strong> que hemos creado previamente, de nombre “componentes”. Dentro de la carpeta del proyecto guardaremos el <em>script</em> llamado “componentes_eolica.R”, y el archivo de Microsoft® Excel® llamado “eolica_60.xlsx”. Si abrimos este último archivo, comprobaremos que se compone de tres hojas. La primera muestra un mensaje sobre el uso de los datos, la segunda recoge la descripción de las variables consideradas, y la tercera (hoja “Datos”) almacena los datos que debemos importar. Estos datos se corresponden con diferentes variables económico-financieras de 60 empresas productoras de electricidad mediante generación eólica.</p>
+<p>Es muy importante observar que existen variables con datos faltantes (<em>missing values</em>). En concreto, podemos identificar estas faltas de dato por la existencia de celdas en blanco; pero también por la existencia de celdas con el texto “n.d.” (no dato). Así, tendremos que aplicar código adicional en el comando de importación de R para que estos casos queden correctamente recogidos como <em>NAs</em> (<em>not available</em>).</p>
+<p>Cerraremos el archivo de Microsoft® Excel®, “<a href="https://docs.google.com/spreadsheets/d/1G7yk22TShY1bYS1i9v4PfVi_HCkOG2ZO/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">eolica_60.xlsx</a>” y volveremos a RStudio. Después, abriremos nuestro <em>script</em> “<a href="https://drive.google.com/file/d/1d0ss6sh-jIAcrrlWSHHQI_CfRtiDqANX/view?usp=sharing">componentes_eolica.R</a>”. Este <em>script</em> contiene el programa que vamos a ejecutar en lel ejemplo.</p>
+<p>La primera línea / instrucción en el <em>script</em> es:</p>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="componentes-principales..html#cb214-1" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span></code></pre></div>
+<p>La instrucción tiene como objeto limpiar el <em>Environment</em> (memoria) de objetos de anteriores sesiones de trabajo. Para importar los datos almacenados en la hoja “Datos” del archivo “eolica_60.xlsx”, ejecutaremos el código:</p>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="componentes-principales..html#cb215-1" tabindex="-1"></a><span class="co"># DATOS</span></span>
+<span id="cb215-2"><a href="componentes-principales..html#cb215-2" tabindex="-1"></a></span>
+<span id="cb215-3"><a href="componentes-principales..html#cb215-3" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb215-4"><a href="componentes-principales..html#cb215-4" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;eolica_60.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;Datos&quot;</span>, <span class="at">na =</span> <span class="st">&quot;n.d.&quot;</span>)</span></code></pre></div>
+<p>Podemos observar cómo, en el <em>Environment,</em> ya aparece un objeto. Este objeto es una estructura de datos tipo <em>data frame</em>, se llama “datos” y contiene 12 columnas, una por cada una de las variables almacenadas en el archivo de Microsoft® Excel®. De estas variables, tres son de tipo cualitativo (atributos o factores), formadas por cadenas de caracteres: el nombre de la empresa (NOMBRE), el nombre de la sociedad matriz (grupo empresarial) a la que pertenece (MATRIZ), y el tamaño de dicho grupo de empresas (DIMENSION).</p>
+<p>R ha considerado la primera columna de la hoja de Excel (NOMBRE) como una variable de tipo cualitativo o atributo. En realidad no es una variable; sino el nombre de los casos (empresas). Para evitar esto, podemos redefinir nuestro <em>data frame</em> diciéndole que esa primera columna contiene los nombres de los casos (filas):</p>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="componentes-principales..html#cb216-1" tabindex="-1"></a><span class="co"># DATOS</span></span>
+<span id="cb216-2"><a href="componentes-principales..html#cb216-2" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(datos, <span class="at">row.names =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p>En la línea anterior hemos asignado al <em>data frame</em> “datos” los propios datos de “datos”; pero indicando que la primera columna no es una variable; sino el nombre de los casos o filas (empresas). Advertimos que ya no aparece NOMBRE como variable, y que en el <em>Environment</em> ya aparece el <em>data frame</em> “datos” con 60 observaciones, pero con 11 variables (una menos).</p>
+<p>Como en el ejemplo se plantea construir un indicador basado en las 4 variables antes indicadas (RES, FPIOS, MARGEN y SOLVENCIA), crearemos un <em>data frame</em> con solo esas variables. Lo llamaremos, por ejemplo, “muestra”:</p>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="componentes-principales..html#cb217-1" tabindex="-1"></a><span class="co"># Seleccionando variables metricas para el analisis.</span></span>
+<span id="cb217-2"><a href="componentes-principales..html#cb217-2" tabindex="-1"></a></span>
+<span id="cb217-3"><a href="componentes-principales..html#cb217-3" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb217-4"><a href="componentes-principales..html#cb217-4" tabindex="-1"></a>muestra <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span> <span class="fu">select</span>(RES, FPIOS, MARGEN, SOLVENCIA)</span>
+<span id="cb217-5"><a href="componentes-principales..html#cb217-5" tabindex="-1"></a><span class="fu">summary</span> (muestra)</span></code></pre></div>
+<pre><code>##       RES            FPIOS            MARGEN          SOLVENCIA     
+##  Min.   :-5661   Min.   :-77533   Min.   :-302.03   Min.   :-40.74  
+##  1st Qu.:  496   1st Qu.:  2323   1st Qu.:  11.70   1st Qu.:  5.94  
+##  Median : 1939   Median :  9727   Median :  27.64   Median : 16.88  
+##  Mean   : 2699   Mean   : 18801   Mean   :  30.63   Mean   : 28.12  
+##  3rd Qu.: 3903   3rd Qu.: 26493   3rd Qu.:  39.59   3rd Qu.: 51.38  
+##  Max.   :17026   Max.   :177707   Max.   : 400.90   Max.   : 99.08  
+##  NA&#39;s   :1       NA&#39;s   :1        NA&#39;s   :2         NA&#39;s   :1</code></pre>
+<p>El siguiente paso será localizar los posibles <strong><em>missing values</em></strong>, ya que para obtener componentes principales es necesario que todos los casos posean dato para todas las variables del análisis. Para tener una idea general, se puede utilizar la función <code>vis_miss()</code> del paquete <code>{visdat}</code>, que localizará gráficamente los <em>missing values</em> de las diferentes variables, y calculará el porcentaje de casos que supone, con respecto al total de observaciones:</p>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="componentes-principales..html#cb219-1" tabindex="-1"></a><span class="fu">library</span>(visdat)</span>
+<span id="cb219-2"><a href="componentes-principales..html#cb219-2" tabindex="-1"></a><span class="fu">vis_miss</span>(muestra)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-182-1.png" width="672" /></p>
+<p>Del gráfico anterior se desprende que existen 5 <em>missing values</em> repartidos en las 4 variables del estudio. Para localizarlos, podemos filtrar nuestro <em>data frame</em> con las herramientas de <code>{dplyr}</code>:</p>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="componentes-principales..html#cb220-1" tabindex="-1"></a>muestra <span class="sc">%&gt;%</span></span>
+<span id="cb220-2"><a href="componentes-principales..html#cb220-2" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(RES) <span class="sc">|</span> <span class="fu">is.na</span>(FPIOS) <span class="sc">|</span> <span class="fu">is.na</span>(MARGEN) <span class="sc">|</span> <span class="fu">is.na</span>(SOLVENCIA)) <span class="sc">%&gt;%</span></span>
+<span id="cb220-3"><a href="componentes-principales..html#cb220-3" tabindex="-1"></a>               <span class="fu">select</span>(RES, FPIOS, MARGEN, SOLVENCIA)  </span></code></pre></div>
+<pre><code>##                                       RES      FPIOS  MARGEN SOLVENCIA
+## Biovent Energia SA                     NA 70033.0000  22.792    38.082
+## Eolica La Janda SL             9880.09100         NA  38.256    16.428
+## Parc Eolic Sant Antoni SL       668.00000  9727.0000      NA    13.964
+## WPD Parque Eolico El Poleo SL.  -30.63754   520.6033 -11.121        NA
+## Eolica La Brujula SA           2306.06200 21694.7910      NA    51.474</code></pre>
+<p>Ante la existencia de <em>missing values</em>, se puede actuar de varios modos. Por ejemplo, <strong>se puede intentar obtener por otro canal de información el conjunto de valores</strong> que no están disponibles, <strong>o recurrir a alguna estimación</strong>. En caso de que esto sea difícil, se puede optar, simplemente, por <strong>eliminar</strong> estos casos, en especial cuando representan un porcentaje muy reducido respecto al total de casos. En nuestro ejemplo, supondremos que hemos optado por esta última vía, y eliminaremos estos casos con el código:</p>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="componentes-principales..html#cb222-1" tabindex="-1"></a>muestra <span class="ot">&lt;-</span> muestra <span class="sc">%&gt;%</span></span>
+<span id="cb222-2"><a href="componentes-principales..html#cb222-2" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span> <span class="fu">is.na</span>(RES) <span class="sc">&amp;</span> <span class="sc">!</span> <span class="fu">is.na</span>(FPIOS) <span class="sc">&amp;</span> <span class="sc">!</span> <span class="fu">is.na</span>(MARGEN) <span class="sc">&amp;</span> <span class="sc">!</span> <span class="fu">is.na</span>(SOLVENCIA))  </span></code></pre></div>
+<p>Verificamos en el <em>Environment</em> que el <em>data frame</em> “muestra” ha pasado a tener 53 casos.</p>
+<p>Por otro lado, la técnica de componentes principales <strong>es muy sensible a la existencia de <em>outliers</em></strong>. En consecuencia, deberán ser identificados y, en su caso, eliminados. Para realizar este proceso, y dado que en nuestro análisis contamos con 4 variables, primero “resumiremos” el valor que toman dichas variables para cada observación (empresa), mediante el cálculo de la <em>distancia de Mahalanobis</em>. De hecho, las distancias de los diferentes casos se almacenarán en una nueva columna o variable de nuestro <em>data frame,</em> a la que llamaremos MAHALANOBIS:</p>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="componentes-principales..html#cb223-1" tabindex="-1"></a>muestra <span class="ot">&lt;-</span> muestra <span class="sc">%&gt;%</span></span>
+<span id="cb223-2"><a href="componentes-principales..html#cb223-2" tabindex="-1"></a>  <span class="fu">mutate</span> (<span class="at">MAHALANOBIS =</span> <span class="fu">mahalanobis</span>(<span class="fu">cbind</span>(RES, FPIOS, MARGEN, SOLVENCIA),</span>
+<span id="cb223-3"><a href="componentes-principales..html#cb223-3" tabindex="-1"></a>            <span class="at">center =</span> <span class="fu">colMeans</span>(<span class="fu">select</span>(., RES, FPIOS, MARGEN, SOLVENCIA)),</span>
+<span id="cb223-4"><a href="componentes-principales..html#cb223-4" tabindex="-1"></a>            <span class="at">cov =</span> <span class="fu">cov</span>(<span class="fu">select</span>(., RES, FPIOS, MARGEN, SOLVENCIA))))</span></code></pre></div>
+<p>Dentro de las funciones <code>select()</code> hay unos puntos. Recordemos que estos puntos deben ser añadidos cuando una función no es la primera del operador “<em>pipe</em>” (<code>%&gt;%</code>), para indicar que las variables de los paréntesis hacen referencia al <em>data frame</em> “muestra” (o, en general, el objeto que fluye a través del “<em>pipe</em>”).</p>
+<p>A continuación, construiremos un diagrama de caja de la variable MAHALANOBIS, como si fuera cualquier otra variable, a partir de la función <code>ggplot()</code> del paquete <code>{ggplot2}</code>:</p>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="componentes-principales..html#cb224-1" tabindex="-1"></a><span class="fu">library</span> (ggplot2)</span>
+<span id="cb224-2"><a href="componentes-principales..html#cb224-2" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> muestra, <span class="at">map =</span> (<span class="fu">aes</span>(<span class="at">y =</span> MAHALANOBIS))) <span class="sc">+</span></span>
+<span id="cb224-3"><a href="componentes-principales..html#cb224-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;orange&quot;</span>) <span class="sc">+</span></span>
+<span id="cb224-4"><a href="componentes-principales..html#cb224-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;DISTANCIA DE MAHALANOBIS&quot;</span>, <span class="at">subtitle =</span> <span class="st">&quot;Empresas eólicas&quot;</span>) <span class="sc">+</span></span>
+<span id="cb224-5"><a href="componentes-principales..html#cb224-5" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;MAHALANOBIS&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-186-1.png" width="672" /></p>
+<p>En el gráfico se observa que existen, por encima de la caja, varios <em>outliers</em>. Para identificarlos de modo concreto, hemos de calcular los cuartiles primero y tercero de la variable MAHALANOBIS y pasar el correspondiente filtro:</p>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="componentes-principales..html#cb225-1" tabindex="-1"></a>Q1M <span class="ot">&lt;-</span> <span class="fu">quantile</span> (muestra<span class="sc">$</span>MAHALANOBIS, <span class="fu">c</span>(<span class="fl">0.25</span>))</span>
+<span id="cb225-2"><a href="componentes-principales..html#cb225-2" tabindex="-1"></a>Q3M <span class="ot">&lt;-</span> <span class="fu">quantile</span> (muestra<span class="sc">$</span>MAHALANOBIS, <span class="fu">c</span>(<span class="fl">0.75</span>))</span>
+<span id="cb225-3"><a href="componentes-principales..html#cb225-3" tabindex="-1"></a>muestra <span class="sc">%&gt;%</span></span>
+<span id="cb225-4"><a href="componentes-principales..html#cb225-4" tabindex="-1"></a>  <span class="fu">filter</span>(MAHALANOBIS <span class="sc">&gt;</span> Q3M <span class="sc">+</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(MAHALANOBIS) <span class="sc">|</span></span>
+<span id="cb225-5"><a href="componentes-principales..html#cb225-5" tabindex="-1"></a>         MAHALANOBIS <span class="sc">&lt;</span> Q1M <span class="sc">-</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(MAHALANOBIS))<span class="sc">%&gt;%</span></span>
+<span id="cb225-6"><a href="componentes-principales..html#cb225-6" tabindex="-1"></a>         <span class="fu">select</span>(MAHALANOBIS)</span></code></pre></div>
+<pre><code>##                                     MAHALANOBIS
+## Viesgo Renovables SL.                  35.05290
+## Guzman Energia SL                      10.31024
+## WPD Wind Investment SL.                21.69461
+## Molinos Del Ebro SA                    24.38816
+## Tarraco Eolica SA                      21.91118
+## WPD Parque Eolico Las Panaderas SL.     8.21836
+## Eolica Navarra SL                      13.41478</code></pre>
+<p>Si, tras el estudio de los valores que toman las variables originales en estos casos, se decide eliminarlos, el código será:</p>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="componentes-principales..html#cb227-1" tabindex="-1"></a>muestra_so <span class="ot">&lt;-</span> muestra <span class="sc">%&gt;%</span></span>
+<span id="cb227-2"><a href="componentes-principales..html#cb227-2" tabindex="-1"></a>  <span class="fu">filter</span>(MAHALANOBIS <span class="sc">&lt;=</span> Q3M <span class="sc">+</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(MAHALANOBIS) <span class="sc">&amp;</span></span>
+<span id="cb227-3"><a href="componentes-principales..html#cb227-3" tabindex="-1"></a>         MAHALANOBIS <span class="sc">&gt;=</span> Q1M <span class="sc">-</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(MAHALANOBIS))</span>
+<span id="cb227-4"><a href="componentes-principales..html#cb227-4" tabindex="-1"></a>muestra_so <span class="ot">&lt;-</span> muestra_so <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>MAHALANOBIS)</span></code></pre></div>
+<p>Se ha creado un nuevo <em>data frame</em> llamado “muestra_so” con los casos que <strong>no</strong> son <em>outliers</em> (y que no contienen <em>missing values</em>), y se ha eliminado la variable MAHALANOBIS, puesto que su única utilidad era la de localizar y filtrar los <em>outliers</em>. Con este <em>data frame</em> “muestra_so” es con el que se procederá al cálculo de las componentes.</p>
+<p>La condición previa para el cálculo de componentes es que las variables originales del análisis contengan información redundante, es decir, que en buena medida aporten una “misma información” sobre los casos (empresas). Esto se verifica con la existencia de altas correlaciones entre las variables (al menos, entre algunas de ellas). Por tanto, hemos de calcular la matriz de correlaciones correspondiente. Un modo gráfico visualmente efectivo es utilizar las posibilidades que nos ofrece el paquete <code>{GGally}</code> mediante la función <code>ggpairs()</code>:</p>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="componentes-principales..html#cb228-1" tabindex="-1"></a><span class="co"># Correlaciones.</span></span>
+<span id="cb228-2"><a href="componentes-principales..html#cb228-2" tabindex="-1"></a></span>
+<span id="cb228-3"><a href="componentes-principales..html#cb228-3" tabindex="-1"></a><span class="fu">library</span> (GGally)</span>
+<span id="cb228-4"><a href="componentes-principales..html#cb228-4" tabindex="-1"></a></span>
+<span id="cb228-5"><a href="componentes-principales..html#cb228-5" tabindex="-1"></a>corr_plot_so <span class="ot">&lt;-</span> <span class="fu">ggpairs</span>(muestra_so, </span>
+<span id="cb228-6"><a href="componentes-principales..html#cb228-6" tabindex="-1"></a>                        <span class="at">lower =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="fu">wrap</span>(<span class="st">&quot;cor&quot;</span>,</span>
+<span id="cb228-7"><a href="componentes-principales..html#cb228-7" tabindex="-1"></a>                                                       <span class="at">size =</span> <span class="fl">4.5</span>,</span>
+<span id="cb228-8"><a href="componentes-principales..html#cb228-8" tabindex="-1"></a>                                                       <span class="at">method =</span> <span class="st">&quot;pearson&quot;</span>,</span>
+<span id="cb228-9"><a href="componentes-principales..html#cb228-9" tabindex="-1"></a>                                                       <span class="at">stars =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb228-10"><a href="componentes-principales..html#cb228-10" tabindex="-1"></a>                        <span class="at">title =</span> <span class="st">&quot;Matriz de Correlación sin outliers&quot;</span>)</span>
+<span id="cb228-11"><a href="componentes-principales..html#cb228-11" tabindex="-1"></a>corr_plot_so</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-189-1.png" width="672" /></p>
+<p>Puede apreciarse cómo existen altas correlaciones (en valor absoluto) entre todas las variables. Por tanto, tiene sentido hacer un análisis de componentes principales, ya que hay variables que parecen <strong>compartir información</strong>.</p>
+<p>La obtención de las componentes se va a realizar mediante la función <code>prcomp()</code>. Es conveniente que activemos el argumento <code>scale =</code> con “T” (<em>true</em>) para que las variables originales sean consideradas en sus <strong>versiones tipificadas</strong>. Vamos a asignar los resultados a un objeto de nombre, por ejemplo, “componentes”. Por último, guardaremos el <code>summary()</code> o resumen de los resultados con un nombre provisional, por ejemplo, “temporal”. El código es el siguiente:</p>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="componentes-principales..html#cb229-1" tabindex="-1"></a><span class="co"># Obtencion de componentes.</span></span>
+<span id="cb229-2"><a href="componentes-principales..html#cb229-2" tabindex="-1"></a></span>
+<span id="cb229-3"><a href="componentes-principales..html#cb229-3" tabindex="-1"></a>componentes <span class="ot">&lt;-</span> <span class="fu">prcomp</span> (muestra_so, <span class="at">scale=</span>T)</span>
+<span id="cb229-4"><a href="componentes-principales..html#cb229-4" tabindex="-1"></a>temporal <span class="ot">&lt;-</span> <span class="fu">summary</span> (componentes)</span>
+<span id="cb229-5"><a href="componentes-principales..html#cb229-5" tabindex="-1"></a>temporal</span></code></pre></div>
+<pre><code>## Importance of components:
+##                           PC1    PC2    PC3    PC4
+## Standard deviation     1.6903 0.7646 0.6487 0.3709
+## Proportion of Variance 0.7143 0.1462 0.1052 0.0344
+## Cumulative Proportion  0.7143 0.8604 0.9656 1.0000</code></pre>
+<p>La “<em>Standard deviation</em>” es la raíz cuadrada de los autovalores asociados a cada componente. “<em>Proportion of Variance</em>” nos dice la proporción de la suma de varianzas de las variables originales (<em>comunalidad</em>) recogida por cada componente, proporción que se acumula en “<em>Cumulative Proportion</em>”. Nótese que las componentes aparecen ordenadas de más a menos importantes en función de la cantidad de varianza que capturan. En este caso, la primera componente acumula más del 71% de la varianza (comportamiento) de las variables originales. Por tanto, esta primera componente resume bastante bien la información que las 4 variables originales contienen sobre los casos (empresas).</p>
+<p>Si el elemento “importance” del <code>summary()</code> o resumen “temporal” lo convertimos en un <em>data frame</em>, por ejemplo “summary_df”, podremos presentar los resultados por medio de una tabla estéticamente más atractiva, a partir de la función <code>kable()</code> del paquete <code>{knitr}</code>, y las funciones complementarias del paquete <code>{kableExtra}</code>:</p>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="componentes-principales..html#cb231-1" tabindex="-1"></a><span class="co"># Convertir el resumen en un data frame</span></span>
+<span id="cb231-2"><a href="componentes-principales..html#cb231-2" tabindex="-1"></a></span>
+<span id="cb231-3"><a href="componentes-principales..html#cb231-3" tabindex="-1"></a>summary_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(temporal<span class="sc">$</span>importance)</span>
+<span id="cb231-4"><a href="componentes-principales..html#cb231-4" tabindex="-1"></a>summary_df <span class="ot">&lt;-</span> <span class="fu">t</span>(summary_df)  <span class="co"># Transponer para mejor visualización</span></span>
+<span id="cb231-5"><a href="componentes-principales..html#cb231-5" tabindex="-1"></a><span class="fu">rm</span> (temporal)</span>
+<span id="cb231-6"><a href="componentes-principales..html#cb231-6" tabindex="-1"></a></span>
+<span id="cb231-7"><a href="componentes-principales..html#cb231-7" tabindex="-1"></a><span class="co"># Crear la tabla con kable y personalizarla con kableExtra</span></span>
+<span id="cb231-8"><a href="componentes-principales..html#cb231-8" tabindex="-1"></a></span>
+<span id="cb231-9"><a href="componentes-principales..html#cb231-9" tabindex="-1"></a><span class="fu">library</span> (knitr)</span>
+<span id="cb231-10"><a href="componentes-principales..html#cb231-10" tabindex="-1"></a><span class="fu">library</span> (kableExtra)</span>
+<span id="cb231-11"><a href="componentes-principales..html#cb231-11" tabindex="-1"></a>knitr.table.format <span class="ot">=</span> <span class="st">&quot;html&quot;</span></span>
+<span id="cb231-12"><a href="componentes-principales..html#cb231-12" tabindex="-1"></a></span>
+<span id="cb231-13"><a href="componentes-principales..html#cb231-13" tabindex="-1"></a>summary_df <span class="sc">%&gt;%</span></span>
+<span id="cb231-14"><a href="componentes-principales..html#cb231-14" tabindex="-1"></a><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Resumen de Componentes&quot;</span>,</span>
+<span id="cb231-15"><a href="componentes-principales..html#cb231-15" tabindex="-1"></a>      <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Desviación típica&quot;</span>,<span class="st">&quot;Proporción de varianza (comunalidad)&quot;</span>,</span>
+<span id="cb231-16"><a href="componentes-principales..html#cb231-16" tabindex="-1"></a>                    <span class="st">&quot;Proporción de varianza (comunalidad) acumulada&quot;</span>),</span>
+<span id="cb231-17"><a href="componentes-principales..html#cb231-17" tabindex="-1"></a>      <span class="at">format.args =</span> <span class="fu">list</span>(<span class="at">decimal.mark =</span> <span class="st">&quot;.&quot;</span>, <span class="at">digits =</span> <span class="dv">4</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb231-18"><a href="componentes-principales..html#cb231-18" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;bordered&quot;</span>, <span class="st">&quot;condensed&quot;</span>),</span>
+<span id="cb231-19"><a href="componentes-principales..html#cb231-19" tabindex="-1"></a>                <span class="at">full_width =</span> F, </span>
+<span id="cb231-20"><a href="componentes-principales..html#cb231-20" tabindex="-1"></a>                <span class="at">position =</span> <span class="st">&quot;center&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb231-21"><a href="componentes-principales..html#cb231-21" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold=</span> T, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb231-22"><a href="componentes-principales..html#cb231-22" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(summary_df)), <span class="at">bold=</span> F, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb231-23"><a href="componentes-principales..html#cb231-23" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">1</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">extra_css =</span> <span class="st">&quot;text-align: left;&quot;</span>)</span></code></pre></div>
+<table class="table table-striped table-bordered table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-192">Table 6.1: </span><span id="tab:unnamed-chunk-192">Table 6.2: </span>Resumen de Componentes
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Desviación típica
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Proporción de varianza (comunalidad)
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Proporción de varianza (comunalidad) acumulada
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+PC1
+</td>
+<td style="text-align:right;text-align: center;">
+1.6903
+</td>
+<td style="text-align:right;text-align: center;">
+0.7143
+</td>
+<td style="text-align:right;text-align: center;">
+0.7143
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+PC2
+</td>
+<td style="text-align:right;text-align: center;">
+0.7646
+</td>
+<td style="text-align:right;text-align: center;">
+0.1462
+</td>
+<td style="text-align:right;text-align: center;">
+0.8604
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+PC3
+</td>
+<td style="text-align:right;text-align: center;">
+0.6487
+</td>
+<td style="text-align:right;text-align: center;">
+0.1052
+</td>
+<td style="text-align:right;text-align: center;">
+0.9656
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+PC4
+</td>
+<td style="text-align:right;text-align: center;">
+0.3709
+</td>
+<td style="text-align:right;text-align: center;">
+0.0344
+</td>
+<td style="text-align:right;text-align: center;">
+1.0000
+</td>
+</tr>
+</tbody>
+</table>
+<p>Los coeficientes o <strong>cargas</strong> de cada componente se obtienen pidiendo a nuestro objeto “componentes” el elemento “rotation”. Estas cargas las vamos a guardar en un nuevo objeto que llamaremos, por ejemplo, “cargas”, que presentaremos mediante una pequeña tabla diseñada con la función <code>kable()</code> del paquete <code>{knitr}</code> y otras funciones del paquete <code>{kableExtra}</code>:</p>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="componentes-principales..html#cb232-1" tabindex="-1"></a><span class="co"># Cargas de cada componente.</span></span>
+<span id="cb232-2"><a href="componentes-principales..html#cb232-2" tabindex="-1"></a></span>
+<span id="cb232-3"><a href="componentes-principales..html#cb232-3" tabindex="-1"></a>cargas <span class="ot">&lt;-</span> componentes<span class="sc">$</span>rotation</span>
+<span id="cb232-4"><a href="componentes-principales..html#cb232-4" tabindex="-1"></a>cargas <span class="sc">%&gt;%</span></span>
+<span id="cb232-5"><a href="componentes-principales..html#cb232-5" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Cargas de las componentes obtenidas&quot;</span>,</span>
+<span id="cb232-6"><a href="componentes-principales..html#cb232-6" tabindex="-1"></a>        <span class="at">format.args =</span> <span class="fu">list</span>(<span class="at">decimal.mark =</span> <span class="st">&quot;.&quot;</span>, <span class="at">digits =</span> <span class="dv">4</span>))  <span class="sc">%&gt;%</span></span>
+<span id="cb232-7"><a href="componentes-principales..html#cb232-7" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F, <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>,</span>
+<span id="cb232-8"><a href="componentes-principales..html#cb232-8" tabindex="-1"></a>                <span class="st">&quot;bordered&quot;</span>, <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb232-9"><a href="componentes-principales..html#cb232-9" tabindex="-1"></a>                <span class="at">position =</span> <span class="st">&quot;center&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb232-10"><a href="componentes-principales..html#cb232-10" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold=</span> T, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb232-11"><a href="componentes-principales..html#cb232-11" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(cargas)), <span class="at">bold=</span> F, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb232-12"><a href="componentes-principales..html#cb232-12" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">1</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">extra_css =</span> <span class="st">&quot;text-align: left;&quot;</span>)</span></code></pre></div>
+<table class="table table-striped" style="font-size: condensed; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-194">Table 6.3: </span><span id="tab:unnamed-chunk-194">Table 6.4: </span>Cargas de las componentes obtenidas
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+PC1
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+PC2
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+PC3
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+PC4
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+RES
+</td>
+<td style="text-align:right;text-align: center;">
+0.4915
+</td>
+<td style="text-align:right;text-align: center;">
+0.5578
+</td>
+<td style="text-align:right;text-align: center;">
+0.48460
+</td>
+<td style="text-align:right;text-align: center;">
+0.46094
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+FPIOS
+</td>
+<td style="text-align:right;text-align: center;">
+0.5491
+</td>
+<td style="text-align:right;text-align: center;">
+-0.1554
+</td>
+<td style="text-align:right;text-align: center;">
+0.33515
+</td>
+<td style="text-align:right;text-align: center;">
+-0.74971
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+MARGEN
+</td>
+<td style="text-align:right;text-align: center;">
+0.4803
+</td>
+<td style="text-align:right;text-align: center;">
+0.3406
+</td>
+<td style="text-align:right;text-align: center;">
+-0.80447
+</td>
+<td style="text-align:right;text-align: center;">
+-0.07849
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+SOLVENCIA
+</td>
+<td style="text-align:right;text-align: center;">
+0.4758
+</td>
+<td style="text-align:right;text-align: center;">
+-0.7407
+</td>
+<td style="text-align:right;text-align: center;">
+-0.07528
+</td>
+<td style="text-align:right;text-align: center;">
+0.46830
+</td>
+</tr>
+</tbody>
+</table>
+<p>A partir de las cargas se pueden explicitar las ecuaciones correspondientes a cada componente. Por ejemplo, para la primera componente, la ecuación será:</p>
+<p><span class="math display">\[
+\text{CP}_{i1} = 0.4915 \cdot \text{RES}_{i1} + 0.5491 \cdot \text{FPIOS}_{i1} + 0.4803 \cdot \text{MARGEN}_{i1} + 0.4758 \cdot \text{SOLVENCIA}_{i1}
+\]</span> Puede apreciarse que, en cuanto a la primera componente, que es la que especialmente nos interesa como “indicador” de la “solidez del negocio” en el caso de las empresas eólicas seleccionadas, las 4 cargas tienen signo positivo, lo que implica que, cuanto mayores sean los valores de una empresa en las varibles RES (resultado), FPIOS (fondos propios), MARGEN (margen de beneficio) y SOLVENCIA (coeficiente de solvencia), mayor será el valor ndel indicador y, por tanto, la solidez del negocio. Además, como las variables fueron tipificadas, el valor de las cargas son comparables. De este modo, vemos cómo, dentro de la primera componente, que es la que adoptamos como “indicador de solidez”, la mayor importancia la tiene el valor de los fondos propios de la empresa, seguido del resultado del ejercicio, el margen y la solvencia.</p>
+</div>
+<div id="retención-de-componentes-principales." class="section level2 hasAnchor" number="6.4">
+<h2><span class="header-section-number">6.4</span> Retención de componentes principales.<a href="componentes-principales..html#retención-de-componentes-principales." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La etapa de retención de componentes principales consiste en decidir cuántas de las componentes generadas (recordemos que, en un principio, se calculan tantas componentes como variable originales) consideramos que resumen de un modo aceptable la información contenida en las variables originales. Estas <strong>componentes “retenidas” se convertirán en las componentes principales</strong>.</p>
+<p>La primera componente siempre es retenida y, por tanto, es una “componente principal”. El resto, que van capturando proporciones cada vez más pequeñas de la varianza común de las variables originales (comunalidad), podrán o no retenerse; aunque, siempre, la retención de una componente implica que se han retenido todas las anteriores.</p>
+<p>Hay varios procedimientos o criterios para tomar la decisión de cuántas componentes retener. Uno de ellos, comúnmente aplicado, es el de <strong>retener aquellas componentes cuyo autovalor es mayor que 1</strong> (suponiendo que se ha trabajado con las variables en sus versiones tipificadas).</p>
+<p>Los autovalores, como ya vimos, son el cuadrado del elemento “Standard deviation” (sdev) del objeto “componentes” que hemos generado a partir de la función <code>prcomp()</code>. Hemos creado un <em>data frame</em> con estos autovalores calculados (y su orden, al que hemos llamado variable o columna “orden”, y que es un vector de números enteros consecutivos que va desde uno hasta número de variables originales o de componentes) y los hemos dispuesto en un gráfico de barras:</p>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="componentes-principales..html#cb233-1" tabindex="-1"></a><span class="co"># Determinacion Componentes a retener.</span></span>
+<span id="cb233-2"><a href="componentes-principales..html#cb233-2" tabindex="-1"></a></span>
+<span id="cb233-3"><a href="componentes-principales..html#cb233-3" tabindex="-1"></a><span class="co"># Criterio del Autovalor mayor que 1.</span></span>
+<span id="cb233-4"><a href="componentes-principales..html#cb233-4" tabindex="-1"></a></span>
+<span id="cb233-5"><a href="componentes-principales..html#cb233-5" tabindex="-1"></a>orden <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(muestra_so))</span>
+<span id="cb233-6"><a href="componentes-principales..html#cb233-6" tabindex="-1"></a>autovalor <span class="ot">&lt;-</span> componentes<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb233-7"><a href="componentes-principales..html#cb233-7" tabindex="-1"></a>autovalores <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(orden, autovalor)</span>
+<span id="cb233-8"><a href="componentes-principales..html#cb233-8" tabindex="-1"></a></span>
+<span id="cb233-9"><a href="componentes-principales..html#cb233-9" tabindex="-1"></a>autograph <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> autovalores,</span>
+<span id="cb233-10"><a href="componentes-principales..html#cb233-10" tabindex="-1"></a>                    <span class="at">map =</span> (<span class="fu">aes</span>(<span class="at">x =</span> orden, <span class="at">y =</span> autovalor))) <span class="sc">+</span></span>
+<span id="cb233-11"><a href="componentes-principales..html#cb233-11" tabindex="-1"></a>             <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>,</span>
+<span id="cb233-12"><a href="componentes-principales..html#cb233-12" tabindex="-1"></a>                      <span class="at">colour =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb233-13"><a href="componentes-principales..html#cb233-13" tabindex="-1"></a>                      <span class="at">fill =</span> <span class="st">&quot;orange&quot;</span>,</span>
+<span id="cb233-14"><a href="componentes-principales..html#cb233-14" tabindex="-1"></a>                      <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb233-15"><a href="componentes-principales..html#cb233-15" tabindex="-1"></a>             <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(autovalores)))<span class="sc">+</span></span>
+<span id="cb233-16"><a href="componentes-principales..html#cb233-16" tabindex="-1"></a>             <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">1</span>, <span class="at">colour =</span> <span class="st">&quot;dark blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb233-17"><a href="componentes-principales..html#cb233-17" tabindex="-1"></a>             <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">round</span>(autovalor,<span class="dv">2</span>)),</span>
+<span id="cb233-18"><a href="componentes-principales..html#cb233-18" tabindex="-1"></a>                       <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">colour =</span> <span class="st">&quot;dark blue&quot;</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb233-19"><a href="componentes-principales..html#cb233-19" tabindex="-1"></a>             <span class="fu">ggtitle</span>(<span class="st">&quot;AUTOVALORES DE LAS COMPONENTES&quot;</span>,</span>
+<span id="cb233-20"><a href="componentes-principales..html#cb233-20" tabindex="-1"></a>                     <span class="at">subtitle =</span> <span class="st">&quot;Empresas eólicas&quot;</span>) <span class="sc">+</span></span>
+<span id="cb233-21"><a href="componentes-principales..html#cb233-21" tabindex="-1"></a>             <span class="fu">xlab</span> (<span class="st">&quot;Número de componente&quot;</span>) <span class="sc">+</span></span>
+<span id="cb233-22"><a href="componentes-principales..html#cb233-22" tabindex="-1"></a>             <span class="fu">ylab</span>(<span class="st">&quot;Autovalor&quot;</span>)</span>
+<span id="cb233-23"><a href="componentes-principales..html#cb233-23" tabindex="-1"></a></span>
+<span id="cb233-24"><a href="componentes-principales..html#cb233-24" tabindex="-1"></a>autograph</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-195-1.png" width="672" /></p>
+<p>Respecto al gráfico, conviene recordar que, al ser un gráfico de barras, si no se quieren representar las frecuencias sino los valores que toma una variable (en este caso, “autovalor”) para cada valor de la otra variable (en este caso, “orden”); en el <code>geom_bar()</code> habrá que añadir el argumento <code>stat =</code> con el valor “identity”. Además, se utiliza el elemento <code>scale_x_continuous()</code> para pesonalizar la escala del eje x, y que se divida dicho eje en tantos tramos como componentes hay.</p>
+<p>En el gráfico obtenido se advierte que solo el primer autovalor es mayor que 1, por lo que solo se retendrá la primera componente, que será la única <strong>componente principal.</strong> Nuestro objetivo era, de todos modos, obtener un único indicador (de “solidez del negocio”) que resuma la información contenida en las cuatro variables RES, FPIOS, MARGEN y SOLVENCIA, por lo que, aunque hubiera habido más componentes con autovalor mayor que uno, solo hubiéramos seleccionado la primera. No obstante, este resultado es positivo para nuestros intereses, ya que reafirma la idea de que únicamente con la primera componente se recoge una gran proporción de la <em>comunalidad</em> o varianza conjunta (comportamiento) de las 4 variables, luego es un buen resumen global de las mismas. Esto ya se vio anteriormente al hacer <code>summary (componentes)</code>, aunque se puede representar gráficamente con el siguiente código:</p>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="componentes-principales..html#cb234-1" tabindex="-1"></a><span class="co"># Determinar si cada autovalor es mayor o igual a 1</span></span>
+<span id="cb234-2"><a href="componentes-principales..html#cb234-2" tabindex="-1"></a></span>
+<span id="cb234-3"><a href="componentes-principales..html#cb234-3" tabindex="-1"></a>autovalores <span class="ot">&lt;-</span> autovalores <span class="sc">%&gt;%</span></span>
+<span id="cb234-4"><a href="componentes-principales..html#cb234-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variacum =</span> <span class="dv">100</span><span class="sc">*</span>(<span class="fu">cumsum</span>((autovalor<span class="sc">/</span><span class="fu">nrow</span>(autovalores)))))</span>
+<span id="cb234-5"><a href="componentes-principales..html#cb234-5" tabindex="-1"></a>checkcp <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(autovalores<span class="sc">$</span>autovalor <span class="sc">&gt;=</span> <span class="dv">1</span>, <span class="st">&quot;CP&quot;</span>, <span class="st">&quot;NCP&quot;</span>)</span>
+<span id="cb234-6"><a href="componentes-principales..html#cb234-6" tabindex="-1"></a>checkcp</span></code></pre></div>
+<pre><code>## [1] &quot;CP&quot;  &quot;NCP&quot; &quot;NCP&quot; &quot;NCP&quot;</code></pre>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="componentes-principales..html#cb236-1" tabindex="-1"></a>vacumgraph <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> autovalores, <span class="at">map =</span> (<span class="fu">aes</span>(<span class="at">x =</span> orden,</span>
+<span id="cb236-2"><a href="componentes-principales..html#cb236-2" tabindex="-1"></a>                                                    <span class="at">y =</span> variacum,</span>
+<span id="cb236-3"><a href="componentes-principales..html#cb236-3" tabindex="-1"></a>                                                    <span class="at">fill =</span> checkcp))) <span class="sc">+</span></span>
+<span id="cb236-4"><a href="componentes-principales..html#cb236-4" tabindex="-1"></a>              <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb236-5"><a href="componentes-principales..html#cb236-5" tabindex="-1"></a>              <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(autovalores)))<span class="sc">+</span></span>
+<span id="cb236-6"><a href="componentes-principales..html#cb236-6" tabindex="-1"></a>              <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">round</span>(variacum,<span class="dv">2</span>)), <span class="at">vjust =</span> <span class="dv">1</span>,</span>
+<span id="cb236-7"><a href="componentes-principales..html#cb236-7" tabindex="-1"></a>                        <span class="at">colour =</span> <span class="st">&quot;dark blue&quot;</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb236-8"><a href="componentes-principales..html#cb236-8" tabindex="-1"></a>              <span class="fu">ggtitle</span>(<span class="st">&quot;COMUNALIDAD ACUMULADA POR COMPONENTES&quot;</span>,</span>
+<span id="cb236-9"><a href="componentes-principales..html#cb236-9" tabindex="-1"></a>                      <span class="at">subtitle =</span> <span class="st">&quot;Empresas eólicas&quot;</span>) <span class="sc">+</span></span>
+<span id="cb236-10"><a href="componentes-principales..html#cb236-10" tabindex="-1"></a>              <span class="fu">xlab</span> (<span class="st">&quot;Número de componente&quot;</span>) <span class="sc">+</span></span>
+<span id="cb236-11"><a href="componentes-principales..html#cb236-11" tabindex="-1"></a>              <span class="fu">ylab</span>(<span class="st">&quot;Varianza acumulada&quot;</span>)</span>
+<span id="cb236-12"><a href="componentes-principales..html#cb236-12" tabindex="-1"></a>vacumgraph</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-196-1.png" width="672" /></p>
+<p>Para obtener el gráfico anterior, se comienza añadiendo al <em>data frame</em> “autovalores” una columna o variable que es la s<em>uma acumulada del porcentaje de</em> <em>comunalidad</em> recogido por las sucesivas componentes, que están ordenadas de mayor a menor autovalor. Para calcular el porcentaje, se usa la función <code>cumsum()</code>, y se tiene en cuenta que, como las variables fueron tipificadas para calcular las componentes, la <em>comunalidad</em>, que coincide con la suma de las varianzas de las componentes (autovalores), es igual al número de variables o componentes (valor que toma la función <code>nrow()</code>).</p>
+<p>Después, se ha creado un vector que contiene tantos elementos como variables o componentes hay en el análisis (vector “checkcp”). Con la función condicional <code>ifelse()</code> se consigue que los elementos de “checkcp” sean “CP” o “NCP” según los correspondientes autovalores sean mayores o no que 1. Finalmente, según sea el valor de cada elemento de “checkcp”, las barras del gráfico se colorearán de uno u otro modo.</p>
+<p>Posteriormente, mediante el paquete <code>{patchwork}</code>, se han unido los dos gráficos creados en esta fase, poniendo uno debajo del otro:</p>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="componentes-principales..html#cb237-1" tabindex="-1"></a><span class="fu">library</span> (patchwork)</span>
+<span id="cb237-2"><a href="componentes-principales..html#cb237-2" tabindex="-1"></a>autograph <span class="sc">/</span> vacumgraph</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-197-1.png" width="672" /></p>
+</div>
+<div id="puntuaciones-de-los-casos-scores" class="section level2 hasAnchor" number="6.5">
+<h2><span class="header-section-number">6.5</span> Puntuaciones de los casos (scores)<a href="componentes-principales..html#puntuaciones-de-los-casos-scores" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Para obtener las puntuaciones de cada caso (empresa) en el indicador de “solidez del negocio” (y que es nuestra componente principal, que a su vez coincide con la primera componente), simplemente debemos tener en cuenta que tales puntuaciones están guardadas en la matriz “x” del objeto <code>prcomp()</code> creado. Vamos a renombrar a las primera columna (componente) de esta matriz como “scores” y vamos a ver las puntuaciones de las empresas, que volcaremos en una tabla, junto al valor que toman en las variables originales, recolocando las filas (empresas) de mayor a menor valor de la puntuación (lo que se consigue mediante la función <code>arrange()</code> del paquete <code>{dplyr}</code>:</p>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="componentes-principales..html#cb238-1" tabindex="-1"></a><span class="co"># Scores.</span></span>
+<span id="cb238-2"><a href="componentes-principales..html#cb238-2" tabindex="-1"></a></span>
+<span id="cb238-3"><a href="componentes-principales..html#cb238-3" tabindex="-1"></a>scores <span class="ot">&lt;-</span> componentes<span class="sc">$</span>x[,<span class="dv">1</span>] <span class="co">#tantas columnas como componentes retenidas</span></span>
+<span id="cb238-4"><a href="componentes-principales..html#cb238-4" tabindex="-1"></a>scores_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(scores)</span>
+<span id="cb238-5"><a href="componentes-principales..html#cb238-5" tabindex="-1"></a>scores_df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(scores_df,muestra_so)</span>
+<span id="cb238-6"><a href="componentes-principales..html#cb238-6" tabindex="-1"></a>scores_df <span class="sc">%&gt;%</span></span>
+<span id="cb238-7"><a href="componentes-principales..html#cb238-7" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(scores)) <span class="sc">%&gt;%</span></span>
+<span id="cb238-8"><a href="componentes-principales..html#cb238-8" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Puntuaciones de las componentes obtenidas&quot;</span>,</span>
+<span id="cb238-9"><a href="componentes-principales..html#cb238-9" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Empresa&quot;</span>, <span class="st">&quot;Puntuación&quot;</span>, <span class="st">&quot;Resultado&quot;</span>, <span class="st">&quot;F. Propios&quot;</span>,</span>
+<span id="cb238-10"><a href="componentes-principales..html#cb238-10" tabindex="-1"></a>                      <span class="st">&quot;Margen&quot;</span>, <span class="st">&quot;Solvencia&quot;</span>),</span>
+<span id="cb238-11"><a href="componentes-principales..html#cb238-11" tabindex="-1"></a>        <span class="at">format.args =</span> <span class="fu">list</span>(<span class="at">decimal.mark =</span> <span class="st">&quot;.&quot;</span>, <span class="at">digits =</span> <span class="dv">4</span>))  <span class="sc">%&gt;%</span></span>
+<span id="cb238-12"><a href="componentes-principales..html#cb238-12" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F, <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>,</span>
+<span id="cb238-13"><a href="componentes-principales..html#cb238-13" tabindex="-1"></a>                <span class="st">&quot;bordered&quot;</span>, <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb238-14"><a href="componentes-principales..html#cb238-14" tabindex="-1"></a>                <span class="at">position =</span> <span class="st">&quot;center&quot;</span>, <span class="at">font_size =</span> <span class="dv">12</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb238-15"><a href="componentes-principales..html#cb238-15" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold=</span> T, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb238-16"><a href="componentes-principales..html#cb238-16" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(scores_df)), <span class="at">bold=</span> F, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb238-17"><a href="componentes-principales..html#cb238-17" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">1</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">extra_css =</span> <span class="st">&quot;text-align: left;&quot;</span>)</span></code></pre></div>
+<table class="table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-199">Table 6.5: </span><span id="tab:unnamed-chunk-199">Table 6.6: </span>Puntuaciones de las componentes obtenidas
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Empresa
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Puntuación
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Resultado
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+F. Propios
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Margen
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Solvencia
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Eolia Gregal De Inversiones SA.
+</td>
+<td style="text-align:right;text-align: center;">
+6.34608
+</td>
+<td style="text-align:right;text-align: center;">
+9420.00
+</td>
+<td style="text-align:right;text-align: center;">
+81778.0
+</td>
+<td style="text-align:right;text-align: center;">
+186.208
+</td>
+<td style="text-align:right;text-align: center;">
+79.196
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Elecdey SL
+</td>
+<td style="text-align:right;text-align: center;">
+3.55316
+</td>
+<td style="text-align:right;text-align: center;">
+5539.03
+</td>
+<td style="text-align:right;text-align: center;">
+41042.3
+</td>
+<td style="text-align:right;text-align: center;">
+144.924
+</td>
+<td style="text-align:right;text-align: center;">
+65.208
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+CYL Energia Eolica SL
+</td>
+<td style="text-align:right;text-align: center;">
+2.87125
+</td>
+<td style="text-align:right;text-align: center;">
+9401.38
+</td>
+<td style="text-align:right;text-align: center;">
+51821.6
+</td>
+<td style="text-align:right;text-align: center;">
+37.795
+</td>
+<td style="text-align:right;text-align: center;">
+51.290
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Esquilvent SL
+</td>
+<td style="text-align:right;text-align: center;">
+2.38469
+</td>
+<td style="text-align:right;text-align: center;">
+9010.21
+</td>
+<td style="text-align:right;text-align: center;">
+48769.1
+</td>
+<td style="text-align:right;text-align: center;">
+39.476
+</td>
+<td style="text-align:right;text-align: center;">
+30.938
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Disa Duna SL.
+</td>
+<td style="text-align:right;text-align: center;">
+2.35060
+</td>
+<td style="text-align:right;text-align: center;">
+2594.40
+</td>
+<td style="text-align:right;text-align: center;">
+42283.1
+</td>
+<td style="text-align:right;text-align: center;">
+55.953
+</td>
+<td style="text-align:right;text-align: center;">
+98.303
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Parques Eolicos San Lorenzo SL
+</td>
+<td style="text-align:right;text-align: center;">
+2.11047
+</td>
+<td style="text-align:right;text-align: center;">
+4311.98
+</td>
+<td style="text-align:right;text-align: center;">
+37396.2
+</td>
+<td style="text-align:right;text-align: center;">
+36.810
+</td>
+<td style="text-align:right;text-align: center;">
+89.806
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Insular De Aguas De Lanzarote SA
+</td>
+<td style="text-align:right;text-align: center;">
+1.86856
+</td>
+<td style="text-align:right;text-align: center;">
+4159.91
+</td>
+<td style="text-align:right;text-align: center;">
+28249.3
+</td>
+<td style="text-align:right;text-align: center;">
+57.138
+</td>
+<td style="text-align:right;text-align: center;">
+76.913
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Sierra De Selva SL
+</td>
+<td style="text-align:right;text-align: center;">
+1.42059
+</td>
+<td style="text-align:right;text-align: center;">
+4525.00
+</td>
+<td style="text-align:right;text-align: center;">
+19555.0
+</td>
+<td style="text-align:right;text-align: center;">
+47.045
+</td>
+<td style="text-align:right;text-align: center;">
+70.524
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Naturgy Wind, S.L.
+</td>
+<td style="text-align:right;text-align: center;">
+1.31880
+</td>
+<td style="text-align:right;text-align: center;">
+8500.00
+</td>
+<td style="text-align:right;text-align: center;">
+28418.0
+</td>
+<td style="text-align:right;text-align: center;">
+39.575
+</td>
+<td style="text-align:right;text-align: center;">
+10.388
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Parques Eolicos De Cerrato SL
+</td>
+<td style="text-align:right;text-align: center;">
+1.26532
+</td>
+<td style="text-align:right;text-align: center;">
+6541.00
+</td>
+<td style="text-align:right;text-align: center;">
+22817.0
+</td>
+<td style="text-align:right;text-align: center;">
+44.755
+</td>
+<td style="text-align:right;text-align: center;">
+34.878
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Eolica De Rubio SL
+</td>
+<td style="text-align:right;text-align: center;">
+0.91962
+</td>
+<td style="text-align:right;text-align: center;">
+2693.00
+</td>
+<td style="text-align:right;text-align: center;">
+25486.0
+</td>
+<td style="text-align:right;text-align: center;">
+34.607
+</td>
+<td style="text-align:right;text-align: center;">
+60.688
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Brulles Eolica SL
+</td>
+<td style="text-align:right;text-align: center;">
+0.88594
+</td>
+<td style="text-align:right;text-align: center;">
+3540.57
+</td>
+<td style="text-align:right;text-align: center;">
+16432.0
+</td>
+<td style="text-align:right;text-align: center;">
+47.227
+</td>
+<td style="text-align:right;text-align: center;">
+55.284
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Sistemas Energeticos Valle De Sedano SA
+</td>
+<td style="text-align:right;text-align: center;">
+0.88563
+</td>
+<td style="text-align:right;text-align: center;">
+897.00
+</td>
+<td style="text-align:right;text-align: center;">
+45733.0
+</td>
+<td style="text-align:right;text-align: center;">
+4.327
+</td>
+<td style="text-align:right;text-align: center;">
+66.896
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Acciona Eolica Del Levante SL
+</td>
+<td style="text-align:right;text-align: center;">
+0.65681
+</td>
+<td style="text-align:right;text-align: center;">
+6853.00
+</td>
+<td style="text-align:right;text-align: center;">
+21769.0
+</td>
+<td style="text-align:right;text-align: center;">
+27.520
+</td>
+<td style="text-align:right;text-align: center;">
+11.557
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+BON Vent De Corbera S. L. EN Constitucion
+</td>
+<td style="text-align:right;text-align: center;">
+0.65640
+</td>
+<td style="text-align:right;text-align: center;">
+3261.47
+</td>
+<td style="text-align:right;text-align: center;">
+23095.6
+</td>
+<td style="text-align:right;text-align: center;">
+36.607
+</td>
+<td style="text-align:right;text-align: center;">
+41.453
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Molinos De La Rioja Sociedad Anonima
+</td>
+<td style="text-align:right;text-align: center;">
+0.56574
+</td>
+<td style="text-align:right;text-align: center;">
+2371.00
+</td>
+<td style="text-align:right;text-align: center;">
+15787.0
+</td>
+<td style="text-align:right;text-align: center;">
+42.017
+</td>
+<td style="text-align:right;text-align: center;">
+54.789
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Desarrollo De Energias Renovables De La Rioja Sociedad Anonima
+</td>
+<td style="text-align:right;text-align: center;">
+0.48954
+</td>
+<td style="text-align:right;text-align: center;">
+2145.00
+</td>
+<td style="text-align:right;text-align: center;">
+17441.0
+</td>
+<td style="text-align:right;text-align: center;">
+27.297
+</td>
+<td style="text-align:right;text-align: center;">
+62.005
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Eolica Campollano SA
+</td>
+<td style="text-align:right;text-align: center;">
+0.48574
+</td>
+<td style="text-align:right;text-align: center;">
+2592.20
+</td>
+<td style="text-align:right;text-align: center;">
+27217.6
+</td>
+<td style="text-align:right;text-align: center;">
+25.327
+</td>
+<td style="text-align:right;text-align: center;">
+40.630
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Bajoz Eolica SL
+</td>
+<td style="text-align:right;text-align: center;">
+0.39866
+</td>
+<td style="text-align:right;text-align: center;">
+2620.34
+</td>
+<td style="text-align:right;text-align: center;">
+9641.3
+</td>
+<td style="text-align:right;text-align: center;">
+70.476
+</td>
+<td style="text-align:right;text-align: center;">
+29.644
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Parc Eolic De Vilalba Dels Arcs SL
+</td>
+<td style="text-align:right;text-align: center;">
+0.02524
+</td>
+<td style="text-align:right;text-align: center;">
+2454.07
+</td>
+<td style="text-align:right;text-align: center;">
+9438.7
+</td>
+<td style="text-align:right;text-align: center;">
+48.378
+</td>
+<td style="text-align:right;text-align: center;">
+28.085
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Empordavent SL
+</td>
+<td style="text-align:right;text-align: center;">
+-0.04223
+</td>
+<td style="text-align:right;text-align: center;">
+2582.00
+</td>
+<td style="text-align:right;text-align: center;">
+15176.0
+</td>
+<td style="text-align:right;text-align: center;">
+32.635
+</td>
+<td style="text-align:right;text-align: center;">
+25.295
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Al-Andalus Wind Power SL
+</td>
+<td style="text-align:right;text-align: center;">
+-0.07062
+</td>
+<td style="text-align:right;text-align: center;">
+4403.21
+</td>
+<td style="text-align:right;text-align: center;">
+21466.1
+</td>
+<td style="text-align:right;text-align: center;">
+12.582
+</td>
+<td style="text-align:right;text-align: center;">
+8.591
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Eolica Fontesilva SL
+</td>
+<td style="text-align:right;text-align: center;">
+-0.07618
+</td>
+<td style="text-align:right;text-align: center;">
+1584.33
+</td>
+<td style="text-align:right;text-align: center;">
+15524.1
+</td>
+<td style="text-align:right;text-align: center;">
+27.756
+</td>
+<td style="text-align:right;text-align: center;">
+37.786
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Eolica 2000 SL
+</td>
+<td style="text-align:right;text-align: center;">
+-0.56288
+</td>
+<td style="text-align:right;text-align: center;">
+1713.00
+</td>
+<td style="text-align:right;text-align: center;">
+5765.0
+</td>
+<td style="text-align:right;text-align: center;">
+37.852
+</td>
+<td style="text-align:right;text-align: center;">
+16.878
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Fergo Galicia Vento -P E Mondoñedo SL
+</td>
+<td style="text-align:right;text-align: center;">
+-0.64177
+</td>
+<td style="text-align:right;text-align: center;">
+2288.50
+</td>
+<td style="text-align:right;text-align: center;">
+4159.3
+</td>
+<td style="text-align:right;text-align: center;">
+30.405
+</td>
+<td style="text-align:right;text-align: center;">
+14.925
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Renovables Castilla La Mancha S.A.
+</td>
+<td style="text-align:right;text-align: center;">
+-0.68969
+</td>
+<td style="text-align:right;text-align: center;">
+1847.03
+</td>
+<td style="text-align:right;text-align: center;">
+2902.4
+</td>
+<td style="text-align:right;text-align: center;">
+39.595
+</td>
+<td style="text-align:right;text-align: center;">
+11.635
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Comiolica SL
+</td>
+<td style="text-align:right;text-align: center;">
+-0.73350
+</td>
+<td style="text-align:right;text-align: center;">
+1938.69
+</td>
+<td style="text-align:right;text-align: center;">
+4404.7
+</td>
+<td style="text-align:right;text-align: center;">
+29.295
+</td>
+<td style="text-align:right;text-align: center;">
+13.845
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Drago Renovables SL
+</td>
+<td style="text-align:right;text-align: center;">
+-0.78124
+</td>
+<td style="text-align:right;text-align: center;">
+1000.92
+</td>
+<td style="text-align:right;text-align: center;">
+7735.3
+</td>
+<td style="text-align:right;text-align: center;">
+20.826
+</td>
+<td style="text-align:right;text-align: center;">
+22.401
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Parque Eolico La Boga SL.
+</td>
+<td style="text-align:right;text-align: center;">
+-0.79622
+</td>
+<td style="text-align:right;text-align: center;">
+11.94
+</td>
+<td style="text-align:right;text-align: center;">
+29316.8
+</td>
+<td style="text-align:right;text-align: center;">
+1.001
+</td>
+<td style="text-align:right;text-align: center;">
+9.646
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Parque Eolico Santa Catalina SL
+</td>
+<td style="text-align:right;text-align: center;">
+-0.81797
+</td>
+<td style="text-align:right;text-align: center;">
+3645.28
+</td>
+<td style="text-align:right;text-align: center;">
+-1664.8
+</td>
+<td style="text-align:right;text-align: center;">
+31.780
+</td>
+<td style="text-align:right;text-align: center;">
+-1.126
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Parque Eolico Valcaire SL
+</td>
+<td style="text-align:right;text-align: center;">
+-0.84931
+</td>
+<td style="text-align:right;text-align: center;">
+1152.72
+</td>
+<td style="text-align:right;text-align: center;">
+2173.0
+</td>
+<td style="text-align:right;text-align: center;">
+45.881
+</td>
+<td style="text-align:right;text-align: center;">
+5.981
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Energias Renovables De Peñanebina SL
+</td>
+<td style="text-align:right;text-align: center;">
+-0.88259
+</td>
+<td style="text-align:right;text-align: center;">
+983.00
+</td>
+<td style="text-align:right;text-align: center;">
+5231.0
+</td>
+<td style="text-align:right;text-align: center;">
+25.939
+</td>
+<td style="text-align:right;text-align: center;">
+16.901
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Expertise EN Energias Renovables Eolica Y Fotovoltaica De Canarias SL
+</td>
+<td style="text-align:right;text-align: center;">
+-0.96396
+</td>
+<td style="text-align:right;text-align: center;">
+52.30
+</td>
+<td style="text-align:right;text-align: center;">
+4916.5
+</td>
+<td style="text-align:right;text-align: center;">
+34.569
+</td>
+<td style="text-align:right;text-align: center;">
+15.809
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Parque Eolico Tesosanto SL
+</td>
+<td style="text-align:right;text-align: center;">
+-1.10299
+</td>
+<td style="text-align:right;text-align: center;">
+1706.13
+</td>
+<td style="text-align:right;text-align: center;">
+2842.2
+</td>
+<td style="text-align:right;text-align: center;">
+21.008
+</td>
+<td style="text-align:right;text-align: center;">
+4.249
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Eolica Del Guadiana SL
+</td>
+<td style="text-align:right;text-align: center;">
+-1.20211
+</td>
+<td style="text-align:right;text-align: center;">
+1571.57
+</td>
+<td style="text-align:right;text-align: center;">
+4430.2
+</td>
+<td style="text-align:right;text-align: center;">
+9.341
+</td>
+<td style="text-align:right;text-align: center;">
+6.671
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Suresa Retama S.L.
+</td>
+<td style="text-align:right;text-align: center;">
+-1.24341
+</td>
+<td style="text-align:right;text-align: center;">
+-78.00
+</td>
+<td style="text-align:right;text-align: center;">
+12892.0
+</td>
+<td style="text-align:right;text-align: center;">
+-29.295
+</td>
+<td style="text-align:right;text-align: center;">
+39.249
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Elecdey Palencia S.L.
+</td>
+<td style="text-align:right;text-align: center;">
+-1.25359
+</td>
+<td style="text-align:right;text-align: center;">
+987.27
+</td>
+<td style="text-align:right;text-align: center;">
+1581.5
+</td>
+<td style="text-align:right;text-align: center;">
+22.016
+</td>
+<td style="text-align:right;text-align: center;">
+4.760
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Eolica Mirasierra SL
+</td>
+<td style="text-align:right;text-align: center;">
+-1.36573
+</td>
+<td style="text-align:right;text-align: center;">
+1123.48
+</td>
+<td style="text-align:right;text-align: center;">
+995.8
+</td>
+<td style="text-align:right;text-align: center;">
+17.064
+</td>
+<td style="text-align:right;text-align: center;">
+1.780
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Helios Patrimonial 1 SL
+</td>
+<td style="text-align:right;text-align: center;">
+-1.50762
+</td>
+<td style="text-align:right;text-align: center;">
+237.85
+</td>
+<td style="text-align:right;text-align: center;">
+3468.1
+</td>
+<td style="text-align:right;text-align: center;">
+5.379
+</td>
+<td style="text-align:right;text-align: center;">
+8.411
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Sistemes Energetics Conesa I S.L.
+</td>
+<td style="text-align:right;text-align: center;">
+-1.56230
+</td>
+<td style="text-align:right;text-align: center;">
+878.00
+</td>
+<td style="text-align:right;text-align: center;">
+-988.0
+</td>
+<td style="text-align:right;text-align: center;">
+16.649
+</td>
+<td style="text-align:right;text-align: center;">
+-3.193
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Inversiones Fotovoltaicas Mallorquinas SL.
+</td>
+<td style="text-align:right;text-align: center;">
+-1.57826
+</td>
+<td style="text-align:right;text-align: center;">
+272.75
+</td>
+<td style="text-align:right;text-align: center;">
+930.1
+</td>
+<td style="text-align:right;text-align: center;">
+11.661
+</td>
+<td style="text-align:right;text-align: center;">
+3.235
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Helios Patrimonial 2 SL
+</td>
+<td style="text-align:right;text-align: center;">
+-1.60027
+</td>
+<td style="text-align:right;text-align: center;">
+190.12
+</td>
+<td style="text-align:right;text-align: center;">
+2472.1
+</td>
+<td style="text-align:right;text-align: center;">
+4.315
+</td>
+<td style="text-align:right;text-align: center;">
+6.145
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Fotovoltaica Los Navalmorales SL
+</td>
+<td style="text-align:right;text-align: center;">
+-1.60453
+</td>
+<td style="text-align:right;text-align: center;">
+143.00
+</td>
+<td style="text-align:right;text-align: center;">
+966.0
+</td>
+<td style="text-align:right;text-align: center;">
+12.228
+</td>
+<td style="text-align:right;text-align: center;">
+2.581
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Energias Naturales La Calzada SL
+</td>
+<td style="text-align:right;text-align: center;">
+-1.69272
+</td>
+<td style="text-align:right;text-align: center;">
+754.00
+</td>
+<td style="text-align:right;text-align: center;">
+-1983.0
+</td>
+<td style="text-align:right;text-align: center;">
+15.561
+</td>
+<td style="text-align:right;text-align: center;">
+-6.834
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Parque Eolico El Moral SL
+</td>
+<td style="text-align:right;text-align: center;">
+-1.74511
+</td>
+<td style="text-align:right;text-align: center;">
+267.00
+</td>
+<td style="text-align:right;text-align: center;">
+-310.0
+</td>
+<td style="text-align:right;text-align: center;">
+7.935
+</td>
+<td style="text-align:right;text-align: center;">
+-1.240
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Eolica De Medinaceli SL
+</td>
+<td style="text-align:right;text-align: center;">
+-1.91245
+</td>
+<td style="text-align:right;text-align: center;">
+324.00
+</td>
+<td style="text-align:right;text-align: center;">
+-2854.0
+</td>
+<td style="text-align:right;text-align: center;">
+4.302
+</td>
+<td style="text-align:right;text-align: center;">
+-4.142
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Wigep Andalucia SA
+</td>
+<td style="text-align:right;text-align: center;">
+-2.05070
+</td>
+<td style="text-align:right;text-align: center;">
+296.00
+</td>
+<td style="text-align:right;text-align: center;">
+-3762.0
+</td>
+<td style="text-align:right;text-align: center;">
+4.611
+</td>
+<td style="text-align:right;text-align: center;">
+-10.634
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+Parque Eolico Energia Puertosol SL.
+</td>
+<td style="text-align:right;text-align: center;">
+-2.12892
+</td>
+<td style="text-align:right;text-align: center;">
+-945.38
+</td>
+<td style="text-align:right;text-align: center;">
+2488.6
+</td>
+<td style="text-align:right;text-align: center;">
+-17.969
+</td>
+<td style="text-align:right;text-align: center;">
+5.899
+</td>
+</tr>
+</tbody>
+</table>
+<p>Las puntuaciones de los casos en nuestro indicador (componente principal) pueden integrarse en un <em>data frame</em> y ser utilizadas como cualquier otra variable en un análisis multivariante, sabiendo que este indicador asume gran parte de la información que, como caracterización de las distintas empresas, contenían las 4 variables originales.</p>
+</div>
+<div id="materiales-para-realizar-las-prácticas-del-capítulo.-4" class="section level2 hasAnchor" number="6.6">
+<h2><span class="header-section-number">6.6</span> Materiales para realizar las prácticas del capítulo.<a href="componentes-principales..html#materiales-para-realizar-las-prácticas-del-capítulo.-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En esta sección se muestran los links de acceso a los diferentes materiales (<em>scripts</em>, datos…) necesarios para llevar a cabo los contenidos prácticos del capítulo.</p>
+<p><strong>Datos (en formato Microsoft (R) Excel (R)):</strong></p>
+<ul>
+<li>eolica_60.xlsx (<a href="https://docs.google.com/spreadsheets/d/1G7yk22TShY1bYS1i9v4PfVi_HCkOG2ZO/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">obtener aquí</a>)</li>
+</ul>
+<p><strong>Scripts:</strong></p>
+<ul>
+<li>componentes_eolica.R (<a href="https://drive.google.com/file/d/1d0ss6sh-jIAcrrlWSHHQI_CfRtiDqANX/view?usp=sharing">obtener aquí</a>)</li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="análisis-previo-de-datos..html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="análisis-clúster..html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection",
+"toc_deph": 3
+},
+"table": {
+"number": false
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

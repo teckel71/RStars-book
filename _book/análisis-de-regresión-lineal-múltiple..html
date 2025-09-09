@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 9 Análisis de Regresión Lineal Múltiple. | Técnicas de Análisis de Datos Económicos con R</title>
+  <meta name="description" content="Libro de análisis de datos económicos." />
+  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 9 Análisis de Regresión Lineal Múltiple. | Técnicas de Análisis de Datos Económicos con R" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://bookdown.org/teckel71/book/figuras/Portada_v2.PNG" />
+  <meta property="og:description" content="Libro de análisis de datos económicos." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 9 Análisis de Regresión Lineal Múltiple. | Técnicas de Análisis de Datos Económicos con R" />
+  
+  <meta name="twitter:description" content="Libro de análisis de datos económicos." />
+  <meta name="twitter:image" content="https://bookdown.org/teckel71/book/figuras/Portada_v2.PNG" />
+
+<meta name="author" content="" />
+
+
+<meta name="date" content="2025-01-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="análisis-de-la-varianza..html"/>
+<link rel="next" href="análisis-de-datos-cualitativos..html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Técnicas de Análisis de Datos Económicos con R</a></li>
+
+<li class="divider"></li>
+<li><a href="index.html#section" id="toc-section"></a></li>
+<li class="chapter" data-level="" data-path="prefacio.html"><a href="prefacio.html"><i class="fa fa-check"></i>Prefacio</a></li>
+<li class="chapter" data-level="1" data-path="introducción..html"><a href="introducción..html"><i class="fa fa-check"></i><b>1</b> Introducción.</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introducción..html"><a href="introducción..html#llámalo-estadística."><i class="fa fa-check"></i><b>1.1</b> Llámalo Estadística.</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="introducción..html"><a href="introducción..html#concepto-de-estadística."><i class="fa fa-check"></i><b>1.1.1</b> Concepto de Estadística.</a></li>
+<li class="chapter" data-level="1.1.2" data-path="introducción..html"><a href="introducción..html#el-método-estadístico."><i class="fa fa-check"></i><b>1.1.2</b> El método estadístico.</a></li>
+<li class="chapter" data-level="1.1.3" data-path="introducción..html"><a href="introducción..html#economía-y-estadística."><i class="fa fa-check"></i><b>1.1.3</b> Economía y Estadística.</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="introducción..html"><a href="introducción..html#qué-es-r-y-cómo-nos-ayuda-a-analizar-datos-desde-el-punto-de-vista-estadístico"><i class="fa fa-check"></i><b>1.2</b> ¿Qué es R y cómo nos ayuda a analizar datos desde el punto de vista estadístico?</a></li>
+<li class="chapter" data-level="1.3" data-path="introducción..html"><a href="introducción..html#instalación-de-r-y-r-studio."><i class="fa fa-check"></i><b>1.3</b> Instalación de R y R-Studio.</a></li>
+<li class="chapter" data-level="1.4" data-path="introducción..html"><a href="introducción..html#r-y-rstudio.-comienzo-proyectos."><i class="fa fa-check"></i><b>1.4</b> R y RStudio. Comienzo: Proyectos.</a></li>
+<li class="chapter" data-level="1.5" data-path="introducción..html"><a href="introducción..html#scripts."><i class="fa fa-check"></i><b>1.5</b> Scripts.</a></li>
+<li class="chapter" data-level="1.6" data-path="introducción..html"><a href="introducción..html#funciones."><i class="fa fa-check"></i><b>1.6</b> Funciones.</a></li>
+<li class="chapter" data-level="1.7" data-path="introducción..html"><a href="introducción..html#paquetes-packages."><i class="fa fa-check"></i><b>1.7</b> Paquetes (packages).</a></li>
+<li class="chapter" data-level="1.8" data-path="introducción..html"><a href="introducción..html#help-sistema-de-ayuda."><i class="fa fa-check"></i><b>1.8</b> Help! (sistema de ayuda).</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html"><i class="fa fa-check"></i><b>2</b> Almacenando y manipulando datos.</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#objetos.-datos."><i class="fa fa-check"></i><b>2.1</b> Objetos. Datos.</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#vectores."><i class="fa fa-check"></i><b>2.1.1</b> Vectores.</a></li>
+<li class="chapter" data-level="2.1.2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#matrices."><i class="fa fa-check"></i><b>2.1.2</b> Matrices.</a></li>
+<li class="chapter" data-level="2.1.3" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#data-frames."><i class="fa fa-check"></i><b>2.1.3</b> Data frames.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#importando-datos."><i class="fa fa-check"></i><b>2.2</b> Importando datos.</a></li>
+<li class="chapter" data-level="2.3" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#dplyr."><i class="fa fa-check"></i><b>2.3</b> {dplyr}.</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#el-tidyverse.-cargando-dplyr."><i class="fa fa-check"></i><b>2.3.1</b> El Tidyverse. Cargando {dplyr}.</a></li>
+<li class="chapter" data-level="2.3.2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#seleccionando-columnas-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.2</b> Seleccionando columnas de un data frame.</a></li>
+<li class="chapter" data-level="2.3.3" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#seleccionando-casos-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.3</b> Seleccionando casos de un <em>data frame</em>.</a></li>
+<li class="chapter" data-level="2.3.4" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#ordenando-casos-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.4</b> Ordenando casos de un <em>data frame</em>.</a></li>
+<li class="chapter" data-level="2.3.5" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#cambiando-el-nombre-de-las-variables-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.5</b> Cambiando el nombre de las variables de un <em>data frame</em>.</a></li>
+<li class="chapter" data-level="2.3.6" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#añadiendo-variables-como-transformación-de-otras-variables-en-un-data-frame."><i class="fa fa-check"></i><b>2.3.6</b> <strong>Añadiendo variables como transformación de otras variables en un <em>data frame</em>.</strong></a></li>
+<li class="chapter" data-level="2.3.7" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#extrayendo-y-sintetizando-información-de-las-variables-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.7</b> Extrayendo y sintetizando información de las variables de un <em>data frame</em>.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#exportando-datos."><i class="fa fa-check"></i><b>2.4</b> Exportando datos.</a></li>
+<li class="chapter" data-level="2.5" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#materiales-para-realizar-las-prácticas-del-capítulo."><i class="fa fa-check"></i><b>2.5</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="gráficos..html"><a href="gráficos..html"><i class="fa fa-check"></i><b>3</b> Gráficos.</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="gráficos..html"><a href="gráficos..html#tidyverse-para-gráficos-ggplot2."><i class="fa fa-check"></i><b>3.1</b> Tidyverse para gráficos: ggplot2.</a></li>
+<li class="chapter" data-level="3.2" data-path="gráficos..html"><a href="gráficos..html#gráficos-de-una-variable-histogramas-gráficos-de-densidad-gráficos-de-caja-o-boxplots."><i class="fa fa-check"></i><b>3.2</b> Gráficos de una variable: histogramas, gráficos de densidad, gráficos de caja o <em>boxplots</em>.</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="gráficos..html"><a href="gráficos..html#histograma."><i class="fa fa-check"></i><b>3.2.1</b> Histograma.</a></li>
+<li class="chapter" data-level="3.2.2" data-path="gráficos..html"><a href="gráficos..html#gráfico-de-densidad."><i class="fa fa-check"></i><b>3.2.2</b> Gráfico de densidad.</a></li>
+<li class="chapter" data-level="3.2.3" data-path="gráficos..html"><a href="gráficos..html#gráfico-de-caja-o-box-plot."><i class="fa fa-check"></i><b>3.2.3</b> Gráfico de caja o <em>Box-Plot</em>.</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="gráficos..html"><a href="gráficos..html#gráficos-de-dos-variables."><i class="fa fa-check"></i><b>3.3</b> Gráficos de dos variables.</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="gráficos..html"><a href="gráficos..html#gráfico-de-dispersión-o-scatterplot."><i class="fa fa-check"></i><b>3.3.1</b> Gráfico de dispersión o <em>scatterplot</em>.</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="gráficos..html"><a href="gráficos..html#materiales-para-realizar-las-prácticas-del-capítulo.-1"><i class="fa fa-check"></i><b>3.4</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html"><i class="fa fa-check"></i><b>4</b> Estadística descriptiva.</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#análisis-univariante."><i class="fa fa-check"></i><b>4.1</b> Análisis univariante.</a></li>
+<li class="chapter" data-level="4.2" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#representando-datos-y-distribuciones-de-frecuencias-en-tablas-con-r."><i class="fa fa-check"></i><b>4.2</b> Representando datos y distribuciones de frecuencias en tablas con R.</a></li>
+<li class="chapter" data-level="4.3" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#medidas-de-posición."><i class="fa fa-check"></i><b>4.3</b> Medidas de posición.</a></li>
+<li class="chapter" data-level="4.4" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#medidas-de-dispersión-o-variabilidad."><i class="fa fa-check"></i><b>4.4</b> Medidas de dispersión o variabilidad.</a></li>
+<li class="chapter" data-level="4.5" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#medidas-de-forma."><i class="fa fa-check"></i><b>4.5</b> Medidas de forma.</a></li>
+<li class="chapter" data-level="4.6" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#materiales-para-realizar-las-prácticas-del-capítulo.-2"><i class="fa fa-check"></i><b>4.6</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html"><i class="fa fa-check"></i><b>5</b> Análisis previo de datos.</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#introducción.-1"><i class="fa fa-check"></i><b>5.1</b> Introducción.</a></li>
+<li class="chapter" data-level="5.2" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#análisis-de-una-variable."><i class="fa fa-check"></i><b>5.2</b> Análisis de una variable.</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#buscando-missing-values-y-outliers."><i class="fa fa-check"></i><b>5.2.1</b> Buscando <em>missing values</em> y <em>outliers</em>.</a></li>
+<li class="chapter" data-level="5.2.2" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#descripción-de-una-variable."><i class="fa fa-check"></i><b>5.2.2</b> Descripción de una variable.</a></li>
+<li class="chapter" data-level="5.2.3" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#normalidad."><i class="fa fa-check"></i><b>5.2.3</b> Normalidad.</a></li>
+<li class="chapter" data-level="5.2.4" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#resumen-los-4-gráficos-básicos-en-la-descripción-de-una-variable."><i class="fa fa-check"></i><b>5.2.4</b> Resumen: los 4 gráficos básicos en la descripción de una variable.</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#análisis-de-múltiples-variables."><i class="fa fa-check"></i><b>5.3</b> Análisis de múltiples variables.</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#localización-de-missing-values-y-outliers."><i class="fa fa-check"></i><b>5.3.1</b> Localización de <em>missing values</em> y <em>outliers</em>.</a></li>
+<li class="chapter" data-level="5.3.2" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#correlación-entre-variables."><i class="fa fa-check"></i><b>5.3.2</b> Correlación entre variables.</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#materiales-para-realizar-las-prácticas-del-capítulo.-3"><i class="fa fa-check"></i><b>5.4</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="componentes-principales..html"><a href="componentes-principales..html"><i class="fa fa-check"></i><b>6</b> Componentes principales.</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="componentes-principales..html"><a href="componentes-principales..html#introducción.-2"><i class="fa fa-check"></i><b>6.1</b> Introducción.</a></li>
+<li class="chapter" data-level="6.2" data-path="componentes-principales..html"><a href="componentes-principales..html#información-y-varianza."><i class="fa fa-check"></i><b>6.2</b> Información y varianza.</a></li>
+<li class="chapter" data-level="6.3" data-path="componentes-principales..html"><a href="componentes-principales..html#cálculo-de-componentes."><i class="fa fa-check"></i><b>6.3</b> Cálculo de componentes.</a></li>
+<li class="chapter" data-level="6.4" data-path="componentes-principales..html"><a href="componentes-principales..html#retención-de-componentes-principales."><i class="fa fa-check"></i><b>6.4</b> Retención de componentes principales.</a></li>
+<li class="chapter" data-level="6.5" data-path="componentes-principales..html"><a href="componentes-principales..html#puntuaciones-de-los-casos-scores"><i class="fa fa-check"></i><b>6.5</b> Puntuaciones de los casos (scores)</a></li>
+<li class="chapter" data-level="6.6" data-path="componentes-principales..html"><a href="componentes-principales..html#materiales-para-realizar-las-prácticas-del-capítulo.-4"><i class="fa fa-check"></i><b>6.6</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="análisis-clúster..html"><a href="análisis-clúster..html"><i class="fa fa-check"></i><b>7</b> Análisis Clúster.</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="análisis-clúster..html"><a href="análisis-clúster..html#introducción.-3"><i class="fa fa-check"></i><b>7.1</b> Introducción.</a></li>
+<li class="chapter" data-level="7.2" data-path="análisis-clúster..html"><a href="análisis-clúster..html#métodos-de-agrupación-jerárquicos."><i class="fa fa-check"></i><b>7.2</b> Métodos de agrupación jerárquicos.</a></li>
+<li class="chapter" data-level="7.3" data-path="análisis-clúster..html"><a href="análisis-clúster..html#métodos-de-agrupación-no-jerárquicos."><i class="fa fa-check"></i><b>7.3</b> Métodos de agrupación no-jerárquicos.</a></li>
+<li class="chapter" data-level="7.4" data-path="análisis-clúster..html"><a href="análisis-clúster..html#materiales-para-realizar-las-prácticas-del-capítulo.-5"><i class="fa fa-check"></i><b>7.4</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html"><i class="fa fa-check"></i><b>8</b> Análisis de la varianza.</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#introducción.-4"><i class="fa fa-check"></i><b>8.1</b> Introducción.</a></li>
+<li class="chapter" data-level="8.2" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#anova-de-un-solo-factor."><i class="fa fa-check"></i><b>8.2</b> ANOVA de un solo factor.</a></li>
+<li class="chapter" data-level="8.3" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#comparaciones-múltiples."><i class="fa fa-check"></i><b>8.3</b> Comparaciones múltiples.</a></li>
+<li class="chapter" data-level="8.4" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#y-si-no-se-cumplen-las-condiciones-para-realizar-el-contraste-f-de-anova"><i class="fa fa-check"></i><b>8.4</b> ¿Y si no se cumplen las condiciones para realizar el contraste F de ANOVA?</a></li>
+<li class="chapter" data-level="8.5" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#materiales-para-realizar-las-prácticas-del-capítulo.-6"><i class="fa fa-check"></i><b>8.5</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html"><i class="fa fa-check"></i><b>9</b> Análisis de Regresión Lineal Múltiple.</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html#introducción.-5"><i class="fa fa-check"></i><b>9.1</b> Introducción.</a></li>
+<li class="chapter" data-level="9.2" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html#especificación-del-mbr.-datos-de-corte-transversal."><i class="fa fa-check"></i><b>9.2</b> Especificación del MBR. Datos de corte transversal.</a></li>
+<li class="chapter" data-level="9.3" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html#materiales-para-realizar-las-prácticas-del-capítulo.-7"><i class="fa fa-check"></i><b>9.3</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html"><i class="fa fa-check"></i><b>10</b> Análisis de Datos Cualitativos.</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#introducción.-6"><i class="fa fa-check"></i><b>10.1</b> Introducción.</a></li>
+<li class="chapter" data-level="10.2" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#tablas-de-contingencia-y-asociación-entre-dos-atributos-o-factores."><i class="fa fa-check"></i><b>10.2</b> Tablas de contingencia, y asociación entre dos atributos o factores.</a></li>
+<li class="chapter" data-level="10.3" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#análisis-de-correspondencias."><i class="fa fa-check"></i><b>10.3</b> Análisis de correspondencias.</a></li>
+<li class="chapter" data-level="10.4" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#modelos-logaritmico-lineales-aplicados-a-tablas-de-contingencia."><i class="fa fa-check"></i><b>10.4</b> Modelos logaritmico-lineales aplicados a tablas de contingencia.</a></li>
+<li class="chapter" data-level="10.5" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#materiales-para-realizar-las-prácticas-del-capítulo.-8"><i class="fa fa-check"></i><b>10.5</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="bibliografía.html"><a href="bibliografía.html"><i class="fa fa-check"></i>Bibliografía</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Técnicas de Análisis de Datos Económicos con R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="análisis-de-regresión-lineal-múltiple." class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">Capítulo 9</span> Análisis de Regresión Lineal Múltiple.<a href="análisis-de-regresión-lineal-múltiple..html#análisis-de-regresión-lineal-múltiple." class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introducción.-5" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> Introducción.<a href="análisis-de-regresión-lineal-múltiple..html#introducción.-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El análisis de regresión (lineal) múltiple es una de las técnicas de análisis de dependencias más profusamente utilizadas. En el modelo de regresión múltiple la variable dependiente tiene escala métrica. Las variables explicativas pueden ser métricas o ser atributos.</p>
+<p>Según los datos de los que se alimenta el modelo, se aplicarán diferentes métodos de estimación, especificaciones y pruebas:</p>
+<ul>
+<li><p>Series temporales.</p></li>
+<li><p>Datos de corte transversal.</p></li>
+<li><p>Paneles de datos.</p></li>
+</ul>
+<p>En este capítulo nos centraremos en los modelos estimados con base en datos de corte transversal (es decir, las variables tienen datos referentes a distintos casos o individuos: personas, empresas, países, etc.)</p>
+<p>La construcción de un modelo de regresión cuenta con una serie de <strong>etapas</strong>, que son:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Especificación del modelo:</strong> establecer las variables que entrarán a formar parte del modelo (dependiente, explicativas).</p></li>
+<li><p><strong>Estimación:</strong> calcular el valor de los parámetros o coeficientes estructurales del modelo.</p></li>
+<li><p><strong>Contraste y validación:</strong> verificar si el modelo estimado cumple con las hipótesis que garantizan unas buenas propiedades y si es adecuado para representar la realidad.</p></li>
+<li><p><strong>Utilización del modelo:</strong> a efectos de previsión, análisis estructural o simulación de escenarios.</p></li>
+</ol>
+<p>Vamos a partir del modelo básico de regresión (MBR). Es cierto que, para superar ciertas carencias de este, se ha procedido a desarrollar especificaciones y métodos de estimación más elaborados; pero no es menos cierto que no es conveniente “quemar” etapas sin conocer las características del modelo fundamental, como cimiento donde se posan modelados más complejos.</p>
+<p>En el MBR vamos a suponer que existen:</p>
+<ul>
+<li><p>Una variable dependiente <em>y</em>.</p></li>
+<li><p>k variables explicativas <span class="math inline">\(x_j\)</span>.</p></li>
+<li><p>Variable o <strong><em>perturbación aleatoria</em></strong> u, que recoge el efecto conjunto de todas aquellas variables que afectan al comportamiento de <em>y</em> pero que no están explicitadas en la especificación como variables <em>x</em>.</p></li>
+<li><p>El tamaño de la muestra es <em>n</em>.</p></li>
+</ul>
+<p>El modelo que se plantea es:</p>
+<p><span class="math display">\[
+y_i=\beta_1x_{i1}+\beta_2x_{i2}+\cdots+\beta_kx_{ik}+u_i
+\]</span></p>
+<p>con <span class="math inline">\(i=1,2,...,n\)</span> .</p>
+<p>O, en notación matricial:</p>
+<p><span class="math display">\[
+y=X\beta+u
+\]</span></p>
+<p>Donde <em>y</em> es un vector (nx1), <em>X</em> una matriz (nxk), <span class="math inline">\(\beta\)</span> un vector (kx1), y <em>u</em> un vestor (nx1).</p>
+<p>En el MBR, la perturbación aleatoria <em>u</em> debe cumplir con una serie de <strong>hipótesis básicas</strong>: normalidad en su comportamiento, esperanza nula, homoscedasticidad o varianza constante, y ausencia de autocorrelación (covarianza nula entre diferentes elementos del vector de la perturbación). Estas hipótesis, junto a las de permanencia estructural (valores de los elementos de <span class="math inline">\(\beta\)</span> constantes a lo largo de la muestra), no endogeneidad o regresores no-estocásticos (covarianza nula entre la matriz <em>X</em> y el vector <em>u</em>), y rango pleno (las columnas de la matriz X o variables explicativas no han de ser combinaciones lineales unas de otras); permiten que el MBR pueda ser estimado por el método de mínimos cuadrados ordinarios (MCO), obteniendo estimadores con las mejores propiedades: <strong>insesgadez, eficiencia, consistencia</strong>.</p>
+<p>En la medida en que alguna o algunas de las hipótesis básicas no se cumplan, la calidad de los estimadores MCO perderan calidad, en el sentido de no gozar de las propiedades deseables, desde un punto de vista inferencial. En tal caso, podrán aplicarse otros métodos de estimación, diversos métodos econométricos, o asumir que los estimadores carecen de algunas de las propiedades deseables.</p>
+<p>El modelo estimado será:</p>
+<p><span class="math display">\[
+\hat{y}_i=\hat{\beta}_1x_{i1}+\hat{\beta}_2x_{i2}+\cdots+\hat{\beta}_kx_{ik}
+\]</span></p>
+<p>Y el <strong>error o residuo</strong> será, para cada observación, <span class="math inline">\(\hat{u}_i=y_i-\hat{y}_i\)</span>. El vector de residuos se considera una estimación del vector de perturbaciones aleatorias. Es por ello que el vector de residuos se utiliza para verificar el cumplimiento de las hipótesis del modelo básico referentes al comportamiento de la perturbación (normalidad, homoscedasticidad, ausencia de autocorrelación…)</p>
+<p>Tras estas breves notas formales del MBR, pasaremos a construir un modelo que intentará explicar el comportamiento de la rentabilidad económica de un grupo de empresas en función de una serie de variables aleatorias.</p>
+</div>
+<div id="especificación-del-mbr.-datos-de-corte-transversal." class="section level2 hasAnchor" number="9.2">
+<h2><span class="header-section-number">9.2</span> Especificación del MBR. Datos de corte transversal.<a href="análisis-de-regresión-lineal-múltiple..html#especificación-del-mbr.-datos-de-corte-transversal." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Vamos a explicar, mediante un modelo de regresión múltiple, el comportamiento de la rentabilidad económica (RENECO) de las empresas de producción eléctrica mediante tecnología eólica en función del resultado del ejercicio (RES), el activo (ACTIVO), del grado de endeudamiento (ENDEUDA), del grado de apalancamiento (APALANCA), y del tamaño del grupo corporativo (matriz) al que pertenece (DIMENSION). Para ello se ha seleccionado una muestra constituida por 50 empresas.</p>
+<p>Supondremos que trabajamos en un proyecto de RStudio de nombre, por ejemplo, “regresion”. Los datos de las empresas se encuentran en la hoja “Datos” del archivo de Microsoft® Excel® “<a href="https://docs.google.com/spreadsheets/d/1oq17lI4trI8k5oeDgj_fYg9WhbRIqDLG/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">eolica_50.xlsx</a>”. El script con el código que vamos a ir ejecutando se llama “<a href="https://drive.google.com/file/d/1ilNEAA3-Co9kbs5Gv4arwCBCcCnbn0zY/view?usp=sharing">regresion_eolica.R</a>”.</p>
+<p>En primer lugar, como de costumbre, hemos de preparar los datos: importarlos en R y gestionar <em>missing values</em> y <em>outliers</em>.</p>
+<p>Así, una vez abierto el <em>script</em> en el editor de RStudio , comprobaremos que la primera parte del código está dedicada a la limpieza de la memoria (<em>Environment</em>) y a la importación de los datos. Para ello, activaremos el paquete <code>{readxl}</code> y utilizaremos la función <code>read_excel()</code>, indicando en los argumentos el archivo a explorar, y la <em>hoja</em> en la cual se encuentran los datos (hoja “Datos”). También hemos de prestar atención a la cuestión de si existen en la hoja de <em>Excel</em> anotaciones en las celdas donde no haya dato, para completar adecuadamente el argumento <code>na=</code> . Los datos se almacenarán en el <em>data frame</em> “datos”. En este <em>data frame</em>, la primera columna no es una verdadera variable, sino que se compone de los nombres de los casos o empresas. Con una línea de código adicional transformaremos esa primera columna en el <em>nombre de las filas</em>, de modo que tal columna abandona su <em>rol</em> de variable. En definitiva, el código para importar los datos es:</p>
+<div class="sourceCode" id="cb320"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb320-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb320-1" tabindex="-1"></a><span class="do">## Regresion multiple empresas eolicas. Disculpen la falta de tildes.</span></span>
+<span id="cb320-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb320-2" tabindex="-1"></a></span>
+<span id="cb320-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb320-3" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb320-4"><a href="análisis-de-regresión-lineal-múltiple..html#cb320-4" tabindex="-1"></a></span>
+<span id="cb320-5"><a href="análisis-de-regresión-lineal-múltiple..html#cb320-5" tabindex="-1"></a><span class="co"># DATOS</span></span>
+<span id="cb320-6"><a href="análisis-de-regresión-lineal-múltiple..html#cb320-6" tabindex="-1"></a></span>
+<span id="cb320-7"><a href="análisis-de-regresión-lineal-múltiple..html#cb320-7" tabindex="-1"></a>  <span class="co"># Importando</span></span>
+<span id="cb320-8"><a href="análisis-de-regresión-lineal-múltiple..html#cb320-8" tabindex="-1"></a></span>
+<span id="cb320-9"><a href="análisis-de-regresión-lineal-múltiple..html#cb320-9" tabindex="-1"></a>    <span class="fu">library</span>(readxl)</span>
+<span id="cb320-10"><a href="análisis-de-regresión-lineal-múltiple..html#cb320-10" tabindex="-1"></a>    eolicos <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;eolica_50.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;Datos&quot;</span>,</span>
+<span id="cb320-11"><a href="análisis-de-regresión-lineal-múltiple..html#cb320-11" tabindex="-1"></a>                          <span class="at">na =</span> <span class="fu">c</span>(<span class="st">&quot;n.d.&quot;</span>, <span class="st">&quot;s.d.&quot;</span>))</span>
+<span id="cb320-12"><a href="análisis-de-regresión-lineal-múltiple..html#cb320-12" tabindex="-1"></a>    eolicos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(eolicos, <span class="at">row.names =</span> <span class="dv">1</span>)</span>
+<span id="cb320-13"><a href="análisis-de-regresión-lineal-múltiple..html#cb320-13" tabindex="-1"></a>    <span class="fu">summary</span> (eolicos)</span></code></pre></div>
+<pre><code>##       RES              ACTIVO            FPIOS        
+##  Min.   :-5268.6   Min.   :  25355   Min.   : -10985  
+##  1st Qu.:  919.6   1st Qu.:  35512   1st Qu.:   1897  
+##  Median : 2321.2   Median :  50301   Median :  17256  
+##  Mean   : 4986.7   Mean   : 189142   Mean   :  83164  
+##  3rd Qu.: 4380.4   3rd Qu.: 101035   3rd Qu.:  44871  
+##  Max.   :42737.0   Max.   :2002458   Max.   :1740487  
+##                    NA&#39;s   :1                          
+## 
+##      RENECO           RENFIN            LIQUIDEZ       
+##  Min.   :-2.708   Min.   :-263.639   Min.   :  0.0140  
+##  1st Qu.: 1.817   1st Qu.:   1.251   1st Qu.:  0.6462  
+##  Median : 3.957   Median :  14.322   Median :  1.1550  
+##  Mean   : 5.758   Mean   :  32.071   Mean   :  4.2370  
+##  3rd Qu.: 8.038   3rd Qu.:  36.193   3rd Qu.:  1.9185  
+##  Max.   :35.262   Max.   : 588.190   Max.   :128.4330  
+##  NA&#39;s   :2                                             
+## 
+##     ENDEUDA            MARGEN           SOLVENCIA      
+##  Min.   :  0.917   Min.   :-2248.16   Min.   :-24.465  
+##  1st Qu.: 37.272   1st Qu.:   14.74   1st Qu.:  4.327  
+##  Median : 74.683   Median :   23.86   Median : 25.317  
+##  Mean   : 66.646   Mean   :  -17.77   Mean   : 33.353  
+##  3rd Qu.: 95.672   3rd Qu.:   45.88   3rd Qu.: 62.727  
+##  Max.   :124.465   Max.   :  400.90   Max.   : 99.082  
+## 
+##     APALANCA            MATRIZ           DIMENSION        
+##  Min.   :-6905.772   Length:50          Length:50         
+##  1st Qu.:    7.586   Class :character   Class :character  
+##  Median :  126.208   Mode  :character   Mode  :character  
+##  Mean   :  784.430                                        
+##  3rd Qu.:  763.952                                        
+##  Max.   :12244.351</code></pre>
+<p>Posteriormente, seleccionaremos las variables que vamos a utilizar en el análisis, almacenándolas en otro data frame de nombre, por ejemplo, “originales”:</p>
+<div class="sourceCode" id="cb322"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb322-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb322-1" tabindex="-1"></a>  <span class="co"># Seleccionando variables clasificadoras para el analisis</span></span>
+<span id="cb322-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb322-2" tabindex="-1"></a></span>
+<span id="cb322-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb322-3" tabindex="-1"></a>    <span class="fu">library</span>(dplyr)</span>
+<span id="cb322-4"><a href="análisis-de-regresión-lineal-múltiple..html#cb322-4" tabindex="-1"></a>    originales<span class="ot">&lt;-</span><span class="fu">select</span>(eolicos,</span>
+<span id="cb322-5"><a href="análisis-de-regresión-lineal-múltiple..html#cb322-5" tabindex="-1"></a>                       RENECO,</span>
+<span id="cb322-6"><a href="análisis-de-regresión-lineal-múltiple..html#cb322-6" tabindex="-1"></a>                       RES,</span>
+<span id="cb322-7"><a href="análisis-de-regresión-lineal-múltiple..html#cb322-7" tabindex="-1"></a>                       ACTIVO,</span>
+<span id="cb322-8"><a href="análisis-de-regresión-lineal-múltiple..html#cb322-8" tabindex="-1"></a>                       ENDEUDA,</span>
+<span id="cb322-9"><a href="análisis-de-regresión-lineal-múltiple..html#cb322-9" tabindex="-1"></a>                       APALANCA,</span>
+<span id="cb322-10"><a href="análisis-de-regresión-lineal-múltiple..html#cb322-10" tabindex="-1"></a>                       DIMENSION)</span>
+<span id="cb322-11"><a href="análisis-de-regresión-lineal-múltiple..html#cb322-11" tabindex="-1"></a>    <span class="fu">summary</span> (originales)</span></code></pre></div>
+<pre><code>##      RENECO            RES              ACTIVO       
+##  Min.   :-2.708   Min.   :-5268.6   Min.   :  25355  
+##  1st Qu.: 1.817   1st Qu.:  919.6   1st Qu.:  35512  
+##  Median : 3.957   Median : 2321.2   Median :  50301  
+##  Mean   : 5.758   Mean   : 4986.7   Mean   : 189142  
+##  3rd Qu.: 8.038   3rd Qu.: 4380.4   3rd Qu.: 101035  
+##  Max.   :35.262   Max.   :42737.0   Max.   :2002458  
+##  NA&#39;s   :2                          NA&#39;s   :1        
+## 
+##     ENDEUDA           APALANCA          DIMENSION        
+##  Min.   :  0.917   Min.   :-6905.772   Length:50         
+##  1st Qu.: 37.272   1st Qu.:    7.586   Class :character  
+##  Median : 74.683   Median :  126.208   Mode  :character  
+##  Mean   : 66.646   Mean   :  784.430                     
+##  3rd Qu.: 95.672   3rd Qu.:  763.952                     
+##  Max.   :124.465   Max.   :12244.351</code></pre>
+<p>Para localizar los casos concretos de <strong><em>missing values</em></strong>, puede recurrirse a utilizar las herramientas de manejo de <em>data frames</em> del paquete <code>{dplyr}</code>. Con la función <code>vismiss()</code> del paquete <code>{visdat}</code> podemos tener una visión gráfica general de los valores faltantes. Si hay casos faltantes en una de las variables, los identificaremos filtrando el <em>data frame</em> con la función <code>filter()</code> de <code>{dplyr}</code>. Ante la existencia de <em>missing values</em>, se puede actuar de varios modos. Por ejemplo, <strong>se puede intentar obtener por otro canal de información el conjunto de valores</strong> de las variables que no están disponibles, <strong>o recurrir a alguna estimación</strong> para los mismos y asignarlos. En caso de que esto sea difícil, se puede optar, simplemente, por <strong>eliminar</strong> estos casos, en especial cuando representan un porcentaje muy reducido respecto al total de casos. En nuestro ejemplo, vamos a suponer que hemos optado por esta última vía. Así, estos casos, finalmente, será exluidos del análisis, utilizando para ello un nuevo filtro:</p>
+<div class="sourceCode" id="cb324"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb324-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb324-1" tabindex="-1"></a>  <span class="co"># Identificando missing values.</span></span>
+<span id="cb324-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb324-2" tabindex="-1"></a></span>
+<span id="cb324-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb324-3" tabindex="-1"></a>    <span class="fu">library</span>(visdat)</span>
+<span id="cb324-4"><a href="análisis-de-regresión-lineal-múltiple..html#cb324-4" tabindex="-1"></a>    <span class="fu">vis_miss</span>(originales)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-274-1.png" width="672" /></p>
+<div class="sourceCode" id="cb325"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb325-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb325-1" tabindex="-1"></a>    originales <span class="sc">%&gt;%</span></span>
+<span id="cb325-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb325-2" tabindex="-1"></a>      <span class="fu">filter</span>(<span class="fu">is.na</span>(RENECO) <span class="sc">|</span> <span class="fu">is.na</span>(RES) <span class="sc">|</span> <span class="fu">is.na</span>(ACTIVO) <span class="sc">|</span></span>
+<span id="cb325-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb325-3" tabindex="-1"></a>             <span class="fu">is.na</span>(ENDEUDA) <span class="sc">|</span> <span class="fu">is.na</span>(APALANCA) <span class="sc">|</span> <span class="fu">is.na</span>(DIMENSION)) <span class="sc">%&gt;%</span></span>
+<span id="cb325-4"><a href="análisis-de-regresión-lineal-múltiple..html#cb325-4" tabindex="-1"></a>      <span class="fu">select</span>(RENECO, RES, ACTIVO, ENDEUDA, APALANCA, DIMENSION)  </span></code></pre></div>
+<pre><code>##                              RENECO       RES ACTIVO ENDEUDA  APALANCA DIMENSION
+## La Caldera Energia Burgos SL  2.643   511.304     NA 110.636 -1019.288    GRANDE
+## Sargon Energias SLU              NA -2216.000  85745 112.811  -879.289     MEDIA
+## Viesgo Renovables SL.            NA  4609.000 269730  34.116    13.330     MEDIA</code></pre>
+<div class="sourceCode" id="cb327"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb327-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb327-1" tabindex="-1"></a>    originales <span class="ot">&lt;-</span> originales <span class="sc">%&gt;%</span></span>
+<span id="cb327-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb327-2" tabindex="-1"></a>      <span class="fu">filter</span>(<span class="sc">!</span> <span class="fu">is.na</span>(RENECO) <span class="sc">&amp;</span> <span class="sc">!</span> <span class="fu">is.na</span>(RES) <span class="sc">&amp;</span> <span class="sc">!</span> <span class="fu">is.na</span>(ACTIVO) <span class="sc">&amp;</span></span>
+<span id="cb327-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb327-3" tabindex="-1"></a>             <span class="sc">!</span> <span class="fu">is.na</span>(ENDEUDA) <span class="sc">&amp;</span> <span class="sc">!</span> <span class="fu">is.na</span>(APALANCA) <span class="sc">&amp;</span> <span class="sc">!</span> <span class="fu">is.na</span>(DIMENSION))</span></code></pre></div>
+<p>Tras el código anterior, se han eliminado del <em>data frame</em> “originales” las empresas “Sargon Energías S. L. U.” y “Viesgo Renovables S. L.”, debido a que carecían de dato de rentabilidad económica (RENECO), y “La Caldera Energía Burgos, S. L.”, al no tener dato sobre el valor de sus activos (ACTIVO).</p>
+<p>Una vez tratados los casos con valores perdidos o <em>missing values</em>, <strong>es necesario detectar la presencia de <em>outliers</em></strong> o casos atípicos en la muestra, que pudieran desvirtuar los resultados del análisis de regresión. Para realizar esta etapa, y dado que en nuestro análisis contamos con 5 variables, primero “resumiremos” el valor que toman dichas variables para cada caso, mediante el cálculo de la <em>distancia de Mahalanobis</em>. De hecho, las distancias de los diferentes casos se almacenarán en una nueva variable, a la que llamaremos MAHALANOBIS, que se incorporará al <em>data frame</em> “originales” por medio de la función <code>mutate()</code> de <code>{dplyr}</code>, y la función <code>mahalanobis()</code>. Recordemos que, en los diferentes argumentos de esta función, el punto “.” hace referencia al <em>data frame</em> que está delante del operador pipe (%&gt;%). Posteriormente, construiremos el diagrama de caja de MAHALANOBIS para verificar la existencia de <em>outliers</em> (puntos), e identificaremoslos casos correspondientes con el filtro adecuado. Obtaremos por crear un nuevo <em>data frame</em>, “originales_so”, aplicando un nuevo filtro que elimine esos casos localizados como <em>outliers</em>:</p>
+<div class="sourceCode" id="cb328"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb328-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-1" tabindex="-1"></a>  <span class="co"># Identificando outliers.</span></span>
+<span id="cb328-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-2" tabindex="-1"></a></span>
+<span id="cb328-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-3" tabindex="-1"></a>    originales <span class="ot">&lt;-</span> originales <span class="sc">%&gt;%</span></span>
+<span id="cb328-4"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-4" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">MAHALANOBIS =</span> <span class="fu">mahalanobis</span>(<span class="fu">select</span>(.,</span>
+<span id="cb328-5"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-5" tabindex="-1"></a>                                          RENECO,</span>
+<span id="cb328-6"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-6" tabindex="-1"></a>                                          RES,</span>
+<span id="cb328-7"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-7" tabindex="-1"></a>                                          ACTIVO,</span>
+<span id="cb328-8"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-8" tabindex="-1"></a>                                          ENDEUDA,</span>
+<span id="cb328-9"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-9" tabindex="-1"></a>                                          APALANCA),</span>
+<span id="cb328-10"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-10" tabindex="-1"></a>                                        <span class="at">center =</span> <span class="fu">colMeans</span>(<span class="fu">select</span>(.,</span>
+<span id="cb328-11"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-11" tabindex="-1"></a>                                                            RENECO,</span>
+<span id="cb328-12"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-12" tabindex="-1"></a>                                                            RES,</span>
+<span id="cb328-13"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-13" tabindex="-1"></a>                                                            ACTIVO,</span>
+<span id="cb328-14"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-14" tabindex="-1"></a>                                                            ENDEUDA,</span>
+<span id="cb328-15"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-15" tabindex="-1"></a>                                                            APALANCA)),</span>
+<span id="cb328-16"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-16" tabindex="-1"></a>                                        <span class="at">cov=</span><span class="fu">cov</span>(<span class="fu">select</span>(.,</span>
+<span id="cb328-17"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-17" tabindex="-1"></a>                                                  RENECO,</span>
+<span id="cb328-18"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-18" tabindex="-1"></a>                                                  RES,</span>
+<span id="cb328-19"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-19" tabindex="-1"></a>                                                  ACTIVO,</span>
+<span id="cb328-20"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-20" tabindex="-1"></a>                                                  ENDEUDA,</span>
+<span id="cb328-21"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-21" tabindex="-1"></a>                                                  APALANCA))))</span>
+<span id="cb328-22"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-22" tabindex="-1"></a></span>
+<span id="cb328-23"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-23" tabindex="-1"></a>    <span class="fu">library</span> (ggplot2)</span>
+<span id="cb328-24"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-24" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="at">data =</span> originales, <span class="at">map =</span> (<span class="fu">aes</span>(<span class="at">y =</span> MAHALANOBIS))) <span class="sc">+</span></span>
+<span id="cb328-25"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-25" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;orange&quot;</span>) <span class="sc">+</span></span>
+<span id="cb328-26"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-26" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">&quot;DISTANCIA DE MAHALANOBIS&quot;</span>, <span class="at">subtitle =</span> <span class="st">&quot;Empresas eólicas&quot;</span>) <span class="sc">+</span></span>
+<span id="cb328-27"><a href="análisis-de-regresión-lineal-múltiple..html#cb328-27" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">&quot;MAHALANOBIS&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-275-1.png" width="672" /></p>
+<div class="sourceCode" id="cb329"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb329-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb329-1" tabindex="-1"></a>    Q1M <span class="ot">&lt;-</span> <span class="fu">quantile</span> (originales<span class="sc">$</span>MAHALANOBIS, <span class="fu">c</span>(<span class="fl">0.25</span>))</span>
+<span id="cb329-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb329-2" tabindex="-1"></a>    Q3M <span class="ot">&lt;-</span> <span class="fu">quantile</span> (originales<span class="sc">$</span>MAHALANOBIS, <span class="fu">c</span>(<span class="fl">0.75</span>))</span>
+<span id="cb329-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb329-3" tabindex="-1"></a>    </span>
+<span id="cb329-4"><a href="análisis-de-regresión-lineal-múltiple..html#cb329-4" tabindex="-1"></a>    originales <span class="sc">%&gt;%</span> <span class="fu">filter</span>(MAHALANOBIS <span class="sc">&gt;</span> Q3M <span class="sc">+</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(MAHALANOBIS) <span class="sc">|</span></span>
+<span id="cb329-5"><a href="análisis-de-regresión-lineal-múltiple..html#cb329-5" tabindex="-1"></a>                      MAHALANOBIS <span class="sc">&lt;</span> Q1M <span class="sc">-</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(MAHALANOBIS)) <span class="sc">%&gt;%</span></span>
+<span id="cb329-6"><a href="análisis-de-regresión-lineal-múltiple..html#cb329-6" tabindex="-1"></a>                   <span class="fu">select</span>(MAHALANOBIS)</span></code></pre></div>
+<pre><code>##                                       MAHALANOBIS
+## Corporacion Acciona Eolica SL            13.67263
+## Parque Eolico Sierra De Las Carbas SL    13.34797
+## Naturgy Renovables SLU                   19.45720
+## Global Power Generation SA.              19.88409
+## Saeta Yield SA.                          20.40512
+## Molinos Del Ebro SA                      21.73955
+## Elecdey Lezuza SA                        18.97057</code></pre>
+<div class="sourceCode" id="cb331"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb331-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb331-1" tabindex="-1"></a>    originales_so <span class="ot">&lt;-</span> originales <span class="sc">%&gt;%</span></span>
+<span id="cb331-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb331-2" tabindex="-1"></a>                     <span class="fu">filter</span>(MAHALANOBIS <span class="sc">&lt;=</span> Q3M <span class="sc">+</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(MAHALANOBIS) <span class="sc">&amp;</span></span>
+<span id="cb331-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb331-3" tabindex="-1"></a>                            MAHALANOBIS <span class="sc">&gt;=</span> Q1M <span class="sc">-</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(MAHALANOBIS)) </span>
+<span id="cb331-4"><a href="análisis-de-regresión-lineal-múltiple..html#cb331-4" tabindex="-1"></a>    originales <span class="ot">&lt;-</span> originales <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>MAHALANOBIS)</span>
+<span id="cb331-5"><a href="análisis-de-regresión-lineal-múltiple..html#cb331-5" tabindex="-1"></a>    originales_so <span class="ot">&lt;-</span> originales_so <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>MAHALANOBIS)</span></code></pre></div>
+<p>Se han localizado 7 empresas con valores de la <em>distancia de Mahalanobis</em> atípicos, lo que hace pensar que, a su vez, estas empresas registran valores atípicos en una o varias de las variables originales. Como ya hemos señalado, eliminamos estos 7 casos de la muestra. Así, el <em>data frame</em> “originales_so”, que es el que emplearemos para estimar el modelo, cuenta con 40 observaciones.</p>
+<p>Una de las variables explicativas es un atributo o factor, llamado DIMENSION, que cuenta con 3 niveles: “GRANDE”, “MEDIANA” y “PEQUEÑA”, según el número de empresas integradas en la matriz a la que pertenece cada empresa de la muestra. Hemos de informar a R de la condición de atributo o factor de esta variable (pues de momento solo la contempla como una variable cualitativa o alfanumérica). Para ello ejecutaremos el código:</p>
+<div class="sourceCode" id="cb332"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb332-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb332-1" tabindex="-1"></a>  <span class="co"># Convertir variable DIMENSION en Factor.</span></span>
+<span id="cb332-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb332-2" tabindex="-1"></a></span>
+<span id="cb332-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb332-3" tabindex="-1"></a>    originales_so<span class="sc">$</span>DIMENSION <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(originales_so<span class="sc">$</span>DIMENSION)</span>
+<span id="cb332-4"><a href="análisis-de-regresión-lineal-múltiple..html#cb332-4" tabindex="-1"></a>    <span class="fu">levels</span>(originales_so<span class="sc">$</span>DIMENSION)</span></code></pre></div>
+<pre><code>## [1] &quot;GRANDE&quot;  &quot;MEDIA&quot;   &quot;PEQUEÑA&quot;</code></pre>
+<p>Una vez preparadas todas las variables, es el momento de <strong>especificar y estimar una regresión múltiple inicial</strong>, que contenga todas las variables explicativas candidatas a formar parte de la versión final.</p>
+<p>Para especificar y estimar este modelo inicial, deben de cargarse previamente algunos paquetes que es necesario utilizar: <code>{knitr}</code> y <code>{kableExtra}</code> para construir tablas con los resultados de la regresión, y <code>{broom}</code>. Este último paquete es fundamental, ya que permite disponer de un modo cómodo de todos los elementos de los que se compone un modelo estimado (no solo lineal, como es nuestro caso).</p>
+<p>Por otro lado, El MBR lineal, estimado mediante el método de mínimos cuadrados ordinarios (MCO), se obtendrá mediante la función <code>lm()</code>. Los resultados los guardaremos en un objeto de nombre, por ejemplo, “ecua0”. Luego, se realizará un <code>summary()</code> para ver dicha estimación.</p>
+<div class="sourceCode" id="cb334"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb334-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb334-1" tabindex="-1"></a><span class="co"># ESPECIFICACION Y ESTIMACION</span></span>
+<span id="cb334-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb334-2" tabindex="-1"></a></span>
+<span id="cb334-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb334-3" tabindex="-1"></a>  <span class="co"># Cargar las librerías necesarias</span></span>
+<span id="cb334-4"><a href="análisis-de-regresión-lineal-múltiple..html#cb334-4" tabindex="-1"></a></span>
+<span id="cb334-5"><a href="análisis-de-regresión-lineal-múltiple..html#cb334-5" tabindex="-1"></a>    <span class="fu">library</span> (knitr)</span>
+<span id="cb334-6"><a href="análisis-de-regresión-lineal-múltiple..html#cb334-6" tabindex="-1"></a>    <span class="fu">library</span> (kableExtra)</span>
+<span id="cb334-7"><a href="análisis-de-regresión-lineal-múltiple..html#cb334-7" tabindex="-1"></a>    <span class="fu">library</span> (broom)</span>
+<span id="cb334-8"><a href="análisis-de-regresión-lineal-múltiple..html#cb334-8" tabindex="-1"></a>    <span class="fu">library</span> (car) <span class="co"># para obtener el vif</span></span>
+<span id="cb334-9"><a href="análisis-de-regresión-lineal-múltiple..html#cb334-9" tabindex="-1"></a></span>
+<span id="cb334-10"><a href="análisis-de-regresión-lineal-múltiple..html#cb334-10" tabindex="-1"></a>  <span class="co"># Especificar el modelo de regresión lineal</span></span>
+<span id="cb334-11"><a href="análisis-de-regresión-lineal-múltiple..html#cb334-11" tabindex="-1"></a>    ecua0 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> originales_so,</span>
+<span id="cb334-12"><a href="análisis-de-regresión-lineal-múltiple..html#cb334-12" tabindex="-1"></a>                RENECO <span class="sc">~</span> RES <span class="sc">+</span> ACTIVO <span class="sc">+</span> ENDEUDA <span class="sc">+</span> APALANCA <span class="sc">+</span> DIMENSION)</span>
+<span id="cb334-13"><a href="análisis-de-regresión-lineal-múltiple..html#cb334-13" tabindex="-1"></a>    <span class="fu">summary</span>(ecua0)</span></code></pre></div>
+<p>El resultado es:</p>
+<pre><code>## 
+## Call:
+## lm(formula = RENECO ~ RES + ACTIVO + ENDEUDA + APALANCA + DIMENSION, 
+##     data = originales_so)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -7.0302 -2.1468 -0.1034  1.5821  6.7527 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       5.045e+00  1.575e+00   3.203  0.00301 ** 
+## RES               9.962e-04  2.137e-04   4.661 4.99e-05 ***
+## ACTIVO           -3.060e-05  8.938e-06  -3.423  0.00167 ** 
+## ENDEUDA          -6.297e-03  1.859e-02  -0.339  0.73698    
+## APALANCA         -4.197e-04  3.508e-04  -1.196  0.24007    
+## DIMENSIONMEDIA    1.462e+00  1.516e+00   0.964  0.34195    
+## DIMENSIONPEQUEÑA  1.781e+00  1.563e+00   1.139  0.26282    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.43 on 33 degrees of freedom
+## Multiple R-squared:  0.5943, Adjusted R-squared:  0.5205 
+## F-statistic: 8.056 on 6 and 33 DF,  p-value: 2.122e-05</code></pre>
+<p>Podemos observar, en cuanto a la <strong>bondad del modelo</strong>, cómo es capaz de recoger el 52% de la varianza o comportamiento de la rentabilidad económica (RENECO), atendiendo al valor del coeficiente de determinación lineal corregido (<em>Adjusted R-squared</em>). Los coeficientes o parámetros estimados, en su conjunto, son estadísticamente significativos para una significación de 0,05 (p-valor muy pequeño, en el <em>contraste F de significación conjunta</em>). En cuanto a los coeficientes estimados considerados individualmente, encontramos que son <strong>estadísticamente significativos</strong> tanto el término independiente (intercept), como los asociados a las variables RES y ACTIVO, a juzgar por los <em>p-valores</em> correspondientes al <em>contraste t de significación individual</em>. En ambos casos, además, son coeficientes con signo positivo, lo que se interpreta como que ambas variables influyen sobre RENECO de modo que, a mayor valor de estas variables, en general se obtiene una mayor rentabilidad económica.</p>
+<p>Por último, es conveniente advertir que el factor DIMENSION se especifica mediante dos variables dicotómicas que representan a dos de los niveles del factor (“MEDIA” y “PEQUEÑA”). sus coeficientes muestran el efecto relativo de ese nivel en relación con el nivel que no es especificado explicitamente (“GRANDE”), ya que no se pueden especificar todos los niveles de un factor para no generar un problema de multicolinealidad perfecta.</p>
+<p>Hay otras informaciones importantes a la hora de valorar la especificación (inicial) del modelo que no se recogen en el <code>summary()</code> del mismo. Además, vamos a presentar todo en modo de tablas diseñadas con <code>kable()</code>. Para poder hacer esto no solo con este modelo inicial, sino con cualquier otra estimación, vamos a integrar el código correspondiente en una función de R. Llamaremos a esta función <code>presenta_modelo()</code>, y recibirá como input la estimación lineal de un modelo, ofreciendo como output tres tablas contenidas en una <em>lista</em>: la primera es una <em>versión</em> del <code>summary()</code>, la segunda es una tabla con otras informaciones adicionales, como el valor del <em>Criterio de Información de Akaike</em> (AIC), y la tercera contiene los valores del <em>factor de inflación de la varianza</em> (VIF) de las variables del modelo. Previamente a mostrar el código de la función, fijaremos un parámetro de nombre, por ejemplo, “knitr.table.format”, para recoger el formato en el que se generarán las tablas diseñadas:</p>
+<div class="sourceCode" id="cb336"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb336-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb336-1" tabindex="-1"></a>  <span class="co">#diseña salida ordenador</span></span>
+<span id="cb336-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb336-2" tabindex="-1"></a></span>
+<span id="cb336-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb336-3" tabindex="-1"></a>    knitr.table.format <span class="ot">=</span> <span class="st">&quot;html&quot;</span></span></code></pre></div>
+<p>El código de la función se basa en el aprovechamiento, a su vez, de dos de las funciones del paquete <code>{broom}</code>. Para realizar la versión en tabla del <code>summary()</code> del modelo, se aplica la función <code>tidy()</code>. Esta función crea un data frame donde se almacenan las columnas con las distintas informaciones (coeficientes, desviaciones típicas, valores del estadístico t, p-valores…) con tantas filas como variables explicativas especificadas. La función <code>glance()</code>, por su lado, extre las siguientes informaciones:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>r.squared</strong>: El coeficiente de determinación R², que indica el porcentaje de variación explicada por el modelo.</p></li>
+<li><p><strong>adj.r.squared</strong>: El R² ajustado, que toma en cuenta los grados de libertad.</p></li>
+<li><p><strong>sigma</strong>: El error estándar de los residuos.</p></li>
+<li><p><strong>statistic</strong>: El estadístico F del modelo.</p></li>
+<li><p><strong>p.value</strong>: El valor p asociado con el estadístico F, que indica la significancia global del modelo.</p></li>
+<li><p><strong>df</strong>: Los grados de libertad del numerador del estadístico F.</p></li>
+<li><p><strong>logLik</strong>: El logaritmo de la verosimilitud del modelo.</p></li>
+<li><p><strong>AIC</strong>: El criterio de información de Akaike.</p></li>
+<li><p><strong>BIC</strong>: El criterio de información bayesiano.</p></li>
+<li><p><strong>deviance</strong>: La desviación del modelo.</p></li>
+</ol>
+<p>El código es, en definitiva:</p>
+<div class="sourceCode" id="cb337"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb337-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-1" tabindex="-1"></a>  <span class="co"># Definir la función de presentación de resultados:  presenta_modelo() #####</span></span>
+<span id="cb337-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-2" tabindex="-1"></a></span>
+<span id="cb337-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-3" tabindex="-1"></a>    presenta_modelo <span class="ot">&lt;-</span> <span class="cf">function</span>(modelo) {</span>
+<span id="cb337-4"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-4" tabindex="-1"></a></span>
+<span id="cb337-5"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-5" tabindex="-1"></a>    <span class="co"># Lista de piezas</span></span>
+<span id="cb337-6"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-6" tabindex="-1"></a>      modelo_piezas <span class="ot">&lt;-</span><span class="fu">list</span>()</span>
+<span id="cb337-7"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-7" tabindex="-1"></a>  </span>
+<span id="cb337-8"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-8" tabindex="-1"></a>    <span class="co"># Aplicar la función tidy() al modelo</span></span>
+<span id="cb337-9"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-9" tabindex="-1"></a>      resultados <span class="ot">&lt;-</span> <span class="fu">tidy</span>(modelo)</span>
+<span id="cb337-10"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-10" tabindex="-1"></a>  </span>
+<span id="cb337-11"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-11" tabindex="-1"></a>    <span class="co"># Seleccionar las columnas deseadas</span></span>
+<span id="cb337-12"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-12" tabindex="-1"></a>      resultados <span class="ot">&lt;-</span> resultados[, <span class="fu">c</span>(<span class="st">&quot;term&quot;</span>,</span>
+<span id="cb337-13"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-13" tabindex="-1"></a>                                   <span class="st">&quot;estimate&quot;</span>,</span>
+<span id="cb337-14"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-14" tabindex="-1"></a>                                   <span class="st">&quot;std.error&quot;</span>,<span class="st">&quot;statistic&quot;</span>,</span>
+<span id="cb337-15"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-15" tabindex="-1"></a>                                   <span class="st">&quot;p.value&quot;</span>)]</span>
+<span id="cb337-16"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-16" tabindex="-1"></a>    <span class="co"># Añadir la columna &#39;stars&#39; según los valores de &#39;p.value&#39;</span></span>
+<span id="cb337-17"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-17" tabindex="-1"></a>      resultados<span class="sc">$</span>stars <span class="ot">&lt;-</span> <span class="fu">cut</span>(resultados<span class="sc">$</span>p.value,</span>
+<span id="cb337-18"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-18" tabindex="-1"></a>                            <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="fl">0.001</span>, <span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="cn">Inf</span>),</span>
+<span id="cb337-19"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-19" tabindex="-1"></a>                            <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;***&quot;</span>, <span class="st">&quot;**&quot;</span>, <span class="st">&quot;*&quot;</span>, <span class="st">&quot;·&quot;</span>, <span class="st">&quot; &quot;</span>),</span>
+<span id="cb337-20"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-20" tabindex="-1"></a>                            <span class="at">right =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb337-21"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-21" tabindex="-1"></a>    <span class="co"># formatear los valores de la columna &quot;estimate&quot; a 5 decimales</span></span>
+<span id="cb337-22"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-22" tabindex="-1"></a>      resultados<span class="sc">$</span>estimate <span class="ot">&lt;-</span> <span class="fu">formatC</span>(resultados<span class="sc">$</span>estimate,</span>
+<span id="cb337-23"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-23" tabindex="-1"></a>                                     <span class="at">format =</span> <span class="st">&quot;f&quot;</span>,</span>
+<span id="cb337-24"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-24" tabindex="-1"></a>                                     <span class="at">digits =</span> <span class="dv">5</span>)</span>
+<span id="cb337-25"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-25" tabindex="-1"></a>  </span>
+<span id="cb337-26"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-26" tabindex="-1"></a>    <span class="co"># Crear la tabla con kable</span></span>
+<span id="cb337-27"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-27" tabindex="-1"></a>      tabla1 <span class="ot">&lt;-</span> resultados <span class="sc">%&gt;%</span></span>
+<span id="cb337-28"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-28" tabindex="-1"></a>        <span class="fu">kable</span>(<span class="at">format =</span> knitr.table.format,</span>
+<span id="cb337-29"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-29" tabindex="-1"></a>          <span class="at">caption =</span> <span class="st">&quot;Modelo Lineal&quot;</span>,</span>
+<span id="cb337-30"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-30" tabindex="-1"></a>          <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Variable&quot;</span>, <span class="st">&quot;Coeficiente&quot;</span>, <span class="st">&quot;Desv. Típica&quot;</span>,</span>
+<span id="cb337-31"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-31" tabindex="-1"></a>                        <span class="st">&quot;Estadístico t&quot;</span>, <span class="st">&quot;p-valor&quot;</span>, <span class="st">&quot;Sig.&quot;</span>),</span>
+<span id="cb337-32"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-32" tabindex="-1"></a>          <span class="at">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb337-33"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-33" tabindex="-1"></a>          <span class="at">align =</span> <span class="fu">c</span>(<span class="st">&quot;l&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;c&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb337-34"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-34" tabindex="-1"></a>        <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F,</span>
+<span id="cb337-35"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-35" tabindex="-1"></a>                      <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>,</span>
+<span id="cb337-36"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-36" tabindex="-1"></a>                                          <span class="st">&quot;bordered&quot;</span>,</span>
+<span id="cb337-37"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-37" tabindex="-1"></a>                                          <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb337-38"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-38" tabindex="-1"></a>                      <span class="at">position =</span> <span class="st">&quot;center&quot;</span>,</span>
+<span id="cb337-39"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-39" tabindex="-1"></a>                      <span class="at">font_size =</span> <span class="dv">11</span>)</span>
+<span id="cb337-40"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-40" tabindex="-1"></a> </span>
+<span id="cb337-41"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-41" tabindex="-1"></a>      modelo_piezas[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> tabla1</span>
+<span id="cb337-42"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-42" tabindex="-1"></a>  </span>
+<span id="cb337-43"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-43" tabindex="-1"></a>    <span class="co"># Aplicar la función glance</span></span>
+<span id="cb337-44"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-44" tabindex="-1"></a>      estadisticos <span class="ot">&lt;-</span> <span class="fu">glance</span>(modelo)</span>
+<span id="cb337-45"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-45" tabindex="-1"></a>      estadisticos <span class="ot">&lt;-</span> estadisticos[,<span class="fu">c</span>(<span class="st">&quot;r.squared&quot;</span>,</span>
+<span id="cb337-46"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-46" tabindex="-1"></a>                                      <span class="st">&quot;adj.r.squared&quot;</span>,</span>
+<span id="cb337-47"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-47" tabindex="-1"></a>                                      <span class="st">&quot;sigma&quot;</span>,</span>
+<span id="cb337-48"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-48" tabindex="-1"></a>                                      <span class="st">&quot;statistic&quot;</span>,</span>
+<span id="cb337-49"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-49" tabindex="-1"></a>                                      <span class="st">&quot;p.value&quot;</span>,</span>
+<span id="cb337-50"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-50" tabindex="-1"></a>                                      <span class="st">&quot;AIC&quot;</span>,</span>
+<span id="cb337-51"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-51" tabindex="-1"></a>                                      <span class="st">&quot;nobs&quot;</span>)]</span>
+<span id="cb337-52"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-52" tabindex="-1"></a>    <span class="co"># Crear la tabla con kable</span></span>
+<span id="cb337-53"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-53" tabindex="-1"></a>      tabla2 <span class="ot">&lt;-</span> estadisticos <span class="sc">%&gt;%</span></span>
+<span id="cb337-54"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-54" tabindex="-1"></a>        <span class="fu">kable</span>(<span class="at">format =</span> knitr.table.format,</span>
+<span id="cb337-55"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-55" tabindex="-1"></a>          <span class="at">caption =</span> <span class="st">&quot;Estadísticos del modelo&quot;</span>,</span>
+<span id="cb337-56"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-56" tabindex="-1"></a>          <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;R2&quot;</span>, <span class="st">&quot;R2 ajustado&quot;</span>, <span class="st">&quot;Sigma&quot;</span>, <span class="st">&quot;Estadístico F&quot;</span>,</span>
+<span id="cb337-57"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-57" tabindex="-1"></a>                        <span class="st">&quot;p-valor&quot;</span>, <span class="st">&quot;AIC&quot;</span>, <span class="st">&quot;num. observaciones&quot;</span>),</span>
+<span id="cb337-58"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-58" tabindex="-1"></a>          <span class="at">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb337-59"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-59" tabindex="-1"></a>          <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb337-60"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-60" tabindex="-1"></a>        <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F,</span>
+<span id="cb337-61"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-61" tabindex="-1"></a>                      <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>,</span>
+<span id="cb337-62"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-62" tabindex="-1"></a>                                          <span class="st">&quot;bordered&quot;</span>,</span>
+<span id="cb337-63"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-63" tabindex="-1"></a>                                          <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb337-64"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-64" tabindex="-1"></a>                      <span class="at">position =</span> <span class="st">&quot;center&quot;</span>,</span>
+<span id="cb337-65"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-65" tabindex="-1"></a>                      <span class="at">font_size =</span> <span class="dv">11</span>)</span>
+<span id="cb337-66"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-66" tabindex="-1"></a>      </span>
+<span id="cb337-67"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-67" tabindex="-1"></a>      modelo_piezas[[<span class="dv">2</span>]] <span class="ot">&lt;-</span> tabla2  </span>
+<span id="cb337-68"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-68" tabindex="-1"></a></span>
+<span id="cb337-69"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-69" tabindex="-1"></a>    <span class="co"># Obtener VIF</span></span>
+<span id="cb337-70"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-70" tabindex="-1"></a>      vif_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">vif</span>(modelo))</span>
+<span id="cb337-71"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-71" tabindex="-1"></a></span>
+<span id="cb337-72"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-72" tabindex="-1"></a>    <span class="co"># Añadir nombres de filas</span></span>
+<span id="cb337-73"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-73" tabindex="-1"></a>      <span class="fu">library</span>(tibble)</span>
+<span id="cb337-74"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-74" tabindex="-1"></a>      vif_df <span class="ot">&lt;-</span> vif_df <span class="sc">%&gt;%</span></span>
+<span id="cb337-75"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-75" tabindex="-1"></a>      <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">&quot;Variable&quot;</span>)</span>
+<span id="cb337-76"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-76" tabindex="-1"></a>  </span>
+<span id="cb337-77"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-77" tabindex="-1"></a>    <span class="co"># Crear tabla con kable</span></span>
+<span id="cb337-78"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-78" tabindex="-1"></a>      tabla3 <span class="ot">&lt;-</span> vif_df[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="sc">%&gt;%</span></span>
+<span id="cb337-79"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-79" tabindex="-1"></a>        <span class="fu">kable</span>(<span class="at">format =</span> knitr.table.format,</span>
+<span id="cb337-80"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-80" tabindex="-1"></a>              <span class="at">caption =</span> <span class="st">&quot;Factor de inflación de la varianza&quot;</span>,</span>
+<span id="cb337-81"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-81" tabindex="-1"></a>              <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Variable&quot;</span>,<span class="st">&quot;Valor VIF&quot;</span>),</span>
+<span id="cb337-82"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-82" tabindex="-1"></a>              <span class="at">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb337-83"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-83" tabindex="-1"></a>              <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb337-84"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-84" tabindex="-1"></a>        <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F,</span>
+<span id="cb337-85"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-85" tabindex="-1"></a>                      <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>,</span>
+<span id="cb337-86"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-86" tabindex="-1"></a>                                          <span class="st">&quot;bordered&quot;</span>,</span>
+<span id="cb337-87"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-87" tabindex="-1"></a>                                          <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb337-88"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-88" tabindex="-1"></a>                      <span class="at">position =</span> <span class="st">&quot;center&quot;</span>,</span>
+<span id="cb337-89"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-89" tabindex="-1"></a>                      <span class="at">font_size =</span> <span class="dv">11</span>)</span>
+<span id="cb337-90"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-90" tabindex="-1"></a>      </span>
+<span id="cb337-91"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-91" tabindex="-1"></a>      modelo_piezas[[<span class="dv">3</span>]] <span class="ot">&lt;-</span> tabla3</span>
+<span id="cb337-92"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-92" tabindex="-1"></a>  </span>
+<span id="cb337-93"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-93" tabindex="-1"></a>    <span class="fu">return</span>(modelo_piezas)</span>
+<span id="cb337-94"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-94" tabindex="-1"></a>  }</span>
+<span id="cb337-95"><a href="análisis-de-regresión-lineal-múltiple..html#cb337-95" tabindex="-1"></a><span class="do">############################################################################</span></span></code></pre></div>
+<p>Una vez definida la función, podemos aplicarla al modelo estimado inicial, guardando las tres tablas generadas en la lista “modelo_0”, que pueden ser visualizadas:</p>
+<div class="sourceCode" id="cb338"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb338-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb338-1" tabindex="-1"></a>  modelo_0 <span class="ot">&lt;-</span> <span class="fu">presenta_modelo</span>(ecua0)</span>
+<span id="cb338-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb338-2" tabindex="-1"></a></span>
+<span id="cb338-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb338-3" tabindex="-1"></a>  modelo_0[[<span class="dv">1</span>]]</span></code></pre></div>
+<table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-282">Table 9.1: </span><span id="tab:unnamed-chunk-282">Table 9.2: </span>Modelo Lineal
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:center;">
+Coeficiente
+</th>
+<th style="text-align:center;">
+Desv. Típica
+</th>
+<th style="text-align:center;">
+Estadístico t
+</th>
+<th style="text-align:center;">
+p-valor
+</th>
+<th style="text-align:center;">
+Sig.
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:center;">
+5.04540
+</td>
+<td style="text-align:center;">
+1.575
+</td>
+<td style="text-align:center;">
+3.203
+</td>
+<td style="text-align:center;">
+0.003
+</td>
+<td style="text-align:center;">
+**
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+RES
+</td>
+<td style="text-align:center;">
+0.00100
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+4.661
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ACTIVO
+</td>
+<td style="text-align:center;">
+-0.00003
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+-3.423
+</td>
+<td style="text-align:center;">
+0.002
+</td>
+<td style="text-align:center;">
+**
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENDEUDA
+</td>
+<td style="text-align:center;">
+-0.00630
+</td>
+<td style="text-align:center;">
+0.019
+</td>
+<td style="text-align:center;">
+-0.339
+</td>
+<td style="text-align:center;">
+0.737
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+APALANCA
+</td>
+<td style="text-align:center;">
+-0.00042
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+-1.196
+</td>
+<td style="text-align:center;">
+0.240
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DIMENSIONMEDIA
+</td>
+<td style="text-align:center;">
+1.46168
+</td>
+<td style="text-align:center;">
+1.516
+</td>
+<td style="text-align:center;">
+0.964
+</td>
+<td style="text-align:center;">
+0.342
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DIMENSIONPEQUEÑA
+</td>
+<td style="text-align:center;">
+1.78055
+</td>
+<td style="text-align:center;">
+1.563
+</td>
+<td style="text-align:center;">
+1.139
+</td>
+<td style="text-align:center;">
+0.263
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb339"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb339-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb339-1" tabindex="-1"></a>  modelo_0[[<span class="dv">2</span>]]</span></code></pre></div>
+<table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-282">Table 9.1: </span><span id="tab:unnamed-chunk-282">Table 9.1: </span>Estadísticos del modelo
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;">
+R2
+</th>
+<th style="text-align:center;">
+R2 ajustado
+</th>
+<th style="text-align:center;">
+Sigma
+</th>
+<th style="text-align:center;">
+Estadístico F
+</th>
+<th style="text-align:center;">
+p-valor
+</th>
+<th style="text-align:center;">
+AIC
+</th>
+<th style="text-align:center;">
+num. observaciones
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+0.594
+</td>
+<td style="text-align:center;">
+0.521
+</td>
+<td style="text-align:center;">
+3.43
+</td>
+<td style="text-align:center;">
+8.056
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+220.431
+</td>
+<td style="text-align:center;">
+40
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb340-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb340-1" tabindex="-1"></a>  modelo_0[[<span class="dv">3</span>]]</span></code></pre></div>
+<table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-282">Table 9.1: </span><span id="tab:unnamed-chunk-282">Table 9.1: </span>Factor de inflación de la varianza
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;">
+Variable
+</th>
+<th style="text-align:center;">
+Valor VIF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+RES
+</td>
+<td style="text-align:center;">
+1.690
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+ACTIVO
+</td>
+<td style="text-align:center;">
+1.873
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+ENDEUDA
+</td>
+<td style="text-align:center;">
+1.279
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+APALANCA
+</td>
+<td style="text-align:center;">
+1.318
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+DIMENSION
+</td>
+<td style="text-align:center;">
+1.558
+</td>
+</tr>
+</tbody>
+</table>
+<p>Los resultados de la primera y segunda tabla ya fueron comentados en casi su totalidad anteriormente, al comentar el <code>summary()</code> del modelo. Se ha añadido el valor del <em>Criterio de Información de Akaike</em> (AIC). Esta es una medida basada en la <em>función de verosimilitud</em> que permite comparar la adecuación de especificaciones alternativas para representar la realidad, de modo que, <strong>a menor AIC, mejor especificación.</strong></p>
+<p>La tercera tabla muestra los valores del <em>factor de la inflación de la varianza</em> (VIF) para cada variable explicativa. El VIF <strong>mide el riesgo de que, debido a la influencia de la variable en cuestión, exista un problema de multicolinealidad</strong> entre las variables explicativas del modelo. Un valor de 5/10 (dependiendo de los autores) sugiere que puede existir un problema de multicolinealidad importante. En el caso del modelo inicial, ningún valor del VIF sugiere un posible problema de multicolinealidad.</p>
+<p>La búsqueda de una especificación alternativa que sea más adecuada puede atender a múltiples estrategias del analista, y del propio propósito con el que se quiere utilizar el modelo. Por tanto, implica una gran carga de subjetividad. No obstante, existen métodos automatizados para que, una vez se tiene la estimación inicial, se obtenga una especificación más sencilla (<em>Principio de Parsimonia</em>) sin una pérdida grande de bondad de la regresión. Por ejemplo, un método es el <em>step / backward</em> que, en función del <em>Criterio de Información de Akaike (AIC)</em>, irá probando a estimar especificaciones más simples que disminuyan de AIC (lo que implica una mejor especificación). En nuestro caso, se aplicará con el código:</p>
+<div class="sourceCode" id="cb341"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb341-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb341-1" tabindex="-1"></a>  ecuaDEF <span class="ot">&lt;-</span> <span class="fu">step</span>(ecua0, <span class="at">scale =</span> <span class="dv">0</span>,</span>
+<span id="cb341-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb341-2" tabindex="-1"></a>                  <span class="at">direction =</span> <span class="fu">c</span>(<span class="st">&quot;backward&quot;</span>),</span>
+<span id="cb341-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb341-3" tabindex="-1"></a>                  <span class="at">trace =</span> <span class="dv">1</span>, <span class="at">steps =</span> <span class="dv">1000</span>, <span class="at">k =</span> <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## Start:  AIC=104.92
+## RENECO ~ RES + ACTIVO + ENDEUDA + APALANCA + DIMENSION
+## 
+##             Df Sum of Sq    RSS    AIC
+## - DIMENSION  2    17.324 405.63 102.66
+## - ENDEUDA    1     1.350 389.65 103.06
+## - APALANCA   1    16.843 405.14 104.61
+## &lt;none&gt;                   388.30 104.92
+## - ACTIVO     1   137.886 526.19 115.07
+## - RES        1   255.671 643.97 123.15
+## 
+## Step:  AIC=102.66
+## RENECO ~ RES + ACTIVO + ENDEUDA + APALANCA
+## 
+##            Df Sum of Sq    RSS    AIC
+## - ENDEUDA   1      0.27 405.90 100.69
+## &lt;none&gt;                  405.63 102.66
+## - APALANCA  1     27.08 432.71 103.25
+## - ACTIVO    1    278.04 683.67 121.54
+## - RES       1    386.92 792.55 127.45
+## 
+## Step:  AIC=100.69
+## RENECO ~ RES + ACTIVO + APALANCA
+## 
+##            Df Sum of Sq    RSS    AIC
+## &lt;none&gt;                  405.90 100.69
+## - APALANCA  1     34.56 440.46 101.96
+## - ACTIVO    1    280.94 686.83 119.73
+## - RES       1    394.36 800.26 125.84</code></pre>
+<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb343-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb343-1" tabindex="-1"></a>  <span class="fu">summary</span> (ecuaDEF)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = RENECO ~ RES + ACTIVO + APALANCA, data = originales_so)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6.3668 -2.5872 -0.3775  1.4791  7.3184 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  5.759e+00  8.530e-01   6.752 6.97e-08 ***
+## RES          1.110e-03  1.877e-04   5.914 9.05e-07 ***
+## ACTIVO      -3.644e-05  7.301e-06  -4.992 1.54e-05 ***
+## APALANCA    -5.376e-04  3.070e-04  -1.751   0.0885 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.358 on 36 degrees of freedom
+## Multiple R-squared:  0.5759, Adjusted R-squared:  0.5406 
+## F-statistic:  16.3 on 3 and 36 DF,  p-value: 7.444e-07</code></pre>
+<p>El resultado del algoritmo es una especificación del modelo, cuya estimación se almacena en memoria con el nombre, por ejemplo, “ecuaDEF”. Se ha mostrado el <code>summary()</code> del modelo. También se puede aplicar la función <code>presenta_modelo()</code>, para obtener un <em>output</em> de la estimación más detallado:</p>
+<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb345-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb345-1" tabindex="-1"></a>  modelo_DEF <span class="ot">&lt;-</span> <span class="fu">presenta_modelo</span>(ecuaDEF)</span>
+<span id="cb345-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb345-2" tabindex="-1"></a></span>
+<span id="cb345-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb345-3" tabindex="-1"></a>  modelo_DEF[[<span class="dv">1</span>]]</span></code></pre></div>
+<table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-284">Table 9.3: </span><span id="tab:unnamed-chunk-284">Table 9.4: </span>Modelo Lineal
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:center;">
+Coeficiente
+</th>
+<th style="text-align:center;">
+Desv. Típica
+</th>
+<th style="text-align:center;">
+Estadístico t
+</th>
+<th style="text-align:center;">
+p-valor
+</th>
+<th style="text-align:center;">
+Sig.
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:center;">
+5.75901
+</td>
+<td style="text-align:center;">
+0.853
+</td>
+<td style="text-align:center;">
+6.752
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+RES
+</td>
+<td style="text-align:center;">
+0.00111
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+5.914
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ACTIVO
+</td>
+<td style="text-align:center;">
+-0.00004
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+-4.992
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+APALANCA
+</td>
+<td style="text-align:center;">
+-0.00054
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+-1.751
+</td>
+<td style="text-align:center;">
+0.088
+</td>
+<td style="text-align:center;">
+·
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb346-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb346-1" tabindex="-1"></a>  modelo_DEF[[<span class="dv">2</span>]]</span></code></pre></div>
+<table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-284">Table 9.3: </span><span id="tab:unnamed-chunk-284">Table 9.3: </span>Estadísticos del modelo
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;">
+R2
+</th>
+<th style="text-align:center;">
+R2 ajustado
+</th>
+<th style="text-align:center;">
+Sigma
+</th>
+<th style="text-align:center;">
+Estadístico F
+</th>
+<th style="text-align:center;">
+p-valor
+</th>
+<th style="text-align:center;">
+AIC
+</th>
+<th style="text-align:center;">
+num. observaciones
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+0.576
+</td>
+<td style="text-align:center;">
+0.541
+</td>
+<td style="text-align:center;">
+3.358
+</td>
+<td style="text-align:center;">
+16.295
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+216.204
+</td>
+<td style="text-align:center;">
+40
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb347-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb347-1" tabindex="-1"></a>  modelo_DEF[[<span class="dv">3</span>]]</span></code></pre></div>
+<table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-284">Table 9.3: </span><span id="tab:unnamed-chunk-284">Table 9.3: </span>Factor de inflación de la varianza
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;">
+Variable
+</th>
+<th style="text-align:center;">
+Valor VIF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+RES
+</td>
+<td style="text-align:center;">
+1.360
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+ACTIVO
+</td>
+<td style="text-align:center;">
+1.304
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+APALANCA
+</td>
+<td style="text-align:center;">
+1.054
+</td>
+</tr>
+</tbody>
+</table>
+<p>En el modelo definitivo (ecuaDEF), tan solo permanecen 3 variables explicativas: RES, ACTIVO (ambas significativas para una significación de 0,05) y APALANCA (significativa para una significación de 0,1). Una diferencia importante respecto al modelo inicial es que, el signo del coeficiente asociado a ACTIVO pasa a ser negativo. También el grado de apalancamiento tiene asociado un coeficiente negativo (a mayor apalancamiento, menor rentabilidad económica). SI observamos la segunda tabla, puede observarse que el valor de AIC es de 216,20, inferior al valor de AIC del modelo inicial (220,4). La bondad del ajuste, medida por medio del R2 ajustado, es de 0,541; superior al de modelo inicial (0,521). Finalmente, en la tercera tabla se muestran unos valores de VIF bajos, por lo que se descartan problemas de multicolinealidad.</p>
+<p>Una vez decidida la especificación (final) del modelo, es necesario desarrollar la <strong>etapa de contrastación de las hipótesis básicas del modelo</strong>, con la intención de determinar el grado en que los estimadores obtenidos mediante MCO gozan de buenas propiedades, o si es necesario aplicar métodos de estimación alternativos, métodos econométricos específicos, o incluso re-especificar el modelo).</p>
+<p>Es conveniente, previamente al análisis de cada hipótesis, generar varios gráficos de gran utilidad.</p>
+<p>El primer paso, no obstante, es recurrir a la función <code>augment()</code> del paquete <code>{broom}</code>. Esta función, aplicada a un modelo, genera algunas series de datos fundamentales relacionadas con el mismo, y las almacena junto a las variables del modelo especificado en un data frame. En nuestro caso, hemos llamado al data frame “series_ecuaDEF”, y hemos cambiado el nombre a las series que vamos a utilizar posteriormente: los valores ajustados de la variable dependiente (RENECO.est), los residuos (residuos), y los valores de la distancia de Cook (cooksd). Además, hemos creado una variable llamada ORDEN para asignar un valor correlativo a cada observación o caso de la muestra:</p>
+<div class="sourceCode" id="cb348"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb348-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb348-1" tabindex="-1"></a><span class="co"># MODELO FINAL: CONTRASTACIÓN.</span></span>
+<span id="cb348-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb348-2" tabindex="-1"></a></span>
+<span id="cb348-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb348-3" tabindex="-1"></a>  series_ecuaDEF <span class="ot">&lt;-</span> <span class="fu">augment</span>(ecuaDEF)</span>
+<span id="cb348-4"><a href="análisis-de-regresión-lineal-múltiple..html#cb348-4" tabindex="-1"></a>  series_ecuaDEF <span class="ot">&lt;-</span> series_ecuaDEF <span class="sc">%&gt;%</span></span>
+<span id="cb348-5"><a href="análisis-de-regresión-lineal-múltiple..html#cb348-5" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">RENECO.est =</span> .fitted,</span>
+<span id="cb348-6"><a href="análisis-de-regresión-lineal-múltiple..html#cb348-6" tabindex="-1"></a>         <span class="at">residuos =</span> .resid,</span>
+<span id="cb348-7"><a href="análisis-de-regresión-lineal-múltiple..html#cb348-7" tabindex="-1"></a>         <span class="at">cooksd =</span> .cooksd)</span>
+<span id="cb348-8"><a href="análisis-de-regresión-lineal-múltiple..html#cb348-8" tabindex="-1"></a>  series_ecuaDEF<span class="sc">$</span>ORDEN <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(series_ecuaDEF))</span>
+<span id="cb348-9"><a href="análisis-de-regresión-lineal-múltiple..html#cb348-9" tabindex="-1"></a>  <span class="fu">summary</span> (series_ecuaDEF)</span></code></pre></div>
+<pre><code>##   .rownames             RENECO            RES         
+##  Length:40          Min.   :-2.708   Min.   :-5268.6  
+##  Class :character   1st Qu.: 2.103   1st Qu.:  892.2  
+##  Mode  :character   Median : 4.404   Median : 2321.2  
+##                     Mean   : 5.547   Mean   : 2812.2  
+##                     3rd Qu.: 8.270   3rd Qu.: 3951.2  
+##                     Max.   :15.882   Max.   :12819.0  
+## 
+##      ACTIVO          APALANCA         RENECO.est    
+##  Min.   : 25355   Min.   :-3037.8   Min.   :-8.564  
+##  1st Qu.: 33162   1st Qu.:   21.4   1st Qu.: 3.970  
+##  Median : 45903   Median :  146.5   Median : 5.620  
+##  Mean   : 78664   Mean   :  868.9   Mean   : 5.547  
+##  3rd Qu.: 81312   3rd Qu.: 1080.1   3rd Qu.: 7.432  
+##  Max.   :443467   Max.   : 8049.4   Max.   :12.464  
+## 
+##     residuos            .hat             .sigma     
+##  Min.   :-6.3668   Min.   :0.02906   Min.   :3.107  
+##  1st Qu.:-2.5872   1st Qu.:0.03774   1st Qu.:3.350  
+##  Median :-0.3775   Median :0.05202   Median :3.385  
+##  Mean   : 0.0000   Mean   :0.10000   Mean   :3.356  
+##  3rd Qu.: 1.4791   3rd Qu.:0.10120   3rd Qu.:3.403  
+##  Max.   : 7.3184   Max.   :0.53601   Max.   :3.405  
+## 
+##      cooksd            .std.resid          ORDEN      
+##  Min.   :0.0000143   Min.   :-1.9446   Min.   : 1.00  
+##  1st Qu.:0.0007106   1st Qu.:-0.7888   1st Qu.:10.75  
+##  Median :0.0083866   Median :-0.1147   Median :20.50  
+##  Mean   :0.0514405   Mean   : 0.0116   Mean   :20.50  
+##  3rd Qu.:0.0271051   3rd Qu.: 0.4557   3rd Qu.:30.25  
+##  Max.   :1.4848788   Max.   : 2.4566   Max.   :40.00</code></pre>
+<p>Una vez obtenidas todas las series necesarias, diseñaremos los gráficos que facilitarán la comprensión y contraste del modelo final. El primero compara los valores reales de RENECO con las estimaciones del modelo, RENECO.est. Lógicamente, es deseable que, para cada caso, la distancia entre ambos puntos sea mínima. El segundo muestra los residuos. El tercero es el <em>gráfico de densidad</em> de los residuos, y el cuarto representa, para cada caso, el <em>valor de la distancia de Cook</em>. Los valores altos de la distancia de Cook en un modelo de regresión indican observaciones que tienen una influencia significativa en los coeficientes estimados del modelo. Son considerados “altos” los valores que superan el valor inverso de 4 por el número de observaciones muestrales.</p>
+<p>Los 4 gráficos se agrupan mediante la gramática del paquete {patchwork}. Finalmente, se genera una tabla a partir de un filtro para identificar los casos concretos que tienen valores “altos” de la distancia de Cook. En definitiva, el código es:</p>
+<div class="sourceCode" id="cb350"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb350-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-1" tabindex="-1"></a>  <span class="co"># Gráficos.</span></span>
+<span id="cb350-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-2" tabindex="-1"></a>  </span>
+<span id="cb350-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-3" tabindex="-1"></a>    g_real_pred <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> series_ecuaDEF) <span class="sc">+</span></span>
+<span id="cb350-4"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-4" tabindex="-1"></a>      <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> ORDEN, <span class="at">y =</span> RENECO.est),</span>
+<span id="cb350-5"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-5" tabindex="-1"></a>                 <span class="at">size=</span> <span class="dv">2</span>,</span>
+<span id="cb350-6"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-6" tabindex="-1"></a>                 <span class="at">alpha=</span> <span class="fl">0.6</span>,</span>
+<span id="cb350-7"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-7" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span>    </span>
+<span id="cb350-8"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-8" tabindex="-1"></a>      <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> ORDEN, <span class="at">y =</span> RENECO),</span>
+<span id="cb350-9"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-9" tabindex="-1"></a>                 <span class="at">size=</span> <span class="dv">2</span>,</span>
+<span id="cb350-10"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-10" tabindex="-1"></a>                 <span class="at">alpha=</span> <span class="fl">0.6</span>,</span>
+<span id="cb350-11"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-11" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb350-12"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-12" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> ORDEN, <span class="at">y =</span> RENECO.est),</span>
+<span id="cb350-13"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-13" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb350-14"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-14" tabindex="-1"></a>                <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>,</span>
+<span id="cb350-15"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-15" tabindex="-1"></a>                <span class="at">size=</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb350-16"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-16" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> ORDEN, <span class="at">y =</span> RENECO),</span>
+<span id="cb350-17"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-17" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb350-18"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-18" tabindex="-1"></a>                <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>,</span>
+<span id="cb350-19"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-19" tabindex="-1"></a>                <span class="at">size=</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb350-20"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-20" tabindex="-1"></a>      <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> ORDEN, <span class="at">xend =</span> ORDEN, <span class="at">y =</span> RENECO.est, <span class="at">yend =</span> RENECO),</span>
+<span id="cb350-21"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-21" tabindex="-1"></a>                   <span class="at">color =</span> <span class="st">&quot;orange&quot;</span>) <span class="sc">+</span></span>
+<span id="cb350-22"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-22" tabindex="-1"></a>      <span class="fu">ggtitle</span>(<span class="st">&quot;RENTABILIDAD ECONÓMICA.&quot;</span>,</span>
+<span id="cb350-23"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-23" tabindex="-1"></a>              <span class="at">subtitle=</span> <span class="st">&quot;VALORES REALES (rojo) vs PREDICCIONES (azul).&quot;</span>) <span class="sc">+</span></span>
+<span id="cb350-24"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-24" tabindex="-1"></a>      <span class="fu">xlab</span>(<span class="st">&quot;Casos&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb350-25"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-25" tabindex="-1"></a>      <span class="fu">ylab</span>(<span class="st">&quot;Rentabilidad Económica: Real y Predicción&quot;</span>)</span>
+<span id="cb350-26"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-26" tabindex="-1"></a></span>
+<span id="cb350-27"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-27" tabindex="-1"></a>  g_resid <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> series_ecuaDEF, <span class="fu">aes</span>(<span class="at">x =</span> ORDEN, <span class="at">y =</span> residuos)) <span class="sc">+</span></span>
+<span id="cb350-28"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-28" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>, <span class="at">alpha=</span> <span class="fl">0.6</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb350-29"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-29" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">color =</span> <span class="st">&quot;firebrick&quot;</span>, <span class="at">span =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb350-30"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-30" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>)<span class="sc">+</span></span>
+<span id="cb350-31"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-31" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">&quot;RENTABILIDAD ECONÓMICA.&quot;</span>, <span class="at">subtitle=</span> <span class="st">&quot;Residuos.&quot;</span>)<span class="sc">+</span></span>
+<span id="cb350-32"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-32" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">&quot;Casos&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb350-33"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-33" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">&quot;Residuos&quot;</span>)</span>
+<span id="cb350-34"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-34" tabindex="-1"></a></span>
+<span id="cb350-35"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-35" tabindex="-1"></a>  g_hresid <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> series_ecuaDEF, <span class="at">map =</span> <span class="fu">aes</span>(<span class="at">x =</span> residuos)) <span class="sc">+</span></span>
+<span id="cb350-36"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-36" tabindex="-1"></a>    <span class="fu">geom_density</span>(<span class="at">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;orange&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb350-37"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-37" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">&quot;RENTABILIDAD ECONÓMICA&quot;</span>, <span class="at">subtitle =</span> <span class="st">&quot;Densidad Residuos&quot;</span>)<span class="sc">+</span></span>
+<span id="cb350-38"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-38" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">&quot;Rentabilidad Económica&quot;</span>) <span class="sc">+</span></span>
+<span id="cb350-39"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-39" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">&quot;Densidad&quot;</span>)</span>
+<span id="cb350-40"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-40" tabindex="-1"></a></span>
+<span id="cb350-41"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-41" tabindex="-1"></a>  g_cook <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> series_ecuaDEF, <span class="fu">aes</span>(<span class="at">x =</span> ORDEN, <span class="at">y =</span> cooksd)) <span class="sc">+</span></span>
+<span id="cb350-42"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-42" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb350-43"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-43" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">4</span><span class="sc">/</span><span class="fu">nrow</span>(series_ecuaDEF),</span>
+<span id="cb350-44"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-44" tabindex="-1"></a>               <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>,</span>
+<span id="cb350-45"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-45" tabindex="-1"></a>               <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb350-46"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-46" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">&quot;RENTABILIDAD ECONÓMICA.&quot;</span>, <span class="at">subtitle=</span> <span class="st">&quot;Distancia de Cook.&quot;</span>)<span class="sc">+</span></span>
+<span id="cb350-47"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-47" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">&quot;Casos&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb350-48"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-48" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">&quot;Distancias&quot;</span>)</span>
+<span id="cb350-49"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-49" tabindex="-1"></a></span>
+<span id="cb350-50"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-50" tabindex="-1"></a>  <span class="fu">library</span> (patchwork)</span>
+<span id="cb350-51"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-51" tabindex="-1"></a></span>
+<span id="cb350-52"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-52" tabindex="-1"></a>  (g_real_pred <span class="sc">|</span> g_hresid) <span class="sc">/</span> (g_resid <span class="sc">|</span> g_cook)</span>
+<span id="cb350-53"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-53" tabindex="-1"></a></span>
+<span id="cb350-54"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-54" tabindex="-1"></a>  tablaCook <span class="ot">&lt;-</span> series_ecuaDEF <span class="sc">%&gt;%</span></span>
+<span id="cb350-55"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-55" tabindex="-1"></a>    <span class="fu">filter</span> ( cooksd <span class="sc">&gt;</span> <span class="dv">4</span><span class="sc">/</span><span class="fu">nrow</span>(series_ecuaDEF)) <span class="sc">%&gt;%</span></span>
+<span id="cb350-56"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-56" tabindex="-1"></a>    <span class="fu">select</span> (.rownames, cooksd) <span class="sc">%&gt;%</span></span>
+<span id="cb350-57"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-57" tabindex="-1"></a>    <span class="fu">kable</span>(<span class="at">format =</span> knitr.table.format,</span>
+<span id="cb350-58"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-58" tabindex="-1"></a>          <span class="at">caption =</span> <span class="st">&quot;Casos destacados distancia de Cook&quot;</span>,</span>
+<span id="cb350-59"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-59" tabindex="-1"></a>          <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Caso&quot;</span>,<span class="st">&quot;Distancia de Cook&quot;</span>),</span>
+<span id="cb350-60"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-60" tabindex="-1"></a>          <span class="at">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb350-61"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-61" tabindex="-1"></a>          <span class="at">align =</span> <span class="fu">c</span>(<span class="st">&quot;l&quot;</span>,<span class="st">&quot;c&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb350-62"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-62" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F,</span>
+<span id="cb350-63"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-63" tabindex="-1"></a>                  <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>,</span>
+<span id="cb350-64"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-64" tabindex="-1"></a>                                      <span class="st">&quot;bordered&quot;</span>,</span>
+<span id="cb350-65"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-65" tabindex="-1"></a>                                      <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb350-66"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-66" tabindex="-1"></a>                  <span class="at">position =</span> <span class="st">&quot;center&quot;</span>,</span>
+<span id="cb350-67"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-67" tabindex="-1"></a>                  <span class="at">font_size =</span> <span class="dv">11</span>)</span>
+<span id="cb350-68"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-68" tabindex="-1"></a></span>
+<span id="cb350-69"><a href="análisis-de-regresión-lineal-múltiple..html#cb350-69" tabindex="-1"></a>    tablaCook</span></code></pre></div>
+<img src="_main_files/figure-html/unnamed-chunk-288-1.png" width="672" />
+<table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-288">Table 9.5: </span><span id="tab:unnamed-chunk-288">Table 9.6: </span>Casos destacados distancia de Cook
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Caso
+</th>
+<th style="text-align:center;">
+Distancia de Cook
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Innogy Spain SA.
+</td>
+<td style="text-align:center;">
+1.485
+</td>
+</tr>
+</tbody>
+</table>
+<p>De los gráficos anteriores se desprende, en general, que los residuos parecen mantener un comportamiento conforme a una distribución normal, y que hay una observación o caso con una distancia de Cook que puede influir de modo relevante en el valor de los coeficientes estimados. Esta empresa es identificada como “Innogy Spain S.A.” Podría estudiarse en detalle este caso o incluso reestimar el modelo sin su presencia, a fin de comprobar el efecto que tiene esta observación sobre la estimación en general.</p>
+<p>Tras estudiar los gráficos, vamos a pasar a contrastar las hipótesis básicas del MBR referidas a la <em>forma funcional</em>, y la <em>normalidad</em> y <em>comportamiento homoscedástico</em> de la perturbación aleatoria. Para ello se aplicarán las pruebas <em>Ramsey-Reset</em>, <em>Shapiro-Wilk</em> y <em>Breusch-Pagan</em>, respectivamente. Los resultados de las tres pruebas se presentarán condensados en una tabla, en la que además se incluirá la conclusión del contraste, para una significación de 0,05. Para crear la tabla, primero se generará un data frame con sus elementos, denominado, por ejemplo, “check_hipotesis”. El código es:</p>
+<div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb351-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-1" tabindex="-1"></a>  <span class="co"># Hipótesis básicas MBR.</span></span>
+<span id="cb351-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-2" tabindex="-1"></a></span>
+<span id="cb351-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-3" tabindex="-1"></a>    <span class="fu">library</span> (lmtest)</span>
+<span id="cb351-4"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-4" tabindex="-1"></a>    reset_test <span class="ot">&lt;-</span> <span class="fu">resettest</span>(ecuaDEF, <span class="at">data=</span> originales_so) <span class="co"># F. Funcional</span></span>
+<span id="cb351-5"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-5" tabindex="-1"></a>    shapiro_test <span class="ot">&lt;-</span> <span class="fu">shapiro.test</span>(series_ecuaDEF<span class="sc">$</span>residuos) <span class="co"># Normalidad</span></span>
+<span id="cb351-6"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-6" tabindex="-1"></a>    bp_test <span class="ot">&lt;-</span> <span class="fu">bptest</span>(ecuaDEF) <span class="co"># Homoscedasticidad</span></span>
+<span id="cb351-7"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-7" tabindex="-1"></a></span>
+<span id="cb351-8"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-8" tabindex="-1"></a>  <span class="co"># Tabla resultados</span></span>
+<span id="cb351-9"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-9" tabindex="-1"></a></span>
+<span id="cb351-10"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-10" tabindex="-1"></a>    <span class="co"># Crear un data frame con los resultados</span></span>
+<span id="cb351-11"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-11" tabindex="-1"></a></span>
+<span id="cb351-12"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-12" tabindex="-1"></a>      check_hipotesis <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb351-13"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-13" tabindex="-1"></a>        <span class="st">&quot;Tipo_de_prueba&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Forma Funcional&quot;</span>,</span>
+<span id="cb351-14"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-14" tabindex="-1"></a>                             <span class="st">&quot;Normalidad de perturbación aleatoria&quot;</span>,</span>
+<span id="cb351-15"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-15" tabindex="-1"></a>                             <span class="st">&quot;Homoscedasticidad de perturbación aleatoria&quot;</span>),</span>
+<span id="cb351-16"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-16" tabindex="-1"></a>        <span class="st">&quot;Prueba&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Ramsey-Reset&quot;</span>,</span>
+<span id="cb351-17"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-17" tabindex="-1"></a>                     <span class="st">&quot;Shapiro-Wilk&quot;</span>,</span>
+<span id="cb351-18"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-18" tabindex="-1"></a>                     <span class="st">&quot;Breusch-Pagan&quot;</span>),</span>
+<span id="cb351-19"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-19" tabindex="-1"></a>        <span class="st">&quot;Estadistico&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(reset_test<span class="sc">$</span>statistic,</span>
+<span id="cb351-20"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-20" tabindex="-1"></a>                          shapiro_test<span class="sc">$</span>statistic,</span>
+<span id="cb351-21"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-21" tabindex="-1"></a>                          bp_test<span class="sc">$</span>statistic),</span>
+<span id="cb351-22"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-22" tabindex="-1"></a>        <span class="st">&quot;P_valor&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(reset_test<span class="sc">$</span>p.value,</span>
+<span id="cb351-23"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-23" tabindex="-1"></a>                      shapiro_test<span class="sc">$</span>p.value,</span>
+<span id="cb351-24"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-24" tabindex="-1"></a>                      bp_test<span class="sc">$</span>p.value),</span>
+<span id="cb351-25"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-25" tabindex="-1"></a>        <span class="st">&quot;Conclusion&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">ifelse</span>(reset_test<span class="sc">$</span>p.value <span class="sc">&gt;=</span> <span class="fl">0.05</span>,</span>
+<span id="cb351-26"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-26" tabindex="-1"></a>                                 <span class="st">&quot;F. funcional correcta&quot;</span>,</span>
+<span id="cb351-27"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-27" tabindex="-1"></a>                                 <span class="st">&quot;F. funcional incorrecta&quot;</span>),</span>
+<span id="cb351-28"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-28" tabindex="-1"></a>                         <span class="fu">ifelse</span>(shapiro_test<span class="sc">$</span>p.value <span class="sc">&gt;=</span> <span class="fl">0.05</span>,</span>
+<span id="cb351-29"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-29" tabindex="-1"></a>                                <span class="st">&quot;Normalidad&quot;</span>,</span>
+<span id="cb351-30"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-30" tabindex="-1"></a>                                <span class="st">&quot;No-Normalidad&quot;</span>),</span>
+<span id="cb351-31"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-31" tabindex="-1"></a>                         <span class="fu">ifelse</span>(bp_test<span class="sc">$</span>p.value <span class="sc">&gt;=</span> <span class="fl">0.05</span>,</span>
+<span id="cb351-32"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-32" tabindex="-1"></a>                                <span class="st">&quot;Homoscedasticidad&quot;</span>,</span>
+<span id="cb351-33"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-33" tabindex="-1"></a>                                <span class="st">&quot;Heteroscedasticidad&quot;</span>)))</span>
+<span id="cb351-34"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-34" tabindex="-1"></a></span>
+<span id="cb351-35"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-35" tabindex="-1"></a>    <span class="fu">row.names</span>(check_hipotesis) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb351-36"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-36" tabindex="-1"></a></span>
+<span id="cb351-37"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-37" tabindex="-1"></a>  <span class="co"># Crear la tabla con kable</span></span>
+<span id="cb351-38"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-38" tabindex="-1"></a>    </span>
+<span id="cb351-39"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-39" tabindex="-1"></a>    tabla_check <span class="ot">&lt;-</span> check_hipotesis <span class="sc">%&gt;%</span></span>
+<span id="cb351-40"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-40" tabindex="-1"></a>      <span class="fu">kable</span>(<span class="at">format =</span> knitr.table.format,</span>
+<span id="cb351-41"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-41" tabindex="-1"></a>            <span class="at">caption =</span> <span class="st">&quot;Contrastes de hipótesis del MBR&quot;</span>,</span>
+<span id="cb351-42"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-42" tabindex="-1"></a>            <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Tipo de prueba&quot;</span>,</span>
+<span id="cb351-43"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-43" tabindex="-1"></a>                          <span class="st">&quot;Prueba&quot;</span>,</span>
+<span id="cb351-44"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-44" tabindex="-1"></a>                          <span class="st">&quot;Estadístico&quot;</span>,</span>
+<span id="cb351-45"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-45" tabindex="-1"></a>                          <span class="st">&quot;P-valor&quot;</span>,</span>
+<span id="cb351-46"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-46" tabindex="-1"></a>                          <span class="st">&quot;Conclusión&quot;</span>),</span>
+<span id="cb351-47"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-47" tabindex="-1"></a>            <span class="at">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb351-48"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-48" tabindex="-1"></a>            <span class="at">align =</span> <span class="fu">c</span>(<span class="st">&quot;l&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;c&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb351-49"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-49" tabindex="-1"></a>      <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F,</span>
+<span id="cb351-50"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-50" tabindex="-1"></a>                    <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>,</span>
+<span id="cb351-51"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-51" tabindex="-1"></a>                                        <span class="st">&quot;bordered&quot;</span>,</span>
+<span id="cb351-52"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-52" tabindex="-1"></a>                                        <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb351-53"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-53" tabindex="-1"></a>                    <span class="at">position =</span> <span class="st">&quot;center&quot;</span>,</span>
+<span id="cb351-54"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-54" tabindex="-1"></a>                    <span class="at">font_size =</span> <span class="dv">11</span>)</span>
+<span id="cb351-55"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-55" tabindex="-1"></a></span>
+<span id="cb351-56"><a href="análisis-de-regresión-lineal-múltiple..html#cb351-56" tabindex="-1"></a>    tabla_check</span></code></pre></div>
+<table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-290">Table 9.7: </span><span id="tab:unnamed-chunk-290">Table 9.8: </span>Contrastes de hipótesis del MBR
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Tipo de prueba
+</th>
+<th style="text-align:center;">
+Prueba
+</th>
+<th style="text-align:center;">
+Estadístico
+</th>
+<th style="text-align:center;">
+P-valor
+</th>
+<th style="text-align:center;">
+Conclusión
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Forma Funcional
+</td>
+<td style="text-align:center;">
+Ramsey-Reset
+</td>
+<td style="text-align:center;">
+6.907
+</td>
+<td style="text-align:center;">
+0.003
+</td>
+<td style="text-align:center;">
+F. funcional incorrecta
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Normalidad de perturbación aleatoria
+</td>
+<td style="text-align:center;">
+Shapiro-Wilk
+</td>
+<td style="text-align:center;">
+0.963
+</td>
+<td style="text-align:center;">
+0.212
+</td>
+<td style="text-align:center;">
+Normalidad
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Homoscedasticidad de perturbación aleatoria
+</td>
+<td style="text-align:center;">
+Breusch-Pagan
+</td>
+<td style="text-align:center;">
+5.773
+</td>
+<td style="text-align:center;">
+0.123
+</td>
+<td style="text-align:center;">
+Homoscedasticidad
+</td>
+</tr>
+</tbody>
+</table>
+<p>En la tabla de resultados del contraste de las hipótesis básicas del MBR, encontramos que el modelo no plantea problemas de falta de normalidad o heteroscedasticidad en la perturbación aleatoria. En cambio, la prueba de <em>Ramsey-Reset</em> rechaza la hipótesis nula de especificación lineal correcta. En concreto, este contraste plantea estas dos hipótesis:</p>
+<ul>
+<li><p><strong>Hipótesis nula (H0)</strong>: El modelo está correctamente especificado, es decir, no hay errores de especificación. En términos más técnicos, esto significa que las combinaciones no lineales de los valores ajustados no tienen poder explicativo adicional sobre la variable dependiente.</p></li>
+<li><p><strong>Hipótesis alternativa (H1)</strong>: El modelo está mal especificado, lo que implica que las combinaciones no lineales de los valores ajustados sí tienen poder explicativo adicional sobre la variable dependiente.</p></li>
+</ul>
+<p>Si se asume que las variables especificadas son las correctas, y no hay omisión de variables relevantes; un rechazo de la hipótesis nula implica que la relación funcional planteada (lineal), no es correcta.</p>
+<p>El incumplimiento de la hipótesis de linealidad podría acarrear que los estimadores MCO obtenidos adolecen de la pérdida de la propiedad de insesgadez.</p>
+<p>Si el modelo supera razonablemente la fase de contraste de las hipótesis básicas; podría ser utilizado para los objetivos planteados en la investigación: análisis estructural, previsión, simulación. En este ejemplo, vamos a realizar un ejercicio de simulación.</p>
+<p>Vamos a obtener la respuesta de la rentabilidad económica (RENECO), ante 3 escenarios alternativos. Dichos escenarios están guardados en la hoja “Simula” del archivo de Microsoft® Excel® “<a href="https://docs.google.com/spreadsheets/d/1QUqpOHC_XK38MBggb3hYibDReHVfd7wL/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">eolica_escenarios.xlsx</a>”. Hay que tener en cuenta que en los escenarios se aportan valores para algunas variables que no aparecen en el modelo final. Lógicamente, lo importante son los datos del escenario correspondientes a las variables que sí están especificadas. Los escenarios se importan y se almacenan en el <em>data frame</em> de nombre, por ejemplo, “escenario”:</p>
+<div class="sourceCode" id="cb352"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb352-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb352-1" tabindex="-1"></a><span class="co"># SIMULACIÓN</span></span>
+<span id="cb352-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb352-2" tabindex="-1"></a></span>
+<span id="cb352-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb352-3" tabindex="-1"></a>  <span class="co"># Cargar escenario de Excel</span></span>
+<span id="cb352-4"><a href="análisis-de-regresión-lineal-múltiple..html#cb352-4" tabindex="-1"></a></span>
+<span id="cb352-5"><a href="análisis-de-regresión-lineal-múltiple..html#cb352-5" tabindex="-1"></a>    escenario <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;eolica_escenarios.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;Simula&quot;</span>)</span>
+<span id="cb352-6"><a href="análisis-de-regresión-lineal-múltiple..html#cb352-6" tabindex="-1"></a>    escenario <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(escenario, <span class="at">row.names =</span> <span class="dv">1</span>)</span>
+<span id="cb352-7"><a href="análisis-de-regresión-lineal-múltiple..html#cb352-7" tabindex="-1"></a>    escenario</span></code></pre></div>
+<pre><code>##              RES ACTIVO ENDEUDA APALANCA DIMENSION
+## ESCENARIO A 2500  50000   20.25    0.238    GRANDE
+## ESCENARIO B 2500  25000   50.00   50.000     MEDIA
+## ESCENARIO C 3000   5000   90.00  100.000   PEQUEÑA</code></pre>
+<p>Mediante la función <code>predict()</code>, se generará la respuesta a los escenarios propuestos, por parte del modelo definitivo (ECUADEF). Esta respuesta se guardará en el <em>data frame</em> de nombre, por ejemplo, “estimación”, que luego uniremos al <em>data frame</em> “escenario” mediante la función <code>cbind()</code>, creando un único <em>data frame</em> llamado, por ejemplo, “simulacion”:</p>
+<div class="sourceCode" id="cb354"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb354-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb354-1" tabindex="-1"></a>  <span class="co"># Simulación con el modelo</span></span>
+<span id="cb354-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb354-2" tabindex="-1"></a></span>
+<span id="cb354-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb354-3" tabindex="-1"></a>    estimacion <span class="ot">&lt;-</span><span class="fu">predict</span> (<span class="at">object=</span> ecuaDEF,</span>
+<span id="cb354-4"><a href="análisis-de-regresión-lineal-múltiple..html#cb354-4" tabindex="-1"></a>                          <span class="at">newdata =</span> escenario,</span>
+<span id="cb354-5"><a href="análisis-de-regresión-lineal-múltiple..html#cb354-5" tabindex="-1"></a>                          <span class="at">interval=</span><span class="st">&quot;prediction&quot;</span>,</span>
+<span id="cb354-6"><a href="análisis-de-regresión-lineal-múltiple..html#cb354-6" tabindex="-1"></a>                          <span class="at">level=</span><span class="fl">0.95</span>)</span>
+<span id="cb354-7"><a href="análisis-de-regresión-lineal-múltiple..html#cb354-7" tabindex="-1"></a>    estimacion</span></code></pre></div>
+<pre><code>##                  fit        lwr      upr
+## ESCENARIO A 6.711704 -0.2161380 13.63955
+## ESCENARIO B 7.596000  0.6413923 14.55061
+## ESCENARIO C 8.852940  1.8523982 15.85348</code></pre>
+<div class="sourceCode" id="cb356"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb356-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb356-1" tabindex="-1"></a>    simulacion <span class="ot">&lt;-</span> <span class="fu">cbind</span>(escenario, estimacion)</span></code></pre></div>
+<p>Finalmente, vamos a presentar la simulación en forma de tabla. En primer lugar, vamos a dar un formato específico a cada variable, cara a su volcado a la tabla, con la función <code>format()</code>. El argumento <code>nsmall=</code> indica el número mínimo de decimales que habrá a la derecha del punto decimal:</p>
+<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb357-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb357-1" tabindex="-1"></a>  <span class="co"># Formatear las columnas con el número mínimo de decimales deseado</span></span>
+<span id="cb357-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb357-2" tabindex="-1"></a></span>
+<span id="cb357-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb357-3" tabindex="-1"></a>    simulacion<span class="sc">$</span>ENDEUDA <span class="ot">&lt;-</span> <span class="fu">format</span>(simulacion<span class="sc">$</span>ENDEUDA, <span class="at">nsmall =</span> <span class="dv">3</span>)</span>
+<span id="cb357-4"><a href="análisis-de-regresión-lineal-múltiple..html#cb357-4" tabindex="-1"></a>    simulacion<span class="sc">$</span>APALANCA <span class="ot">&lt;-</span> <span class="fu">format</span>(simulacion<span class="sc">$</span>APALANCA, <span class="at">nsmall =</span> <span class="dv">3</span>)</span>
+<span id="cb357-5"><a href="análisis-de-regresión-lineal-múltiple..html#cb357-5" tabindex="-1"></a>    simulacion<span class="sc">$</span>fit <span class="ot">&lt;-</span> <span class="fu">format</span>(simulacion<span class="sc">$</span>fit, <span class="at">nsmall =</span> <span class="dv">3</span>)</span>
+<span id="cb357-6"><a href="análisis-de-regresión-lineal-múltiple..html#cb357-6" tabindex="-1"></a>    simulacion<span class="sc">$</span>lwr <span class="ot">&lt;-</span> <span class="fu">format</span>(simulacion<span class="sc">$</span>lwr, <span class="at">nsmall =</span> <span class="dv">3</span>)</span>
+<span id="cb357-7"><a href="análisis-de-regresión-lineal-múltiple..html#cb357-7" tabindex="-1"></a>    simulacion<span class="sc">$</span>upr <span class="ot">&lt;-</span> <span class="fu">format</span>(simulacion<span class="sc">$</span>upr, <span class="at">nsmall =</span> <span class="dv">3</span>)</span></code></pre></div>
+<p>Tras definir el formato numérico de las variables, se construirá la tabla, de nombre, por ejemplo, “tablasimula”:</p>
+<div class="sourceCode" id="cb358"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb358-1"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-1" tabindex="-1"></a>  <span class="co"># Tabla</span></span>
+<span id="cb358-2"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-2" tabindex="-1"></a></span>
+<span id="cb358-3"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-3" tabindex="-1"></a>    tablasimula <span class="ot">&lt;-</span> simulacion <span class="sc">%&gt;%</span></span>
+<span id="cb358-4"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-4" tabindex="-1"></a>      <span class="fu">kable</span>(<span class="at">format =</span> knitr.table.format,</span>
+<span id="cb358-5"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-5" tabindex="-1"></a>            <span class="at">caption =</span> <span class="st">&quot;Simulación Modelo Rentabilidad Económica&quot;</span>,</span>
+<span id="cb358-6"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-6" tabindex="-1"></a>            <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Escenario&quot;</span>,</span>
+<span id="cb358-7"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-7" tabindex="-1"></a>                          <span class="st">&quot;Resultado&quot;</span>,</span>
+<span id="cb358-8"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-8" tabindex="-1"></a>                          <span class="st">&quot;Activo&quot;</span>,</span>
+<span id="cb358-9"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-9" tabindex="-1"></a>                          <span class="st">&quot;Endeuda&quot;</span>,</span>
+<span id="cb358-10"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-10" tabindex="-1"></a>                          <span class="st">&quot;Apalancamiento&quot;</span>,</span>
+<span id="cb358-11"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-11" tabindex="-1"></a>                          <span class="st">&quot;Dimensión&quot;</span>,</span>
+<span id="cb358-12"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-12" tabindex="-1"></a>                          <span class="st">&quot;Previsión&quot;</span>,</span>
+<span id="cb358-13"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-13" tabindex="-1"></a>                          <span class="st">&quot;Inferior 95%&quot;</span>,</span>
+<span id="cb358-14"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-14" tabindex="-1"></a>                          <span class="st">&quot;Superior 95%&quot;</span>),</span>
+<span id="cb358-15"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-15" tabindex="-1"></a>        <span class="at">digits =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb358-16"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-16" tabindex="-1"></a>      <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F,</span>
+<span id="cb358-17"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-17" tabindex="-1"></a>                    <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>,</span>
+<span id="cb358-18"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-18" tabindex="-1"></a>                    <span class="st">&quot;bordered&quot;</span>,</span>
+<span id="cb358-19"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-19" tabindex="-1"></a>                    <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb358-20"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-20" tabindex="-1"></a>                    <span class="at">position =</span> <span class="st">&quot;center&quot;</span>,</span>
+<span id="cb358-21"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-21" tabindex="-1"></a>                    <span class="at">font_size =</span> <span class="dv">11</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb358-22"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-22" tabindex="-1"></a>      <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold=</span> T, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb358-23"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-23" tabindex="-1"></a>      <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(simulacion)), <span class="at">bold=</span> F, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>)</span>
+<span id="cb358-24"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-24" tabindex="-1"></a></span>
+<span id="cb358-25"><a href="análisis-de-regresión-lineal-múltiple..html#cb358-25" tabindex="-1"></a>  tablasimula</span></code></pre></div>
+<table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-295">Table 9.9: </span><span id="tab:unnamed-chunk-295">Table 9.10: </span>Simulación Modelo Rentabilidad Económica
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Escenario
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Resultado
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Activo
+</th>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Endeuda
+</th>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Apalancamiento
+</th>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Dimensión
+</th>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Previsión
+</th>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Inferior 95%
+</th>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Superior 95%
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;">
+ESCENARIO A
+</td>
+<td style="text-align:right;text-align: center;">
+2500
+</td>
+<td style="text-align:right;text-align: center;">
+50000
+</td>
+<td style="text-align:left;text-align: center;">
+20.250
+</td>
+<td style="text-align:left;text-align: center;">
+0.238
+</td>
+<td style="text-align:left;text-align: center;">
+GRANDE
+</td>
+<td style="text-align:left;text-align: center;">
+6.711704
+</td>
+<td style="text-align:left;text-align: center;">
+-0.2161380
+</td>
+<td style="text-align:left;text-align: center;">
+13.63955
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+ESCENARIO B
+</td>
+<td style="text-align:right;text-align: center;">
+2500
+</td>
+<td style="text-align:right;text-align: center;">
+25000
+</td>
+<td style="text-align:left;text-align: center;">
+50.000
+</td>
+<td style="text-align:left;text-align: center;">
+50.000
+</td>
+<td style="text-align:left;text-align: center;">
+MEDIA
+</td>
+<td style="text-align:left;text-align: center;">
+7.596000
+</td>
+<td style="text-align:left;text-align: center;">
+0.6413923
+</td>
+<td style="text-align:left;text-align: center;">
+14.55061
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+ESCENARIO C
+</td>
+<td style="text-align:right;text-align: center;">
+3000
+</td>
+<td style="text-align:right;text-align: center;">
+5000
+</td>
+<td style="text-align:left;text-align: center;">
+90.000
+</td>
+<td style="text-align:left;text-align: center;">
+100.000
+</td>
+<td style="text-align:left;text-align: center;">
+PEQUEÑA
+</td>
+<td style="text-align:left;text-align: center;">
+8.852940
+</td>
+<td style="text-align:left;text-align: center;">
+1.8523982
+</td>
+<td style="text-align:left;text-align: center;">
+15.85348
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="materiales-para-realizar-las-prácticas-del-capítulo.-7" class="section level2 hasAnchor" number="9.3">
+<h2><span class="header-section-number">9.3</span> Materiales para realizar las prácticas del capítulo.<a href="análisis-de-regresión-lineal-múltiple..html#materiales-para-realizar-las-prácticas-del-capítulo.-7" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En esta sección se muestran los links de acceso a los diferentes materiales (<em>scripts</em>, datos…) necesarios para llevar a cabo los contenidos prácticos del capítulo.</p>
+<p><strong>Datos (en formato Microsoft (R) Excel (R)):</strong></p>
+<ul>
+<li><p>eolica_50.xlsx (<a href="https://docs.google.com/spreadsheets/d/1oq17lI4trI8k5oeDgj_fYg9WhbRIqDLG/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">obtener aquí</a>)</p></li>
+<li><p>eolica_escenarios.xlsx (<a href="https://docs.google.com/spreadsheets/d/1QUqpOHC_XK38MBggb3hYibDReHVfd7wL/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">obtener aquí</a>)</p></li>
+<li><p><strong>Scripts:</strong></p></li>
+<li><p>regresion_eolica.R <a href="https://drive.google.com/file/d/1p4p17OudRprwkpF7wvvF1gwHZG82uv89/view?usp=sharing">(</a><a href="https://drive.google.com/file/d/1ilNEAA3-Co9kbs5Gv4arwCBCcCnbn0zY/view?usp=sharing">obtener aquí</a>)</p></li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="análisis-de-la-varianza..html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="análisis-de-datos-cualitativos..html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection",
+"toc_deph": 3
+},
+"table": {
+"number": false
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 2 Almacenando y manipulando datos. | Técnicas de Análisis de Datos Económicos con R</title>
+  <meta name="description" content="Libro de análisis de datos económicos." />
+  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 2 Almacenando y manipulando datos. | Técnicas de Análisis de Datos Económicos con R" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://bookdown.org/teckel71/book/figuras/Portada_v2.PNG" />
+  <meta property="og:description" content="Libro de análisis de datos económicos." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 2 Almacenando y manipulando datos. | Técnicas de Análisis de Datos Económicos con R" />
+  
+  <meta name="twitter:description" content="Libro de análisis de datos económicos." />
+  <meta name="twitter:image" content="https://bookdown.org/teckel71/book/figuras/Portada_v2.PNG" />
+
+<meta name="author" content="" />
+
+
+<meta name="date" content="2025-01-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="introducción..html"/>
+<link rel="next" href="gráficos..html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Técnicas de Análisis de Datos Económicos con R</a></li>
+
+<li class="divider"></li>
+<li><a href="index.html#section" id="toc-section"></a></li>
+<li class="chapter" data-level="" data-path="prefacio.html"><a href="prefacio.html"><i class="fa fa-check"></i>Prefacio</a></li>
+<li class="chapter" data-level="1" data-path="introducción..html"><a href="introducción..html"><i class="fa fa-check"></i><b>1</b> Introducción.</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introducción..html"><a href="introducción..html#llámalo-estadística."><i class="fa fa-check"></i><b>1.1</b> Llámalo Estadística.</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="introducción..html"><a href="introducción..html#concepto-de-estadística."><i class="fa fa-check"></i><b>1.1.1</b> Concepto de Estadística.</a></li>
+<li class="chapter" data-level="1.1.2" data-path="introducción..html"><a href="introducción..html#el-método-estadístico."><i class="fa fa-check"></i><b>1.1.2</b> El método estadístico.</a></li>
+<li class="chapter" data-level="1.1.3" data-path="introducción..html"><a href="introducción..html#economía-y-estadística."><i class="fa fa-check"></i><b>1.1.3</b> Economía y Estadística.</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="introducción..html"><a href="introducción..html#qué-es-r-y-cómo-nos-ayuda-a-analizar-datos-desde-el-punto-de-vista-estadístico"><i class="fa fa-check"></i><b>1.2</b> ¿Qué es R y cómo nos ayuda a analizar datos desde el punto de vista estadístico?</a></li>
+<li class="chapter" data-level="1.3" data-path="introducción..html"><a href="introducción..html#instalación-de-r-y-r-studio."><i class="fa fa-check"></i><b>1.3</b> Instalación de R y R-Studio.</a></li>
+<li class="chapter" data-level="1.4" data-path="introducción..html"><a href="introducción..html#r-y-rstudio.-comienzo-proyectos."><i class="fa fa-check"></i><b>1.4</b> R y RStudio. Comienzo: Proyectos.</a></li>
+<li class="chapter" data-level="1.5" data-path="introducción..html"><a href="introducción..html#scripts."><i class="fa fa-check"></i><b>1.5</b> Scripts.</a></li>
+<li class="chapter" data-level="1.6" data-path="introducción..html"><a href="introducción..html#funciones."><i class="fa fa-check"></i><b>1.6</b> Funciones.</a></li>
+<li class="chapter" data-level="1.7" data-path="introducción..html"><a href="introducción..html#paquetes-packages."><i class="fa fa-check"></i><b>1.7</b> Paquetes (packages).</a></li>
+<li class="chapter" data-level="1.8" data-path="introducción..html"><a href="introducción..html#help-sistema-de-ayuda."><i class="fa fa-check"></i><b>1.8</b> Help! (sistema de ayuda).</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html"><i class="fa fa-check"></i><b>2</b> Almacenando y manipulando datos.</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#objetos.-datos."><i class="fa fa-check"></i><b>2.1</b> Objetos. Datos.</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#vectores."><i class="fa fa-check"></i><b>2.1.1</b> Vectores.</a></li>
+<li class="chapter" data-level="2.1.2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#matrices."><i class="fa fa-check"></i><b>2.1.2</b> Matrices.</a></li>
+<li class="chapter" data-level="2.1.3" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#data-frames."><i class="fa fa-check"></i><b>2.1.3</b> Data frames.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#importando-datos."><i class="fa fa-check"></i><b>2.2</b> Importando datos.</a></li>
+<li class="chapter" data-level="2.3" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#dplyr."><i class="fa fa-check"></i><b>2.3</b> {dplyr}.</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#el-tidyverse.-cargando-dplyr."><i class="fa fa-check"></i><b>2.3.1</b> El Tidyverse. Cargando {dplyr}.</a></li>
+<li class="chapter" data-level="2.3.2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#seleccionando-columnas-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.2</b> Seleccionando columnas de un data frame.</a></li>
+<li class="chapter" data-level="2.3.3" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#seleccionando-casos-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.3</b> Seleccionando casos de un <em>data frame</em>.</a></li>
+<li class="chapter" data-level="2.3.4" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#ordenando-casos-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.4</b> Ordenando casos de un <em>data frame</em>.</a></li>
+<li class="chapter" data-level="2.3.5" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#cambiando-el-nombre-de-las-variables-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.5</b> Cambiando el nombre de las variables de un <em>data frame</em>.</a></li>
+<li class="chapter" data-level="2.3.6" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#añadiendo-variables-como-transformación-de-otras-variables-en-un-data-frame."><i class="fa fa-check"></i><b>2.3.6</b> <strong>Añadiendo variables como transformación de otras variables en un <em>data frame</em>.</strong></a></li>
+<li class="chapter" data-level="2.3.7" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#extrayendo-y-sintetizando-información-de-las-variables-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.7</b> Extrayendo y sintetizando información de las variables de un <em>data frame</em>.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#exportando-datos."><i class="fa fa-check"></i><b>2.4</b> Exportando datos.</a></li>
+<li class="chapter" data-level="2.5" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#materiales-para-realizar-las-prácticas-del-capítulo."><i class="fa fa-check"></i><b>2.5</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="gráficos..html"><a href="gráficos..html"><i class="fa fa-check"></i><b>3</b> Gráficos.</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="gráficos..html"><a href="gráficos..html#tidyverse-para-gráficos-ggplot2."><i class="fa fa-check"></i><b>3.1</b> Tidyverse para gráficos: ggplot2.</a></li>
+<li class="chapter" data-level="3.2" data-path="gráficos..html"><a href="gráficos..html#gráficos-de-una-variable-histogramas-gráficos-de-densidad-gráficos-de-caja-o-boxplots."><i class="fa fa-check"></i><b>3.2</b> Gráficos de una variable: histogramas, gráficos de densidad, gráficos de caja o <em>boxplots</em>.</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="gráficos..html"><a href="gráficos..html#histograma."><i class="fa fa-check"></i><b>3.2.1</b> Histograma.</a></li>
+<li class="chapter" data-level="3.2.2" data-path="gráficos..html"><a href="gráficos..html#gráfico-de-densidad."><i class="fa fa-check"></i><b>3.2.2</b> Gráfico de densidad.</a></li>
+<li class="chapter" data-level="3.2.3" data-path="gráficos..html"><a href="gráficos..html#gráfico-de-caja-o-box-plot."><i class="fa fa-check"></i><b>3.2.3</b> Gráfico de caja o <em>Box-Plot</em>.</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="gráficos..html"><a href="gráficos..html#gráficos-de-dos-variables."><i class="fa fa-check"></i><b>3.3</b> Gráficos de dos variables.</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="gráficos..html"><a href="gráficos..html#gráfico-de-dispersión-o-scatterplot."><i class="fa fa-check"></i><b>3.3.1</b> Gráfico de dispersión o <em>scatterplot</em>.</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="gráficos..html"><a href="gráficos..html#materiales-para-realizar-las-prácticas-del-capítulo.-1"><i class="fa fa-check"></i><b>3.4</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html"><i class="fa fa-check"></i><b>4</b> Estadística descriptiva.</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#análisis-univariante."><i class="fa fa-check"></i><b>4.1</b> Análisis univariante.</a></li>
+<li class="chapter" data-level="4.2" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#representando-datos-y-distribuciones-de-frecuencias-en-tablas-con-r."><i class="fa fa-check"></i><b>4.2</b> Representando datos y distribuciones de frecuencias en tablas con R.</a></li>
+<li class="chapter" data-level="4.3" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#medidas-de-posición."><i class="fa fa-check"></i><b>4.3</b> Medidas de posición.</a></li>
+<li class="chapter" data-level="4.4" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#medidas-de-dispersión-o-variabilidad."><i class="fa fa-check"></i><b>4.4</b> Medidas de dispersión o variabilidad.</a></li>
+<li class="chapter" data-level="4.5" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#medidas-de-forma."><i class="fa fa-check"></i><b>4.5</b> Medidas de forma.</a></li>
+<li class="chapter" data-level="4.6" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#materiales-para-realizar-las-prácticas-del-capítulo.-2"><i class="fa fa-check"></i><b>4.6</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html"><i class="fa fa-check"></i><b>5</b> Análisis previo de datos.</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#introducción.-1"><i class="fa fa-check"></i><b>5.1</b> Introducción.</a></li>
+<li class="chapter" data-level="5.2" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#análisis-de-una-variable."><i class="fa fa-check"></i><b>5.2</b> Análisis de una variable.</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#buscando-missing-values-y-outliers."><i class="fa fa-check"></i><b>5.2.1</b> Buscando <em>missing values</em> y <em>outliers</em>.</a></li>
+<li class="chapter" data-level="5.2.2" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#descripción-de-una-variable."><i class="fa fa-check"></i><b>5.2.2</b> Descripción de una variable.</a></li>
+<li class="chapter" data-level="5.2.3" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#normalidad."><i class="fa fa-check"></i><b>5.2.3</b> Normalidad.</a></li>
+<li class="chapter" data-level="5.2.4" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#resumen-los-4-gráficos-básicos-en-la-descripción-de-una-variable."><i class="fa fa-check"></i><b>5.2.4</b> Resumen: los 4 gráficos básicos en la descripción de una variable.</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#análisis-de-múltiples-variables."><i class="fa fa-check"></i><b>5.3</b> Análisis de múltiples variables.</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#localización-de-missing-values-y-outliers."><i class="fa fa-check"></i><b>5.3.1</b> Localización de <em>missing values</em> y <em>outliers</em>.</a></li>
+<li class="chapter" data-level="5.3.2" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#correlación-entre-variables."><i class="fa fa-check"></i><b>5.3.2</b> Correlación entre variables.</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#materiales-para-realizar-las-prácticas-del-capítulo.-3"><i class="fa fa-check"></i><b>5.4</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="componentes-principales..html"><a href="componentes-principales..html"><i class="fa fa-check"></i><b>6</b> Componentes principales.</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="componentes-principales..html"><a href="componentes-principales..html#introducción.-2"><i class="fa fa-check"></i><b>6.1</b> Introducción.</a></li>
+<li class="chapter" data-level="6.2" data-path="componentes-principales..html"><a href="componentes-principales..html#información-y-varianza."><i class="fa fa-check"></i><b>6.2</b> Información y varianza.</a></li>
+<li class="chapter" data-level="6.3" data-path="componentes-principales..html"><a href="componentes-principales..html#cálculo-de-componentes."><i class="fa fa-check"></i><b>6.3</b> Cálculo de componentes.</a></li>
+<li class="chapter" data-level="6.4" data-path="componentes-principales..html"><a href="componentes-principales..html#retención-de-componentes-principales."><i class="fa fa-check"></i><b>6.4</b> Retención de componentes principales.</a></li>
+<li class="chapter" data-level="6.5" data-path="componentes-principales..html"><a href="componentes-principales..html#puntuaciones-de-los-casos-scores"><i class="fa fa-check"></i><b>6.5</b> Puntuaciones de los casos (scores)</a></li>
+<li class="chapter" data-level="6.6" data-path="componentes-principales..html"><a href="componentes-principales..html#materiales-para-realizar-las-prácticas-del-capítulo.-4"><i class="fa fa-check"></i><b>6.6</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="análisis-clúster..html"><a href="análisis-clúster..html"><i class="fa fa-check"></i><b>7</b> Análisis Clúster.</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="análisis-clúster..html"><a href="análisis-clúster..html#introducción.-3"><i class="fa fa-check"></i><b>7.1</b> Introducción.</a></li>
+<li class="chapter" data-level="7.2" data-path="análisis-clúster..html"><a href="análisis-clúster..html#métodos-de-agrupación-jerárquicos."><i class="fa fa-check"></i><b>7.2</b> Métodos de agrupación jerárquicos.</a></li>
+<li class="chapter" data-level="7.3" data-path="análisis-clúster..html"><a href="análisis-clúster..html#métodos-de-agrupación-no-jerárquicos."><i class="fa fa-check"></i><b>7.3</b> Métodos de agrupación no-jerárquicos.</a></li>
+<li class="chapter" data-level="7.4" data-path="análisis-clúster..html"><a href="análisis-clúster..html#materiales-para-realizar-las-prácticas-del-capítulo.-5"><i class="fa fa-check"></i><b>7.4</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html"><i class="fa fa-check"></i><b>8</b> Análisis de la varianza.</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#introducción.-4"><i class="fa fa-check"></i><b>8.1</b> Introducción.</a></li>
+<li class="chapter" data-level="8.2" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#anova-de-un-solo-factor."><i class="fa fa-check"></i><b>8.2</b> ANOVA de un solo factor.</a></li>
+<li class="chapter" data-level="8.3" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#comparaciones-múltiples."><i class="fa fa-check"></i><b>8.3</b> Comparaciones múltiples.</a></li>
+<li class="chapter" data-level="8.4" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#y-si-no-se-cumplen-las-condiciones-para-realizar-el-contraste-f-de-anova"><i class="fa fa-check"></i><b>8.4</b> ¿Y si no se cumplen las condiciones para realizar el contraste F de ANOVA?</a></li>
+<li class="chapter" data-level="8.5" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#materiales-para-realizar-las-prácticas-del-capítulo.-6"><i class="fa fa-check"></i><b>8.5</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html"><i class="fa fa-check"></i><b>9</b> Análisis de Regresión Lineal Múltiple.</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html#introducción.-5"><i class="fa fa-check"></i><b>9.1</b> Introducción.</a></li>
+<li class="chapter" data-level="9.2" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html#especificación-del-mbr.-datos-de-corte-transversal."><i class="fa fa-check"></i><b>9.2</b> Especificación del MBR. Datos de corte transversal.</a></li>
+<li class="chapter" data-level="9.3" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html#materiales-para-realizar-las-prácticas-del-capítulo.-7"><i class="fa fa-check"></i><b>9.3</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html"><i class="fa fa-check"></i><b>10</b> Análisis de Datos Cualitativos.</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#introducción.-6"><i class="fa fa-check"></i><b>10.1</b> Introducción.</a></li>
+<li class="chapter" data-level="10.2" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#tablas-de-contingencia-y-asociación-entre-dos-atributos-o-factores."><i class="fa fa-check"></i><b>10.2</b> Tablas de contingencia, y asociación entre dos atributos o factores.</a></li>
+<li class="chapter" data-level="10.3" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#análisis-de-correspondencias."><i class="fa fa-check"></i><b>10.3</b> Análisis de correspondencias.</a></li>
+<li class="chapter" data-level="10.4" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#modelos-logaritmico-lineales-aplicados-a-tablas-de-contingencia."><i class="fa fa-check"></i><b>10.4</b> Modelos logaritmico-lineales aplicados a tablas de contingencia.</a></li>
+<li class="chapter" data-level="10.5" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#materiales-para-realizar-las-prácticas-del-capítulo.-8"><i class="fa fa-check"></i><b>10.5</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="bibliografía.html"><a href="bibliografía.html"><i class="fa fa-check"></i>Bibliografía</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Técnicas de Análisis de Datos Económicos con R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="almacenando-y-manipulando-datos." class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Capítulo 2</span> Almacenando y manipulando datos.<a href="almacenando-y-manipulando-datos..html#almacenando-y-manipulando-datos." class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="objetos.-datos." class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Objetos. Datos.<a href="almacenando-y-manipulando-datos..html#objetos.-datos." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Como vimos en el capítulo 1, tras ejecutar un sencillo script (o al escribir instrucciones directamente desde la consola), R es interactivo: responde a las entradas que recibe. Las entradas o <strong>expresiones</strong> pueden ser, básicamente:</p>
+<ul>
+<li><p>Expresiones aritméticas.</p></li>
+<li><p>Expresiones lógicas.</p></li>
+<li><p>Llamadas a funciones.</p></li>
+<li><p>Asignaciones.</p></li>
+</ul>
+<p>Las expresiones realizan acciones sobre <strong>objetos</strong> de R. Los objetos en R son entes que tienen ciertas características, <em>metadatos</em>, llamados atributos. No todos los objetos tienen los mismos atributos y, ni tan siquiera, todos los objetos tienen atributos que los caractericen.</p>
+<p>Los objetos más importantes en R son ciertas estructuras o <em>contenedores</em> diseñados para almacenar elementos:</p>
+<ul>
+<li><p>Vectores.</p></li>
+<li><p>Matrices.</p></li>
+<li><p>Listas.</p></li>
+<li><p>Data frames.</p></li>
+<li><p>Factores.</p></li>
+</ul>
+<p>Los elementos almacenados en los objetos se dividen en <em>clases</em>. Entre las diferentes clases, destacan las clases referidas a <strong>datos</strong>, que pueden ser de diferentes <em>modos</em>: logical (verdadero/falso), numeric (números) o character (cadena de texto). El modo numeric puede ser, a la vez, de tipo integer (número entero) o double (número real). En el caso de logical y carácter, modo y tipo coinciden.</p>
+<p>Vamos a profundizar un poco en algunas de estos contenedores de datos. Vamos a suponer que trabajamos en el proyecto que creamos en el capítulo anterior (proyecto “explora”), y que vamos a editar el script que también creamos en tal capítulo (script “explorando.R”, que se encontrará ubicado en la carpeta del proyecto “explora”).</p>
+<div id="vectores." class="section level3 hasAnchor" number="2.1.1">
+<h3><span class="header-section-number">2.1.1</span> Vectores.<a href="almacenando-y-manipulando-datos..html#vectores." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Los <strong>vectores</strong>, son conjuntos de elementos <strong>de la misma clase</strong>. Vamos a definir por ejemplo el vector x = (1,3,5,8). Para ello, vamos a escribir en nuestro script:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="almacenando-y-manipulando-datos..html#cb10-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">8</span>)</span></code></pre></div>
+<p>Ejecutamos la línea (situando el cursor en algún lugar de ella, dentro del script; y pulsando a la vez las teclas <code>Control + Enter</code> o pinchando con el ratón en el botón <code>Run</code> del editor). Ya tenemos nuestro primer objeto de tipo <em>vector</em> en memoria. Por cierto, lo que hemos hecho es una <strong>asignación</strong>, que se escribe con una flecha creada mediante los signos “&lt;” y “-”. Hemos asignado a un vector llamado “x” los elementos 1, 3, 5 y 8.</p>
+<p>Para ver el vector simplemente escribimos en la consola (o en el script) el nombre del vector, “x”. El resultado será:</p>
+<pre><code>## [1] 1 3 5 8</code></pre>
+<p>Además, si miramos en la ventana superior-derecha de R-Studio, veremos que en el <strong><em>Global Environment</em></strong> se muestra nuestro vector y que, además, se nos informa de que tiene <em>modo</em> <em>numérico</em>. El <em>Global Environment</em> nos informa de los objetos que R tiene en memoria:</p>
+<div class="float">
+<img src="figuras/Imagen2_01.png" width="500" alt="Nuestro vector en memoria." />
+<div class="figcaption">Nuestro vector en memoria.</div>
+</div>
+<p>Si queremos obtener un vector de números consecutivos del 2 al 6, basta con ejecutar en la “consola” (o escribir y ejecutar en el script):</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="almacenando-y-manipulando-datos..html#cb12-1" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>)</span></code></pre></div>
+<p>Al escribir el nombre del vector “y” en la “consola” obtendremos:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="almacenando-y-manipulando-datos..html#cb13-1" tabindex="-1"></a>y</span></code></pre></div>
+<pre><code>## [1] 2 3 4 5 6</code></pre>
+<p>Si queremos saber la longitud de un vector, usaremos la <em>función</em> <code>length()</code>. Por ejemplo, <code>length(y)</code> nos devolverá el valor 5. Escribamos en el script y ejecutemos:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="almacenando-y-manipulando-datos..html#cb15-1" tabindex="-1"></a><span class="fu">length</span>(y)</span></code></pre></div>
+<pre><code>## [1] 5</code></pre>
+<p>Un vector puede incluir, además de números, caracteres o grupos de caracteres alfanuméricos; siempre entrecomillados (lo fundamental es que sean elementos de la misma clase). Por ejemplo, el vector “genero” (¡no pongamos tildes o podemos tener problemas!). Así, si ejecutamos estas dos líneas de código:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="almacenando-y-manipulando-datos..html#cb17-1" tabindex="-1"></a>genero<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">&quot;Mujer&quot;</span>,<span class="st">&quot;Hombre&quot;</span>)</span>
+<span id="cb17-2"><a href="almacenando-y-manipulando-datos..html#cb17-2" tabindex="-1"></a>genero</span></code></pre></div>
+<p>Se habrá creado el vector “genero”:</p>
+<pre><code>## [1] &quot;Mujer&quot;  &quot;Hombre&quot;</code></pre>
+<p>Podemos obtener la clase de los elementos almacenados en nuestro vector con la función <code>class()</code>:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="almacenando-y-manipulando-datos..html#cb19-1" tabindex="-1"></a><span class="fu">class</span>(genero)</span></code></pre></div>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>Si falta un dato en un vector, habrá que escribir “NA” (not available). Por ejemplo, si falta el tercer dato de este vector “z”, este vector se escribirá como:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="almacenando-y-manipulando-datos..html#cb21-1" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="cn">NA</span>,<span class="dv">2</span>,<span class="dv">8</span>)</span></code></pre></div>
+<p>Para <strong>seleccionar un elemento</strong> concreto de un vector, indicaremos entre corchetes la posición en la que se encuentra. Por ejemplo, refiriéndonos al vector “x”, para obtener el valor de su tercer elemento, haremos:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="almacenando-y-manipulando-datos..html#cb22-1" tabindex="-1"></a>x[<span class="dv">3</span>]</span></code></pre></div>
+<pre><code>## [1] 5</code></pre>
+<p>Si queremos que se nos muestre los elementos del vector x del 2º al 4º:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="almacenando-y-manipulando-datos..html#cb24-1" tabindex="-1"></a>x[<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>]</span></code></pre></div>
+<pre><code>## [1] 3 5 8</code></pre>
+<p>Por último, si queremos sacar en pantalla los elementos 1º y 4º, tendremos que incluir una “c” seguida de un paréntesis que recoja el orden de los elementos que queremos seleccionar:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="almacenando-y-manipulando-datos..html#cb26-1" tabindex="-1"></a>x[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">4</span>)]</span></code></pre></div>
+<pre><code>## [1] 1 8</code></pre>
+</div>
+<div id="matrices." class="section level3 hasAnchor" number="2.1.2">
+<h3><span class="header-section-number">2.1.2</span> Matrices.<a href="almacenando-y-manipulando-datos..html#matrices." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Las <strong>matrices</strong>, internamente en R, son vectores; pero con dos atributos adicionales: número de filas y número de columnas. Se definen mediante la función matrix(). Por ejemplo, para definir la matriz “a”:</p>
+<p><span class="math display">\[
+\begin{pmatrix}
+    1 &amp; 4 &amp; 7 \\
+    2 &amp; 5 &amp; 8 \\
+    3 &amp; 6 &amp; 9
+\end{pmatrix}
+\]</span> Tendremos que escribir:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="almacenando-y-manipulando-datos..html#cb28-1" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">9</span>),<span class="at">nrow=</span><span class="dv">3</span>)</span>
+<span id="cb28-2"><a href="almacenando-y-manipulando-datos..html#cb28-2" tabindex="-1"></a>a</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    2    5    8
+## [3,]    3    6    9</code></pre>
+<p>El número de filas de la matriz (y por tanto, el número de columnas) se fija con el argumento <code>nrow =</code> . También podríamos fijar el número de columnas, con <code>ncol =</code> .</p>
+<p>Como vemos, por defecto, R va “cortando” el vector por columnas (si lo preferimos, lo puede hacer también por filas, añadiendo a la función <code>matrix()</code> el argumento <code>by row = true</code>; pero, en nuestro ejemplo, obtendríamos la matriz traspuesta a la que queremos almacenar).</p>
+<p>Las dimensiones (número de filas y de columnas) de la matriz pueden obtenerse mediante la función <code>dim()</code>:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="almacenando-y-manipulando-datos..html#cb30-1" tabindex="-1"></a><span class="fu">dim</span>(a)</span></code></pre></div>
+<pre><code>## [1] 3 3</code></pre>
+<p>3 filas y 3 columnas.</p>
+<p>Si queremos seleccionar elementos concretos de una matriz, lo haremos utilizando corchetes para indicar filas y columnas. Hemos de tener en cuenta que, trabajando con matrices, siempre tenemos <span class="math display">\[rango de filas, rango de columnas\]</span> Si se deja en blanco el espacio entre el corchete inicial y la coma, esto querrá decir que consideramos todas las filas. Y si no insertamos nada entre la coma y el corchete de cierre, esto significará que consideramos todas las columnas. A continuación tenemos varios ejemplos de código, con el resultado obtenido en la consola:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="almacenando-y-manipulando-datos..html#cb32-1" tabindex="-1"></a>a[<span class="dv">2</span>,<span class="dv">3</span>]</span></code></pre></div>
+<pre><code>## [1] 8</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="almacenando-y-manipulando-datos..html#cb34-1" tabindex="-1"></a>a[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>] </span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    4    7
+## [2,]    5    8</code></pre>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="almacenando-y-manipulando-datos..html#cb36-1" tabindex="-1"></a>a[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)]</span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    1    7
+## [2,]    2    8
+## [3,]    3    9</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="almacenando-y-manipulando-datos..html#cb38-1" tabindex="-1"></a>a[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),]</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    3    6    9</code></pre>
+<p>Tanto para vectores como para matrices, funcionan las operaciones suma y diferencia sin más complicaciones. En el caso del producto, sin embargo, hay que tener en cuenta que, por ejemplo, a*a devuelve la multiplicación elemento a elemento, es decir:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="almacenando-y-manipulando-datos..html#cb40-1" tabindex="-1"></a>a<span class="sc">*</span>a</span></code></pre></div>
+<p>Devuelve la multiplicación elemento a elemento (en este caso, el cuadrado de cada número, al multiplicar la matriz a por sí misma):</p>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1   16   49
+## [2,]    4   25   64
+## [3,]    9   36   81</code></pre>
+<p>Para hacer el verdadero producto matricial deberá introducirse:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="almacenando-y-manipulando-datos..html#cb42-1" tabindex="-1"></a>a<span class="sc">%*%</span>a</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]   30   66  102
+## [2,]   36   81  126
+## [3,]   42   96  150</code></pre>
+</div>
+<div id="data-frames." class="section level3 hasAnchor" number="2.1.3">
+<h3><span class="header-section-number">2.1.3</span> Data frames.<a href="almacenando-y-manipulando-datos..html#data-frames." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Un <strong><em>data frame</em></strong> es un objeto que almacena datos organizados mediante la clase <code>data.frame</code>. Esta organización consiste en que, por filas, se disponen los diferentes casos o sujetos; mientras que por columnas se posicionan las variables. Así:</p>
+<ul>
+<li><p>Es similar a una matriz en el sentido de que tiene dos dimensiones. Podemos acceder a sus elementos con corchetes, tenemos nombres de filas y columnas, y podemos operar con ellas.</p></li>
+<li><p>Cada columna tiene un nombre, de manera que podemos acceder a una columna concreta con el símbolo <strong><code>$</code></strong>. Todas las columnas (variables) son vectores con la misma longitud.</p></li>
+<li><p>Cada columna puede ser un vector numérico, factor, de tipo carácter o lógico.</p></li>
+</ul>
+<p>Por ejemplo, vamos a crear el <em>data frame</em> <strong>“datos”</strong>, con tres variables: “peso”, “altura”, y “color de ojos”, llamadas “Peso”, “Altura” y “Cl.ojos”, respectivamente; para 3 individuos o casos. Una opción es crear primero las tres variables como vectores, y luego crear el <em>data frame</em> mediante la función <code>dataframe()</code>:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="almacenando-y-manipulando-datos..html#cb44-1" tabindex="-1"></a>Peso<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">68</span>,<span class="dv">75</span>,<span class="dv">88</span>)</span>
+<span id="cb44-2"><a href="almacenando-y-manipulando-datos..html#cb44-2" tabindex="-1"></a>Altura<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fl">1.6</span>,<span class="fl">1.8</span>,<span class="fl">1.9</span>)</span>
+<span id="cb44-3"><a href="almacenando-y-manipulando-datos..html#cb44-3" tabindex="-1"></a>Cl.ojos<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">&quot;azules&quot;</span>,<span class="st">&quot;marrones&quot;</span>,<span class="st">&quot;marrones&quot;</span>)</span>
+<span id="cb44-4"><a href="almacenando-y-manipulando-datos..html#cb44-4" tabindex="-1"></a>datos<span class="ot">&lt;-</span><span class="fu">data.frame</span>(Peso,Altura,Cl.ojos)</span></code></pre></div>
+<p>Si ahora ejecutamos una línea con el nombre de nuestro <em>data frame</em>, lo obtendremos como resultado en la consola:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="almacenando-y-manipulando-datos..html#cb45-1" tabindex="-1"></a>datos</span></code></pre></div>
+<pre><code>##   Peso Altura  Cl.ojos
+## 1   68    1.6   azules
+## 2   75    1.8 marrones
+## 3   88    1.9 marrones</code></pre>
+<p>Para obtener los nombres de las variables (es decir, el nombre de cada columna) teclearemos la función:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="almacenando-y-manipulando-datos..html#cb47-1" tabindex="-1"></a><span class="fu">names</span>(datos)</span></code></pre></div>
+<p>Obteniéndose:</p>
+<pre><code>## [1] &quot;Peso&quot;    &quot;Altura&quot;  &quot;Cl.ojos&quot;</code></pre>
+<p>Para obtener solo los datos de la columna (variable) color de ojos teclearemos datos$Cl.ojos:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="almacenando-y-manipulando-datos..html#cb49-1" tabindex="-1"></a>datos<span class="sc">$</span>Cl.ojos</span></code></pre></div>
+<pre><code>## [1] &quot;azules&quot;   &quot;marrones&quot; &quot;marrones&quot;</code></pre>
+<p>Y para obtener los datos de peso: datos$Peso:</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="almacenando-y-manipulando-datos..html#cb51-1" tabindex="-1"></a>datos<span class="sc">$</span>Peso</span></code></pre></div>
+<pre><code>## [1] 68 75 88</code></pre>
+<p>Para saber el número de filas y de columnas de una hoja de datos utilizaremos las funciones <code>nrow()</code> y <code>ncol()</code>:</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="almacenando-y-manipulando-datos..html#cb53-1" tabindex="-1"></a><span class="fu">nrow</span>(datos)</span></code></pre></div>
+<pre><code>## [1] 3</code></pre>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="almacenando-y-manipulando-datos..html#cb55-1" tabindex="-1"></a><span class="fu">ncol</span>(datos)</span></code></pre></div>
+<pre><code>## [1] 3</code></pre>
+<p>Para seleccionar elementos de un data frame, se pueden seguir las mismas reglas que para la selección de elementos de una matriz (con el número de cada fila, que es cada individuo; y el número de cada columna, que es cada variable. Para elegir una variable, no obstante, ya hemos visto que es posible usar su nombre; aunque precedido del nombre del data frame y el signo <code>$</code>. Por ejemplo, si ejecutamos:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="almacenando-y-manipulando-datos..html#cb57-1" tabindex="-1"></a>datos[,<span class="dv">2</span>]</span></code></pre></div>
+<pre><code>## [1] 1.6 1.8 1.9</code></pre>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="almacenando-y-manipulando-datos..html#cb59-1" tabindex="-1"></a>datos<span class="sc">$</span>Altura</span></code></pre></div>
+<pre><code>## [1] 1.6 1.8 1.9</code></pre>
+<p>Obtenemos el mismo resultado.</p>
+</div>
+</div>
+<div id="importando-datos." class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Importando datos.<a href="almacenando-y-manipulando-datos..html#importando-datos." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Lo más frecuente es que no tecleemos los datos, como hemos hecho hasta ahora; sino que los importemos a R desde algún contenedor externo (archivo de texto, hoja de cálculo, base de datos…). Nosotros vamos a importar nuestros datos desde Microsoft® Excel®. Vamos a cerrar el script que hemos estado construyendo en los apartados anteriores (para conservarlo hay que guardarlo antes), aunque vamos a seguir trabajando en el mismo proyecto (que habíamos llamado “explora”). Iremos a la carpeta del proyecto y guardaremos en ella los dos archivos de esta práctica (obtén el enlace a los archivos en la sección final del capítulo):</p>
+<ul>
+<li><p>Un archivo de Microsoft® Excel® llamado “eolica_20.xlsx”</p></li>
+<li><p>Un script con las instrucciones que vamos a mostrar a continuación, y que se llama “explora_eolica.R”</p></li>
+</ul>
+<p>Si abrimos el archivo de Microsoft® Excel® comprobaremos que se compone de tres hojas. La primera muestra el criterio de búsqueda de casos en la un aviso sobre el uso exclusivo que se debe dar a los datos incorporados; la segunda recoge la descripción de las variables consideradas; y la tercera (hoja “Top 20”) guarda los datos que debemos <strong>importar</strong> desde R-Studio. Estos datos se corresponden con diferentes variables económico-financieras de 20 empresas productoras de electricidad mediante generación eólica. Luego vamos a cerrar el archivo de Microsoft® Excel® y volveremos a R-Studio. Vamos a abrir nuestro script “explora_eolica.R” con <code>File → Open File…</code> Este script contiene el programa que vamos a ir ejecutando en la práctica. La primera línea / instrucción en los scripts suele ser:</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="almacenando-y-manipulando-datos..html#cb61-1" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span></code></pre></div>
+<p>La instrucción tiene como objeto limpiar el <em>Environment</em> (memoria) de objetos de anteriores sesiones de trabajo. Para importar los datos localizados en el archivo de Excel “eolica_20.xlsx” el código es:</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="almacenando-y-manipulando-datos..html#cb62-1" tabindex="-1"></a><span class="co"># DATOS</span></span>
+<span id="cb62-2"><a href="almacenando-y-manipulando-datos..html#cb62-2" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb62-3"><a href="almacenando-y-manipulando-datos..html#cb62-3" tabindex="-1"></a>eolica_20 <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;eolica_20.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;Top 20&quot;</span>)</span></code></pre></div>
+<p>¡Atención! Si nunca se ha utilizado el paquete <code>{readxl}</code> (que contiene el código necesario para importar datos de un archivo de Microsoft® Excel®), cuando la intentemos activar con la función <code>library()</code> nos dará un error o nos dirá que previamente hay que importarla. En ese caso, iremos a la ventana inferior-derecha y pulsaremos la pestaña <code>Packages</code>, pulsaremos en <code>Install</code>, y emergerá una ventana donde dejaremos el “repositorio” que viene por defecto y, en el campo “Packages”, escribiremos el nombre del “paquete” que contiene la librería que nos hace falta (normalmente coincide con el nombre de la propia librería, en nuestro caso <code>{readxl}</code>. Una vez descargado el “paquete”, podremos ejecutar el código anterior sin problemas.</p>
+<p>Otra cuestión importante a tener en cuenta es que, en la hoja de cálculo del ejemplo, los “valores perdidos” o <em>missing values</em> (celdas en las que no hay datos), venían en blanco. Pero, en ocasiones, pueden contener algún tipo de anotación, como por ejemplo, “n.d.” (no disponible). En tal caso, deberá incluirse un argumento más que informe de estas celdas que, sin estar en blanco, no tienen dato:</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="almacenando-y-manipulando-datos..html#cb63-1" tabindex="-1"></a>eolica_20 <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;eolica_20.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;Top 20&quot;</span>, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">&quot;n.d.&quot;</span>))</span></code></pre></div>
+<p>Volviendo a nuestro ejemplo, podemos observar cómo en el <em>Environment</em> ya aparece un objeto. Este objeto es una estructura de datos tipo <em>data frame</em>, se llama “eolica_20” y contiene 11 columnas, una por cada una de las variables almacenadas en el archivo de Microsoft® Excel®. De estas variables, tres son de tipo cualitativo, formadas por cadenas de caracteres: el nombre de la empresa, “NOMBRE”; y el nombre del grupo empresarial matriz al que pertenece, “MATRIZ”. Puede explorarse el contenido del <em>data frame</em> y los principales estadísticos con la función <code>summary()</code>:</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="almacenando-y-manipulando-datos..html#cb64-1" tabindex="-1"></a><span class="fu">summary</span> (eolica_20)</span></code></pre></div>
+<pre><code>##     NOMBRE               RES             ACTIVO             FPIOS        
+##  Length:20          Min.   : -5662   Min.   :  109024   Min.   : -77533  
+##  Class :character   1st Qu.:  2865   1st Qu.:  187240   1st Qu.:  27615  
+##  Mode  :character   Median :  7388   Median :  271636   Median :  77740  
+##                     Mean   : 50754   Mean   : 1183599   Mean   : 563678  
+##                     3rd Qu.: 21206   3rd Qu.:  813816   3rd Qu.: 219345  
+##                     Max.   :727548   Max.   :13492812   Max.   :6904824  
+##                     NA&#39;s   :1                                            
+## 
+##      RENECO            RENFIN            LIQUIDEZ          MARGEN       
+##  Min.   :-2.8130   Min.   :-359.773   Min.   :0.0780   Min.   :-302.03  
+##  1st Qu.: 0.8765   1st Qu.:   1.664   1st Qu.:0.7342   1st Qu.:  12.39  
+##  Median : 3.6150   Median :  10.812   Median :1.2345   Median :  21.42  
+##  Mean   : 2.9399   Mean   :  -3.450   Mean   :1.4200   Mean   :  16.40  
+##  3rd Qu.: 4.7735   3rd Qu.:  25.312   3rd Qu.:1.5615   3rd Qu.:  38.56  
+##  Max.   : 8.5860   Max.   :  52.261   Max.   :5.3300   Max.   : 208.36  
+##  NA&#39;s   :1                                                              
+## 
+##    SOLVENCIA         APALANCA           MATRIZ         
+##  Min.   :-40.74   Min.   :-6265.50   Length:20         
+##  1st Qu.: 11.26   1st Qu.:   16.13   Class :character  
+##  Median : 23.68   Median :  145.93   Mode  :character  
+##  Mean   : 32.68   Mean   :  -17.17                     
+##  3rd Qu.: 52.62   3rd Qu.:  504.74                     
+##  Max.   : 99.08   Max.   : 1019.62</code></pre>
+<p>Veremos cómo aparecen 11 variables con algunos estadísticos básicos.</p>
+<p>R ha considerado la primera columna como una variable de tipo cualitativo (atributo). En realidad no es una variable, sino el nombre de los individuos o casos. Para evitar que R tome los nombres de los casos como una variable, podemos redefinir nuestro <em>data frame</em> diciéndole que considere esa primera columna como los <em>nombres de los individuos o filas</em>:</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="almacenando-y-manipulando-datos..html#cb66-1" tabindex="-1"></a>eolica_20 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(eolica_20, <span class="at">row.names =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p>En la línea anterior hemos asignado al data frame “eolica_20” los propios datos de “eolica_20”; pero indicando que la primera columna de datos no es una variable; sino el nombre de los casos. Si hacemos ahora el <code>summary()</code>:</p>
+<pre><code>##       RES             ACTIVO             FPIOS             RENECO       
+##  Min.   : -5662   Min.   :  109024   Min.   : -77533   Min.   :-2.8130  
+##  1st Qu.:  2865   1st Qu.:  187240   1st Qu.:  27615   1st Qu.: 0.8765  
+##  Median :  7388   Median :  271636   Median :  77740   Median : 3.6150  
+##  Mean   : 50754   Mean   : 1183599   Mean   : 563678   Mean   : 2.9399  
+##  3rd Qu.: 21206   3rd Qu.:  813816   3rd Qu.: 219345   3rd Qu.: 4.7735  
+##  Max.   :727548   Max.   :13492812   Max.   :6904824   Max.   : 8.5860  
+##  NA&#39;s   :1                                             NA&#39;s   :1        
+## 
+##      RENFIN            LIQUIDEZ          MARGEN          SOLVENCIA     
+##  Min.   :-359.773   Min.   :0.0780   Min.   :-302.03   Min.   :-40.74  
+##  1st Qu.:   1.664   1st Qu.:0.7342   1st Qu.:  12.39   1st Qu.: 11.26  
+##  Median :  10.812   Median :1.2345   Median :  21.42   Median : 23.68  
+##  Mean   :  -3.450   Mean   :1.4200   Mean   :  16.40   Mean   : 32.68  
+##  3rd Qu.:  25.312   3rd Qu.:1.5615   3rd Qu.:  38.56   3rd Qu.: 52.62  
+##  Max.   :  52.261   Max.   :5.3300   Max.   : 208.36   Max.   : 99.08  
+## 
+##     APALANCA           MATRIZ         
+##  Min.   :-6265.50   Length:20         
+##  1st Qu.:   16.13   Class :character  
+##  Median :  145.93   Mode  :character  
+##  Mean   :  -17.17                     
+##  3rd Qu.:  504.74                     
+##  Max.   : 1019.62</code></pre>
+<p>Vemos que ya no aparece “NOMBRE” como variable, y en el <em>Environment</em> ya aparece el data frame “eolica_20” con 20 observaciones (casos), pero con 10 variables (una menos).</p>
+<p>Antes de seguir con la manipulación de nuestros datos, es preciso decir que existen otros muchos formatos de datos que pueden ser importados. Por ejemplo, con el paquete <code>{readr}</code> se pueden importar datos de archivos de texto de tipo tabular (por ejemplo, archivos *.csv). Con el paquete <code>{haven}</code> se pueden capturar los datos almacenados en archivos de SPSS® (.sav), Stata® (.dta), SAS® (.sas7bdat), etc. Finamente, se pueden capturar datos almacenados en páginas web (archivos en formato JSON o XML, o en tablas HTML)) o en bases de datos gestionadas mediante diversos sistemas (SQLite, MySQL, MariaDB, PostgreSQL, Oracle®).</p>
+</div>
+<div id="dplyr." class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> {dplyr}.<a href="almacenando-y-manipulando-datos..html#dplyr." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="el-tidyverse.-cargando-dplyr." class="section level3 hasAnchor" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> El Tidyverse. Cargando {dplyr}.<a href="almacenando-y-manipulando-datos..html#el-tidyverse.-cargando-dplyr." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>El <strong><em>Tidyverse</em></strong> es un conjunto de paquetes / librerías con una filosofía común, como es el uso de ciertas estructuras gramaticales, que facilitan muchas de las tareas y análisis que podrían hacerse con el lenguaje R estándar. Una buena obra para profundizar en el Tidyverse es <span class="citation">Wickham and Grolemund (<a href="#ref-Wickham2017R">2017</a>)</span>.</p>
+<p>Uno de esos paquetes es <code>{dplyr}</code>, que proporciona una gramática más sencilla que la del lenguaje R convencional para <strong>manipular</strong> los objetos de estructuras de datos conocidos como <strong><em>data frames</em></strong>.</p>
+<p>Los data frames, como ya sabemos, son estructuras en las que se almacenan datos de modo que, por columnas, se disponen las variables del análisis; y por filas los casos que conforman la muestra / población.</p>
+<p>Vamos a suponer que trabajamos dentro del proyecto que hemos creado previamente, de nombre “explora” (ver capítulo 1). Dentro de la carpeta del proyecto guardaremos el script llamado “explora_dplyr.R” y el archivo de Microsoft® Excel® llamado “eolica_20.xlsx”. Si abrimos este último archivo, comprobaremos que se compone de tres hojas. La hoja “Top 20” contiene los datos a importar desde R-Studio. Estos datos se corresponden con diferentes variables económico-financieras de 20 empresas productoras de electricidad mediante generación eólica.</p>
+<p>Luego cerraremos el archivo de Microsoft® Excel®, “eolica_20.xlsx”, y volveremos a R-Studio. Después, abriremos nuestro script “explora_dplyr.R” con <code>File → Open File…</code> Este script contiene el programa que vamos a ir ejecutando en la práctica.</p>
+<p>La primera línea / instrucción en los scripts suele ser:</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="almacenando-y-manipulando-datos..html#cb68-1" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span></code></pre></div>
+<p>La instrucción tiene como objeto limpiar el <em>Environment</em> (memoria) de objetos de anteriores sesiones de trabajo.</p>
+<p>Para importar los datos que hay en la hoja “Top 20” del archivo de Microsoft® Excel® llamado “eolica_20.xlsx”, ejecutaremos el código:</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="almacenando-y-manipulando-datos..html#cb69-1" tabindex="-1"></a><span class="co"># DATOS</span></span>
+<span id="cb69-2"><a href="almacenando-y-manipulando-datos..html#cb69-2" tabindex="-1"></a></span>
+<span id="cb69-3"><a href="almacenando-y-manipulando-datos..html#cb69-3" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb69-4"><a href="almacenando-y-manipulando-datos..html#cb69-4" tabindex="-1"></a>eolica_20 <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;eolica_20.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;Top 20&quot;</span>)</span></code></pre></div>
+<p>Podemos observar como en el <em>Environment</em> ya aparece un objeto. Este objeto es una estructura de datos tipo <em>data frame</em>, se llama “eolica_20” y contiene 11 columnas. R ha considerado la primera columna como una variable de tipo cualitativo. En realidad, la primera columna no es una variable, sino que está formada por el nombre (identificador) de los diferentes casos u observaciones. Para evitar que R tome los nombres de los casos como una variable más, podemos redefinir nuestro <em>data frame</em> diciéndole que tome esa primera columna como los <em>nombres de los individuos</em>:</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="almacenando-y-manipulando-datos..html#cb70-1" tabindex="-1"></a>eolica_20 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(eolica_20, <span class="at">row.names =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p>En la línea anterior hemos asignado al <em>data frame</em> “eolica_20” los propios datos de “eolica_20”; pero indicando que la primera columna de datos no es una variable; sino el nombre de los casos.</p>
+<p>A continuación, cargaremos el paquete <code>{dplyr}</code>. Si nunca antes se ha utilizado este paquete, cuando lo intentemos activar con la función <code>library()</code> nos dará un error o nos dirá que previamente hay que importarlo. En ese caso, iremos a la ventana inferior-derecha y pulsaremos la pestaña “Packages”, pulsaremos en <code>Install</code>, y emergerá una ventana donde dejaremos el “repositorio” que viene por defecto y, en el campo <code>Packages</code>, escribiremos el nombre del “paquete” (en nuestro caso <code>{dplyr}</code>). Una vez descargado el “paquete”, podremos ejecutar el código sin problemas:</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="almacenando-y-manipulando-datos..html#cb71-1" tabindex="-1"></a><span class="co">#Cargando dplyr</span></span>
+<span id="cb71-2"><a href="almacenando-y-manipulando-datos..html#cb71-2" tabindex="-1"></a></span>
+<span id="cb71-3"><a href="almacenando-y-manipulando-datos..html#cb71-3" tabindex="-1"></a><span class="fu">library</span> (dplyr)</span></code></pre></div>
+<p>Para entender mejor la <strong>sintaxis</strong> que siguen las funciones o instrucciones a las que da acceso <code>{dplyr}</code>, hay que tener en cuenta lo siguiente:</p>
+<ul>
+<li><p>El primer argumento que tiene una función de <code>{dplyr}</code> es el <em>data frame</em> con el que se va a trabajar.</p></li>
+<li><p>Los otros argumentos describen qué hay que hacer con el <em>data frame</em> especificado en el primer argumento. Es posible referirse a las columnas (variables) del <em>data frame</em> con su nombre, <strong>sin utilizar el operador $</strong>.</p></li>
+<li><p>El valor de retorno es un <strong>nuevo</strong> <em>data frame</em>.</p></li>
+</ul>
+<p>En los siguientes subapartados practicaremos con algunas de las principales funciones que aporta <code>{dplyr}</code>.</p>
+</div>
+<div id="seleccionando-columnas-de-un-data-frame." class="section level3 hasAnchor" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> Seleccionando columnas de un data frame.<a href="almacenando-y-manipulando-datos..html#seleccionando-columnas-de-un-data-frame." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La función clave de <code>{dplyr}</code> para seleccionar una o varias columnas (variables) de un <em>data frame</em> es la función <code>select()</code>.</p>
+<p>Así, vamos a imaginar por ejemplo que queremos eliminar de nuestro <em>data frame</em> la variable (de tipo “carácter”) MATRIZ. Podremos ejecutar la asignación:</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="almacenando-y-manipulando-datos..html#cb72-1" tabindex="-1"></a><span class="co">#Seleccionando variables</span></span>
+<span id="cb72-2"><a href="almacenando-y-manipulando-datos..html#cb72-2" tabindex="-1"></a></span>
+<span id="cb72-3"><a href="almacenando-y-manipulando-datos..html#cb72-3" tabindex="-1"></a>eolica_20 <span class="ot">&lt;-</span><span class="fu">select</span>(eolica_20, <span class="sc">-</span>MATRIZ)</span>
+<span id="cb72-4"><a href="almacenando-y-manipulando-datos..html#cb72-4" tabindex="-1"></a><span class="fu">summary</span> (eolica_20)</span></code></pre></div>
+<pre><code>##       RES             ACTIVO             FPIOS        
+##  Min.   : -5662   Min.   :  109024   Min.   : -77533  
+##  1st Qu.:  2865   1st Qu.:  187240   1st Qu.:  27615  
+##  Median :  7388   Median :  271636   Median :  77740  
+##  Mean   : 50754   Mean   : 1183599   Mean   : 563678  
+##  3rd Qu.: 21206   3rd Qu.:  813816   3rd Qu.: 219345  
+##  Max.   :727548   Max.   :13492812   Max.   :6904824  
+##  NA&#39;s   :1                                            
+## 
+##      RENECO            RENFIN            LIQUIDEZ     
+##  Min.   :-2.8130   Min.   :-359.773   Min.   :0.0780  
+##  1st Qu.: 0.8765   1st Qu.:   1.664   1st Qu.:0.7342  
+##  Median : 3.6150   Median :  10.812   Median :1.2345  
+##  Mean   : 2.9399   Mean   :  -3.450   Mean   :1.4200  
+##  3rd Qu.: 4.7735   3rd Qu.:  25.312   3rd Qu.:1.5615  
+##  Max.   : 8.5860   Max.   :  52.261   Max.   :5.3300  
+##  NA&#39;s   :1                                            
+## 
+##      MARGEN          SOLVENCIA         APALANCA       
+##  Min.   :-302.03   Min.   :-40.74   Min.   :-6265.50  
+##  1st Qu.:  12.39   1st Qu.: 11.26   1st Qu.:   16.13  
+##  Median :  21.42   Median : 23.68   Median :  145.93  
+##  Mean   :  16.40   Mean   : 32.68   Mean   :  -17.17  
+##  3rd Qu.:  38.56   3rd Qu.: 52.62   3rd Qu.:  504.74  
+##  Max.   : 208.36   Max.   : 99.08   Max.   : 1019.62</code></pre>
+<p>Podemos verificar que, en el <em>Environment,</em> el <em>data frame</em> ha pasado a tener una variable menos (9), ya que hemos eliminado la variable MATRIZ. Es decir, con el guión “-” se pueden eliminar directamente variables de un <em>data frame</em>.</p>
+<p>Ahora, suponemos que queremos visualizar las variables del <em>data frame</em> “eolica_20”: ACTIVO, FPIOS, LIQUIDEZ, MARGEN, SOLVENCIA y APALANCA (es decir, todas las variables menos RES, RENECO, RENFIN). Para ello, ejecutaremos el código:</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="almacenando-y-manipulando-datos..html#cb74-1" tabindex="-1"></a><span class="fu">select</span>(eolica_20, ACTIVO, FPIOS, LIQUIDEZ, MARGEN, SOLVENCIA, APALANCA)</span></code></pre></div>
+<pre><code>##                                     ACTIVO       FPIOS LIQUIDEZ   MARGEN
+## Holding De Negocios De GAS SL.  13492812.0 6904824.000    1.020   91.152
+## Global Power Generation SA.      2002458.0 1740487.000    2.006   22.403
+## Naturgy Renovables SLU           1956869.0  318475.000    1.263   20.442
+## EDP Renovables España SLU        1275939.0  726783.000    1.596   47.193
+## Corporacion Acciona Eolica SL     864606.0  136064.000    0.788   20.091
+## Saeta Yield SA.                   796886.4  665319.556    2.687   16.258
+## Elawan Energy SL.                 443467.0  186302.006    0.595  208.357
+## Olivento SL                       381207.0   58340.998    0.771   16.629
+## Parque Eolico La Boga SL.         303904.4   29316.797    1.407    1.001
+## Naturgy Wind, S.L.                273542.0   28418.000    1.364   39.575
+## Viesgo Renovables SL.             269730.0  177707.000    0.272   11.818
+## Al-Andalus Wind Power SL          249853.8   21466.121    1.550   12.582
+## Innogy Spain SA.                  230338.5   85447.212    1.416  -18.025
+## Guzman Energia SL                 190287.0  -77532.698    0.078  -19.193
+## Acciona Eolica Del Levante SL     188354.0   21769.000    2.855   27.520
+## Biovent Energia SA                183899.0   70033.000    1.206   22.792
+## Esquilvent SL                     157630.6   48769.130    5.330   39.476
+## Eolica La Janda SL                153429.4   25206.748    1.184   38.256
+## Parque Eolico Santa Catalina SL   147742.5   -1664.755    0.388   31.780
+## WPD Wind Investment SL.           109023.8  108023.826    0.624 -302.027
+## 
+##                                 SOLVENCIA  APALANCA
+## Holding De Negocios De GAS SL.     51.174    91.964
+## Global Power Generation SA.        86.917     1.044
+## Naturgy Renovables SLU             16.274   494.729
+## EDP Renovables España SLU          56.960    67.028
+## Corporacion Acciona Eolica SL      15.737   422.263
+## Saeta Yield SA.                    83.489    17.067
+## Elawan Energy SL.                  42.010   123.771
+## Olivento SL                        15.304   534.761
+## Parque Eolico La Boga SL.           9.646   921.591
+## Naturgy Wind, S.L.                 10.388   824.537
+## Viesgo Renovables SL.              65.883    13.330
+## Al-Andalus Wind Power SL            8.591  1019.616
+## Innogy Spain SA.                   37.096   150.688
+## Guzman Energia SL                 -40.745  -343.542
+## Acciona Eolica Del Levante SL      11.557   743.754
+## Biovent Energia SA                 38.082   141.163
+## Esquilvent SL                      30.938   218.275
+## Eolica La Janda SL                 16.428   480.122
+## Parque Eolico Santa Catalina SL    -1.126 -6265.496
+## WPD Wind Investment SL.            99.082     0.000</code></pre>
+<p>Como no hemos asignado el resultado de la función a ningún “nombre”, R simplemente saca el resultado en pantalla; pero no guarda ningún objeto en el <em>Environment</em>. Si asignamos un <code>select()</code> a un “nombre”, se creará un <em>data frame</em> con ese nombre, y las variables seleccionadas:</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="almacenando-y-manipulando-datos..html#cb76-1" tabindex="-1"></a>eolica_20A <span class="ot">&lt;-</span><span class="fu">select</span>(eolica_20, ACTIVO, FPIOS, LIQUIDEZ, MARGEN, SOLVENCIA, APALANCA)</span>
+<span id="cb76-2"><a href="almacenando-y-manipulando-datos..html#cb76-2" tabindex="-1"></a><span class="fu">summary</span> (eolica_20A)</span></code></pre></div>
+<pre><code>##       RES             ACTIVO             FPIOS        
+##  Min.   : -5662   Min.   :  109024   Min.   : -77533  
+##  1st Qu.:  2865   1st Qu.:  187240   1st Qu.:  27615  
+##  Median :  7388   Median :  271636   Median :  77740  
+##  Mean   : 50754   Mean   : 1183599   Mean   : 563678  
+##  3rd Qu.: 21206   3rd Qu.:  813816   3rd Qu.: 219345  
+##  Max.   :727548   Max.   :13492812   Max.   :6904824  
+##  NA&#39;s   :1                                            
+## 
+##      RENECO            RENFIN            LIQUIDEZ     
+##  Min.   :-2.8130   Min.   :-359.773   Min.   :0.0780  
+##  1st Qu.: 0.8765   1st Qu.:   1.664   1st Qu.:0.7342  
+##  Median : 3.6150   Median :  10.812   Median :1.2345  
+##  Mean   : 2.9399   Mean   :  -3.450   Mean   :1.4200  
+##  3rd Qu.: 4.7735   3rd Qu.:  25.312   3rd Qu.:1.5615  
+##  Max.   : 8.5860   Max.   :  52.261   Max.   :5.3300  
+##  NA&#39;s   :1                                            
+## 
+##      MARGEN          SOLVENCIA         APALANCA       
+##  Min.   :-302.03   Min.   :-40.74   Min.   :-6265.50  
+##  1st Qu.:  12.39   1st Qu.: 11.26   1st Qu.:   16.13  
+##  Median :  21.42   Median : 23.68   Median :  145.93  
+##  Mean   :  16.40   Mean   : 32.68   Mean   :  -17.17  
+##  3rd Qu.:  38.56   3rd Qu.: 52.62   3rd Qu.:  504.74  
+##  Max.   : 208.36   Max.   : 99.08   Max.   : 1019.62</code></pre>
+<p>Podemos comprobar en el <em>Environment</em> cómo hay otro objeto <em>data frame</em> llamado “eolica_20A”, con 6 variables (y los mismos 20 casos). Este <em>data frame</em> lo podríamos haber creado, también, eliminando del <em>data frame</em> original (“eolica_20”), las variables que nos sobran:</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="almacenando-y-manipulando-datos..html#cb78-1" tabindex="-1"></a>eolica_20A <span class="ot">&lt;-</span><span class="fu">select</span>(eolica_20, <span class="sc">-</span>RES, <span class="sc">-</span>RENECO, <span class="sc">-</span>RENFIN)</span></code></pre></div>
+<p>Más aún, si nos fijamos bien, los nombres de todas las variables que hemos excluido empiezan por “RE”, a diferencia de las incluidas. Podríamos haber hecho también:</p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="almacenando-y-manipulando-datos..html#cb79-1" tabindex="-1"></a>eolica_20A <span class="ot">&lt;-</span><span class="fu">select</span>(eolica_20, <span class="sc">-</span>(<span class="fu">starts_with</span>(<span class="st">&quot;RE&quot;</span>)))</span></code></pre></div>
+<p>Y de nuevo obtendríamos el mismo resultado. El argumento <code>starts_with()</code> permite seleccionar variables cuyos nombres comienzan por cierta cadena de caracteres. También se puede hacer mismo con los caracteres finales (<code>ends_with()</code>) o contenidos en alguna posición del nombre (<code>contains()</code>).</p>
+<p>Otra posibilidad que tenemos es hacer una copia de un <em>data frame</em> rápidamente con el argumento <code>everything()</code>. Por ejemplo:</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="almacenando-y-manipulando-datos..html#cb80-1" tabindex="-1"></a>eolica_20_replica <span class="ot">&lt;-</span><span class="fu">select</span>(eolica_20, <span class="fu">everything</span>())</span></code></pre></div>
+<p>Se ha creado el <em>date frame</em> “eolica_20_replica” que es una copia exacta de “eolica_20”.</p>
+</div>
+<div id="seleccionando-casos-de-un-data-frame." class="section level3 hasAnchor" number="2.3.3">
+<h3><span class="header-section-number">2.3.3</span> Seleccionando casos de un <em>data frame</em>.<a href="almacenando-y-manipulando-datos..html#seleccionando-casos-de-un-data-frame." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Además de seleccionar variables, con <code>{dplyr}</code> también se pueden seleccionar casos que cumplan ciertas condiciones. La función para realizar este cometido es <code>filter()</code>. Por ejemplo, si queremos seleccionar las empresas eólicas con un resultado (variable RES) mayor o igual a 50.000 y presentarlas en pantalla, la instrucción será:</p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="almacenando-y-manipulando-datos..html#cb81-1" tabindex="-1"></a><span class="fu">filter</span>(eolica_20, RES <span class="sc">&gt;=</span> <span class="dv">50000</span>)</span></code></pre></div>
+<pre><code>##                                   RES   ACTIVO   FPIOS RENECO RENFIN
+## Holding De Negocios De GAS SL. 727548 13492812 6904824  5.264 10.287
+## EDP Renovables España SLU       67033  1275939  726783  6.458 11.338
+## 
+##                                LIQUIDEZ MARGEN SOLVENCIA APALANCA
+## Holding De Negocios De GAS SL.    1.020 91.152    51.174   91.964
+## EDP Renovables España SLU         1.596 47.193    56.960   67.028</code></pre>
+<p>Se pueden incluir varias condiciones en un mismo filtro. Por ejemplo, vamos a construir un nuevo <em>data frame</em> llamado “eolica_20B” con las empresas que posean un resultado mayor o igual a 50000 y una rentabilidad económica (variable RENECO) inferior al 6%:</p>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="almacenando-y-manipulando-datos..html#cb83-1" tabindex="-1"></a>eolica_20B <span class="ot">&lt;-</span><span class="fu">filter</span>(eolica_20, RES <span class="sc">&gt;=</span> <span class="dv">50000</span> <span class="sc">&amp;</span> RENECO <span class="sc">&lt;</span> <span class="dv">6</span>)</span>
+<span id="cb83-2"><a href="almacenando-y-manipulando-datos..html#cb83-2" tabindex="-1"></a>eolica_20B</span></code></pre></div>
+<pre><code>##                                   RES   ACTIVO   FPIOS
+## Holding De Negocios De GAS SL. 727548 13492812 6904824
+## 
+##                                RENECO RENFIN LIQUIDEZ
+## Holding De Negocios De GAS SL.  5.264 10.287     1.02
+## 
+##                                MARGEN SOLVENCIA APALANCA
+## Holding De Negocios De GAS SL. 91.152    51.174   91.964</code></pre>
+<p>En el <em>Environment</em> aparecerá el <em>data frame</em> “eolica_9B” con solo un caso: la empresa que cumple con ambas condiciones, introducidas mediante el operador lógico relacional “<strong>&amp;</strong>”, que es el equivalente a la conjunción “y” o, dicho de otro modo, la intersección. Otro operador lógico relacional muy utilizado es la barra vertical “<strong>|</strong>”, que es el equivalente a la conjunción “o”, es decir, la unión.</p>
+<p>Los filtros más usuales son &gt;, &lt;, &gt;=, &lt;=, == (igual, ojo, con dos símbolos de igualdad seguidos) y != (no igual).</p>
+</div>
+<div id="ordenando-casos-de-un-data-frame." class="section level3 hasAnchor" number="2.3.4">
+<h3><span class="header-section-number">2.3.4</span> Ordenando casos de un <em>data frame</em>.<a href="almacenando-y-manipulando-datos..html#ordenando-casos-de-un-data-frame." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Además de seleccionar determinados casos u observaciones (filas) de un <em>data frame</em>, con las funciones de <code>{dplyr}</code> también se pueden ordenar estos casos a partir de los valores de ciertas variables (columnas). La función a utilizar es <code>arrange()</code>. Esta función, por defecto, ordena los casos de modo <strong>ascendente</strong>. Por ejemplo:</p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="almacenando-y-manipulando-datos..html#cb85-1" tabindex="-1"></a><span class="fu">arrange</span>(eolica_20, RENECO)</span></code></pre></div>
+<pre><code>##                                        RES     ACTIVO       FPIOS
+## Guzman Energia SL                -5661.463   190287.0  -77532.698
+## Innogy Spain SA.                 -5268.573   230338.5   85447.212
+## WPD Wind Investment SL.           -850.068   109023.8  108023.826
+## Parque Eolico La Boga SL.           11.940   303904.4   29316.797
+## Saeta Yield SA.                   2084.476   796886.4  665319.556
+## Global Power Generation SA.      39995.000  2002458.0 1740487.000
+## Naturgy Renovables SLU           42737.000  1956869.0  318475.000
+## Al-Andalus Wind Power SL          4403.214   249853.8   21466.121
+## Olivento SL                       7388.175   381207.0   58340.998
+## Elawan Energy SL.                12818.975   443467.0  186302.006
+## Naturgy Wind, S.L.                8500.000   273542.0   28418.000
+## Parque Eolico Santa Catalina SL   3645.278   147742.5   -1664.755
+## Biovent Energia SA                      NA   183899.0   70033.000
+## Corporacion Acciona Eolica SL    29592.000   864606.0  136064.000
+## Acciona Eolica Del Levante SL     6853.000   188354.0   21769.000
+## Holding De Negocios De GAS SL.  727548.000 13492812.0 6904824.000
+## EDP Renovables España SLU        67033.000  1275939.0  726783.000
+## Esquilvent SL                     9010.214   157630.6   48769.130
+## Eolica La Janda SL                9880.091   153429.4   25206.748
+## Viesgo Renovables SL.             4609.000   269730.0  177707.000
+## 
+##                                 RENECO   RENFIN LIQUIDEZ
+## Guzman Energia SL               -2.813    6.904    0.078
+## Innogy Spain SA.                -2.708   -7.302    1.416
+## WPD Wind Investment SL.         -1.040   -1.049    0.624
+## Parque Eolico La Boga SL.        0.162    1.684    1.407
+## Saeta Yield SA.                  0.360    0.432    2.687
+## Global Power Generation SA.      1.393    1.603    2.006
+## Naturgy Renovables SLU           1.959   12.043    1.263
+## Al-Andalus Wind Power SL         2.349   27.350    1.550
+## Olivento SL                      2.553   16.684    0.771
+## Elawan Energy SL.                3.615    8.605    0.595
+## Naturgy Wind, S.L.               3.949   38.018    1.364
+## Parque Eolico Santa Catalina SL  4.053 -359.773    0.388
+## Biovent Energia SA               4.551   11.952    1.206
+## Corporacion Acciona Eolica SL    4.562   28.990    0.788
+## Acciona Eolica Del Levante SL    4.985   43.139    2.855
+## Holding De Negocios De GAS SL.   5.264   10.287    1.020
+## EDP Renovables España SLU        6.458   11.338    1.596
+## Esquilvent SL                    7.621   24.633    5.330
+## Eolica La Janda SL               8.586   52.261    1.184
+## Viesgo Renovables SL.               NA    3.200    0.272
+## 
+##                                   MARGEN SOLVENCIA  APALANCA
+## Guzman Energia SL                -19.193   -40.745  -343.542
+## Innogy Spain SA.                 -18.025    37.096   150.688
+## WPD Wind Investment SL.         -302.027    99.082     0.000
+## Parque Eolico La Boga SL.          1.001     9.646   921.591
+## Saeta Yield SA.                   16.258    83.489    17.067
+## Global Power Generation SA.       22.403    86.917     1.044
+## Naturgy Renovables SLU            20.442    16.274   494.729
+## Al-Andalus Wind Power SL          12.582     8.591  1019.616
+## Olivento SL                       16.629    15.304   534.761
+## Elawan Energy SL.                208.357    42.010   123.771
+## Naturgy Wind, S.L.                39.575    10.388   824.537
+## Parque Eolico Santa Catalina SL   31.780    -1.126 -6265.496
+## Biovent Energia SA                22.792    38.082   141.163
+## Corporacion Acciona Eolica SL     20.091    15.737   422.263
+## Acciona Eolica Del Levante SL     27.520    11.557   743.754
+## Holding De Negocios De GAS SL.    91.152    51.174    91.964
+## EDP Renovables España SLU         47.193    56.960    67.028
+## Esquilvent SL                     39.476    30.938   218.275
+## Eolica La Janda SL                38.256    16.428   480.122
+## Viesgo Renovables SL.             11.818    65.883    13.330</code></pre>
+<p>En cambio, para ordenar de modo descendente, hay que utilizar el argumento <code>desc()</code>:</p>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="almacenando-y-manipulando-datos..html#cb87-1" tabindex="-1"></a><span class="fu">arrange</span>(eolica_20, <span class="fu">desc</span>(RENECO))</span></code></pre></div>
+<pre><code>##                                        RES     ACTIVO       FPIOS
+## Eolica La Janda SL                9880.091   153429.4   25206.748
+## Esquilvent SL                     9010.214   157630.6   48769.130
+## EDP Renovables España SLU        67033.000  1275939.0  726783.000
+## Holding De Negocios De GAS SL.  727548.000 13492812.0 6904824.000
+## Acciona Eolica Del Levante SL     6853.000   188354.0   21769.000
+## Corporacion Acciona Eolica SL    29592.000   864606.0  136064.000
+## Biovent Energia SA                      NA   183899.0   70033.000
+## Parque Eolico Santa Catalina SL   3645.278   147742.5   -1664.755
+## Naturgy Wind, S.L.                8500.000   273542.0   28418.000
+## Elawan Energy SL.                12818.975   443467.0  186302.006
+## Olivento SL                       7388.175   381207.0   58340.998
+## Al-Andalus Wind Power SL          4403.214   249853.8   21466.121
+## Naturgy Renovables SLU           42737.000  1956869.0  318475.000
+## Global Power Generation SA.      39995.000  2002458.0 1740487.000
+## Saeta Yield SA.                   2084.476   796886.4  665319.556
+## Parque Eolico La Boga SL.           11.940   303904.4   29316.797
+## WPD Wind Investment SL.           -850.068   109023.8  108023.826
+## Innogy Spain SA.                 -5268.573   230338.5   85447.212
+## Guzman Energia SL                -5661.463   190287.0  -77532.698
+## Viesgo Renovables SL.             4609.000   269730.0  177707.000
+## 
+##                                 RENECO   RENFIN LIQUIDEZ
+## Eolica La Janda SL               8.586   52.261    1.184
+## Esquilvent SL                    7.621   24.633    5.330
+## EDP Renovables España SLU        6.458   11.338    1.596
+## Holding De Negocios De GAS SL.   5.264   10.287    1.020
+## Acciona Eolica Del Levante SL    4.985   43.139    2.855
+## Corporacion Acciona Eolica SL    4.562   28.990    0.788
+## Biovent Energia SA               4.551   11.952    1.206
+## Parque Eolico Santa Catalina SL  4.053 -359.773    0.388
+## Naturgy Wind, S.L.               3.949   38.018    1.364
+## Elawan Energy SL.                3.615    8.605    0.595
+## Olivento SL                      2.553   16.684    0.771
+## Al-Andalus Wind Power SL         2.349   27.350    1.550
+## Naturgy Renovables SLU           1.959   12.043    1.263
+## Global Power Generation SA.      1.393    1.603    2.006
+## Saeta Yield SA.                  0.360    0.432    2.687
+## Parque Eolico La Boga SL.        0.162    1.684    1.407
+## WPD Wind Investment SL.         -1.040   -1.049    0.624
+## Innogy Spain SA.                -2.708   -7.302    1.416
+## Guzman Energia SL               -2.813    6.904    0.078
+## Viesgo Renovables SL.               NA    3.200    0.272
+## 
+##                                   MARGEN SOLVENCIA  APALANCA
+## Eolica La Janda SL                38.256    16.428   480.122
+## Esquilvent SL                     39.476    30.938   218.275
+## EDP Renovables España SLU         47.193    56.960    67.028
+## Holding De Negocios De GAS SL.    91.152    51.174    91.964
+## Acciona Eolica Del Levante SL     27.520    11.557   743.754
+## Corporacion Acciona Eolica SL     20.091    15.737   422.263
+## Biovent Energia SA                22.792    38.082   141.163
+## Parque Eolico Santa Catalina SL   31.780    -1.126 -6265.496
+## Naturgy Wind, S.L.                39.575    10.388   824.537
+## Elawan Energy SL.                208.357    42.010   123.771
+## Olivento SL                       16.629    15.304   534.761
+## Al-Andalus Wind Power SL          12.582     8.591  1019.616
+## Naturgy Renovables SLU            20.442    16.274   494.729
+## Global Power Generation SA.       22.403    86.917     1.044
+## Saeta Yield SA.                   16.258    83.489    17.067
+## Parque Eolico La Boga SL.          1.001     9.646   921.591
+## WPD Wind Investment SL.         -302.027    99.082     0.000
+## Innogy Spain SA.                 -18.025    37.096   150.688
+## Guzman Energia SL                -19.193   -40.745  -343.542
+## Viesgo Renovables SL.             11.818    65.883    13.330</code></pre>
+<p>En el supuesto de que, por ejemplo, hubiera varias empresas con la misma rentabilidad económica (RENECO), podría añadirse otro criterio de ordenación con otra variable, que afectaría a tales empresas para deshacer el “empate” en rentabilidad económica. Por ejemplo, para ordenar de modo ascendente por rentabilidad y, en caso de que haya rentabilidades iguales, por liquidez (variable LIQUIDEZ), se ejecutaría:</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="almacenando-y-manipulando-datos..html#cb89-1" tabindex="-1"></a><span class="fu">arrange</span>(eolica_20, RENECO, LIQUIDEZ)</span></code></pre></div>
+<pre><code>##                                        RES     ACTIVO       FPIOS
+## Guzman Energia SL                -5661.463   190287.0  -77532.698
+## Innogy Spain SA.                 -5268.573   230338.5   85447.212
+## WPD Wind Investment SL.           -850.068   109023.8  108023.826
+## Parque Eolico La Boga SL.           11.940   303904.4   29316.797
+## Saeta Yield SA.                   2084.476   796886.4  665319.556
+## Global Power Generation SA.      39995.000  2002458.0 1740487.000
+## Naturgy Renovables SLU           42737.000  1956869.0  318475.000
+## Al-Andalus Wind Power SL          4403.214   249853.8   21466.121
+## Olivento SL                       7388.175   381207.0   58340.998
+## Elawan Energy SL.                12818.975   443467.0  186302.006
+## Naturgy Wind, S.L.                8500.000   273542.0   28418.000
+## Parque Eolico Santa Catalina SL   3645.278   147742.5   -1664.755
+## Biovent Energia SA                      NA   183899.0   70033.000
+## Corporacion Acciona Eolica SL    29592.000   864606.0  136064.000
+## Acciona Eolica Del Levante SL     6853.000   188354.0   21769.000
+## Holding De Negocios De GAS SL.  727548.000 13492812.0 6904824.000
+## EDP Renovables España SLU        67033.000  1275939.0  726783.000
+## Esquilvent SL                     9010.214   157630.6   48769.130
+## Eolica La Janda SL                9880.091   153429.4   25206.748
+## Viesgo Renovables SL.             4609.000   269730.0  177707.000
+## 
+##                                 RENECO   RENFIN LIQUIDEZ
+## Guzman Energia SL               -2.813    6.904    0.078
+## Innogy Spain SA.                -2.708   -7.302    1.416
+## WPD Wind Investment SL.         -1.040   -1.049    0.624
+## Parque Eolico La Boga SL.        0.162    1.684    1.407
+## Saeta Yield SA.                  0.360    0.432    2.687
+## Global Power Generation SA.      1.393    1.603    2.006
+## Naturgy Renovables SLU           1.959   12.043    1.263
+## Al-Andalus Wind Power SL         2.349   27.350    1.550
+## Olivento SL                      2.553   16.684    0.771
+## Elawan Energy SL.                3.615    8.605    0.595
+## Naturgy Wind, S.L.               3.949   38.018    1.364
+## Parque Eolico Santa Catalina SL  4.053 -359.773    0.388
+## Biovent Energia SA               4.551   11.952    1.206
+## Corporacion Acciona Eolica SL    4.562   28.990    0.788
+## Acciona Eolica Del Levante SL    4.985   43.139    2.855
+## Holding De Negocios De GAS SL.   5.264   10.287    1.020
+## EDP Renovables España SLU        6.458   11.338    1.596
+## Esquilvent SL                    7.621   24.633    5.330
+## Eolica La Janda SL               8.586   52.261    1.184
+## Viesgo Renovables SL.               NA    3.200    0.272
+## 
+##                                   MARGEN SOLVENCIA  APALANCA
+## Guzman Energia SL                -19.193   -40.745  -343.542
+## Innogy Spain SA.                 -18.025    37.096   150.688
+## WPD Wind Investment SL.         -302.027    99.082     0.000
+## Parque Eolico La Boga SL.          1.001     9.646   921.591
+## Saeta Yield SA.                   16.258    83.489    17.067
+## Global Power Generation SA.       22.403    86.917     1.044
+## Naturgy Renovables SLU            20.442    16.274   494.729
+## Al-Andalus Wind Power SL          12.582     8.591  1019.616
+## Olivento SL                       16.629    15.304   534.761
+## Elawan Energy SL.                208.357    42.010   123.771
+## Naturgy Wind, S.L.                39.575    10.388   824.537
+## Parque Eolico Santa Catalina SL   31.780    -1.126 -6265.496
+## Biovent Energia SA                22.792    38.082   141.163
+## Corporacion Acciona Eolica SL     20.091    15.737   422.263
+## Acciona Eolica Del Levante SL     27.520    11.557   743.754
+## Holding De Negocios De GAS SL.    91.152    51.174    91.964
+## EDP Renovables España SLU         47.193    56.960    67.028
+## Esquilvent SL                     39.476    30.938   218.275
+## Eolica La Janda SL                38.256    16.428   480.122
+## Viesgo Renovables SL.             11.818    65.883    13.330</code></pre>
+<p>Obviamente, en este ejemplo concreto el resultado es el mismo que se obtuvo con <code>arrange(eolica_20, RENECO)</code>, puesto que no hay rentabilidades iguales entre las 20 empresas de la muestra.</p>
+</div>
+<div id="cambiando-el-nombre-de-las-variables-de-un-data-frame." class="section level3 hasAnchor" number="2.3.5">
+<h3><span class="header-section-number">2.3.5</span> Cambiando el nombre de las variables de un <em>data frame</em>.<a href="almacenando-y-manipulando-datos..html#cambiando-el-nombre-de-las-variables-de-un-data-frame." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><code>{dplyr}</code> cuenta con una función que cambia fácilmente el nombre de una variable o columna de un <em>data frame</em>: la función <code>rename()</code>. Por ejemplo, si queremos cambiar el nombre de la variable SOLVENCIA por SOLVE, simplemente ejecutaremos:</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="almacenando-y-manipulando-datos..html#cb91-1" tabindex="-1"></a><span class="co">#Renombrando variables</span></span>
+<span id="cb91-2"><a href="almacenando-y-manipulando-datos..html#cb91-2" tabindex="-1"></a>eolica_20 <span class="ot">&lt;-</span> <span class="fu">rename</span>(eolica_20, <span class="at">SOLVE =</span> SOLVENCIA)</span></code></pre></div>
+<p>Podemos comprobar en el <em>Environment</em>, despegando el objeto “eolica_20”, cómo ya no aparece la variable SOLVENCIA; pero sí SOLVE en su lugar (obviamente, con los mismos datos). Es necesario tener en cuenta que en el <strong>lado izquierdo</strong> de la igualdad hay que poner el <strong>nuevo nombre</strong>, y en la derecha el antiguo. Además, en el mismo <code>rename()</code> se pueden cambiar los nombres de <strong>varias variables</strong>, separando las igualdades correspondientes con comas.</p>
+</div>
+<div id="añadiendo-variables-como-transformación-de-otras-variables-en-un-data-frame." class="section level3 hasAnchor" number="2.3.6">
+<h3><span class="header-section-number">2.3.6</span> <strong>Añadiendo variables como transformación de otras variables en un <em>data frame</em>.</strong><a href="almacenando-y-manipulando-datos..html#añadiendo-variables-como-transformación-de-otras-variables-en-un-data-frame." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>El paquete <code>{dplyr}</code> también permite añadir a un <em>data frame</em> variables que son el resultado de <strong>someter a otras variables a diversas transformaciones</strong>. La función para realizar este cometido es <code>mutate()</code>.</p>
+<p>Así, por ejemplo, imaginemos que necesitamos calcular una variable como el cociente entre los resultados obtenidos y el activo. A esta nueva variable la denominaremos RATIO. El código será:</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="almacenando-y-manipulando-datos..html#cb92-1" tabindex="-1"></a><span class="co"># Añadiendo variables como transformacion de otras variables</span></span>
+<span id="cb92-2"><a href="almacenando-y-manipulando-datos..html#cb92-2" tabindex="-1"></a>eolica_20 <span class="ot">&lt;-</span> <span class="fu">mutate</span> (eolica_20, <span class="at">RATIO =</span> RES <span class="sc">/</span> ACTIVO)</span>
+<span id="cb92-3"><a href="almacenando-y-manipulando-datos..html#cb92-3" tabindex="-1"></a><span class="fu">summary</span>(eolica_20)</span></code></pre></div>
+<pre><code>##       RES             ACTIVO             FPIOS             RENECO       
+##  Min.   : -5662   Min.   :  109024   Min.   : -77533   Min.   :-2.8130  
+##  1st Qu.:  2865   1st Qu.:  187240   1st Qu.:  27615   1st Qu.: 0.8765  
+##  Median :  7388   Median :  271636   Median :  77740   Median : 3.6150  
+##  Mean   : 50754   Mean   : 1183599   Mean   : 563678   Mean   : 2.9399  
+##  3rd Qu.: 21206   3rd Qu.:  813816   3rd Qu.: 219345   3rd Qu.: 4.7735  
+##  Max.   :727548   Max.   :13492812   Max.   :6904824   Max.   : 8.5860  
+##  NA&#39;s   :1                                             NA&#39;s   :1        
+## 
+##      RENFIN            LIQUIDEZ          MARGEN            SOLVE       
+##  Min.   :-359.773   Min.   :0.0780   Min.   :-302.03   Min.   :-40.74  
+##  1st Qu.:   1.664   1st Qu.:0.7342   1st Qu.:  12.39   1st Qu.: 11.26  
+##  Median :  10.812   Median :1.2345   Median :  21.42   Median : 23.68  
+##  Mean   :  -3.450   Mean   :1.4200   Mean   :  16.40   Mean   : 32.68  
+##  3rd Qu.:  25.312   3rd Qu.:1.5615   3rd Qu.:  38.56   3rd Qu.: 52.62  
+##  Max.   :  52.261   Max.   :5.3300   Max.   : 208.36   Max.   : 99.08  
+## 
+##     APALANCA            RATIO          
+##  Min.   :-6265.50   Min.   :-0.029752  
+##  1st Qu.:   16.13   1st Qu.: 0.009852  
+##  Median :  145.93   Median : 0.021840  
+##  Mean   :  -17.17   Mean   : 0.022180  
+##  3rd Qu.:  504.74   3rd Qu.: 0.035305  
+##  Max.   : 1019.62   Max.   : 0.064395  
+##                     NA&#39;s   :1</code></pre>
+<p>En la transformación de variables mediante la función <code>mutate()</code>, se pueden utilizar <strong>funciones integradas en otros paquetes</strong> de R. Por ejemplo, si queremos calcular la variable ACTIVOS_ACUM como la variable que recoge los activos acumulados de las empresas, comenzando por la empresa con menor activo, podríamos utilizar la función <code>cumsum()</code> del paquete <code>{base}</code>, y hacer:</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="almacenando-y-manipulando-datos..html#cb94-1" tabindex="-1"></a>eolica_20 <span class="ot">&lt;-</span> <span class="fu">arrange</span>(eolica_20, ACTIVO)</span>
+<span id="cb94-2"><a href="almacenando-y-manipulando-datos..html#cb94-2" tabindex="-1"></a>eolica_20 <span class="ot">&lt;-</span> <span class="fu">mutate</span> (eolica_20, <span class="at">ACTIVOS_ACUM =</span> <span class="fu">cumsum</span>(ACTIVO))</span>
+<span id="cb94-3"><a href="almacenando-y-manipulando-datos..html#cb94-3" tabindex="-1"></a><span class="fu">select</span>(eolica_20, ACTIVO, ACTIVOS_ACUM)</span></code></pre></div>
+<pre><code>##                                     ACTIVO ACTIVOS_ACUM
+## WPD Wind Investment SL.           109023.8     109023.8
+## Parque Eolico Santa Catalina SL   147742.5     256766.3
+## Eolica La Janda SL                153429.4     410195.8
+## Esquilvent SL                     157630.6     567826.4
+## Biovent Energia SA                183899.0     751725.4
+## Acciona Eolica Del Levante SL     188354.0     940079.4
+## Guzman Energia SL                 190287.0    1130366.4
+## Innogy Spain SA.                  230338.5    1360704.9
+## Al-Andalus Wind Power SL          249853.8    1610558.7
+## Viesgo Renovables SL.             269730.0    1880288.7
+## Naturgy Wind, S.L.                273542.0    2153830.7
+## Parque Eolico La Boga SL.         303904.4    2457735.1
+## Olivento SL                       381207.0    2838942.0
+## Elawan Energy SL.                 443467.0    3282409.0
+## Saeta Yield SA.                   796886.4    4079295.4
+## Corporacion Acciona Eolica SL     864606.0    4943901.4
+## EDP Renovables España SLU        1275939.0    6219840.4
+## Naturgy Renovables SLU           1956869.0    8176709.4
+## Global Power Generation SA.      2002458.0   10179167.4
+## Holding De Negocios De GAS SL.  13492812.0   23671979.4</code></pre>
+<p>Podemos verificar cómo se ha integrado en el <em>data frame</em> la variable ACTIVOS_ACUM.</p>
+<p>Un último ejemplo de adición de una variable que es transformación de otras. En este caso, crearemos la variable TAM (tamaño), que es <strong>categórica</strong> (los datos son conjuntos de carcteres). Esta variable toma valor “G” para las empresas con un valor de la variable ACTIVO mayor que 1.000.000, y “P” para las que tengan un valor en la variable ACTIVO menor o igual a 1.000.000. Para calcular automáticamente esta nueva variable categórica, utilizaremos la función de <code>{base}</code> <code>cut()</code>. De este modo, haremos:</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="almacenando-y-manipulando-datos..html#cb96-1" tabindex="-1"></a>eolica_20 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(eolica_20, <span class="at">TAM =</span> <span class="fu">cut</span>(ACTIVO,</span>
+<span id="cb96-2"><a href="almacenando-y-manipulando-datos..html#cb96-2" tabindex="-1"></a>  <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">1000000</span>, <span class="cn">Inf</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;P&quot;</span>, <span class="st">&quot;G&quot;</span>)))</span>
+<span id="cb96-3"><a href="almacenando-y-manipulando-datos..html#cb96-3" tabindex="-1"></a><span class="fu">select</span>(eolica_20, ACTIVO, TAM)</span></code></pre></div>
+<pre><code>##                                     ACTIVO TAM
+## WPD Wind Investment SL.           109023.8   P
+## Parque Eolico Santa Catalina SL   147742.5   P
+## Eolica La Janda SL                153429.4   P
+## Esquilvent SL                     157630.6   P
+## Biovent Energia SA                183899.0   P
+## Acciona Eolica Del Levante SL     188354.0   P
+## Guzman Energia SL                 190287.0   P
+## Innogy Spain SA.                  230338.5   P
+## Al-Andalus Wind Power SL          249853.8   P
+## Viesgo Renovables SL.             269730.0   P
+## Naturgy Wind, S.L.                273542.0   P
+## Parque Eolico La Boga SL.         303904.4   P
+## Olivento SL                       381207.0   P
+## Elawan Energy SL.                 443467.0   P
+## Saeta Yield SA.                   796886.4   P
+## Corporacion Acciona Eolica SL     864606.0   P
+## EDP Renovables España SLU        1275939.0   G
+## Naturgy Renovables SLU           1956869.0   G
+## Global Power Generation SA.      2002458.0   G
+## Holding De Negocios De GAS SL.  13492812.0   G</code></pre>
+<p>Podemos advertir cómo la función <code>cut()</code>, que incluimos dentro de nuestra función de <code>{dplyr}</code> <code>mutate()</code>, tiene, a su vez, varios argumentos: la variable numérica de referencia (ACTIVO); el argumento <strong>“breaks”</strong>, en el que decimos los intervalos en que quedarán divididos los casos (uno, de menos infinito a 1.000.000; y otro de 1.000.000 a más infinito), y <strong>“labels”</strong>, que es el valor que tomará la variable creada (TAM) según el intervalo en el que se sitúe cada caso de la muestra.</p>
+<p>Cabe destacar que podíamos haber escrito el código para crear la variable TAM de un modo más elegante y cómodo, utilizando el operador <strong>“<em>pipe</em>”</strong> (<strong>%&gt;%</strong>). Este operador permite concatenar una serie de instrucciones:</p>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="almacenando-y-manipulando-datos..html#cb98-1" tabindex="-1"></a>eolica_20 <span class="ot">&lt;-</span> eolica_20 <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">TAM =</span> <span class="fu">cut</span>(ACTIVO,</span>
+<span id="cb98-2"><a href="almacenando-y-manipulando-datos..html#cb98-2" tabindex="-1"></a>  <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">1000000</span>, <span class="cn">Inf</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;P&quot;</span>, <span class="st">&quot;G&quot;</span>)))</span>
+<span id="cb98-3"><a href="almacenando-y-manipulando-datos..html#cb98-3" tabindex="-1"></a><span class="fu">select</span>(eolica_20, ACTIVO, TAM)</span></code></pre></div>
+<pre><code>##                                     ACTIVO TAM
+## WPD Wind Investment SL.           109023.8   P
+## Parque Eolico Santa Catalina SL   147742.5   P
+## Eolica La Janda SL                153429.4   P
+## Esquilvent SL                     157630.6   P
+## Biovent Energia SA                183899.0   P
+## Acciona Eolica Del Levante SL     188354.0   P
+## Guzman Energia SL                 190287.0   P
+## Innogy Spain SA.                  230338.5   P
+## Al-Andalus Wind Power SL          249853.8   P
+## Viesgo Renovables SL.             269730.0   P
+## Naturgy Wind, S.L.                273542.0   P
+## Parque Eolico La Boga SL.         303904.4   P
+## Olivento SL                       381207.0   P
+## Elawan Energy SL.                 443467.0   P
+## Saeta Yield SA.                   796886.4   P
+## Corporacion Acciona Eolica SL     864606.0   P
+## EDP Renovables España SLU        1275939.0   G
+## Naturgy Renovables SLU           1956869.0   G
+## Global Power Generation SA.      2002458.0   G
+## Holding De Negocios De GAS SL.  13492812.0   G</code></pre>
+<p>Podríamos interpretar la línea de código así: “asigna al <em>data frame</em>”eolica_20” sus propios datos, después (%&gt;%) crea la variable TAM con la función cut() y añádela a “eolica_20”.</p>
+</div>
+<div id="extrayendo-y-sintetizando-información-de-las-variables-de-un-data-frame." class="section level3 hasAnchor" number="2.3.7">
+<h3><span class="header-section-number">2.3.7</span> Extrayendo y sintetizando información de las variables de un <em>data frame</em>.<a href="almacenando-y-manipulando-datos..html#extrayendo-y-sintetizando-información-de-las-variables-de-un-data-frame." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Otra posibilidad que permite <code>{dplyr}</code> es extraer y sintetizar la información de las variables contenidas en un <em>data frame</em>. Para ello, nos ayudaremos de la función <code>summarise()</code>. Como ejemplo, calculemos la <em>rentabilidad financiera</em> media de las 20 empresas:</p>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="almacenando-y-manipulando-datos..html#cb100-1" tabindex="-1"></a><span class="co">#Extrayendo información de las variables de un data frame</span></span>
+<span id="cb100-2"><a href="almacenando-y-manipulando-datos..html#cb100-2" tabindex="-1"></a><span class="fu">summarise</span>(eolica_20, <span class="at">RENFIN_media =</span> <span class="fu">mean</span>(RENFIN)) </span></code></pre></div>
+<pre><code>##   RENFIN_media
+## 1     -3.45005</code></pre>
+<p>A veces, es de gran utilidad combinar <code>summarise()</code> con <code>group_by()</code>, que extrae la información por grupos definidos por una de las variables. Para ilustrarlo, vamos a utilizar la variable recién creada TAM, para hacer dos grupos de empresas: las de menor (“P”) y las de mayor (“G”) volumen de activo; tras lo cual calcularemos la media de las rentabilidades para cada grupo:</p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="almacenando-y-manipulando-datos..html#cb102-1" tabindex="-1"></a>eolica_20 <span class="sc">%&gt;%</span>  <span class="fu">group_by</span>(TAM) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">RENFIN_media =</span> <span class="fu">mean</span>(RENFIN))</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 2
+##   TAM   RENFIN_media
+##   &lt;fct&gt;        &lt;dbl&gt;
+## 1 P            -6.52
+## 2 G             8.82</code></pre>
+<p>Hemos utilizado el operador <em>pipe</em> (<strong>%&gt;%)</strong> para concatenar diferentes instrucciones de <code>{dplyr}</code>: primero agrupar casos, y luego calcular las medias de cada grupo. Es decir, en este caso se podría “traducir” la línea de código como: “Toma el <em>data frame</em>”eolica_9”, divide los casos en grupos según el valor de la variable TAM, y para cada grupo calcula la media de la variable RENFIN”.</p>
+</div>
+</div>
+<div id="exportando-datos." class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Exportando datos.<a href="almacenando-y-manipulando-datos..html#exportando-datos." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Antes de concluir el capítulo, vamos a tratar brevemente el aspecto de la exportación de datos.</p>
+<p>R cuenta con un <strong>formato propio de datos</strong>, que se traduce en archivos de extensión “RData”, y que puede incluir cualquier objeto de R. Como ejemplo, en el siguiente <em>script</em>, llamado “explora_exporta.R” (obtener aquí), vamos a importar los datos del archivo de Microsoft (R) Excel (R) “eolica_20.xlsx”, y el <em>data frame</em> donde almacenemos los datos vamos a exportarlo como el archivo de datos de R “eolica_20.RData”. Posteriormente, borraremos el <em>data frame</em> del <em>Environment</em> y recuperaremos los datos cargando ese archivo “eolica_20.RData”. Por supuesto, seguimos trabajando, como en todo el capítulo, en el proyecto “explora”.</p>
+<p>Tras abrir el <em>script</em> “explora_exporta.R”, las primeras líneas de código que veremos serán las que ya hemos estudiado para borrar el contenido del <em>Environment</em>, importar los datos de la hoja “Top 20” del archivo “eolica_20.xlsx” (situado en nuestra carpeta de proyecto), y tratar la variable “NOMBRE” para transformarla en el conjunto de nombres de las filas:</p>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="almacenando-y-manipulando-datos..html#cb104-1" tabindex="-1"></a><span class="co"># Exportando datos de empresas eolicas (disculpad la falta de tildes)</span></span>
+<span id="cb104-2"><a href="almacenando-y-manipulando-datos..html#cb104-2" tabindex="-1"></a></span>
+<span id="cb104-3"><a href="almacenando-y-manipulando-datos..html#cb104-3" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb104-4"><a href="almacenando-y-manipulando-datos..html#cb104-4" tabindex="-1"></a></span>
+<span id="cb104-5"><a href="almacenando-y-manipulando-datos..html#cb104-5" tabindex="-1"></a><span class="co"># DATOS</span></span>
+<span id="cb104-6"><a href="almacenando-y-manipulando-datos..html#cb104-6" tabindex="-1"></a></span>
+<span id="cb104-7"><a href="almacenando-y-manipulando-datos..html#cb104-7" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb104-8"><a href="almacenando-y-manipulando-datos..html#cb104-8" tabindex="-1"></a>eolica_20 <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;eolica_20.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;Top 20&quot;</span>)</span>
+<span id="cb104-9"><a href="almacenando-y-manipulando-datos..html#cb104-9" tabindex="-1"></a>eolica_20 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(eolica_20, <span class="at">row.names =</span> <span class="dv">1</span>)</span>
+<span id="cb104-10"><a href="almacenando-y-manipulando-datos..html#cb104-10" tabindex="-1"></a><span class="fu">summary</span>(eolica_20)</span></code></pre></div>
+<pre><code>##       RES             ACTIVO             FPIOS             RENECO       
+##  Min.   : -5662   Min.   :  109024   Min.   : -77533   Min.   :-2.8130  
+##  1st Qu.:  2865   1st Qu.:  187240   1st Qu.:  27615   1st Qu.: 0.8765  
+##  Median :  7388   Median :  271636   Median :  77740   Median : 3.6150  
+##  Mean   : 50754   Mean   : 1183599   Mean   : 563678   Mean   : 2.9399  
+##  3rd Qu.: 21206   3rd Qu.:  813816   3rd Qu.: 219345   3rd Qu.: 4.7735  
+##  Max.   :727548   Max.   :13492812   Max.   :6904824   Max.   : 8.5860  
+##  NA&#39;s   :1                                             NA&#39;s   :1        
+## 
+##      RENFIN            LIQUIDEZ          MARGEN          SOLVENCIA     
+##  Min.   :-359.773   Min.   :0.0780   Min.   :-302.03   Min.   :-40.74  
+##  1st Qu.:   1.664   1st Qu.:0.7342   1st Qu.:  12.39   1st Qu.: 11.26  
+##  Median :  10.812   Median :1.2345   Median :  21.42   Median : 23.68  
+##  Mean   :  -3.450   Mean   :1.4200   Mean   :  16.40   Mean   : 32.68  
+##  3rd Qu.:  25.312   3rd Qu.:1.5615   3rd Qu.:  38.56   3rd Qu.: 52.62  
+##  Max.   :  52.261   Max.   :5.3300   Max.   : 208.36   Max.   : 99.08  
+## 
+##     APALANCA           MATRIZ         
+##  Min.   :-6265.50   Length:20         
+##  1st Qu.:   16.13   Class :character  
+##  Median :  145.93   Mode  :character  
+##  Mean   :  -17.17                     
+##  3rd Qu.:  504.74                     
+##  Max.   : 1019.62</code></pre>
+<p>Posteriormente, se exportará el data frame “eolica_20” al archivo de formato R, “eolica_20.RData”, mediante la función <code>save</code>:</p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="almacenando-y-manipulando-datos..html#cb106-1" tabindex="-1"></a><span class="co"># Exportando data frame a formato R (.RData)</span></span>
+<span id="cb106-2"><a href="almacenando-y-manipulando-datos..html#cb106-2" tabindex="-1"></a></span>
+<span id="cb106-3"><a href="almacenando-y-manipulando-datos..html#cb106-3" tabindex="-1"></a><span class="fu">save</span>(eolica_20, <span class="at">file =</span> <span class="st">&quot;eolica_20.RData&quot;</span>)</span></code></pre></div>
+<p>Puede comprobarse cómo se ha generado el archivo correspondiente en la carpeta de proyecto. Para comprobar que la exportación es correcta, vamos a borrar del <em>Environment</em> el <em>data frame</em> “eolica_20”. Después, cargaremos el archivo “eolica_20.RData”. Como resultado, podremos comprobar que tenemos un nuevo <em>data frame</em> “eolica_20” que es exactamente igual al que teníamos al principio:</p>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="almacenando-y-manipulando-datos..html#cb107-1" tabindex="-1"></a><span class="co"># Borrando el data frame eolica_20</span></span>
+<span id="cb107-2"><a href="almacenando-y-manipulando-datos..html#cb107-2" tabindex="-1"></a></span>
+<span id="cb107-3"><a href="almacenando-y-manipulando-datos..html#cb107-3" tabindex="-1"></a><span class="fu">rm</span>(eolica_20)</span>
+<span id="cb107-4"><a href="almacenando-y-manipulando-datos..html#cb107-4" tabindex="-1"></a></span>
+<span id="cb107-5"><a href="almacenando-y-manipulando-datos..html#cb107-5" tabindex="-1"></a><span class="co"># Importando el archivo .RData con los mismos datos</span></span>
+<span id="cb107-6"><a href="almacenando-y-manipulando-datos..html#cb107-6" tabindex="-1"></a></span>
+<span id="cb107-7"><a href="almacenando-y-manipulando-datos..html#cb107-7" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;eolica_20.RData&quot;</span>)</span>
+<span id="cb107-8"><a href="almacenando-y-manipulando-datos..html#cb107-8" tabindex="-1"></a><span class="fu">summary</span> (eolica_20)</span></code></pre></div>
+<pre><code>##       RES             ACTIVO             FPIOS             RENECO       
+##  Min.   : -5662   Min.   :  109024   Min.   : -77533   Min.   :-2.8130  
+##  1st Qu.:  2865   1st Qu.:  187240   1st Qu.:  27615   1st Qu.: 0.8765  
+##  Median :  7388   Median :  271636   Median :  77740   Median : 3.6150  
+##  Mean   : 50754   Mean   : 1183599   Mean   : 563678   Mean   : 2.9399  
+##  3rd Qu.: 21206   3rd Qu.:  813816   3rd Qu.: 219345   3rd Qu.: 4.7735  
+##  Max.   :727548   Max.   :13492812   Max.   :6904824   Max.   : 8.5860  
+##  NA&#39;s   :1                                             NA&#39;s   :1        
+## 
+##      RENFIN            LIQUIDEZ          MARGEN          SOLVENCIA     
+##  Min.   :-359.773   Min.   :0.0780   Min.   :-302.03   Min.   :-40.74  
+##  1st Qu.:   1.664   1st Qu.:0.7342   1st Qu.:  12.39   1st Qu.: 11.26  
+##  Median :  10.812   Median :1.2345   Median :  21.42   Median : 23.68  
+##  Mean   :  -3.450   Mean   :1.4200   Mean   :  16.40   Mean   : 32.68  
+##  3rd Qu.:  25.312   3rd Qu.:1.5615   3rd Qu.:  38.56   3rd Qu.: 52.62  
+##  Max.   :  52.261   Max.   :5.3300   Max.   : 208.36   Max.   : 99.08  
+## 
+##     APALANCA           MATRIZ         
+##  Min.   :-6265.50   Length:20         
+##  1st Qu.:   16.13   Class :character  
+##  Median :  145.93   Mode  :character  
+##  Mean   :  -17.17                     
+##  3rd Qu.:  504.74                     
+##  Max.   : 1019.62</code></pre>
+<p>Por supuesto, hay más formatos en los que se pueden exportar datos desde R. Por ejemplo, <strong>a un archivo de Microsoft (R) Excel (R)</strong>. Un modo de hacerlo es haciendo uso de la función <code>write_xlsx()</code> del paquete {writexl}. Para que en la hoja de cálculo resultante se incluyan los nombres de las filas (empresas eólicas), hemos tenido previamente que crear un vector con el nombre de estas (vector “NOMBRE”), mediante la función <code>row.names()</code>, y unir ese vector al <em>data frame</em> “eolica_20”, a modo de primera columna, creando un nuevo finalmente un <em>data frame</em> llamado “eolica_20n”, para lo que se ha utilizado la función <code>cbind()</code>, que permite <strong>pegar columnas de datos</strong> que tengan un mismo número de filas.</p>
+<p>Como resultado de todo el código, se ha obtenido el archivo de Microsoft (R) Excel (R) “eolica_20_new.xlsx”:</p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="almacenando-y-manipulando-datos..html#cb109-1" tabindex="-1"></a><span class="co"># Exportando el data frame eolica_20 a Microsoft Excel</span></span>
+<span id="cb109-2"><a href="almacenando-y-manipulando-datos..html#cb109-2" tabindex="-1"></a></span>
+<span id="cb109-3"><a href="almacenando-y-manipulando-datos..html#cb109-3" tabindex="-1"></a><span class="fu">library</span>(writexl)</span>
+<span id="cb109-4"><a href="almacenando-y-manipulando-datos..html#cb109-4" tabindex="-1"></a>NOMBRE <span class="ot">&lt;-</span> <span class="fu">row.names</span>(eolica_20)</span>
+<span id="cb109-5"><a href="almacenando-y-manipulando-datos..html#cb109-5" tabindex="-1"></a>eolica_20n <span class="ot">&lt;-</span> <span class="fu">cbind</span>(NOMBRE, eolica_20)</span>
+<span id="cb109-6"><a href="almacenando-y-manipulando-datos..html#cb109-6" tabindex="-1"></a><span class="fu">write_xlsx</span>(eolica_20n, <span class="at">path =</span> <span class="st">&quot;eolica_20_new.xlsx&quot;</span>)</span>
+<span id="cb109-7"><a href="almacenando-y-manipulando-datos..html#cb109-7" tabindex="-1"></a></span>
+<span id="cb109-8"><a href="almacenando-y-manipulando-datos..html#cb109-8" tabindex="-1"></a><span class="co">#Fin del script</span></span></code></pre></div>
+</div>
+<div id="materiales-para-realizar-las-prácticas-del-capítulo." class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> Materiales para realizar las prácticas del capítulo.<a href="almacenando-y-manipulando-datos..html#materiales-para-realizar-las-prácticas-del-capítulo." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En esta sección se muestran los links de acceso a los diferentes materiales (<em>scripts</em>, datos…) necesarios para llevar a cabo los contenidos prácticos del capítulo.</p>
+<p><strong>Datos (en formato Microsoft (R) Excel (R)):</strong></p>
+<ul>
+<li>eolica_20.xlsx (<a href="https://docs.google.com/spreadsheets/d/1YDFCd0Z7udeIi6WdNYwthYHGmJSrEfG1/edit?usp=drive_link&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">obtener aquí</a>)</li>
+</ul>
+<p><strong>Scripts:</strong></p>
+<ul>
+<li><p>explora_eolica.R (<a href="https://drive.google.com/file/d/1_rt1TtlYGU0VWtnvkWLpxM_MDGOrSFYZ/view?usp=drive_link">obtener aquí</a>)</p></li>
+<li><p>explora_dplyr.R (<a href="https://drive.google.com/file/d/1Is4XOd6EmFswB6w2eZfC8_pp2mtu7aQK/view?usp=drive_link">obtener aquí</a>)</p></li>
+<li><p>explora_exporta.R (<a href="https://drive.google.com/file/d/1NVkpJ6toD3pWJsE0w628Sf4e_c5dcffR/view?usp=sharing">obtener aquí</a>)</p></li>
+</ul>
+
+</div>
+</div>
+<h3>Bibliografía<a href="bibliografía.html#bibliografía" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-Wickham2017R" class="csl-entry">
+Wickham, Hadley, and Garrett Grolemund. 2017. <em>R for Data Science: Import, Tidy, Transform, Visualize, and Model Data</em>. 1st ed. Paperback; O’Reilly Media. <a href="http://r4ds.had.co.nz/">http://r4ds.had.co.nz/</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introducción..html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="gráficos..html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection",
+"toc_deph": 3
+},
+"table": {
+"number": false
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

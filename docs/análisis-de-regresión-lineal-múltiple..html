@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>9 Análisis de Regresión Lineal Múltiple. | Técnicas de Análisis de Datos Económicos con R</title>
+<meta name="author" content="">
+<meta name="description" content="9.1 Introducción. El análisis de regresión (lineal) múltiple es una de las técnicas de análisis de dependencias más profusamente utilizadas. En el modelo de regresión múltiple la variable...">
+<meta name="generator" content="bookdown 0.42 with bs4_book()">
+<meta property="og:title" content="9 Análisis de Regresión Lineal Múltiple. | Técnicas de Análisis de Datos Económicos con R">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://bookdown.org/teckel71/book/análisis-de-regresión-lineal-múltiple..html">
+<meta property="og:image" content="https://bookdown.org/teckel71/book/figuras/Portada_v2.PNG">
+<meta property="og:description" content="9.1 Introducción. El análisis de regresión (lineal) múltiple es una de las técnicas de análisis de dependencias más profusamente utilizadas. En el modelo de regresión múltiple la variable...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="9 Análisis de Regresión Lineal Múltiple. | Técnicas de Análisis de Datos Económicos con R">
+<meta name="twitter:description" content="9.1 Introducción. El análisis de regresión (lineal) múltiple es una de las técnicas de análisis de dependencias más profusamente utilizadas. En el modelo de regresión múltiple la variable...">
+<meta name="twitter:image" content="https://bookdown.org/teckel71/book/figuras/Portada_v2.PNG">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+          margin-bottom: 0em;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Técnicas de Análisis de Datos Económicos con R</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html"></a></li>
+<li><a class="" href="prefacio.html">Prefacio</a></li>
+<li><a class="" href="introducci%C3%B3n..html"><span class="header-section-number">1</span> Introducción.</a></li>
+<li><a class="" href="almacenando-y-manipulando-datos..html"><span class="header-section-number">2</span> Almacenando y manipulando datos.</a></li>
+<li><a class="" href="gr%C3%A1ficos..html"><span class="header-section-number">3</span> Gráficos.</a></li>
+<li><a class="" href="estad%C3%ADstica-descriptiva..html"><span class="header-section-number">4</span> Estadística descriptiva.</a></li>
+<li><a class="" href="an%C3%A1lisis-previo-de-datos..html"><span class="header-section-number">5</span> Análisis previo de datos.</a></li>
+<li><a class="" href="componentes-principales..html"><span class="header-section-number">6</span> Componentes principales.</a></li>
+<li><a class="" href="an%C3%A1lisis-cl%C3%BAster..html"><span class="header-section-number">7</span> Análisis Clúster.</a></li>
+<li><a class="" href="an%C3%A1lisis-de-la-varianza..html"><span class="header-section-number">8</span> Análisis de la varianza.</a></li>
+<li><a class="active" href="an%C3%A1lisis-de-regresi%C3%B3n-lineal-m%C3%BAltiple..html"><span class="header-section-number">9</span> Análisis de Regresión Lineal Múltiple.</a></li>
+<li><a class="" href="an%C3%A1lisis-de-datos-cualitativos..html"><span class="header-section-number">10</span> Análisis de Datos Cualitativos.</a></li>
+<li><a class="" href="bibliograf%C3%ADa.html">Bibliografía</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="análisis-de-regresión-lineal-múltiple." class="section level1" number="9">
+<h1>
+<span class="header-section-number">9</span> Análisis de Regresión Lineal Múltiple.<a class="anchor" aria-label="anchor" href="#an%C3%A1lisis-de-regresi%C3%B3n-lineal-m%C3%BAltiple."><i class="fas fa-link"></i></a>
+</h1>
+<div id="introducción.-5" class="section level2" number="9.1">
+<h2>
+<span class="header-section-number">9.1</span> Introducción.<a class="anchor" aria-label="anchor" href="#introducci%C3%B3n.-5"><i class="fas fa-link"></i></a>
+</h2>
+<p>El análisis de regresión (lineal) múltiple es una de las técnicas de análisis de dependencias más profusamente utilizadas. En el modelo de regresión múltiple la variable dependiente tiene escala métrica. Las variables explicativas pueden ser métricas o ser atributos.</p>
+<p>Según los datos de los que se alimenta el modelo, se aplicarán diferentes métodos de estimación, especificaciones y pruebas:</p>
+<ul>
+<li><p>Series temporales.</p></li>
+<li><p>Datos de corte transversal.</p></li>
+<li><p>Paneles de datos.</p></li>
+</ul>
+<p>En este capítulo nos centraremos en los modelos estimados con base en datos de corte transversal (es decir, las variables tienen datos referentes a distintos casos o individuos: personas, empresas, países, etc.)</p>
+<p>La construcción de un modelo de regresión cuenta con una serie de <strong>etapas</strong>, que son:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Especificación del modelo:</strong> establecer las variables que entrarán a formar parte del modelo (dependiente, explicativas).</p></li>
+<li><p><strong>Estimación:</strong> calcular el valor de los parámetros o coeficientes estructurales del modelo.</p></li>
+<li><p><strong>Contraste y validación:</strong> verificar si el modelo estimado cumple con las hipótesis que garantizan unas buenas propiedades y si es adecuado para representar la realidad.</p></li>
+<li><p><strong>Utilización del modelo:</strong> a efectos de previsión, análisis estructural o simulación de escenarios.</p></li>
+</ol>
+<p>Vamos a partir del modelo básico de regresión (MBR). Es cierto que, para superar ciertas carencias de este, se ha procedido a desarrollar especificaciones y métodos de estimación más elaborados; pero no es menos cierto que no es conveniente “quemar” etapas sin conocer las características del modelo fundamental, como cimiento donde se posan modelados más complejos.</p>
+<p>En el MBR vamos a suponer que existen:</p>
+<ul>
+<li><p>Una variable dependiente <em>y</em>.</p></li>
+<li><p>k variables explicativas <span class="math inline">\(x_j\)</span>.</p></li>
+<li><p>Variable o <strong><em>perturbación aleatoria</em></strong> u, que recoge el efecto conjunto de todas aquellas variables que afectan al comportamiento de <em>y</em> pero que no están explicitadas en la especificación como variables <em>x</em>.</p></li>
+<li><p>El tamaño de la muestra es <em>n</em>.</p></li>
+</ul>
+<p>El modelo que se plantea es:</p>
+<p><span class="math display">\[
+y_i=\beta_1x_{i1}+\beta_2x_{i2}+\cdots+\beta_kx_{ik}+u_i
+\]</span></p>
+<p>con <span class="math inline">\(i=1,2,...,n\)</span> .</p>
+<p>O, en notación matricial:</p>
+<p><span class="math display">\[
+y=X\beta+u
+\]</span></p>
+<p>Donde <em>y</em> es un vector (nx1), <em>X</em> una matriz (nxk), <span class="math inline">\(\beta\)</span> un vector (kx1), y <em>u</em> un vestor (nx1).</p>
+<p>En el MBR, la perturbación aleatoria <em>u</em> debe cumplir con una serie de <strong>hipótesis básicas</strong>: normalidad en su comportamiento, esperanza nula, homoscedasticidad o varianza constante, y ausencia de autocorrelación (covarianza nula entre diferentes elementos del vector de la perturbación). Estas hipótesis, junto a las de permanencia estructural (valores de los elementos de <span class="math inline">\(\beta\)</span> constantes a lo largo de la muestra), no endogeneidad o regresores no-estocásticos (covarianza nula entre la matriz <em>X</em> y el vector <em>u</em>), y rango pleno (las columnas de la matriz X o variables explicativas no han de ser combinaciones lineales unas de otras); permiten que el MBR pueda ser estimado por el método de mínimos cuadrados ordinarios (MCO), obteniendo estimadores con las mejores propiedades: <strong>insesgadez, eficiencia, consistencia</strong>.</p>
+<p>En la medida en que alguna o algunas de las hipótesis básicas no se cumplan, la calidad de los estimadores MCO perderan calidad, en el sentido de no gozar de las propiedades deseables, desde un punto de vista inferencial. En tal caso, podrán aplicarse otros métodos de estimación, diversos métodos econométricos, o asumir que los estimadores carecen de algunas de las propiedades deseables.</p>
+<p>El modelo estimado será:</p>
+<p><span class="math display">\[
+\hat{y}_i=\hat{\beta}_1x_{i1}+\hat{\beta}_2x_{i2}+\cdots+\hat{\beta}_kx_{ik}
+\]</span></p>
+<p>Y el <strong>error o residuo</strong> será, para cada observación, <span class="math inline">\(\hat{u}_i=y_i-\hat{y}_i\)</span>. El vector de residuos se considera una estimación del vector de perturbaciones aleatorias. Es por ello que el vector de residuos se utiliza para verificar el cumplimiento de las hipótesis del modelo básico referentes al comportamiento de la perturbación (normalidad, homoscedasticidad, ausencia de autocorrelación…)</p>
+<p>Tras estas breves notas formales del MBR, pasaremos a construir un modelo que intentará explicar el comportamiento de la rentabilidad económica de un grupo de empresas en función de una serie de variables aleatorias.</p>
+</div>
+<div id="especificación-del-mbr.-datos-de-corte-transversal." class="section level2" number="9.2">
+<h2>
+<span class="header-section-number">9.2</span> Especificación del MBR. Datos de corte transversal.<a class="anchor" aria-label="anchor" href="#especificaci%C3%B3n-del-mbr.-datos-de-corte-transversal."><i class="fas fa-link"></i></a>
+</h2>
+<p>Vamos a explicar, mediante un modelo de regresión múltiple, el comportamiento de la rentabilidad económica (RENECO) de las empresas de producción eléctrica mediante tecnología eólica en función del resultado del ejercicio (RES), el activo (ACTIVO), del grado de endeudamiento (ENDEUDA), del grado de apalancamiento (APALANCA), y del tamaño del grupo corporativo (matriz) al que pertenece (DIMENSION). Para ello se ha seleccionado una muestra constituida por 50 empresas.</p>
+<p>Supondremos que trabajamos en un proyecto de RStudio de nombre, por ejemplo, “regresion”. Los datos de las empresas se encuentran en la hoja “Datos” del archivo de Microsoft® Excel® “<a href="https://docs.google.com/spreadsheets/d/1oq17lI4trI8k5oeDgj_fYg9WhbRIqDLG/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">eolica_50.xlsx</a>”. El script con el código que vamos a ir ejecutando se llama “<a href="https://drive.google.com/file/d/1ilNEAA3-Co9kbs5Gv4arwCBCcCnbn0zY/view?usp=sharing">regresion_eolica.R</a>”.</p>
+<p>En primer lugar, como de costumbre, hemos de preparar los datos: importarlos en R y gestionar <em>missing values</em> y <em>outliers</em>.</p>
+<p>Así, una vez abierto el <em>script</em> en el editor de RStudio , comprobaremos que la primera parte del código está dedicada a la limpieza de la memoria (<em>Environment</em>) y a la importación de los datos. Para ello, activaremos el paquete <a href="https://readxl.tidyverse.org">readxl</a> y utilizaremos la función <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code>, indicando en los argumentos el archivo a explorar, y la <em>hoja</em> en la cual se encuentran los datos (hoja “Datos”). También hemos de prestar atención a la cuestión de si existen en la hoja de <em>Excel</em> anotaciones en las celdas donde no haya dato, para completar adecuadamente el argumento <code>na=</code> . Los datos se almacenarán en el <em>data frame</em> “datos”. En este <em>data frame</em>, la primera columna no es una verdadera variable, sino que se compone de los nombres de los casos o empresas. Con una línea de código adicional transformaremos esa primera columna en el <em>nombre de las filas</em>, de modo que tal columna abandona su <em>rol</em> de variable. En definitiva, el código para importar los datos es:</p>
+<div class="sourceCode" id="cb316"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Regresion multiple empresas eolicas. Disculpen la falta de tildes.</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># DATOS</span></span>
+<span></span>
+<span>  <span class="co"># Importando</span></span>
+<span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
+<span>    <span class="va">eolicos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"eolica_50.xlsx"</span>, sheet <span class="op">=</span> <span class="st">"Datos"</span>,</span>
+<span>                          na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"n.d."</span>, <span class="st">"s.d."</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">eolicos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">eolicos</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span> <span class="op">(</span><span class="va">eolicos</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##       RES              ACTIVO            FPIOS        
+##  Min.   :-5268.6   Min.   :  25355   Min.   : -10985  
+##  1st Qu.:  919.6   1st Qu.:  35512   1st Qu.:   1897  
+##  Median : 2321.2   Median :  50301   Median :  17256  
+##  Mean   : 4986.7   Mean   : 189142   Mean   :  83164  
+##  3rd Qu.: 4380.4   3rd Qu.: 101035   3rd Qu.:  44871  
+##  Max.   :42737.0   Max.   :2002458   Max.   :1740487  
+##                    NA's   :1                          
+## 
+##      RENECO           RENFIN            LIQUIDEZ       
+##  Min.   :-2.708   Min.   :-263.639   Min.   :  0.0140  
+##  1st Qu.: 1.817   1st Qu.:   1.251   1st Qu.:  0.6462  
+##  Median : 3.957   Median :  14.322   Median :  1.1550  
+##  Mean   : 5.758   Mean   :  32.071   Mean   :  4.2370  
+##  3rd Qu.: 8.038   3rd Qu.:  36.193   3rd Qu.:  1.9185  
+##  Max.   :35.262   Max.   : 588.190   Max.   :128.4330  
+##  NA's   :2                                             
+## 
+##     ENDEUDA            MARGEN           SOLVENCIA      
+##  Min.   :  0.917   Min.   :-2248.16   Min.   :-24.465  
+##  1st Qu.: 37.272   1st Qu.:   14.74   1st Qu.:  4.327  
+##  Median : 74.683   Median :   23.86   Median : 25.317  
+##  Mean   : 66.646   Mean   :  -17.77   Mean   : 33.353  
+##  3rd Qu.: 95.672   3rd Qu.:   45.88   3rd Qu.: 62.727  
+##  Max.   :124.465   Max.   :  400.90   Max.   : 99.082  
+## 
+##     APALANCA            MATRIZ           DIMENSION        
+##  Min.   :-6905.772   Length:50          Length:50         
+##  1st Qu.:    7.586   Class :character   Class :character  
+##  Median :  126.208   Mode  :character   Mode  :character  
+##  Mean   :  784.430                                        
+##  3rd Qu.:  763.952                                        
+##  Max.   :12244.351</code></pre>
+<p>Posteriormente, seleccionaremos las variables que vamos a utilizar en el análisis, almacenándolas en otro data frame de nombre, por ejemplo, “originales”:</p>
+<div class="sourceCode" id="cb318"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Seleccionando variables clasificadoras para el analisis</span></span>
+<span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span>    <span class="va">originales</span><span class="op">&lt;-</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">eolicos</span>,</span>
+<span>                       <span class="va">RENECO</span>,</span>
+<span>                       <span class="va">RES</span>,</span>
+<span>                       <span class="va">ACTIVO</span>,</span>
+<span>                       <span class="va">ENDEUDA</span>,</span>
+<span>                       <span class="va">APALANCA</span>,</span>
+<span>                       <span class="va">DIMENSION</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span> <span class="op">(</span><span class="va">originales</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##      RENECO            RES              ACTIVO       
+##  Min.   :-2.708   Min.   :-5268.6   Min.   :  25355  
+##  1st Qu.: 1.817   1st Qu.:  919.6   1st Qu.:  35512  
+##  Median : 3.957   Median : 2321.2   Median :  50301  
+##  Mean   : 5.758   Mean   : 4986.7   Mean   : 189142  
+##  3rd Qu.: 8.038   3rd Qu.: 4380.4   3rd Qu.: 101035  
+##  Max.   :35.262   Max.   :42737.0   Max.   :2002458  
+##  NA's   :2                          NA's   :1        
+## 
+##     ENDEUDA           APALANCA          DIMENSION        
+##  Min.   :  0.917   Min.   :-6905.772   Length:50         
+##  1st Qu.: 37.272   1st Qu.:    7.586   Class :character  
+##  Median : 74.683   Median :  126.208   Mode  :character  
+##  Mean   : 66.646   Mean   :  784.430                     
+##  3rd Qu.: 95.672   3rd Qu.:  763.952                     
+##  Max.   :124.465   Max.   :12244.351</code></pre>
+<p>Para localizar los casos concretos de <strong><em>missing values</em></strong>, puede recurrirse a utilizar las herramientas de manejo de <em>data frames</em> del paquete <a href="https://dplyr.tidyverse.org">dplyr</a>. Con la función <code>vismiss()</code> del paquete <a href="https://docs.ropensci.org/visdat/">visdat</a> podemos tener una visión gráfica general de los valores faltantes. Si hay casos faltantes en una de las variables, los identificaremos filtrando el <em>data frame</em> con la función <code><a href="https://rdrr.io/r/stats/filter.html">filter()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>. Ante la existencia de <em>missing values</em>, se puede actuar de varios modos. Por ejemplo, <strong>se puede intentar obtener por otro canal de información el conjunto de valores</strong> de las variables que no están disponibles, <strong>o recurrir a alguna estimación</strong> para los mismos y asignarlos. En caso de que esto sea difícil, se puede optar, simplemente, por <strong>eliminar</strong> estos casos, en especial cuando representan un porcentaje muy reducido respecto al total de casos. En nuestro ejemplo, vamos a suponer que hemos optado por esta última vía. Así, estos casos, finalmente, será exluidos del análisis, utilizando para ello un nuevo filtro:</p>
+<div class="sourceCode" id="cb320"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Identificando missing values.</span></span>
+<span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/visdat/">visdat</a></span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss</a></span><span class="op">(</span><span class="va">originales</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-274-1.png" width="672"></div>
+<div class="sourceCode" id="cb321"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="va">originales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">RES</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">ACTIVO</span><span class="op">)</span> <span class="op">|</span></span>
+<span>             <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">ENDEUDA</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">APALANCA</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">DIMENSION</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">RENECO</span>, <span class="va">RES</span>, <span class="va">ACTIVO</span>, <span class="va">ENDEUDA</span>, <span class="va">APALANCA</span>, <span class="va">DIMENSION</span><span class="op">)</span>  </span></code></pre></div>
+<pre><code>##                              RENECO       RES ACTIVO ENDEUDA  APALANCA DIMENSION
+## La Caldera Energia Burgos SL  2.643   511.304     NA 110.636 -1019.288    GRANDE
+## Sargon Energias SLU              NA -2216.000  85745 112.811  -879.289     MEDIA
+## Viesgo Renovables SL.            NA  4609.000 269730  34.116    13.330     MEDIA</code></pre>
+<div class="sourceCode" id="cb323"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="va">originales</span> <span class="op">&lt;-</span> <span class="va">originales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">RES</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">ACTIVO</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span>             <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">ENDEUDA</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">APALANCA</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">DIMENSION</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Tras el código anterior, se han eliminado del <em>data frame</em> “originales” las empresas “Sargon Energías S. L. U.” y “Viesgo Renovables S. L.”, debido a que carecían de dato de rentabilidad económica (RENECO), y “La Caldera Energía Burgos, S. L.”, al no tener dato sobre el valor de sus activos (ACTIVO).</p>
+<p>Una vez tratados los casos con valores perdidos o <em>missing values</em>, <strong>es necesario detectar la presencia de <em>outliers</em></strong> o casos atípicos en la muestra, que pudieran desvirtuar los resultados del análisis de regresión. Para realizar esta etapa, y dado que en nuestro análisis contamos con 5 variables, primero “resumiremos” el valor que toman dichas variables para cada caso, mediante el cálculo de la <em>distancia de Mahalanobis</em>. De hecho, las distancias de los diferentes casos se almacenarán en una nueva variable, a la que llamaremos MAHALANOBIS, que se incorporará al <em>data frame</em> “originales” por medio de la función <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>, y la función <code><a href="https://rdrr.io/r/stats/mahalanobis.html">mahalanobis()</a></code>. Recordemos que, en los diferentes argumentos de esta función, el punto “.” hace referencia al <em>data frame</em> que está delante del operador pipe (%&gt;%). Posteriormente, construiremos el diagrama de caja de MAHALANOBIS para verificar la existencia de <em>outliers</em> (puntos), e identificaremoslos casos correspondientes con el filtro adecuado. Obtaremos por crear un nuevo <em>data frame</em>, “originales_so”, aplicando un nuevo filtro que elimine esos casos localizados como <em>outliers</em>:</p>
+<div class="sourceCode" id="cb324"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Identificando outliers.</span></span>
+<span></span>
+<span>    <span class="va">originales</span> <span class="op">&lt;-</span> <span class="va">originales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>MAHALANOBIS <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/mahalanobis.html">mahalanobis</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">.</span>,</span>
+<span>                                          <span class="va">RENECO</span>,</span>
+<span>                                          <span class="va">RES</span>,</span>
+<span>                                          <span class="va">ACTIVO</span>,</span>
+<span>                                          <span class="va">ENDEUDA</span>,</span>
+<span>                                          <span class="va">APALANCA</span><span class="op">)</span>,</span>
+<span>                                        center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">.</span>,</span>
+<span>                                                            <span class="va">RENECO</span>,</span>
+<span>                                                            <span class="va">RES</span>,</span>
+<span>                                                            <span class="va">ACTIVO</span>,</span>
+<span>                                                            <span class="va">ENDEUDA</span>,</span>
+<span>                                                            <span class="va">APALANCA</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                                        cov<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">.</span>,</span>
+<span>                                                  <span class="va">RENECO</span>,</span>
+<span>                                                  <span class="va">RES</span>,</span>
+<span>                                                  <span class="va">ACTIVO</span>,</span>
+<span>                                                  <span class="va">ENDEUDA</span>,</span>
+<span>                                                  <span class="va">APALANCA</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">originales</span>, map <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">MAHALANOBIS</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"DISTANCIA DE MAHALANOBIS"</span>, subtitle <span class="op">=</span> <span class="st">"Empresas eólicas"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"MAHALANOBIS"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-275-1.png" width="672"></div>
+<div class="sourceCode" id="cb325"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="va">Q1M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">originales</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">Q3M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">originales</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.75</span><span class="op">)</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="va">originales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span> <span class="op">&gt;</span> <span class="va">Q3M</span> <span class="op">+</span> <span class="fl">1.5</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html">IQR</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span><span class="op">)</span> <span class="op">|</span></span>
+<span>                      <span class="va">MAHALANOBIS</span> <span class="op">&lt;</span> <span class="va">Q1M</span> <span class="op">-</span> <span class="fl">1.5</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html">IQR</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##                                       MAHALANOBIS
+## Corporacion Acciona Eolica SL            13.67263
+## Parque Eolico Sierra De Las Carbas SL    13.34797
+## Naturgy Renovables SLU                   19.45720
+## Global Power Generation SA.              19.88409
+## Saeta Yield SA.                          20.40512
+## Molinos Del Ebro SA                      21.73955
+## Elecdey Lezuza SA                        18.97057</code></pre>
+<div class="sourceCode" id="cb327"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="va">originales_so</span> <span class="op">&lt;-</span> <span class="va">originales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span> <span class="op">&lt;=</span> <span class="va">Q3M</span> <span class="op">+</span> <span class="fl">1.5</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html">IQR</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span>                            <span class="va">MAHALANOBIS</span> <span class="op">&gt;=</span> <span class="va">Q1M</span> <span class="op">-</span> <span class="fl">1.5</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html">IQR</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span><span class="op">)</span><span class="op">)</span> </span>
+<span>    <span class="va">originales</span> <span class="op">&lt;-</span> <span class="va">originales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">MAHALANOBIS</span><span class="op">)</span></span>
+<span>    <span class="va">originales_so</span> <span class="op">&lt;-</span> <span class="va">originales_so</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">MAHALANOBIS</span><span class="op">)</span></span></code></pre></div>
+<p>Se han localizado 7 empresas con valores de la <em>distancia de Mahalanobis</em> atípicos, lo que hace pensar que, a su vez, estas empresas registran valores atípicos en una o varias de las variables originales. Como ya hemos señalado, eliminamos estos 7 casos de la muestra. Así, el <em>data frame</em> “originales_so”, que es el que emplearemos para estimar el modelo, cuenta con 40 observaciones.</p>
+<p>Una de las variables explicativas es un atributo o factor, llamado DIMENSION, que cuenta con 3 niveles: “GRANDE”, “MEDIANA” y “PEQUEÑA”, según el número de empresas integradas en la matriz a la que pertenece cada empresa de la muestra. Hemos de informar a R de la condición de atributo o factor de esta variable (pues de momento solo la contempla como una variable cualitativa o alfanumérica). Para ello ejecutaremos el código:</p>
+<div class="sourceCode" id="cb328"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Convertir variable DIMENSION en Factor.</span></span>
+<span></span>
+<span>    <span class="va">originales_so</span><span class="op">$</span><span class="va">DIMENSION</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">originales_so</span><span class="op">$</span><span class="va">DIMENSION</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">originales_so</span><span class="op">$</span><span class="va">DIMENSION</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] "GRANDE"  "MEDIA"   "PEQUEÑA"</code></pre>
+<p>Una vez preparadas todas las variables, es el momento de <strong>especificar y estimar una regresión múltiple inicial</strong>, que contenga todas las variables explicativas candidatas a formar parte de la versión final.</p>
+<p>Para especificar y estimar este modelo inicial, deben de cargarse previamente algunos paquetes que es necesario utilizar: <a href="https://yihui.org/knitr/">knitr</a> y <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a> para construir tablas con los resultados de la regresión, y <a href="https://broom.tidymodels.org/">broom</a>. Este último paquete es fundamental, ya que permite disponer de un modo cómodo de todos los elementos de los que se compone un modelo estimado (no solo lineal, como es nuestro caso).</p>
+<p>Por otro lado, El MBR lineal, estimado mediante el método de mínimos cuadrados ordinarios (MCO), se obtendrá mediante la función <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>. Los resultados los guardaremos en un objeto de nombre, por ejemplo, “ecua0”. Luego, se realizará un <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> para ver dicha estimación.</p>
+<div class="sourceCode" id="cb330"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ESPECIFICACION Y ESTIMACION</span></span>
+<span></span>
+<span>  <span class="co"># Cargar las librerías necesarias</span></span>
+<span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://broom.tidymodels.org/">broom</a></span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://r-forge.r-project.org/projects/car/">car</a></span><span class="op">)</span> <span class="co"># para obtener el vif</span></span>
+<span></span>
+<span>  <span class="co"># Especificar el modelo de regresión lineal</span></span>
+<span>    <span class="va">ecua0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">originales_so</span>,</span>
+<span>                <span class="va">RENECO</span> <span class="op">~</span> <span class="va">RES</span> <span class="op">+</span> <span class="va">ACTIVO</span> <span class="op">+</span> <span class="va">ENDEUDA</span> <span class="op">+</span> <span class="va">APALANCA</span> <span class="op">+</span> <span class="va">DIMENSION</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">ecua0</span><span class="op">)</span></span></code></pre></div>
+<p>El resultado es:</p>
+<pre><code>## 
+## Call:
+## lm(formula = RENECO ~ RES + ACTIVO + ENDEUDA + APALANCA + DIMENSION, 
+##     data = originales_so)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -7.0302 -2.1468 -0.1034  1.5821  6.7527 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       5.045e+00  1.575e+00   3.203  0.00301 ** 
+## RES               9.962e-04  2.137e-04   4.661 4.99e-05 ***
+## ACTIVO           -3.060e-05  8.938e-06  -3.423  0.00167 ** 
+## ENDEUDA          -6.297e-03  1.859e-02  -0.339  0.73698    
+## APALANCA         -4.197e-04  3.508e-04  -1.196  0.24007    
+## DIMENSIONMEDIA    1.462e+00  1.516e+00   0.964  0.34195    
+## DIMENSIONPEQUEÑA  1.781e+00  1.563e+00   1.139  0.26282    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 3.43 on 33 degrees of freedom
+## Multiple R-squared:  0.5943, Adjusted R-squared:  0.5205 
+## F-statistic: 8.056 on 6 and 33 DF,  p-value: 2.122e-05</code></pre>
+<p>Podemos observar, en cuanto a la <strong>bondad del modelo</strong>, cómo es capaz de recoger el 52% de la varianza o comportamiento de la rentabilidad económica (RENECO), atendiendo al valor del coeficiente de determinación lineal corregido (<em>Adjusted R-squared</em>). Los coeficientes o parámetros estimados, en su conjunto, son estadísticamente significativos para una significación de 0,05 (p-valor muy pequeño, en el <em>contraste F de significación conjunta</em>). En cuanto a los coeficientes estimados considerados individualmente, encontramos que son <strong>estadísticamente significativos</strong> tanto el término independiente (intercept), como los asociados a las variables RES y ACTIVO, a juzgar por los <em>p-valores</em> correspondientes al <em>contraste t de significación individual</em>. En ambos casos, además, son coeficientes con signo positivo, lo que se interpreta como que ambas variables influyen sobre RENECO de modo que, a mayor valor de estas variables, en general se obtiene una mayor rentabilidad económica.</p>
+<p>Por último, es conveniente advertir que el factor DIMENSION se especifica mediante dos variables dicotómicas que representan a dos de los niveles del factor (“MEDIA” y “PEQUEÑA”). sus coeficientes muestran el efecto relativo de ese nivel en relación con el nivel que no es especificado explicitamente (“GRANDE”), ya que no se pueden especificar todos los niveles de un factor para no generar un problema de multicolinealidad perfecta.</p>
+<p>Hay otras informaciones importantes a la hora de valorar la especificación (inicial) del modelo que no se recogen en el <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> del mismo. Además, vamos a presentar todo en modo de tablas diseñadas con <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code>. Para poder hacer esto no solo con este modelo inicial, sino con cualquier otra estimación, vamos a integrar el código correspondiente en una función de R. Llamaremos a esta función <code>presenta_modelo()</code>, y recibirá como input la estimación lineal de un modelo, ofreciendo como output tres tablas contenidas en una <em>lista</em>: la primera es una <em>versión</em> del <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>, la segunda es una tabla con otras informaciones adicionales, como el valor del <em>Criterio de Información de Akaike</em> (AIC), y la tercera contiene los valores del <em>factor de inflación de la varianza</em> (VIF) de las variables del modelo. Previamente a mostrar el código de la función, fijaremos un parámetro de nombre, por ejemplo, “knitr.table.format”, para recoger el formato en el que se generarán las tablas diseñadas:</p>
+<div class="sourceCode" id="cb332"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co">#diseña salida ordenador</span></span>
+<span></span>
+<span>    <span class="va">knitr.table.format</span> <span class="op">=</span> <span class="st">"html"</span></span></code></pre></div>
+<p>El código de la función se basa en el aprovechamiento, a su vez, de dos de las funciones del paquete <a href="https://broom.tidymodels.org/">broom</a>. Para realizar la versión en tabla del <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> del modelo, se aplica la función <code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code>. Esta función crea un data frame donde se almacenan las columnas con las distintas informaciones (coeficientes, desviaciones típicas, valores del estadístico t, p-valores…) con tantas filas como variables explicativas especificadas. La función <code><a href="https://generics.r-lib.org/reference/glance.html">glance()</a></code>, por su lado, extre las siguientes informaciones:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>r.squared</strong>: El coeficiente de determinación R², que indica el porcentaje de variación explicada por el modelo.</p></li>
+<li><p><strong>adj.r.squared</strong>: El R² ajustado, que toma en cuenta los grados de libertad.</p></li>
+<li><p><strong>sigma</strong>: El error estándar de los residuos.</p></li>
+<li><p><strong>statistic</strong>: El estadístico F del modelo.</p></li>
+<li><p><strong>p.value</strong>: El valor p asociado con el estadístico F, que indica la significancia global del modelo.</p></li>
+<li><p><strong>df</strong>: Los grados de libertad del numerador del estadístico F.</p></li>
+<li><p><strong>logLik</strong>: El logaritmo de la verosimilitud del modelo.</p></li>
+<li><p><strong>AIC</strong>: El criterio de información de Akaike.</p></li>
+<li><p><strong>BIC</strong>: El criterio de información bayesiano.</p></li>
+<li><p><strong>deviance</strong>: La desviación del modelo.</p></li>
+</ol>
+<p>El código es, en definitiva:</p>
+<div class="sourceCode" id="cb333"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Definir la función de presentación de resultados:  presenta_modelo() #####</span></span>
+<span></span>
+<span>    <span class="va">presenta_modelo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">modelo</span><span class="op">)</span> <span class="op">{</span></span>
+<span></span>
+<span>    <span class="co"># Lista de piezas</span></span>
+<span>      <span class="va">modelo_piezas</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  </span>
+<span>    <span class="co"># Aplicar la función tidy() al modelo</span></span>
+<span>      <span class="va">resultados</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">modelo</span><span class="op">)</span></span>
+<span>  </span>
+<span>    <span class="co"># Seleccionar las columnas deseadas</span></span>
+<span>      <span class="va">resultados</span> <span class="op">&lt;-</span> <span class="va">resultados</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"term"</span>,</span>
+<span>                                   <span class="st">"estimate"</span>,</span>
+<span>                                   <span class="st">"std.error"</span>,<span class="st">"statistic"</span>,</span>
+<span>                                   <span class="st">"p.value"</span><span class="op">)</span><span class="op">]</span></span>
+<span>    <span class="co"># Añadir la columna 'stars' según los valores de 'p.value'</span></span>
+<span>      <span class="va">resultados</span><span class="op">$</span><span class="va">stars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span><span class="op">(</span><span class="va">resultados</span><span class="op">$</span><span class="va">p.value</span>,</span>
+<span>                            breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0.001</span>, <span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
+<span>                            labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"***"</span>, <span class="st">"**"</span>, <span class="st">"*"</span>, <span class="st">"·"</span>, <span class="st">" "</span><span class="op">)</span>,</span>
+<span>                            right <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>    <span class="co"># formatear los valores de la columna "estimate" a 5 decimales</span></span>
+<span>      <span class="va">resultados</span><span class="op">$</span><span class="va">estimate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/formatc.html">formatC</a></span><span class="op">(</span><span class="va">resultados</span><span class="op">$</span><span class="va">estimate</span>,</span>
+<span>                                     format <span class="op">=</span> <span class="st">"f"</span>,</span>
+<span>                                     digits <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span>  </span>
+<span>    <span class="co"># Crear la tabla con kable</span></span>
+<span>      <span class="va">tabla1</span> <span class="op">&lt;-</span> <span class="va">resultados</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>format <span class="op">=</span> <span class="va">knitr.table.format</span>,</span>
+<span>          caption <span class="op">=</span> <span class="st">"Modelo Lineal"</span>,</span>
+<span>          col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Variable"</span>, <span class="st">"Coeficiente"</span>, <span class="st">"Desv. Típica"</span>,</span>
+<span>                        <span class="st">"Estadístico t"</span>, <span class="st">"p-valor"</span>, <span class="st">"Sig."</span><span class="op">)</span>,</span>
+<span>          digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>          align <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"l"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>, <span class="st">"c"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                      bootstrap_options <span class="op">=</span> <span class="st">"striped"</span>,</span>
+<span>                                          <span class="st">"bordered"</span>,</span>
+<span>                                          <span class="st">"condensed"</span>,</span>
+<span>                      position <span class="op">=</span> <span class="st">"center"</span>,</span>
+<span>                      font_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span></span>
+<span> </span>
+<span>      <span class="va">modelo_piezas</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">tabla1</span></span>
+<span>  </span>
+<span>    <span class="co"># Aplicar la función glance</span></span>
+<span>      <span class="va">estadisticos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/glance.html">glance</a></span><span class="op">(</span><span class="va">modelo</span><span class="op">)</span></span>
+<span>      <span class="va">estadisticos</span> <span class="op">&lt;-</span> <span class="va">estadisticos</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"r.squared"</span>,</span>
+<span>                                      <span class="st">"adj.r.squared"</span>,</span>
+<span>                                      <span class="st">"sigma"</span>,</span>
+<span>                                      <span class="st">"statistic"</span>,</span>
+<span>                                      <span class="st">"p.value"</span>,</span>
+<span>                                      <span class="st">"AIC"</span>,</span>
+<span>                                      <span class="st">"nobs"</span><span class="op">)</span><span class="op">]</span></span>
+<span>    <span class="co"># Crear la tabla con kable</span></span>
+<span>      <span class="va">tabla2</span> <span class="op">&lt;-</span> <span class="va">estadisticos</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>format <span class="op">=</span> <span class="va">knitr.table.format</span>,</span>
+<span>          caption <span class="op">=</span> <span class="st">"Estadísticos del modelo"</span>,</span>
+<span>          col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"R2"</span>, <span class="st">"R2 ajustado"</span>, <span class="st">"Sigma"</span>, <span class="st">"Estadístico F"</span>,</span>
+<span>                        <span class="st">"p-valor"</span>, <span class="st">"AIC"</span>, <span class="st">"num. observaciones"</span><span class="op">)</span>,</span>
+<span>          digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>          align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                      bootstrap_options <span class="op">=</span> <span class="st">"striped"</span>,</span>
+<span>                                          <span class="st">"bordered"</span>,</span>
+<span>                                          <span class="st">"condensed"</span>,</span>
+<span>                      position <span class="op">=</span> <span class="st">"center"</span>,</span>
+<span>                      font_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span></span>
+<span>      </span>
+<span>      <span class="va">modelo_piezas</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">tabla2</span>  </span>
+<span></span>
+<span>    <span class="co"># Obtener VIF</span></span>
+<span>      <span class="va">vif_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/car/man/vif.html">vif</a></span><span class="op">(</span><span class="va">modelo</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="co"># Añadir nombres de filas</span></span>
+<span>      <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/">tibble</a></span><span class="op">)</span></span>
+<span>      <span class="va">vif_df</span> <span class="op">&lt;-</span> <span class="va">vif_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">rownames_to_column</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"Variable"</span><span class="op">)</span></span>
+<span>  </span>
+<span>    <span class="co"># Crear tabla con kable</span></span>
+<span>      <span class="va">tabla3</span> <span class="op">&lt;-</span> <span class="va">vif_df</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>format <span class="op">=</span> <span class="va">knitr.table.format</span>,</span>
+<span>              caption <span class="op">=</span> <span class="st">"Factor de inflación de la varianza"</span>,</span>
+<span>              col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Variable"</span>,<span class="st">"Valor VIF"</span><span class="op">)</span>,</span>
+<span>              digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>              align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                      bootstrap_options <span class="op">=</span> <span class="st">"striped"</span>,</span>
+<span>                                          <span class="st">"bordered"</span>,</span>
+<span>                                          <span class="st">"condensed"</span>,</span>
+<span>                      position <span class="op">=</span> <span class="st">"center"</span>,</span>
+<span>                      font_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span></span>
+<span>      </span>
+<span>      <span class="va">modelo_piezas</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">tabla3</span></span>
+<span>  </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">modelo_piezas</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="co">############################################################################</span></span></code></pre></div>
+<p>Una vez definida la función, podemos aplicarla al modelo estimado inicial, guardando las tres tablas generadas en la lista “modelo_0”, que pueden ser visualizadas:</p>
+<div class="sourceCode" id="cb334"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="va">modelo_0</span> <span class="op">&lt;-</span> <span class="fu">presenta_modelo</span><span class="op">(</span><span class="va">ecua0</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">modelo_0</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-282">Table 9.1: </span><span id="tab:unnamed-chunk-282">Table 9.2: </span>Modelo Lineal
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:center;">
+Coeficiente
+</th>
+<th style="text-align:center;">
+Desv. Típica
+</th>
+<th style="text-align:center;">
+Estadístico t
+</th>
+<th style="text-align:center;">
+p-valor
+</th>
+<th style="text-align:center;">
+Sig.
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:center;">
+5.04540
+</td>
+<td style="text-align:center;">
+1.575
+</td>
+<td style="text-align:center;">
+3.203
+</td>
+<td style="text-align:center;">
+0.003
+</td>
+<td style="text-align:center;">
+**
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+RES
+</td>
+<td style="text-align:center;">
+0.00100
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+4.661
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ACTIVO
+</td>
+<td style="text-align:center;">
+-0.00003
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+-3.423
+</td>
+<td style="text-align:center;">
+0.002
+</td>
+<td style="text-align:center;">
+**
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENDEUDA
+</td>
+<td style="text-align:center;">
+-0.00630
+</td>
+<td style="text-align:center;">
+0.019
+</td>
+<td style="text-align:center;">
+-0.339
+</td>
+<td style="text-align:center;">
+0.737
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+APALANCA
+</td>
+<td style="text-align:center;">
+-0.00042
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+-1.196
+</td>
+<td style="text-align:center;">
+0.240
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DIMENSIONMEDIA
+</td>
+<td style="text-align:center;">
+1.46168
+</td>
+<td style="text-align:center;">
+1.516
+</td>
+<td style="text-align:center;">
+0.964
+</td>
+<td style="text-align:center;">
+0.342
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DIMENSIONPEQUEÑA
+</td>
+<td style="text-align:center;">
+1.78055
+</td>
+<td style="text-align:center;">
+1.563
+</td>
+<td style="text-align:center;">
+1.139
+</td>
+<td style="text-align:center;">
+0.263
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+</tbody>
+</table></div>
+<div class="sourceCode" id="cb335"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="va">modelo_0</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-282">Table 9.1: </span><span id="tab:unnamed-chunk-282">Table 9.1: </span>Estadísticos del modelo
+</caption>
+<thead><tr>
+<th style="text-align:center;">
+R2
+</th>
+<th style="text-align:center;">
+R2 ajustado
+</th>
+<th style="text-align:center;">
+Sigma
+</th>
+<th style="text-align:center;">
+Estadístico F
+</th>
+<th style="text-align:center;">
+p-valor
+</th>
+<th style="text-align:center;">
+AIC
+</th>
+<th style="text-align:center;">
+num. observaciones
+</th>
+</tr></thead>
+<tbody><tr>
+<td style="text-align:center;">
+0.594
+</td>
+<td style="text-align:center;">
+0.521
+</td>
+<td style="text-align:center;">
+3.43
+</td>
+<td style="text-align:center;">
+8.056
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+220.431
+</td>
+<td style="text-align:center;">
+40
+</td>
+</tr></tbody>
+</table></div>
+<div class="sourceCode" id="cb336"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="va">modelo_0</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-282">Table 9.1: </span><span id="tab:unnamed-chunk-282">Table 9.1: </span>Factor de inflación de la varianza
+</caption>
+<thead><tr>
+<th style="text-align:center;">
+Variable
+</th>
+<th style="text-align:center;">
+Valor VIF
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+RES
+</td>
+<td style="text-align:center;">
+1.690
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+ACTIVO
+</td>
+<td style="text-align:center;">
+1.873
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+ENDEUDA
+</td>
+<td style="text-align:center;">
+1.279
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+APALANCA
+</td>
+<td style="text-align:center;">
+1.318
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+DIMENSION
+</td>
+<td style="text-align:center;">
+1.558
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Los resultados de la primera y segunda tabla ya fueron comentados en casi su totalidad anteriormente, al comentar el <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> del modelo. Se ha añadido el valor del <em>Criterio de Información de Akaike</em> (AIC). Esta es una medida basada en la <em>función de verosimilitud</em> que permite comparar la adecuación de especificaciones alternativas para representar la realidad, de modo que, <strong>a menor AIC, mejor especificación.</strong></p>
+<p>La tercera tabla muestra los valores del <em>factor de la inflación de la varianza</em> (VIF) para cada variable explicativa. El VIF <strong>mide el riesgo de que, debido a la influencia de la variable en cuestión, exista un problema de multicolinealidad</strong> entre las variables explicativas del modelo. Un valor de 5/10 (dependiendo de los autores) sugiere que puede existir un problema de multicolinealidad importante. En el caso del modelo inicial, ningún valor del VIF sugiere un posible problema de multicolinealidad.</p>
+<p>La búsqueda de una especificación alternativa que sea más adecuada puede atender a múltiples estrategias del analista, y del propio propósito con el que se quiere utilizar el modelo. Por tanto, implica una gran carga de subjetividad. No obstante, existen métodos automatizados para que, una vez se tiene la estimación inicial, se obtenga una especificación más sencilla (<em>Principio de Parsimonia</em>) sin una pérdida grande de bondad de la regresión. Por ejemplo, un método es el <em>step / backward</em> que, en función del <em>Criterio de Información de Akaike (AIC)</em>, irá probando a estimar especificaciones más simples que disminuyan de AIC (lo que implica una mejor especificación). En nuestro caso, se aplicará con el código:</p>
+<div class="sourceCode" id="cb337"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="va">ecuaDEF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/step.html">step</a></span><span class="op">(</span><span class="va">ecua0</span>, scale <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>                  direction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"backward"</span><span class="op">)</span>,</span>
+<span>                  trace <span class="op">=</span> <span class="fl">1</span>, steps <span class="op">=</span> <span class="fl">1000</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## Start:  AIC=104.92
+## RENECO ~ RES + ACTIVO + ENDEUDA + APALANCA + DIMENSION
+## 
+##             Df Sum of Sq    RSS    AIC
+## - DIMENSION  2    17.324 405.63 102.66
+## - ENDEUDA    1     1.350 389.65 103.06
+## - APALANCA   1    16.843 405.14 104.61
+## &lt;none&gt;                   388.30 104.92
+## - ACTIVO     1   137.886 526.19 115.07
+## - RES        1   255.671 643.97 123.15
+## 
+## Step:  AIC=102.66
+## RENECO ~ RES + ACTIVO + ENDEUDA + APALANCA
+## 
+##            Df Sum of Sq    RSS    AIC
+## - ENDEUDA   1      0.27 405.90 100.69
+## &lt;none&gt;                  405.63 102.66
+## - APALANCA  1     27.08 432.71 103.25
+## - ACTIVO    1    278.04 683.67 121.54
+## - RES       1    386.92 792.55 127.45
+## 
+## Step:  AIC=100.69
+## RENECO ~ RES + ACTIVO + APALANCA
+## 
+##            Df Sum of Sq    RSS    AIC
+## &lt;none&gt;                  405.90 100.69
+## - APALANCA  1     34.56 440.46 101.96
+## - ACTIVO    1    280.94 686.83 119.73
+## - RES       1    394.36 800.26 125.84</code></pre>
+<div class="sourceCode" id="cb339"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span> <span class="op">(</span><span class="va">ecuaDEF</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = RENECO ~ RES + ACTIVO + APALANCA, data = originales_so)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6.3668 -2.5872 -0.3775  1.4791  7.3184 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  5.759e+00  8.530e-01   6.752 6.97e-08 ***
+## RES          1.110e-03  1.877e-04   5.914 9.05e-07 ***
+## ACTIVO      -3.644e-05  7.301e-06  -4.992 1.54e-05 ***
+## APALANCA    -5.376e-04  3.070e-04  -1.751   0.0885 .  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 3.358 on 36 degrees of freedom
+## Multiple R-squared:  0.5759, Adjusted R-squared:  0.5406 
+## F-statistic:  16.3 on 3 and 36 DF,  p-value: 7.444e-07</code></pre>
+<p>El resultado del algoritmo es una especificación del modelo, cuya estimación se almacena en memoria con el nombre, por ejemplo, “ecuaDEF”. Se ha mostrado el <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> del modelo. También se puede aplicar la función <code>presenta_modelo()</code>, para obtener un <em>output</em> de la estimación más detallado:</p>
+<div class="sourceCode" id="cb341"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="va">modelo_DEF</span> <span class="op">&lt;-</span> <span class="fu">presenta_modelo</span><span class="op">(</span><span class="va">ecuaDEF</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">modelo_DEF</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-284">Table 9.3: </span><span id="tab:unnamed-chunk-284">Table 9.4: </span>Modelo Lineal
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:center;">
+Coeficiente
+</th>
+<th style="text-align:center;">
+Desv. Típica
+</th>
+<th style="text-align:center;">
+Estadístico t
+</th>
+<th style="text-align:center;">
+p-valor
+</th>
+<th style="text-align:center;">
+Sig.
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:center;">
+5.75901
+</td>
+<td style="text-align:center;">
+0.853
+</td>
+<td style="text-align:center;">
+6.752
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+RES
+</td>
+<td style="text-align:center;">
+0.00111
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+5.914
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ACTIVO
+</td>
+<td style="text-align:center;">
+-0.00004
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+-4.992
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+APALANCA
+</td>
+<td style="text-align:center;">
+-0.00054
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+-1.751
+</td>
+<td style="text-align:center;">
+0.088
+</td>
+<td style="text-align:center;">
+·
+</td>
+</tr>
+</tbody>
+</table></div>
+<div class="sourceCode" id="cb342"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="va">modelo_DEF</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-284">Table 9.3: </span><span id="tab:unnamed-chunk-284">Table 9.3: </span>Estadísticos del modelo
+</caption>
+<thead><tr>
+<th style="text-align:center;">
+R2
+</th>
+<th style="text-align:center;">
+R2 ajustado
+</th>
+<th style="text-align:center;">
+Sigma
+</th>
+<th style="text-align:center;">
+Estadístico F
+</th>
+<th style="text-align:center;">
+p-valor
+</th>
+<th style="text-align:center;">
+AIC
+</th>
+<th style="text-align:center;">
+num. observaciones
+</th>
+</tr></thead>
+<tbody><tr>
+<td style="text-align:center;">
+0.576
+</td>
+<td style="text-align:center;">
+0.541
+</td>
+<td style="text-align:center;">
+3.358
+</td>
+<td style="text-align:center;">
+16.295
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+216.204
+</td>
+<td style="text-align:center;">
+40
+</td>
+</tr></tbody>
+</table></div>
+<div class="sourceCode" id="cb343"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="va">modelo_DEF</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-284">Table 9.3: </span><span id="tab:unnamed-chunk-284">Table 9.3: </span>Factor de inflación de la varianza
+</caption>
+<thead><tr>
+<th style="text-align:center;">
+Variable
+</th>
+<th style="text-align:center;">
+Valor VIF
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+RES
+</td>
+<td style="text-align:center;">
+1.360
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+ACTIVO
+</td>
+<td style="text-align:center;">
+1.304
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+APALANCA
+</td>
+<td style="text-align:center;">
+1.054
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>En el modelo definitivo (ecuaDEF), tan solo permanecen 3 variables explicativas: RES, ACTIVO (ambas significativas para una significación de 0,05) y APALANCA (significativa para una significación de 0,1). Una diferencia importante respecto al modelo inicial es que, el signo del coeficiente asociado a ACTIVO pasa a ser negativo. También el grado de apalancamiento tiene asociado un coeficiente negativo (a mayor apalancamiento, menor rentabilidad económica). SI observamos la segunda tabla, puede observarse que el valor de AIC es de 216,20, inferior al valor de AIC del modelo inicial (220,4). La bondad del ajuste, medida por medio del R2 ajustado, es de 0,541; superior al de modelo inicial (0,521). Finalmente, en la tercera tabla se muestran unos valores de VIF bajos, por lo que se descartan problemas de multicolinealidad.</p>
+<p>Una vez decidida la especificación (final) del modelo, es necesario desarrollar la <strong>etapa de contrastación de las hipótesis básicas del modelo</strong>, con la intención de determinar el grado en que los estimadores obtenidos mediante MCO gozan de buenas propiedades, o si es necesario aplicar métodos de estimación alternativos, métodos econométricos específicos, o incluso re-especificar el modelo).</p>
+<p>Es conveniente, previamente al análisis de cada hipótesis, generar varios gráficos de gran utilidad.</p>
+<p>El primer paso, no obstante, es recurrir a la función <code><a href="https://generics.r-lib.org/reference/augment.html">augment()</a></code> del paquete <a href="https://broom.tidymodels.org/">broom</a>. Esta función, aplicada a un modelo, genera algunas series de datos fundamentales relacionadas con el mismo, y las almacena junto a las variables del modelo especificado en un data frame. En nuestro caso, hemos llamado al data frame “series_ecuaDEF”, y hemos cambiado el nombre a las series que vamos a utilizar posteriormente: los valores ajustados de la variable dependiente (RENECO.est), los residuos (residuos), y los valores de la distancia de Cook (cooksd). Además, hemos creado una variable llamada ORDEN para asignar un valor correlativo a cada observación o caso de la muestra:</p>
+<div class="sourceCode" id="cb344"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># MODELO FINAL: CONTRASTACIÓN.</span></span>
+<span></span>
+<span>  <span class="va">series_ecuaDEF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/augment.html">augment</a></span><span class="op">(</span><span class="va">ecuaDEF</span><span class="op">)</span></span>
+<span>  <span class="va">series_ecuaDEF</span> <span class="op">&lt;-</span> <span class="va">series_ecuaDEF</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>RENECO.est <span class="op">=</span> <span class="va">.fitted</span>,</span>
+<span>         residuos <span class="op">=</span> <span class="va">.resid</span>,</span>
+<span>         cooksd <span class="op">=</span> <span class="va">.cooksd</span><span class="op">)</span></span>
+<span>  <span class="va">series_ecuaDEF</span><span class="op">$</span><span class="va">ORDEN</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">series_ecuaDEF</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span> <span class="op">(</span><span class="va">series_ecuaDEF</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##   .rownames             RENECO            RES         
+##  Length:40          Min.   :-2.708   Min.   :-5268.6  
+##  Class :character   1st Qu.: 2.103   1st Qu.:  892.2  
+##  Mode  :character   Median : 4.404   Median : 2321.2  
+##                     Mean   : 5.547   Mean   : 2812.2  
+##                     3rd Qu.: 8.270   3rd Qu.: 3951.2  
+##                     Max.   :15.882   Max.   :12819.0  
+## 
+##      ACTIVO          APALANCA         RENECO.est    
+##  Min.   : 25355   Min.   :-3037.8   Min.   :-8.564  
+##  1st Qu.: 33162   1st Qu.:   21.4   1st Qu.: 3.970  
+##  Median : 45903   Median :  146.5   Median : 5.620  
+##  Mean   : 78664   Mean   :  868.9   Mean   : 5.547  
+##  3rd Qu.: 81312   3rd Qu.: 1080.1   3rd Qu.: 7.432  
+##  Max.   :443467   Max.   : 8049.4   Max.   :12.464  
+## 
+##     residuos            .hat             .sigma     
+##  Min.   :-6.3668   Min.   :0.02906   Min.   :3.107  
+##  1st Qu.:-2.5872   1st Qu.:0.03774   1st Qu.:3.350  
+##  Median :-0.3775   Median :0.05202   Median :3.385  
+##  Mean   : 0.0000   Mean   :0.10000   Mean   :3.356  
+##  3rd Qu.: 1.4791   3rd Qu.:0.10120   3rd Qu.:3.403  
+##  Max.   : 7.3184   Max.   :0.53601   Max.   :3.405  
+## 
+##      cooksd            .std.resid          ORDEN      
+##  Min.   :0.0000143   Min.   :-1.9446   Min.   : 1.00  
+##  1st Qu.:0.0007106   1st Qu.:-0.7888   1st Qu.:10.75  
+##  Median :0.0083866   Median :-0.1147   Median :20.50  
+##  Mean   :0.0514405   Mean   : 0.0116   Mean   :20.50  
+##  3rd Qu.:0.0271051   3rd Qu.: 0.4557   3rd Qu.:30.25  
+##  Max.   :1.4848788   Max.   : 2.4566   Max.   :40.00</code></pre>
+<p>Una vez obtenidas todas las series necesarias, diseñaremos los gráficos que facilitarán la comprensión y contraste del modelo final. El primero compara los valores reales de RENECO con las estimaciones del modelo, RENECO.est. Lógicamente, es deseable que, para cada caso, la distancia entre ambos puntos sea mínima. El segundo muestra los residuos. El tercero es el <em>gráfico de densidad</em> de los residuos, y el cuarto representa, para cada caso, el <em>valor de la distancia de Cook</em>. Los valores altos de la distancia de Cook en un modelo de regresión indican observaciones que tienen una influencia significativa en los coeficientes estimados del modelo. Son considerados “altos” los valores que superan el valor inverso de 4 por el número de observaciones muestrales.</p>
+<p>Los 4 gráficos se agrupan mediante la gramática del paquete {patchwork}. Finalmente, se genera una tabla a partir de un filtro para identificar los casos concretos que tienen valores “altos” de la distancia de Cook. En definitiva, el código es:</p>
+<div class="sourceCode" id="cb346"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Gráficos.</span></span>
+<span>  </span>
+<span>    <span class="va">g_real_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">series_ecuaDEF</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">ORDEN</span>, y <span class="op">=</span> <span class="va">RENECO.est</span><span class="op">)</span>,</span>
+<span>                 size<span class="op">=</span> <span class="fl">2</span>,</span>
+<span>                 alpha<span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span>                 color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span>    </span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">ORDEN</span>, y <span class="op">=</span> <span class="va">RENECO</span><span class="op">)</span>,</span>
+<span>                 size<span class="op">=</span> <span class="fl">2</span>,</span>
+<span>                 alpha<span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span>                 color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">ORDEN</span>, y <span class="op">=</span> <span class="va">RENECO.est</span><span class="op">)</span>,</span>
+<span>                color <span class="op">=</span> <span class="st">"blue"</span>,</span>
+<span>                linetype <span class="op">=</span> <span class="st">"dashed"</span>,</span>
+<span>                size<span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">ORDEN</span>, y <span class="op">=</span> <span class="va">RENECO</span><span class="op">)</span>,</span>
+<span>                color <span class="op">=</span> <span class="st">"red"</span>,</span>
+<span>                linetype <span class="op">=</span> <span class="st">"dashed"</span>,</span>
+<span>                size<span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html">geom_segment</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">ORDEN</span>, xend <span class="op">=</span> <span class="va">ORDEN</span>, y <span class="op">=</span> <span class="va">RENECO.est</span>, yend <span class="op">=</span> <span class="va">RENECO</span><span class="op">)</span>,</span>
+<span>                   color <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"RENTABILIDAD ECONÓMICA."</span>,</span>
+<span>              subtitle<span class="op">=</span> <span class="st">"VALORES REALES (rojo) vs PREDICCIONES (azul)."</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Casos"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Rentabilidad Económica: Real y Predicción"</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">g_resid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">series_ecuaDEF</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">ORDEN</span>, y <span class="op">=</span> <span class="va">residuos</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">2</span>, alpha<span class="op">=</span> <span class="fl">0.6</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"firebrick"</span>, span <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"RENTABILIDAD ECONÓMICA."</span>, subtitle<span class="op">=</span> <span class="st">"Residuos."</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Casos"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Residuos"</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">g_hresid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">series_ecuaDEF</span>, map <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">residuos</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"red"</span>, fill <span class="op">=</span> <span class="st">"orange"</span>, alpha <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"RENTABILIDAD ECONÓMICA"</span>, subtitle <span class="op">=</span> <span class="st">"Densidad Residuos"</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Rentabilidad Económica"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Densidad"</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">g_cook</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">series_ecuaDEF</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">ORDEN</span>, y <span class="op">=</span> <span class="va">cooksd</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">4</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">series_ecuaDEF</span><span class="op">)</span>,</span>
+<span>               linetype <span class="op">=</span> <span class="st">"dashed"</span>,</span>
+<span>               color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"RENTABILIDAD ECONÓMICA."</span>, subtitle<span class="op">=</span> <span class="st">"Distancia de Cook."</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Casos"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Distancias"</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="op">(</span><span class="va">g_real_pred</span> <span class="op">|</span> <span class="va">g_hresid</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">g_resid</span> <span class="op">|</span> <span class="va">g_cook</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">tablaCook</span> <span class="op">&lt;-</span> <span class="va">series_ecuaDEF</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span> <span class="op">(</span> <span class="va">cooksd</span> <span class="op">&gt;</span> <span class="fl">4</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">series_ecuaDEF</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span> <span class="op">(</span><span class="va">.rownames</span>, <span class="va">cooksd</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>format <span class="op">=</span> <span class="va">knitr.table.format</span>,</span>
+<span>          caption <span class="op">=</span> <span class="st">"Casos destacados distancia de Cook"</span>,</span>
+<span>          col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Caso"</span>,<span class="st">"Distancia de Cook"</span><span class="op">)</span>,</span>
+<span>          digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>          align <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"l"</span>,<span class="st">"c"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                  bootstrap_options <span class="op">=</span> <span class="st">"striped"</span>,</span>
+<span>                                      <span class="st">"bordered"</span>,</span>
+<span>                                      <span class="st">"condensed"</span>,</span>
+<span>                  position <span class="op">=</span> <span class="st">"center"</span>,</span>
+<span>                  font_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">tablaCook</span></span></code></pre></div>
+<img src="RstarS_files/figure-html/unnamed-chunk-288-1.png" width="672"><div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-288">Table 9.5: </span><span id="tab:unnamed-chunk-288">Table 9.6: </span>Casos destacados distancia de Cook
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+Caso
+</th>
+<th style="text-align:center;">
+Distancia de Cook
+</th>
+</tr></thead>
+<tbody><tr>
+<td style="text-align:left;">
+Innogy Spain SA.
+</td>
+<td style="text-align:center;">
+1.485
+</td>
+</tr></tbody>
+</table></div>
+<p>De los gráficos anteriores se desprende, en general, que los residuos parecen mantener un comportamiento conforme a una distribución normal, y que hay una observación o caso con una distancia de Cook que puede influir de modo relevante en el valor de los coeficientes estimados. Esta empresa es identificada como “Innogy Spain S.A.” Podría estudiarse en detalle este caso o incluso reestimar el modelo sin su presencia, a fin de comprobar el efecto que tiene esta observación sobre la estimación en general.</p>
+<p>Tras estudiar los gráficos, vamos a pasar a contrastar las hipótesis básicas del MBR referidas a la <em>forma funcional</em>, y la <em>normalidad</em> y <em>comportamiento homoscedástico</em> de la perturbación aleatoria. Para ello se aplicarán las pruebas <em>Ramsey-Reset</em>, <em>Shapiro-Wilk</em> y <em>Breusch-Pagan</em>, respectivamente. Los resultados de las tres pruebas se presentarán condensados en una tabla, en la que además se incluirá la conclusión del contraste, para una significación de 0,05. Para crear la tabla, primero se generará un data frame con sus elementos, denominado, por ejemplo, “check_hipotesis”. El código es:</p>
+<div class="sourceCode" id="cb347"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Hipótesis básicas MBR.</span></span>
+<span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va">lmtest</span><span class="op">)</span></span>
+<span>    <span class="va">reset_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/resettest.html">resettest</a></span><span class="op">(</span><span class="va">ecuaDEF</span>, data<span class="op">=</span> <span class="va">originales_so</span><span class="op">)</span> <span class="co"># F. Funcional</span></span>
+<span>    <span class="va">shapiro_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/shapiro.test.html">shapiro.test</a></span><span class="op">(</span><span class="va">series_ecuaDEF</span><span class="op">$</span><span class="va">residuos</span><span class="op">)</span> <span class="co"># Normalidad</span></span>
+<span>    <span class="va">bp_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/bptest.html">bptest</a></span><span class="op">(</span><span class="va">ecuaDEF</span><span class="op">)</span> <span class="co"># Homoscedasticidad</span></span>
+<span></span>
+<span>  <span class="co"># Tabla resultados</span></span>
+<span></span>
+<span>    <span class="co"># Crear un data frame con los resultados</span></span>
+<span></span>
+<span>      <span class="va">check_hipotesis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>        <span class="st">"Tipo_de_prueba"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Forma Funcional"</span>,</span>
+<span>                             <span class="st">"Normalidad de perturbación aleatoria"</span>,</span>
+<span>                             <span class="st">"Homoscedasticidad de perturbación aleatoria"</span><span class="op">)</span>,</span>
+<span>        <span class="st">"Prueba"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ramsey-Reset"</span>,</span>
+<span>                     <span class="st">"Shapiro-Wilk"</span>,</span>
+<span>                     <span class="st">"Breusch-Pagan"</span><span class="op">)</span>,</span>
+<span>        <span class="st">"Estadistico"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">reset_test</span><span class="op">$</span><span class="va">statistic</span>,</span>
+<span>                          <span class="va">shapiro_test</span><span class="op">$</span><span class="va">statistic</span>,</span>
+<span>                          <span class="va">bp_test</span><span class="op">$</span><span class="va">statistic</span><span class="op">)</span>,</span>
+<span>        <span class="st">"P_valor"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">reset_test</span><span class="op">$</span><span class="va">p.value</span>,</span>
+<span>                      <span class="va">shapiro_test</span><span class="op">$</span><span class="va">p.value</span>,</span>
+<span>                      <span class="va">bp_test</span><span class="op">$</span><span class="va">p.value</span><span class="op">)</span>,</span>
+<span>        <span class="st">"Conclusion"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">reset_test</span><span class="op">$</span><span class="va">p.value</span> <span class="op">&gt;=</span> <span class="fl">0.05</span>,</span>
+<span>                                 <span class="st">"F. funcional correcta"</span>,</span>
+<span>                                 <span class="st">"F. funcional incorrecta"</span><span class="op">)</span>,</span>
+<span>                         <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">shapiro_test</span><span class="op">$</span><span class="va">p.value</span> <span class="op">&gt;=</span> <span class="fl">0.05</span>,</span>
+<span>                                <span class="st">"Normalidad"</span>,</span>
+<span>                                <span class="st">"No-Normalidad"</span><span class="op">)</span>,</span>
+<span>                         <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">bp_test</span><span class="op">$</span><span class="va">p.value</span> <span class="op">&gt;=</span> <span class="fl">0.05</span>,</span>
+<span>                                <span class="st">"Homoscedasticidad"</span>,</span>
+<span>                                <span class="st">"Heteroscedasticidad"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">check_hipotesis</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
+<span></span>
+<span>  <span class="co"># Crear la tabla con kable</span></span>
+<span>    </span>
+<span>    <span class="va">tabla_check</span> <span class="op">&lt;-</span> <span class="va">check_hipotesis</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>format <span class="op">=</span> <span class="va">knitr.table.format</span>,</span>
+<span>            caption <span class="op">=</span> <span class="st">"Contrastes de hipótesis del MBR"</span>,</span>
+<span>            col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Tipo de prueba"</span>,</span>
+<span>                          <span class="st">"Prueba"</span>,</span>
+<span>                          <span class="st">"Estadístico"</span>,</span>
+<span>                          <span class="st">"P-valor"</span>,</span>
+<span>                          <span class="st">"Conclusión"</span><span class="op">)</span>,</span>
+<span>            digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>            align <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"l"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>, <span class="st">"c"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                    bootstrap_options <span class="op">=</span> <span class="st">"striped"</span>,</span>
+<span>                                        <span class="st">"bordered"</span>,</span>
+<span>                                        <span class="st">"condensed"</span>,</span>
+<span>                    position <span class="op">=</span> <span class="st">"center"</span>,</span>
+<span>                    font_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">tabla_check</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-290">Table 9.7: </span><span id="tab:unnamed-chunk-290">Table 9.8: </span>Contrastes de hipótesis del MBR
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+Tipo de prueba
+</th>
+<th style="text-align:center;">
+Prueba
+</th>
+<th style="text-align:center;">
+Estadístico
+</th>
+<th style="text-align:center;">
+P-valor
+</th>
+<th style="text-align:center;">
+Conclusión
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Forma Funcional
+</td>
+<td style="text-align:center;">
+Ramsey-Reset
+</td>
+<td style="text-align:center;">
+6.907
+</td>
+<td style="text-align:center;">
+0.003
+</td>
+<td style="text-align:center;">
+F. funcional incorrecta
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Normalidad de perturbación aleatoria
+</td>
+<td style="text-align:center;">
+Shapiro-Wilk
+</td>
+<td style="text-align:center;">
+0.963
+</td>
+<td style="text-align:center;">
+0.212
+</td>
+<td style="text-align:center;">
+Normalidad
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Homoscedasticidad de perturbación aleatoria
+</td>
+<td style="text-align:center;">
+Breusch-Pagan
+</td>
+<td style="text-align:center;">
+5.773
+</td>
+<td style="text-align:center;">
+0.123
+</td>
+<td style="text-align:center;">
+Homoscedasticidad
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>En la tabla de resultados del contraste de las hipótesis básicas del MBR, encontramos que el modelo no plantea problemas de falta de normalidad o heteroscedasticidad en la perturbación aleatoria. En cambio, la prueba de <em>Ramsey-Reset</em> rechaza la hipótesis nula de especificación lineal correcta. En concreto, este contraste plantea estas dos hipótesis:</p>
+<ul>
+<li><p><strong>Hipótesis nula (H0)</strong>: El modelo está correctamente especificado, es decir, no hay errores de especificación. En términos más técnicos, esto significa que las combinaciones no lineales de los valores ajustados no tienen poder explicativo adicional sobre la variable dependiente.</p></li>
+<li><p><strong>Hipótesis alternativa (H1)</strong>: El modelo está mal especificado, lo que implica que las combinaciones no lineales de los valores ajustados sí tienen poder explicativo adicional sobre la variable dependiente.</p></li>
+</ul>
+<p>Si se asume que las variables especificadas son las correctas, y no hay omisión de variables relevantes; un rechazo de la hipótesis nula implica que la relación funcional planteada (lineal), no es correcta.</p>
+<p>El incumplimiento de la hipótesis de linealidad podría acarrear que los estimadores MCO obtenidos adolecen de la pérdida de la propiedad de insesgadez.</p>
+<p>Si el modelo supera razonablemente la fase de contraste de las hipótesis básicas; podría ser utilizado para los objetivos planteados en la investigación: análisis estructural, previsión, simulación. En este ejemplo, vamos a realizar un ejercicio de simulación.</p>
+<p>Vamos a obtener la respuesta de la rentabilidad económica (RENECO), ante 3 escenarios alternativos. Dichos escenarios están guardados en la hoja “Simula” del archivo de Microsoft® Excel® “<a href="https://docs.google.com/spreadsheets/d/1QUqpOHC_XK38MBggb3hYibDReHVfd7wL/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">eolica_escenarios.xlsx</a>”. Hay que tener en cuenta que en los escenarios se aportan valores para algunas variables que no aparecen en el modelo final. Lógicamente, lo importante son los datos del escenario correspondientes a las variables que sí están especificadas. Los escenarios se importan y se almacenan en el <em>data frame</em> de nombre, por ejemplo, “escenario”:</p>
+<div class="sourceCode" id="cb348"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># SIMULACIÓN</span></span>
+<span></span>
+<span>  <span class="co"># Cargar escenario de Excel</span></span>
+<span></span>
+<span>    <span class="va">escenario</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"eolica_escenarios.xlsx"</span>, sheet <span class="op">=</span> <span class="st">"Simula"</span><span class="op">)</span></span>
+<span>    <span class="va">escenario</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">escenario</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>    <span class="va">escenario</span></span></code></pre></div>
+<pre><code>##              RES ACTIVO ENDEUDA APALANCA DIMENSION
+## ESCENARIO A 2500  50000   20.25    0.238    GRANDE
+## ESCENARIO B 2500  25000   50.00   50.000     MEDIA
+## ESCENARIO C 3000   5000   90.00  100.000   PEQUEÑA</code></pre>
+<p>Mediante la función <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>, se generará la respuesta a los escenarios propuestos, por parte del modelo definitivo (ECUADEF). Esta respuesta se guardará en el <em>data frame</em> de nombre, por ejemplo, “estimación”, que luego uniremos al <em>data frame</em> “escenario” mediante la función <code><a href="https://rdrr.io/r/base/cbind.html">cbind()</a></code>, creando un único <em>data frame</em> llamado, por ejemplo, “simulacion”:</p>
+<div class="sourceCode" id="cb350"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Simulación con el modelo</span></span>
+<span></span>
+<span>    <span class="va">estimacion</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span> <span class="op">(</span>object<span class="op">=</span> <span class="va">ecuaDEF</span>,</span>
+<span>                          newdata <span class="op">=</span> <span class="va">escenario</span>,</span>
+<span>                          interval<span class="op">=</span><span class="st">"prediction"</span>,</span>
+<span>                          level<span class="op">=</span><span class="fl">0.95</span><span class="op">)</span></span>
+<span>    <span class="va">estimacion</span></span></code></pre></div>
+<pre><code>##                  fit        lwr      upr
+## ESCENARIO A 6.711704 -0.2161380 13.63955
+## ESCENARIO B 7.596000  0.6413923 14.55061
+## ESCENARIO C 8.852940  1.8523982 15.85348</code></pre>
+<div class="sourceCode" id="cb352"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="va">simulacion</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">escenario</span>, <span class="va">estimacion</span><span class="op">)</span></span></code></pre></div>
+<p>Finalmente, vamos a presentar la simulación en forma de tabla. En primer lugar, vamos a dar un formato específico a cada variable, cara a su volcado a la tabla, con la función <code><a href="https://rdrr.io/r/base/format.html">format()</a></code>. El argumento <code>nsmall=</code> indica el número mínimo de decimales que habrá a la derecha del punto decimal:</p>
+<div class="sourceCode" id="cb353"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Formatear las columnas con el número mínimo de decimales deseado</span></span>
+<span></span>
+<span>    <span class="va">simulacion</span><span class="op">$</span><span class="va">ENDEUDA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="va">simulacion</span><span class="op">$</span><span class="va">ENDEUDA</span>, nsmall <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span>    <span class="va">simulacion</span><span class="op">$</span><span class="va">APALANCA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="va">simulacion</span><span class="op">$</span><span class="va">APALANCA</span>, nsmall <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span>    <span class="va">simulacion</span><span class="op">$</span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="va">simulacion</span><span class="op">$</span><span class="va">fit</span>, nsmall <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span>    <span class="va">simulacion</span><span class="op">$</span><span class="va">lwr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="va">simulacion</span><span class="op">$</span><span class="va">lwr</span>, nsmall <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span>    <span class="va">simulacion</span><span class="op">$</span><span class="va">upr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="va">simulacion</span><span class="op">$</span><span class="va">upr</span>, nsmall <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p>Tras definir el formato numérico de las variables, se construirá la tabla, de nombre, por ejemplo, “tablasimula”:</p>
+<div class="sourceCode" id="cb354"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Tabla</span></span>
+<span></span>
+<span>    <span class="va">tablasimula</span> <span class="op">&lt;-</span> <span class="va">simulacion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>format <span class="op">=</span> <span class="va">knitr.table.format</span>,</span>
+<span>            caption <span class="op">=</span> <span class="st">"Simulación Modelo Rentabilidad Económica"</span>,</span>
+<span>            col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Escenario"</span>,</span>
+<span>                          <span class="st">"Resultado"</span>,</span>
+<span>                          <span class="st">"Activo"</span>,</span>
+<span>                          <span class="st">"Endeuda"</span>,</span>
+<span>                          <span class="st">"Apalancamiento"</span>,</span>
+<span>                          <span class="st">"Dimensión"</span>,</span>
+<span>                          <span class="st">"Previsión"</span>,</span>
+<span>                          <span class="st">"Inferior 95%"</span>,</span>
+<span>                          <span class="st">"Superior 95%"</span><span class="op">)</span>,</span>
+<span>        digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                    bootstrap_options <span class="op">=</span> <span class="st">"striped"</span>,</span>
+<span>                    <span class="st">"bordered"</span>,</span>
+<span>                    <span class="st">"condensed"</span>,</span>
+<span>                    position <span class="op">=</span> <span class="st">"center"</span>,</span>
+<span>                    font_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">0</span>, bold<span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">simulacion</span><span class="op">)</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">tablasimula</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-295">Table 9.9: </span><span id="tab:unnamed-chunk-295">Table 9.10: </span>Simulación Modelo Rentabilidad Económica
+</caption>
+<thead><tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Escenario
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Resultado
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Activo
+</th>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Endeuda
+</th>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Apalancamiento
+</th>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Dimensión
+</th>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Previsión
+</th>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Inferior 95%
+</th>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Superior 95%
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;">
+ESCENARIO A
+</td>
+<td style="text-align:right;text-align: center;">
+2500
+</td>
+<td style="text-align:right;text-align: center;">
+50000
+</td>
+<td style="text-align:left;text-align: center;">
+20.250
+</td>
+<td style="text-align:left;text-align: center;">
+0.238
+</td>
+<td style="text-align:left;text-align: center;">
+GRANDE
+</td>
+<td style="text-align:left;text-align: center;">
+6.711704
+</td>
+<td style="text-align:left;text-align: center;">
+-0.2161380
+</td>
+<td style="text-align:left;text-align: center;">
+13.63955
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+ESCENARIO B
+</td>
+<td style="text-align:right;text-align: center;">
+2500
+</td>
+<td style="text-align:right;text-align: center;">
+25000
+</td>
+<td style="text-align:left;text-align: center;">
+50.000
+</td>
+<td style="text-align:left;text-align: center;">
+50.000
+</td>
+<td style="text-align:left;text-align: center;">
+MEDIA
+</td>
+<td style="text-align:left;text-align: center;">
+7.596000
+</td>
+<td style="text-align:left;text-align: center;">
+0.6413923
+</td>
+<td style="text-align:left;text-align: center;">
+14.55061
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+ESCENARIO C
+</td>
+<td style="text-align:right;text-align: center;">
+3000
+</td>
+<td style="text-align:right;text-align: center;">
+5000
+</td>
+<td style="text-align:left;text-align: center;">
+90.000
+</td>
+<td style="text-align:left;text-align: center;">
+100.000
+</td>
+<td style="text-align:left;text-align: center;">
+PEQUEÑA
+</td>
+<td style="text-align:left;text-align: center;">
+8.852940
+</td>
+<td style="text-align:left;text-align: center;">
+1.8523982
+</td>
+<td style="text-align:left;text-align: center;">
+15.85348
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div id="materiales-para-realizar-las-prácticas-del-capítulo.-7" class="section level2" number="9.3">
+<h2>
+<span class="header-section-number">9.3</span> Materiales para realizar las prácticas del capítulo.<a class="anchor" aria-label="anchor" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-7"><i class="fas fa-link"></i></a>
+</h2>
+<p>En esta sección se muestran los links de acceso a los diferentes materiales (<em>scripts</em>, datos…) necesarios para llevar a cabo los contenidos prácticos del capítulo.</p>
+<p><strong>Datos (en formato Microsoft (R) Excel (R)):</strong></p>
+<ul>
+<li><p>eolica_50.xlsx (<a href="https://docs.google.com/spreadsheets/d/1oq17lI4trI8k5oeDgj_fYg9WhbRIqDLG/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">obtener aquí</a>)</p></li>
+<li><p>eolica_escenarios.xlsx (<a href="https://docs.google.com/spreadsheets/d/1QUqpOHC_XK38MBggb3hYibDReHVfd7wL/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">obtener aquí</a>)</p></li>
+<li><p><strong>Scripts:</strong></p></li>
+<li><p>regresion_eolica.R <a href="https://drive.google.com/file/d/1p4p17OudRprwkpF7wvvF1gwHZG82uv89/view?usp=sharing">(</a><a href="https://drive.google.com/file/d/1ilNEAA3-Co9kbs5Gv4arwCBCcCnbn0zY/view?usp=sharing">obtener aquí</a>)</p></li>
+</ul>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="an%C3%A1lisis-de-la-varianza..html"><span class="header-section-number">8</span> Análisis de la varianza.</a></div>
+<div class="next"><a href="an%C3%A1lisis-de-datos-cualitativos..html"><span class="header-section-number">10</span> Análisis de Datos Cualitativos.</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#an%C3%A1lisis-de-regresi%C3%B3n-lineal-m%C3%BAltiple."><span class="header-section-number">9</span> Análisis de Regresión Lineal Múltiple.</a></li>
+<li><a class="nav-link" href="#introducci%C3%B3n.-5"><span class="header-section-number">9.1</span> Introducción.</a></li>
+<li><a class="nav-link" href="#especificaci%C3%B3n-del-mbr.-datos-de-corte-transversal."><span class="header-section-number">9.2</span> Especificación del MBR. Datos de corte transversal.</a></li>
+<li><a class="nav-link" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-7"><span class="header-section-number">9.3</span> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Técnicas de Análisis de Datos Económicos con R</strong>" was written by . It was last built on 2025-09-09.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

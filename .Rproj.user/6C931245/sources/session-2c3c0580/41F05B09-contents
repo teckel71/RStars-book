@@ -1,0 +1,360 @@
+---
+editor_options:
+  markdown:
+    wrap: sentence
+---
+
+# Almacenando y manipulando datos.
+
+## Objetos. Datos.
+
+Como vimos en el capítulo 1, tras ejecutar un sencillo script (o al escribir instrucciones directamente desde la consola), R es interactivo: responde a las entradas que recibe.
+Las entradas o **expresiones** pueden ser, básicamente básicamente:
+
+-   Expresiones aritméticas.
+
+-   Expresiones lógicas.
+
+-   Llamadas a funciones.
+
+-   Asignaciones.
+
+Las expresiones realizan acciones sobre **objetos** de R.
+Los objetos en R son entes que tienen ciertas características, *metadatos*, llamados atributos.
+No todos los objetos tienen los mismos atributos y, ni tan siquiera, todos los objetos tienen atributos que los caractericen.
+
+Los objetos más importantes en R son ciertas estructuras o *contenedores* diseñados para almacenar elementos:
+
+-   Vectores.
+
+-   Matrices.
+
+-   Listas.
+
+-   Data frames.
+
+-   Factores.
+
+Los elementos almacenados en los objetos se dividen en *clases*.
+Entre las diferentes clases, destacan las clases referidas a **datos**, que pueden ser de diferentes *modos*: logical (verdadero/falso), numeric (números) o character (cadena de texto).
+El modo numeric puede ser, a la vez, de tipo integer (número entero) o double (número real).
+En el caso de logical y carácter, modo y tipo coinciden.
+
+Vamos a profundizar un poco en algunas de estos contenedores de datos.
+Vamos a suponer que trabajamos en el proyecto que creamos en el capítulo anterior (proyecto "explora"), y que vamos a editar el script que también creamos en tal capítulo (script "explorando.R", que se encontrará ubicado en la carpeta del proyecto "explora").
+
+### Vectores.
+
+Los **vectores**, son conjuntos de elementos **de la misma clase**.
+Vamos a definir por ejemplo el vector x = (1,3,5,8).
+Para ello, vamos a escribir en nuestro script:
+
+```{r, eval=TRUE, echo=TRUE }
+x <- c(1,3,5,8)
+```
+
+Ejecutamos la línea (situando el cursor en algún lugar de ella, dentro del script; y pulsando a la vez las teclas `Control + Enter` o pinchando con el ratón en el botón `Run` del editor).
+Ya tenemos nuestro primer objeto de tipo *vector* en memoria.
+Por cierto, lo que hemos hecho es una **asignación**, que se escribe con una flecha creada mediante los signos "\<" y "-".
+Hemos asignado a un vector llamado "x" los elementos 1, 3, 5 y 8.
+
+Para ver el vector simplemente escribimos en la consola (o en el script) el nombre del vector, "x".
+El resultado será:
+
+```{r, eval=TRUE, echo=FALSE}
+x
+```
+
+Además, si miramos en la ventana superior-derecha de R-Studio, veremos que en el ***Global Environment*** se muestra nuestro vector y que, además, se nos informa de que tiene *modo* *numérico*.
+El *Global Environment* nos informa de los objetos que R tiene en memoria:
+
+![Nuestro vector en memoria.](figuras/Imagen2_01.png){width="700"} Si queremos obtener un vector de números consecutivos del 2 al 6, basta con ejecutar en la "consola" (o escribir y ejecutar en el script):
+
+```{r, eval=TRUE, echo=TRUE}
+y <- c(2:6)
+```
+
+Al escribir el nombre del vector "y" en la "consola" obtendremos:
+
+```{r, echo=TRUE}
+y
+```
+
+Si queremos saber la longitud de un vector, usaremos la *función* `length()`.
+Por ejemplo, `length(y)` nos devolverá el valor 5.
+Escribamos en el script y ejecutemos:
+
+```{r}
+length(y)
+```
+
+Un vector puede incluir, además de números, caracteres o grupos de caracteres alfanuméricos; siempre entrecomillados (lo fundamental es que sean elementos de la misma clase).
+Por ejemplo, el vector "genero" (¡no pongamos tildes o podemos tener problemas!).
+Así, si ejecutamos estas dos líneas de código:
+
+```{r, eval=TRUE, echo=FALSE}
+genero<-c ("Mujer","Hombre")
+genero
+```
+
+Se habrá creado el vector "genero":
+
+```{r}
+genero
+```
+
+Podemos obtener la clase de los elementos almacenados en nuestro vector con la función class():
+
+```{r, eval=TRUE, echo=TRUE}
+class(genero)
+```
+
+Si falta un dato en un vector, habrá que escribir "NA" (not available).
+Por ejemplo, si falta el tercer dato de este vector "z", este vector se escribirá como:
+
+```{r, eval=TRUE, echo=TRUE}
+Z <- c(1,2,NA,2,8)
+```
+
+Para **seleccionar un elemento** concreto de un vector, indicaremos entre corchetes la posición en la que se encuentra.
+Por ejemplo, refiriéndonos al vector "x", para obtener el valor de su tercer elemento, haremos:
+
+```{r, eval=TRUE, echo=TRUE}
+x[3]
+```
+
+Si queremos que se nos muestre los elementos del vector x del 2º al 4º:
+
+```{r, eval=TRUE, echo=TRUE}
+x[2:4]
+```
+
+Por último, si queremos sacar en pantalla los elementos 1º y 4º, tendremos que incluir una "c" seguida de un paréntesis que recoja el orden de los elementos que queremos seleccionar:
+
+```{r, eval=TRUE, echo=TRUE}
+x[c(1,4)]
+```
+
+### Matrices.
+
+Las **matrices**, internamente en R, son vectores; pero con dos atributos adicionales: número de filas y número de columnas.
+Se definen mediante la función matrix().
+Por ejemplo, para definir la matriz "a":
+
+$$
+\begin{equation}
+  \begin{pmatrix}
+    1 & 4 & 7\\
+    2 & 5 & 8\\
+    3 & 6 & 9
+   \end{pmatrix}
+\end{equation}
+$$
+
+Tendremos que escribir:
+
+```{r, eval=TRUE, echo=TRUE}
+a <- matrix(c(1,2,3,4,5,6,7,8,9),nrow=3)
+a
+```
+
+El número de filas de la matriz (y por tanto, el número de columnas) se fija con el argumento `nrow =` .
+También podríamos fijar el número de columnas, con `ncol =` .
+
+Como vemos, por defecto, R va "cortando" el vector por columnas (si lo preferimos, lo puede hacer también por filas, añadiendo a la función `matrix()` el argumento `by row = true`; pero, en nuestro ejemplo, obtendríamos la matriz traspuesta a la que queremos almacenar).
+
+Las dimensiones (número de filas y de columnas) de la matriz pueden obtenerse mediante la función `dim()`:
+
+```{r, eval=TRUE, echo=TRUE}
+dim(a)
+
+```
+
+3 filas y 3 columnas.
+
+Si queremos seleccionar elementos concretos de una matriz, lo haremos utilizando corchetes para indicar filas y columnas.
+Hemos de tener en cuenta que, trabajando con matrices, siempre tenemos **[rango de filas, rango de columnas]**.
+Si se deja en blanco el espacio entre el corchete inicial y la coma, esto querrá decir que consideramos todas las filas.
+Y si no insertamos nada entre la coma y el corchete de cierre, esto significará que consideramos todas las columnas.
+A continuación tenemos varios ejemplos de código, con el resultado obtenido en la consola:
+
+```{r, eval=TRUE, echo=TRUE}
+a[2,3]
+a[1:2,2:3] 
+a[,c(1,3)]
+a[c(1,3),]
+```
+
+Tanto para vectores como para matrices, funcionan las operaciones suma y diferencia sin más complicaciones.
+En el caso del producto, sin embargo, hay que tener en cuenta que, por ejemplo, a\*a devuelve la multiplicación elemento a elemento, es decir:
+
+```{r, eval=FALSE, echo=TRUE}
+a*a
+```
+
+Devuelve la multiplicación elemento a elemento (en este caso, el cuadrado de cada número, al multiplicar la matriz a por sí misma):
+
+```{r, eval=TRUE, echo=FALSE}
+a*a
+```
+
+Para hacer el verdadero producto matricial deberá introducirse:
+
+```{r, eval=TRUE, echo=TRUE}
+a%*%a
+```
+
+### Data frames.
+
+Un **data frame** es un objeto que almacena datos organizados mediante la clase `data.frame`.
+Esta organización consiste en que, por filas, se disponen los diferentes casos o sujetos; mientras que por columnas se posicionan las variables.
+Así:
+
+-   Es similar a una matriz en el sentido de que tiene dos dimensiones.
+    Podemos acceder a sus elementos con corchetes, tenemos nombres de filas y columnas, y podemos operar con ellas.
+
+-   Cada columna tiene un nombre, de manera que podemos acceder a una columna concreta con el símbolo **`$`**.
+    Todas las columnas (variables) son vectores con la misma longitud.
+
+-   Cada columna puede ser un vector numérico, factor, de tipo carácter o lógico.
+
+Por ejemplo, vamos a crear el *data frame* **"datos"**, con tres variables: "peso", "altura", y "color de ojos", llamadas "Peso", "Altura" y "Cl.ojos", respectivamente; para 3 individuos o casos.
+Una opción es crear primero las tres variables como vectores, y luego crear el *data frame* mediante la función `dataframe()`:
+
+```{r, eval=TRUE, echo=TRUE}
+Peso<-c(68,75,88)
+Altura<-c(1.6,1.8,1.9)
+Cl.ojos<-c("azules","marrones","marrones")
+datos<-data.frame(Peso,Altura,Cl.ojos)
+```
+
+Si ahora ejecutamos una línea con el nombre de nuestro *data frame*, lo obtendremos como resultado en la consola:
+
+```{r, eval=TRUE, echo=TRUE}
+datos
+```
+
+Para obtener los nombres de las variables (es decir, el nombre de cada columna) teclearemos la función:
+
+```{r, eval=FALSE, echo=TRUE}
+names(datos)
+```
+
+Obteniéndose:
+
+```{r, eval=TRUE, echo=FALSE}
+names(datos)
+```
+
+Para obtener solo los datos de la columna (variable) color de ojos teclearemos datos\$Cl.ojos:
+
+```{r, eval=TRUE, echo=TRUE}
+datos$Cl.ojos
+```
+
+Y para obtener los datos de peso: datos\$Peso:
+
+```{r, eval=TRUE, echo=TRUE}
+datos$Peso
+```
+
+Para saber el número de filas y de columnas de una hoja de datos utilizaremos las funciones `nrow()` y `ncol()`:
+
+```{r, eval=TRUE, echo=TRUE}
+nrow(datos)
+ncol(datos)
+```
+
+Para seleccionar elementos de un data frame, se pueden seguir las mismas reglas que para la selección de elementos de una matriz (con el número de cada fila, que es cada individuo; y el número de cada columna, que es cada variable. Para elegir una variable, no obstante, ya hemos visto que es posible usar su nombre; aunque precedido del nombre del data frame y el signo `$`. Por ejemplo, si ejecutamos:
+
+```{r, eval=TRUE, echo=TRUE}
+datos[,2]
+datos$Altura
+```
+
+Obtenemos el mismo resultado.
+
+## Importando datos.
+
+Lo más frecuente es que no tecleemos los datos, como hemos hecho hasta ahora; sino que los importemos a R desde algún contenedor externo (archivo de texto, hoja de cálculo, base de datos...).
+Nosotros vamos a importar nuestros datos desde Microsoft® Excel®.
+Vamos a cerrar el script que hemos estado construyendo en los apartados anteriores (para conservarlo hay que guardarlo antes), aunque vamos a seguir trabajando en el mismo proyecto (que habíamos llamado, por ejemplo, "explora").
+Iremos a la carpeta del proyecto y guardaremos en ella los dos archivos de esta práctica:
+
+-   Un archivo de Microsoft® Excel® llamado "eolica_20.xlsx" ([obtener aquí)](https://docs.google.com/spreadsheets/d/1YDFCd0Z7udeIi6WdNYwthYHGmJSrEfG1/edit?usp=drive_link&ouid=115375878280465826079&rtpof=true&sd=true)
+
+-   Un script con las instrucciones que vamos a mostrar a continuación, y que se llama "explora_eolica.R" ([obtener aquí](https://drive.google.com/file/d/1_rt1TtlYGU0VWtnvkWLpxM_MDGOrSFYZ/view?usp=drive_link))
+
+Si abrimos el archivo de Microsoft® Excel® comprobaremos que se compone de tres hojas.
+La primera muestra el criterio de búsqueda de casos en la un aviso sobre el uso exclusivo que se debe dar a los datos incorporados; la segunda recoge la descripción de las variables consideradas; y la tercera (hoja "Top 20") guarda los datos que debemos **importar** desde R-Studio.
+Estos datos se corresponden con diferentes variables económico-financieras de 20 empresas productoras de electricidad mediante generación eólica.
+Luego vamos a cerrar el archivo de Microsoft® Excel® y volveremos a R-Studio.
+Vamos a abrir nuestro script "explora_eolica.R" con `File → Open File…` Este script contiene el programa que vamos a ir ejecutando en la práctica.
+La primera línea / instrucción en los scripts suele ser:
+
+```{r, eval=TRUE, echo=TRUE}
+rm(list = ls())
+```
+
+La instrucción tiene como objeto limpiar el *Environment* (memoria) de objetos de anteriores sesiones de trabajo.
+Para importar los datos localizados en el archivo de Excel "eolica_20.xlsx" el código es:
+
+```{r, eval=TRUE, echo=TRUE}
+# DATOS
+library(readxl)
+eolica_20 <- read_excel("eolica_20.xlsx", sheet = "Top 20")
+```
+
+¡Atención!
+Si nunca se ha utilizado el paquete `{readxl}` (que contiene el código necesario para importar datos de un archivo de Microsoft® Excel®), cuando la intentemos activar con la función `library()` nos dará un error o nos dirá que previamente hay que importarla.
+En ese caso, iremos a la ventana inferior-derecha y pulsaremos la pestaña `Packages`, pulsaremos en `Install`, y emergerá una ventana donde dejaremos el "repositorio" que viene por defecto y, en el campo "Packages", escribiremos el nombre del "paquete" que contiene la librería que nos hace falta (normalmente coincide con el nombre de la propia librería, en nuestro caso `{readxl}`. Una vez descargado el "paquete", podremos ejecutar el código anterior sin problemas.
+
+Podemos observar como en el *Environment* ya aparece un objeto.
+Este objeto es una estructura de datos tipo *data frame*, se llama "eolica_20" y contiene 12 columnas, una por cada una de las variables almacenadas en el archivo de Microsoft® Excel®.
+De estas variables, tres son de tipo cualitativo, formadas por cadenas de caracteres: el nombre de la empresa, "NOMBRE"; y el nombre del grupo empresarial matriz al que pertenece, "MATRIZ".
+Puede explorarse el contenido del *data frame* y los principales estadísticos con la función `summary()`:
+
+```{r, eval=TRUE, echo=TRUE}
+summary (eolica_20)
+```
+
+Veremos cómo aparecen 11 variables con algunos estadísticos básicos.
+
+R ha considerado la primera columna como una variable de tipo cualitativo (atributo o factor).
+En realidad no es una variable, sino el nombre de los individuos o casos.
+Para evitar que R tome los nombres de los casos como una variable, podemos redefinir nuestro *data frame* diciéndole que considere esa primera columna como los *nombres de los individuos o filas*:
+
+```{r, eval=TRUE, echo=TRUE}
+eolica_20 <- data.frame(eolica_20, row.names = 1)
+```
+
+En la línea anterior hemos asignado al data frame "eolica_20" los propios datos de "eolica_20"; pero indicando que la primera columna de datos no es una variable; sino el nombre de los casos.
+Si hacemos ahora el `summary()`:
+
+```{r, eval=TRUE, echo=TRUE}
+summary (eolica_20)
+```
+
+Vemos que ya no aparece "NOMBRE" como variable, y en el *Environment* ya aparece el data frame "eolica_20" con 20 observaciones (casos), pero con 11 variables (una menos).
+
+Antes de seguir con la manipulación de nuestros datos, es preciso decir que existen otros muchos formatos de datos que pueden ser importados.
+Por ejemplo, con el paquete `{readr}` se pueden importar datos de archivos de texto de tipo tabular (por ejemplo, archivos \*.csv).
+Con el paquete `{haven}` se pueden capturar los datos almacenados en archivos de SPSS® (.sav), Stata® (.dta), SAS® (.sas7bdat), etc.
+Finamente, se pueden capturar datos almacenados en páginas web (archivos en formato JSON o XML, o en tablas HTML)) o en bases de datos gestionadas mediante diversos sistemas (SQLite, MySQL, MariaDB, PostgreSQL, Oracle®).
+
+## dplyr().
+
+### El Tidyverse. Cargando dplyr().
+
+El ***Tidyverse*** es un conjunto de paquetes / librerías con una filosofía común, como es el uso de ciertas estructuras gramaticales, que facilitan muchas de las tareas y análisis que podrían hacerse con el lenguaje R estándar.
+Una buena obra para profundizar en el Tidyverse es @Wickham2017R.
+
+Uno de esos paquetes es `{dplyr}`, que proporciona una gramática más sencilla que la del lenguaje R convencional para **manipular** los objetos de estructuras de datos conocidos como ***data frames***.
+
+Los data frames, como ya sabemos, son estructuras en las que se almacenan datos de modo que, por columnas, se disponen las variables del análisis; y por filas los casos que conforman la muestra / población.
+
+Vamos a suponer que trabajamos dentro del proyecto que hemos creado previamente, de nombre "explora" (ver capítulo 1).
+Dentro de la carpeta del proyecto guardaremos el script llamado "explora_dplyr.R" y el archivo de Microsoft® Excel® llamado "eolica_20.xlsx".
+Si abrimos este último archivo, comprobaremos que se compone de tres hojas.
+La hoja "Top 20" contiene los datos a importar desde R-Studio.
+Estos datos se corresponden con diferentes variables económico-financieras de 20 empresas productoras de electricidad mediante generación eólica.

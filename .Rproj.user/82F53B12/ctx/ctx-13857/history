@@ -1,0 +1,512 @@
+if (length(columnas_no_validas) > 0) {
+stop(paste("Las siguientes columnas no existen en el dataframe:", paste(columnas_no_validas, collapse = ", ")))
+}
+# Seleccionar las variables deseadas
+df_seleccion <- dataframe[, columnas, drop = FALSE]
+# Crear el nuevo dataframe con casos completos
+df_sm <- df_seleccion[complete.cases(df_seleccion), ]
+# Nombrar el nuevo dataframe
+nombre_df_sm <- paste0(deparse(substitute(dataframe)), "_sm")
+assign(nombre_df_sm, df_sm, envir = .GlobalEnv)
+# Identificar los casos con datos faltantes
+df_na <- df_seleccion[!complete.cases(df_seleccion), ]
+lista_resultado <- list()
+if (nrow(df_na) > 0) {
+# Crear la tabla en formato HTML
+tabla_na <- kable(df_na, format = "html", caption = "Casos con datos faltantes") %>%
+kable_styling(full_width = FALSE)
+# Agregar la tabla a la lista
+lista_resultado$tabla_na <- tabla_na
+message("Se han encontrado casos con datos faltantes. La tabla está almacenada en el objeto lista.")
+} else {
+message("No hay casos con datos faltantes en las variables seleccionadas.")
+lista_resultado$tabla_na <- NULL
+}
+# Agregar el nuevo dataframe limpio a la lista
+lista_resultado$dataframe_sm <- df_sm
+# Nombrar la lista y guardarla en el entorno global
+nombre_lista <- paste0(deparse(substitute(dataframe)), "_resultado")
+assign(nombre_lista, lista_resultado, envir = .GlobalEnv)
+# Devolver el nombre de la lista
+return(nombre_lista)
+}
+MATmv(eolica_100,c(RES,RENECO,DIMENSION))
+eolica_100_resultado$tabla_na
+# Descibiendo a las empresas eolicas (disculpad la falta de tildes)
+rm(list = ls())
+# DATOS
+library(readxl)
+eolica_100 <- read_excel("eolica_100_mv.xlsx", sheet = "Datos",
+na = c("n.d.", "s.d."))
+library(knitr)
+library(kableExtra)
+library(visdat)
+MATmv <- function(dataframe, columnas) {
+# Convertir nombres de columnas a texto si no lo son
+columnas <- sapply(substitute(columnas)[-1], deparse)
+# Verificar que el dataframe sea válido
+if (!is.data.frame(dataframe)) {
+stop("El primer argumento debe ser un dataframe.")
+}
+# Verificar que las columnas existen en el dataframe
+columnas_no_validas <- setdiff(columnas, colnames(dataframe))
+if (length(columnas_no_validas) > 0) {
+stop(paste("Las siguientes columnas no existen en el dataframe:", paste(columnas_no_validas, collapse = ", ")))
+}
+# Seleccionar las variables deseadas
+df_seleccion <- dataframe[, columnas, drop = FALSE]
+# Crear el nuevo dataframe con casos completos
+df_sm <- df_seleccion[complete.cases(df_seleccion), ]
+# Nombrar el nuevo dataframe
+nombre_df_sm <- paste0(deparse(substitute(dataframe)), "_sm")
+assign(nombre_df_sm, df_sm, envir = .GlobalEnv)
+# Identificar los casos con datos faltantes
+df_na <- df_seleccion[!complete.cases(df_seleccion), ]
+# Crear la lista de información
+lista_info <- list()
+# Agregar el nombre de los casos (índice de fila) al dataframe de datos faltantes
+if (nrow(df_na) > 0) {
+df_na$Caso <- rownames(df_na)  # Añadir columna con el nombre/índice del caso
+# Crear la tabla en formato HTML
+tabla_na <- kable(df_na, format = "html", caption = "Casos con datos faltantes") %>%
+kable_styling(full_width = FALSE)
+# Agregar la tabla a la lista
+lista_info$tabla_na <- tabla_na
+message("Se han encontrado casos con datos faltantes. La información está almacenada en la lista.")
+} else {
+message("No hay casos con datos faltantes en las variables seleccionadas.")
+lista_info$tabla_na <- NULL
+}
+# Crear el gráfico de vis_miss
+grafico_vis_miss <- vis_miss(df_seleccion)
+lista_info$grafico_vis_miss <- grafico_vis_miss
+# Nombrar la lista y guardarla en el entorno global
+nombre_lista <- paste0(nombre_df_sm, "_info")
+assign(nombre_lista, lista_info, envir = .GlobalEnv)
+# Devolver el nombre del nuevo dataframe
+return(nombre_df_sm)
+}
+MATmv(eolica_100,c(RES,RENECO,DIMENSION))
+View(eolica_100_sm_info)
+eolica_100_sm_info$grafico_vis_miss
+eolica_100_sm_info$tabla_na
+# Descibiendo a las empresas eolicas (disculpad la falta de tildes)
+rm(list = ls())
+# DATOS
+library(readxl)
+eolica_100 <- read_excel("eolica_100_mv.xlsx", sheet = "Datos",
+na = c("n.d.", "s.d."))
+library(knitr)
+library(kableExtra)
+library(visdat)
+MATmv <- function(dataframe, columnas) {
+# Convertir nombres de columnas a texto si no lo son
+columnas <- sapply(substitute(columnas)[-1], deparse)
+# Verificar que el dataframe sea válido
+if (!is.data.frame(dataframe)) {
+stop("El primer argumento debe ser un dataframe.")
+}
+# Verificar que las columnas existen en el dataframe
+columnas_no_validas <- setdiff(columnas, colnames(dataframe))
+if (length(columnas_no_validas) > 0) {
+stop(paste("Las siguientes columnas no existen en el dataframe:", paste(columnas_no_validas, collapse = ", ")))
+}
+# Seleccionar las variables deseadas
+df_seleccion <- dataframe[, columnas, drop = FALSE]
+# Crear el nuevo dataframe con casos completos
+df_sm <- df_seleccion[complete.cases(df_seleccion), ]
+# Nombrar el nuevo dataframe
+nombre_df_sm <- paste0(deparse(substitute(dataframe)), "_sm")
+assign(nombre_df_sm, df_sm, envir = .GlobalEnv)
+# Identificar los casos con datos faltantes
+df_na <- df_seleccion[!complete.cases(df_seleccion), ]
+# Crear la lista de información
+lista_info <- list()
+if (nrow(df_na) > 0) {
+# Agregar el índice de los casos como primera columna
+df_na <- cbind(Caso = rownames(df_na), df_na)
+# Crear la tabla en formato HTML
+tabla_na <- kable(df_na, format = "html", caption = "Casos con datos faltantes") %>%
+kable_styling(full_width = FALSE)
+# Agregar la tabla a la lista
+lista_info$tabla_na <- tabla_na
+message("Se han encontrado casos con datos faltantes. La información está almacenada en la lista.")
+} else {
+message("No hay casos con datos faltantes en las variables seleccionadas.")
+lista_info$tabla_na <- NULL
+}
+# Crear el gráfico de vis_miss
+grafico_vis_miss <- vis_miss(df_seleccion)
+lista_info$grafico_vis_miss <- grafico_vis_miss
+# Nombrar la lista y guardarla en el entorno global
+nombre_lista <- paste0(nombre_df_sm, "_info")
+assign(nombre_lista, lista_info, envir = .GlobalEnv)
+# Devolver el nombre del nuevo dataframe
+return(nombre_df_sm)
+}
+MATmv(eolica_100,c(RES,RENECO,DIMENSION))
+eolica_100_sm_info$grafico_vis_miss
+eolica_100_sm_info$tabla_na
+View(eolica_100_sm)
+View(eolica_100)
+View(eolica_100_sm)
+# Descibiendo a las empresas eolicas (disculpad la falta de tildes)
+rm(list = ls())
+# DATOS
+library(readxl)
+eolica_100 <- read_excel("eolica_100_mv.xlsx", sheet = "Datos",
+na = c("n.d.", "s.d."))
+library(knitr)
+library(kableExtra)
+library(visdat)
+MATmv <- function(dataframe, columnas) {
+# Convertir nombres de columnas a texto si no lo son
+columnas <- sapply(substitute(columnas)[-1], deparse)
+# Verificar que el dataframe sea válido
+if (!is.data.frame(dataframe)) {
+stop("El primer argumento debe ser un dataframe.")
+}
+# Verificar que las columnas existen en el dataframe
+columnas_no_validas <- setdiff(columnas, colnames(dataframe))
+if (length(columnas_no_validas) > 0) {
+stop(paste("Las siguientes columnas no existen en el dataframe:", paste(columnas_no_validas, collapse = ", ")))
+}
+# Seleccionar las variables deseadas
+df_seleccion <- dataframe[, columnas, drop = FALSE]
+# Crear el nuevo dataframe con casos completos
+df_sm <- df_seleccion[complete.cases(df_seleccion), ]
+# Conservar los nombres de las filas
+rownames(df_sm) <- rownames(df_seleccion)[complete.cases(df_seleccion)]
+# Nombrar el nuevo dataframe
+nombre_df_sm <- paste0(deparse(substitute(dataframe)), "_sm")
+assign(nombre_df_sm, df_sm, envir = .GlobalEnv)
+# Identificar los casos con datos faltantes
+df_na <- df_seleccion[!complete.cases(df_seleccion), ]
+# Conservar los nombres de las filas
+rownames(df_na) <- rownames(df_seleccion)[!complete.cases(df_seleccion)]
+# Crear la lista de información
+lista_info <- list()
+if (nrow(df_na) > 0) {
+# Agregar el índice de los casos como primera columna
+df_na <- cbind(Caso = rownames(df_na), df_na)
+# Crear la tabla en formato HTML
+tabla_na <- kable(df_na, format = "html", caption = "Casos con datos faltantes") %>%
+kable_styling(full_width = FALSE)
+# Agregar la tabla a la lista
+lista_info$tabla_na <- tabla_na
+message("Se han encontrado casos con datos faltantes. La información está almacenada en la lista.")
+} else {
+message("No hay casos con datos faltantes en las variables seleccionadas.")
+lista_info$tabla_na <- NULL
+}
+# Crear el gráfico de vis_miss
+grafico_vis_miss <- vis_miss(df_seleccion)
+lista_info$grafico_vis_miss <- grafico_vis_miss
+# Nombrar la lista y guardarla en el entorno global
+nombre_lista <- paste0(nombre_df_sm, "_info")
+assign(nombre_lista, lista_info, envir = .GlobalEnv)
+# Devolver el nombre del nuevo dataframe
+return(nombre_df_sm)
+}
+MATmv(eolica_100,c(RES,RENECO,DIMENSION))
+View(eolica_100_sm)
+View(eolica_100_sm_info)
+# Descibiendo a las empresas eolicas (disculpad la falta de tildes)
+rm(list = ls())
+# DATOS
+library(readxl)
+eolica_100 <- read_excel("eolica_100_mv.xlsx", sheet = "Datos",
+na = c("n.d.", "s.d."))
+library(knitr)
+library(kableExtra)
+library(visdat)
+MATmv <- function(dataframe, columnas) {
+# Convertir nombres de columnas a texto si no lo son
+columnas <- sapply(substitute(columnas)[-1], deparse)
+# Verificar que el dataframe sea válido
+if (!is.data.frame(dataframe)) {
+stop("El primer argumento debe ser un dataframe.")
+}
+# Verificar que las columnas existen en el dataframe
+columnas_no_validas <- setdiff(columnas, colnames(dataframe))
+if (length(columnas_no_validas) > 0) {
+stop(paste("Las siguientes columnas no existen en el dataframe:", paste(columnas_no_validas, collapse = ", ")))
+}
+# Seleccionar las variables deseadas
+df_seleccion <- dataframe[, columnas, drop = FALSE]
+# Conservar los nombres de las filas originales
+rownames(df_seleccion) <- rownames(dataframe)
+# Crear el nuevo dataframe con casos completos
+df_sm <- df_seleccion[complete.cases(df_seleccion), ]
+# Nombrar el nuevo dataframe
+nombre_df_sm <- paste0(deparse(substitute(dataframe)), "_sm")
+assign(nombre_df_sm, df_sm, envir = .GlobalEnv)
+# Identificar los casos con datos faltantes
+df_na <- df_seleccion[!complete.cases(df_seleccion), ]
+# Crear la lista de información
+lista_info <- list()
+if (nrow(df_na) > 0) {
+# Agregar el índice de los casos como primera columna
+df_na <- cbind(Caso = rownames(df_na), df_na)
+# Crear la tabla en formato HTML
+tabla_na <- kable(df_na, format = "html", caption = "Casos con datos faltantes") %>%
+kable_styling(full_width = FALSE)
+# Agregar la tabla a la lista
+lista_info$tabla_na <- tabla_na
+message("Se han encontrado casos con datos faltantes. La información está almacenada en la lista.")
+} else {
+message("No hay casos con datos faltantes en las variables seleccionadas.")
+lista_info$tabla_na <- NULL
+}
+# Crear el gráfico de vis_miss
+grafico_vis_miss <- vis_miss(df_seleccion)
+lista_info$grafico_vis_miss <- grafico_vis_miss
+# Nombrar la lista y guardarla en el entorno global
+nombre_lista <- paste0(nombre_df_sm, "_info")
+assign(nombre_lista, lista_info, envir = .GlobalEnv)
+# Devolver el nombre del nuevo dataframe
+return(nombre_df_sm)
+}
+MATmv(eolica_100,c(RES,RENECO,DIMENSION))
+View(eolica_100_sm)
+eolica_100
+# Descibiendo a las empresas eolicas (disculpad la falta de tildes)
+rm(list = ls())
+# DATOS
+library(readxl)
+eolica_100 <- read_excel("eolica_100_mv.xlsx", sheet = "Datos",
+na = c("n.d.", "s.d."))
+summary (eolica_100)
+eolica_100 <- data.frame(eolica_100, row.names = 1)
+summary (eolica_100)
+MATmv(eolica_100,c(RES,RENECO,DIMENSION))
+library(knitr)
+library(kableExtra)
+library(visdat)
+MATmv <- function(dataframe, columnas) {
+# Convertir nombres de columnas a texto si no lo son
+columnas <- sapply(substitute(columnas)[-1], deparse)
+# Verificar que el dataframe sea válido
+if (!is.data.frame(dataframe)) {
+stop("El primer argumento debe ser un dataframe.")
+}
+# Verificar que las columnas existen en el dataframe
+columnas_no_validas <- setdiff(columnas, colnames(dataframe))
+if (length(columnas_no_validas) > 0) {
+stop(paste("Las siguientes columnas no existen en el dataframe:", paste(columnas_no_validas, collapse = ", ")))
+}
+# Seleccionar las variables deseadas
+df_seleccion <- dataframe[, columnas, drop = FALSE]
+# Conservar los nombres de las filas originales
+rownames(df_seleccion) <- rownames(dataframe)
+# Crear el nuevo dataframe con casos completos
+df_sm <- df_seleccion[complete.cases(df_seleccion), ]
+# Nombrar el nuevo dataframe
+nombre_df_sm <- paste0(deparse(substitute(dataframe)), "_sm")
+assign(nombre_df_sm, df_sm, envir = .GlobalEnv)
+# Identificar los casos con datos faltantes
+df_na <- df_seleccion[!complete.cases(df_seleccion), ]
+# Crear la lista de información
+lista_info <- list()
+if (nrow(df_na) > 0) {
+# Agregar el índice de los casos como primera columna
+df_na <- cbind(Caso = rownames(df_na), df_na)
+# Crear la tabla en formato HTML
+tabla_na <- kable(df_na, format = "html", caption = "Casos con datos faltantes") %>%
+kable_styling(full_width = FALSE)
+# Agregar la tabla a la lista
+lista_info$tabla_na <- tabla_na
+message("Se han encontrado casos con datos faltantes. La información está almacenada en la lista.")
+} else {
+message("No hay casos con datos faltantes en las variables seleccionadas.")
+lista_info$tabla_na <- NULL
+}
+# Crear el gráfico de vis_miss
+grafico_vis_miss <- vis_miss(df_seleccion)
+lista_info$grafico_vis_miss <- grafico_vis_miss
+# Nombrar la lista y guardarla en el entorno global
+nombre_lista <- paste0(nombre_df_sm, "_info")
+assign(nombre_lista, lista_info, envir = .GlobalEnv)
+# Devolver el nombre del nuevo dataframe
+return(nombre_df_sm)
+}
+MATmv(eolica_100,c(RES,RENECO,DIMENSION))
+View(eolica_100_sm)
+View(eolica_100_sm_info)
+eolica_100_sm_info$tabla_na
+# Descibiendo a las empresas eolicas (disculpad la falta de tildes)
+rm(list = ls())
+# DATOS
+library(readxl)
+eolica_100 <- read_excel("eolica_100_mv.xlsx", sheet = "Datos",
+na = c("n.d.", "s.d."))
+summary (eolica_100)
+eolica_100 <- data.frame(eolica_100, row.names = 1)
+summary (eolica_100)
+library(knitr)
+library(kableExtra)
+library(visdat)
+MATmv <- function(dataframe, columnas) {
+# Convertir nombres de columnas a texto si no lo son
+columnas <- sapply(substitute(columnas)[-1], deparse)
+# Verificar que el dataframe sea válido
+if (!is.data.frame(dataframe)) {
+stop("El primer argumento debe ser un dataframe.")
+}
+# Verificar que las columnas existen en el dataframe
+columnas_no_validas <- setdiff(columnas, colnames(dataframe))
+if (length(columnas_no_validas) > 0) {
+stop(paste("Las siguientes columnas no existen en el dataframe:", paste(columnas_no_validas, collapse = ", ")))
+}
+# Seleccionar las variables deseadas
+df_seleccion <- dataframe[, columnas, drop = FALSE]
+# Conservar los nombres de las filas originales
+rownames(df_seleccion) <- rownames(dataframe)
+# Crear el nuevo dataframe con casos completos
+df_sm <- df_seleccion[complete.cases(df_seleccion), ]
+# Nombrar el nuevo dataframe
+nombre_df_sm <- paste0(deparse(substitute(dataframe)), "_sm")
+assign(nombre_df_sm, df_sm, envir = .GlobalEnv)
+# Identificar los casos con datos faltantes
+df_na <- df_seleccion[!complete.cases(df_seleccion), ]
+# Crear la lista de información
+lista_info <- list()
+if (nrow(df_na) > 0) {
+# Crear la tabla en formato HTML sin duplicar los nombres de los casos
+tabla_na <- kable(df_na, format = "html", caption = "Casos con datos faltantes") %>%
+kable_styling(full_width = FALSE)
+# Agregar la tabla a la lista
+lista_info$tabla_na <- tabla_na
+message("Se han encontrado casos con datos faltantes. La información está almacenada en la lista.")
+} else {
+message("No hay casos con datos faltantes en las variables seleccionadas.")
+lista_info$tabla_na <- NULL
+}
+# Crear el gráfico de vis_miss
+grafico_vis_miss <- vis_miss(df_seleccion)
+lista_info$grafico_vis_miss <- grafico_vis_miss
+# Nombrar la lista y guardarla en el entorno global
+nombre_lista <- paste0(nombre_df_sm, "_info")
+assign(nombre_lista, lista_info, envir = .GlobalEnv)
+# Devolver el nombre del nuevo dataframe
+return(nombre_df_sm)
+}
+MATmv(eolica_100,c(RES,RENECO,DIMENSION))
+eolica_100_sm_info$tabla_na
+eolica_100_sm_info$grafico_vis_miss
+install.packages(c("devtools", "roxygen2", "usethis"))
+# Descibiendo a las empresas eolicas (disculpad la falta de tildes)
+rm(list = ls())
+# DATOS
+library(readxl)
+eolica_100 <- read_excel("eolica_100_mv.xlsx", sheet = "Datos",
+na = c("n.d.", "s.d."))
+summary (eolica_100)
+eolica_100 <- data.frame(eolica_100, row.names = 1)
+summary (eolica_100)
+# Analisis de una variable.
+## Localizando missing values.
+library (MATmv)
+MATmv(eolica_100,c(RES, ACTIVO, RENECO, RENFIN))
+library (dplyr)
+# Descibiendo a las empresas eolicas (disculpad la falta de tildes)
+rm(list = ls())
+# DATOS
+library(readxl)
+eolica_100 <- read_excel("eolica_100_mv.xlsx", sheet = "Datos",
+na = c("n.d.", "s.d."))
+summary (eolica_100)
+eolica_100 <- data.frame(eolica_100, row.names = 1)
+summary (eolica_100)
+# Analisis de una variable.
+## Localizando missing values.
+library (MATmv)
+library (dplyr)
+MATmv(eolica_100,c(RES, ACTIVO, RENECO, RENFIN))
+# Descibiendo a las empresas eolicas (disculpad la falta de tildes)
+rm(list = ls())
+# DATOS
+library(readxl)
+eolica_100 <- read_excel("eolica_100_mv.xlsx", sheet = "Datos",
+na = c("n.d.", "s.d."))
+summary (eolica_100)
+eolica_100 <- data.frame(eolica_100, row.names = 1)
+summary (eolica_100)
+# Analisis de una variable.
+## Localizando missing values.
+library (MATmv)
+MATmv(eolica_100,c(RES, ACTIVO, RENECO, RENFIN))
+# Descibiendo a las empresas eolicas (disculpad la falta de tildes)
+rm(list = ls())
+# DATOS
+library(readxl)
+eolica_100 <- read_excel("eolica_100_mv.xlsx", sheet = "Datos",
+na = c("n.d.", "s.d."))
+summary (eolica_100)
+eolica_100 <- data.frame(eolica_100, row.names = 1)
+summary (eolica_100)
+library (MATmv)
+MATmv(eolica_100,c(RES, ACTIVO, RENECO, RENFIN))
+library (dplyr)
+MATmv(eolica_100,c(RES, ACTIVO, RENECO, RENFIN))
+library (kableExtra)
+MATmv(eolica_100,c(RES, ACTIVO, RENECO, RENFIN))
+library (dplyr)
+library (kableExtra)
+library (kableExtra)
+# Descibiendo a las empresas eolicas (disculpad la falta de tildes)
+rm(list = ls())
+# DATOS
+library(readxl)
+eolica_100 <- read_excel("eolica_100_mv.xlsx", sheet = "Datos",
+na = c("n.d.", "s.d."))
+summary (eolica_100)
+eolica_100 <- data.frame(eolica_100, row.names = 1)
+summary (eolica_100)
+library (MATmv)
+library (dplyr)
+library (kableExtra)
+library(visdat)
+vis_miss(eolica_100)
+library (dplyr)
+muestra<- select(eolica_100, everything())
+muestra %>% filter(is.na(RENECO)) %>% select(RENECO)
+muestra <- muestra %>% filter(! is.na(RENECO))
+library (ggplot2)
+ggplot(data = muestra, map = (aes(y = RENECO))) +
+geom_boxplot(fill = "orange") +
+ggtitle("RENTABILIDAD ECONÓMICA", subtitle = "Empresas eólicas") +
+ylab("Rentabilidad Económica (%)")
+Q1 <- quantile (muestra$RENECO, c(0.25))
+Q3 <- quantile (muestra$RENECO, c(0.75))
+Q1; Q3
+muestra %>% filter(RENECO > Q3 + 1.5*IQR(RENECO) | RENECO < Q1 - 1.5*IQR(RENECO)) %>%
+select(RENECO)
+muestra_so <- muestra %>%
+filter(RENECO <= Q3 + 1.5*IQR(RENECO) & RENECO >= Q1 - 1.5*IQR(RENECO))
+library (knitr)
+install.packages("xfun")
+# Descibiendo a las empresas eolicas (disculpad la falta de tildes)
+rm(list = ls())
+# DATOS
+library(readxl)
+eolica_100 <- read_excel("eolica_100_mv.xlsx", sheet = "Datos",
+na = c("n.d.", "s.d."))
+summary (eolica_100)
+eolica_100 <- data.frame(eolica_100, row.names = 1)
+summary (eolica_100)
+# Analisis de una variable.
+## Localizando missing values.
+library (MATmv)
+MATmv(eolica_100,c(RES, ACTIVO, RENECO, RENFIN))
+# Descibiendo a las empresas eolicas (disculpad la falta de tildes)
+rm(list = ls())
+# DATOS
+library(readxl)
+eolica_100 <- read_excel("eolica_100_mv.xlsx", sheet = "Datos",
+na = c("n.d.", "s.d."))
+summary (eolica_100)
+eolica_100 <- data.frame(eolica_100, row.names = 1)
+summary (eolica_100)
+library (MATmv)
+MATmv(eolica_100,c(RES, ACTIVO, RENECO, RENFIN))

@@ -1,0 +1,91 @@
+# Introducción.
+
+## R y R-Studio. Comienzo: Proyectos.
+
+Abriremos R-Studio pulsando en el icono correspondiente. Aparecerá la siguiente ventana:
+
+![[IDE de RStudio.]{.smallcaps}](figuras/Imagen1_01.png){width="700"}
+
+La parte izquierda de la ventana es la **consola**. La consola es la sección de RStudio donde podemos manejar R mediante la introducción de código. Por ejemplo, podemos escribir `2+2` después del cursor (signo "\>"), y pulsar Enter. La propia consola nos devolverá el valor 4:
+
+```{r,eval=TRUE, echo=TRUE}
+2+2
+```
+
+De todos modos, la forma más eficiente de trabajar es mediante "proyectos" y "scripts".
+
+Un **proyecto** básicamente viene asociado a la carpeta donde R trabajará, buscando los datos que sean sus "inputs", y, en su caso, enviando sus resultados u "outputs". Para crear un nuevo proyecto, seguiremos la instrucción `File → New Project`, luego se nos preguntará si se crea el proyecto en una nueva carpeta o en una ya existente. Vamos a crearlo, por ejemplo, en el disco extraíble D, carpeta R, subcarpeta "explora", que ya está creada. Nos saldrá una ventana para buscar la carpeta y, cuando la encontremos, pulsaremos `Open` y `Create Project`. Ya tendremos creado nuestro proyecto. Si nos vamos al explorador de Windows®, y buscamos la carpeta "explora", encontraremos que en tal carpeta aparece un archivo de nombre "explora", con un icono de un cubo con una "R". Ese archivo lo que está haciendo es actuar como un "faro" que le dice a R que, cuando trabajemos en el proyecto "explora", todos los archivos de datos necesarios estarán en esa carpeta (también llamada "explora", porque el proyecto adopta el nombre de la carpeta donde lo localizamos). Y que, si nuestro trabajo aporta algún fichero de "output", también se depositará en esa carpeta del proyecto.
+
+En futuras sesiones, si queremos trabajar en el mismo proyecto, en lugar de seguir la ruta `File → New Project`, tendremos que hacer `File → Open Project`.
+
+## Scripts.
+
+En cuanto a los **scripts**, son programas o rutinas donde varias instrucciones se ejecutan secuencialmente. Para crear un script, se seguirá la ruta Fi`le → New File → R Script`. Y si el script lo guardamos, ¿dónde lo hará? Pues en la carpeta "explora", que es la del proyecto en el que estamos trabajando.
+
+Informáticamente, un script es simplemente un archivo de texto plano. Se puede modificar con cualquier editor de texto. Afortunadamente, para no estar entrando y saliendo de R-Studio, esta interfaz incorpora un **editor** de scripts, lo cual es muy cómodo.
+
+Vemos como ahora, a la izquierda de R-Studio, ha aparecido, en la parte superior, una nueva ventana, pasando la consola a ocupar la parte inferior. Es la ventana del "editor":
+
+![[El editor de Scripts de RStudio.]{.smallcaps}](figuras/Imagen1_02.png){width="700"}
+
+Igual que con los proyectos, podemos crear desde R-Studio un script nuevo, o abrir uno preexistente; y modificarlo, ejecutarlo, o volverlo a guardar.
+
+Vamos a comenzar a escribir nuestro script. Si queremos hacer un comentario que no ejecute ninguna instrucción, éste irá precedido del símbolo almohadilla o *hashtag* "\#". Luego, vamos a ordenar a R que haga la operación de suma: 2+2. Escribimos, por tanto, en el editor:
+
+```{r, eval=FALSE, echo=TRUE}
+#Ejemplo de Script
+2+2  #este script hace una simple suma.
+```
+
+Si pulsamos `Control + Mayúsculas + ENTER` o al desplegable de `Source → Source with Echo`, se ejecutará el script (para ejecutar solo la línea donde está el cursor, pulsaremos `Control + ENTER` o el botón de `Run`; y para ejecutar varias líneas, hemos de sombrearlas y pulsar `Control + ENTER` o el botón de `Run`). En la consola aparecerá:
+
+```{r, eval=TRUE, echo=FALSE}
+#Ejemplo de Script
+2+2  #este script hace una simple suma.
+```
+
+Podemos guardar el script con `File → Save As…` ¿Dónde se guardará por defecto? Pues en la carpeta "explora", que es la de nuestro proyecto. Una vez nuestro script ya tiene nombre, podemos ir guardándolo de vez en cuando pulsando simplemente en el botón del "disquete" del editor. Vamos a llamarlo, por ejemplo, "explorando". Si vamos, en el explorador de Windows®, a nuestra carpeta de proyecto, veremos que hay un archivo de texto llamado "explorando" con extensión ".R" (explorando.R). Este script lo podremos ejecutar cuantas veces queramos sin tener que escribir nada, o reescribirlo si vemos que no funciona o que necesitamos hacer modificaciones. Esa es la ventaja de trabajar con scripts.
+
+Para recuperar un script en una nueva sesión de trabajo simplemente tenemos que seguir las instrucciones `File → Open File…` y seleccionarlo.
+
+## Paquetes (packages).
+
+R es un lenguaje de programación en torno al cual se ha desarrollado una cantidad casi inimaginable de recursos: funciones, bases de datos, utilidades... Tal es la cantidad de recursos, que no sería operativo abrir R (directamente, o a través de una IDE, como R-Studio) y tener inmediatamente todos esos recursos activos y preparados para ser utilizados. Además, R debería ser actualizado de un modo casi constante.
+
+Por todo ello, todos los recursos disponibles están organizados mediante "paquetes" ("packages" en inglés). Un **paquete** es una colección de funciones y/o un conjunto de datos desarrollados por la comunidad de R. Estos incrementan el potencial de R ampliando sus capacidades básicas, o añadiendo otras nuevas.
+
+De hecho, cuando abrimos R, algunos de estos paquetes, que se han instalado junto al propio lenguaje, se activan. Pero solo algunos. Un ejemplo es el paquete `{base}` o el paquete `{stats}` [@R-base].
+
+La mayor parte de los paquetes disponibles no forman parte, por "defecto", en la misma instalación de R. Se encuentran en diversos servidores llamados repositorios. El más importante, es [CRAN](https://cran.r-project.org/), que es el "repositorio oficial" y que alberga más de 10.000 paquetes. Pero existen otros repositorios, a destacar, por ejemplo, GitHub.
+
+Para **instalar** un paquete en nuestra máquina que esté albergado en CRAN, un modo sencillo es, dentro de R-Studio, pulsar en la ventana inferior / izquierda sobre la pestaña "Packages", y sobre el botón "Install". Emergerá entonces una ventana donde hay un campo para escribir el nombre del paquete (al comenzar a escribirlo, el propio R-Studio te sugerirá los paquetes disponibles). Esto equivale a usar (bien directamente en la consola, o bien como línea de código insertada en un script) la instrucción `install.packages()`, con el nombre del paquete entre comillas (si son varios, pues irán separados por comas.
+
+Una vez se tiene instalado el paquete, ya no habrá que volver a instalarlo para utilizarlo; sino **activarlo**. De hecho, todos los paquetes que no se encuentran por defecto en la propia instalación de R, deben ser activados para poder usar sus funcionalidades y/o datos. Para hacerlo, se debe utilizar la instrucción `library()`, y el nombre del paquete dentro del paréntesis.
+
+Del nombre de esta instrucción surge la confusión común de tomar como sinónimos las palabras "paquete" y "librería" en el entorno de R. Si nos referimos a estas colecciones de funcionalidades y/o datos; lo correcto es "paquete", ya que "librería" tiene más que ver con la organización informática de un software.
+
+## Help! (sistema de ayuda).
+
+A veces podemos albergar dudas sobre la correcta utilización de las funcionalidades y herramientas que nos proporciona un paquete. Hay varias fuentes de ayuda para intentar encontrar respuesta a las cuestiones que se nos plantean.
+
+Una opción, para obtener información general sobre un paquete, es utilizar la función `help()`, con el argumento "package". Por ejemplo:
+
+```{r, eval=TRUE, echo=TRUE}
+help(package="base")
+```
+
+Observaremos como en la ventana inferior / izquierda de R-Studio nos saldrá la información correspondiente. De hecho, en tal ventana existe una pestaña **"Help"** para obtener la ayuda sin teclear código.
+
+Además, cada función puede ser consultada individualmente mediante `help("nombre de la función")` o `help(function, package = "package")` si el paquete no ha sido cargado. Estas instrucciones nos mostrarán la descripción de la función y sus argumentos acompañados de ejemplos de utilización. Por ejemplo:
+
+```{r, eval=FALSE, echo=TRUE}
+help("rm", package="base")
+```
+
+La instrucción anterior nos aporta la documentación sobre la función `rm()` del paquete `{base}` de R (nota: este paquete se activa por defecto al abrir R o R-Studio; por lo que el segundo argumento, con el nombre del paquete que contiene la instrucción no es necesario).
+
+Otra opción para mostrar información de ayuda es la exploración de las "viñetas" (vignettes). Las **viñetas** son documentos que muestran de un modo más detallado las funcionalidades de un paquete. La información de las viñetas de un paquete están disponibles en el archivo "documentation". Puede obtenerse una lista de las viñetas de nuestros paquetes instalados con la función `browseVignettes()`. Si solo queremos consultar las viñetas de un paquete concreto pasaremos como argumento a la función el nombre del mismo: `browseVignettes(package = "packagename")`. En ambos casos, una ventana del navegador se abrirá para que podamos fácilmente explorar el documento.
+
+Si optamos por permanecer en la consola, la instrucción `vignette()` nos mostrará una lista de viñetas, `vignette(package = "packagename")` las viñetas incluidas en el paquete, y una vez identificada la viñeta de interés podremos consultarla mediante `vignette("vignettename")`.
+
+😉

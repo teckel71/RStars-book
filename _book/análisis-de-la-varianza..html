@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 8 Análisis de la varianza. | Técnicas de Análisis de Datos Económicos con R</title>
+  <meta name="description" content="Libro de análisis de datos económicos." />
+  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 8 Análisis de la varianza. | Técnicas de Análisis de Datos Económicos con R" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://bookdown.org/teckel71/book/figuras/Portada_v2.PNG" />
+  <meta property="og:description" content="Libro de análisis de datos económicos." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 8 Análisis de la varianza. | Técnicas de Análisis de Datos Económicos con R" />
+  
+  <meta name="twitter:description" content="Libro de análisis de datos económicos." />
+  <meta name="twitter:image" content="https://bookdown.org/teckel71/book/figuras/Portada_v2.PNG" />
+
+<meta name="author" content="" />
+
+
+<meta name="date" content="2025-01-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="análisis-clúster..html"/>
+<link rel="next" href="análisis-de-regresión-lineal-múltiple..html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Técnicas de Análisis de Datos Económicos con R</a></li>
+
+<li class="divider"></li>
+<li><a href="index.html#section" id="toc-section"></a></li>
+<li class="chapter" data-level="" data-path="prefacio.html"><a href="prefacio.html"><i class="fa fa-check"></i>Prefacio</a></li>
+<li class="chapter" data-level="1" data-path="introducción..html"><a href="introducción..html"><i class="fa fa-check"></i><b>1</b> Introducción.</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introducción..html"><a href="introducción..html#llámalo-estadística."><i class="fa fa-check"></i><b>1.1</b> Llámalo Estadística.</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="introducción..html"><a href="introducción..html#concepto-de-estadística."><i class="fa fa-check"></i><b>1.1.1</b> Concepto de Estadística.</a></li>
+<li class="chapter" data-level="1.1.2" data-path="introducción..html"><a href="introducción..html#el-método-estadístico."><i class="fa fa-check"></i><b>1.1.2</b> El método estadístico.</a></li>
+<li class="chapter" data-level="1.1.3" data-path="introducción..html"><a href="introducción..html#economía-y-estadística."><i class="fa fa-check"></i><b>1.1.3</b> Economía y Estadística.</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="introducción..html"><a href="introducción..html#qué-es-r-y-cómo-nos-ayuda-a-analizar-datos-desde-el-punto-de-vista-estadístico"><i class="fa fa-check"></i><b>1.2</b> ¿Qué es R y cómo nos ayuda a analizar datos desde el punto de vista estadístico?</a></li>
+<li class="chapter" data-level="1.3" data-path="introducción..html"><a href="introducción..html#instalación-de-r-y-r-studio."><i class="fa fa-check"></i><b>1.3</b> Instalación de R y R-Studio.</a></li>
+<li class="chapter" data-level="1.4" data-path="introducción..html"><a href="introducción..html#r-y-rstudio.-comienzo-proyectos."><i class="fa fa-check"></i><b>1.4</b> R y RStudio. Comienzo: Proyectos.</a></li>
+<li class="chapter" data-level="1.5" data-path="introducción..html"><a href="introducción..html#scripts."><i class="fa fa-check"></i><b>1.5</b> Scripts.</a></li>
+<li class="chapter" data-level="1.6" data-path="introducción..html"><a href="introducción..html#funciones."><i class="fa fa-check"></i><b>1.6</b> Funciones.</a></li>
+<li class="chapter" data-level="1.7" data-path="introducción..html"><a href="introducción..html#paquetes-packages."><i class="fa fa-check"></i><b>1.7</b> Paquetes (packages).</a></li>
+<li class="chapter" data-level="1.8" data-path="introducción..html"><a href="introducción..html#help-sistema-de-ayuda."><i class="fa fa-check"></i><b>1.8</b> Help! (sistema de ayuda).</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html"><i class="fa fa-check"></i><b>2</b> Almacenando y manipulando datos.</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#objetos.-datos."><i class="fa fa-check"></i><b>2.1</b> Objetos. Datos.</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#vectores."><i class="fa fa-check"></i><b>2.1.1</b> Vectores.</a></li>
+<li class="chapter" data-level="2.1.2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#matrices."><i class="fa fa-check"></i><b>2.1.2</b> Matrices.</a></li>
+<li class="chapter" data-level="2.1.3" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#data-frames."><i class="fa fa-check"></i><b>2.1.3</b> Data frames.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#importando-datos."><i class="fa fa-check"></i><b>2.2</b> Importando datos.</a></li>
+<li class="chapter" data-level="2.3" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#dplyr."><i class="fa fa-check"></i><b>2.3</b> {dplyr}.</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#el-tidyverse.-cargando-dplyr."><i class="fa fa-check"></i><b>2.3.1</b> El Tidyverse. Cargando {dplyr}.</a></li>
+<li class="chapter" data-level="2.3.2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#seleccionando-columnas-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.2</b> Seleccionando columnas de un data frame.</a></li>
+<li class="chapter" data-level="2.3.3" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#seleccionando-casos-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.3</b> Seleccionando casos de un <em>data frame</em>.</a></li>
+<li class="chapter" data-level="2.3.4" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#ordenando-casos-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.4</b> Ordenando casos de un <em>data frame</em>.</a></li>
+<li class="chapter" data-level="2.3.5" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#cambiando-el-nombre-de-las-variables-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.5</b> Cambiando el nombre de las variables de un <em>data frame</em>.</a></li>
+<li class="chapter" data-level="2.3.6" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#añadiendo-variables-como-transformación-de-otras-variables-en-un-data-frame."><i class="fa fa-check"></i><b>2.3.6</b> <strong>Añadiendo variables como transformación de otras variables en un <em>data frame</em>.</strong></a></li>
+<li class="chapter" data-level="2.3.7" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#extrayendo-y-sintetizando-información-de-las-variables-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.7</b> Extrayendo y sintetizando información de las variables de un <em>data frame</em>.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#exportando-datos."><i class="fa fa-check"></i><b>2.4</b> Exportando datos.</a></li>
+<li class="chapter" data-level="2.5" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#materiales-para-realizar-las-prácticas-del-capítulo."><i class="fa fa-check"></i><b>2.5</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="gráficos..html"><a href="gráficos..html"><i class="fa fa-check"></i><b>3</b> Gráficos.</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="gráficos..html"><a href="gráficos..html#tidyverse-para-gráficos-ggplot2."><i class="fa fa-check"></i><b>3.1</b> Tidyverse para gráficos: ggplot2.</a></li>
+<li class="chapter" data-level="3.2" data-path="gráficos..html"><a href="gráficos..html#gráficos-de-una-variable-histogramas-gráficos-de-densidad-gráficos-de-caja-o-boxplots."><i class="fa fa-check"></i><b>3.2</b> Gráficos de una variable: histogramas, gráficos de densidad, gráficos de caja o <em>boxplots</em>.</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="gráficos..html"><a href="gráficos..html#histograma."><i class="fa fa-check"></i><b>3.2.1</b> Histograma.</a></li>
+<li class="chapter" data-level="3.2.2" data-path="gráficos..html"><a href="gráficos..html#gráfico-de-densidad."><i class="fa fa-check"></i><b>3.2.2</b> Gráfico de densidad.</a></li>
+<li class="chapter" data-level="3.2.3" data-path="gráficos..html"><a href="gráficos..html#gráfico-de-caja-o-box-plot."><i class="fa fa-check"></i><b>3.2.3</b> Gráfico de caja o <em>Box-Plot</em>.</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="gráficos..html"><a href="gráficos..html#gráficos-de-dos-variables."><i class="fa fa-check"></i><b>3.3</b> Gráficos de dos variables.</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="gráficos..html"><a href="gráficos..html#gráfico-de-dispersión-o-scatterplot."><i class="fa fa-check"></i><b>3.3.1</b> Gráfico de dispersión o <em>scatterplot</em>.</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="gráficos..html"><a href="gráficos..html#materiales-para-realizar-las-prácticas-del-capítulo.-1"><i class="fa fa-check"></i><b>3.4</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html"><i class="fa fa-check"></i><b>4</b> Estadística descriptiva.</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#análisis-univariante."><i class="fa fa-check"></i><b>4.1</b> Análisis univariante.</a></li>
+<li class="chapter" data-level="4.2" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#representando-datos-y-distribuciones-de-frecuencias-en-tablas-con-r."><i class="fa fa-check"></i><b>4.2</b> Representando datos y distribuciones de frecuencias en tablas con R.</a></li>
+<li class="chapter" data-level="4.3" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#medidas-de-posición."><i class="fa fa-check"></i><b>4.3</b> Medidas de posición.</a></li>
+<li class="chapter" data-level="4.4" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#medidas-de-dispersión-o-variabilidad."><i class="fa fa-check"></i><b>4.4</b> Medidas de dispersión o variabilidad.</a></li>
+<li class="chapter" data-level="4.5" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#medidas-de-forma."><i class="fa fa-check"></i><b>4.5</b> Medidas de forma.</a></li>
+<li class="chapter" data-level="4.6" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#materiales-para-realizar-las-prácticas-del-capítulo.-2"><i class="fa fa-check"></i><b>4.6</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html"><i class="fa fa-check"></i><b>5</b> Análisis previo de datos.</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#introducción.-1"><i class="fa fa-check"></i><b>5.1</b> Introducción.</a></li>
+<li class="chapter" data-level="5.2" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#análisis-de-una-variable."><i class="fa fa-check"></i><b>5.2</b> Análisis de una variable.</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#buscando-missing-values-y-outliers."><i class="fa fa-check"></i><b>5.2.1</b> Buscando <em>missing values</em> y <em>outliers</em>.</a></li>
+<li class="chapter" data-level="5.2.2" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#descripción-de-una-variable."><i class="fa fa-check"></i><b>5.2.2</b> Descripción de una variable.</a></li>
+<li class="chapter" data-level="5.2.3" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#normalidad."><i class="fa fa-check"></i><b>5.2.3</b> Normalidad.</a></li>
+<li class="chapter" data-level="5.2.4" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#resumen-los-4-gráficos-básicos-en-la-descripción-de-una-variable."><i class="fa fa-check"></i><b>5.2.4</b> Resumen: los 4 gráficos básicos en la descripción de una variable.</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#análisis-de-múltiples-variables."><i class="fa fa-check"></i><b>5.3</b> Análisis de múltiples variables.</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#localización-de-missing-values-y-outliers."><i class="fa fa-check"></i><b>5.3.1</b> Localización de <em>missing values</em> y <em>outliers</em>.</a></li>
+<li class="chapter" data-level="5.3.2" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#correlación-entre-variables."><i class="fa fa-check"></i><b>5.3.2</b> Correlación entre variables.</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#materiales-para-realizar-las-prácticas-del-capítulo.-3"><i class="fa fa-check"></i><b>5.4</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="componentes-principales..html"><a href="componentes-principales..html"><i class="fa fa-check"></i><b>6</b> Componentes principales.</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="componentes-principales..html"><a href="componentes-principales..html#introducción.-2"><i class="fa fa-check"></i><b>6.1</b> Introducción.</a></li>
+<li class="chapter" data-level="6.2" data-path="componentes-principales..html"><a href="componentes-principales..html#información-y-varianza."><i class="fa fa-check"></i><b>6.2</b> Información y varianza.</a></li>
+<li class="chapter" data-level="6.3" data-path="componentes-principales..html"><a href="componentes-principales..html#cálculo-de-componentes."><i class="fa fa-check"></i><b>6.3</b> Cálculo de componentes.</a></li>
+<li class="chapter" data-level="6.4" data-path="componentes-principales..html"><a href="componentes-principales..html#retención-de-componentes-principales."><i class="fa fa-check"></i><b>6.4</b> Retención de componentes principales.</a></li>
+<li class="chapter" data-level="6.5" data-path="componentes-principales..html"><a href="componentes-principales..html#puntuaciones-de-los-casos-scores"><i class="fa fa-check"></i><b>6.5</b> Puntuaciones de los casos (scores)</a></li>
+<li class="chapter" data-level="6.6" data-path="componentes-principales..html"><a href="componentes-principales..html#materiales-para-realizar-las-prácticas-del-capítulo.-4"><i class="fa fa-check"></i><b>6.6</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="análisis-clúster..html"><a href="análisis-clúster..html"><i class="fa fa-check"></i><b>7</b> Análisis Clúster.</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="análisis-clúster..html"><a href="análisis-clúster..html#introducción.-3"><i class="fa fa-check"></i><b>7.1</b> Introducción.</a></li>
+<li class="chapter" data-level="7.2" data-path="análisis-clúster..html"><a href="análisis-clúster..html#métodos-de-agrupación-jerárquicos."><i class="fa fa-check"></i><b>7.2</b> Métodos de agrupación jerárquicos.</a></li>
+<li class="chapter" data-level="7.3" data-path="análisis-clúster..html"><a href="análisis-clúster..html#métodos-de-agrupación-no-jerárquicos."><i class="fa fa-check"></i><b>7.3</b> Métodos de agrupación no-jerárquicos.</a></li>
+<li class="chapter" data-level="7.4" data-path="análisis-clúster..html"><a href="análisis-clúster..html#materiales-para-realizar-las-prácticas-del-capítulo.-5"><i class="fa fa-check"></i><b>7.4</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html"><i class="fa fa-check"></i><b>8</b> Análisis de la varianza.</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#introducción.-4"><i class="fa fa-check"></i><b>8.1</b> Introducción.</a></li>
+<li class="chapter" data-level="8.2" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#anova-de-un-solo-factor."><i class="fa fa-check"></i><b>8.2</b> ANOVA de un solo factor.</a></li>
+<li class="chapter" data-level="8.3" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#comparaciones-múltiples."><i class="fa fa-check"></i><b>8.3</b> Comparaciones múltiples.</a></li>
+<li class="chapter" data-level="8.4" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#y-si-no-se-cumplen-las-condiciones-para-realizar-el-contraste-f-de-anova"><i class="fa fa-check"></i><b>8.4</b> ¿Y si no se cumplen las condiciones para realizar el contraste F de ANOVA?</a></li>
+<li class="chapter" data-level="8.5" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#materiales-para-realizar-las-prácticas-del-capítulo.-6"><i class="fa fa-check"></i><b>8.5</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html"><i class="fa fa-check"></i><b>9</b> Análisis de Regresión Lineal Múltiple.</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html#introducción.-5"><i class="fa fa-check"></i><b>9.1</b> Introducción.</a></li>
+<li class="chapter" data-level="9.2" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html#especificación-del-mbr.-datos-de-corte-transversal."><i class="fa fa-check"></i><b>9.2</b> Especificación del MBR. Datos de corte transversal.</a></li>
+<li class="chapter" data-level="9.3" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html#materiales-para-realizar-las-prácticas-del-capítulo.-7"><i class="fa fa-check"></i><b>9.3</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html"><i class="fa fa-check"></i><b>10</b> Análisis de Datos Cualitativos.</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#introducción.-6"><i class="fa fa-check"></i><b>10.1</b> Introducción.</a></li>
+<li class="chapter" data-level="10.2" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#tablas-de-contingencia-y-asociación-entre-dos-atributos-o-factores."><i class="fa fa-check"></i><b>10.2</b> Tablas de contingencia, y asociación entre dos atributos o factores.</a></li>
+<li class="chapter" data-level="10.3" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#análisis-de-correspondencias."><i class="fa fa-check"></i><b>10.3</b> Análisis de correspondencias.</a></li>
+<li class="chapter" data-level="10.4" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#modelos-logaritmico-lineales-aplicados-a-tablas-de-contingencia."><i class="fa fa-check"></i><b>10.4</b> Modelos logaritmico-lineales aplicados a tablas de contingencia.</a></li>
+<li class="chapter" data-level="10.5" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#materiales-para-realizar-las-prácticas-del-capítulo.-8"><i class="fa fa-check"></i><b>10.5</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="bibliografía.html"><a href="bibliografía.html"><i class="fa fa-check"></i>Bibliografía</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Técnicas de Análisis de Datos Económicos con R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="análisis-de-la-varianza." class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">Capítulo 8</span> Análisis de la varianza.<a href="análisis-de-la-varianza..html#análisis-de-la-varianza." class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introducción.-4" class="section level2 hasAnchor" number="8.1">
+<h2><span class="header-section-number">8.1</span> Introducción.<a href="análisis-de-la-varianza..html#introducción.-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El análisis de la varianza (ANOVA) puede considerarse una generalización del contraste de hipótesis de medias poblacionales iguales para el caso de poblaciones normales y con varianzas desconocidas, pero iguales. La generalización consiste en poder considerar más de dos poblaciones. La <strong>hipótesis nula</strong> será la que afirma que <strong>las medias poblacionales de la variable métrica en estudio, para todas las poblaciones, son iguales</strong>. La hipótesis alternativa, por su lado, afirmará que existe al menos dos poblaciones con medias diferentes. Como todo contraste, para llevarlo acabo hemos de tener una muestra representativa de cada población, y fijar un nivel de significación (usualmente 0.05).</p>
+<p>También se puede considerar el ANOVA como un <strong>tipo especial de análisis de regresión</strong>, en la que la variable dependiente es una variable métrica, y las variables explicativas son atributos o factores (en escala nominal u ordinal). La misión de los factores es clasificar a los casos que constituyen nuestra muestra en distintas submuestras, cada una representativa de una de las subpoblaciones cuyas medias en la variable en estudio se quiere comparar.</p>
+</div>
+<div id="anova-de-un-solo-factor." class="section level2 hasAnchor" number="8.2">
+<h2><span class="header-section-number">8.2</span> ANOVA de un solo factor.<a href="análisis-de-la-varianza..html#anova-de-un-solo-factor." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Aunque se pueden realizar ANOVAs con más de un atributo o factor, en este ejemplo nos ceñiremos al caso más simple, en el que solo hay un atributo o factor que se ocupa de distribuir los casos de la muestra entre los distintos grupos o submuestras (a partir de las categoría o nivel que toma cada caso).</p>
+<p>En concreto, en esta práctica, comprobaremos <strong>si</strong> <strong>la dimensión del grupo empresarial al que pertenecen las empresas eólicas</strong> (medida en función del número de empresas integradas en el grupo empresarial, y concretada en el factor DIMENSION) <strong>tiene una influencia significativa sobre la rentabilidad económica</strong> (variable RENECO), <strong>en términos medios</strong>. Para ello se ha seleccionado una muestra constituida por 50 empresas productoras de electricidad mediante tecnología eólica. Así, la población, constituida por todas las empresas de generación eléctrica eólica de España, queda dividida en tres subpoblaciones: la subpoblación de empresas que pertenecen a grupos empresariales de DIMENSION (según el número de filiales contenidas) “GRANDE”, la subpoblación de empresas que pertenecen a grupos empresariales de DIMENSION “MEDIA”, y la subpoblación de empresas que pertenecen a grupos empresariales de DIMENSION “PEQUEÑA”. Cada una de estas subpoblaciones tendrán sus respectivas rentabilidades económicas medias, que desconocemos (ya que no tenemos los datos de la población, es decir, de todas las empresas eólicas del país; sino solo de una muestra de 50 empresas). Lo que si tenemos para cada subpoblación es una submuestra que la representa (parte de las 50 empresas de la muestra, que queda fraccionada en tres según el factor DIMENSION). Y de cada submuestra, tenemos la correspondiente rentabilidad media muestral. Lo que comprobaremos con el contraste de ANOVA, en definitiva, es si las diferencias observadas entre las rentabilidades medias de cada submuestra son lo suficientemente amplias como para pensar que, puede considerarse que existen diferencias importantes (significativas) entre las rentabilidades medias de las subpoblaciones (considerando todas las empresas eólicas que conforman la población).</p>
+<p>Los datos están almacenados en el archivo de Microsoft Excel “<a href="https://docs.google.com/spreadsheets/d/1PVRwLo1eAbFLOgSscLZw0bD9rgMk2X-w/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">eolica_50.xls</a>”, y el script con el código del ejemplo se halla contenido en el fichero “<a href="https://drive.google.com/file/d/1p4p17OudRprwkpF7wvvF1gwHZG82uv89/view?usp=sharing">anova_cluster.R</a>”. Vamos a suponer que trabajaremos en un proyecto de RStudio al que denominaremos “anova”.</p>
+<p>Una vez abierto el <em>script</em> en el editor de RStudio , comprobaremos que la primera parte del código está dedicada a la limpieza de la memoria (<em>Environment</em>) y a la importación de los datos. Para ello, activaremos el paquete <code>{readxl}</code> y utilizaremos la función <code>read_excel()</code>, indicando en los argumentos el archivo a explorar, y la <em>hoja</em> en la cual se encuentran los datos (hoja “Datos”). También hemos de prestar atención a la cuestión de si existen en la hoja de <em>Excel</em> anotaciones en las celdas donde no haya dato, para completar adecuadamente el argumento <code>na=</code> . Los datos se almacenarán en el <em>data frame</em> “datos”. En este <em>data frame</em>, la primera columna no es una verdadera variable, sino que se compone de los nombres de los casos o empresas. Con una línea de código adicional transformaremos esa primera columna en el <em>nombre de las filas</em>, de modo que tal columna abandona su <em>rol</em> de variable. En definitiva, el código para importar los datos es:</p>
+<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb299-1"><a href="análisis-de-la-varianza..html#cb299-1" tabindex="-1"></a><span class="co"># Análisis ANOVA de un factor.</span></span>
+<span id="cb299-2"><a href="análisis-de-la-varianza..html#cb299-2" tabindex="-1"></a></span>
+<span id="cb299-3"><a href="análisis-de-la-varianza..html#cb299-3" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb299-4"><a href="análisis-de-la-varianza..html#cb299-4" tabindex="-1"></a></span>
+<span id="cb299-5"><a href="análisis-de-la-varianza..html#cb299-5" tabindex="-1"></a><span class="co"># DATOS</span></span>
+<span id="cb299-6"><a href="análisis-de-la-varianza..html#cb299-6" tabindex="-1"></a></span>
+<span id="cb299-7"><a href="análisis-de-la-varianza..html#cb299-7" tabindex="-1"></a><span class="fu">library</span> (readxl)</span>
+<span id="cb299-8"><a href="análisis-de-la-varianza..html#cb299-8" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;eolica_50.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;Datos&quot;</span>,</span>
+<span id="cb299-9"><a href="análisis-de-la-varianza..html#cb299-9" tabindex="-1"></a>                    <span class="at">na =</span> <span class="fu">c</span>(<span class="st">&quot;n.d.&quot;</span>, <span class="st">&quot;s.d.&quot;</span>))</span>
+<span id="cb299-10"><a href="análisis-de-la-varianza..html#cb299-10" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(datos, <span class="at">row.names =</span> <span class="dv">1</span>)</span>
+<span id="cb299-11"><a href="análisis-de-la-varianza..html#cb299-11" tabindex="-1"></a><span class="fu">summary</span> (datos)</span></code></pre></div>
+<pre><code>##       RES              ACTIVO            FPIOS        
+##  Min.   :-5268.6   Min.   :  25355   Min.   : -10985  
+##  1st Qu.:  919.6   1st Qu.:  35512   1st Qu.:   1897  
+##  Median : 2321.2   Median :  50301   Median :  17256  
+##  Mean   : 4986.7   Mean   : 189142   Mean   :  83164  
+##  3rd Qu.: 4380.4   3rd Qu.: 101035   3rd Qu.:  44871  
+##  Max.   :42737.0   Max.   :2002458   Max.   :1740487  
+##                    NA&#39;s   :1                          
+## 
+##      RENECO           RENFIN            LIQUIDEZ       
+##  Min.   :-2.708   Min.   :-263.639   Min.   :  0.0140  
+##  1st Qu.: 1.817   1st Qu.:   1.251   1st Qu.:  0.6462  
+##  Median : 3.957   Median :  14.322   Median :  1.1550  
+##  Mean   : 5.758   Mean   :  32.071   Mean   :  4.2370  
+##  3rd Qu.: 8.038   3rd Qu.:  36.193   3rd Qu.:  1.9185  
+##  Max.   :35.262   Max.   : 588.190   Max.   :128.4330  
+##  NA&#39;s   :2                                             
+## 
+##     ENDEUDA            MARGEN           SOLVENCIA      
+##  Min.   :  0.917   Min.   :-2248.16   Min.   :-24.465  
+##  1st Qu.: 37.272   1st Qu.:   14.74   1st Qu.:  4.327  
+##  Median : 74.683   Median :   23.86   Median : 25.317  
+##  Mean   : 66.646   Mean   :  -17.77   Mean   : 33.353  
+##  3rd Qu.: 95.672   3rd Qu.:   45.88   3rd Qu.: 62.727  
+##  Max.   :124.465   Max.   :  400.90   Max.   : 99.082  
+## 
+##     APALANCA            MATRIZ           DIMENSION        
+##  Min.   :-6905.772   Length:50          Length:50         
+##  1st Qu.:    7.586   Class :character   Class :character  
+##  Median :  126.208   Mode  :character   Mode  :character  
+##  Mean   :  784.430                                        
+##  3rd Qu.:  763.952                                        
+##  Max.   :12244.351</code></pre>
+<p>Antes de proceder al <em>análisis de la varianza</em> propiamente dicho, hemos de preparar nuestros datos mediante la localización de <em>missing values</em> y <em>outliers</em>. Los <em>outliers</em>, en el ANOVA, pueden tener una gran influencia (ya que se trabaja en <em>términos medios</em>) sobre los resultados, por lo que deben ser tratados convenientemente.</p>
+<p>Para localizar los casos concretos de <strong><em>missing values</em></strong>, puede recurrirse a utilizar las herramientas de manejo de <em>data frames</em> del paquete <code>{dplyr}</code>. Previamente, realizaremos una <strong>copia</strong> del <em>data frame</em> original, “datos”, a la que llamaremos “muestra”, que es con la que trabajaremos (para mantener la integridad del primer <em>data frame</em>). Con la función <code>vismiss()</code> del paquete <code>{visdat}</code> podemos tener una visión gráfica general de los valores faltantes, en especial en el caso de la variable RENECO y el factor DIMENSION. Si hay casos faltantes en una de estas variables, los identificaremos filtrando el <em>data frame</em> con la función <code>filter()</code> de <code>{dplyr}</code>. Ante la existencia de <em>missing values</em>, se puede actuar de varios modos. Por ejemplo, <strong>se puede intentar obtener por otro canal de información el conjunto de valores</strong> de RENECO que no están disponibles, <strong>o recurrir a alguna estimación</strong> para los mismos y asignarlos. En caso de que esto sea difícil, se puede optar, simplemente, por <strong>eliminar</strong> estos casos, en especial cuando representan un porcentaje muy reducido respecto al total de casos. En nuestro ejemplo, vamos a suponer que hemos optado por esta última vía, al no conseguir unos valores más o menos verosímiles de RENECO para las empresas de las que se carece de dato. Así, estos casos, finalmente, será exluidos del análisis, utilizando para ello un nuevo filtro:</p>
+<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb301-1"><a href="análisis-de-la-varianza..html#cb301-1" tabindex="-1"></a>  <span class="co"># Missing values</span></span>
+<span id="cb301-2"><a href="análisis-de-la-varianza..html#cb301-2" tabindex="-1"></a></span>
+<span id="cb301-3"><a href="análisis-de-la-varianza..html#cb301-3" tabindex="-1"></a>  <span class="fu">library</span> (dplyr)</span>
+<span id="cb301-4"><a href="análisis-de-la-varianza..html#cb301-4" tabindex="-1"></a>  <span class="fu">library</span>(visdat)</span>
+<span id="cb301-5"><a href="análisis-de-la-varianza..html#cb301-5" tabindex="-1"></a>  <span class="fu">vis_miss</span>(datos)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-252-1.png" width="672" /></p>
+<div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb302-1"><a href="análisis-de-la-varianza..html#cb302-1" tabindex="-1"></a>  datos <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">is.na</span>(RENECO) <span class="sc">|</span> <span class="fu">is.na</span>(DIMENSION)) <span class="sc">%&gt;%</span></span>
+<span id="cb302-2"><a href="análisis-de-la-varianza..html#cb302-2" tabindex="-1"></a>            <span class="fu">select</span>(RENECO, DIMENSION)</span></code></pre></div>
+<pre><code>##                       RENECO DIMENSION
+## Sargon Energias SLU       NA     MEDIA
+## Viesgo Renovables SL.     NA     MEDIA</code></pre>
+<div class="sourceCode" id="cb304"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb304-1"><a href="análisis-de-la-varianza..html#cb304-1" tabindex="-1"></a>  muestra <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb304-2"><a href="análisis-de-la-varianza..html#cb304-2" tabindex="-1"></a>             <span class="fu">filter</span>(<span class="sc">!</span> <span class="fu">is.na</span>(RENECO) <span class="sc">&amp;</span> <span class="sc">!</span> <span class="fu">is.na</span>(DIMENSION))</span></code></pre></div>
+<p>Tras el código anterior, se han eliminado del <em>data frame</em> “muestra” las empresas “Sargon Energías S. L. U.” y “Viesgo Renovables S. L.”, empresas pertenecientes a grupos empresariales de dimensión media (DIMENSION), debido a que carecían de dato de rentabilidad económica (RENECO).</p>
+<p>Una vez tratados los casos con valores perdidos o <em>missing values</em>, <strong>es necesario detectar la presencia de <em>outliers</em></strong> o casos atípicos en la muestra, que pudieran desvirtuar los resultados derivados del ANOVA. Para ello, realizaremos un <strong><em>boxplot</em></strong> o gráfico de caja. Aplicaremos, por ejemplo, el código siguiente, que utiliza la gramática del paquete <code>{ggplot2}</code>:</p>
+<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb305-1"><a href="análisis-de-la-varianza..html#cb305-1" tabindex="-1"></a>  <span class="co"># Outliers</span></span>
+<span id="cb305-2"><a href="análisis-de-la-varianza..html#cb305-2" tabindex="-1"></a></span>
+<span id="cb305-3"><a href="análisis-de-la-varianza..html#cb305-3" tabindex="-1"></a>  <span class="fu">library</span> (ggplot2)</span>
+<span id="cb305-4"><a href="análisis-de-la-varianza..html#cb305-4" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">data =</span> muestra,</span>
+<span id="cb305-5"><a href="análisis-de-la-varianza..html#cb305-5" tabindex="-1"></a>         <span class="at">map =</span> (<span class="fu">aes</span>(<span class="at">y =</span> RENECO))) <span class="sc">+</span></span>
+<span id="cb305-6"><a href="análisis-de-la-varianza..html#cb305-6" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;orange&quot;</span>) <span class="sc">+</span></span>
+<span id="cb305-7"><a href="análisis-de-la-varianza..html#cb305-7" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;RENTABILIDAD ECONÓMICA&quot;</span>,</span>
+<span id="cb305-8"><a href="análisis-de-la-varianza..html#cb305-8" tabindex="-1"></a>          <span class="at">subtitle =</span> <span class="st">&quot;100 empresas eólicas&quot;</span>) <span class="sc">+</span></span>
+<span id="cb305-9"><a href="análisis-de-la-varianza..html#cb305-9" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Rentabilidad Económica (%)&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-253-1.png" width="672" /></p>
+<p>En el gráfico de caja se aprecia claramente que existe un <em>outlier</em>. Para identificar tal empresa, calcularemos, respecto a la variable RENECO, el primer y tercer cuartiles, que nos servirán para construir el filtro que capturará el caso atípico. Así, en el código, las dos primeras filas calculan los cuartiles primero (Q1) y tercero (Q3) mediante la función <code>quantile()</code>. Luego se filtran, mediante la función <code>filter()</code> de <code>{dplyr}</code>, los <em>outliers</em>, calculadoscomo aquellos casos con valores de RENECO mayores que Q3 más 1,5 veces el <em>rango intercuartílico</em> de la variable; o menores que Q1 menos 1,5 veces dicho rango intercuartílico. Para calcular el rango intercuartílico se recurre a la función <code>IQR()</code>. Finalmente, con <code>select()</code> se muestran los casos en la consola de RStudio:</p>
+<div class="sourceCode" id="cb306"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb306-1"><a href="análisis-de-la-varianza..html#cb306-1" tabindex="-1"></a>  Q1 <span class="ot">&lt;-</span> <span class="fu">quantile</span> (muestra<span class="sc">$</span>RENECO, <span class="fu">c</span>(<span class="fl">0.25</span>))</span>
+<span id="cb306-2"><a href="análisis-de-la-varianza..html#cb306-2" tabindex="-1"></a>  Q3 <span class="ot">&lt;-</span> <span class="fu">quantile</span> (muestra<span class="sc">$</span>RENECO, <span class="fu">c</span>(<span class="fl">0.75</span>))</span>
+<span id="cb306-3"><a href="análisis-de-la-varianza..html#cb306-3" tabindex="-1"></a></span>
+<span id="cb306-4"><a href="análisis-de-la-varianza..html#cb306-4" tabindex="-1"></a>  muestra <span class="sc">%&gt;%</span></span>
+<span id="cb306-5"><a href="análisis-de-la-varianza..html#cb306-5" tabindex="-1"></a>    <span class="fu">filter</span>(RENECO <span class="sc">&gt;</span> Q3 <span class="sc">+</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(RENECO) <span class="sc">|</span></span>
+<span id="cb306-6"><a href="análisis-de-la-varianza..html#cb306-6" tabindex="-1"></a>           RENECO <span class="sc">&lt;</span> Q1 <span class="sc">-</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(RENECO)) <span class="sc">%&gt;%</span></span>
+<span id="cb306-7"><a href="análisis-de-la-varianza..html#cb306-7" tabindex="-1"></a>    <span class="fu">select</span>(RENECO)</span></code></pre></div>
+<pre><code>##                     RENECO
+## Molinos Del Ebro SA 35.262</code></pre>
+<p>La empresa identificada como outlier es “Molinos del Ebro S. A”. Como ocurría con los <em>missing values</em>, el tratamiento de los <em>outliers</em> depende de la información que se tenga, existiendo varias alternativas (corrección del dato, estimación, etc.) Si no se tiene información fiable, y los <em>outliers</em> no representan una gran proporción respecto al total de casos, puede optarse por su eliminación de la muestra, como haremos en este ejemplo. Podemos hacerlo creando un nuevo <em>data frame</em> a partir de “muestra”; pero sin ese caso. Ese nuevo <em>data frame</em> se llamará, por ejemplo, “<strong>muestra_so</strong>”:</p>
+<div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb308-1"><a href="análisis-de-la-varianza..html#cb308-1" tabindex="-1"></a>  muestra_so <span class="ot">&lt;-</span> muestra <span class="sc">%&gt;%</span> <span class="fu">filter</span>(RENECO <span class="sc">&lt;=</span> Q3 <span class="sc">+</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(RENECO) <span class="sc">&amp;</span></span>
+<span id="cb308-2"><a href="análisis-de-la-varianza..html#cb308-2" tabindex="-1"></a>                                   RENECO <span class="sc">&gt;=</span> Q1 <span class="sc">-</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(RENECO))</span></code></pre></div>
+<p>Una vez preparados los datos, vamos a presentar los grupos de empresas eólicas y sus rentabilidades económicas medias. Para ello, diseñaremos una tabla con la función <code>kable()</code> del paquete <code>{knitr}</code>, y personalizada con algunas funciones incluidas en el paquete <code>{kableExtra}</code>. Para construir la tabla, hemos de crear anteriormente un pequeño <em>data frame</em>, llamado por ejemplo “tablamedias”, en el que cada caso o fila sea uno de los grupos en que queda dividida la muestra a partir de los niveles del factor “DIMENSION”, y que contenga tres variables: la DIMENSION de cada grupo o submuestra, su número de casos contenidos (variable “observaciones”), y las respectivas rentabilidades medias (variable “media”):</p>
+<div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb309-1"><a href="análisis-de-la-varianza..html#cb309-1" tabindex="-1"></a>  <span class="co"># Visualizando número de frecuencias y medias de los grupos con dplyr:</span></span>
+<span id="cb309-2"><a href="análisis-de-la-varianza..html#cb309-2" tabindex="-1"></a>  </span>
+<span id="cb309-3"><a href="análisis-de-la-varianza..html#cb309-3" tabindex="-1"></a>  <span class="fu">library</span> (knitr)</span>
+<span id="cb309-4"><a href="análisis-de-la-varianza..html#cb309-4" tabindex="-1"></a>  <span class="fu">library</span> (kableExtra)</span>
+<span id="cb309-5"><a href="análisis-de-la-varianza..html#cb309-5" tabindex="-1"></a>  knitr.table.format <span class="ot">=</span> <span class="st">&quot;html&quot;</span> </span>
+<span id="cb309-6"><a href="análisis-de-la-varianza..html#cb309-6" tabindex="-1"></a></span>
+<span id="cb309-7"><a href="análisis-de-la-varianza..html#cb309-7" tabindex="-1"></a>  tablamedias <span class="ot">&lt;-</span>  muestra_so <span class="sc">%&gt;%</span></span>
+<span id="cb309-8"><a href="análisis-de-la-varianza..html#cb309-8" tabindex="-1"></a>                    <span class="fu">group_by</span>(DIMENSION) <span class="sc">%&gt;%</span></span>
+<span id="cb309-9"><a href="análisis-de-la-varianza..html#cb309-9" tabindex="-1"></a>                    <span class="fu">summarise</span> (<span class="at">observaciones =</span> <span class="fu">length</span>(DIMENSION),</span>
+<span id="cb309-10"><a href="análisis-de-la-varianza..html#cb309-10" tabindex="-1"></a>                               <span class="at">media =</span> <span class="fu">mean</span>(RENECO))</span>
+<span id="cb309-11"><a href="análisis-de-la-varianza..html#cb309-11" tabindex="-1"></a></span>
+<span id="cb309-12"><a href="análisis-de-la-varianza..html#cb309-12" tabindex="-1"></a>  tablamedias <span class="sc">%&gt;%</span></span>
+<span id="cb309-13"><a href="análisis-de-la-varianza..html#cb309-13" tabindex="-1"></a>    <span class="fu">kable</span>(<span class="at">format =</span> knitr.table.format,</span>
+<span id="cb309-14"><a href="análisis-de-la-varianza..html#cb309-14" tabindex="-1"></a>      <span class="at">caption =</span> <span class="st">&quot;Rentabilidad Económica. Medias por grupos (tamaño matriz).&quot;</span>,</span>
+<span id="cb309-15"><a href="análisis-de-la-varianza..html#cb309-15" tabindex="-1"></a>      <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Tamaño&quot;</span>, <span class="st">&quot;Observaciones&quot;</span>, <span class="st">&quot;Rentabilidad Económica&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb309-16"><a href="análisis-de-la-varianza..html#cb309-16" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F,</span>
+<span id="cb309-17"><a href="análisis-de-la-varianza..html#cb309-17" tabindex="-1"></a>                <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="st">&quot;bordered&quot;</span>, <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb309-18"><a href="análisis-de-la-varianza..html#cb309-18" tabindex="-1"></a>                <span class="at">position =</span> <span class="st">&quot;center&quot;</span>,</span>
+<span id="cb309-19"><a href="análisis-de-la-varianza..html#cb309-19" tabindex="-1"></a>                <span class="at">font_size =</span> <span class="dv">11</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb309-20"><a href="análisis-de-la-varianza..html#cb309-20" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold=</span> T, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb309-21"><a href="análisis-de-la-varianza..html#cb309-21" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(tablamedias), <span class="at">bold=</span> F, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>)</span></code></pre></div>
+<table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-257">Table 8.1: </span><span id="tab:unnamed-chunk-257">Table 8.2: </span>Rentabilidad Económica. Medias por grupos (tamaño matriz).
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Tamaño
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Observaciones
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Rentabilidad Económica
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;">
+GRANDE
+</td>
+<td style="text-align:right;text-align: center;">
+24
+</td>
+<td style="text-align:right;text-align: center;">
+2.721167
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+MEDIA
+</td>
+<td style="text-align:right;text-align: center;">
+13
+</td>
+<td style="text-align:right;text-align: center;">
+7.241154
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+PEQUEÑA
+</td>
+<td style="text-align:right;text-align: center;">
+10
+</td>
+<td style="text-align:right;text-align: center;">
+8.167200
+</td>
+</tr>
+</tbody>
+</table>
+<p>Gráficamente, las tres submuestras de empresas pueden caracterizarse, en cuanto a la rentabilidad económica (RENECO), mediante dos tipos de gráficos: gráficos de densidad y gráficos de caja. Los gráficos serán construidos utilizando las facilidades del paquete <code>{ggplot2}</code>. Además, combinaremos los gráficos en una composición utilizando el paquete <code>{patchwork}</code>. El código es el siguiente:</p>
+<div class="sourceCode" id="cb310"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb310-1"><a href="análisis-de-la-varianza..html#cb310-1" tabindex="-1"></a>  <span class="co"># Graficando casos y medias.</span></span>
+<span id="cb310-2"><a href="análisis-de-la-varianza..html#cb310-2" tabindex="-1"></a></span>
+<span id="cb310-3"><a href="análisis-de-la-varianza..html#cb310-3" tabindex="-1"></a>  <span class="co"># Crear el gráfico de densidad</span></span>
+<span id="cb310-4"><a href="análisis-de-la-varianza..html#cb310-4" tabindex="-1"></a>  gdensidad <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span> muestra_so, <span class="fu">aes</span>(<span class="at">x =</span> RENECO, <span class="at">color =</span> DIMENSION, <span class="at">fill =</span> DIMENSION)) <span class="sc">+</span></span>
+<span id="cb310-5"><a href="análisis-de-la-varianza..html#cb310-5" tabindex="-1"></a>    <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb310-6"><a href="análisis-de-la-varianza..html#cb310-6" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">data =</span> tablamedias, <span class="fu">aes</span>(<span class="at">xintercept =</span> media, <span class="at">color =</span> DIMENSION), <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb310-7"><a href="análisis-de-la-varianza..html#cb310-7" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Diagramas de Densidad por Grupo con Medias&quot;</span>,</span>
+<span id="cb310-8"><a href="análisis-de-la-varianza..html#cb310-8" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;Rentabilidad Económica (%)&quot;</span>,</span>
+<span id="cb310-9"><a href="análisis-de-la-varianza..html#cb310-9" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>) <span class="sc">+</span></span>
+<span id="cb310-10"><a href="análisis-de-la-varianza..html#cb310-10" tabindex="-1"></a>    <span class="fu">theme_grey</span>()</span>
+<span id="cb310-11"><a href="análisis-de-la-varianza..html#cb310-11" tabindex="-1"></a>  </span>
+<span id="cb310-12"><a href="análisis-de-la-varianza..html#cb310-12" tabindex="-1"></a>  <span class="co"># Crear box-plot</span></span>
+<span id="cb310-13"><a href="análisis-de-la-varianza..html#cb310-13" tabindex="-1"></a>  gbox <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> muestra_so,</span>
+<span id="cb310-14"><a href="análisis-de-la-varianza..html#cb310-14" tabindex="-1"></a>         <span class="at">map =</span> (<span class="fu">aes</span>(<span class="at">y =</span> DIMENSION,</span>
+<span id="cb310-15"><a href="análisis-de-la-varianza..html#cb310-15" tabindex="-1"></a>                    <span class="at">x =</span> RENECO,</span>
+<span id="cb310-16"><a href="análisis-de-la-varianza..html#cb310-16" tabindex="-1"></a>                    <span class="at">color =</span> DIMENSION,</span>
+<span id="cb310-17"><a href="análisis-de-la-varianza..html#cb310-17" tabindex="-1"></a>                    <span class="at">fill =</span> DIMENSION))) <span class="sc">+</span></span>
+<span id="cb310-18"><a href="análisis-de-la-varianza..html#cb310-18" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">outlier.shape =</span> <span class="cn">NA</span>,</span>
+<span id="cb310-19"><a href="análisis-de-la-varianza..html#cb310-19" tabindex="-1"></a>               <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb310-20"><a href="análisis-de-la-varianza..html#cb310-20" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> <span class="st">&quot;mean&quot;</span>,</span>
+<span id="cb310-21"><a href="análisis-de-la-varianza..html#cb310-21" tabindex="-1"></a>               <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>,</span>
+<span id="cb310-22"><a href="análisis-de-la-varianza..html#cb310-22" tabindex="-1"></a>               <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb310-23"><a href="análisis-de-la-varianza..html#cb310-23" tabindex="-1"></a>               <span class="at">map =</span> <span class="fu">aes</span>(<span class="at">col =</span> DIMENSION),</span>
+<span id="cb310-24"><a href="análisis-de-la-varianza..html#cb310-24" tabindex="-1"></a>               <span class="at">alpha =</span> <span class="fl">0.60</span>) <span class="sc">+</span></span>
+<span id="cb310-25"><a href="análisis-de-la-varianza..html#cb310-25" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.1</span>,</span>
+<span id="cb310-26"><a href="análisis-de-la-varianza..html#cb310-26" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">1</span>,</span>
+<span id="cb310-27"><a href="análisis-de-la-varianza..html#cb310-27" tabindex="-1"></a>              <span class="at">map =</span> (<span class="fu">aes</span>(<span class="at">col =</span> DIMENSION)),</span>
+<span id="cb310-28"><a href="análisis-de-la-varianza..html#cb310-28" tabindex="-1"></a>              <span class="at">alpha =</span> <span class="fl">0.40</span>) <span class="sc">+</span></span>
+<span id="cb310-29"><a href="análisis-de-la-varianza..html#cb310-29" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">tittle =</span><span class="st">&quot;Diagramas de caja por Grupo con Medias&quot;</span>,</span>
+<span id="cb310-30"><a href="análisis-de-la-varianza..html#cb310-30" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Rentabilidad Económica (%)&quot;</span>,</span>
+<span id="cb310-31"><a href="análisis-de-la-varianza..html#cb310-31" tabindex="-1"></a>       <span class="at">ylab =</span> <span class="st">&quot;Submuestras&quot;</span>)</span>
+<span id="cb310-32"><a href="análisis-de-la-varianza..html#cb310-32" tabindex="-1"></a></span>
+<span id="cb310-33"><a href="análisis-de-la-varianza..html#cb310-33" tabindex="-1"></a>  <span class="co"># Combinar gráficos.</span></span>
+<span id="cb310-34"><a href="análisis-de-la-varianza..html#cb310-34" tabindex="-1"></a>  </span>
+<span id="cb310-35"><a href="análisis-de-la-varianza..html#cb310-35" tabindex="-1"></a>  <span class="fu">library</span>(patchwork)</span>
+<span id="cb310-36"><a href="análisis-de-la-varianza..html#cb310-36" tabindex="-1"></a>  </span>
+<span id="cb310-37"><a href="análisis-de-la-varianza..html#cb310-37" tabindex="-1"></a>  gdensidad <span class="sc">/</span> gbox</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-258-1.png" width="672" /></p>
+<p>Cada grupo o submuestra “representa” a una subpoblación, según la dimensión que tenga la matriz empresarial. El ANOVA lo que intenta determinar es si, observadas las diferencias en las medias muestrales de la variable en estudio (aquí, RENECO), esas diferencias pueden considerarse o no estadísticamente significativas a nivel poblacional. En realidad, la hipótesis nula a contrastar es que ninguna de las diferencias entre las medias de la variable de las subpoblacionales es estadísticamente significativa; mientras que la hipótesis alternativa es que existe al menos una diferencia significativa entre las medias de las subpoblaciones. En definitiva, la <strong>hipótesis nula</strong> a contrastar sugiere <strong>que no existen diferencias entre las rentabilidades económicas medias de los grupos</strong> (subpoblaciones) de empresas eólicas (discriminadas por el tamaño del grupo empresarial al que pertenecen). De ser así, el factor DIMENSION no tendría una influencia estadísticamente significativa sobre el valor medio de la variable RENECO.</p>
+<p>Las conclusiones a las que lleguemos con el <em>contraste F de ANOVA</em> serán válidas en la medida en que se cumplan las <strong>hipótesis de normalidad y homogeneidad en las varianzas</strong> de la variable dependiente o métrica (RENECO), en los tres grupos o subpoblaciones en que queda dividida la población atendiendo los niveles o categorías del factor (DIMENSION). Hemos de contrastar, pues, ambas hipótesis, a partir de la información de las tres submuestras que tenemos y que representan, respectivamente, a cada una de esas subpoblaciones.</p>
+<p>En cuanto a la hipótesis de <strong>normalidad</strong>, se pueden usar dos vías para verificar su cumplimiento: el análisis gráfico y la realización de contrastes estadísticos.</p>
+<p>El análisis gráfico puede llevarse a cabo mediante la realización <em>de gráficos QQ</em> de la variable RENECO, a partir de las submuestras o grupos de empresas en que queda fragmentada la muestra a partir de la variable DIMENSION. Estos gráficos pueden generarse con la gramática del paquete <code>{ggplot2}</code>:</p>
+<div class="sourceCode" id="cb311"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb311-1"><a href="análisis-de-la-varianza..html#cb311-1" tabindex="-1"></a><span class="co"># PRERREQUISITOS / HIPÓTESIS ANOVA  </span></span>
+<span id="cb311-2"><a href="análisis-de-la-varianza..html#cb311-2" tabindex="-1"></a></span>
+<span id="cb311-3"><a href="análisis-de-la-varianza..html#cb311-3" tabindex="-1"></a>    <span class="co"># Normalidad / Gráfico QQ</span></span>
+<span id="cb311-4"><a href="análisis-de-la-varianza..html#cb311-4" tabindex="-1"></a></span>
+<span id="cb311-5"><a href="análisis-de-la-varianza..html#cb311-5" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="at">data =</span> muestra_so,</span>
+<span id="cb311-6"><a href="análisis-de-la-varianza..html#cb311-6" tabindex="-1"></a>           <span class="fu">aes</span>(<span class="at">sample =</span> RENECO)) <span class="sc">+</span></span>
+<span id="cb311-7"><a href="análisis-de-la-varianza..html#cb311-7" tabindex="-1"></a>    <span class="fu">stat_qq</span>(<span class="at">colour =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb311-8"><a href="análisis-de-la-varianza..html#cb311-8" tabindex="-1"></a>    <span class="fu">stat_qq_line</span>(<span class="at">colour =</span> <span class="st">&quot;dark blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb311-9"><a href="análisis-de-la-varianza..html#cb311-9" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">&quot;RENTABILIDAD ECONÓMICA: QQ-PLOT&quot;</span>,</span>
+<span id="cb311-10"><a href="análisis-de-la-varianza..html#cb311-10" tabindex="-1"></a>            <span class="at">subtitle =</span> <span class="st">&quot;Empresas eólicas&quot;</span>) <span class="sc">+</span></span>
+<span id="cb311-11"><a href="análisis-de-la-varianza..html#cb311-11" tabindex="-1"></a>    <span class="fu">facet_grid</span>(. <span class="sc">~</span> DIMENSION)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-259-1.png" width="672" /></p>
+<p>Los <em>gráficos QQ</em> parecen inidicar que la variable RENECO tiene un comportamiento distante a la Ley Normal en las submuestras (y, por tanto, en las correspondientes subpoblaciones), al localizarse, algunos de los puntos, relativamente alejados de la diagonal, especialmente en el caso de las empresas pertenecientes a matrices de dimensión “grande”. Para extraer una conclusión de un modo más preciso, vamos a realizar el contraste de normalidad de <em>Shapiro-Wilk</em>:</p>
+<div class="sourceCode" id="cb312"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb312-1"><a href="análisis-de-la-varianza..html#cb312-1" tabindex="-1"></a>    <span class="co"># Normalidad: Shapiro-Wilk para cada grupo</span></span>
+<span id="cb312-2"><a href="análisis-de-la-varianza..html#cb312-2" tabindex="-1"></a>    normalidad <span class="ot">&lt;-</span> muestra_so <span class="sc">%&gt;%</span></span>
+<span id="cb312-3"><a href="análisis-de-la-varianza..html#cb312-3" tabindex="-1"></a>      <span class="fu">group_by</span>(DIMENSION) <span class="sc">%&gt;%</span></span>
+<span id="cb312-4"><a href="análisis-de-la-varianza..html#cb312-4" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">shapiro_p_value =</span> <span class="fu">round</span>(<span class="fu">shapiro.test</span>(RENECO)<span class="sc">$</span>p.value, <span class="dv">3</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb312-5"><a href="análisis-de-la-varianza..html#cb312-5" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">decide =</span> <span class="fu">if_else</span>(shapiro_p_value <span class="sc">&gt;</span> <span class="fl">0.05</span>,</span>
+<span id="cb312-6"><a href="análisis-de-la-varianza..html#cb312-6" tabindex="-1"></a>                            <span class="st">&quot;NORMALIDAD&quot;</span>,</span>
+<span id="cb312-7"><a href="análisis-de-la-varianza..html#cb312-7" tabindex="-1"></a>                            <span class="st">&quot;NO-NORMALIDAD&quot;</span>))</span>
+<span id="cb312-8"><a href="análisis-de-la-varianza..html#cb312-8" tabindex="-1"></a></span>
+<span id="cb312-9"><a href="análisis-de-la-varianza..html#cb312-9" tabindex="-1"></a>    tablashapiro <span class="ot">&lt;-</span> normalidad <span class="sc">%&gt;%</span></span>
+<span id="cb312-10"><a href="análisis-de-la-varianza..html#cb312-10" tabindex="-1"></a>    <span class="fu">kable</span>(<span class="at">format =</span> knitr.table.format,</span>
+<span id="cb312-11"><a href="análisis-de-la-varianza..html#cb312-11" tabindex="-1"></a>          <span class="at">caption =</span> <span class="st">&quot;Normalidad (Shapiro-Wilks)&quot;</span>,</span>
+<span id="cb312-12"><a href="análisis-de-la-varianza..html#cb312-12" tabindex="-1"></a>          <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Dimensión&quot;</span>, <span class="st">&quot;p-valor&quot;</span>, <span class="st">&quot;Conclusión&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb312-13"><a href="análisis-de-la-varianza..html#cb312-13" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F,</span>
+<span id="cb312-14"><a href="análisis-de-la-varianza..html#cb312-14" tabindex="-1"></a>                  <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="st">&quot;bordered&quot;</span>, <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb312-15"><a href="análisis-de-la-varianza..html#cb312-15" tabindex="-1"></a>                  <span class="at">position =</span> <span class="st">&quot;center&quot;</span>,</span>
+<span id="cb312-16"><a href="análisis-de-la-varianza..html#cb312-16" tabindex="-1"></a>                  <span class="at">font_size =</span> <span class="dv">11</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb312-17"><a href="análisis-de-la-varianza..html#cb312-17" tabindex="-1"></a>    <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold=</span> T, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb312-18"><a href="análisis-de-la-varianza..html#cb312-18" tabindex="-1"></a>    <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(normalidad), <span class="at">bold=</span> F, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>)</span>
+<span id="cb312-19"><a href="análisis-de-la-varianza..html#cb312-19" tabindex="-1"></a></span>
+<span id="cb312-20"><a href="análisis-de-la-varianza..html#cb312-20" tabindex="-1"></a>    tablashapiro</span></code></pre></div>
+<p>En el código anterior, se crea un pequeño <em>data frame</em> denominado “normalidad”, que incluye, para cada submuestra definida por los niveles del factor DIMENSION, la variable “decide” con los <em>p-valores</em> de la prueba de <em>Shapiro-Wilk</em>, y un atributo llamado “decide”, creado mediante la función <code>mutate()</code> de <code>{dplyr}</code>, que adopta la categoría “NORMALIDAD” o “NO-NORMALIDAD” dependiendo de los p-valores. Posteriormente, el data frame “normalidad” se presenta como una tabla de nombre “tablashapiro”.</p>
+<table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-261">Table 8.3: </span><span id="tab:unnamed-chunk-261">Table 8.4: </span>Normalidad (Shapiro-Wilks).
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Dimensión
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+p-valor
+</th>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Conclusión
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;">
+GRANDE
+</td>
+<td style="text-align:right;text-align: center;">
+0.038
+</td>
+<td style="text-align:left;text-align: center;">
+NO-NORMALIDAD
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+MEDIA
+</td>
+<td style="text-align:right;text-align: center;">
+0.698
+</td>
+<td style="text-align:left;text-align: center;">
+NORMALIDAD
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+PEQUEÑA
+</td>
+<td style="text-align:right;text-align: center;">
+0.134
+</td>
+<td style="text-align:left;text-align: center;">
+NORMALIDAD
+</td>
+</tr>
+</tbody>
+</table>
+<p>En esta prueba, la hipótesis nula equivale al supuesto de normalidad. Para un 5% de significación estadística, un <strong>p-valor superior a 0,05 implicará el no-rechazo de la hipótesis nula de normalidad</strong>. En el ejemplo, la submuestra de empresas pertenecientes a matrices de dimensión “grande” llevan a pensar que esta subpoblación no sigue una distribución normal. En los otros dos casos, en cambio, podemos aceptar la existencia de normalidad.</p>
+<p>En cuanto a la <strong>homogeneidad de las varianzas</strong>, contrastamos este supuesto mediante la prueba de <em>Bartlett</em>.</p>
+<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb313-1"><a href="análisis-de-la-varianza..html#cb313-1" tabindex="-1"></a>    <span class="co"># Homogeneidad en las varianzas</span></span>
+<span id="cb313-2"><a href="análisis-de-la-varianza..html#cb313-2" tabindex="-1"></a></span>
+<span id="cb313-3"><a href="análisis-de-la-varianza..html#cb313-3" tabindex="-1"></a>    <span class="fu">bartlett.test</span>(muestra_so<span class="sc">$</span>RENECO <span class="sc">~</span> muestra_so<span class="sc">$</span>DIMENSION)</span></code></pre></div>
+<pre><code>## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  muestra_so$RENECO by muestra_so$DIMENSION
+## Bartlett&#39;s K-squared = 9.389, df = 2, p-value = 0.009146</code></pre>
+<p>El p-valor es menor que 0,05; luego <strong>se rechaza la hipótesis nula de homogeneidad de las varianzas de los grupos (subpoblaciones)</strong>.</p>
+<p>Puesto que en uno de los grupos (subpoblaciones) se rechaza la hipótesis de normalidad, y (sobre todo) puesto que no se puede considerar una dispersión similar en las tres subpoblaciones (varianzas homogéneas), los resultados de la prueba <strong><em>F de ANOVA</em></strong> pierden validez, y habría que optar por <strong>una alternativa robusta</strong>. No obstante, <strong>a modo ilustrativo</strong>, seguiremos adelante con la prueba <em>F de ANOVA</em>.</p>
+<p>El contraste <em>F de ANOVA</em> de igualdad en las medias de la variable en estudio (rentabilidad económica, RENECO) de las distintas (sub)poblaciones (grupos de empresas según el tamaño del grupo empresarial de pertenencia) se realiza en R mediante la función <code>aov()</code>, que guardaremos, por ejemplo, como el objeto “Datos.aov”, y que se almacenará en forma resumida en la lista “summary_aov”, de un solo elemento. Este elemento, que contiene la solución resumida del contraste ANOVA, se convierte en un <em>data frame</em> (de nombre “aov_table”) con el objetivo de presentarlo como una tabla de <code>kable()</code>:</p>
+<div class="sourceCode" id="cb315"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb315-1"><a href="análisis-de-la-varianza..html#cb315-1" tabindex="-1"></a><span class="co"># Test F de ANOVA</span></span>
+<span id="cb315-2"><a href="análisis-de-la-varianza..html#cb315-2" tabindex="-1"></a></span>
+<span id="cb315-3"><a href="análisis-de-la-varianza..html#cb315-3" tabindex="-1"></a>Datos.aov <span class="ot">&lt;-</span> <span class="fu">aov</span>(muestra_so<span class="sc">$</span>RENECO <span class="sc">~</span> muestra_so<span class="sc">$</span>DIMENSION)</span>
+<span id="cb315-4"><a href="análisis-de-la-varianza..html#cb315-4" tabindex="-1"></a>summary_aov <span class="ot">&lt;-</span> <span class="fu">summary</span>(Datos.aov)</span>
+<span id="cb315-5"><a href="análisis-de-la-varianza..html#cb315-5" tabindex="-1"></a></span>
+<span id="cb315-6"><a href="análisis-de-la-varianza..html#cb315-6" tabindex="-1"></a>  <span class="co"># Extraer los resultados del ANOVA</span></span>
+<span id="cb315-7"><a href="análisis-de-la-varianza..html#cb315-7" tabindex="-1"></a>  aov_table <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(summary_aov[[<span class="dv">1</span>]])</span>
+<span id="cb315-8"><a href="análisis-de-la-varianza..html#cb315-8" tabindex="-1"></a></span>
+<span id="cb315-9"><a href="análisis-de-la-varianza..html#cb315-9" tabindex="-1"></a>  <span class="co"># Convertir la tabla en una tabla de kable</span></span>
+<span id="cb315-10"><a href="análisis-de-la-varianza..html#cb315-10" tabindex="-1"></a>  aov_table <span class="sc">%&gt;%</span></span>
+<span id="cb315-11"><a href="análisis-de-la-varianza..html#cb315-11" tabindex="-1"></a>    <span class="fu">kable</span>(<span class="at">format =</span> knitr.table.format,</span>
+<span id="cb315-12"><a href="análisis-de-la-varianza..html#cb315-12" tabindex="-1"></a>          <span class="at">caption =</span> <span class="st">&quot;Resultados del ANOVA&quot;</span>,</span>
+<span id="cb315-13"><a href="análisis-de-la-varianza..html#cb315-13" tabindex="-1"></a>          <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Grados Libertad&quot;</span>,</span>
+<span id="cb315-14"><a href="análisis-de-la-varianza..html#cb315-14" tabindex="-1"></a>                        <span class="st">&quot;Suma cuadrados&quot;</span>,</span>
+<span id="cb315-15"><a href="análisis-de-la-varianza..html#cb315-15" tabindex="-1"></a>                        <span class="st">&quot;Media suma cuadrados&quot;</span>,</span>
+<span id="cb315-16"><a href="análisis-de-la-varianza..html#cb315-16" tabindex="-1"></a>                        <span class="st">&quot;Estadístico F&quot;</span>,</span>
+<span id="cb315-17"><a href="análisis-de-la-varianza..html#cb315-17" tabindex="-1"></a>                        <span class="st">&quot;p-valor&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb315-18"><a href="análisis-de-la-varianza..html#cb315-18" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F,</span>
+<span id="cb315-19"><a href="análisis-de-la-varianza..html#cb315-19" tabindex="-1"></a>                  <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="st">&quot;bordered&quot;</span>, <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb315-20"><a href="análisis-de-la-varianza..html#cb315-20" tabindex="-1"></a>                  <span class="at">position =</span> <span class="st">&quot;center&quot;</span>,</span>
+<span id="cb315-21"><a href="análisis-de-la-varianza..html#cb315-21" tabindex="-1"></a>                  <span class="at">font_size =</span> <span class="dv">11</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb315-22"><a href="análisis-de-la-varianza..html#cb315-22" tabindex="-1"></a>    <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold=</span> T, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb315-23"><a href="análisis-de-la-varianza..html#cb315-23" tabindex="-1"></a>    <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(aov_table), <span class="at">bold=</span> F, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>)</span></code></pre></div>
+<table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-264">Table 8.5: </span><span id="tab:unnamed-chunk-264">Table 8.6: </span>Resultados del ANOVA
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Grados Libertad
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Suma cuadrados
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Media suma cuadrados
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Estadístico F
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+p-valor
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;">
+muestra_so$DIMENSION
+</td>
+<td style="text-align:right;text-align: center;">
+2
+</td>
+<td style="text-align:right;text-align: center;">
+289.4459
+</td>
+<td style="text-align:right;text-align: center;">
+144.72296
+</td>
+<td style="text-align:right;text-align: center;">
+8.720764
+</td>
+<td style="text-align:right;text-align: center;">
+0.0006453
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+Residuals
+</td>
+<td style="text-align:right;text-align: center;">
+44
+</td>
+<td style="text-align:right;text-align: center;">
+730.1895
+</td>
+<td style="text-align:right;text-align: center;">
+16.59522
+</td>
+<td style="text-align:right;text-align: center;">
+NA
+</td>
+<td style="text-align:right;text-align: center;">
+NA
+</td>
+</tr>
+</tbody>
+</table>
+<p>El valor del estadístico F de ANOVA es de 8,721; con un p-valor asociado de 0,0006. Como el p-valor es menor que 0,05, <strong>se rechaza la hipótesis nula de medias iguales</strong>; por lo que podremos afirmar (para una significación del 5%) que <strong>el tamaño o dimensión del grupo empresarial de pertenencia influye, en media, en la rentabilidad económica obtenida</strong>.</p>
+</div>
+<div id="comparaciones-múltiples." class="section level2 hasAnchor" number="8.3">
+<h2><span class="header-section-number">8.3</span> Comparaciones múltiples.<a href="análisis-de-la-varianza..html#comparaciones-múltiples." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Cuando el resultado del contraste <em>F de ANOVA</em> es de rechazo de la hipótesis nula, se presenta otra cuestión interesante. La hipótesis alternativa dice que existe al menos una diferencia entre las medias de dos grupos que es “importante”. Pero no tienen porque ser todas. Entonces, cabe preguntarse que diferencias concretas entre medias son estadísticamente significativas, y cuáles no. Para dilucidar esta cuestión se han desarrollado diversas pruebas de <strong>comparaciones múltiples</strong>. Una de ellas es la prueba <em>HSD de Tuckey</em>. Un modo de obtener los resultados de esta prueba es ejecutarla a partir de las funciones del paquete <code>{emmeans}</code>. En concreto, los resultados de la prueba <em>HSD de</em> <em>Tuckey</em> se obtendrán aplicando la función <code>pairs()</code> a un objeto creado previamente con la función <code>emmeans()</code>, al que hemos llamado, por ejemplo, “medias”, y que tiene como argumentos el nombre de nuestra solución del contraste ANOVA anterior y, entrecomillado, el nombre de la variable que actúa como factor que divide a la muestra en los tres grupos (submuestras) comparados (DIMENSION). Los resultados se han guardado en el objeto “pares”, que posteriormente se ha transformado en un <em>data frame</em> para poder ser presentado como una tabla de <code>kable()</code>:</p>
+<div class="sourceCode" id="cb316"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb316-1"><a href="análisis-de-la-varianza..html#cb316-1" tabindex="-1"></a><span class="co"># COMPARACIONES MÚLTIPLES</span></span>
+<span id="cb316-2"><a href="análisis-de-la-varianza..html#cb316-2" tabindex="-1"></a></span>
+<span id="cb316-3"><a href="análisis-de-la-varianza..html#cb316-3" tabindex="-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb316-4"><a href="análisis-de-la-varianza..html#cb316-4" tabindex="-1"></a>medias <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(Datos.aov, <span class="st">&quot;DIMENSION&quot;</span>)</span>
+<span id="cb316-5"><a href="análisis-de-la-varianza..html#cb316-5" tabindex="-1"></a>pares <span class="ot">&lt;-</span> <span class="fu">pairs</span>(medias)</span>
+<span id="cb316-6"><a href="análisis-de-la-varianza..html#cb316-6" tabindex="-1"></a>pares_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(pares)</span>
+<span id="cb316-7"><a href="análisis-de-la-varianza..html#cb316-7" tabindex="-1"></a>pares_df <span class="sc">%&gt;%</span></span>
+<span id="cb316-8"><a href="análisis-de-la-varianza..html#cb316-8" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">format =</span> knitr.table.format,</span>
+<span id="cb316-9"><a href="análisis-de-la-varianza..html#cb316-9" tabindex="-1"></a>        <span class="at">caption =</span> <span class="st">&quot;Resultados comparaciones múltiples&quot;</span>,</span>
+<span id="cb316-10"><a href="análisis-de-la-varianza..html#cb316-10" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Grupos&quot;</span>,</span>
+<span id="cb316-11"><a href="análisis-de-la-varianza..html#cb316-11" tabindex="-1"></a>                      <span class="st">&quot;Diferencia estimada&quot;</span>,</span>
+<span id="cb316-12"><a href="análisis-de-la-varianza..html#cb316-12" tabindex="-1"></a>                      <span class="st">&quot;Desviación Típica&quot;</span>,</span>
+<span id="cb316-13"><a href="análisis-de-la-varianza..html#cb316-13" tabindex="-1"></a>                      <span class="st">&quot;Grados de libertad&quot;</span>,</span>
+<span id="cb316-14"><a href="análisis-de-la-varianza..html#cb316-14" tabindex="-1"></a>                      <span class="st">&quot;Estadístico t&quot;</span>,</span>
+<span id="cb316-15"><a href="análisis-de-la-varianza..html#cb316-15" tabindex="-1"></a>                      <span class="st">&quot;p-valor&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb316-16"><a href="análisis-de-la-varianza..html#cb316-16" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F,</span>
+<span id="cb316-17"><a href="análisis-de-la-varianza..html#cb316-17" tabindex="-1"></a>                <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="st">&quot;bordered&quot;</span>, <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb316-18"><a href="análisis-de-la-varianza..html#cb316-18" tabindex="-1"></a>                <span class="at">position =</span> <span class="st">&quot;center&quot;</span>,</span>
+<span id="cb316-19"><a href="análisis-de-la-varianza..html#cb316-19" tabindex="-1"></a>                <span class="at">font_size =</span> <span class="dv">11</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb316-20"><a href="análisis-de-la-varianza..html#cb316-20" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold=</span> T, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb316-21"><a href="análisis-de-la-varianza..html#cb316-21" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(pares_df), <span class="at">bold=</span> F, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>)</span></code></pre></div>
+<table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-266">Table 8.7: </span><span id="tab:unnamed-chunk-266">Table 8.8: </span>Resultados comparaciones múltiples
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Grupos
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Diferencia estimada
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Desviación Típica
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Grados de libertad
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Estadístico t
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+p-valor
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;">
+GRANDE - MEDIA
+</td>
+<td style="text-align:right;text-align: center;">
+-4.5199872
+</td>
+<td style="text-align:right;text-align: center;">
+1.402862
+</td>
+<td style="text-align:right;text-align: center;">
+44
+</td>
+<td style="text-align:right;text-align: center;">
+-3.2219752
+</td>
+<td style="text-align:right;text-align: center;">
+0.0066466
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+GRANDE - PEQUEÑA
+</td>
+<td style="text-align:right;text-align: center;">
+-5.4460333
+</td>
+<td style="text-align:right;text-align: center;">
+1.533294
+</td>
+<td style="text-align:right;text-align: center;">
+44
+</td>
+<td style="text-align:right;text-align: center;">
+-3.5518532
+</td>
+<td style="text-align:right;text-align: center;">
+0.0026160
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+MEDIA - PEQUEÑA
+</td>
+<td style="text-align:right;text-align: center;">
+-0.9260462
+</td>
+<td style="text-align:right;text-align: center;">
+1.713498
+</td>
+<td style="text-align:right;text-align: center;">
+44
+</td>
+<td style="text-align:right;text-align: center;">
+-0.5404418
+</td>
+<td style="text-align:right;text-align: center;">
+0.8518522
+</td>
+</tr>
+</tbody>
+</table>
+<p>En la tabla generada, cada fila recoge la diferencia entre la rentabilidad media de las empresas incluidas en las submuestras de los distintos niveles de dimensión de los grupos empresariales a los que perteneces dichas empresas. En la última columna, se muestran los <em>p-valores.</em> La hipótesis nula implica que la diferencia entre las rentabilidades medias de los dos grupos implicados son tan pequeñas que pueden considerarse nulas. Por tanto, p-valores muy pequeños (menores que 0,05) implican un rechazo de esta hipótesis, y la admisión de que esas difrencias son significativamente distintas a 0, o sea, “importantes”. Por tanto, en el ejemplo se concluye que las rentabilidad media del grupo de empresas de matrices de dimensión “grande” difiere significativamente con respecto a las rentabilidades medias de los otros dos grupos. En cambio, las rentabilidades medias de los grupos de empresas de matrices de dimensión “media” y “pequeña” no difieren significativamente.</p>
+</div>
+<div id="y-si-no-se-cumplen-las-condiciones-para-realizar-el-contraste-f-de-anova" class="section level2 hasAnchor" number="8.4">
+<h2><span class="header-section-number">8.4</span> ¿Y si no se cumplen las condiciones para realizar el contraste F de ANOVA?<a href="análisis-de-la-varianza..html#y-si-no-se-cumplen-las-condiciones-para-realizar-el-contraste-f-de-anova" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En el ejemplo anterior hemos visto cómo, aunque hemos seguido el procedimiento de realización del contraste F de ANOVA y la prueba HSD de Tuckey de comparaciones múltiples; no sé cumplían algunos de los requisitos necesarios para confiar en los resultados de estos contrastes: la normalidad de las subpoblaciones (medida a través de las submuestras) y la homogeneidad de las varianzas de estas.</p>
+<p>Cuando esto ocurre, es necesario recurrir a técnicas robustas, puesto que el comportamiento de la variable analizada en las subpoblaciones (grupos) no se ajusta al necesario para poder aplicar los contrastes anteriores.</p>
+<p>Una prueba robusta que puede suplir al contraste F de ANOVA es la de Kruskal-Wallis. En esta prueba, la hipótesis nula vuelve a ser que no existen diferencias significativas entre las medias de la variable estudiada de las diferentes subpoblaciones (representadas por las correspondientes submuestras), mientras que la hipótesis alternativa apuesta porquela existencia al menos una diferencia significativa. Para aplicar la prueba de Kruskal-Wallis en R, puede recurrirse a la función <code>kruskal.test()</code> del paquete <code>{pgirmess}</code>. Así, en nuestro ejemplo, tenemos:</p>
+<div class="sourceCode" id="cb317"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb317-1"><a href="análisis-de-la-varianza..html#cb317-1" tabindex="-1"></a><span class="co">#Cuando se incumplen las hipotesis de ANOVA (test robusto)</span></span>
+<span id="cb317-2"><a href="análisis-de-la-varianza..html#cb317-2" tabindex="-1"></a></span>
+<span id="cb317-3"><a href="análisis-de-la-varianza..html#cb317-3" tabindex="-1"></a><span class="fu">library</span>(pgirmess)</span>
+<span id="cb317-4"><a href="análisis-de-la-varianza..html#cb317-4" tabindex="-1"></a></span>
+<span id="cb317-5"><a href="análisis-de-la-varianza..html#cb317-5" tabindex="-1"></a>Datos.K <span class="ot">&lt;-</span> <span class="fu">kruskal.test</span>(muestra_so<span class="sc">$</span>RENECO <span class="sc">~</span> muestra_so<span class="sc">$</span>DIMENSION)</span>
+<span id="cb317-6"><a href="análisis-de-la-varianza..html#cb317-6" tabindex="-1"></a>Datos.K</span></code></pre></div>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  muestra_so$RENECO by muestra_so$DIMENSION
+## Kruskal-Wallis chi-squared = 14.718, df = 2, p-value = 0.0006368</code></pre>
+<p>Puede comprobarse cómo el <em>p-valor</em> es muy pequeño (menor a 0,05), por lo que hemos de rechazar la hipótesis nula de medias iguales y admitir que <strong>existe al menos dos grupos (subpoblaciones) en los que la diferencia entre la rentabilidad económica media es significativa</strong>.</p>
+<p>De nuevo, si se rechaza la hipótesis nula, cabe preguntarse cuáles son los grupos o subpoblaciones concretas cuyas medias de rentabilidad económica son significativamente diferentes. Kruskal-Wallis desarrollaron también la versión robusta de la prueba <em>HSD de Tuckey</em>, que se incluye en <code>{pgirmess}</code>, con la función <code>kruskalmc()</code>. En el siguiente código se aplica la función, cuya solución se guarda en el objeto “Datos.kmc”. El elemento de la solución “dif.com”, que contiene las comparaciones entre las medias, se pasa a un <em>data frame</em> para poder ser mostrado como una tabla de <code>kable()</code>:</p>
+<div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb319-1"><a href="análisis-de-la-varianza..html#cb319-1" tabindex="-1"></a>  <span class="co"># Comparaciones múltiples</span></span>
+<span id="cb319-2"><a href="análisis-de-la-varianza..html#cb319-2" tabindex="-1"></a></span>
+<span id="cb319-3"><a href="análisis-de-la-varianza..html#cb319-3" tabindex="-1"></a>  Datos.kmc <span class="ot">&lt;-</span> <span class="fu">kruskalmc</span>(muestra_so<span class="sc">$</span>RENECO <span class="sc">~</span> muestra_so<span class="sc">$</span>DIMENSION)</span>
+<span id="cb319-4"><a href="análisis-de-la-varianza..html#cb319-4" tabindex="-1"></a></span>
+<span id="cb319-5"><a href="análisis-de-la-varianza..html#cb319-5" tabindex="-1"></a>  <span class="co"># Convertir los resultados a un data frame</span></span>
+<span id="cb319-6"><a href="análisis-de-la-varianza..html#cb319-6" tabindex="-1"></a></span>
+<span id="cb319-7"><a href="análisis-de-la-varianza..html#cb319-7" tabindex="-1"></a>  Datos.kmc.df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(Datos.kmc<span class="sc">$</span>dif.com)</span>
+<span id="cb319-8"><a href="análisis-de-la-varianza..html#cb319-8" tabindex="-1"></a></span>
+<span id="cb319-9"><a href="análisis-de-la-varianza..html#cb319-9" tabindex="-1"></a>  Datos.kmc.df <span class="sc">%&gt;%</span></span>
+<span id="cb319-10"><a href="análisis-de-la-varianza..html#cb319-10" tabindex="-1"></a>    <span class="fu">kable</span>(<span class="at">format =</span> knitr.table.format,</span>
+<span id="cb319-11"><a href="análisis-de-la-varianza..html#cb319-11" tabindex="-1"></a>          <span class="at">caption =</span> <span class="st">&quot;Kruskal-Wallis. Múltiples diferencias&quot;</span>,</span>
+<span id="cb319-12"><a href="análisis-de-la-varianza..html#cb319-12" tabindex="-1"></a>          <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Diferencias medias&quot;</span>,</span>
+<span id="cb319-13"><a href="análisis-de-la-varianza..html#cb319-13" tabindex="-1"></a>                        <span class="st">&quot;Diferencias críticas&quot;</span>,</span>
+<span id="cb319-14"><a href="análisis-de-la-varianza..html#cb319-14" tabindex="-1"></a>                        <span class="st">&quot;Significación&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb319-15"><a href="análisis-de-la-varianza..html#cb319-15" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F,</span>
+<span id="cb319-16"><a href="análisis-de-la-varianza..html#cb319-16" tabindex="-1"></a>                  <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">&quot;striped&quot;</span>,</span>
+<span id="cb319-17"><a href="análisis-de-la-varianza..html#cb319-17" tabindex="-1"></a>                                        <span class="st">&quot;bordered&quot;</span>,</span>
+<span id="cb319-18"><a href="análisis-de-la-varianza..html#cb319-18" tabindex="-1"></a>                                        <span class="st">&quot;condensed&quot;</span>),</span>
+<span id="cb319-19"><a href="análisis-de-la-varianza..html#cb319-19" tabindex="-1"></a>                  <span class="at">position =</span> <span class="st">&quot;center&quot;</span>,</span>
+<span id="cb319-20"><a href="análisis-de-la-varianza..html#cb319-20" tabindex="-1"></a>                  <span class="at">font_size =</span> <span class="dv">11</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb319-21"><a href="análisis-de-la-varianza..html#cb319-21" tabindex="-1"></a>    <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold =</span> T, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb319-22"><a href="análisis-de-la-varianza..html#cb319-22" tabindex="-1"></a>    <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(Datos.kmc.df), <span class="at">bold =</span> F, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>)</span></code></pre></div>
+<table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-269">Table 8.9: </span><span id="tab:unnamed-chunk-269">Table 8.10: </span>Kruskal-Wallis. Múltiples diferencias
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Diferencias medias
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Diferencias críticas
+</th>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Significación
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;">
+GRANDE-MEDIA
+</td>
+<td style="text-align:right;text-align: center;">
+16.381410
+</td>
+<td style="text-align:right;text-align: center;">
+11.30376
+</td>
+<td style="text-align:left;text-align: center;">
+TRUE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+GRANDE-PEQUEÑA
+</td>
+<td style="text-align:right;text-align: center;">
+13.758333
+</td>
+<td style="text-align:right;text-align: center;">
+12.35473
+</td>
+<td style="text-align:left;text-align: center;">
+TRUE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+MEDIA-PEQUEÑA
+</td>
+<td style="text-align:right;text-align: center;">
+2.623077
+</td>
+<td style="text-align:right;text-align: center;">
+13.80676
+</td>
+<td style="text-align:left;text-align: center;">
+FALSE
+</td>
+</tr>
+</tbody>
+</table>
+<p>En la tabla generada se comprueba cómo las diferencias que la media de la rentabilidad económica de la subpoblación de empresas pertenecientes a matrices de dimensión “grande” son significativas (para un 0,05 de significación). En cambio, las rentabilidades económicas medias de las empresas pertenecientes a matrices de dimensiones “media” y “pequeña” no difieren entre sí de modo significativo.</p>
+</div>
+<div id="materiales-para-realizar-las-prácticas-del-capítulo.-6" class="section level2 hasAnchor" number="8.5">
+<h2><span class="header-section-number">8.5</span> Materiales para realizar las prácticas del capítulo.<a href="análisis-de-la-varianza..html#materiales-para-realizar-las-prácticas-del-capítulo.-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En esta sección se muestran los links de acceso a los diferentes materiales (<em>scripts</em>, datos…) necesarios para llevar a cabo los contenidos prácticos del capítulo.</p>
+<p><strong>Datos (en formato Microsoft (R) Excel (R)):</strong></p>
+<ul>
+<li>eolica_50.xlsx (<a href="https://docs.google.com/spreadsheets/d/1PVRwLo1eAbFLOgSscLZw0bD9rgMk2X-w/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">obtener aquí</a>)</li>
+</ul>
+<p><strong>Scripts:</strong></p>
+<ul>
+<li>anova_eolica.R <a href="https://drive.google.com/file/d/1p4p17OudRprwkpF7wvvF1gwHZG82uv89/view?usp=sharing">(obtener aquí</a>)</li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="análisis-clúster..html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="análisis-de-regresión-lineal-múltiple..html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection",
+"toc_deph": 3
+},
+"table": {
+"number": false
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

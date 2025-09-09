@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>2 Almacenando y manipulando datos. | Técnicas de Análisis de Datos Económicos con R</title>
+<meta name="author" content="">
+<meta name="description" content="2.1 Objetos. Datos. Como vimos en el capítulo 1, tras ejecutar un sencillo script (o al escribir instrucciones directamente desde la consola), R es interactivo: responde a las entradas que recibe....">
+<meta name="generator" content="bookdown 0.42 with bs4_book()">
+<meta property="og:title" content="2 Almacenando y manipulando datos. | Técnicas de Análisis de Datos Económicos con R">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://bookdown.org/teckel71/book/almacenando-y-manipulando-datos..html">
+<meta property="og:image" content="https://bookdown.org/teckel71/book/figuras/Portada_v2.PNG">
+<meta property="og:description" content="2.1 Objetos. Datos. Como vimos en el capítulo 1, tras ejecutar un sencillo script (o al escribir instrucciones directamente desde la consola), R es interactivo: responde a las entradas que recibe....">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2 Almacenando y manipulando datos. | Técnicas de Análisis de Datos Económicos con R">
+<meta name="twitter:description" content="2.1 Objetos. Datos. Como vimos en el capítulo 1, tras ejecutar un sencillo script (o al escribir instrucciones directamente desde la consola), R es interactivo: responde a las entradas que recibe....">
+<meta name="twitter:image" content="https://bookdown.org/teckel71/book/figuras/Portada_v2.PNG">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+          margin-bottom: 0em;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Técnicas de Análisis de Datos Económicos con R</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html"></a></li>
+<li><a class="" href="prefacio.html">Prefacio</a></li>
+<li><a class="" href="introducci%C3%B3n..html"><span class="header-section-number">1</span> Introducción.</a></li>
+<li><a class="active" href="almacenando-y-manipulando-datos..html"><span class="header-section-number">2</span> Almacenando y manipulando datos.</a></li>
+<li><a class="" href="gr%C3%A1ficos..html"><span class="header-section-number">3</span> Gráficos.</a></li>
+<li><a class="" href="estad%C3%ADstica-descriptiva..html"><span class="header-section-number">4</span> Estadística descriptiva.</a></li>
+<li><a class="" href="an%C3%A1lisis-previo-de-datos..html"><span class="header-section-number">5</span> Análisis previo de datos.</a></li>
+<li><a class="" href="componentes-principales..html"><span class="header-section-number">6</span> Componentes principales.</a></li>
+<li><a class="" href="an%C3%A1lisis-cl%C3%BAster..html"><span class="header-section-number">7</span> Análisis Clúster.</a></li>
+<li><a class="" href="an%C3%A1lisis-de-la-varianza..html"><span class="header-section-number">8</span> Análisis de la varianza.</a></li>
+<li><a class="" href="an%C3%A1lisis-de-regresi%C3%B3n-lineal-m%C3%BAltiple..html"><span class="header-section-number">9</span> Análisis de Regresión Lineal Múltiple.</a></li>
+<li><a class="" href="an%C3%A1lisis-de-datos-cualitativos..html"><span class="header-section-number">10</span> Análisis de Datos Cualitativos.</a></li>
+<li><a class="" href="bibliograf%C3%ADa.html">Bibliografía</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="almacenando-y-manipulando-datos." class="section level1" number="2">
+<h1>
+<span class="header-section-number">2</span> Almacenando y manipulando datos.<a class="anchor" aria-label="anchor" href="#almacenando-y-manipulando-datos."><i class="fas fa-link"></i></a>
+</h1>
+<div id="objetos.-datos." class="section level2" number="2.1">
+<h2>
+<span class="header-section-number">2.1</span> Objetos. Datos.<a class="anchor" aria-label="anchor" href="#objetos.-datos."><i class="fas fa-link"></i></a>
+</h2>
+<p>Como vimos en el capítulo 1, tras ejecutar un sencillo script (o al escribir instrucciones directamente desde la consola), R es interactivo: responde a las entradas que recibe. Las entradas o <strong>expresiones</strong> pueden ser, básicamente:</p>
+<ul>
+<li><p>Expresiones aritméticas.</p></li>
+<li><p>Expresiones lógicas.</p></li>
+<li><p>Llamadas a funciones.</p></li>
+<li><p>Asignaciones.</p></li>
+</ul>
+<p>Las expresiones realizan acciones sobre <strong>objetos</strong> de R. Los objetos en R son entes que tienen ciertas características, <em>metadatos</em>, llamados atributos. No todos los objetos tienen los mismos atributos y, ni tan siquiera, todos los objetos tienen atributos que los caractericen.</p>
+<p>Los objetos más importantes en R son ciertas estructuras o <em>contenedores</em> diseñados para almacenar elementos:</p>
+<ul>
+<li><p>Vectores.</p></li>
+<li><p>Matrices.</p></li>
+<li><p>Listas.</p></li>
+<li><p>Data frames.</p></li>
+<li><p>Factores.</p></li>
+</ul>
+<p>Los elementos almacenados en los objetos se dividen en <em>clases</em>. Entre las diferentes clases, destacan las clases referidas a <strong>datos</strong>, que pueden ser de diferentes <em>modos</em>: logical (verdadero/falso), numeric (números) o character (cadena de texto). El modo numeric puede ser, a la vez, de tipo integer (número entero) o double (número real). En el caso de logical y carácter, modo y tipo coinciden.</p>
+<p>Vamos a profundizar un poco en algunas de estos contenedores de datos. Vamos a suponer que trabajamos en el proyecto que creamos en el capítulo anterior (proyecto “explora”), y que vamos a editar el script que también creamos en tal capítulo (script “explorando.R”, que se encontrará ubicado en la carpeta del proyecto “explora”).</p>
+<div id="vectores." class="section level3" number="2.1.1">
+<h3>
+<span class="header-section-number">2.1.1</span> Vectores.<a class="anchor" aria-label="anchor" href="#vectores."><i class="fas fa-link"></i></a>
+</h3>
+<p>Los <strong>vectores</strong>, son conjuntos de elementos <strong>de la misma clase</strong>. Vamos a definir por ejemplo el vector x = (1,3,5,8). Para ello, vamos a escribir en nuestro script:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">5</span>,<span class="fl">8</span><span class="op">)</span></span></code></pre></div>
+<p>Ejecutamos la línea (situando el cursor en algún lugar de ella, dentro del script; y pulsando a la vez las teclas <code>Control + Enter</code> o pinchando con el ratón en el botón <code>Run</code> del editor). Ya tenemos nuestro primer objeto de tipo <em>vector</em> en memoria. Por cierto, lo que hemos hecho es una <strong>asignación</strong>, que se escribe con una flecha creada mediante los signos “&lt;” y “-”. Hemos asignado a un vector llamado “x” los elementos 1, 3, 5 y 8.</p>
+<p>Para ver el vector simplemente escribimos en la consola (o en el script) el nombre del vector, “x”. El resultado será:</p>
+<pre><code>## [1] 1 3 5 8</code></pre>
+<p>Además, si miramos en la ventana superior-derecha de R-Studio, veremos que en el <strong><em>Global Environment</em></strong> se muestra nuestro vector y que, además, se nos informa de que tiene <em>modo</em> <em>numérico</em>. El <em>Global Environment</em> nos informa de los objetos que R tiene en memoria:</p>
+<div class="float">
+<img src="figuras/Imagen2_01.png" width="500" alt="Nuestro vector en memoria."><div class="figcaption">Nuestro vector en memoria.</div>
+</div>
+<p>Si queremos obtener un vector de números consecutivos del 2 al 6, basta con ejecutar en la “consola” (o escribir y ejecutar en el script):</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span></span></code></pre></div>
+<p>Al escribir el nombre del vector “y” en la “consola” obtendremos:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">y</span></span></code></pre></div>
+<pre><code>## [1] 2 3 4 5 6</code></pre>
+<p>Si queremos saber la longitud de un vector, usaremos la <em>función</em> <code><a href="https://rdrr.io/r/base/length.html">length()</a></code>. Por ejemplo, <code>length(y)</code> nos devolverá el valor 5. Escribamos en el script y ejecutemos:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] 5</code></pre>
+<p>Un vector puede incluir, además de números, caracteres o grupos de caracteres alfanuméricos; siempre entrecomillados (lo fundamental es que sean elementos de la misma clase). Por ejemplo, el vector “genero” (¡no pongamos tildes o podemos tener problemas!). Así, si ejecutamos estas dos líneas de código:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">genero</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Mujer"</span>,<span class="st">"Hombre"</span><span class="op">)</span></span>
+<span><span class="va">genero</span></span></code></pre></div>
+<p>Se habrá creado el vector “genero”:</p>
+<pre><code>## [1] "Mujer"  "Hombre"</code></pre>
+<p>Podemos obtener la clase de los elementos almacenados en nuestro vector con la función <code><a href="https://rdrr.io/r/base/class.html">class()</a></code>:</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">genero</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] "character"</code></pre>
+<p>Si falta un dato en un vector, habrá que escribir “NA” (not available). Por ejemplo, si falta el tercer dato de este vector “z”, este vector se escribirá como:</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">Z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="cn">NA</span>,<span class="fl">2</span>,<span class="fl">8</span><span class="op">)</span></span></code></pre></div>
+<p>Para <strong>seleccionar un elemento</strong> concreto de un vector, indicaremos entre corchetes la posición en la que se encuentra. Por ejemplo, refiriéndonos al vector “x”, para obtener el valor de su tercer elemento, haremos:</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span></span></code></pre></div>
+<pre><code>## [1] 5</code></pre>
+<p>Si queremos que se nos muestre los elementos del vector x del 2º al 4º:</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span></code></pre></div>
+<pre><code>## [1] 3 5 8</code></pre>
+<p>Por último, si queremos sacar en pantalla los elementos 1º y 4º, tendremos que incluir una “c” seguida de un paréntesis que recoja el orden de los elementos que queremos seleccionar:</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<pre><code>## [1] 1 8</code></pre>
+</div>
+<div id="matrices." class="section level3" number="2.1.2">
+<h3>
+<span class="header-section-number">2.1.2</span> Matrices.<a class="anchor" aria-label="anchor" href="#matrices."><i class="fas fa-link"></i></a>
+</h3>
+<p>Las <strong>matrices</strong>, internamente en R, son vectores; pero con dos atributos adicionales: número de filas y número de columnas. Se definen mediante la función matrix(). Por ejemplo, para definir la matriz “a”:</p>
+<p><span class="math display">\[
+\begin{pmatrix}
+    1 &amp; 4 &amp; 7 \\
+    2 &amp; 5 &amp; 8 \\
+    3 &amp; 6 &amp; 9
+\end{pmatrix}
+\]</span> Tendremos que escribir:</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>,<span class="fl">7</span>,<span class="fl">8</span>,<span class="fl">9</span><span class="op">)</span>,nrow<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">a</span></span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    2    5    8
+## [3,]    3    6    9</code></pre>
+<p>El número de filas de la matriz (y por tanto, el número de columnas) se fija con el argumento <code>nrow =</code> . También podríamos fijar el número de columnas, con <code>ncol =</code> .</p>
+<p>Como vemos, por defecto, R va “cortando” el vector por columnas (si lo preferimos, lo puede hacer también por filas, añadiendo a la función <code><a href="https://rdrr.io/r/base/matrix.html">matrix()</a></code> el argumento <code>by row = true</code>; pero, en nuestro ejemplo, obtendríamos la matriz traspuesta a la que queremos almacenar).</p>
+<p>Las dimensiones (número de filas y de columnas) de la matriz pueden obtenerse mediante la función <code><a href="https://rdrr.io/r/base/dim.html">dim()</a></code>:</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] 3 3</code></pre>
+<p>3 filas y 3 columnas.</p>
+<p>Si queremos seleccionar elementos concretos de una matriz, lo haremos utilizando corchetes para indicar filas y columnas. Hemos de tener en cuenta que, trabajando con matrices, siempre tenemos <span class="math display">\[rango de filas, rango de columnas\]</span> Si se deja en blanco el espacio entre el corchete inicial y la coma, esto querrá decir que consideramos todas las filas. Y si no insertamos nada entre la coma y el corchete de cierre, esto significará que consideramos todas las columnas. A continuación tenemos varios ejemplos de código, con el resultado obtenido en la consola:</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">a</span><span class="op">[</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">]</span></span></code></pre></div>
+<pre><code>## [1] 8</code></pre>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">a</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span> </span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    4    7
+## [2,]    5    8</code></pre>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">a</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    1    7
+## [2,]    2    8
+## [3,]    3    9</code></pre>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">a</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    3    6    9</code></pre>
+<p>Tanto para vectores como para matrices, funcionan las operaciones suma y diferencia sin más complicaciones. En el caso del producto, sin embargo, hay que tener en cuenta que, por ejemplo, a*a devuelve la multiplicación elemento a elemento, es decir:</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">a</span><span class="op">*</span><span class="va">a</span></span></code></pre></div>
+<p>Devuelve la multiplicación elemento a elemento (en este caso, el cuadrado de cada número, al multiplicar la matriz a por sí misma):</p>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1   16   49
+## [2,]    4   25   64
+## [3,]    9   36   81</code></pre>
+<p>Para hacer el verdadero producto matricial deberá introducirse:</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">a</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span><span class="va">a</span></span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]   30   66  102
+## [2,]   36   81  126
+## [3,]   42   96  150</code></pre>
+</div>
+<div id="data-frames." class="section level3" number="2.1.3">
+<h3>
+<span class="header-section-number">2.1.3</span> Data frames.<a class="anchor" aria-label="anchor" href="#data-frames."><i class="fas fa-link"></i></a>
+</h3>
+<p>Un <strong><em>data frame</em></strong> es un objeto que almacena datos organizados mediante la clase <code>data.frame</code>. Esta organización consiste en que, por filas, se disponen los diferentes casos o sujetos; mientras que por columnas se posicionan las variables. Así:</p>
+<ul>
+<li><p>Es similar a una matriz en el sentido de que tiene dos dimensiones. Podemos acceder a sus elementos con corchetes, tenemos nombres de filas y columnas, y podemos operar con ellas.</p></li>
+<li><p>Cada columna tiene un nombre, de manera que podemos acceder a una columna concreta con el símbolo <strong><code>$</code></strong>. Todas las columnas (variables) son vectores con la misma longitud.</p></li>
+<li><p>Cada columna puede ser un vector numérico, factor, de tipo carácter o lógico.</p></li>
+</ul>
+<p>Por ejemplo, vamos a crear el <em>data frame</em> <strong>“datos”</strong>, con tres variables: “peso”, “altura”, y “color de ojos”, llamadas “Peso”, “Altura” y “Cl.ojos”, respectivamente; para 3 individuos o casos. Una opción es crear primero las tres variables como vectores, y luego crear el <em>data frame</em> mediante la función <code>dataframe()</code>:</p>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">Peso</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">68</span>,<span class="fl">75</span>,<span class="fl">88</span><span class="op">)</span></span>
+<span><span class="va">Altura</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1.6</span>,<span class="fl">1.8</span>,<span class="fl">1.9</span><span class="op">)</span></span>
+<span><span class="va">Cl.ojos</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"azules"</span>,<span class="st">"marrones"</span>,<span class="st">"marrones"</span><span class="op">)</span></span>
+<span><span class="va">datos</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">Peso</span>,<span class="va">Altura</span>,<span class="va">Cl.ojos</span><span class="op">)</span></span></code></pre></div>
+<p>Si ahora ejecutamos una línea con el nombre de nuestro <em>data frame</em>, lo obtendremos como resultado en la consola:</p>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">datos</span></span></code></pre></div>
+<pre><code>##   Peso Altura  Cl.ojos
+## 1   68    1.6   azules
+## 2   75    1.8 marrones
+## 3   88    1.9 marrones</code></pre>
+<p>Para obtener los nombres de las variables (es decir, el nombre de cada columna) teclearemos la función:</p>
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">datos</span><span class="op">)</span></span></code></pre></div>
+<p>Obteniéndose:</p>
+<pre><code>## [1] "Peso"    "Altura"  "Cl.ojos"</code></pre>
+<p>Para obtener solo los datos de la columna (variable) color de ojos teclearemos datos$Cl.ojos:</p>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">datos</span><span class="op">$</span><span class="va">Cl.ojos</span></span></code></pre></div>
+<pre><code>## [1] "azules"   "marrones" "marrones"</code></pre>
+<p>Y para obtener los datos de peso: datos$Peso:</p>
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">datos</span><span class="op">$</span><span class="va">Peso</span></span></code></pre></div>
+<pre><code>## [1] 68 75 88</code></pre>
+<p>Para saber el número de filas y de columnas de una hoja de datos utilizaremos las funciones <code><a href="https://rdrr.io/r/base/nrow.html">nrow()</a></code> y <code><a href="https://rdrr.io/r/base/nrow.html">ncol()</a></code>:</p>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">datos</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] 3</code></pre>
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">datos</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] 3</code></pre>
+<p>Para seleccionar elementos de un data frame, se pueden seguir las mismas reglas que para la selección de elementos de una matriz (con el número de cada fila, que es cada individuo; y el número de cada columna, que es cada variable. Para elegir una variable, no obstante, ya hemos visto que es posible usar su nombre; aunque precedido del nombre del data frame y el signo <code>$</code>. Por ejemplo, si ejecutamos:</p>
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">datos</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span></span></code></pre></div>
+<pre><code>## [1] 1.6 1.8 1.9</code></pre>
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">datos</span><span class="op">$</span><span class="va">Altura</span></span></code></pre></div>
+<pre><code>## [1] 1.6 1.8 1.9</code></pre>
+<p>Obtenemos el mismo resultado.</p>
+</div>
+</div>
+<div id="importando-datos." class="section level2" number="2.2">
+<h2>
+<span class="header-section-number">2.2</span> Importando datos.<a class="anchor" aria-label="anchor" href="#importando-datos."><i class="fas fa-link"></i></a>
+</h2>
+<p>Lo más frecuente es que no tecleemos los datos, como hemos hecho hasta ahora; sino que los importemos a R desde algún contenedor externo (archivo de texto, hoja de cálculo, base de datos…). Nosotros vamos a importar nuestros datos desde Microsoft® Excel®. Vamos a cerrar el script que hemos estado construyendo en los apartados anteriores (para conservarlo hay que guardarlo antes), aunque vamos a seguir trabajando en el mismo proyecto (que habíamos llamado “explora”). Iremos a la carpeta del proyecto y guardaremos en ella los dos archivos de esta práctica (obtén el enlace a los archivos en la sección final del capítulo):</p>
+<ul>
+<li><p>Un archivo de Microsoft® Excel® llamado “eolica_20.xlsx”</p></li>
+<li><p>Un script con las instrucciones que vamos a mostrar a continuación, y que se llama “explora_eolica.R”</p></li>
+</ul>
+<p>Si abrimos el archivo de Microsoft® Excel® comprobaremos que se compone de tres hojas. La primera muestra el criterio de búsqueda de casos en la un aviso sobre el uso exclusivo que se debe dar a los datos incorporados; la segunda recoge la descripción de las variables consideradas; y la tercera (hoja “Top 20”) guarda los datos que debemos <strong>importar</strong> desde R-Studio. Estos datos se corresponden con diferentes variables económico-financieras de 20 empresas productoras de electricidad mediante generación eólica. Luego vamos a cerrar el archivo de Microsoft® Excel® y volveremos a R-Studio. Vamos a abrir nuestro script “explora_eolica.R” con <code>File → Open File…</code> Este script contiene el programa que vamos a ir ejecutando en la práctica. La primera línea / instrucción en los scripts suele ser:</p>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>La instrucción tiene como objeto limpiar el <em>Environment</em> (memoria) de objetos de anteriores sesiones de trabajo. Para importar los datos localizados en el archivo de Excel “eolica_20.xlsx” el código es:</p>
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># DATOS</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
+<span><span class="va">eolica_20</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"eolica_20.xlsx"</span>, sheet <span class="op">=</span> <span class="st">"Top 20"</span><span class="op">)</span></span></code></pre></div>
+<p>¡Atención! Si nunca se ha utilizado el paquete <a href="https://readxl.tidyverse.org">readxl</a> (que contiene el código necesario para importar datos de un archivo de Microsoft® Excel®), cuando la intentemos activar con la función <code><a href="https://rdrr.io/r/base/library.html">library()</a></code> nos dará un error o nos dirá que previamente hay que importarla. En ese caso, iremos a la ventana inferior-derecha y pulsaremos la pestaña <code>Packages</code>, pulsaremos en <code>Install</code>, y emergerá una ventana donde dejaremos el “repositorio” que viene por defecto y, en el campo “Packages”, escribiremos el nombre del “paquete” que contiene la librería que nos hace falta (normalmente coincide con el nombre de la propia librería, en nuestro caso <a href="https://readxl.tidyverse.org">readxl</a>. Una vez descargado el “paquete”, podremos ejecutar el código anterior sin problemas.</p>
+<p>Otra cuestión importante a tener en cuenta es que, en la hoja de cálculo del ejemplo, los “valores perdidos” o <em>missing values</em> (celdas en las que no hay datos), venían en blanco. Pero, en ocasiones, pueden contener algún tipo de anotación, como por ejemplo, “n.d.” (no disponible). En tal caso, deberá incluirse un argumento más que informe de estas celdas que, sin estar en blanco, no tienen dato:</p>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eolica_20</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"eolica_20.xlsx"</span>, sheet <span class="op">=</span> <span class="st">"Top 20"</span>, na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"n.d."</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Volviendo a nuestro ejemplo, podemos observar cómo en el <em>Environment</em> ya aparece un objeto. Este objeto es una estructura de datos tipo <em>data frame</em>, se llama “eolica_20” y contiene 11 columnas, una por cada una de las variables almacenadas en el archivo de Microsoft® Excel®. De estas variables, tres son de tipo cualitativo, formadas por cadenas de caracteres: el nombre de la empresa, “NOMBRE”; y el nombre del grupo empresarial matriz al que pertenece, “MATRIZ”. Puede explorarse el contenido del <em>data frame</em> y los principales estadísticos con la función <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>:</p>
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span> <span class="op">(</span><span class="va">eolica_20</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##     NOMBRE               RES             ACTIVO             FPIOS        
+##  Length:20          Min.   : -5662   Min.   :  109024   Min.   : -77533  
+##  Class :character   1st Qu.:  2865   1st Qu.:  187240   1st Qu.:  27615  
+##  Mode  :character   Median :  7388   Median :  271636   Median :  77740  
+##                     Mean   : 50754   Mean   : 1183599   Mean   : 563678  
+##                     3rd Qu.: 21206   3rd Qu.:  813816   3rd Qu.: 219345  
+##                     Max.   :727548   Max.   :13492812   Max.   :6904824  
+##                     NA's   :1                                            
+## 
+##      RENECO            RENFIN            LIQUIDEZ          MARGEN       
+##  Min.   :-2.8130   Min.   :-359.773   Min.   :0.0780   Min.   :-302.03  
+##  1st Qu.: 0.8765   1st Qu.:   1.664   1st Qu.:0.7342   1st Qu.:  12.39  
+##  Median : 3.6150   Median :  10.812   Median :1.2345   Median :  21.42  
+##  Mean   : 2.9399   Mean   :  -3.450   Mean   :1.4200   Mean   :  16.40  
+##  3rd Qu.: 4.7735   3rd Qu.:  25.312   3rd Qu.:1.5615   3rd Qu.:  38.56  
+##  Max.   : 8.5860   Max.   :  52.261   Max.   :5.3300   Max.   : 208.36  
+##  NA's   :1                                                              
+## 
+##    SOLVENCIA         APALANCA           MATRIZ         
+##  Min.   :-40.74   Min.   :-6265.50   Length:20         
+##  1st Qu.: 11.26   1st Qu.:   16.13   Class :character  
+##  Median : 23.68   Median :  145.93   Mode  :character  
+##  Mean   : 32.68   Mean   :  -17.17                     
+##  3rd Qu.: 52.62   3rd Qu.:  504.74                     
+##  Max.   : 99.08   Max.   : 1019.62</code></pre>
+<p>Veremos cómo aparecen 11 variables con algunos estadísticos básicos.</p>
+<p>R ha considerado la primera columna como una variable de tipo cualitativo (atributo). En realidad no es una variable, sino el nombre de los individuos o casos. Para evitar que R tome los nombres de los casos como una variable, podemos redefinir nuestro <em>data frame</em> diciéndole que considere esa primera columna como los <em>nombres de los individuos o filas</em>:</p>
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eolica_20</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">eolica_20</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p>En la línea anterior hemos asignado al data frame “eolica_20” los propios datos de “eolica_20”; pero indicando que la primera columna de datos no es una variable; sino el nombre de los casos. Si hacemos ahora el <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>:</p>
+<pre><code>##       RES             ACTIVO             FPIOS             RENECO       
+##  Min.   : -5662   Min.   :  109024   Min.   : -77533   Min.   :-2.8130  
+##  1st Qu.:  2865   1st Qu.:  187240   1st Qu.:  27615   1st Qu.: 0.8765  
+##  Median :  7388   Median :  271636   Median :  77740   Median : 3.6150  
+##  Mean   : 50754   Mean   : 1183599   Mean   : 563678   Mean   : 2.9399  
+##  3rd Qu.: 21206   3rd Qu.:  813816   3rd Qu.: 219345   3rd Qu.: 4.7735  
+##  Max.   :727548   Max.   :13492812   Max.   :6904824   Max.   : 8.5860  
+##  NA's   :1                                             NA's   :1        
+## 
+##      RENFIN            LIQUIDEZ          MARGEN          SOLVENCIA     
+##  Min.   :-359.773   Min.   :0.0780   Min.   :-302.03   Min.   :-40.74  
+##  1st Qu.:   1.664   1st Qu.:0.7342   1st Qu.:  12.39   1st Qu.: 11.26  
+##  Median :  10.812   Median :1.2345   Median :  21.42   Median : 23.68  
+##  Mean   :  -3.450   Mean   :1.4200   Mean   :  16.40   Mean   : 32.68  
+##  3rd Qu.:  25.312   3rd Qu.:1.5615   3rd Qu.:  38.56   3rd Qu.: 52.62  
+##  Max.   :  52.261   Max.   :5.3300   Max.   : 208.36   Max.   : 99.08  
+## 
+##     APALANCA           MATRIZ         
+##  Min.   :-6265.50   Length:20         
+##  1st Qu.:   16.13   Class :character  
+##  Median :  145.93   Mode  :character  
+##  Mean   :  -17.17                     
+##  3rd Qu.:  504.74                     
+##  Max.   : 1019.62</code></pre>
+<p>Vemos que ya no aparece “NOMBRE” como variable, y en el <em>Environment</em> ya aparece el data frame “eolica_20” con 20 observaciones (casos), pero con 10 variables (una menos).</p>
+<p>Antes de seguir con la manipulación de nuestros datos, es preciso decir que existen otros muchos formatos de datos que pueden ser importados. Por ejemplo, con el paquete <a href="https://readr.tidyverse.org">readr</a> se pueden importar datos de archivos de texto de tipo tabular (por ejemplo, archivos *.csv). Con el paquete <a href="https://haven.tidyverse.org">haven</a> se pueden capturar los datos almacenados en archivos de SPSS® (.sav), Stata® (.dta), SAS® (.sas7bdat), etc. Finamente, se pueden capturar datos almacenados en páginas web (archivos en formato JSON o XML, o en tablas HTML)) o en bases de datos gestionadas mediante diversos sistemas (SQLite, MySQL, MariaDB, PostgreSQL, Oracle®).</p>
+</div>
+<div id="dplyr." class="section level2" number="2.3">
+<h2>
+<span class="header-section-number">2.3</span> {dplyr}.<a class="anchor" aria-label="anchor" href="#dplyr."><i class="fas fa-link"></i></a>
+</h2>
+<div id="el-tidyverse.-cargando-dplyr." class="section level3" number="2.3.1">
+<h3>
+<span class="header-section-number">2.3.1</span> El Tidyverse. Cargando {dplyr}.<a class="anchor" aria-label="anchor" href="#el-tidyverse.-cargando-dplyr."><i class="fas fa-link"></i></a>
+</h3>
+<p>El <strong><em>Tidyverse</em></strong> es un conjunto de paquetes / librerías con una filosofía común, como es el uso de ciertas estructuras gramaticales, que facilitan muchas de las tareas y análisis que podrían hacerse con el lenguaje R estándar. Una buena obra para profundizar en el Tidyverse es <span class="citation">Wickham and Grolemund (<a href="bibliograf%C3%ADa.html#ref-Wickham2017R">2017</a>)</span>.</p>
+<p>Uno de esos paquetes es <a href="https://dplyr.tidyverse.org">dplyr</a>, que proporciona una gramática más sencilla que la del lenguaje R convencional para <strong>manipular</strong> los objetos de estructuras de datos conocidos como <strong><em>data frames</em></strong>.</p>
+<p>Los data frames, como ya sabemos, son estructuras en las que se almacenan datos de modo que, por columnas, se disponen las variables del análisis; y por filas los casos que conforman la muestra / población.</p>
+<p>Vamos a suponer que trabajamos dentro del proyecto que hemos creado previamente, de nombre “explora” (ver capítulo 1). Dentro de la carpeta del proyecto guardaremos el script llamado “explora_dplyr.R” y el archivo de Microsoft® Excel® llamado “eolica_20.xlsx”. Si abrimos este último archivo, comprobaremos que se compone de tres hojas. La hoja “Top 20” contiene los datos a importar desde R-Studio. Estos datos se corresponden con diferentes variables económico-financieras de 20 empresas productoras de electricidad mediante generación eólica.</p>
+<p>Luego cerraremos el archivo de Microsoft® Excel®, “eolica_20.xlsx”, y volveremos a R-Studio. Después, abriremos nuestro script “explora_dplyr.R” con <code>File → Open File…</code> Este script contiene el programa que vamos a ir ejecutando en la práctica.</p>
+<p>La primera línea / instrucción en los scripts suele ser:</p>
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>La instrucción tiene como objeto limpiar el <em>Environment</em> (memoria) de objetos de anteriores sesiones de trabajo.</p>
+<p>Para importar los datos que hay en la hoja “Top 20” del archivo de Microsoft® Excel® llamado “eolica_20.xlsx”, ejecutaremos el código:</p>
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># DATOS</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
+<span><span class="va">eolica_20</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"eolica_20.xlsx"</span>, sheet <span class="op">=</span> <span class="st">"Top 20"</span><span class="op">)</span></span></code></pre></div>
+<p>Podemos observar como en el <em>Environment</em> ya aparece un objeto. Este objeto es una estructura de datos tipo <em>data frame</em>, se llama “eolica_20” y contiene 11 columnas. R ha considerado la primera columna como una variable de tipo cualitativo. En realidad, la primera columna no es una variable, sino que está formada por el nombre (identificador) de los diferentes casos u observaciones. Para evitar que R tome los nombres de los casos como una variable más, podemos redefinir nuestro <em>data frame</em> diciéndole que tome esa primera columna como los <em>nombres de los individuos</em>:</p>
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eolica_20</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">eolica_20</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p>En la línea anterior hemos asignado al <em>data frame</em> “eolica_20” los propios datos de “eolica_20”; pero indicando que la primera columna de datos no es una variable; sino el nombre de los casos.</p>
+<p>A continuación, cargaremos el paquete <a href="https://dplyr.tidyverse.org">dplyr</a>. Si nunca antes se ha utilizado este paquete, cuando lo intentemos activar con la función <code><a href="https://rdrr.io/r/base/library.html">library()</a></code> nos dará un error o nos dirá que previamente hay que importarlo. En ese caso, iremos a la ventana inferior-derecha y pulsaremos la pestaña “Packages”, pulsaremos en <code>Install</code>, y emergerá una ventana donde dejaremos el “repositorio” que viene por defecto y, en el campo <code>Packages</code>, escribiremos el nombre del “paquete” (en nuestro caso <a href="https://dplyr.tidyverse.org">dplyr</a>). Una vez descargado el “paquete”, podremos ejecutar el código sin problemas:</p>
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#Cargando dplyr</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span></code></pre></div>
+<p>Para entender mejor la <strong>sintaxis</strong> que siguen las funciones o instrucciones a las que da acceso <a href="https://dplyr.tidyverse.org">dplyr</a>, hay que tener en cuenta lo siguiente:</p>
+<ul>
+<li><p>El primer argumento que tiene una función de <a href="https://dplyr.tidyverse.org">dplyr</a> es el <em>data frame</em> con el que se va a trabajar.</p></li>
+<li><p>Los otros argumentos describen qué hay que hacer con el <em>data frame</em> especificado en el primer argumento. Es posible referirse a las columnas (variables) del <em>data frame</em> con su nombre, <strong>sin utilizar el operador $</strong>.</p></li>
+<li><p>El valor de retorno es un <strong>nuevo</strong> <em>data frame</em>.</p></li>
+</ul>
+<p>En los siguientes subapartados practicaremos con algunas de las principales funciones que aporta <a href="https://dplyr.tidyverse.org">dplyr</a>.</p>
+</div>
+<div id="seleccionando-columnas-de-un-data-frame." class="section level3" number="2.3.2">
+<h3>
+<span class="header-section-number">2.3.2</span> Seleccionando columnas de un data frame.<a class="anchor" aria-label="anchor" href="#seleccionando-columnas-de-un-data-frame."><i class="fas fa-link"></i></a>
+</h3>
+<p>La función clave de <a href="https://dplyr.tidyverse.org">dplyr</a> para seleccionar una o varias columnas (variables) de un <em>data frame</em> es la función <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code>.</p>
+<p>Así, vamos a imaginar por ejemplo que queremos eliminar de nuestro <em>data frame</em> la variable (de tipo “carácter”) MATRIZ. Podremos ejecutar la asignación:</p>
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#Seleccionando variables</span></span>
+<span></span>
+<span><span class="va">eolica_20</span> <span class="op">&lt;-</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">eolica_20</span>, <span class="op">-</span><span class="va">MATRIZ</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span> <span class="op">(</span><span class="va">eolica_20</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##       RES             ACTIVO             FPIOS        
+##  Min.   : -5662   Min.   :  109024   Min.   : -77533  
+##  1st Qu.:  2865   1st Qu.:  187240   1st Qu.:  27615  
+##  Median :  7388   Median :  271636   Median :  77740  
+##  Mean   : 50754   Mean   : 1183599   Mean   : 563678  
+##  3rd Qu.: 21206   3rd Qu.:  813816   3rd Qu.: 219345  
+##  Max.   :727548   Max.   :13492812   Max.   :6904824  
+##  NA's   :1                                            
+## 
+##      RENECO            RENFIN            LIQUIDEZ     
+##  Min.   :-2.8130   Min.   :-359.773   Min.   :0.0780  
+##  1st Qu.: 0.8765   1st Qu.:   1.664   1st Qu.:0.7342  
+##  Median : 3.6150   Median :  10.812   Median :1.2345  
+##  Mean   : 2.9399   Mean   :  -3.450   Mean   :1.4200  
+##  3rd Qu.: 4.7735   3rd Qu.:  25.312   3rd Qu.:1.5615  
+##  Max.   : 8.5860   Max.   :  52.261   Max.   :5.3300  
+##  NA's   :1                                            
+## 
+##      MARGEN          SOLVENCIA         APALANCA       
+##  Min.   :-302.03   Min.   :-40.74   Min.   :-6265.50  
+##  1st Qu.:  12.39   1st Qu.: 11.26   1st Qu.:   16.13  
+##  Median :  21.42   Median : 23.68   Median :  145.93  
+##  Mean   :  16.40   Mean   : 32.68   Mean   :  -17.17  
+##  3rd Qu.:  38.56   3rd Qu.: 52.62   3rd Qu.:  504.74  
+##  Max.   : 208.36   Max.   : 99.08   Max.   : 1019.62</code></pre>
+<p>Podemos verificar que, en el <em>Environment,</em> el <em>data frame</em> ha pasado a tener una variable menos (9), ya que hemos eliminado la variable MATRIZ. Es decir, con el guión “-” se pueden eliminar directamente variables de un <em>data frame</em>.</p>
+<p>Ahora, suponemos que queremos visualizar las variables del <em>data frame</em> “eolica_20”: ACTIVO, FPIOS, LIQUIDEZ, MARGEN, SOLVENCIA y APALANCA (es decir, todas las variables menos RES, RENECO, RENFIN). Para ello, ejecutaremos el código:</p>
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">eolica_20</span>, <span class="va">ACTIVO</span>, <span class="va">FPIOS</span>, <span class="va">LIQUIDEZ</span>, <span class="va">MARGEN</span>, <span class="va">SOLVENCIA</span>, <span class="va">APALANCA</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##                                     ACTIVO       FPIOS LIQUIDEZ   MARGEN
+## Holding De Negocios De GAS SL.  13492812.0 6904824.000    1.020   91.152
+## Global Power Generation SA.      2002458.0 1740487.000    2.006   22.403
+## Naturgy Renovables SLU           1956869.0  318475.000    1.263   20.442
+## EDP Renovables España SLU        1275939.0  726783.000    1.596   47.193
+## Corporacion Acciona Eolica SL     864606.0  136064.000    0.788   20.091
+## Saeta Yield SA.                   796886.4  665319.556    2.687   16.258
+## Elawan Energy SL.                 443467.0  186302.006    0.595  208.357
+## Olivento SL                       381207.0   58340.998    0.771   16.629
+## Parque Eolico La Boga SL.         303904.4   29316.797    1.407    1.001
+## Naturgy Wind, S.L.                273542.0   28418.000    1.364   39.575
+## Viesgo Renovables SL.             269730.0  177707.000    0.272   11.818
+## Al-Andalus Wind Power SL          249853.8   21466.121    1.550   12.582
+## Innogy Spain SA.                  230338.5   85447.212    1.416  -18.025
+## Guzman Energia SL                 190287.0  -77532.698    0.078  -19.193
+## Acciona Eolica Del Levante SL     188354.0   21769.000    2.855   27.520
+## Biovent Energia SA                183899.0   70033.000    1.206   22.792
+## Esquilvent SL                     157630.6   48769.130    5.330   39.476
+## Eolica La Janda SL                153429.4   25206.748    1.184   38.256
+## Parque Eolico Santa Catalina SL   147742.5   -1664.755    0.388   31.780
+## WPD Wind Investment SL.           109023.8  108023.826    0.624 -302.027
+## 
+##                                 SOLVENCIA  APALANCA
+## Holding De Negocios De GAS SL.     51.174    91.964
+## Global Power Generation SA.        86.917     1.044
+## Naturgy Renovables SLU             16.274   494.729
+## EDP Renovables España SLU          56.960    67.028
+## Corporacion Acciona Eolica SL      15.737   422.263
+## Saeta Yield SA.                    83.489    17.067
+## Elawan Energy SL.                  42.010   123.771
+## Olivento SL                        15.304   534.761
+## Parque Eolico La Boga SL.           9.646   921.591
+## Naturgy Wind, S.L.                 10.388   824.537
+## Viesgo Renovables SL.              65.883    13.330
+## Al-Andalus Wind Power SL            8.591  1019.616
+## Innogy Spain SA.                   37.096   150.688
+## Guzman Energia SL                 -40.745  -343.542
+## Acciona Eolica Del Levante SL      11.557   743.754
+## Biovent Energia SA                 38.082   141.163
+## Esquilvent SL                      30.938   218.275
+## Eolica La Janda SL                 16.428   480.122
+## Parque Eolico Santa Catalina SL    -1.126 -6265.496
+## WPD Wind Investment SL.            99.082     0.000</code></pre>
+<p>Como no hemos asignado el resultado de la función a ningún “nombre”, R simplemente saca el resultado en pantalla; pero no guarda ningún objeto en el <em>Environment</em>. Si asignamos un <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> a un “nombre”, se creará un <em>data frame</em> con ese nombre, y las variables seleccionadas:</p>
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eolica_20A</span> <span class="op">&lt;-</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">eolica_20</span>, <span class="va">ACTIVO</span>, <span class="va">FPIOS</span>, <span class="va">LIQUIDEZ</span>, <span class="va">MARGEN</span>, <span class="va">SOLVENCIA</span>, <span class="va">APALANCA</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span> <span class="op">(</span><span class="va">eolica_20A</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##       RES             ACTIVO             FPIOS        
+##  Min.   : -5662   Min.   :  109024   Min.   : -77533  
+##  1st Qu.:  2865   1st Qu.:  187240   1st Qu.:  27615  
+##  Median :  7388   Median :  271636   Median :  77740  
+##  Mean   : 50754   Mean   : 1183599   Mean   : 563678  
+##  3rd Qu.: 21206   3rd Qu.:  813816   3rd Qu.: 219345  
+##  Max.   :727548   Max.   :13492812   Max.   :6904824  
+##  NA's   :1                                            
+## 
+##      RENECO            RENFIN            LIQUIDEZ     
+##  Min.   :-2.8130   Min.   :-359.773   Min.   :0.0780  
+##  1st Qu.: 0.8765   1st Qu.:   1.664   1st Qu.:0.7342  
+##  Median : 3.6150   Median :  10.812   Median :1.2345  
+##  Mean   : 2.9399   Mean   :  -3.450   Mean   :1.4200  
+##  3rd Qu.: 4.7735   3rd Qu.:  25.312   3rd Qu.:1.5615  
+##  Max.   : 8.5860   Max.   :  52.261   Max.   :5.3300  
+##  NA's   :1                                            
+## 
+##      MARGEN          SOLVENCIA         APALANCA       
+##  Min.   :-302.03   Min.   :-40.74   Min.   :-6265.50  
+##  1st Qu.:  12.39   1st Qu.: 11.26   1st Qu.:   16.13  
+##  Median :  21.42   Median : 23.68   Median :  145.93  
+##  Mean   :  16.40   Mean   : 32.68   Mean   :  -17.17  
+##  3rd Qu.:  38.56   3rd Qu.: 52.62   3rd Qu.:  504.74  
+##  Max.   : 208.36   Max.   : 99.08   Max.   : 1019.62</code></pre>
+<p>Podemos comprobar en el <em>Environment</em> cómo hay otro objeto <em>data frame</em> llamado “eolica_20A”, con 6 variables (y los mismos 20 casos). Este <em>data frame</em> lo podríamos haber creado, también, eliminando del <em>data frame</em> original (“eolica_20”), las variables que nos sobran:</p>
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eolica_20A</span> <span class="op">&lt;-</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">eolica_20</span>, <span class="op">-</span><span class="va">RES</span>, <span class="op">-</span><span class="va">RENECO</span>, <span class="op">-</span><span class="va">RENFIN</span><span class="op">)</span></span></code></pre></div>
+<p>Más aún, si nos fijamos bien, los nombres de todas las variables que hemos excluido empiezan por “RE”, a diferencia de las incluidas. Podríamos haber hecho también:</p>
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eolica_20A</span> <span class="op">&lt;-</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">eolica_20</span>, <span class="op">-</span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"RE"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Y de nuevo obtendríamos el mismo resultado. El argumento <code><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with()</a></code> permite seleccionar variables cuyos nombres comienzan por cierta cadena de caracteres. También se puede hacer mismo con los caracteres finales (<code><a href="https://tidyselect.r-lib.org/reference/starts_with.html">ends_with()</a></code>) o contenidos en alguna posición del nombre (<code><a href="https://tidyselect.r-lib.org/reference/starts_with.html">contains()</a></code>).</p>
+<p>Otra posibilidad que tenemos es hacer una copia de un <em>data frame</em> rápidamente con el argumento <code><a href="https://tidyselect.r-lib.org/reference/everything.html">everything()</a></code>. Por ejemplo:</p>
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eolica_20_replica</span> <span class="op">&lt;-</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">eolica_20</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Se ha creado el <em>date frame</em> “eolica_20_replica” que es una copia exacta de “eolica_20”.</p>
+</div>
+<div id="seleccionando-casos-de-un-data-frame." class="section level3" number="2.3.3">
+<h3>
+<span class="header-section-number">2.3.3</span> Seleccionando casos de un <em>data frame</em>.<a class="anchor" aria-label="anchor" href="#seleccionando-casos-de-un-data-frame."><i class="fas fa-link"></i></a>
+</h3>
+<p>Además de seleccionar variables, con <a href="https://dplyr.tidyverse.org">dplyr</a> también se pueden seleccionar casos que cumplan ciertas condiciones. La función para realizar este cometido es <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code>. Por ejemplo, si queremos seleccionar las empresas eólicas con un resultado (variable RES) mayor o igual a 50.000 y presentarlas en pantalla, la instrucción será:</p>
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">eolica_20</span>, <span class="va">RES</span> <span class="op">&gt;=</span> <span class="fl">50000</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##                                   RES   ACTIVO   FPIOS RENECO RENFIN
+## Holding De Negocios De GAS SL. 727548 13492812 6904824  5.264 10.287
+## EDP Renovables España SLU       67033  1275939  726783  6.458 11.338
+## 
+##                                LIQUIDEZ MARGEN SOLVENCIA APALANCA
+## Holding De Negocios De GAS SL.    1.020 91.152    51.174   91.964
+## EDP Renovables España SLU         1.596 47.193    56.960   67.028</code></pre>
+<p>Se pueden incluir varias condiciones en un mismo filtro. Por ejemplo, vamos a construir un nuevo <em>data frame</em> llamado “eolica_20B” con las empresas que posean un resultado mayor o igual a 50000 y una rentabilidad económica (variable RENECO) inferior al 6%:</p>
+<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eolica_20B</span> <span class="op">&lt;-</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">eolica_20</span>, <span class="va">RES</span> <span class="op">&gt;=</span> <span class="fl">50000</span> <span class="op">&amp;</span> <span class="va">RENECO</span> <span class="op">&lt;</span> <span class="fl">6</span><span class="op">)</span></span>
+<span><span class="va">eolica_20B</span></span></code></pre></div>
+<pre><code>##                                   RES   ACTIVO   FPIOS
+## Holding De Negocios De GAS SL. 727548 13492812 6904824
+## 
+##                                RENECO RENFIN LIQUIDEZ
+## Holding De Negocios De GAS SL.  5.264 10.287     1.02
+## 
+##                                MARGEN SOLVENCIA APALANCA
+## Holding De Negocios De GAS SL. 91.152    51.174   91.964</code></pre>
+<p>En el <em>Environment</em> aparecerá el <em>data frame</em> “eolica_9B” con solo un caso: la empresa que cumple con ambas condiciones, introducidas mediante el operador lógico relacional “<strong>&amp;</strong>”, que es el equivalente a la conjunción “y” o, dicho de otro modo, la intersección. Otro operador lógico relacional muy utilizado es la barra vertical “<strong>|</strong>”, que es el equivalente a la conjunción “o”, es decir, la unión.</p>
+<p>Los filtros más usuales son &gt;, &lt;, &gt;=, &lt;=, == (igual, ojo, con dos símbolos de igualdad seguidos) y != (no igual).</p>
+</div>
+<div id="ordenando-casos-de-un-data-frame." class="section level3" number="2.3.4">
+<h3>
+<span class="header-section-number">2.3.4</span> Ordenando casos de un <em>data frame</em>.<a class="anchor" aria-label="anchor" href="#ordenando-casos-de-un-data-frame."><i class="fas fa-link"></i></a>
+</h3>
+<p>Además de seleccionar determinados casos u observaciones (filas) de un <em>data frame</em>, con las funciones de <a href="https://dplyr.tidyverse.org">dplyr</a> también se pueden ordenar estos casos a partir de los valores de ciertas variables (columnas). La función a utilizar es <code><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange()</a></code>. Esta función, por defecto, ordena los casos de modo <strong>ascendente</strong>. Por ejemplo:</p>
+<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">eolica_20</span>, <span class="va">RENECO</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##                                        RES     ACTIVO       FPIOS
+## Guzman Energia SL                -5661.463   190287.0  -77532.698
+## Innogy Spain SA.                 -5268.573   230338.5   85447.212
+## WPD Wind Investment SL.           -850.068   109023.8  108023.826
+## Parque Eolico La Boga SL.           11.940   303904.4   29316.797
+## Saeta Yield SA.                   2084.476   796886.4  665319.556
+## Global Power Generation SA.      39995.000  2002458.0 1740487.000
+## Naturgy Renovables SLU           42737.000  1956869.0  318475.000
+## Al-Andalus Wind Power SL          4403.214   249853.8   21466.121
+## Olivento SL                       7388.175   381207.0   58340.998
+## Elawan Energy SL.                12818.975   443467.0  186302.006
+## Naturgy Wind, S.L.                8500.000   273542.0   28418.000
+## Parque Eolico Santa Catalina SL   3645.278   147742.5   -1664.755
+## Biovent Energia SA                      NA   183899.0   70033.000
+## Corporacion Acciona Eolica SL    29592.000   864606.0  136064.000
+## Acciona Eolica Del Levante SL     6853.000   188354.0   21769.000
+## Holding De Negocios De GAS SL.  727548.000 13492812.0 6904824.000
+## EDP Renovables España SLU        67033.000  1275939.0  726783.000
+## Esquilvent SL                     9010.214   157630.6   48769.130
+## Eolica La Janda SL                9880.091   153429.4   25206.748
+## Viesgo Renovables SL.             4609.000   269730.0  177707.000
+## 
+##                                 RENECO   RENFIN LIQUIDEZ
+## Guzman Energia SL               -2.813    6.904    0.078
+## Innogy Spain SA.                -2.708   -7.302    1.416
+## WPD Wind Investment SL.         -1.040   -1.049    0.624
+## Parque Eolico La Boga SL.        0.162    1.684    1.407
+## Saeta Yield SA.                  0.360    0.432    2.687
+## Global Power Generation SA.      1.393    1.603    2.006
+## Naturgy Renovables SLU           1.959   12.043    1.263
+## Al-Andalus Wind Power SL         2.349   27.350    1.550
+## Olivento SL                      2.553   16.684    0.771
+## Elawan Energy SL.                3.615    8.605    0.595
+## Naturgy Wind, S.L.               3.949   38.018    1.364
+## Parque Eolico Santa Catalina SL  4.053 -359.773    0.388
+## Biovent Energia SA               4.551   11.952    1.206
+## Corporacion Acciona Eolica SL    4.562   28.990    0.788
+## Acciona Eolica Del Levante SL    4.985   43.139    2.855
+## Holding De Negocios De GAS SL.   5.264   10.287    1.020
+## EDP Renovables España SLU        6.458   11.338    1.596
+## Esquilvent SL                    7.621   24.633    5.330
+## Eolica La Janda SL               8.586   52.261    1.184
+## Viesgo Renovables SL.               NA    3.200    0.272
+## 
+##                                   MARGEN SOLVENCIA  APALANCA
+## Guzman Energia SL                -19.193   -40.745  -343.542
+## Innogy Spain SA.                 -18.025    37.096   150.688
+## WPD Wind Investment SL.         -302.027    99.082     0.000
+## Parque Eolico La Boga SL.          1.001     9.646   921.591
+## Saeta Yield SA.                   16.258    83.489    17.067
+## Global Power Generation SA.       22.403    86.917     1.044
+## Naturgy Renovables SLU            20.442    16.274   494.729
+## Al-Andalus Wind Power SL          12.582     8.591  1019.616
+## Olivento SL                       16.629    15.304   534.761
+## Elawan Energy SL.                208.357    42.010   123.771
+## Naturgy Wind, S.L.                39.575    10.388   824.537
+## Parque Eolico Santa Catalina SL   31.780    -1.126 -6265.496
+## Biovent Energia SA                22.792    38.082   141.163
+## Corporacion Acciona Eolica SL     20.091    15.737   422.263
+## Acciona Eolica Del Levante SL     27.520    11.557   743.754
+## Holding De Negocios De GAS SL.    91.152    51.174    91.964
+## EDP Renovables España SLU         47.193    56.960    67.028
+## Esquilvent SL                     39.476    30.938   218.275
+## Eolica La Janda SL                38.256    16.428   480.122
+## Viesgo Renovables SL.             11.818    65.883    13.330</code></pre>
+<p>En cambio, para ordenar de modo descendente, hay que utilizar el argumento <code><a href="https://dplyr.tidyverse.org/reference/desc.html">desc()</a></code>:</p>
+<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">eolica_20</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##                                        RES     ACTIVO       FPIOS
+## Eolica La Janda SL                9880.091   153429.4   25206.748
+## Esquilvent SL                     9010.214   157630.6   48769.130
+## EDP Renovables España SLU        67033.000  1275939.0  726783.000
+## Holding De Negocios De GAS SL.  727548.000 13492812.0 6904824.000
+## Acciona Eolica Del Levante SL     6853.000   188354.0   21769.000
+## Corporacion Acciona Eolica SL    29592.000   864606.0  136064.000
+## Biovent Energia SA                      NA   183899.0   70033.000
+## Parque Eolico Santa Catalina SL   3645.278   147742.5   -1664.755
+## Naturgy Wind, S.L.                8500.000   273542.0   28418.000
+## Elawan Energy SL.                12818.975   443467.0  186302.006
+## Olivento SL                       7388.175   381207.0   58340.998
+## Al-Andalus Wind Power SL          4403.214   249853.8   21466.121
+## Naturgy Renovables SLU           42737.000  1956869.0  318475.000
+## Global Power Generation SA.      39995.000  2002458.0 1740487.000
+## Saeta Yield SA.                   2084.476   796886.4  665319.556
+## Parque Eolico La Boga SL.           11.940   303904.4   29316.797
+## WPD Wind Investment SL.           -850.068   109023.8  108023.826
+## Innogy Spain SA.                 -5268.573   230338.5   85447.212
+## Guzman Energia SL                -5661.463   190287.0  -77532.698
+## Viesgo Renovables SL.             4609.000   269730.0  177707.000
+## 
+##                                 RENECO   RENFIN LIQUIDEZ
+## Eolica La Janda SL               8.586   52.261    1.184
+## Esquilvent SL                    7.621   24.633    5.330
+## EDP Renovables España SLU        6.458   11.338    1.596
+## Holding De Negocios De GAS SL.   5.264   10.287    1.020
+## Acciona Eolica Del Levante SL    4.985   43.139    2.855
+## Corporacion Acciona Eolica SL    4.562   28.990    0.788
+## Biovent Energia SA               4.551   11.952    1.206
+## Parque Eolico Santa Catalina SL  4.053 -359.773    0.388
+## Naturgy Wind, S.L.               3.949   38.018    1.364
+## Elawan Energy SL.                3.615    8.605    0.595
+## Olivento SL                      2.553   16.684    0.771
+## Al-Andalus Wind Power SL         2.349   27.350    1.550
+## Naturgy Renovables SLU           1.959   12.043    1.263
+## Global Power Generation SA.      1.393    1.603    2.006
+## Saeta Yield SA.                  0.360    0.432    2.687
+## Parque Eolico La Boga SL.        0.162    1.684    1.407
+## WPD Wind Investment SL.         -1.040   -1.049    0.624
+## Innogy Spain SA.                -2.708   -7.302    1.416
+## Guzman Energia SL               -2.813    6.904    0.078
+## Viesgo Renovables SL.               NA    3.200    0.272
+## 
+##                                   MARGEN SOLVENCIA  APALANCA
+## Eolica La Janda SL                38.256    16.428   480.122
+## Esquilvent SL                     39.476    30.938   218.275
+## EDP Renovables España SLU         47.193    56.960    67.028
+## Holding De Negocios De GAS SL.    91.152    51.174    91.964
+## Acciona Eolica Del Levante SL     27.520    11.557   743.754
+## Corporacion Acciona Eolica SL     20.091    15.737   422.263
+## Biovent Energia SA                22.792    38.082   141.163
+## Parque Eolico Santa Catalina SL   31.780    -1.126 -6265.496
+## Naturgy Wind, S.L.                39.575    10.388   824.537
+## Elawan Energy SL.                208.357    42.010   123.771
+## Olivento SL                       16.629    15.304   534.761
+## Al-Andalus Wind Power SL          12.582     8.591  1019.616
+## Naturgy Renovables SLU            20.442    16.274   494.729
+## Global Power Generation SA.       22.403    86.917     1.044
+## Saeta Yield SA.                   16.258    83.489    17.067
+## Parque Eolico La Boga SL.          1.001     9.646   921.591
+## WPD Wind Investment SL.         -302.027    99.082     0.000
+## Innogy Spain SA.                 -18.025    37.096   150.688
+## Guzman Energia SL                -19.193   -40.745  -343.542
+## Viesgo Renovables SL.             11.818    65.883    13.330</code></pre>
+<p>En el supuesto de que, por ejemplo, hubiera varias empresas con la misma rentabilidad económica (RENECO), podría añadirse otro criterio de ordenación con otra variable, que afectaría a tales empresas para deshacer el “empate” en rentabilidad económica. Por ejemplo, para ordenar de modo ascendente por rentabilidad y, en caso de que haya rentabilidades iguales, por liquidez (variable LIQUIDEZ), se ejecutaría:</p>
+<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">eolica_20</span>, <span class="va">RENECO</span>, <span class="va">LIQUIDEZ</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##                                        RES     ACTIVO       FPIOS
+## Guzman Energia SL                -5661.463   190287.0  -77532.698
+## Innogy Spain SA.                 -5268.573   230338.5   85447.212
+## WPD Wind Investment SL.           -850.068   109023.8  108023.826
+## Parque Eolico La Boga SL.           11.940   303904.4   29316.797
+## Saeta Yield SA.                   2084.476   796886.4  665319.556
+## Global Power Generation SA.      39995.000  2002458.0 1740487.000
+## Naturgy Renovables SLU           42737.000  1956869.0  318475.000
+## Al-Andalus Wind Power SL          4403.214   249853.8   21466.121
+## Olivento SL                       7388.175   381207.0   58340.998
+## Elawan Energy SL.                12818.975   443467.0  186302.006
+## Naturgy Wind, S.L.                8500.000   273542.0   28418.000
+## Parque Eolico Santa Catalina SL   3645.278   147742.5   -1664.755
+## Biovent Energia SA                      NA   183899.0   70033.000
+## Corporacion Acciona Eolica SL    29592.000   864606.0  136064.000
+## Acciona Eolica Del Levante SL     6853.000   188354.0   21769.000
+## Holding De Negocios De GAS SL.  727548.000 13492812.0 6904824.000
+## EDP Renovables España SLU        67033.000  1275939.0  726783.000
+## Esquilvent SL                     9010.214   157630.6   48769.130
+## Eolica La Janda SL                9880.091   153429.4   25206.748
+## Viesgo Renovables SL.             4609.000   269730.0  177707.000
+## 
+##                                 RENECO   RENFIN LIQUIDEZ
+## Guzman Energia SL               -2.813    6.904    0.078
+## Innogy Spain SA.                -2.708   -7.302    1.416
+## WPD Wind Investment SL.         -1.040   -1.049    0.624
+## Parque Eolico La Boga SL.        0.162    1.684    1.407
+## Saeta Yield SA.                  0.360    0.432    2.687
+## Global Power Generation SA.      1.393    1.603    2.006
+## Naturgy Renovables SLU           1.959   12.043    1.263
+## Al-Andalus Wind Power SL         2.349   27.350    1.550
+## Olivento SL                      2.553   16.684    0.771
+## Elawan Energy SL.                3.615    8.605    0.595
+## Naturgy Wind, S.L.               3.949   38.018    1.364
+## Parque Eolico Santa Catalina SL  4.053 -359.773    0.388
+## Biovent Energia SA               4.551   11.952    1.206
+## Corporacion Acciona Eolica SL    4.562   28.990    0.788
+## Acciona Eolica Del Levante SL    4.985   43.139    2.855
+## Holding De Negocios De GAS SL.   5.264   10.287    1.020
+## EDP Renovables España SLU        6.458   11.338    1.596
+## Esquilvent SL                    7.621   24.633    5.330
+## Eolica La Janda SL               8.586   52.261    1.184
+## Viesgo Renovables SL.               NA    3.200    0.272
+## 
+##                                   MARGEN SOLVENCIA  APALANCA
+## Guzman Energia SL                -19.193   -40.745  -343.542
+## Innogy Spain SA.                 -18.025    37.096   150.688
+## WPD Wind Investment SL.         -302.027    99.082     0.000
+## Parque Eolico La Boga SL.          1.001     9.646   921.591
+## Saeta Yield SA.                   16.258    83.489    17.067
+## Global Power Generation SA.       22.403    86.917     1.044
+## Naturgy Renovables SLU            20.442    16.274   494.729
+## Al-Andalus Wind Power SL          12.582     8.591  1019.616
+## Olivento SL                       16.629    15.304   534.761
+## Elawan Energy SL.                208.357    42.010   123.771
+## Naturgy Wind, S.L.                39.575    10.388   824.537
+## Parque Eolico Santa Catalina SL   31.780    -1.126 -6265.496
+## Biovent Energia SA                22.792    38.082   141.163
+## Corporacion Acciona Eolica SL     20.091    15.737   422.263
+## Acciona Eolica Del Levante SL     27.520    11.557   743.754
+## Holding De Negocios De GAS SL.    91.152    51.174    91.964
+## EDP Renovables España SLU         47.193    56.960    67.028
+## Esquilvent SL                     39.476    30.938   218.275
+## Eolica La Janda SL                38.256    16.428   480.122
+## Viesgo Renovables SL.             11.818    65.883    13.330</code></pre>
+<p>Obviamente, en este ejemplo concreto el resultado es el mismo que se obtuvo con <code>arrange(eolica_20, RENECO)</code>, puesto que no hay rentabilidades iguales entre las 20 empresas de la muestra.</p>
+</div>
+<div id="cambiando-el-nombre-de-las-variables-de-un-data-frame." class="section level3" number="2.3.5">
+<h3>
+<span class="header-section-number">2.3.5</span> Cambiando el nombre de las variables de un <em>data frame</em>.<a class="anchor" aria-label="anchor" href="#cambiando-el-nombre-de-las-variables-de-un-data-frame."><i class="fas fa-link"></i></a>
+</h3>
+<p><a href="https://dplyr.tidyverse.org">dplyr</a> cuenta con una función que cambia fácilmente el nombre de una variable o columna de un <em>data frame</em>: la función <code><a href="https://dplyr.tidyverse.org/reference/rename.html">rename()</a></code>. Por ejemplo, si queremos cambiar el nombre de la variable SOLVENCIA por SOLVE, simplemente ejecutaremos:</p>
+<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#Renombrando variables</span></span>
+<span><span class="va">eolica_20</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span><span class="va">eolica_20</span>, SOLVE <span class="op">=</span> <span class="va">SOLVENCIA</span><span class="op">)</span></span></code></pre></div>
+<p>Podemos comprobar en el <em>Environment</em>, despegando el objeto “eolica_20”, cómo ya no aparece la variable SOLVENCIA; pero sí SOLVE en su lugar (obviamente, con los mismos datos). Es necesario tener en cuenta que en el <strong>lado izquierdo</strong> de la igualdad hay que poner el <strong>nuevo nombre</strong>, y en la derecha el antiguo. Además, en el mismo <code><a href="https://dplyr.tidyverse.org/reference/rename.html">rename()</a></code> se pueden cambiar los nombres de <strong>varias variables</strong>, separando las igualdades correspondientes con comas.</p>
+</div>
+<div id="añadiendo-variables-como-transformación-de-otras-variables-en-un-data-frame." class="section level3" number="2.3.6">
+<h3>
+<span class="header-section-number">2.3.6</span> <strong>Añadiendo variables como transformación de otras variables en un <em>data frame</em>.</strong><a class="anchor" aria-label="anchor" href="#a%C3%B1adiendo-variables-como-transformaci%C3%B3n-de-otras-variables-en-un-data-frame."><i class="fas fa-link"></i></a>
+</h3>
+<p>El paquete <a href="https://dplyr.tidyverse.org">dplyr</a> también permite añadir a un <em>data frame</em> variables que son el resultado de <strong>someter a otras variables a diversas transformaciones</strong>. La función para realizar este cometido es <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code>.</p>
+<p>Así, por ejemplo, imaginemos que necesitamos calcular una variable como el cociente entre los resultados obtenidos y el activo. A esta nueva variable la denominaremos RATIO. El código será:</p>
+<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Añadiendo variables como transformacion de otras variables</span></span>
+<span><span class="va">eolica_20</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span> <span class="op">(</span><span class="va">eolica_20</span>, RATIO <span class="op">=</span> <span class="va">RES</span> <span class="op">/</span> <span class="va">ACTIVO</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">eolica_20</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##       RES             ACTIVO             FPIOS             RENECO       
+##  Min.   : -5662   Min.   :  109024   Min.   : -77533   Min.   :-2.8130  
+##  1st Qu.:  2865   1st Qu.:  187240   1st Qu.:  27615   1st Qu.: 0.8765  
+##  Median :  7388   Median :  271636   Median :  77740   Median : 3.6150  
+##  Mean   : 50754   Mean   : 1183599   Mean   : 563678   Mean   : 2.9399  
+##  3rd Qu.: 21206   3rd Qu.:  813816   3rd Qu.: 219345   3rd Qu.: 4.7735  
+##  Max.   :727548   Max.   :13492812   Max.   :6904824   Max.   : 8.5860  
+##  NA's   :1                                             NA's   :1        
+## 
+##      RENFIN            LIQUIDEZ          MARGEN            SOLVE       
+##  Min.   :-359.773   Min.   :0.0780   Min.   :-302.03   Min.   :-40.74  
+##  1st Qu.:   1.664   1st Qu.:0.7342   1st Qu.:  12.39   1st Qu.: 11.26  
+##  Median :  10.812   Median :1.2345   Median :  21.42   Median : 23.68  
+##  Mean   :  -3.450   Mean   :1.4200   Mean   :  16.40   Mean   : 32.68  
+##  3rd Qu.:  25.312   3rd Qu.:1.5615   3rd Qu.:  38.56   3rd Qu.: 52.62  
+##  Max.   :  52.261   Max.   :5.3300   Max.   : 208.36   Max.   : 99.08  
+## 
+##     APALANCA            RATIO          
+##  Min.   :-6265.50   Min.   :-0.029752  
+##  1st Qu.:   16.13   1st Qu.: 0.009852  
+##  Median :  145.93   Median : 0.021840  
+##  Mean   :  -17.17   Mean   : 0.022180  
+##  3rd Qu.:  504.74   3rd Qu.: 0.035305  
+##  Max.   : 1019.62   Max.   : 0.064395  
+##                     NA's   :1</code></pre>
+<p>En la transformación de variables mediante la función <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code>, se pueden utilizar <strong>funciones integradas en otros paquetes</strong> de R. Por ejemplo, si queremos calcular la variable ACTIVOS_ACUM como la variable que recoge los activos acumulados de las empresas, comenzando por la empresa con menor activo, podríamos utilizar la función <code><a href="https://rdrr.io/r/base/cumsum.html">cumsum()</a></code> del paquete <code>{base}</code>, y hacer:</p>
+<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eolica_20</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">eolica_20</span>, <span class="va">ACTIVO</span><span class="op">)</span></span>
+<span><span class="va">eolica_20</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span> <span class="op">(</span><span class="va">eolica_20</span>, ACTIVOS_ACUM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="va">ACTIVO</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">eolica_20</span>, <span class="va">ACTIVO</span>, <span class="va">ACTIVOS_ACUM</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##                                     ACTIVO ACTIVOS_ACUM
+## WPD Wind Investment SL.           109023.8     109023.8
+## Parque Eolico Santa Catalina SL   147742.5     256766.3
+## Eolica La Janda SL                153429.4     410195.8
+## Esquilvent SL                     157630.6     567826.4
+## Biovent Energia SA                183899.0     751725.4
+## Acciona Eolica Del Levante SL     188354.0     940079.4
+## Guzman Energia SL                 190287.0    1130366.4
+## Innogy Spain SA.                  230338.5    1360704.9
+## Al-Andalus Wind Power SL          249853.8    1610558.7
+## Viesgo Renovables SL.             269730.0    1880288.7
+## Naturgy Wind, S.L.                273542.0    2153830.7
+## Parque Eolico La Boga SL.         303904.4    2457735.1
+## Olivento SL                       381207.0    2838942.0
+## Elawan Energy SL.                 443467.0    3282409.0
+## Saeta Yield SA.                   796886.4    4079295.4
+## Corporacion Acciona Eolica SL     864606.0    4943901.4
+## EDP Renovables España SLU        1275939.0    6219840.4
+## Naturgy Renovables SLU           1956869.0    8176709.4
+## Global Power Generation SA.      2002458.0   10179167.4
+## Holding De Negocios De GAS SL.  13492812.0   23671979.4</code></pre>
+<p>Podemos verificar cómo se ha integrado en el <em>data frame</em> la variable ACTIVOS_ACUM.</p>
+<p>Un último ejemplo de adición de una variable que es transformación de otras. En este caso, crearemos la variable TAM (tamaño), que es <strong>categórica</strong> (los datos son conjuntos de carcteres). Esta variable toma valor “G” para las empresas con un valor de la variable ACTIVO mayor que 1.000.000, y “P” para las que tengan un valor en la variable ACTIVO menor o igual a 1.000.000. Para calcular automáticamente esta nueva variable categórica, utilizaremos la función de <code>{base}</code> <code><a href="https://rdrr.io/r/base/cut.html">cut()</a></code>. De este modo, haremos:</p>
+<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eolica_20</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="va">eolica_20</span>, TAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span><span class="op">(</span><span class="va">ACTIVO</span>,</span>
+<span>  breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">1000000</span>, <span class="cn">Inf</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"P"</span>, <span class="st">"G"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">eolica_20</span>, <span class="va">ACTIVO</span>, <span class="va">TAM</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##                                     ACTIVO TAM
+## WPD Wind Investment SL.           109023.8   P
+## Parque Eolico Santa Catalina SL   147742.5   P
+## Eolica La Janda SL                153429.4   P
+## Esquilvent SL                     157630.6   P
+## Biovent Energia SA                183899.0   P
+## Acciona Eolica Del Levante SL     188354.0   P
+## Guzman Energia SL                 190287.0   P
+## Innogy Spain SA.                  230338.5   P
+## Al-Andalus Wind Power SL          249853.8   P
+## Viesgo Renovables SL.             269730.0   P
+## Naturgy Wind, S.L.                273542.0   P
+## Parque Eolico La Boga SL.         303904.4   P
+## Olivento SL                       381207.0   P
+## Elawan Energy SL.                 443467.0   P
+## Saeta Yield SA.                   796886.4   P
+## Corporacion Acciona Eolica SL     864606.0   P
+## EDP Renovables España SLU        1275939.0   G
+## Naturgy Renovables SLU           1956869.0   G
+## Global Power Generation SA.      2002458.0   G
+## Holding De Negocios De GAS SL.  13492812.0   G</code></pre>
+<p>Podemos advertir cómo la función <code><a href="https://rdrr.io/r/base/cut.html">cut()</a></code>, que incluimos dentro de nuestra función de <a href="https://dplyr.tidyverse.org">dplyr</a> <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code>, tiene, a su vez, varios argumentos: la variable numérica de referencia (ACTIVO); el argumento <strong>“breaks”</strong>, en el que decimos los intervalos en que quedarán divididos los casos (uno, de menos infinito a 1.000.000; y otro de 1.000.000 a más infinito), y <strong>“labels”</strong>, que es el valor que tomará la variable creada (TAM) según el intervalo en el que se sitúe cada caso de la muestra.</p>
+<p>Cabe destacar que podíamos haber escrito el código para crear la variable TAM de un modo más elegante y cómodo, utilizando el operador <strong>“<em>pipe</em>”</strong> (<strong>%&gt;%</strong>). Este operador permite concatenar una serie de instrucciones:</p>
+<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eolica_20</span> <span class="op">&lt;-</span> <span class="va">eolica_20</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>TAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span><span class="op">(</span><span class="va">ACTIVO</span>,</span>
+<span>  breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">1000000</span>, <span class="cn">Inf</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"P"</span>, <span class="st">"G"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">eolica_20</span>, <span class="va">ACTIVO</span>, <span class="va">TAM</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##                                     ACTIVO TAM
+## WPD Wind Investment SL.           109023.8   P
+## Parque Eolico Santa Catalina SL   147742.5   P
+## Eolica La Janda SL                153429.4   P
+## Esquilvent SL                     157630.6   P
+## Biovent Energia SA                183899.0   P
+## Acciona Eolica Del Levante SL     188354.0   P
+## Guzman Energia SL                 190287.0   P
+## Innogy Spain SA.                  230338.5   P
+## Al-Andalus Wind Power SL          249853.8   P
+## Viesgo Renovables SL.             269730.0   P
+## Naturgy Wind, S.L.                273542.0   P
+## Parque Eolico La Boga SL.         303904.4   P
+## Olivento SL                       381207.0   P
+## Elawan Energy SL.                 443467.0   P
+## Saeta Yield SA.                   796886.4   P
+## Corporacion Acciona Eolica SL     864606.0   P
+## EDP Renovables España SLU        1275939.0   G
+## Naturgy Renovables SLU           1956869.0   G
+## Global Power Generation SA.      2002458.0   G
+## Holding De Negocios De GAS SL.  13492812.0   G</code></pre>
+<p>Podríamos interpretar la línea de código así: “asigna al <em>data frame</em>”eolica_20” sus propios datos, después (%&gt;%) crea la variable TAM con la función cut() y añádela a “eolica_20”.</p>
+</div>
+<div id="extrayendo-y-sintetizando-información-de-las-variables-de-un-data-frame." class="section level3" number="2.3.7">
+<h3>
+<span class="header-section-number">2.3.7</span> Extrayendo y sintetizando información de las variables de un <em>data frame</em>.<a class="anchor" aria-label="anchor" href="#extrayendo-y-sintetizando-informaci%C3%B3n-de-las-variables-de-un-data-frame."><i class="fas fa-link"></i></a>
+</h3>
+<p>Otra posibilidad que permite <a href="https://dplyr.tidyverse.org">dplyr</a> es extraer y sintetizar la información de las variables contenidas en un <em>data frame</em>. Para ello, nos ayudaremos de la función <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code>. Como ejemplo, calculemos la <em>rentabilidad financiera</em> media de las 20 empresas:</p>
+<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#Extrayendo información de las variables de un data frame</span></span>
+<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span><span class="va">eolica_20</span>, RENFIN_media <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">RENFIN</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
+<pre><code>##   RENFIN_media
+## 1     -3.45005</code></pre>
+<p>A veces, es de gran utilidad combinar <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code> con <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code>, que extrae la información por grupos definidos por una de las variables. Para ilustrarlo, vamos a utilizar la variable recién creada TAM, para hacer dos grupos de empresas: las de menor (“P”) y las de mayor (“G”) volumen de activo; tras lo cual calcularemos la media de las rentabilidades para cada grupo:</p>
+<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eolica_20</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">TAM</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>RENFIN_media <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">RENFIN</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## # A tibble: 2 × 2
+##   TAM   RENFIN_media
+##   &lt;fct&gt;        &lt;dbl&gt;
+## 1 P            -6.52
+## 2 G             8.82</code></pre>
+<p>Hemos utilizado el operador <em>pipe</em> (<strong>%&gt;%)</strong> para concatenar diferentes instrucciones de <a href="https://dplyr.tidyverse.org">dplyr</a>: primero agrupar casos, y luego calcular las medias de cada grupo. Es decir, en este caso se podría “traducir” la línea de código como: “Toma el <em>data frame</em>”eolica_9”, divide los casos en grupos según el valor de la variable TAM, y para cada grupo calcula la media de la variable RENFIN”.</p>
+</div>
+</div>
+<div id="exportando-datos." class="section level2" number="2.4">
+<h2>
+<span class="header-section-number">2.4</span> Exportando datos.<a class="anchor" aria-label="anchor" href="#exportando-datos."><i class="fas fa-link"></i></a>
+</h2>
+<p>Antes de concluir el capítulo, vamos a tratar brevemente el aspecto de la exportación de datos.</p>
+<p>R cuenta con un <strong>formato propio de datos</strong>, que se traduce en archivos de extensión “RData”, y que puede incluir cualquier objeto de R. Como ejemplo, en el siguiente <em>script</em>, llamado “explora_exporta.R” (obtener aquí), vamos a importar los datos del archivo de Microsoft (R) Excel (R) “eolica_20.xlsx”, y el <em>data frame</em> donde almacenemos los datos vamos a exportarlo como el archivo de datos de R “eolica_20.RData”. Posteriormente, borraremos el <em>data frame</em> del <em>Environment</em> y recuperaremos los datos cargando ese archivo “eolica_20.RData”. Por supuesto, seguimos trabajando, como en todo el capítulo, en el proyecto “explora”.</p>
+<p>Tras abrir el <em>script</em> “explora_exporta.R”, las primeras líneas de código que veremos serán las que ya hemos estudiado para borrar el contenido del <em>Environment</em>, importar los datos de la hoja “Top 20” del archivo “eolica_20.xlsx” (situado en nuestra carpeta de proyecto), y tratar la variable “NOMBRE” para transformarla en el conjunto de nombres de las filas:</p>
+<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Exportando datos de empresas eolicas (disculpad la falta de tildes)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># DATOS</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
+<span><span class="va">eolica_20</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"eolica_20.xlsx"</span>, sheet <span class="op">=</span> <span class="st">"Top 20"</span><span class="op">)</span></span>
+<span><span class="va">eolica_20</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">eolica_20</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">eolica_20</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##       RES             ACTIVO             FPIOS             RENECO       
+##  Min.   : -5662   Min.   :  109024   Min.   : -77533   Min.   :-2.8130  
+##  1st Qu.:  2865   1st Qu.:  187240   1st Qu.:  27615   1st Qu.: 0.8765  
+##  Median :  7388   Median :  271636   Median :  77740   Median : 3.6150  
+##  Mean   : 50754   Mean   : 1183599   Mean   : 563678   Mean   : 2.9399  
+##  3rd Qu.: 21206   3rd Qu.:  813816   3rd Qu.: 219345   3rd Qu.: 4.7735  
+##  Max.   :727548   Max.   :13492812   Max.   :6904824   Max.   : 8.5860  
+##  NA's   :1                                             NA's   :1        
+## 
+##      RENFIN            LIQUIDEZ          MARGEN          SOLVENCIA     
+##  Min.   :-359.773   Min.   :0.0780   Min.   :-302.03   Min.   :-40.74  
+##  1st Qu.:   1.664   1st Qu.:0.7342   1st Qu.:  12.39   1st Qu.: 11.26  
+##  Median :  10.812   Median :1.2345   Median :  21.42   Median : 23.68  
+##  Mean   :  -3.450   Mean   :1.4200   Mean   :  16.40   Mean   : 32.68  
+##  3rd Qu.:  25.312   3rd Qu.:1.5615   3rd Qu.:  38.56   3rd Qu.: 52.62  
+##  Max.   :  52.261   Max.   :5.3300   Max.   : 208.36   Max.   : 99.08  
+## 
+##     APALANCA           MATRIZ         
+##  Min.   :-6265.50   Length:20         
+##  1st Qu.:   16.13   Class :character  
+##  Median :  145.93   Mode  :character  
+##  Mean   :  -17.17                     
+##  3rd Qu.:  504.74                     
+##  Max.   : 1019.62</code></pre>
+<p>Posteriormente, se exportará el data frame “eolica_20” al archivo de formato R, “eolica_20.RData”, mediante la función <code>save</code>:</p>
+<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Exportando data frame a formato R (.RData)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">eolica_20</span>, file <span class="op">=</span> <span class="st">"eolica_20.RData"</span><span class="op">)</span></span></code></pre></div>
+<p>Puede comprobarse cómo se ha generado el archivo correspondiente en la carpeta de proyecto. Para comprobar que la exportación es correcta, vamos a borrar del <em>Environment</em> el <em>data frame</em> “eolica_20”. Después, cargaremos el archivo “eolica_20.RData”. Como resultado, podremos comprobar que tenemos un nuevo <em>data frame</em> “eolica_20” que es exactamente igual al que teníamos al principio:</p>
+<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Borrando el data frame eolica_20</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span><span class="va">eolica_20</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Importando el archivo .RData con los mismos datos</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"eolica_20.RData"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span> <span class="op">(</span><span class="va">eolica_20</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##       RES             ACTIVO             FPIOS             RENECO       
+##  Min.   : -5662   Min.   :  109024   Min.   : -77533   Min.   :-2.8130  
+##  1st Qu.:  2865   1st Qu.:  187240   1st Qu.:  27615   1st Qu.: 0.8765  
+##  Median :  7388   Median :  271636   Median :  77740   Median : 3.6150  
+##  Mean   : 50754   Mean   : 1183599   Mean   : 563678   Mean   : 2.9399  
+##  3rd Qu.: 21206   3rd Qu.:  813816   3rd Qu.: 219345   3rd Qu.: 4.7735  
+##  Max.   :727548   Max.   :13492812   Max.   :6904824   Max.   : 8.5860  
+##  NA's   :1                                             NA's   :1        
+## 
+##      RENFIN            LIQUIDEZ          MARGEN          SOLVENCIA     
+##  Min.   :-359.773   Min.   :0.0780   Min.   :-302.03   Min.   :-40.74  
+##  1st Qu.:   1.664   1st Qu.:0.7342   1st Qu.:  12.39   1st Qu.: 11.26  
+##  Median :  10.812   Median :1.2345   Median :  21.42   Median : 23.68  
+##  Mean   :  -3.450   Mean   :1.4200   Mean   :  16.40   Mean   : 32.68  
+##  3rd Qu.:  25.312   3rd Qu.:1.5615   3rd Qu.:  38.56   3rd Qu.: 52.62  
+##  Max.   :  52.261   Max.   :5.3300   Max.   : 208.36   Max.   : 99.08  
+## 
+##     APALANCA           MATRIZ         
+##  Min.   :-6265.50   Length:20         
+##  1st Qu.:   16.13   Class :character  
+##  Median :  145.93   Mode  :character  
+##  Mean   :  -17.17                     
+##  3rd Qu.:  504.74                     
+##  Max.   : 1019.62</code></pre>
+<p>Por supuesto, hay más formatos en los que se pueden exportar datos desde R. Por ejemplo, <strong>a un archivo de Microsoft (R) Excel (R)</strong>. Un modo de hacerlo es haciendo uso de la función <code><a href="https://docs.ropensci.org/writexl//reference/write_xlsx.html">write_xlsx()</a></code> del paquete {writexl}. Para que en la hoja de cálculo resultante se incluyan los nombres de las filas (empresas eólicas), hemos tenido previamente que crear un vector con el nombre de estas (vector “NOMBRE”), mediante la función <code><a href="https://rdrr.io/r/base/row.names.html">row.names()</a></code>, y unir ese vector al <em>data frame</em> “eolica_20”, a modo de primera columna, creando un nuevo finalmente un <em>data frame</em> llamado “eolica_20n”, para lo que se ha utilizado la función <code><a href="https://rdrr.io/r/base/cbind.html">cbind()</a></code>, que permite <strong>pegar columnas de datos</strong> que tengan un mismo número de filas.</p>
+<p>Como resultado de todo el código, se ha obtenido el archivo de Microsoft (R) Excel (R) “eolica_20_new.xlsx”:</p>
+<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Exportando el data frame eolica_20 a Microsoft Excel</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ropensci.r-universe.dev/writexl">writexl</a></span><span class="op">)</span></span>
+<span><span class="va">NOMBRE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">eolica_20</span><span class="op">)</span></span>
+<span><span class="va">eolica_20n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">NOMBRE</span>, <span class="va">eolica_20</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://docs.ropensci.org/writexl//reference/write_xlsx.html">write_xlsx</a></span><span class="op">(</span><span class="va">eolica_20n</span>, path <span class="op">=</span> <span class="st">"eolica_20_new.xlsx"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#Fin del script</span></span></code></pre></div>
+</div>
+<div id="materiales-para-realizar-las-prácticas-del-capítulo." class="section level2" number="2.5">
+<h2>
+<span class="header-section-number">2.5</span> Materiales para realizar las prácticas del capítulo.<a class="anchor" aria-label="anchor" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo."><i class="fas fa-link"></i></a>
+</h2>
+<p>En esta sección se muestran los links de acceso a los diferentes materiales (<em>scripts</em>, datos…) necesarios para llevar a cabo los contenidos prácticos del capítulo.</p>
+<p><strong>Datos (en formato Microsoft (R) Excel (R)):</strong></p>
+<ul>
+<li>eolica_20.xlsx (<a href="https://docs.google.com/spreadsheets/d/1YDFCd0Z7udeIi6WdNYwthYHGmJSrEfG1/edit?usp=drive_link&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">obtener aquí</a>)</li>
+</ul>
+<p><strong>Scripts:</strong></p>
+<ul>
+<li><p>explora_eolica.R (<a href="https://drive.google.com/file/d/1_rt1TtlYGU0VWtnvkWLpxM_MDGOrSFYZ/view?usp=drive_link">obtener aquí</a>)</p></li>
+<li><p>explora_dplyr.R (<a href="https://drive.google.com/file/d/1Is4XOd6EmFswB6w2eZfC8_pp2mtu7aQK/view?usp=drive_link">obtener aquí</a>)</p></li>
+<li><p>explora_exporta.R (<a href="https://drive.google.com/file/d/1NVkpJ6toD3pWJsE0w628Sf4e_c5dcffR/view?usp=sharing">obtener aquí</a>)</p></li>
+</ul>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="introducci%C3%B3n..html"><span class="header-section-number">1</span> Introducción.</a></div>
+<div class="next"><a href="gr%C3%A1ficos..html"><span class="header-section-number">3</span> Gráficos.</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#almacenando-y-manipulando-datos."><span class="header-section-number">2</span> Almacenando y manipulando datos.</a></li>
+<li>
+<a class="nav-link" href="#objetos.-datos."><span class="header-section-number">2.1</span> Objetos. Datos.</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#vectores."><span class="header-section-number">2.1.1</span> Vectores.</a></li>
+<li><a class="nav-link" href="#matrices."><span class="header-section-number">2.1.2</span> Matrices.</a></li>
+<li><a class="nav-link" href="#data-frames."><span class="header-section-number">2.1.3</span> Data frames.</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#importando-datos."><span class="header-section-number">2.2</span> Importando datos.</a></li>
+<li>
+<a class="nav-link" href="#dplyr."><span class="header-section-number">2.3</span> {dplyr}.</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#el-tidyverse.-cargando-dplyr."><span class="header-section-number">2.3.1</span> El Tidyverse. Cargando {dplyr}.</a></li>
+<li><a class="nav-link" href="#seleccionando-columnas-de-un-data-frame."><span class="header-section-number">2.3.2</span> Seleccionando columnas de un data frame.</a></li>
+<li><a class="nav-link" href="#seleccionando-casos-de-un-data-frame."><span class="header-section-number">2.3.3</span> Seleccionando casos de un data frame.</a></li>
+<li><a class="nav-link" href="#ordenando-casos-de-un-data-frame."><span class="header-section-number">2.3.4</span> Ordenando casos de un data frame.</a></li>
+<li><a class="nav-link" href="#cambiando-el-nombre-de-las-variables-de-un-data-frame."><span class="header-section-number">2.3.5</span> Cambiando el nombre de las variables de un data frame.</a></li>
+<li><a class="nav-link" href="#a%C3%B1adiendo-variables-como-transformaci%C3%B3n-de-otras-variables-en-un-data-frame."><span class="header-section-number">2.3.6</span> Añadiendo variables como transformación de otras variables en un data frame.</a></li>
+<li><a class="nav-link" href="#extrayendo-y-sintetizando-informaci%C3%B3n-de-las-variables-de-un-data-frame."><span class="header-section-number">2.3.7</span> Extrayendo y sintetizando información de las variables de un data frame.</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#exportando-datos."><span class="header-section-number">2.4</span> Exportando datos.</a></li>
+<li><a class="nav-link" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo."><span class="header-section-number">2.5</span> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Técnicas de Análisis de Datos Económicos con R</strong>" was written by . It was last built on 2025-09-09.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

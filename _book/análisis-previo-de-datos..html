@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 5 Análisis previo de datos. | Técnicas de Análisis de Datos Económicos con R</title>
+  <meta name="description" content="Libro de análisis de datos económicos." />
+  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 5 Análisis previo de datos. | Técnicas de Análisis de Datos Económicos con R" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://bookdown.org/teckel71/book/figuras/Portada_v2.PNG" />
+  <meta property="og:description" content="Libro de análisis de datos económicos." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 5 Análisis previo de datos. | Técnicas de Análisis de Datos Económicos con R" />
+  
+  <meta name="twitter:description" content="Libro de análisis de datos económicos." />
+  <meta name="twitter:image" content="https://bookdown.org/teckel71/book/figuras/Portada_v2.PNG" />
+
+<meta name="author" content="" />
+
+
+<meta name="date" content="2025-01-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="estadística-descriptiva..html"/>
+<link rel="next" href="componentes-principales..html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Técnicas de Análisis de Datos Económicos con R</a></li>
+
+<li class="divider"></li>
+<li><a href="index.html#section" id="toc-section"></a></li>
+<li class="chapter" data-level="" data-path="prefacio.html"><a href="prefacio.html"><i class="fa fa-check"></i>Prefacio</a></li>
+<li class="chapter" data-level="1" data-path="introducción..html"><a href="introducción..html"><i class="fa fa-check"></i><b>1</b> Introducción.</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introducción..html"><a href="introducción..html#llámalo-estadística."><i class="fa fa-check"></i><b>1.1</b> Llámalo Estadística.</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="introducción..html"><a href="introducción..html#concepto-de-estadística."><i class="fa fa-check"></i><b>1.1.1</b> Concepto de Estadística.</a></li>
+<li class="chapter" data-level="1.1.2" data-path="introducción..html"><a href="introducción..html#el-método-estadístico."><i class="fa fa-check"></i><b>1.1.2</b> El método estadístico.</a></li>
+<li class="chapter" data-level="1.1.3" data-path="introducción..html"><a href="introducción..html#economía-y-estadística."><i class="fa fa-check"></i><b>1.1.3</b> Economía y Estadística.</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="introducción..html"><a href="introducción..html#qué-es-r-y-cómo-nos-ayuda-a-analizar-datos-desde-el-punto-de-vista-estadístico"><i class="fa fa-check"></i><b>1.2</b> ¿Qué es R y cómo nos ayuda a analizar datos desde el punto de vista estadístico?</a></li>
+<li class="chapter" data-level="1.3" data-path="introducción..html"><a href="introducción..html#instalación-de-r-y-r-studio."><i class="fa fa-check"></i><b>1.3</b> Instalación de R y R-Studio.</a></li>
+<li class="chapter" data-level="1.4" data-path="introducción..html"><a href="introducción..html#r-y-rstudio.-comienzo-proyectos."><i class="fa fa-check"></i><b>1.4</b> R y RStudio. Comienzo: Proyectos.</a></li>
+<li class="chapter" data-level="1.5" data-path="introducción..html"><a href="introducción..html#scripts."><i class="fa fa-check"></i><b>1.5</b> Scripts.</a></li>
+<li class="chapter" data-level="1.6" data-path="introducción..html"><a href="introducción..html#funciones."><i class="fa fa-check"></i><b>1.6</b> Funciones.</a></li>
+<li class="chapter" data-level="1.7" data-path="introducción..html"><a href="introducción..html#paquetes-packages."><i class="fa fa-check"></i><b>1.7</b> Paquetes (packages).</a></li>
+<li class="chapter" data-level="1.8" data-path="introducción..html"><a href="introducción..html#help-sistema-de-ayuda."><i class="fa fa-check"></i><b>1.8</b> Help! (sistema de ayuda).</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html"><i class="fa fa-check"></i><b>2</b> Almacenando y manipulando datos.</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#objetos.-datos."><i class="fa fa-check"></i><b>2.1</b> Objetos. Datos.</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#vectores."><i class="fa fa-check"></i><b>2.1.1</b> Vectores.</a></li>
+<li class="chapter" data-level="2.1.2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#matrices."><i class="fa fa-check"></i><b>2.1.2</b> Matrices.</a></li>
+<li class="chapter" data-level="2.1.3" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#data-frames."><i class="fa fa-check"></i><b>2.1.3</b> Data frames.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#importando-datos."><i class="fa fa-check"></i><b>2.2</b> Importando datos.</a></li>
+<li class="chapter" data-level="2.3" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#dplyr."><i class="fa fa-check"></i><b>2.3</b> {dplyr}.</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#el-tidyverse.-cargando-dplyr."><i class="fa fa-check"></i><b>2.3.1</b> El Tidyverse. Cargando {dplyr}.</a></li>
+<li class="chapter" data-level="2.3.2" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#seleccionando-columnas-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.2</b> Seleccionando columnas de un data frame.</a></li>
+<li class="chapter" data-level="2.3.3" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#seleccionando-casos-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.3</b> Seleccionando casos de un <em>data frame</em>.</a></li>
+<li class="chapter" data-level="2.3.4" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#ordenando-casos-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.4</b> Ordenando casos de un <em>data frame</em>.</a></li>
+<li class="chapter" data-level="2.3.5" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#cambiando-el-nombre-de-las-variables-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.5</b> Cambiando el nombre de las variables de un <em>data frame</em>.</a></li>
+<li class="chapter" data-level="2.3.6" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#añadiendo-variables-como-transformación-de-otras-variables-en-un-data-frame."><i class="fa fa-check"></i><b>2.3.6</b> <strong>Añadiendo variables como transformación de otras variables en un <em>data frame</em>.</strong></a></li>
+<li class="chapter" data-level="2.3.7" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#extrayendo-y-sintetizando-información-de-las-variables-de-un-data-frame."><i class="fa fa-check"></i><b>2.3.7</b> Extrayendo y sintetizando información de las variables de un <em>data frame</em>.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#exportando-datos."><i class="fa fa-check"></i><b>2.4</b> Exportando datos.</a></li>
+<li class="chapter" data-level="2.5" data-path="almacenando-y-manipulando-datos..html"><a href="almacenando-y-manipulando-datos..html#materiales-para-realizar-las-prácticas-del-capítulo."><i class="fa fa-check"></i><b>2.5</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="gráficos..html"><a href="gráficos..html"><i class="fa fa-check"></i><b>3</b> Gráficos.</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="gráficos..html"><a href="gráficos..html#tidyverse-para-gráficos-ggplot2."><i class="fa fa-check"></i><b>3.1</b> Tidyverse para gráficos: ggplot2.</a></li>
+<li class="chapter" data-level="3.2" data-path="gráficos..html"><a href="gráficos..html#gráficos-de-una-variable-histogramas-gráficos-de-densidad-gráficos-de-caja-o-boxplots."><i class="fa fa-check"></i><b>3.2</b> Gráficos de una variable: histogramas, gráficos de densidad, gráficos de caja o <em>boxplots</em>.</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="gráficos..html"><a href="gráficos..html#histograma."><i class="fa fa-check"></i><b>3.2.1</b> Histograma.</a></li>
+<li class="chapter" data-level="3.2.2" data-path="gráficos..html"><a href="gráficos..html#gráfico-de-densidad."><i class="fa fa-check"></i><b>3.2.2</b> Gráfico de densidad.</a></li>
+<li class="chapter" data-level="3.2.3" data-path="gráficos..html"><a href="gráficos..html#gráfico-de-caja-o-box-plot."><i class="fa fa-check"></i><b>3.2.3</b> Gráfico de caja o <em>Box-Plot</em>.</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="gráficos..html"><a href="gráficos..html#gráficos-de-dos-variables."><i class="fa fa-check"></i><b>3.3</b> Gráficos de dos variables.</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="gráficos..html"><a href="gráficos..html#gráfico-de-dispersión-o-scatterplot."><i class="fa fa-check"></i><b>3.3.1</b> Gráfico de dispersión o <em>scatterplot</em>.</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="gráficos..html"><a href="gráficos..html#materiales-para-realizar-las-prácticas-del-capítulo.-1"><i class="fa fa-check"></i><b>3.4</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html"><i class="fa fa-check"></i><b>4</b> Estadística descriptiva.</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#análisis-univariante."><i class="fa fa-check"></i><b>4.1</b> Análisis univariante.</a></li>
+<li class="chapter" data-level="4.2" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#representando-datos-y-distribuciones-de-frecuencias-en-tablas-con-r."><i class="fa fa-check"></i><b>4.2</b> Representando datos y distribuciones de frecuencias en tablas con R.</a></li>
+<li class="chapter" data-level="4.3" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#medidas-de-posición."><i class="fa fa-check"></i><b>4.3</b> Medidas de posición.</a></li>
+<li class="chapter" data-level="4.4" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#medidas-de-dispersión-o-variabilidad."><i class="fa fa-check"></i><b>4.4</b> Medidas de dispersión o variabilidad.</a></li>
+<li class="chapter" data-level="4.5" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#medidas-de-forma."><i class="fa fa-check"></i><b>4.5</b> Medidas de forma.</a></li>
+<li class="chapter" data-level="4.6" data-path="estadística-descriptiva..html"><a href="estadística-descriptiva..html#materiales-para-realizar-las-prácticas-del-capítulo.-2"><i class="fa fa-check"></i><b>4.6</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html"><i class="fa fa-check"></i><b>5</b> Análisis previo de datos.</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#introducción.-1"><i class="fa fa-check"></i><b>5.1</b> Introducción.</a></li>
+<li class="chapter" data-level="5.2" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#análisis-de-una-variable."><i class="fa fa-check"></i><b>5.2</b> Análisis de una variable.</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#buscando-missing-values-y-outliers."><i class="fa fa-check"></i><b>5.2.1</b> Buscando <em>missing values</em> y <em>outliers</em>.</a></li>
+<li class="chapter" data-level="5.2.2" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#descripción-de-una-variable."><i class="fa fa-check"></i><b>5.2.2</b> Descripción de una variable.</a></li>
+<li class="chapter" data-level="5.2.3" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#normalidad."><i class="fa fa-check"></i><b>5.2.3</b> Normalidad.</a></li>
+<li class="chapter" data-level="5.2.4" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#resumen-los-4-gráficos-básicos-en-la-descripción-de-una-variable."><i class="fa fa-check"></i><b>5.2.4</b> Resumen: los 4 gráficos básicos en la descripción de una variable.</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#análisis-de-múltiples-variables."><i class="fa fa-check"></i><b>5.3</b> Análisis de múltiples variables.</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#localización-de-missing-values-y-outliers."><i class="fa fa-check"></i><b>5.3.1</b> Localización de <em>missing values</em> y <em>outliers</em>.</a></li>
+<li class="chapter" data-level="5.3.2" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#correlación-entre-variables."><i class="fa fa-check"></i><b>5.3.2</b> Correlación entre variables.</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="análisis-previo-de-datos..html"><a href="análisis-previo-de-datos..html#materiales-para-realizar-las-prácticas-del-capítulo.-3"><i class="fa fa-check"></i><b>5.4</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="componentes-principales..html"><a href="componentes-principales..html"><i class="fa fa-check"></i><b>6</b> Componentes principales.</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="componentes-principales..html"><a href="componentes-principales..html#introducción.-2"><i class="fa fa-check"></i><b>6.1</b> Introducción.</a></li>
+<li class="chapter" data-level="6.2" data-path="componentes-principales..html"><a href="componentes-principales..html#información-y-varianza."><i class="fa fa-check"></i><b>6.2</b> Información y varianza.</a></li>
+<li class="chapter" data-level="6.3" data-path="componentes-principales..html"><a href="componentes-principales..html#cálculo-de-componentes."><i class="fa fa-check"></i><b>6.3</b> Cálculo de componentes.</a></li>
+<li class="chapter" data-level="6.4" data-path="componentes-principales..html"><a href="componentes-principales..html#retención-de-componentes-principales."><i class="fa fa-check"></i><b>6.4</b> Retención de componentes principales.</a></li>
+<li class="chapter" data-level="6.5" data-path="componentes-principales..html"><a href="componentes-principales..html#puntuaciones-de-los-casos-scores"><i class="fa fa-check"></i><b>6.5</b> Puntuaciones de los casos (scores)</a></li>
+<li class="chapter" data-level="6.6" data-path="componentes-principales..html"><a href="componentes-principales..html#materiales-para-realizar-las-prácticas-del-capítulo.-4"><i class="fa fa-check"></i><b>6.6</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="análisis-clúster..html"><a href="análisis-clúster..html"><i class="fa fa-check"></i><b>7</b> Análisis Clúster.</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="análisis-clúster..html"><a href="análisis-clúster..html#introducción.-3"><i class="fa fa-check"></i><b>7.1</b> Introducción.</a></li>
+<li class="chapter" data-level="7.2" data-path="análisis-clúster..html"><a href="análisis-clúster..html#métodos-de-agrupación-jerárquicos."><i class="fa fa-check"></i><b>7.2</b> Métodos de agrupación jerárquicos.</a></li>
+<li class="chapter" data-level="7.3" data-path="análisis-clúster..html"><a href="análisis-clúster..html#métodos-de-agrupación-no-jerárquicos."><i class="fa fa-check"></i><b>7.3</b> Métodos de agrupación no-jerárquicos.</a></li>
+<li class="chapter" data-level="7.4" data-path="análisis-clúster..html"><a href="análisis-clúster..html#materiales-para-realizar-las-prácticas-del-capítulo.-5"><i class="fa fa-check"></i><b>7.4</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html"><i class="fa fa-check"></i><b>8</b> Análisis de la varianza.</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#introducción.-4"><i class="fa fa-check"></i><b>8.1</b> Introducción.</a></li>
+<li class="chapter" data-level="8.2" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#anova-de-un-solo-factor."><i class="fa fa-check"></i><b>8.2</b> ANOVA de un solo factor.</a></li>
+<li class="chapter" data-level="8.3" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#comparaciones-múltiples."><i class="fa fa-check"></i><b>8.3</b> Comparaciones múltiples.</a></li>
+<li class="chapter" data-level="8.4" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#y-si-no-se-cumplen-las-condiciones-para-realizar-el-contraste-f-de-anova"><i class="fa fa-check"></i><b>8.4</b> ¿Y si no se cumplen las condiciones para realizar el contraste F de ANOVA?</a></li>
+<li class="chapter" data-level="8.5" data-path="análisis-de-la-varianza..html"><a href="análisis-de-la-varianza..html#materiales-para-realizar-las-prácticas-del-capítulo.-6"><i class="fa fa-check"></i><b>8.5</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html"><i class="fa fa-check"></i><b>9</b> Análisis de Regresión Lineal Múltiple.</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html#introducción.-5"><i class="fa fa-check"></i><b>9.1</b> Introducción.</a></li>
+<li class="chapter" data-level="9.2" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html#especificación-del-mbr.-datos-de-corte-transversal."><i class="fa fa-check"></i><b>9.2</b> Especificación del MBR. Datos de corte transversal.</a></li>
+<li class="chapter" data-level="9.3" data-path="análisis-de-regresión-lineal-múltiple..html"><a href="análisis-de-regresión-lineal-múltiple..html#materiales-para-realizar-las-prácticas-del-capítulo.-7"><i class="fa fa-check"></i><b>9.3</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html"><i class="fa fa-check"></i><b>10</b> Análisis de Datos Cualitativos.</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#introducción.-6"><i class="fa fa-check"></i><b>10.1</b> Introducción.</a></li>
+<li class="chapter" data-level="10.2" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#tablas-de-contingencia-y-asociación-entre-dos-atributos-o-factores."><i class="fa fa-check"></i><b>10.2</b> Tablas de contingencia, y asociación entre dos atributos o factores.</a></li>
+<li class="chapter" data-level="10.3" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#análisis-de-correspondencias."><i class="fa fa-check"></i><b>10.3</b> Análisis de correspondencias.</a></li>
+<li class="chapter" data-level="10.4" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#modelos-logaritmico-lineales-aplicados-a-tablas-de-contingencia."><i class="fa fa-check"></i><b>10.4</b> Modelos logaritmico-lineales aplicados a tablas de contingencia.</a></li>
+<li class="chapter" data-level="10.5" data-path="análisis-de-datos-cualitativos..html"><a href="análisis-de-datos-cualitativos..html#materiales-para-realizar-las-prácticas-del-capítulo.-8"><i class="fa fa-check"></i><b>10.5</b> Materiales para realizar las prácticas del capítulo.</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="bibliografía.html"><a href="bibliografía.html"><i class="fa fa-check"></i>Bibliografía</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Técnicas de Análisis de Datos Económicos con R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="análisis-previo-de-datos." class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Capítulo 5</span> Análisis previo de datos.<a href="análisis-previo-de-datos..html#análisis-previo-de-datos." class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introducción.-1" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Introducción.<a href="análisis-previo-de-datos..html#introducción.-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Antes de la aplicación de técnicas complejas que permitan extraer de los datos conclusiones relevantes, es necesario realizar unas <strong>tareas previas</strong> destinadas a conseguir dos objetivos:</p>
+<ul>
+<li><p><strong>Preparar nuestros datos</strong> para que puedan ser procesados correctamente sin provocar distorsiones en los resultados.</p></li>
+<li><p>Obtener una <strong>visión inicial de la información</strong> que esconden los datos, fundamentalmente en cuanto a las medidas básicas que caracterizan la distribución de frecuencias de las variables en las que se estructuran estos, así como, en el caso de contar con más de una variable, de las relaciones estadísticas que existen entre ellas.</p></li>
+</ul>
+<p>Además, es preciso tener en cuenta que, usualmente, es conveniente que estos rasgos iniciales que caracterizan a nuestra muestra o población sean plasmados de un modo <strong>visualmente amigable</strong>, claro y conciso.</p>
+<p>En esta práctica, por medio de un ejemplo basado en información económico-financiera de una muestra constituida por 100 empresas dedicadas a la producción de electricidad mediante tecnología eólica, se mostrarán una serie de buenas prácticas y análisis básicos útiles a la hora de preparar y analizar inicialmente nuestro conjunto de datos.</p>
+<p>Vamos a suponer que trabajamos dentro de un <strong>proyecto</strong> que hemos creado previamente, de nombre “explora”. Dentro de la carpeta del proyecto guardaremos el <em>script</em> llamado “<a href="https://drive.google.com/file/d/1VqZX81h15JZhF7KXXj3alLd08o5ywkX2/view?usp=sharing">explora_describe.R</a>”, y el archivo de Microsoft® Excel® llamado “<a href="https://docs.google.com/spreadsheets/d/1f9KV5epNpBRM6v9sKPtgFDkzMlOo75Y2/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">eolica_100_mv.xlsx</a>”. Si abrimos este último archivo, comprobaremos que se compone de tres hojas. La primera muestra un mensaje sobre el uso de los datos, la segunda recoge la descripción de las variables consideradas, y la tercera (hoja “Datos”) almacena los datos que debemos importar. Estos datos se corresponden con diferentes variables económico-financieras de las 100 empresas productoras de electricidad mediante generación eólica con mayor volumen de activo.</p>
+<p>Es muy importante observar que existen variables con datos faltantes (<em>missing values</em>). En concreto, podemos identificar estas faltas de dato por la existencia de celdas en blanco; pero también por la existencia de celdas con el texto “n.d.” (no dato) o “s.d.” (sin dato). Es muy importante identificar el modo en que quedan recogidos los datos faltantes en la hoja de cálculo, ya que <strong>tendremos que aplicar código adicional</strong> en el comando de importación de R <strong>para que estos casos queden correctamente recogidos como <em>NAs</em></strong> (<em>not available</em>).</p>
+<p>Cerraremos el archivo de Microsoft® Excel®, “eolica_100_mv.xlsx” y volveremos a RStudio. Después, abriremos nuestro <em>script</em> “explora_describe.R” con <code>File → Open File…</code> Este <em>script</em> contiene el programa que vamos a ir ejecutando en la práctica.</p>
+<p>La primera línea / instrucción en el <em>script</em> es:</p>
+<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb179-1"><a href="análisis-previo-de-datos..html#cb179-1" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span></code></pre></div>
+<p>La instrucción tiene como objeto limpiar el <em>Environment</em> (memoria) de objetos de anteriores sesiones de trabajo. Para importar los datos que hay en la hoja “Datos” del archivo de Microsoft® Excel® llamado “eolica_100_mv.xlsx”, ejecutaremos el código:</p>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb180-1"><a href="análisis-previo-de-datos..html#cb180-1" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb180-2"><a href="análisis-previo-de-datos..html#cb180-2" tabindex="-1"></a>eolica_100 <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;eolica_100_mv.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;Datos&quot;</span>,</span>
+<span id="cb180-3"><a href="análisis-previo-de-datos..html#cb180-3" tabindex="-1"></a>                         <span class="at">na =</span> <span class="fu">c</span>(<span class="st">&quot;n.d.&quot;</span>, <span class="st">&quot;s.d.&quot;</span>))</span>
+<span id="cb180-4"><a href="análisis-previo-de-datos..html#cb180-4" tabindex="-1"></a><span class="fu">summary</span> (eolica_100)</span></code></pre></div>
+<pre><code>##     NOMBRE               RES               ACTIVO             FPIOS        
+##  Length:100         Min.   : -5661.5   Min.   :   24944   Min.   : -77533  
+##  Class :character   1st Qu.:   669.5   1st Qu.:   34547   1st Qu.:   2305  
+##  Mode  :character   Median :  2084.5   Median :   46950   Median :  11936  
+##                     Mean   : 11529.8   Mean   :  277270   Mean   : 123743  
+##                     3rd Qu.:  3806.7   3rd Qu.:   85610   3rd Qu.:  28292  
+##                     Max.   :727548.0   Max.   :13492812   Max.   :6904824  
+##                     NA&#39;s   :1          NA&#39;s   :1                           
+## 
+##      RENECO           RENFIN            LIQUIDEZ           ENDEUDA       
+##  Min.   :-2.813   Min.   :-359.773   Min.   :  0.0140   Min.   :  0.917  
+##  1st Qu.: 1.558   1st Qu.:   2.556   1st Qu.:  0.6567   1st Qu.: 50.852  
+##  Median : 4.236   Median :  15.326   Median :  1.0650   Median : 83.346  
+##  Mean   : 5.416   Mean   :  17.243   Mean   :  2.7214   Mean   : 72.227  
+##  3rd Qu.: 7.970   3rd Qu.:  31.307   3rd Qu.:  1.6078   3rd Qu.: 95.388  
+##  Max.   :35.262   Max.   : 588.190   Max.   :128.4330   Max.   :140.745  
+##  NA&#39;s   :2                                              NA&#39;s   :2        
+## 
+##      MARGEN            SOLVENCIA         APALANCA           MATRIZ         
+##  Min.   :-2248.157   Min.   :-40.74   Min.   :-8254.11   Length:100        
+##  1st Qu.:   12.316   1st Qu.:  4.71   1st Qu.:   16.13   Class :character  
+##  Median :   26.618   Median : 16.65   Median :  161.97   Mode  :character  
+##  Mean   :    3.228   Mean   : 27.57   Mean   :  345.03                     
+##  3rd Qu.:   39.590   3rd Qu.: 45.59   3rd Qu.:  623.13                     
+##  Max.   :  400.899   Max.   : 99.08   Max.   :12244.35                     
+##  NA&#39;s   :2                                                                 
+## 
+##   DIMENSION        
+##  Length:100        
+##  Class :character  
+##  Mode  :character</code></pre>
+<p>Por defecto, R considera las celdas en blanco de la hoja de cálculo como NAs; pero hemos de advertirle del resto de posibilidades que existen en la hoja para comunicar que falta un dato determinado, como ya se ha comentado. Para ello, hemos añadido en la función <code>read_excel()</code> el argumento <code>na =</code>, que recoge los contenidos de celda de la hoja de cálculo que indican que falta el dato en cuestión.</p>
+<p>Por otro lado, R ha considerado la primera columna como una variable de tipo cualitativo, atributo, o factor. En realidad, esta columna no es una variable, sino que está formada por los nombres de los diferentes casos u observaciones. Para evitar que R tome la columna de los nombres de los casos como una variable más, podemos redefinir nuestro <em>data frame</em> diciéndole que tome esa primera columna como el conjunto de los <em>nombres</em> de los casos:</p>
+<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb182-1"><a href="análisis-previo-de-datos..html#cb182-1" tabindex="-1"></a>eolica_100 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(eolica_100, <span class="at">row.names =</span> <span class="dv">1</span>)</span>
+<span id="cb182-2"><a href="análisis-previo-de-datos..html#cb182-2" tabindex="-1"></a><span class="fu">summary</span> (eolica_100)</span></code></pre></div>
+<pre><code>##       RES               ACTIVO             FPIOS             RENECO      
+##  Min.   : -5661.5   Min.   :   24944   Min.   : -77533   Min.   :-2.813  
+##  1st Qu.:   669.5   1st Qu.:   34547   1st Qu.:   2305   1st Qu.: 1.558  
+##  Median :  2084.5   Median :   46950   Median :  11936   Median : 4.236  
+##  Mean   : 11529.8   Mean   :  277270   Mean   : 123743   Mean   : 5.416  
+##  3rd Qu.:  3806.7   3rd Qu.:   85610   3rd Qu.:  28292   3rd Qu.: 7.970  
+##  Max.   :727548.0   Max.   :13492812   Max.   :6904824   Max.   :35.262  
+##  NA&#39;s   :1          NA&#39;s   :1                            NA&#39;s   :2       
+## 
+##      RENFIN            LIQUIDEZ           ENDEUDA            MARGEN         
+##  Min.   :-359.773   Min.   :  0.0140   Min.   :  0.917   Min.   :-2248.157  
+##  1st Qu.:   2.556   1st Qu.:  0.6567   1st Qu.: 50.852   1st Qu.:   12.316  
+##  Median :  15.326   Median :  1.0650   Median : 83.346   Median :   26.618  
+##  Mean   :  17.243   Mean   :  2.7214   Mean   : 72.227   Mean   :    3.228  
+##  3rd Qu.:  31.307   3rd Qu.:  1.6078   3rd Qu.: 95.388   3rd Qu.:   39.590  
+##  Max.   : 588.190   Max.   :128.4330   Max.   :140.745   Max.   :  400.899  
+##                                        NA&#39;s   :2         NA&#39;s   :2          
+## 
+##    SOLVENCIA         APALANCA           MATRIZ           DIMENSION        
+##  Min.   :-40.74   Min.   :-8254.11   Length:100         Length:100        
+##  1st Qu.:  4.71   1st Qu.:   16.13   Class :character   Class :character  
+##  Median : 16.65   Median :  161.97   Mode  :character   Mode  :character  
+##  Mean   : 27.57   Mean   :  345.03                                        
+##  3rd Qu.: 45.59   3rd Qu.:  623.13                                        
+##  Max.   : 99.08   Max.   :12244.35</code></pre>
+<p>Observaremos que ya no aparece NOMBRE, puesto que la columna correspondiente ya no es considerada como una variable.</p>
+</div>
+<div id="análisis-de-una-variable." class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Análisis de una variable.<a href="análisis-previo-de-datos..html#análisis-de-una-variable." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="buscando-missing-values-y-outliers." class="section level3 hasAnchor" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Buscando <em>missing values</em> y <em>outliers</em>.<a href="análisis-previo-de-datos..html#buscando-missing-values-y-outliers." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Vamos a suponer que la variable que queremos estudiar es la variable <em>Rentabilidad Económica</em> (RENECO).</p>
+<p>La primera acción que debe realizarse es comprobar que todos los casos (empresas) tienen su correspondiente dato o valor para la variable (RENECO), es decir, que no existen <strong>valores perdidos o <em>missing values</em></strong>.</p>
+<p>Para tener una idea general, se puede utilizar la función <code>vis_miss()</code> del paquete <code>{visdat}</code>, que nos localizará gráficamente los <em>missing values</em> de las diferentes variables, y calculará el porcentaje de casos que supone, con respecto al total de observaciones:</p>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb184-1"><a href="análisis-previo-de-datos..html#cb184-1" tabindex="-1"></a><span class="fu">library</span>(visdat)</span>
+<span id="cb184-2"><a href="análisis-previo-de-datos..html#cb184-2" tabindex="-1"></a><span class="fu">vis_miss</span>(eolica_100)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-144-1.png" width="672" /></p>
+<p>Puede observarse cómo, en el caso concreto de la variable RENECO, un 2% de los casos no tienen dato (es decir, 2 casos de los 100). Para localizar los casos concretos, puede recurrirse a utilizar las herramientas de manejo de <em>data frames</em> del paquete <code>{dplyr}</code>. En concreto, realizaremos una copia del <em>data frame</em> original, “eolica_100”, a la que llamaremos “muestra”, que es con la que trabajaremos (para mantener la integridad del <em>data frame</em> original); y filtraremos los casos para detectar aquellos que carecen de valor en la variable RENECO:</p>
+<div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb185-1"><a href="análisis-previo-de-datos..html#cb185-1" tabindex="-1"></a><span class="fu">library</span> (dplyr)</span>
+<span id="cb185-2"><a href="análisis-previo-de-datos..html#cb185-2" tabindex="-1"></a>muestra<span class="ot">&lt;-</span> <span class="fu">select</span>(eolica_100, <span class="fu">everything</span>())</span>
+<span id="cb185-3"><a href="análisis-previo-de-datos..html#cb185-3" tabindex="-1"></a>muestra <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">is.na</span>(RENECO)) <span class="sc">%&gt;%</span> <span class="fu">select</span>(RENECO)</span></code></pre></div>
+<p>La función <code>is.na()</code> comprueba si, en la posición correspondiente a una fila o caso, para la variable escrita en el argumento; hay o no un dato o valor. Como resultado se obtienen dos empresas, para las que se puede comprobar que no hay valor para la variable RENECO:</p>
+<pre><code>##                       RENECO
+## Viesgo Renovables SL.     NA
+## Sargon Energias SLU       NA</code></pre>
+<p>Ante la existencia de <em>missing values</em>, se puede actuar de varios modos. Por ejemplo, se puede intentar obtener por otro canal de información el conjunto de valores de RENECO que no están disponibles, o recurrir a alguna estimación para los mismos y asignarlos. En caso de que esto sea difícil, se puede optar, simplemente, por eliminar estos casos, en especial cuando representan un porcentaje muy reducido respecto al total de casos. En nuestro ejemplo, vamos a suponer que hemos optado por esta última vía, al no conseguir unos valores más o menos verosímiles de RENECO para las empresas de las que se carece de dato. Esta <strong>eliminación de casos</strong> se podrá realizar mediante el código:</p>
+<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb187-1"><a href="análisis-previo-de-datos..html#cb187-1" tabindex="-1"></a>muestra <span class="ot">&lt;-</span> muestra <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span> <span class="fu">is.na</span>(RENECO))</span></code></pre></div>
+<p>El operador <strong><code>!</code></strong> significa “no”.</p>
+<p>Podemos comprobar cómo en el <em>Global Environment</em> aparece el <em>data frame</em> “muestra” con dos casos menos (98):</p>
+<div class="float">
+<img src="figuras/Imagen4_01.png" width="500" alt="Global Environment." />
+<div class="figcaption">Global Environment.</div>
+</div>
+<p>Una vez tratados los casos con valores perdidos o <em>missing values</em>, <strong>conviene detectar la posible presencia en la muestra de <em>outliers</em></strong> o casos atípicos, que pudieran desvirtuar los resultados derivados de ciertos análisis. Al trabajar con una sola variable métrica (la rentabilidad económica, RENECO), podemos intentar realizar esta tarea <strong>representando gráficamente</strong> la variable mediante un <strong><em>boxplot</em></strong> o <em>gráfico de caja</em>. Aplicaremos, por ejemplo, el código siguiente, que utiliza la gramática del paquete <code>{ggplot2}</code>:</p>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="análisis-previo-de-datos..html#cb188-1" tabindex="-1"></a><span class="fu">library</span> (ggplot2)</span>
+<span id="cb188-2"><a href="análisis-previo-de-datos..html#cb188-2" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> muestra, <span class="at">map =</span> (<span class="fu">aes</span>(<span class="at">y =</span> RENECO))) <span class="sc">+</span></span>
+<span id="cb188-3"><a href="análisis-previo-de-datos..html#cb188-3" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;orange&quot;</span>) <span class="sc">+</span></span>
+<span id="cb188-4"><a href="análisis-previo-de-datos..html#cb188-4" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">&quot;RENTABILIDAD ECONÓMICA&quot;</span>, <span class="at">subtitle =</span> <span class="st">&quot;Empresas eólicas&quot;</span>) <span class="sc">+</span></span>
+<span id="cb188-5"><a href="análisis-previo-de-datos..html#cb188-5" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">&quot;Rentabilidad Económica (%)&quot;</span>)</span></code></pre></div>
+<p>Obteniéndose el gráfico:</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-149-1.png" width="672" /></p>
+<p>La “caja” contiene el 50% de los valores de la variable que toman los casos centrales (los que van del primer cuartil al tercero, cuya diferencia se llama <em>rango intercuartílico</em>), y contiene una línea horizontal que es la mediana (segundo cuartil). Por arriba sobresale un segmento que llega al mayor valor de la variable que toma algún caso y que no llega a ser atípico; y por debajo de la caja otro segmento que llega al menor valor de la variable que toma algún caso y que no llega a ser atípico. Los casos atípicos o outliers son aquellos que toman valores que se alejan más de 1.5 veces del rango intercuartílico (altura de la caja) del tercer cuartil, por arriba; o del primer cuartil, por abajo. Se registran mediante puntos.</p>
+<p>En nuestro caso, el <em>boxplot</em> ratifica la existencia de dos casos atípicos. Para identificar esos dos casos concretos, podemos recurrir al paquete <code>{dplyr}</code>, y <strong>establecer un filtro</strong> con el siguiente código:</p>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="análisis-previo-de-datos..html#cb189-1" tabindex="-1"></a>Q1 <span class="ot">&lt;-</span> <span class="fu">quantile</span> (muestra<span class="sc">$</span>RENECO, <span class="fu">c</span>(<span class="fl">0.25</span>))</span>
+<span id="cb189-2"><a href="análisis-previo-de-datos..html#cb189-2" tabindex="-1"></a>Q3 <span class="ot">&lt;-</span> <span class="fu">quantile</span> (muestra<span class="sc">$</span>RENECO, <span class="fu">c</span>(<span class="fl">0.75</span>))</span>
+<span id="cb189-3"><a href="análisis-previo-de-datos..html#cb189-3" tabindex="-1"></a>muestra <span class="sc">%&gt;%</span> </span>
+<span id="cb189-4"><a href="análisis-previo-de-datos..html#cb189-4" tabindex="-1"></a>        <span class="fu">filter</span>(RENECO <span class="sc">&gt;</span> Q3 <span class="sc">+</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(RENECO) <span class="sc">|</span> RENECO <span class="sc">&lt;</span> Q1 <span class="sc">-</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(RENECO)) <span class="sc">%&gt;%</span></span>
+<span id="cb189-5"><a href="análisis-previo-de-datos..html#cb189-5" tabindex="-1"></a>        <span class="fu">select</span>(RENECO)</span></code></pre></div>
+<p>En el código anterior, las dos primeras filas calculan los cuartiles primero (Q1) y tercero (Q3) mediante la función <code>quantile()</code>. En esta función, es preciso poner como segundo argumento la proporción de casos que van a quedar por debajo del “cuantil” en cuestión (por ejemplo, el primer cuartil se calcula poniendo 0.25, dado que deja por debajo al 25% de casos con menor valor en la variable). Luego se filtran los <em>outliers</em> mediante la función <code>filter()</code> de <code>{dplyr}</code> , calculados como aquellos casos con valores de RENECO mayores que Q3 más 1,5 veces el rango intercuartílico de la variable; o menores que Q1 menos 1,5 veces dicho rango intercuartílico. Para calcular el rango intercuartílico se recurre a la función <code>IQR()</code>. Finalmente, con <code>select()</code>, se muestran los casos en la consola de R-Studio:</p>
+<pre><code>##                     RENECO
+## Molinos Del Ebro SA 35.262
+## Sierra De Selva SL  21.761</code></pre>
+<p>Como ocurría con los <em>missing values</em>, el tratamiento de los <em>outliers</em> depende de la información que se tenga, existiendo varias alternativas (corrección del dato, estimación, etc.) Si no se tiene información fiable, y los <em>outliers</em> no representan una gran proporción respecto al total de casos, puede optarse por su eliminación de la muestra. En este ejemplo, efectivamente, <strong>eliminaremos estas dos empresas con comportamiento atípico</strong> en la rentabilidad económica (RENECO), a fin de que su presencia en la muestra <strong>no</strong> <strong>distorsione los resultados en la aplicación posterior de ciertas técnicas</strong> (por ejemplo, un ANOVA o un análisis de regresión). Podemos hacerlo creando un nuevo <em>data frame</em> a partir de “muestra”; pero sin esos dos casos. Ese nuevo <em>data frame</em> se llamará, por ejemplo, “muestra_so”:</p>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="análisis-previo-de-datos..html#cb191-1" tabindex="-1"></a>muestra_so <span class="ot">&lt;-</span> muestra <span class="sc">%&gt;%</span></span>
+<span id="cb191-2"><a href="análisis-previo-de-datos..html#cb191-2" tabindex="-1"></a>            <span class="fu">filter</span>(RENECO <span class="sc">&lt;=</span> Q3 <span class="sc">+</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(RENECO) <span class="sc">&amp;</span> RENECO <span class="sc">&gt;=</span> Q1 <span class="sc">-</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(RENECO))</span></code></pre></div>
+<p>Es importante observar que, en el código de la función <code>filter()</code>, las desigualdades deben cambiar, así como el operador “<strong>|</strong>” por el operador “<strong>&amp;</strong>”. En el <em>Global Environment</em> podemos comprobar cómo el <em>data frame</em> “muestra_so” posee el mismo número de variables que el <em>data frame</em> “muestra”; pero con dos observaciones o casos menos (96).</p>
+</div>
+<div id="descripción-de-una-variable." class="section level3 hasAnchor" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> Descripción de una variable.<a href="análisis-previo-de-datos..html#descripción-de-una-variable." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Una vez que se tiene preparada la base de datos, con un tratamiento adecuado de los <em>missing values</em> y de los <em>outliers,</em> y <strong>antes</strong> de proceder a la aplicación de una técnica adecuada según los objetivos perseguidos en el estudio; suelen presentarse una serie de <strong>gráficos</strong> básicos y <strong>medidas</strong> descriptivas que proporcionan una <strong>idea inicial de la estructura</strong> del sector para la variable o variables analizadas. Nos referimos a medidas y/o gráficos de posición, dispersión y forma (asimetría y curtosis).</p>
+<p>Antes de ello, se puede presentar una tabla donde se recoja la distribución de frecuencias de la variable. Si son muchos los casos (en el ejemplo, 96), la distribución podría presentarse agrupada en intervalos, como ya se vio en el capítulo 4 de este libro. De este modo, el código para generar la tabla podría ser:</p>
+<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="análisis-previo-de-datos..html#cb192-1" tabindex="-1"></a><span class="co"># Tabla de datos (distribución de frecuencias agrupadas en intervalos)</span></span>
+<span id="cb192-2"><a href="análisis-previo-de-datos..html#cb192-2" tabindex="-1"></a></span>
+<span id="cb192-3"><a href="análisis-previo-de-datos..html#cb192-3" tabindex="-1"></a><span class="fu">library</span> (knitr)</span>
+<span id="cb192-4"><a href="análisis-previo-de-datos..html#cb192-4" tabindex="-1"></a><span class="fu">library</span> (kableExtra)</span>
+<span id="cb192-5"><a href="análisis-previo-de-datos..html#cb192-5" tabindex="-1"></a>muestra_so <span class="ot">&lt;-</span> muestra_so <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(RENECO, <span class="fu">row.names</span>(muestra_so))</span>
+<span id="cb192-6"><a href="análisis-previo-de-datos..html#cb192-6" tabindex="-1"></a></span>
+<span id="cb192-7"><a href="análisis-previo-de-datos..html#cb192-7" tabindex="-1"></a><span class="co"># Crear los intervalos</span></span>
+<span id="cb192-8"><a href="análisis-previo-de-datos..html#cb192-8" tabindex="-1"></a>muestra_so<span class="sc">$</span>intervalos <span class="ot">&lt;-</span> <span class="fu">cut</span>(muestra_so<span class="sc">$</span>RENECO, <span class="at">breaks =</span> <span class="dv">5</span>, <span class="at">include.lowest =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb192-9"><a href="análisis-previo-de-datos..html#cb192-9" tabindex="-1"></a></span>
+<span id="cb192-10"><a href="análisis-previo-de-datos..html#cb192-10" tabindex="-1"></a><span class="co"># Contar las frecuencias de cada intervalo</span></span>
+<span id="cb192-11"><a href="análisis-previo-de-datos..html#cb192-11" tabindex="-1"></a>conteo_intervalos <span class="ot">&lt;-</span> <span class="fu">table</span>(muestra_so<span class="sc">$</span>intervalos)</span>
+<span id="cb192-12"><a href="análisis-previo-de-datos..html#cb192-12" tabindex="-1"></a></span>
+<span id="cb192-13"><a href="análisis-previo-de-datos..html#cb192-13" tabindex="-1"></a><span class="co"># Convertir el resultado a un data frame para una mejor visualización</span></span>
+<span id="cb192-14"><a href="análisis-previo-de-datos..html#cb192-14" tabindex="-1"></a>conteo_intervalos_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(conteo_intervalos)</span>
+<span id="cb192-15"><a href="análisis-previo-de-datos..html#cb192-15" tabindex="-1"></a></span>
+<span id="cb192-16"><a href="análisis-previo-de-datos..html#cb192-16" tabindex="-1"></a><span class="co"># Renombrar las columnas para mayor claridad</span></span>
+<span id="cb192-17"><a href="análisis-previo-de-datos..html#cb192-17" tabindex="-1"></a><span class="fu">colnames</span>(conteo_intervalos_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Intervalo&quot;</span>, <span class="st">&quot;Frecuencia&quot;</span>)</span>
+<span id="cb192-18"><a href="análisis-previo-de-datos..html#cb192-18" tabindex="-1"></a></span>
+<span id="cb192-19"><a href="análisis-previo-de-datos..html#cb192-19" tabindex="-1"></a><span class="co"># Calcular y guardar la frecuencia total</span></span>
+<span id="cb192-20"><a href="análisis-previo-de-datos..html#cb192-20" tabindex="-1"></a>N_agre <span class="ot">&lt;-</span> <span class="fu">sum</span>(conteo_intervalos_df<span class="sc">$</span>Frecuencia)</span>
+<span id="cb192-21"><a href="análisis-previo-de-datos..html#cb192-21" tabindex="-1"></a></span>
+<span id="cb192-22"><a href="análisis-previo-de-datos..html#cb192-22" tabindex="-1"></a><span class="co"># Calcular frecuencias absolutas acumuladas</span></span>
+<span id="cb192-23"><a href="análisis-previo-de-datos..html#cb192-23" tabindex="-1"></a>conteo_intervalos_df<span class="sc">$</span>Frecuencia_acum <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(conteo_intervalos_df<span class="sc">$</span>Frecuencia)</span>
+<span id="cb192-24"><a href="análisis-previo-de-datos..html#cb192-24" tabindex="-1"></a></span>
+<span id="cb192-25"><a href="análisis-previo-de-datos..html#cb192-25" tabindex="-1"></a><span class="co"># Calcular frecuencias relativas</span></span>
+<span id="cb192-26"><a href="análisis-previo-de-datos..html#cb192-26" tabindex="-1"></a>conteo_intervalos_df<span class="sc">$</span>Frecuencia_R <span class="ot">&lt;-</span> conteo_intervalos_df<span class="sc">$</span>Frecuencia <span class="sc">/</span> N_agre</span>
+<span id="cb192-27"><a href="análisis-previo-de-datos..html#cb192-27" tabindex="-1"></a></span>
+<span id="cb192-28"><a href="análisis-previo-de-datos..html#cb192-28" tabindex="-1"></a><span class="co"># Calcular frecuencias relativas acumuladas</span></span>
+<span id="cb192-29"><a href="análisis-previo-de-datos..html#cb192-29" tabindex="-1"></a>conteo_intervalos_df<span class="sc">$</span>Frecuencia_R_acum <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(conteo_intervalos_df<span class="sc">$</span>Frecuencia_R)</span>
+<span id="cb192-30"><a href="análisis-previo-de-datos..html#cb192-30" tabindex="-1"></a></span>
+<span id="cb192-31"><a href="análisis-previo-de-datos..html#cb192-31" tabindex="-1"></a><span class="co"># Mostrar el resultado</span></span>
+<span id="cb192-32"><a href="análisis-previo-de-datos..html#cb192-32" tabindex="-1"></a>conteo_intervalos_df <span class="sc">%&gt;%</span></span>
+<span id="cb192-33"><a href="análisis-previo-de-datos..html#cb192-33" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Distribución de frecuencias agrupadas en intervalos de la Rentabilidad Económica&quot;</span>,</span>
+<span id="cb192-34"><a href="análisis-previo-de-datos..html#cb192-34" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Intervalo rentabilidad&quot;</span>, <span class="st">&quot;Frecuencia absoluta n(i)&quot;</span>,</span>
+<span id="cb192-35"><a href="análisis-previo-de-datos..html#cb192-35" tabindex="-1"></a>                      <span class="st">&quot;Frecuencia absoluta acum. N(i)&quot;</span>, <span class="st">&quot;Frecuencia relativa f(i)&quot;</span>,</span>
+<span id="cb192-36"><a href="análisis-previo-de-datos..html#cb192-36" tabindex="-1"></a>                      <span class="st">&quot;Frecuencia relativa acum. F(i)&quot;</span>),</span>
+<span id="cb192-37"><a href="análisis-previo-de-datos..html#cb192-37" tabindex="-1"></a>        <span class="at">format.args =</span> <span class="fu">list</span>(<span class="at">decimal.mark =</span> <span class="st">&quot;.&quot;</span>, <span class="at">digits =</span> <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb192-38"><a href="análisis-previo-de-datos..html#cb192-38" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F, <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>,</span>
+<span id="cb192-39"><a href="análisis-previo-de-datos..html#cb192-39" tabindex="-1"></a>                <span class="st">&quot;bordered&quot;</span>, <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb192-40"><a href="análisis-previo-de-datos..html#cb192-40" tabindex="-1"></a>                <span class="at">position =</span> <span class="st">&quot;center&quot;</span>, <span class="at">font_size =</span> <span class="dv">11</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb192-41"><a href="análisis-previo-de-datos..html#cb192-41" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold=</span> T, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb192-42"><a href="análisis-previo-de-datos..html#cb192-42" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(conteo_intervalos_df)), <span class="at">bold=</span> F, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>)</span></code></pre></div>
+<table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-156">Table 5.1: </span><span id="tab:unnamed-chunk-156">Table 5.2: </span>Distribución de frecuencias agrupadas en intervalos de la Rentabilidad Económica
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Intervalo rentabilidad
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Frecuencia absoluta n(i)
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Frecuencia absoluta acum. N(i)
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Frecuencia relativa f(i)
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Frecuencia relativa acum. F(i)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;">
+[-2.83,0.926]
+</td>
+<td style="text-align:right;text-align: center;">
+16
+</td>
+<td style="text-align:right;text-align: center;">
+16
+</td>
+<td style="text-align:right;text-align: center;">
+0.17
+</td>
+<td style="text-align:right;text-align: center;">
+0.17
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+(0.926,4.66]
+</td>
+<td style="text-align:right;text-align: center;">
+38
+</td>
+<td style="text-align:right;text-align: center;">
+54
+</td>
+<td style="text-align:right;text-align: center;">
+0.40
+</td>
+<td style="text-align:right;text-align: center;">
+0.56
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+(4.66,8.4]
+</td>
+<td style="text-align:right;text-align: center;">
+21
+</td>
+<td style="text-align:right;text-align: center;">
+75
+</td>
+<td style="text-align:right;text-align: center;">
+0.22
+</td>
+<td style="text-align:right;text-align: center;">
+0.78
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+(8.4,12.1]
+</td>
+<td style="text-align:right;text-align: center;">
+11
+</td>
+<td style="text-align:right;text-align: center;">
+86
+</td>
+<td style="text-align:right;text-align: center;">
+0.11
+</td>
+<td style="text-align:right;text-align: center;">
+0.90
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+(12.1,15.9]
+</td>
+<td style="text-align:right;text-align: center;">
+10
+</td>
+<td style="text-align:right;text-align: center;">
+96
+</td>
+<td style="text-align:right;text-align: center;">
+0.10
+</td>
+<td style="text-align:right;text-align: center;">
+1.00
+</td>
+</tr>
+</tbody>
+</table>
+<p>El <strong>análisis gráfico</strong> suele dar una idea atractiva e intuitiva de la estructura de la distribución de frecuencias de nuestro conjunto de casos en relación con la variable a analizar. Un gráfico fundamental es el <strong>histograma</strong> de la variable estudiada. Para ello, utilizaremos la gramática del paquete <code>{ggplot2}</code>:</p>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="análisis-previo-de-datos..html#cb193-1" tabindex="-1"></a><span class="do">## Descriptivos básicos</span></span>
+<span id="cb193-2"><a href="análisis-previo-de-datos..html#cb193-2" tabindex="-1"></a></span>
+<span id="cb193-3"><a href="análisis-previo-de-datos..html#cb193-3" tabindex="-1"></a><span class="co"># Gráficos básicos</span></span>
+<span id="cb193-4"><a href="análisis-previo-de-datos..html#cb193-4" tabindex="-1"></a></span>
+<span id="cb193-5"><a href="análisis-previo-de-datos..html#cb193-5" tabindex="-1"></a>g1 <span class="ot">&lt;-</span></span>
+<span id="cb193-6"><a href="análisis-previo-de-datos..html#cb193-6" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> muestra_so, <span class="at">map =</span> <span class="fu">aes</span>(<span class="at">x =</span> RENECO)) <span class="sc">+</span></span>
+<span id="cb193-7"><a href="análisis-previo-de-datos..html#cb193-7" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">40</span>,</span>
+<span id="cb193-8"><a href="análisis-previo-de-datos..html#cb193-8" tabindex="-1"></a>                 <span class="at">colour =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb193-9"><a href="análisis-previo-de-datos..html#cb193-9" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;orange&quot;</span>,</span>
+<span id="cb193-10"><a href="análisis-previo-de-datos..html#cb193-10" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb193-11"><a href="análisis-previo-de-datos..html#cb193-11" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(muestra_so<span class="sc">$</span>RENECO),</span>
+<span id="cb193-12"><a href="análisis-previo-de-datos..html#cb193-12" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;dark blue&quot;</span>,</span>
+<span id="cb193-13"><a href="análisis-previo-de-datos..html#cb193-13" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">1.2</span>,</span>
+<span id="cb193-14"><a href="análisis-previo-de-datos..html#cb193-14" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb193-15"><a href="análisis-previo-de-datos..html#cb193-15" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Histograma&quot;</span>)<span class="sc">+</span></span>
+<span id="cb193-16"><a href="análisis-previo-de-datos..html#cb193-16" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Rentabilidad Económica (%)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb193-17"><a href="análisis-previo-de-datos..html#cb193-17" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Frecuencias&quot;</span>)</span>
+<span id="cb193-18"><a href="análisis-previo-de-datos..html#cb193-18" tabindex="-1"></a></span>
+<span id="cb193-19"><a href="análisis-previo-de-datos..html#cb193-19" tabindex="-1"></a>g1</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-157-1.png" width="672" /></p>
+<p>En el gráfico vemos de un modo bastante nítido la distribución de frecuencias en cuanto a la rentabilidad económica (RENECO). Se ha incorporado una línea vertical azul (mediante <code>geom_vline()</code>) para localizar la rentabilidad media. Entre otras cosas, se puede apreciar que la distribución de frecuencias es acampanada y <em>asimétrica positiva</em>.</p>
+<p>Como complemento al histograma, podemos realizar un gráfico de densidad de RENECO, al que añadiremos una curva normal con la misma media y desviación típica que nuestra distribución de frecuencias, y que se añade mediante <code>stat_function()</code> y el argumento <code>fun = dnorm</code>. Este gráfico representa la distribución de probabilidad empírica de la muestra, es una especie de histograma “suavizado”. De este modo, se podrán verificar de un modo fácil algunas de las características avanzadas con la observación del histograma, como la asimetría positiva. El código es:</p>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="análisis-previo-de-datos..html#cb194-1" tabindex="-1"></a>g2 <span class="ot">&lt;-</span></span>
+<span id="cb194-2"><a href="análisis-previo-de-datos..html#cb194-2" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> muestra_so, <span class="at">map =</span> <span class="fu">aes</span>(<span class="at">x =</span> RENECO)) <span class="sc">+</span></span>
+<span id="cb194-3"><a href="análisis-previo-de-datos..html#cb194-3" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">colour =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb194-4"><a href="análisis-previo-de-datos..html#cb194-4" tabindex="-1"></a>               <span class="at">fill =</span> <span class="st">&quot;orange&quot;</span>,</span>
+<span id="cb194-5"><a href="análisis-previo-de-datos..html#cb194-5" tabindex="-1"></a>               <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb194-6"><a href="análisis-previo-de-datos..html#cb194-6" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(muestra_so<span class="sc">$</span>RENECO),</span>
+<span id="cb194-7"><a href="análisis-previo-de-datos..html#cb194-7" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;dark blue&quot;</span>,</span>
+<span id="cb194-8"><a href="análisis-previo-de-datos..html#cb194-8" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.8</span>,</span>
+<span id="cb194-9"><a href="análisis-previo-de-datos..html#cb194-9" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb194-10"><a href="análisis-previo-de-datos..html#cb194-10" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="fu">mean</span>(muestra_so<span class="sc">$</span>RENECO),</span>
+<span id="cb194-11"><a href="análisis-previo-de-datos..html#cb194-11" tabindex="-1"></a>                                         <span class="at">sd =</span> <span class="fu">sd</span>(muestra_so<span class="sc">$</span>RENECO)),</span>
+<span id="cb194-12"><a href="análisis-previo-de-datos..html#cb194-12" tabindex="-1"></a>                                         <span class="at">geom =</span> <span class="st">&quot;area&quot;</span>, <span class="at">color =</span> <span class="st">&quot;darkblue&quot;</span>, </span>
+<span id="cb194-13"><a href="análisis-previo-de-datos..html#cb194-13" tabindex="-1"></a>                                         <span class="at">fill =</span> <span class="st">&quot;yellow&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb194-14"><a href="análisis-previo-de-datos..html#cb194-14" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Gráfico de densidad vs curva normal&quot;</span>)<span class="sc">+</span></span>
+<span id="cb194-15"><a href="análisis-previo-de-datos..html#cb194-15" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Rentabilidad Económica (%)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb194-16"><a href="análisis-previo-de-datos..html#cb194-16" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Densidad&quot;</span>)</span>
+<span id="cb194-17"><a href="análisis-previo-de-datos..html#cb194-17" tabindex="-1"></a></span>
+<span id="cb194-18"><a href="análisis-previo-de-datos..html#cb194-18" tabindex="-1"></a>g2</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-158-1.png" width="672" /></p>
+<p>Un tercer gráfico útil es el box-plot una vez se eliminaron los casos outliers, con la incorporación de los valores que toman los casos que componen la muestra, para lo cuál se utiliza el <code>geom_jitter</code>:</p>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="análisis-previo-de-datos..html#cb195-1" tabindex="-1"></a>g3 <span class="ot">&lt;-</span></span>
+<span id="cb195-2"><a href="análisis-previo-de-datos..html#cb195-2" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> muestra_so, <span class="at">map =</span> (<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> RENECO))) <span class="sc">+</span></span>
+<span id="cb195-3"><a href="análisis-previo-de-datos..html#cb195-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb195-4"><a href="análisis-previo-de-datos..html#cb195-4" tabindex="-1"></a>               <span class="at">fill =</span> <span class="st">&quot;orange&quot;</span>,</span>
+<span id="cb195-5"><a href="análisis-previo-de-datos..html#cb195-5" tabindex="-1"></a>               <span class="at">outlier.shape =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb195-6"><a href="análisis-previo-de-datos..html#cb195-6" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> <span class="st">&quot;mean&quot;</span>,</span>
+<span id="cb195-7"><a href="análisis-previo-de-datos..html#cb195-7" tabindex="-1"></a>               <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>,</span>
+<span id="cb195-8"><a href="análisis-previo-de-datos..html#cb195-8" tabindex="-1"></a>               <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb195-9"><a href="análisis-previo-de-datos..html#cb195-9" tabindex="-1"></a>               <span class="at">col =</span> <span class="st">&quot;darkblue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb195-10"><a href="análisis-previo-de-datos..html#cb195-10" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.1</span>,</span>
+<span id="cb195-11"><a href="análisis-previo-de-datos..html#cb195-11" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">1</span>,</span>
+<span id="cb195-12"><a href="análisis-previo-de-datos..html#cb195-12" tabindex="-1"></a>              <span class="at">col =</span> <span class="st">&quot;darkred&quot;</span>,</span>
+<span id="cb195-13"><a href="análisis-previo-de-datos..html#cb195-13" tabindex="-1"></a>              <span class="at">alpha =</span> <span class="fl">0.50</span>) <span class="sc">+</span></span>
+<span id="cb195-14"><a href="análisis-previo-de-datos..html#cb195-14" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Box-Plot&quot;</span>) <span class="sc">+</span></span>
+<span id="cb195-15"><a href="análisis-previo-de-datos..html#cb195-15" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Rentabilidad Económica (%)&quot;</span>)</span>
+<span id="cb195-16"><a href="análisis-previo-de-datos..html#cb195-16" tabindex="-1"></a></span>
+<span id="cb195-17"><a href="análisis-previo-de-datos..html#cb195-17" tabindex="-1"></a>g3</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-159-1.png" width="672" /></p>
+<p>Por otro lado, conviene tener conocimiento del valor de las principales <strong>medidas descriptivas</strong> (de posición, dispersión, forma) que caracterizan a la distribución de la variable a analizar. Para ello, vamos a crear un <em>data frame</em> llamado, por ejemplo, “estadisticos”, que recogerá las diferentes medidas, calculadas al aplicar a la variable RENECO del <em>data frame</em> “muestra_so” la función de <code>{deplyr}</code> llamada <code>summarise()</code>. Se calcularán la media, desviación típica, valor mínimo, mediana, valor máximo, el coeficiente de asimetría de Fisher, y el coeficiente de apuntamiento o curtosis de Fisher. Precisamente, para poder calcular esta última medida, es preciso activar el paquete <code>{moments}</code>, que contiene la función <code>kurtosis()</code>. La versión del coeficiente de apuntamiento de esta función dispone como distribución perfectamente mesocúrtica el valor de 3, por lo que se le restará 3 en la versión que manejaremos para que la distribución mesocúrtica se sitúe en un coeficiente de 0. El código es:</p>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="análisis-previo-de-datos..html#cb196-1" tabindex="-1"></a><span class="co"># Calcular estadísticos</span></span>
+<span id="cb196-2"><a href="análisis-previo-de-datos..html#cb196-2" tabindex="-1"></a></span>
+<span id="cb196-3"><a href="análisis-previo-de-datos..html#cb196-3" tabindex="-1"></a><span class="fu">library</span> (moments) <span class="co"># paquete necesario para calcular la curtosis.</span></span>
+<span id="cb196-4"><a href="análisis-previo-de-datos..html#cb196-4" tabindex="-1"></a></span>
+<span id="cb196-5"><a href="análisis-previo-de-datos..html#cb196-5" tabindex="-1"></a>estadisticos <span class="ot">&lt;-</span> muestra_so <span class="sc">%&gt;%</span> <span class="fu">summarise</span>( <span class="at">Media =</span> <span class="fu">mean</span>(RENECO),</span>
+<span id="cb196-6"><a href="análisis-previo-de-datos..html#cb196-6" tabindex="-1"></a>                                          <span class="at">DT =</span> <span class="fu">sd</span>(RENECO),</span>
+<span id="cb196-7"><a href="análisis-previo-de-datos..html#cb196-7" tabindex="-1"></a>                                          Mínimo <span class="ot">=</span> <span class="fu">min</span>(RENECO),</span>
+<span id="cb196-8"><a href="análisis-previo-de-datos..html#cb196-8" tabindex="-1"></a>                                          <span class="at">Mediana =</span> <span class="fu">median</span>(RENECO),</span>
+<span id="cb196-9"><a href="análisis-previo-de-datos..html#cb196-9" tabindex="-1"></a>                                          <span class="at">Maximo =</span> <span class="fu">max</span>(RENECO),</span>
+<span id="cb196-10"><a href="análisis-previo-de-datos..html#cb196-10" tabindex="-1"></a>                                          <span class="at">Asimetria =</span> <span class="fu">skewness</span>(RENECO),</span>
+<span id="cb196-11"><a href="análisis-previo-de-datos..html#cb196-11" tabindex="-1"></a>                                          <span class="at">Curtosis =</span> <span class="fu">kurtosis</span>(RENECO) <span class="sc">-</span> <span class="dv">3</span>)</span></code></pre></div>
+<p>La ventaja de volcar las medidas y estadísticos en el data frame (de un solo caso) “estadisticos” es que se pueden mostrar los valores en una tabla elegante generada a partir de el mismo mediante las funciones knitr() y kableExtra(), como ya sabemos:</p>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="análisis-previo-de-datos..html#cb197-1" tabindex="-1"></a><span class="co"># Mostrar estadisticos</span></span>
+<span id="cb197-2"><a href="análisis-previo-de-datos..html#cb197-2" tabindex="-1"></a></span>
+<span id="cb197-3"><a href="análisis-previo-de-datos..html#cb197-3" tabindex="-1"></a>estadisticos <span class="sc">%&gt;%</span></span>
+<span id="cb197-4"><a href="análisis-previo-de-datos..html#cb197-4" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Principales Estadísticos de la Rentabilidad Económica&quot;</span>,</span>
+<span id="cb197-5"><a href="análisis-previo-de-datos..html#cb197-5" tabindex="-1"></a>        <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Media&quot;</span>, <span class="st">&quot;Mediana&quot;</span>,</span>
+<span id="cb197-6"><a href="análisis-previo-de-datos..html#cb197-6" tabindex="-1"></a>                      <span class="st">&quot;Desviación Típica&quot;</span>, <span class="st">&quot;Valor mínimo&quot;</span>,</span>
+<span id="cb197-7"><a href="análisis-previo-de-datos..html#cb197-7" tabindex="-1"></a>                      <span class="st">&quot;Valor Máximo&quot;</span>, <span class="st">&quot;C. Asimetría Fisher&quot;</span>,</span>
+<span id="cb197-8"><a href="análisis-previo-de-datos..html#cb197-8" tabindex="-1"></a>                      <span class="st">&quot;C. Curtosis Fisher&quot;</span>),</span>
+<span id="cb197-9"><a href="análisis-previo-de-datos..html#cb197-9" tabindex="-1"></a>        <span class="at">format.args =</span> <span class="fu">list</span>(<span class="at">decimal.mark =</span> <span class="st">&quot;.&quot;</span>, <span class="at">digits =</span> <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb197-10"><a href="análisis-previo-de-datos..html#cb197-10" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F, <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>,</span>
+<span id="cb197-11"><a href="análisis-previo-de-datos..html#cb197-11" tabindex="-1"></a>                <span class="st">&quot;bordered&quot;</span>, <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb197-12"><a href="análisis-previo-de-datos..html#cb197-12" tabindex="-1"></a>                <span class="at">position =</span> <span class="st">&quot;center&quot;</span>, <span class="at">font_size =</span> <span class="dv">11</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb197-13"><a href="análisis-previo-de-datos..html#cb197-13" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold=</span> T, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb197-14"><a href="análisis-previo-de-datos..html#cb197-14" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(estadisticos)), <span class="at">bold=</span> F, <span class="at">align =</span> <span class="st">&quot;c&quot;</span>)</span></code></pre></div>
+<table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-162">Table 5.3: </span><span id="tab:unnamed-chunk-162">Table 5.4: </span>Principales Estadísticos de la Rentabilidad Económica
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Media
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Mediana
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Desviación Típica
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Valor mínimo
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Valor Máximo
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+C. Asimetría Fisher
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+C. Curtosis Fisher
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;text-align: center;">
+4.9
+</td>
+<td style="text-align:right;text-align: center;">
+4.3
+</td>
+<td style="text-align:right;text-align: center;">
+-2.8
+</td>
+<td style="text-align:right;text-align: center;">
+4.1
+</td>
+<td style="text-align:right;text-align: center;">
+16
+</td>
+<td style="text-align:right;text-align: center;">
+0.56
+</td>
+<td style="text-align:right;text-align: center;">
+-0.37
+</td>
+</tr>
+</tbody>
+</table>
+<p>La interpretación de estas medidas fueron comentadas en el capítulo 4.</p>
+</div>
+<div id="normalidad." class="section level3 hasAnchor" number="5.2.3">
+<h3><span class="header-section-number">5.2.3</span> Normalidad.<a href="análisis-previo-de-datos..html#normalidad." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En muchas técnicas multivariantes basadas en métodos inferenciales (por ejemplo, análisis de la varianza, o en la regresión lineal), se requiere que las variables sigan una <strong>distribución normal</strong>. Para comprobarlo, se puede a recurrir a análisis gráficos o a análisis formales, estos últimos basados en contrastar la hipótesis nula de normalidad.</p>
+<p>Vamos a mostrar un <strong>método gráfico</strong> muy extendido. Comprobaremos la normalidad de la variable RENECO mediante un <strong><em>gráfico qq</em></strong> (cuantil-cuantil), que compara los cuantiles de nuestra muestra con los de una distribución normal teórica (con la misma media y desviación típica). Si los puntos se sitúan cercanos a la diagonal, entonces se asumirá un comportamiento (aproximadamente) normal. El código para realizar el gráfico con las herramientas del paquete <code>{ggplot2}</code> es:</p>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="análisis-previo-de-datos..html#cb198-1" tabindex="-1"></a><span class="do">## Normalidad</span></span>
+<span id="cb198-2"><a href="análisis-previo-de-datos..html#cb198-2" tabindex="-1"></a></span>
+<span id="cb198-3"><a href="análisis-previo-de-datos..html#cb198-3" tabindex="-1"></a><span class="co"># Grafico QQ</span></span>
+<span id="cb198-4"><a href="análisis-previo-de-datos..html#cb198-4" tabindex="-1"></a></span>
+<span id="cb198-5"><a href="análisis-previo-de-datos..html#cb198-5" tabindex="-1"></a>g4 <span class="ot">&lt;-</span></span>
+<span id="cb198-6"><a href="análisis-previo-de-datos..html#cb198-6" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> muestra_so, <span class="fu">aes</span>(<span class="at">sample =</span> RENECO)) <span class="sc">+</span></span>
+<span id="cb198-7"><a href="análisis-previo-de-datos..html#cb198-7" tabindex="-1"></a>  <span class="fu">stat_qq</span>(<span class="at">colour =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb198-8"><a href="análisis-previo-de-datos..html#cb198-8" tabindex="-1"></a>  <span class="fu">stat_qq_line</span>(<span class="at">colour =</span> <span class="st">&quot;dark blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb198-9"><a href="análisis-previo-de-datos..html#cb198-9" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;QQ-Plot&quot;</span>)</span>
+<span id="cb198-10"><a href="análisis-previo-de-datos..html#cb198-10" tabindex="-1"></a></span>
+<span id="cb198-11"><a href="análisis-previo-de-datos..html#cb198-11" tabindex="-1"></a>g4</span></code></pre></div>
+<p>Y el resultado:</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-164-1.png" width="672" /></p>
+<p>A veces, es difícil obtener una conclusión sólida con el gráfico <em>qq</em>; aunque en el ejemplo se aprecia, sobre todo en los primeros puntos, una separación notable de estos con respecto a la línea, lo que induce a pensar en que podría <strong>no</strong> seguirse una distribución normal.</p>
+<p>Si queremos ser más precisos, en lugar de un análisis gráfico se puede recurrir a realizar un análisis formal, basado en la realización de <strong>contrastes de hipótesis</strong>. Una prueba muy usual es la <strong>prueba de normalidad de <em>Shapiro y Wilk</em></strong>, que tiene un buen comportamiento en muestras relativamente reducidas. En esta prueba, la hipótesis nula equivale al supuesto de normalidad. Para un 5% de significación estadística, un p-valor superior a 0.05 implicará el no-rechazo de la hipótesis de normalidad. Para realizar la prueba, se ejecutará el código:</p>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="análisis-previo-de-datos..html#cb199-1" tabindex="-1"></a><span class="co"># Prueba de Shapiro-Wilk</span></span>
+<span id="cb199-2"><a href="análisis-previo-de-datos..html#cb199-2" tabindex="-1"></a></span>
+<span id="cb199-3"><a href="análisis-previo-de-datos..html#cb199-3" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="at">x =</span> muestra_so<span class="sc">$</span>RENECO)</span></code></pre></div>
+<p>El resultado obtenido en la consola:</p>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  muestra_so$RENECO
+## W = 0.9605, p-value = 0.005523</code></pre>
+<p>Como el p-valor es (muy) inferior a 0.05, <strong>se rechaza la hipótesis nula de normalidad en la distribución</strong>, lo que implica que, para una significación estadística del 5%, admitimos que RENECO <strong>no</strong> sigue, para nuestra muestra, un comportamiento normal, como ya se anticipó con el gráfico <em>qq</em>.</p>
+</div>
+<div id="resumen-los-4-gráficos-básicos-en-la-descripción-de-una-variable." class="section level3 hasAnchor" number="5.2.4">
+<h3><span class="header-section-number">5.2.4</span> Resumen: los 4 gráficos básicos en la descripción de una variable.<a href="análisis-previo-de-datos..html#resumen-los-4-gráficos-básicos-en-la-descripción-de-una-variable." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En definitiva, para describir de un modo inicial una distribución de frecuencias de una variable (en escala métrica), podrían analizarse los 4 gráficos que se han comentado anteriormente. Estos gráficos se pueden presentar conjuntamente, para ahorrar espacio en un informe, utilizando el paquete <code>{patchwork}</code>, que permite combinar e integrar en una sola imagen varios gráficos generados con <code>{ggplot2}</code>. En nuestro ejemplo, vamos a generar una figura que integra los 4 gráficos anteriores (que hemos denominado “g1”, “g2”, “g3” y “g4”). Para ello creamos el objeto “resumen”, que integra los gráficos, mediante una asignación con la sintaxis del paquete <code>{patchwork}</code>: El operador <code>/</code> indica que los gráficos siguientes se dispondrán inmediatamente debajo; mientras que <code>|</code> indica que el gráfico siguiente se dispone al lado del anterior. Luego, se le añade también un título y un subtítulo:</p>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="análisis-previo-de-datos..html#cb201-1" tabindex="-1"></a><span class="do">## Resumen gráfico</span></span>
+<span id="cb201-2"><a href="análisis-previo-de-datos..html#cb201-2" tabindex="-1"></a></span>
+<span id="cb201-3"><a href="análisis-previo-de-datos..html#cb201-3" tabindex="-1"></a><span class="fu">library</span> (patchwork)</span>
+<span id="cb201-4"><a href="análisis-previo-de-datos..html#cb201-4" tabindex="-1"></a>resumen <span class="ot">&lt;-</span> (g1 <span class="sc">|</span> g2)<span class="sc">/</span>(g3 <span class="sc">|</span> g4)</span>
+<span id="cb201-5"><a href="análisis-previo-de-datos..html#cb201-5" tabindex="-1"></a>resumen <span class="ot">&lt;-</span> resumen <span class="sc">+</span> </span>
+<span id="cb201-6"><a href="análisis-previo-de-datos..html#cb201-6" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(</span>
+<span id="cb201-7"><a href="análisis-previo-de-datos..html#cb201-7" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Rentabilidad Económica&quot;</span>,</span>
+<span id="cb201-8"><a href="análisis-previo-de-datos..html#cb201-8" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Empresas eólicas (sin outliers)&quot;</span>)</span>
+<span id="cb201-9"><a href="análisis-previo-de-datos..html#cb201-9" tabindex="-1"></a>resumen</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-167-1.png" width="672" /></p>
+</div>
+</div>
+<div id="análisis-de-múltiples-variables." class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Análisis de múltiples variables.<a href="análisis-previo-de-datos..html#análisis-de-múltiples-variables." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Son muchas las técnicas aplicadas al análisis de datos económicos basadas en una distribución de frecuencias multivariante. En este apartado nos centraremos en el caso de <strong>variables métricas</strong>, ya que al caso de atributos, variables categóricas o factores; le dedicaremos un capítulo en exclusiva. Algunas técnicas multivariantes son el análisis de componentes principales, el análisis de regresión, el análisis clúster…</p>
+<p>Todas estas metodologías requieren, de nuevo, de una fase inicial que ponga a punto la base de datos y ofrezca una fotografía de cómo es la situación en cuanto a las variables en estudio. En este sentido, es conveniente aplicar, para cada variable por separado, algunos de los análisis gráficos básicos vistos anteriormente.</p>
+<p>A estos análisis básicos hay que añadir, principalmente, algún análisis previo adicional, destinado fundamentalmente a comprobar el <strong>grado de intensidad en la relación estadística</strong> entre las variables implicadas. Antes de abordar esta cuestión, hemos de pararnos en una casuística específica que se presenta cuando trabajamos con numerosas variables: la detección de casos atípicos o <em>outliers</em>.</p>
+<div id="localización-de-missing-values-y-outliers." class="section level3 hasAnchor" number="5.3.1">
+<h3><span class="header-section-number">5.3.1</span> Localización de <em>missing values</em> y <em>outliers</em>.<a href="análisis-previo-de-datos..html#localización-de-missing-values-y-outliers." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Para trabajar con múltiples variables, en primer lugar es preciso localizar los casos con <strong>valores perdidos o <em>missing values</em></strong>, para decidir cómo procesarlos (eliminación del caso, estimación del valor faltante, etc.)</p>
+<p>Vamos a imaginar que queremos realizar un análisis en el que tendremos en cuenta las variables RENECO (rentabilidad económica), ACTIVO (volumen de activos de la empresa), MARGEN (margen de beneficio) y RES (resultado del ejercicio).</p>
+<p>Ya vimos cómo el siguiente código nos aporta gráficamente una idea de la posible existencia de valores faltantes:</p>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="análisis-previo-de-datos..html#cb202-1" tabindex="-1"></a><span class="do">## Trabajando con multiples variables.</span></span>
+<span id="cb202-2"><a href="análisis-previo-de-datos..html#cb202-2" tabindex="-1"></a></span>
+<span id="cb202-3"><a href="análisis-previo-de-datos..html#cb202-3" tabindex="-1"></a><span class="co"># Localizando y descartando casos con missing values.</span></span>
+<span id="cb202-4"><a href="análisis-previo-de-datos..html#cb202-4" tabindex="-1"></a></span>
+<span id="cb202-5"><a href="análisis-previo-de-datos..html#cb202-5" tabindex="-1"></a><span class="fu">vis_miss</span>(eolica_100)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-168-1.png" width="672" /></p>
+<p>Podemos apreciar cómo existen varios casos con <em>missing values</em> en las variables objeto de estudio.</p>
+<p>Para localizar los <em>missing values</em>, podemos recurrir al siguiente código. En él, hacemos una copia del <em>data frame</em> original, “eolica_100”, para preservar su integridad. A esa copia la hemos llamado “muestra2”. Luego, hemos sometido a “muestra2” a un <em>filtro</em> para detectar los casos en los que no hay valor para alguna (o varias) de las variables analizadas. El operador <strong><code>|</code></strong> significa “o”. Posteriormente, hemos decidido eliminar esos casos. Para ello asignamos a “muestra2” el resultado de pasar un filtro en el que se eligen los casos que no tienen valores faltantes en ninguna de las variables. El operador <strong><code>&amp;</code></strong> significa “y”:</p>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="análisis-previo-de-datos..html#cb203-1" tabindex="-1"></a><span class="do">## Trabajando con multiples variables.</span></span>
+<span id="cb203-2"><a href="análisis-previo-de-datos..html#cb203-2" tabindex="-1"></a></span>
+<span id="cb203-3"><a href="análisis-previo-de-datos..html#cb203-3" tabindex="-1"></a><span class="co"># Localizando y descartando casos con missing values.</span></span>
+<span id="cb203-4"><a href="análisis-previo-de-datos..html#cb203-4" tabindex="-1"></a>muestra2<span class="ot">&lt;-</span> <span class="fu">select</span>(eolica_100, <span class="fu">everything</span>())</span>
+<span id="cb203-5"><a href="análisis-previo-de-datos..html#cb203-5" tabindex="-1"></a>muestra2 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">is.na</span>(RENECO) <span class="sc">|</span> <span class="fu">is.na</span>(ACTIVO) <span class="sc">|</span> <span class="fu">is.na</span>(MARGEN) <span class="sc">|</span> <span class="fu">is.na</span>(RES))<span class="sc">%&gt;%</span></span>
+<span id="cb203-6"><a href="análisis-previo-de-datos..html#cb203-6" tabindex="-1"></a>             <span class="fu">select</span>(RENECO, ACTIVO, MARGEN, RES)</span></code></pre></div>
+<pre><code>##                              RENECO    ACTIVO   MARGEN       RES
+## Viesgo Renovables SL.            NA 269730.00   11.818  4609.000
+## Biovent Energia SA            4.551 183899.00   22.792        NA
+## Sargon Energias SLU              NA  85745.00 -615.625 -2216.000
+## Parc Eolic Sant Antoni SL     1.361  69654.00       NA   668.000
+## Eolica La Brujula SA          7.295  42146.98       NA  2306.062
+## La Caldera Energia Burgos SL  2.643        NA   14.448   511.304</code></pre>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="análisis-previo-de-datos..html#cb205-1" tabindex="-1"></a>muestra2 <span class="ot">&lt;-</span> muestra2 <span class="sc">%&gt;%</span></span>
+<span id="cb205-2"><a href="análisis-previo-de-datos..html#cb205-2" tabindex="-1"></a>            <span class="fu">filter</span>(<span class="sc">!</span> <span class="fu">is.na</span>(RENECO) <span class="sc">&amp;</span> <span class="sc">!</span> <span class="fu">is.na</span>(ACTIVO) <span class="sc">&amp;</span> <span class="sc">!</span> <span class="fu">is.na</span>(MARGEN) <span class="sc">&amp;</span> <span class="sc">!</span> <span class="fu">is.na</span>(RES))</span></code></pre></div>
+<p>El <em>data frame</em> “muestra2” contiene los mismos datos que “eolica_100”, salvo los 6 casos con <em>missing values</em> (94).</p>
+<p>Para la <strong>detección de <em>outliers</em></strong>, si las variables que entran en el análisis son numerosas, podría ser poco operativo estudiar las variables una a una. Una alternativa consiste en calcular la <strong><em>distancia de Mahalanobis</em></strong> de las variables del estudio, como <strong>“resumen” del comportamiento de cada caso</strong> en todas las variables del análisis, consideradas conjuntamente.</p>
+<p>Así, primero vamos a calcular una columna más en el <em>data frame</em> “muestra2” con los valores de la <em>distancia de</em> <em>Mahalanobis</em> del conjunto de las 4 variables en cada uno de los casos (empresas eólicas). Esta columna o variable la denominaremos, por ejemplo, MAHALANOBIS<em>.</em> Para ello, se utiliza la función <code>mutate()</code> del paquete <code>{deplyr}</code>, y como argumento de esta la función <code>mahalanobis()</code>, en la que hay que especificar:</p>
+<ul>
+<li><p>Las columnas de “muestra2” para las que se van a calcular las distancias, unidas en una matriz interna con la función <code>cbind()</code>.</p></li>
+<li><p>El vector de medias de las variables para las que se calcula la distancia (argumento <code>center =</code>). Las variables, aquí, se recogen con la función <code>select()</code> de <code>{deplyr}</code>, en donde el punto significa que las columnas pertenecen al <em>data frame</em> al que se llamó con el operador <em>pipe</em> <code>%&gt;%</code>:</p></li>
+<li><p>La matriz de varianzas y covarianzas de las variables para las que se calcula la distancia (argumento <code>cov =</code>).</p></li>
+</ul>
+<p>En definitiva, el código es:</p>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="análisis-previo-de-datos..html#cb206-1" tabindex="-1"></a><span class="co"># Identificando y descartando outliers con distancia de Mahalanobis.</span></span>
+<span id="cb206-2"><a href="análisis-previo-de-datos..html#cb206-2" tabindex="-1"></a></span>
+<span id="cb206-3"><a href="análisis-previo-de-datos..html#cb206-3" tabindex="-1"></a>muestra2 <span class="ot">&lt;-</span> muestra2 <span class="sc">%&gt;%</span></span>
+<span id="cb206-4"><a href="análisis-previo-de-datos..html#cb206-4" tabindex="-1"></a>            <span class="fu">mutate</span> (<span class="at">MAHALANOBIS =</span> <span class="fu">mahalanobis</span>(<span class="fu">cbind</span>(RENECO, ACTIVO, MARGEN, RES),</span>
+<span id="cb206-5"><a href="análisis-previo-de-datos..html#cb206-5" tabindex="-1"></a>                      <span class="at">center =</span> <span class="fu">colMeans</span>(<span class="fu">select</span>(., RENECO, ACTIVO, MARGEN, RES)),</span>
+<span id="cb206-6"><a href="análisis-previo-de-datos..html#cb206-6" tabindex="-1"></a>                      <span class="at">cov =</span> <span class="fu">cov</span>(<span class="fu">select</span>(., RENECO, ACTIVO, MARGEN, RES))))</span></code></pre></div>
+<p>Posteriormente, se puede construir el diagrama de caja de la variable MAHALANOBIS, como cualquier otra variable:</p>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb207-1"><a href="análisis-previo-de-datos..html#cb207-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> muestra2, <span class="at">map =</span> (<span class="fu">aes</span>(<span class="at">y =</span> MAHALANOBIS))) <span class="sc">+</span></span>
+<span id="cb207-2"><a href="análisis-previo-de-datos..html#cb207-2" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;orange&quot;</span>) <span class="sc">+</span></span>
+<span id="cb207-3"><a href="análisis-previo-de-datos..html#cb207-3" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">&quot;DISTANCIA DE MAHALANOBIS&quot;</span>,</span>
+<span id="cb207-4"><a href="análisis-previo-de-datos..html#cb207-4" tabindex="-1"></a>            <span class="at">subtitle =</span> <span class="st">&quot;RENECO, ACTIVO, MARGEN, RES. Empresas eólicas &quot;</span>) <span class="sc">+</span></span>
+<span id="cb207-5"><a href="análisis-previo-de-datos..html#cb207-5" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">&quot;MAHALANOBIS&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-171-1.png" width="672" /></p>
+<p>Se observa cómo existen varios casos <em>outliers</em>. Para saber de qué casos concretos se trata, se podrá ejecutar el código:</p>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="análisis-previo-de-datos..html#cb208-1" tabindex="-1"></a>Q1M <span class="ot">&lt;-</span> <span class="fu">quantile</span> (muestra2<span class="sc">$</span>MAHALANOBIS, <span class="fu">c</span>(<span class="fl">0.25</span>))</span>
+<span id="cb208-2"><a href="análisis-previo-de-datos..html#cb208-2" tabindex="-1"></a>Q3M <span class="ot">&lt;-</span> <span class="fu">quantile</span> (muestra2<span class="sc">$</span>MAHALANOBIS, <span class="fu">c</span>(<span class="fl">0.75</span>))</span>
+<span id="cb208-3"><a href="análisis-previo-de-datos..html#cb208-3" tabindex="-1"></a></span>
+<span id="cb208-4"><a href="análisis-previo-de-datos..html#cb208-4" tabindex="-1"></a>muestra2 <span class="sc">%&gt;%</span></span>
+<span id="cb208-5"><a href="análisis-previo-de-datos..html#cb208-5" tabindex="-1"></a>  <span class="fu">filter</span>(MAHALANOBIS <span class="sc">&gt;</span> Q3M <span class="sc">+</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(MAHALANOBIS) <span class="sc">|</span></span>
+<span id="cb208-6"><a href="análisis-previo-de-datos..html#cb208-6" tabindex="-1"></a>         MAHALANOBIS <span class="sc">&lt;</span> Q1M <span class="sc">-</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(MAHALANOBIS))<span class="sc">%&gt;%</span></span>
+<span id="cb208-7"><a href="análisis-previo-de-datos..html#cb208-7" tabindex="-1"></a>  <span class="fu">select</span>(MAHALANOBIS, RENECO, ACTIVO, MARGEN, RES) </span></code></pre></div>
+<p>En la consola se obtendrá el listado:</p>
+<pre><code>##                                MAHALANOBIS RENECO      ACTIVO
+## Holding De Negocios De GAS SL.   91.041690  5.264 13492812.00
+## Global Power Generation SA.      37.255573  1.393  2002458.00
+## Naturgy Renovables SLU           31.675561  1.959  1956869.00
+## Saeta Yield SA.                  11.891027  0.360   796886.38
+## Molinos Del Ebro SA              29.589696 35.262    62114.37
+## Tarraco Eolica SA                 3.600426 12.868    38102.00
+## WPD Parque Eolico Navillas SL.   84.589929 -0.416    35511.45
+## Brulles Eolica SL                 3.599069 15.882    29722.58
+## Sierra De Selva SL                9.055155 21.761    27728.00
+## 
+##                                   MARGEN         RES
+## Holding De Negocios De GAS SL.    91.152 727548.0000
+## Global Power Generation SA.       22.403  39995.0000
+## Naturgy Renovables SLU            20.442  42737.0000
+## Saeta Yield SA.                   16.258   2084.4760
+## Molinos Del Ebro SA               41.821  17026.2569
+## Tarraco Eolica SA                400.899   4953.0000
+## WPD Parque Eolico Navillas SL. -2248.157   -110.9293
+## Brulles Eolica SL                 47.227   3540.5693
+## Sierra De Selva SL                47.045   4525.0000</code></pre>
+<p>Si se opta por eliminar estos casos cara al análisis a aplicar posteriormente, se podrá crear un nuevo <em>data frame</em>, por ejemplo “muestra2_so”, con el código siguiente:</p>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="análisis-previo-de-datos..html#cb210-1" tabindex="-1"></a>muestra2_so <span class="ot">&lt;-</span> muestra2 <span class="sc">%&gt;%</span></span>
+<span id="cb210-2"><a href="análisis-previo-de-datos..html#cb210-2" tabindex="-1"></a>  <span class="fu">filter</span>(MAHALANOBIS <span class="sc">&lt;=</span> Q3M <span class="sc">+</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(MAHALANOBIS) <span class="sc">&amp;</span></span>
+<span id="cb210-3"><a href="análisis-previo-de-datos..html#cb210-3" tabindex="-1"></a>           MAHALANOBIS <span class="sc">&gt;=</span> Q1M <span class="sc">-</span> <span class="fl">1.5</span><span class="sc">*</span><span class="fu">IQR</span>(MAHALANOBIS)) </span></code></pre></div>
+<p>El <em>data frame</em> “muestra2_so” será una réplica de “muestra2”, aunque sin incluir los casos detectados como atípicos o <em>outliers</em> (85 casos).</p>
+</div>
+<div id="correlación-entre-variables." class="section level3 hasAnchor" number="5.3.2">
+<h3><span class="header-section-number">5.3.2</span> Correlación entre variables.<a href="análisis-previo-de-datos..html#correlación-entre-variables." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Cuando trabajamos con más de una variable, una característica muy importante viene dada por la intensidad con la que tales variables están relacionadas estadísticamente entre sí, es decir, el estudio de las correlaciones. Un modo atractivo y rápido de visualizar la <strong>matriz de correlaciones</strong> de las variables es a través de la función <code>ggpairs()</code> del paquete <code>{GGally}</code>. Para aplicar la función, hemos creado el <em>data frame</em> “temporal” con las variables (métricas) del estudio, que borramos tras general el gráfico:</p>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="análisis-previo-de-datos..html#cb211-1" tabindex="-1"></a><span class="do">## Correlaciones entre variables.</span></span>
+<span id="cb211-2"><a href="análisis-previo-de-datos..html#cb211-2" tabindex="-1"></a><span class="fu">library</span> (GGally)</span>
+<span id="cb211-3"><a href="análisis-previo-de-datos..html#cb211-3" tabindex="-1"></a></span>
+<span id="cb211-4"><a href="análisis-previo-de-datos..html#cb211-4" tabindex="-1"></a>temporal <span class="ot">&lt;-</span> muestra2_so <span class="sc">%&gt;%</span> <span class="fu">select</span>(RENECO, ACTIVO, MARGEN, RES)</span>
+<span id="cb211-5"><a href="análisis-previo-de-datos..html#cb211-5" tabindex="-1"></a>corr_plot_so <span class="ot">&lt;-</span> <span class="fu">ggpairs</span>(temporal, </span>
+<span id="cb211-6"><a href="análisis-previo-de-datos..html#cb211-6" tabindex="-1"></a>                        <span class="at">lower =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="fu">wrap</span>(<span class="st">&quot;cor&quot;</span>,</span>
+<span id="cb211-7"><a href="análisis-previo-de-datos..html#cb211-7" tabindex="-1"></a>                        <span class="at">size =</span> <span class="fl">4.5</span>,</span>
+<span id="cb211-8"><a href="análisis-previo-de-datos..html#cb211-8" tabindex="-1"></a>                        <span class="at">method =</span> <span class="st">&quot;pearson&quot;</span>,</span>
+<span id="cb211-9"><a href="análisis-previo-de-datos..html#cb211-9" tabindex="-1"></a>                        <span class="at">stars =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb211-10"><a href="análisis-previo-de-datos..html#cb211-10" tabindex="-1"></a>                        <span class="at">title =</span> <span class="st">&quot;Matriz de Correlación sin outliers&quot;</span>)</span>
+<span id="cb211-11"><a href="análisis-previo-de-datos..html#cb211-11" tabindex="-1"></a><span class="fu">rm</span>(temporal)</span>
+<span id="cb211-12"><a href="análisis-previo-de-datos..html#cb211-12" tabindex="-1"></a>corr_plot_so</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-175-1.png" width="672" /></p>
+<p>Un coeficiente de correlación puede tomar un valor entre -1 (fuerte relación, en sentido opuesto) a +1 (fuerte relación, en el mismo sentido). Como puede apreciarse en el gráfico, las variables ACTIVO y RES mantienen una relación muy intensa y en sentido positivo. Entre MARGEN y RENECO existe también una relación de intensidad destacable. En cambio, ACTIVO y MARGEN; y RENECO y ACTIVO apenas están estadísticamente relacionadas.</p>
+<p>Antes de terminar la práctica, vamos a comparar las correlaciones anteriores con las que se dan si se incluyen los casos outliers en la muestra. Estas correlaciones se generarán con el mismo código; pero sustituyendo el <em>data frame</em> “muestra2_so” por “muestra”:</p>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="análisis-previo-de-datos..html#cb212-1" tabindex="-1"></a>temporal <span class="ot">&lt;-</span> muestra2 <span class="sc">%&gt;%</span> <span class="fu">select</span>(RENECO, ACTIVO, MARGEN, RES)</span>
+<span id="cb212-2"><a href="análisis-previo-de-datos..html#cb212-2" tabindex="-1"></a>corr_plot_co <span class="ot">&lt;-</span> <span class="fu">ggpairs</span>(temporal, </span>
+<span id="cb212-3"><a href="análisis-previo-de-datos..html#cb212-3" tabindex="-1"></a>                        <span class="at">lower =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="fu">wrap</span>(<span class="st">&quot;cor&quot;</span>,</span>
+<span id="cb212-4"><a href="análisis-previo-de-datos..html#cb212-4" tabindex="-1"></a>                                                       <span class="at">size =</span> <span class="fl">4.5</span>,</span>
+<span id="cb212-5"><a href="análisis-previo-de-datos..html#cb212-5" tabindex="-1"></a>                                                       <span class="at">method =</span> <span class="st">&quot;pearson&quot;</span>,</span>
+<span id="cb212-6"><a href="análisis-previo-de-datos..html#cb212-6" tabindex="-1"></a>                                                       <span class="at">stars =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb212-7"><a href="análisis-previo-de-datos..html#cb212-7" tabindex="-1"></a>                        <span class="at">title =</span> <span class="st">&quot;Matriz de Correlación con outliers&quot;</span>)</span>
+<span id="cb212-8"><a href="análisis-previo-de-datos..html#cb212-8" tabindex="-1"></a><span class="fu">rm</span>(temporal)</span>
+<span id="cb212-9"><a href="análisis-previo-de-datos..html#cb212-9" tabindex="-1"></a>corr_plot_co</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-176-1.png" width="672" /></p>
+<p>Puede observarse cómo la presencia de outliers puede variar la relación entre las variables. Salvo el caso de la correlación entre ACTIVO y RES, que se fortalece; las correlaciones entre RENECO y MARGEN, y RENECO y RES se debilitan (en este último caso, pasa a no ser significativa ni tan siquiera para una significación de 0.1).</p>
+<p>Un modo visual para poder comparar ambas figuras consiste en utilizar la función <code>ggmatrix_gtable()</code> del paquete <code>{GGally}</code> para realizar “copias” en formato compatible con la función <code>ggplot()</code> del paquete <code>{ggplo2}</code>. Estas “copias” pueden integrarse en una sola figura utilizando la función <code>grid.arrange()</code> del paquete <code>{gridExtra}</code>. Nota: este paquete funciona de modo parecido a <code>{patchwork}</code>, y lo utilizamos porque este último paquete no funciona correctamente al intentar combinar las copias creadas en formato compatible con la función <code>ggplot()</code>. El código y resultado serán:</p>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="análisis-previo-de-datos..html#cb213-1" tabindex="-1"></a>corr_plot_so_gg <span class="ot">&lt;-</span> <span class="fu">ggmatrix_gtable</span>(corr_plot_so)</span>
+<span id="cb213-2"><a href="análisis-previo-de-datos..html#cb213-2" tabindex="-1"></a>corr_plot_co_gg <span class="ot">&lt;-</span> <span class="fu">ggmatrix_gtable</span>(corr_plot_co)</span>
+<span id="cb213-3"><a href="análisis-previo-de-datos..html#cb213-3" tabindex="-1"></a></span>
+<span id="cb213-4"><a href="análisis-previo-de-datos..html#cb213-4" tabindex="-1"></a><span class="fu">library</span> (gridExtra)</span>
+<span id="cb213-5"><a href="análisis-previo-de-datos..html#cb213-5" tabindex="-1"></a></span>
+<span id="cb213-6"><a href="análisis-previo-de-datos..html#cb213-6" tabindex="-1"></a><span class="fu">grid.arrange</span>(corr_plot_so_gg, corr_plot_co_gg, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">top =</span> <span class="st">&quot;CORRELACIONES&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-177-1.png" width="672" /></p>
+</div>
+</div>
+<div id="materiales-para-realizar-las-prácticas-del-capítulo.-3" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Materiales para realizar las prácticas del capítulo.<a href="análisis-previo-de-datos..html#materiales-para-realizar-las-prácticas-del-capítulo.-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En esta sección se muestran los links de acceso a los diferentes materiales (scripts, datos…) necesarios para llevar a cabo los contenidos prácticos del capítulo.</p>
+<p><strong>Datos (en formato Microsoft (R) Excel (R)):</strong></p>
+<ul>
+<li>eolica_100_mv.xlsx (<a href="https://docs.google.com/spreadsheets/d/1f9KV5epNpBRM6v9sKPtgFDkzMlOo75Y2/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">obtener aquí</a>)</li>
+</ul>
+<p><strong>Scripts:</strong></p>
+<ul>
+<li>explora_describe.R (<a href="https://drive.google.com/file/d/1VqZX81h15JZhF7KXXj3alLd08o5ywkX2/view?usp=sharing">obtener aquí</a>)</li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="estadística-descriptiva..html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="componentes-principales..html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection",
+"toc_deph": 3
+},
+"table": {
+"number": false
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

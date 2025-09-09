@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 2 Almacenando datos. | Técnicas de Análisis de Datos Económicos con R</title>
+  <meta name="description" content="Libro de análisis de datos económicos." />
+  <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 2 Almacenando datos. | Técnicas de Análisis de Datos Económicos con R" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://bookdown.org/teckel71/book/figuras/Portada_v1.PNG" />
+  <meta property="og:description" content="Libro de análisis de datos económicos." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 2 Almacenando datos. | Técnicas de Análisis de Datos Económicos con R" />
+  
+  <meta name="twitter:description" content="Libro de análisis de datos económicos." />
+  <meta name="twitter:image" content="https://bookdown.org/teckel71/book/figuras/Portada_v1.PNG" />
+
+<meta name="author" content="" />
+
+
+<meta name="date" content="2023-10-09" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="introducción..html"/>
+<link rel="next" href="parts.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Técnicas de Análisis de Datos Económicos con R</a></li>
+
+<li class="divider"></li>
+<li><a href="index.html#section" id="toc-section"></a></li>
+<li class="chapter" data-level="" data-path="prefacio.html"><a href="prefacio.html"><i class="fa fa-check"></i>Prefacio</a></li>
+<li class="chapter" data-level="1" data-path="introducción..html"><a href="introducción..html"><i class="fa fa-check"></i><b>1</b> Introducción.</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introducción..html"><a href="introducción..html#r-y-r-studio.-comienzo-proyectos."><i class="fa fa-check"></i><b>1.1</b> R y R-Studio. Comienzo: Proyectos.</a></li>
+<li class="chapter" data-level="1.2" data-path="introducción..html"><a href="introducción..html#scripts."><i class="fa fa-check"></i><b>1.2</b> Scripts.</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="almacenando-datos..html"><a href="almacenando-datos..html"><i class="fa fa-check"></i><b>2</b> Almacenando datos.</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="almacenando-datos..html"><a href="almacenando-datos..html#objetos.-datos."><i class="fa fa-check"></i><b>2.1</b> Objetos. Datos.</a></li>
+<li class="chapter" data-level="2.2" data-path="almacenando-datos..html"><a href="almacenando-datos..html#vectores."><i class="fa fa-check"></i><b>2.2</b> Vectores.</a></li>
+<li class="chapter" data-level="2.3" data-path="almacenando-datos..html"><a href="almacenando-datos..html#matrices."><i class="fa fa-check"></i><b>2.3</b> Matrices.</a></li>
+<li class="chapter" data-level="2.4" data-path="almacenando-datos..html"><a href="almacenando-datos..html#data-frames."><i class="fa fa-check"></i><b>2.4</b> Data frames.</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="parts.html"><a href="parts.html"><i class="fa fa-check"></i><b>3</b> Parts</a></li>
+<li class="chapter" data-level="4" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>4</b> Footnotes and citations</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>4.1</b> Footnotes</a></li>
+<li class="chapter" data-level="4.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>4.2</b> Citations</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>5</b> Blocks</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>5.1</b> Equations</a></li>
+<li class="chapter" data-level="5.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>5.2</b> Theorems and proofs</a></li>
+<li class="chapter" data-level="5.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>5.3</b> Callout blocks</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="sharing-your-book.html"><a href="sharing-your-book.html"><i class="fa fa-check"></i><b>6</b> Sharing your book</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="sharing-your-book.html"><a href="sharing-your-book.html#publishing"><i class="fa fa-check"></i><b>6.1</b> Publishing</a></li>
+<li class="chapter" data-level="6.2" data-path="sharing-your-book.html"><a href="sharing-your-book.html#pages"><i class="fa fa-check"></i><b>6.2</b> 404 pages</a></li>
+<li class="chapter" data-level="6.3" data-path="sharing-your-book.html"><a href="sharing-your-book.html#metadata-for-sharing"><i class="fa fa-check"></i><b>6.3</b> Metadata for sharing</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="bibliografía.html"><a href="bibliografía.html"><i class="fa fa-check"></i>Bibliografía</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Técnicas de Análisis de Datos Económicos con R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="almacenando-datos." class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Capítulo 2</span> Almacenando datos.<a href="almacenando-datos..html#almacenando-datos." class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="objetos.-datos." class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Objetos. Datos.<a href="almacenando-datos..html#objetos.-datos." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Como vimos en el capítulo 1, tras ejecutar un sencillo script (o al escribir instrucciones directamente desde la consola), R es interactivo: responde a las entradas que recibe.
+Las entradas o <strong>expresiones</strong> pueden ser, básicamente básicamente:</p>
+<ul>
+<li><p>Expresiones aritméticas.</p></li>
+<li><p>Expresiones lógicas.</p></li>
+<li><p>Llamadas a funciones.</p></li>
+<li><p>Asignaciones.</p></li>
+</ul>
+<p>Las expresiones realizan acciones sobre <strong>objetos</strong> de R.
+Los objetos en R son entes que tienen ciertas características, <em>metadatos</em>, llamados atributos.
+No todos los objetos tienen los mismos atributos y, ni tan siquiera, todos los objetos tienen atributos que los caractericen.</p>
+<p>Los objetos más importantes en R son ciertas estructuras o <em>contenedores</em> diseñados para almacenar elementos:</p>
+<ul>
+<li><p>Vectores.</p></li>
+<li><p>Matrices.</p></li>
+<li><p>Listas.</p></li>
+<li><p>Data frames.</p></li>
+<li><p>Factores.</p></li>
+</ul>
+<p>Los elementos almacenados en los objetos se dividen en <em>clases</em>.
+Entre las diferentes clases, destacan las clases referidas a <strong>datos</strong>, que pueden ser de diferentes <em>modos</em>: logical (verdadero/falso), numeric (números) o character (cadena de texto).
+El modo numeric puede ser, a la vez, de tipo integer (número entero) o double (número real).
+En el caso de logical y carácter, modo y tipo coinciden.</p>
+<p>Vamos a profundizar un poco en algunas de estos contenedores de datos.
+Vamos a suponer que trabajamos en el proyecto que creamos en el capítulo anterior (proyecto “explora”), y que vamos a editar el script que también creamos en tal capítulo (script “explorando.R”, que se encontrará ubicado en la carpeta del proyecto “explora”).</p>
+</div>
+<div id="vectores." class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Vectores.<a href="almacenando-datos..html#vectores." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Los <strong>vectores</strong>, son conjuntos de elementos <strong>de la misma clase</strong>.
+Vamos a definir por ejemplo el vector x = (1,3,5,8).
+Para ello, vamos a escribir en nuestro script:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="almacenando-datos..html#cb1-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">8</span>)</span></code></pre></div>
+<p>Ejecutamos la línea (situando el cursor en algún lugar de ella, dentro del script; y pulsando a la vez las teclas <code>Control + Enter</code> o pinchando con el ratón en el botón <code>Run</code> del editor).
+Ya tenemos nuestro primer objeto de tipo <em>vector</em> en memoria.
+Por cierto, lo que hemos hecho es una <strong>asignación</strong>, que se escribe con una flecha creada mediante los signos “&lt;” y “-”.
+Hemos asignado a un vector llamado “x” los elementos 1, 3, 5 y 8.</p>
+<p>Para ver el vector simplemente escribimos en la consola (o en el script) el nombre del vector, “x”.
+El resultado será:</p>
+<pre><code>## [1] 1 3 5 8</code></pre>
+<p>Además, si miramos en la ventana superior-derecha de R-Studio, veremos que en el <strong><em>Global Environment</em></strong> se muestra nuestro vector y que, además, se nos informa de que tiene <em>modo</em> <em>numérico</em>.
+El <em>Global Environment</em> nos informa de los objetos que R tiene en memoria:</p>
+<p><img src="figuras/Imagen2_01.png" width="700" alt="Nuestro vector en memoria." /> Si queremos obtener un vector de números consecutivos del 2 al 6, basta con ejecutar en la “consola” (o escribir y ejecutar en el script):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="almacenando-datos..html#cb3-1" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>)</span></code></pre></div>
+<p>Al escribir el nombre del vector “y” en la “consola” obtendremos:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="almacenando-datos..html#cb4-1" tabindex="-1"></a>y</span></code></pre></div>
+<pre><code>## [1] 2 3 4 5 6</code></pre>
+<p>Si queremos saber la longitud de un vector, usaremos la <em>función</em> <code>length()</code>.
+Por ejemplo, <code>length(y)</code> nos devolverá el valor 5.
+Escribamos en el script y ejecutemos:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="almacenando-datos..html#cb6-1" tabindex="-1"></a><span class="fu">length</span>(y)</span></code></pre></div>
+<pre><code>## [1] 5</code></pre>
+<p>Un vector puede incluir, además de números, caracteres o grupos de caracteres alfanuméricos; siempre entrecomillados (lo fundamental es que sean elementos de la misma clase).
+Por ejemplo, el vector “genero” (¡no pongamos tildes o podemos tener problemas!).
+Así, si ejecutamos estas dos líneas de código:</p>
+<pre><code>## [1] &quot;Mujer&quot;  &quot;Hombre&quot;</code></pre>
+<p>Se habrá creado el vector “genero”:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="almacenando-datos..html#cb9-1" tabindex="-1"></a>genero</span></code></pre></div>
+<pre><code>## [1] &quot;Mujer&quot;  &quot;Hombre&quot;</code></pre>
+<p>Podemos obtener la clase de los elementos almacenados en nuestro vector con la función class():</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="almacenando-datos..html#cb11-1" tabindex="-1"></a><span class="fu">class</span>(genero)</span></code></pre></div>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>Si falta un dato en un vector, habrá que escribir “NA” (not available).
+Por ejemplo, si falta el tercer dato de este vector “z”, este vector se escribirá como:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="almacenando-datos..html#cb13-1" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="cn">NA</span>,<span class="dv">2</span>,<span class="dv">8</span>)</span></code></pre></div>
+<p>Para <strong>seleccionar un elemento</strong> concreto de un vector, indicaremos entre corchetes la posición en la que se encuentra.
+Por ejemplo, refiriéndonos al vector “x”, para obtener el valor de su tercer elemento, haremos:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="almacenando-datos..html#cb14-1" tabindex="-1"></a>x[<span class="dv">3</span>]</span></code></pre></div>
+<pre><code>## [1] 5</code></pre>
+<p>Si queremos que se nos muestre los elementos del vector x del 2º al 4º:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="almacenando-datos..html#cb16-1" tabindex="-1"></a>x[<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>]</span></code></pre></div>
+<pre><code>## [1] 3 5 8</code></pre>
+<p>Por último, si queremos sacar en pantalla los elementos 1º y 4º, tendremos que incluir una “c” seguida de un paréntesis que recoja el orden de los elementos que queremos seleccionar:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="almacenando-datos..html#cb18-1" tabindex="-1"></a>x[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">4</span>)]</span></code></pre></div>
+<pre><code>## [1] 1 8</code></pre>
+</div>
+<div id="matrices." class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Matrices.<a href="almacenando-datos..html#matrices." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Las <strong>matrices</strong>, internamente en R, son vectores; pero con dos atributos adicionales: número de filas y número de columnas.
+Se definen mediante la función matrix().
+Por ejemplo, para definir la matriz “a”:</p>
+<p><span class="math display">\[
+\begin{equation}
+  \begin{pmatrix}
+    1 &amp; 4 &amp; 7\\
+    2 &amp; 5 &amp; 8\\
+    3 &amp; 6 &amp; 9
+   \end{pmatrix}
+\end{equation}
+\]</span></p>
+<p>Tendremos que escribir:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="almacenando-datos..html#cb20-1" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">9</span>),<span class="at">nrow=</span><span class="dv">3</span>)</span>
+<span id="cb20-2"><a href="almacenando-datos..html#cb20-2" tabindex="-1"></a>a</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    2    5    8
+## [3,]    3    6    9</code></pre>
+<p>El número de filas de la matriz (y por tanto, el número de columnas) se fija con el argumento <code>nrow =</code> .
+También podríamos fijar el número de columnas, con <code>ncol =</code> .</p>
+<p>Como vemos, por defecto, R va “cortando” el vector por columnas (si lo preferimos, lo puede hacer también por filas, añadiendo a la función <code>matrix()</code> el argumento <code>by row = true</code>; pero, en nuestro ejemplo, obtendríamos la matriz traspuesta a la que queremos almacenar).</p>
+<p>Las dimensiones (número de filas y de columnas) de la matriz pueden obtenerse mediante la función <code>dim()</code>:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="almacenando-datos..html#cb22-1" tabindex="-1"></a><span class="fu">dim</span>(a)</span></code></pre></div>
+<pre><code>## [1] 3 3</code></pre>
+<p>3 filas y 3 columnas.</p>
+<p>Si queremos seleccionar elementos concretos de una matriz, lo haremos utilizando corchetes para indicar filas y columnas.
+Hemos de tener en cuenta que, trabajando con matrices, siempre tenemos <strong>[rango de filas, rango de columnas]</strong>.
+Si se deja en blanco el espacio entre el corchete inicial y la coma, esto querrá decir que consideramos todas las filas.
+Y si no insertamos nada entre la coma y el corchete de cierre, esto significará que consideramos todas las columnas.
+A continuación tenemos varios ejemplos de código, con el resultado obtenido en la consola:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="almacenando-datos..html#cb24-1" tabindex="-1"></a>a[<span class="dv">2</span>,<span class="dv">3</span>]</span></code></pre></div>
+<pre><code>## [1] 8</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="almacenando-datos..html#cb26-1" tabindex="-1"></a>a[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>] </span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    4    7
+## [2,]    5    8</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="almacenando-datos..html#cb28-1" tabindex="-1"></a>a[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)]</span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    1    7
+## [2,]    2    8
+## [3,]    3    9</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="almacenando-datos..html#cb30-1" tabindex="-1"></a>a[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),]</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    3    6    9</code></pre>
+<p>Tanto para vectores como para matrices, funcionan las operaciones suma y diferencia sin más complicaciones.
+En el caso del producto, sin embargo, hay que tener en cuenta que, por ejemplo, a*a devuelve la multiplicación elemento a elemento, es decir:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="almacenando-datos..html#cb32-1" tabindex="-1"></a>a<span class="sc">*</span>a</span></code></pre></div>
+<p>Devuelve la multiplicación elemento a elemento (en este caso, el cuadrado de cada número, al multiplicar la matriz a por sí misma):</p>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1   16   49
+## [2,]    4   25   64
+## [3,]    9   36   81</code></pre>
+<p>Para hacer el verdadero producto matricial deberá introducirse:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="almacenando-datos..html#cb34-1" tabindex="-1"></a>a<span class="sc">%*%</span>a</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]   30   66  102
+## [2,]   36   81  126
+## [3,]   42   96  150</code></pre>
+</div>
+<div id="data-frames." class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Data frames.<a href="almacenando-datos..html#data-frames." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Un <strong>data frame</strong> es un objeto que almacena datos organizados mediante la clase <code>data.frame</code>.
+Esta organización consiste en que, por filas, se disponen los diferentes casos o sujetos; mientras que por columnas se posicionan las variables.
+Así:</p>
+<ul>
+<li><p>Es similar a una matriz en el sentido de que tiene dos dimensiones.
+Podemos acceder a sus elementos con corchetes, tenemos nombres de filas y columnas, y podemos operar con ellas.</p></li>
+<li><p>Cada columna tiene un nombre, de manera que podemos acceder a una columna concreta con el símbolo <strong><code>$</code></strong>.
+Todas las columnas (variables) son vectores con la misma longitud.</p></li>
+<li><p>Cada columna puede ser un vector numérico, factor, de tipo carácter o lógico.</p></li>
+</ul>
+<p>Por ejemplo, vamos a crear el <em>data frame</em> <strong>“datos”</strong>, con tres variables: “peso”, “altura”, y “color de ojos”, llamadas “Peso”, “Altura” y “Cl.ojos”, respectivamente; para 3 individuos o casos.
+Una opción es crear primero las tres variables como vectores, y luego crear el <em>data frame</em> mediante la función <code>dataframe()</code>:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="almacenando-datos..html#cb36-1" tabindex="-1"></a>Peso<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">68</span>,<span class="dv">75</span>,<span class="dv">88</span>)</span>
+<span id="cb36-2"><a href="almacenando-datos..html#cb36-2" tabindex="-1"></a>Altura<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fl">1.6</span>,<span class="fl">1.8</span>,<span class="fl">1.9</span>)</span>
+<span id="cb36-3"><a href="almacenando-datos..html#cb36-3" tabindex="-1"></a>Cl.ojos<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">&quot;azules&quot;</span>,<span class="st">&quot;marrones&quot;</span>,<span class="st">&quot;marrones&quot;</span>)</span>
+<span id="cb36-4"><a href="almacenando-datos..html#cb36-4" tabindex="-1"></a>datos<span class="ot">&lt;-</span><span class="fu">data.frame</span>(Peso,Altura,Cl.ojos)</span></code></pre></div>
+<p>Si ahora ejecutamos una línea con el nombre de nuestro <em>data frame</em>, lo obtendremos como resultado en la consola:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="almacenando-datos..html#cb37-1" tabindex="-1"></a>datos</span></code></pre></div>
+<pre><code>##   Peso Altura  Cl.ojos
+## 1   68    1.6   azules
+## 2   75    1.8 marrones
+## 3   88    1.9 marrones</code></pre>
+<p>Para obtener los nombres de las variables (es decir, el nombre de cada columna) teclearemos la función:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="almacenando-datos..html#cb39-1" tabindex="-1"></a><span class="fu">names</span>(datos)</span></code></pre></div>
+<p>Obteniéndose:</p>
+<pre><code>## [1] &quot;Peso&quot;    &quot;Altura&quot;  &quot;Cl.ojos&quot;</code></pre>
+<p>Para obtener solo los datos de la columna (variable) color de ojos teclearemos datos$Cl.ojos:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="almacenando-datos..html#cb41-1" tabindex="-1"></a>datos<span class="sc">$</span>Cl.ojos</span></code></pre></div>
+<pre><code>## [1] &quot;azules&quot;   &quot;marrones&quot; &quot;marrones&quot;</code></pre>
+<p>Y para obtener los datos de peso: datos$Peso:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="almacenando-datos..html#cb43-1" tabindex="-1"></a>datos<span class="sc">$</span>Peso</span></code></pre></div>
+<pre><code>## [1] 68 75 88</code></pre>
+<p>Para saber el número de filas y de columnas de una hoja de datos utilizaremos las funciones <code>nrow()</code> y <code>ncol()</code>:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="almacenando-datos..html#cb45-1" tabindex="-1"></a><span class="fu">nrow</span>(datos)</span></code></pre></div>
+<pre><code>## [1] 3</code></pre>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="almacenando-datos..html#cb47-1" tabindex="-1"></a><span class="fu">ncol</span>(datos)</span></code></pre></div>
+<pre><code>## [1] 3</code></pre>
+<p>Para seleccionar elementos de un data frame, se pueden seguir las mismas reglas que para la selección de elementos de una matriz (con el número de cada fila, que es cada individuo; y el número de cada columna, que es cada variable. Para elegir una variable, no obstante, ya hemos visto que es posible usar su nombre; aunque precedido del nombre del data frame y el signo <code>$</code>. Por ejemplo, si ejecutamos:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="almacenando-datos..html#cb49-1" tabindex="-1"></a>datos[,<span class="dv">2</span>]</span></code></pre></div>
+<pre><code>## [1] 1.6 1.8 1.9</code></pre>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="almacenando-datos..html#cb51-1" tabindex="-1"></a>datos<span class="sc">$</span>Altura</span></code></pre></div>
+<pre><code>## [1] 1.6 1.8 1.9</code></pre>
+<p>Obtenemos el mismo resultado.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introducción..html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="parts.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
