@@ -197,7 +197,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/visdat/">visdat</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss</a></span><span class="op">(</span><span class="va">originales</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-203-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-205-1.png" width="672" style="display: block; margin: auto;"></div>
 <p>Una vez puesta de manifiesto la existencia de un <em>missing value</em>, localizaremos el caso concreto que lo contiene aplicando la función <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>. Se trata de la empresa “Biovent Energía S.A.”</p>
 <p>Sabemos que ante la existencia de <em>missing values</em>, se puede actuar de varios modos. Por ejemplo, <strong>se puede intentar obtener por otro canal de información el conjunto de valores</strong> que no están disponibles, <strong>o recurrir a alguna estimación</strong>. En caso de que esto sea difícil, se puede optar por <strong>eliminar</strong> estos casos, en especial cuando representan un porcentaje muy reducido respecto al total de casos. En nuestro ejemplo, supondremos que hemos optado por esta última vía, y eliminaremos este caso con otro filtro:</p>
 <div class="sourceCode" id="cb244"><pre class="downlit sourceCode r">
@@ -224,7 +224,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"DISTANCIA DE MAHALANOBIS"</span>, subtitle <span class="op">=</span> <span class="st">"Empresas eólicas"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"MAHALANOBIS"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-206-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-208-1.png" width="672" style="display: block; margin: auto;"></div>
 <p>En el gráfico se observa que existen, por encima de la caja, 4 outliers. Para identificarlos de modo concreto, hemos de calcular los cuartiles primero y tercero de la variable MAHALANOBIS y pasar el correspondiente filtro:</p>
 <div class="sourceCode" id="cb249"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Q1M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">originales</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
@@ -267,7 +267,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/dist.html">dist</a></span><span class="op">(</span><span class="va">zoriginales</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/dist.html">fviz_dist</a></span><span class="op">(</span><span class="va">d</span>, lab_size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-210-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-212-1.png" width="672" style="display: block; margin: auto;"></div>
 <p>Los casos con intersecciones en tonos anaranjados tenderán a agruparse con mayor facilidad (o a agruparse antes); mientras que los casos cuyas intersecciones están en tonos azulados tenderán a pertenecer a grupos diferentes (o a agruparse más tarde). Puede observarse cómo las distancias de tres de las empresas que fueron identificadas como <em>outliers</em> (“Holding de Negocios de Gas S. L.”, “Sargon Energías SLU” y “WPD Wind Investment S. L.”) matienen grandes distancias (casillas azuladas) con el resto de empresas. No ocurre lo mismo con la compañía identificada como <em>outlier</em>, “Global Power Generation, S. A.”, que mantiene distancias más discretas como “Viesgo Renovables S. L.”, “Saeta Yield S. A.” o “EDP Renovables España S. L. U.”</p>
 <p>Vamos a realizar el análisis clúster jerárquico mediante uno de los métodos más habituales, el de <strong><em>Ward</em></strong>, como es común en las aplicaciones prácticas, ya que este método proporciona grupos muy homogéneos (mínima varianza). La función a utilizar es <code><a href="https://rdrr.io/r/stats/hclust.html">hclust()</a></code>. La solución la guardaremos en el objeto (lista) que hemos llamado, por ejemplo, “cluster_j”. Luego se visualizará el <strong><em>dendograma</em></strong> construido con la función <code><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend()</a></code> del paquete <a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a>, que permite personalizar el gráfico con una gramática similar a la utilizada con los gráficos del paquete <a href="https://ggplot2.tidyverse.org">ggplot2</a>:</p>
 <div class="sourceCode" id="cb255"><pre class="downlit sourceCode r">
@@ -286,7 +286,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 ##   Please report the issue at &lt;https://github.com/kassambara/factoextra/issues&gt;.
 ## This warning is displayed once every 8 hours.
 ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-211-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-213-1.png" width="672" style="display: block; margin: auto;"></div>
 <p>En el código anterior:</p>
 <ul>
 <li><p><strong><code>cluster_j</code></strong>: Es el objeto que contiene el dendrograma que se desea visualizar.</p></li>
@@ -315,7 +315,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 <span>       subtitle <span class="op">=</span> <span class="st">"Método de Ward. Variables originales tipificadas."</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_grey</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Warning in get_col(col, k): Length of color vector was shorter than the number of clusters - color vector was recycled</code></pre>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-212-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-214-1.png" width="672" style="display: block; margin: auto;"></div>
 <p>En el código anterior:</p>
 <ul>
 <li><p><strong><code>k = 5</code></strong>: Especifica el número de grupos o clústeres que se desea formar en el dendrograma. En este caso, se han decidido formar 5 grupos.</p></li>
@@ -360,7 +360,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">tablamedias</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-215">Table 7.1: </span><span id="tab:unnamed-chunk-215">Table 7.2: </span>Método de Ward. 5 grupos. Medias de variables
+<span id="tab:unnamed-chunk-217">Table 7.1: </span><span id="tab:unnamed-chunk-217">Table 7.2: </span>Método de Ward. 5 grupos. Medias de variables
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -575,7 +575,7 @@ Solvencia
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">n</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">grupos.graficos.centroides</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">grupos.graficos.centroides</span><span class="op">[[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-218-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-220-1.png" width="672" style="display: block; margin: auto;"></div>
 <p>Hablando siempre en términos de la media (centroides), puede comprobarse cómo el grupo 1 destaca por su alto valor en el resultado y en los fondos propios, el grupo 2 por el alto margen y el alto valor de la solvencia, el tercer grupo por poseer valores discretos (pero no negativos) en las cuatro variables, el cuarto grupo por la elevada solvencia y el margen negativo, y el quinto grupo por el margen y la solvencia negativos.</p>
 <p>Por otro lado, se pueden presentar en diferentes tablas las composiciones e informaciones de cada grupo. Vamos a automatizar de nuevo el proceso de generación de las tablas mediante el empleo de un <em>bucle.</em> Las diferentes tablas se irán guardando en una lista de nombre, por ejemplo, “tablascompo”:</p>
 <div class="sourceCode" id="cb266"><pre class="downlit sourceCode r">
@@ -652,7 +652,7 @@ Solvencia
 <span>    <span class="kw">for</span> <span class="op">(</span><span class="va">n</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">gruposgraficos</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">gruposgraficos</span><span class="op">[[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span></code></pre></div>
-<p><img src="RstarS_files/figure-html/unnamed-chunk-224-1.png" width="672"><img src="RstarS_files/figure-html/unnamed-chunk-224-2.png" width="672"></p>
+<p><img src="RstarS_files/figure-html/unnamed-chunk-226-1.png" width="672" style="display: block; margin: auto;"><img src="RstarS_files/figure-html/unnamed-chunk-226-2.png" width="672" style="display: block; margin: auto;"></p>
 <p>De los gráficos anteriores, pueden extraerse algunas conclusiones. Por ejemplo, en los tres primeros gráficos, destaca la posición de la única empresa que forma el grupo 1 (Holding de Negocios de Gas, S. L.), sobre todo en cuanto al resultado RES (eje x). En este sentido, mención especial merece el gráfico 2 (RES-FPIOS), debido a la especial situación de esta empresa en cuanto a Fondos Propios (FPIOS), lo que se aprecia también en los gráficos 4 y 6. El grupo 4 también está constituido únicamente por una empresa (WPD Wind Investment S. L.), si bien en los diferentes gráficos no muestra una separación tan notable con respecto al resto de empresas y grupos. Tan solo en los gráficos 1, 4 y 5 destaca, debido a la influencia de la variable de margen de beneficio (MARGEN). El grupo 5 es el tercer y último grupo constituido por una única empresa (Sargon Energías S. L. U.). En este caso, su comportamiento destaca en los mismos gráficos que el caso anterior, debido también a su margen de beneficio (MARGEN), visiblemente por debajo del valor presente en el resto de empresas. En cuanto a los grupos constituidos por más de una empresa, las empresas de ambos grupos se muestran relativamente próximas, pudiéndose concluir que las empresas del grupo 2 tienen, en general, mayor volumen de fondos propios (FPIOS) y coeficiente de solvencia (SOLVENCIA) que las del grupo 3; mientras que en cuanto a margen (MARGEN) y resultado (RES) muestran, globalmente, valores próximos.</p>
 </div>
 <div id="métodos-de-agrupación-no-jerárquicos." class="section level2" number="7.3">
@@ -738,7 +738,7 @@ Solvencia
 <span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/visdat/">visdat</a></span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss</a></span><span class="op">(</span><span class="va">originales</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-228-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-230-1.png" width="672" style="display: block; margin: auto;"></div>
 <p>Una vez puesta de manifiesto la existencia de un <em>missing value</em>, localizaremos el caso concreto que lo contiene aplicando la función <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>. El caso es la empresa “Desarrollos Eólicos de Teruel S. L.”:</p>
 <div class="sourceCode" id="cb274"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">originales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -767,7 +767,7 @@ Solvencia
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"DISTANCIA DE MAHALANOBIS"</span>, subtitle <span class="op">=</span> <span class="st">"Empresas eólicas"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"ln(MAHALANOBIS)"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-232-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-234-1.png" width="672" style="display: block; margin: auto;"></div>
 <p>En el gráfico se observa que existen, por encima de la caja, varios outliers. Para identificarlos de modo concreto, hemos de calcular los cuartiles primero y tercero de la variable MAHALANOBIS y pasar el correspondiente filtro:</p>
 <div class="sourceCode" id="cb279"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">Q1M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">originales</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
@@ -845,7 +845,7 @@ Solvencia
 <span>                                     min.nc <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>                                     max.nc <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>                                     method <span class="op">=</span> <span class="st">"kmeans"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="RstarS_files/figure-html/unnamed-chunk-236-1.png" width="672"><img src="RstarS_files/figure-html/unnamed-chunk-236-2.png" width="672"></p>
+<p><img src="RstarS_files/figure-html/unnamed-chunk-238-1.png" width="672" style="display: block; margin: auto;"><img src="RstarS_files/figure-html/unnamed-chunk-238-2.png" width="672" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb285"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">start_line</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"* Among all indices:"</span>, <span class="va">result</span><span class="op">)</span></span>
 <span>    <span class="va">end_line</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"* According to"</span>, <span class="va">result</span><span class="op">)</span></span>
@@ -928,7 +928,7 @@ Solvencia
 <span>      <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">tablamedias</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-241">Table 7.3: </span><span id="tab:unnamed-chunk-241">Table 7.4: </span>Método de k-medias. 3 grupos. Medias de variables
+<span id="tab:unnamed-chunk-243">Table 7.3: </span><span id="tab:unnamed-chunk-243">Table 7.4: </span>Método de k-medias. 3 grupos. Medias de variables
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -1078,7 +1078,7 @@ Solvencia
 <span>    <span class="kw">for</span> <span class="op">(</span><span class="va">n</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">grupos.graficos.centroides</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>         <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">grupos.graficos.centroides</span><span class="op">[[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-243-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-245-1.png" width="672" style="display: block; margin: auto;"></div>
 <p>La lista “grupos.graficos.centroides” almacena las composiciones de 4 (o menos) gráficos generadas. En este ejemplo, solo tiene un elemento, que es mostrado al ejecutar el bucle de presentación de composiciones.</p>
 <p>Por medio de los gráficos se pueden establecer algunas conclusiones, comparando las medias de las variables para cada grupo de casos formado (coordenadas de los centroides). Por ejemplo, el grupo 1 destaca por tener, en media, un resultado y unos fondos propios muy superiores a los del resto de grupos. En cuanto a la solvencia, también tiene en media el mayor valor, aunque la diferencia no parece tan pronunciada con respecto al grupo 3. El grupo 2 se caracteriza por tener, en media, los valores inferiores en las 4 variables clasificadoras, siempre de un modo que se antoja muy pronunciado. Por último, el grupo 3 tiene, en media, el mayor valor de solvencia y, en cuanto al margen, se sitúa relativamente cerca del margen medio del grupo 1.</p>
 <p>El análisis gráfico anterior se puede complementar de un modo estadítico, a fin de verificar si las diferencias observadas entre los valores medios de los grupos, para cada variable, son significativas. Para ello, y teniendo en cuenta que los grupos se pueden considerar submuestras que representan a subpoblaciones, se puede aplicar alguna prueba de comparaciones múltiples de las medias de los grupos formados, de modo que se pueda confirmar, para cierta significación estadística (usualmente 0,05), <strong>si las diferencias en las medias de los grupos para cada variable son estadísticamente relevantes</strong> (significativas) o no.</p>
@@ -1158,7 +1158,7 @@ Solvencia
 <span>      <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">gruposgraficos_kw</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>           <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">gruposgraficos_kw</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>      <span class="op">}</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-247-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-249-1.png" width="672" style="display: block; margin: auto;"></div>
 <div class="sourceCode" id="cb296"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>      <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">tablas_kw</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>           <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">tablas_kw</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
@@ -1209,7 +1209,7 @@ Solvencia
 <span>    <span class="kw">for</span> <span class="op">(</span><span class="va">n</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">gruposgraficos</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>         <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">gruposgraficos</span><span class="op">[[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span></code></pre></div>
-<p><img src="RstarS_files/figure-html/unnamed-chunk-249-1.png" width="672"><img src="RstarS_files/figure-html/unnamed-chunk-249-2.png" width="672"></p>
+<p><img src="RstarS_files/figure-html/unnamed-chunk-251-1.png" width="672" style="display: block; margin: auto;"><img src="RstarS_files/figure-html/unnamed-chunk-251-2.png" width="672" style="display: block; margin: auto;"></p>
 <p>A partir de los gráficos anteriores se aprecia cómo, en coherencia con los resultados obtenidos en el análisis de las medias de los grupos, las empresas del grupo 1 poseen, en general valores en las variables de resultados y fondos propios superiores a los del resto de grupos (gráficos 1, 2, 3, 4 y 6). En cuanto al margen, el grueso de las empresas de los tres grupos poseen márgenes muy parecidos, con una leve tendencia de algunas empresas del grupo 3 a ser menores, y del grupo 1 a ser mayores (gráficos 1, 4 y 5). Con referencia a la solvencia, se distingue con claridad que las empresas del grupo 3 tienen, en general, un mayor nivel, destacando también la dispersión de la variable a lo largo del grupo 1 (gráficos 3, 5 y 6).</p>
 </div>
 <div id="materiales-para-realizar-las-prácticas-del-capítulo.-5" class="section level2" number="7.4">
