@@ -1561,10 +1561,6 @@ Para ello usamos el paquete <a href="https://ggplot2.tidyverse.org">ggplot2</a>:
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"SALARIO MENSUAL"</span>, subtitle <span class="op">=</span> <span class="st">"trabajadores de la empresa XXX"</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Salario (cientos de euros)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Frecuencias"</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-## ℹ Please use `linewidth` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
 <div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-138-1.png" width="672"></div>
 <p>Como comprobamos, la distribución es claramente asimétrica positiva.</p>
 <p>En cuanto a las <strong>medidas de curtosis</strong>, miden el grado de deformación horizontal con respecto a una distribución “tipo”, la distribución normal.
@@ -1577,7 +1573,7 @@ Pueden darse los casos que se muestran en la figura:</p>
 Este coeficiente toma valor negativo si la distribución es <em>platicúrtica</em> (más aplastada que la distribución normal), valor positivo si la distribución es <em>leptocúrtica</em> (más apuntada que la distribución normal), y se acerca a 0 en caso de que la distribución sea aproximadamente igual de apuntada que la distribución normal.
 En R, se puede obtener el coeficiente de asimetría mediante la función <code><a href="https://rdrr.io/pkg/moments/man/kurtosis.html">kurtosis()</a></code> del paquete <a href="https://www.r-project.org">moments</a>.
 Hay que tener en cuenta que para que esta versión coincida con lo dicho anteriormente, al valor calculado hay que restarle el valor “3”:</p>
-<div class="sourceCode" id="cb175"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb174"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Coeficiente de apuntamiento o curtosis de Fisher</span></span>
 <span></span>
 <span><span class="va">curtosis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/moments/man/kurtosis.html">kurtosis</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span> <span class="op">-</span> <span class="fl">3</span></span>
@@ -1585,17 +1581,13 @@ Hay que tener en cuenta que para que esta versión coincida con lo dicho anterio
 <pre><code>## [1] -0.8232965</code></pre>
 <p>Se aprecia como el coeficiente (corregido) es menor que 0, por lo que la distribución de frecuencias de la variable SALARIO es platicúrtica (más “aplastada” que la distribución de frecuencias normal. También hay que tener en cuenta que debemos tener precaución en la aplicación del coeficiente, ya que vimos con anterioridad que la distribución no es aproximadamente simétrica. Gráficamente, podemos comprobar lo anterior representando el histograma y una curva normal que posea la misma moda (que ya calculamos anteriormente).
 Para que sean comparables, debemos transformar el eje “y” del gráfico, pasando de “frecuencias” a “densidad”, para lo cuál se incluye en el <code><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram()</a></code> el argumento <code>aes(y = ..density..)</code>:</p>
-<div class="sourceCode" id="cb177"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb176"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">datos</span>, map <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">SALARIO</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">7</span>, colour <span class="op">=</span> <span class="st">"red"</span>, fill <span class="op">=</span> <span class="st">"orange"</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">..density..</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_function.html">stat_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">dnorm</span>, args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="va">moda</span>, sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"darkblue"</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"SALARIO MENSUAL"</span>, subtitle <span class="op">=</span> <span class="st">"trabajadores de la empresa XXX"</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Salario (cientos de euros)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Densidad"</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
-## ℹ Please use `after_stat(density)` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
 <div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-140-1.png" width="672"></div>
 </div>
 <div id="materiales-para-realizar-las-prácticas-del-capítulo.-2" class="section level2" number="4.6">
