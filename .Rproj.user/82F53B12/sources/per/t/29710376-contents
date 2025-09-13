@@ -1,0 +1,706 @@
+---
+title: "R-Lite Intro"
+author: "Miguel-Ángel Tarancón"
+date: "`r Sys.Date()`"
+output:
+  word_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introducción.
+
+## ¿Qué es R y cómo nos ayuda a analizar datos desde el punto de vista estadístico?
+
+En los últimos tiempos se ha producido una evolución de hardware sin precedentes, lo que ha dado soporte al desarrollo de un potente software dedicado al análisis de datos (todo tipo de datos, no solamente económicos). Este software permite a cualquier investigador aplicar las últimas técnicas de análisis estadístico a cualquier masa de datos, lo que ha supuesto una verdadera revolución. A su vez, esta realidad se ha retroalimentado, de modo que se ha producido un constante avance en el desarrollo de técnicas y tecnologías de análisis de datos cada vez más complejas. Así, podemos hablar de técnicas de aprendizaje automático o *machine learning* (supervisado, no-supervisado o reforzado) o, más recientemente, de modelos de análisis basados en la *inteligencia artificial*.
+
+En este caldo de cultivo, en el que se dispone de grandes masas de datos, de hardware capaz de procesarlas, y de técnicas capaces de extraer información de las mismas, se ha desarrollado un software cada vez más potente que une todos estos elementos para modelizar la realidad. Este software se concreta en aplicaciones y plataformas diversas: SPSS, Stata, SAS... Y también lenguajes de programación orientados al análisis estadístico y matemático, como pueden ser Python, Matlab, Julia o... R.
+
+Sí. R no es solo una aplicación al uso. Es todo un lenguaje de programación, orientado principalmente a la analítica de datos, sobre todo desde una perspectiva estadística. R es un proyecto de GNU, por lo que los usuarios son libres de modificarlo y extenderlo. R se distribuye como software libre bajo la licencia GNU y es multiplataforma, lo que ha facilitado su difusión y la existencia de una comunidad muy activa de ususarios y desarrolladores.
+
+## Instalación de R y R-Studio.
+
+Como ya se ha mencionado, R es un software o lenguaje de uso y difusión gratuitos, bajo licencia GNU. El modo de instalar R es sencillo: basta con ir a la web [*CRAN*](https://cran.r-project.org/) (*Comprehensive R Archive Network*) y descargar la última versión disponible en el sistema operativo del que se sea usuario (en este manual, Microsoft® Windows®). Se ejecutará el archivo descargado, y se completará la instalación.
+
+Una limitación de R es la interfaz o IDE (entorno de desarrollo integrado) que incorpora. Es decir, el "software" con el que se interactúa con el lenguaje R. Esta IDE es muy poco amigable. Para superar esta limitación, existen IDEs alternativas, entre las que destaca RStudio, desarrollada por Posit® Software. Esta IDE es gratuita. De nuevo, simplemente tendremos que ir a la web de [RStudio](https://posit.co/download/rstudio-desktop/) y descargar e instalar la versión gratuita.
+
+## R y RStudio. Comienzo: Proyectos.
+
+Tras instalar R y su IDE RStudio, podremos comenzar a trabajar. Para ello, abriremos RStudio pulsando en el icono correspondiente. Aparecerá la siguiente ventana:
+
+![[IDE de RStudio.]{.smallcaps}](figuras/Imagen1_01.png){width="500"}
+
+La parte izquierda de la ventana es la **consola**. La consola es la sección de RStudio donde podemos manejar R mediante la introducción de código. Por ejemplo, podemos escribir `2+2` después del cursor (signo "\>"), y pulsar Enter. La propia consola nos devolverá el valor 4:
+
+```{r,eval=TRUE, echo=TRUE}
+2+2
+```
+
+De todos modos, la forma más eficiente de trabajar es mediante "proyectos" y "scripts".
+
+Un **proyecto** básicamente viene asociado a la carpeta donde R trabajará, buscando los datos que sean sus "inputs", y, en su caso, enviando sus resultados u "outputs". Dicho de otro modo, es una carpeta más de nuestro sistema de carpetas o directorios; pero a la que dotamos de una característica especial: ser un proyecto de R. Si abrimos desde RStudio el proyecto, estaremos diciendo a R que, por defecto, preferentemente busque todos los archivos e inputs (datos, etc.) que necesite en esa carpeta de proyecto; y que, en su caso, guarde en tal carpeta los outputs que genere.
+
+Para crear un nuevo proyecto, seguiremos la instrucción `File → New Project`, luego se nos preguntará si se crea el proyecto en una nueva carpeta o en una ya existente. Vamos a crearlo, por ejemplo, en el disco extraíble D, carpeta R, subcarpeta "explora", que ya existe. Nos saldrá una ventana para buscar la carpeta y, cuando la encontremos, pulsaremos `Open` y `Create Project`. Ya tendremos creado nuestro proyecto. Si nos vamos al explorador de Windows®, y buscamos la carpeta "explora", encontraremos que en tal carpeta aparece un archivo de nombre "explora", con un icono de un cubo con una "R". Ese archivo lo que está haciendo es actuar como un "faro" que le dice a R que, cuando trabajemos en el proyecto "explora", todos los archivos de datos necesarios estarán en esa carpeta (también llamada "explora", porque el proyecto adopta el nombre de la carpeta donde lo localizamos). Y que, si nuestro trabajo aporta algún fichero de "output", también se depositará en esa carpeta del proyecto.
+
+En futuras sesiones, si queremos trabajar en el mismo proyecto, en lugar de seguir la ruta `File → New Project`, tendremos que hacer `File → Open Project`.
+
+## Scripts.
+
+En cuanto a los **scripts**, son programas o rutinas donde varias instrucciones se ejecutan secuencialmente. Para crear un script, se seguirá la ruta Fi`le → New File → R Script`. Y si el script lo guardamos, ¿dónde lo hará? Pues en la carpeta "explora", que es la del proyecto en el que estamos trabajando.
+
+Informáticamente, un script es simplemente un archivo de texto plano. Se puede modificar con cualquier editor de texto. Afortunadamente, para no estar entrando y saliendo de R-Studio, esta interfaz incorpora un **editor** de scripts, lo cual es muy cómodo.
+
+Vemos cómo ahora, a la izquierda de RStudio, ha aparecido, en la parte superior, una nueva ventana, pasando la consola a ocupar la parte inferior. Es la ventana del "editor":
+
+![[El editor de Scripts de RStudio.]{.smallcaps}](figuras/Imagen1_02.png){width="500"}
+
+Igual que con los proyectos, podemos crear desde RStudio un script nuevo, o abrir uno preexistente; y modificarlo, ejecutarlo, o volverlo a guardar.
+
+Vamos a comenzar a escribir nuestro script. Si queremos hacer un comentario que no ejecute ninguna instrucción, éste irá precedido del símbolo almohadilla o *hashtag* "\#". Luego, vamos a ordenar a R que haga la operación de suma: 2+2. Escribimos, por tanto, en el editor:
+
+```{r, eval=FALSE, echo=TRUE}
+#Ejemplo de Script
+2+2  #este script hace una simple suma.
+```
+
+Si pulsamos `Control + Mayúsculas + ENTER` o al desplegable de `Source → Source with Echo`, se ejecutará el script (para ejecutar solo la línea donde está el cursor, pulsaremos `Control + ENTER` o el botón de `Run`; y para ejecutar varias líneas, hemos de sombrearlas y pulsar `Control + ENTER` o el botón de `Run`). En la consola aparecerá:
+
+```{r, eval=TRUE, echo=FALSE}
+#Ejemplo de Script
+2+2  #este script hace una simple suma.
+```
+
+Podemos guardar el script con `File → Save As…` ¿Dónde se guardará por defecto? Pues en la carpeta "explora", que es la de nuestro proyecto. Una vez nuestro script ya tiene nombre, podemos ir guardándolo de vez en cuando pulsando simplemente en el botón del "disquete" del editor. Vamos a llamarlo, por ejemplo, "explorando". Si vamos, en el explorador de Windows®, a nuestra carpeta de proyecto, veremos que hay un archivo de texto llamado "explorando" con extensión ".R" (explorando.R). Este script lo podremos ejecutar cuantas veces queramos sin tener que escribir nada, o reescribirlo si vemos que no funciona o que necesitamos hacer modificaciones. Esa es la ventaja de trabajar con scripts.
+
+Para recuperar un script en una nueva sesión de trabajo simplemente tenemos que seguir las instrucciones `File → Open File…` y seleccionarlo.
+
+## Funciones.
+
+R trabaja con datos y funciones, principalmente. Pero, ¿qué es una **función**?
+
+Una función es un conjunto o **sistema de instrucciones** que convierten unos datos de entrada o **inputs** en otros datos de salida, resultados, u **outputs**. Una función puede ser muy sencilla o ser verdaderamente compleja. Por otro lado, no todas las funciones están integradas en "paquetes"; sino que el usuario puede crear sus propias funciones (por ejemplo, escribiéndolas en un script) y ejecutarlas.
+
+Las partes básicas de una función son:
+
+-   **Entradas, inputs o argumentos:** son las diversas informaciones necesarias para realizar el procedimiento de la función. Los argumentos pueden ser introducidos por el usuario, o pueden venir dados por defecto, lo que quiere decir que, si el usuario no dota de valor a un argumento, este tomará automáticamente un valor prestablecido.
+
+-   **Cuerpo:** está formado por un conjunto de instrucciones que transforman los *inputs* o entradas en los *outputs* o salidas. Si el cuerpo de la función está formado por varias instrucciones, éstas deben escribirse entre llaves `{ }`.
+
+-   **Salidas:** son los resultados u *output* de la función. Si una función ofrece como salida varios tipos de *objetos,* estos objetos suelen ser almacenados en una estructura de almacenaje de *lista*.
+
+Como ejemplo, vamos a integrar en nuestro script una función, llamada "suma". Esta función requerirá de dos entradas o argumentos (dos números cualesquiera), y ofrecerá, como resultado, salida u output; la suma de tales entradas. El código es:
+
+```{r, eval=TRUE, echo=TRUE}
+suma <- function(x, y) {
+  resultado <- x + y
+  return(resultado)
+}
+```
+
+Ahora, una vez ejecutado el código anterior; si queremos sumar, por ejemplo, los números 12 y 16, solo tendremos que teclear en la consola, o escribir en el script y hacer run, a la línea:
+
+```{r, eval=TRUE, echo=TRUE}
+suma(x=12, y=16)
+```
+
+## Paquetes (packages).
+
+R es un lenguaje de programación en torno al cual se ha desarrollado una cantidad casi inimaginable de recursos: funciones, bases de datos, utilidades... Tal es la cantidad de recursos, que no sería operativo abrir R (directamente, o a través de una IDE, como RStudio) y tener inmediatamente todos esos recursos activos y preparados para ser utilizados. Además, R debería ser actualizado de un modo casi constante.
+
+Por todo ello, todos los recursos disponibles están organizados mediante "paquetes" ("packages" en inglés). Un **paquete** es una colección de funciones y/o un conjunto de datos desarrollados por la comunidad de R. Estos incrementan el potencial de R ampliando sus capacidades básicas, o añadiendo otras nuevas.
+
+De hecho, cuando abrimos R, algunos de estos paquetes, que se han instalado junto al propio lenguaje, se activan. Pero solo algunos. Un ejemplo es el paquete `{base}` o el paquete `{stats}`.
+
+La mayor parte de los paquetes disponibles no forman parte, por "defecto", en la misma instalación de R. Se encuentran en diversos servidores llamados repositorios. El más importante, es [CRAN](https://cran.r-project.org/), que es el "repositorio oficial" y que alberga más de 10.000 paquetes. Pero existen otros repositorios, a destacar, por ejemplo, GitHub.
+
+Para **instalar** un paquete en nuestra máquina que esté albergado en CRAN, un modo sencillo es, dentro de R-Studio, pulsar en la ventana inferior / izquierda sobre la pestaña "Packages", y sobre el botón "Install". Emergerá entonces una ventana donde hay un campo para escribir el nombre del paquete (al comenzar a escribirlo, el propio R-Studio te sugerirá los paquetes disponibles). Esto equivale a usar (bien directamente en la consola, o bien como línea de código insertada en un script) la instrucción `install.packages()`, con el nombre del paquete entre comillas (si son varios, pues irán separados por comas.
+
+Una vez se tiene instalado el paquete, ya no habrá que volver a instalarlo para utilizarlo; sino **activarlo**. De hecho, todos los paquetes que no se encuentran por defecto en la propia instalación de R, deben ser activados para poder usar sus funcionalidades y/o datos. Para hacerlo, se debe utilizar la instrucción `library()`, y el nombre del paquete dentro del paréntesis.
+
+Del nombre de esta instrucción surge la confusión común de tomar como sinónimos las palabras "paquete" y "librería" en el entorno de R. Si nos referimos a estas colecciones de funcionalidades y/o datos; lo correcto es "paquete", ya que "librería" tiene más que ver con la organización informática de un software.
+
+## Help! (sistema de ayuda).
+
+A veces podemos albergar dudas sobre la correcta utilización de las funcionalidades y herramientas que nos proporciona un paquete. Hay varias fuentes de ayuda para intentar encontrar respuesta a las cuestiones que se nos plantean.
+
+Una opción, para obtener información general sobre un paquete, es utilizar la función `help()`, con el argumento `package=`. Por ejemplo:
+
+```{r, eval=TRUE, echo=TRUE}
+help(package="base")
+```
+
+Observaremos como en la ventana inferior / izquierda de RStudio nos saldrá la información correspondiente. De hecho, en tal ventana existe una pestaña **"Help"** para obtener la ayuda sin teclear código.
+
+Además, cada función puede ser consultada individualmente mediante `help("nombre de la función")` o `help(function, package = "package")` si el paquete no ha sido cargado. Estas instrucciones nos mostrarán la descripción de la función y sus argumentos acompañados de ejemplos de utilización. Por ejemplo:
+
+```{r, eval=FALSE, echo=TRUE}
+help("rm", package="base")
+```
+
+La instrucción anterior nos aporta la documentación sobre la función `rm()` del paquete `{base}` de R (nota: este paquete se activa por defecto al abrir R o R-Studio; por lo que el segundo argumento, con el nombre del paquete que contiene la instrucción no es necesario).
+
+Otra opción para mostrar información de ayuda es la exploración de las "viñetas" (vignettes). Las **viñetas** son documentos que muestran de un modo más detallado las funcionalidades de un paquete. La información de las viñetas de un paquete están disponibles en el archivo "documentation". Puede obtenerse una lista de las viñetas de nuestros paquetes instalados con la función `browseVignettes()`. Si solo queremos consultar las viñetas de un paquete concreto pasaremos como argumento a la función el nombre del mismo: `browseVignettes(package = "packagename")`. En ambos casos, una ventana del navegador se abrirá para que podamos fácilmente explorar el documento.
+
+Si optamos por permanecer en la consola, la instrucción `vignette()` nos mostrará una lista de viñetas, `vignette(package = "packagename")` las viñetas incluidas en el paquete, y una vez identificada la viñeta de interés podremos consultarla mediante `vignette("vignettename")`.
+
+# Almacenando y manipulando datos.
+
+## Objetos. Datos.
+
+Como vimos en las secciones anteriores, tras ejecutar un sencillo script (o al escribir instrucciones directamente desde la consola), R es interactivo: responde a las entradas que recibe. Las entradas o **expresiones** pueden ser, básicamente:
+
+-   Expresiones aritméticas.
+
+-   Expresiones lógicas.
+
+-   Llamadas a funciones.
+
+-   Asignaciones.
+
+Las expresiones realizan acciones sobre **objetos** de R. Los objetos en R son entes que tienen ciertas características, *metadatos*, llamados atributos. No todos los objetos tienen los mismos atributos y, ni tan siquiera, todos los objetos tienen atributos que los caractericen.
+
+Los objetos más importantes en R son ciertas estructuras o *contenedores* diseñados para almacenar elementos:
+
+-   Vectores.
+
+-   Matrices.
+
+-   Listas.
+
+-   Data frames.
+
+-   Factores.
+
+Los elementos almacenados en los objetos se dividen en *clases*. Entre las diferentes clases, destacan las clases referidas a **datos**, que pueden ser de diferentes *modos*: logical (verdadero/falso), numeric (números) o character (cadena de texto). El modo numeric puede ser, a la vez, de tipo integer (número entero) o double (número real). En el caso de logical y carácter, modo y tipo coinciden.
+
+Vamos a profundizar un poco en algunas de estos contenedores de datos. Vamos a suponer que trabajamos en el proyecto que creamos en el capítulo anterior (proyecto "explora"), y que vamos a editar el script que también creamos en tal capítulo (script "explorando.R", que se encontrará ubicado en la carpeta del proyecto "explora").
+
+### Vectores.
+
+Los **vectores**, son conjuntos de elementos **de la misma clase**. Vamos a definir por ejemplo el vector x = (1,3,5,8). Para ello, vamos a escribir en nuestro script:
+
+```{r, eval=TRUE, echo=TRUE }
+x <- c(1,3,5,8)
+```
+
+Ejecutamos la línea (situando el cursor en algún lugar de ella, dentro del script; y pulsando a la vez las teclas `Control + Enter` o pinchando con el ratón en el botón `Run` del editor). Ya tenemos nuestro primer objeto de tipo *vector* en memoria. Por cierto, lo que hemos hecho es una **asignación**, que se escribe con una flecha creada mediante los signos "\<" y "-". Hemos asignado a un vector llamado "x" los elementos 1, 3, 5 y 8.
+
+Si miramos en la ventana superior-derecha de R-Studio, veremos que en el ***Global Environment*** se muestra nuestro vector y que, además, se nos informa de que tiene *modo* *numérico*. El *Global Environment* nos informa de los objetos que R tiene en memoria:
+
+![Nuestro vector en memoria.](figuras/Imagen2_01.png){width="500"}
+
+Para ver el vector en pantalla simplemente escribimos en la consola (o en el script) el nombre del vector, "x". El resultado será:
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE}
+x
+```
+
+Si queremos obtener un vector de números consecutivos del 2 al 6, basta con ejecutar en la "consola" (o escribir y ejecutar en el script):
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+y <- c(2:6)
+```
+
+Al escribir el nombre del vector "y" en la "consola" obtendremos:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+y
+```
+
+Un vector puede incluir, además de números, caracteres o grupos de caracteres alfanuméricos; siempre entrecomillados (lo fundamental es que sean elementos de la misma clase). Por ejemplo, el vector "genero" (¡no pongamos tildes o podemos tener problemas!). Así, si ejecutamos estas dos líneas de código:
+
+```{r, eval=FALSE, echo=TRUE, message=FALSE}
+genero<-c("Mujer","Hombre")
+genero
+```
+
+Se habrá creado el vector "genero":
+
+```{r,eval=TRUE, echo=FALSE, message=FALSE}
+genero<-c("Mujer","Hombre")
+genero
+```
+
+Si falta un dato en un vector, habrá que escribir "NA" (not available). Por ejemplo, si falta el tercer dato de este vector "z", este vector se escribirá como:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+Z <- c(1,2,NA,2,8)
+```
+
+Para **seleccionar un elemento** concreto de un vector, indicaremos entre corchetes la posición en la que se encuentra. Por ejemplo, refiriéndonos al vector "x", para obtener el valor de su tercer elemento, haremos:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+x[3]
+```
+
+Si queremos que se nos muestre los elementos del vector x del 2º al 4º:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+x[2:4]
+```
+
+Por último, si queremos sacar en pantalla los elementos 1º y 4º, tendremos que incluir una "c" seguida de un paréntesis que recoja el orden de los elementos que queremos seleccionar:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+x[c(1,4)]
+```
+
+### Matrices.
+
+Las **matrices**, internamente en R, son vectores; pero con dos atributos adicionales: número de filas y número de columnas. Se definen mediante la función matrix(). Por ejemplo, para definir la matriz "a":
+
+$$
+\begin{pmatrix}
+    1 & 4 & 7 \\
+    2 & 5 & 8 \\
+    3 & 6 & 9
+\end{pmatrix}
+$$ Tendremos que escribir:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+a <- matrix(c(1,2,3,4,5,6,7,8,9),nrow=3)
+a
+```
+
+El número de filas de la matriz (y por tanto, el número de columnas) se fija con el argumento `nrow =` . También podríamos fijar el número de columnas, con `ncol =` .
+
+Como vemos, por defecto, R va "cortando" el vector por columnas (si lo preferimos, lo puede hacer también por filas, añadiendo a la función `matrix()` el argumento `by row = true`; pero, en nuestro ejemplo, obtendríamos la matriz traspuesta a la que queremos almacenar).
+
+Si queremos seleccionar elementos concretos de una matriz, lo haremos utilizando corchetes para indicar filas y columnas. Hemos de tener en cuenta que, trabajando con matrices, siempre tenemos $$rango de filas, rango de columnas$$ Si se deja en blanco el espacio entre el corchete inicial y la coma, esto querrá decir que consideramos todas las filas. Y si no insertamos nada entre la coma y el corchete de cierre, esto significará que consideramos todas las columnas. A continuación tenemos varios ejemplos de código, con el resultado obtenido en la consola:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+a[2,3]
+a[1:2,2:3] 
+a[,c(1,3)]
+a[c(1,3),]
+```
+
+### Data frames.
+
+Un ***data frame*** es un objeto que almacena datos organizados mediante la clase `data.frame`. Esta organización consiste en que, por filas, se disponen los diferentes casos o sujetos; mientras que por columnas se posicionan las variables. Así:
+
+-   Es similar a una matriz en el sentido de que tiene dos dimensiones. Podemos acceder a sus elementos con corchetes, tenemos nombres de filas y columnas, y podemos operar con ellas.
+
+-   Cada columna tiene un nombre, de manera que podemos acceder a una columna concreta con el símbolo **`$`**. Todas las columnas (variables) son vectores con la misma longitud.
+
+-   Cada columna puede ser un vector numérico, factor, de tipo carácter o lógico.
+
+Por ejemplo, vamos a crear el *data frame* **"datos"**, con tres variables: "peso", "altura", y "color de ojos", llamadas "Peso", "Altura" y "Cl.ojos", respectivamente; para 3 individuos o casos. Una opción es crear primero las tres variables como vectores, y luego crear el *data frame* mediante la función `dataframe()`:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+Peso<-c(68,75,88)
+Altura<-c(1.6,1.8,1.9)
+Cl.ojos<-c("azules","marrones","marrones")
+datos<-data.frame(Peso,Altura,Cl.ojos)
+```
+
+Si ahora ejecutamos una línea con el nombre de nuestro *data frame*, lo obtendremos como resultado en la consola:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+datos
+```
+
+Para obtener solo los datos de la columna (variable) color de ojos teclearemos datos\$Cl.ojos:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+datos$Cl.ojos
+```
+
+Y para obtener los datos de peso: datos\$Peso:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+datos$Peso
+```
+
+Para seleccionar elementos de un data frame, se pueden seguir las mismas reglas que para la selección de elementos de una matriz (con el número de cada fila, que es cada individuo; y el número de cada columna, que es cada variable. Para elegir una variable, no obstante, ya hemos visto que es posible usar su nombre; aunque precedido del nombre del data frame y el signo `$`. Por ejemplo, si ejecutamos:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+datos[,2]
+datos$Altura
+```
+
+Obtenemos el mismo resultado.
+
+## Importando, manipulando y analizando previamente nuestros datos.
+
+Es el momento de "tirarnos a la piscina" y aprender practicando con datos.
+
+Vamos a cerrar el script que hemos estado construyendo en los apartados anteriores (para conservarlo hay que guardarlo antes), aunque vamos a seguir trabajando en el mismo proyecto (que habíamos llamado "explora"). Iremos a la carpeta del proyecto y guardaremos en ella los dos archivos de esta práctica:
+
+-   Un archivo de Microsoft® Excel® llamado "interestelar_100.xlsx"
+
+-   Un script con las instrucciones que vamos a mostrar a continuación, y que se llama "exploralite.R"
+
+Vamos a abrir nuestro script "exploralite.R" con `File → Open File…` Este script contiene el programa que vamos a ir ejecutando en la práctica.
+
+### Limpieza del Global Environment y carga de paquetes.
+
+La primera instrucción en los scripts suele ser:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+# Análisis Previo de datos
+
+# Limpiando el Global Environment
+rm(list = ls())
+```
+
+La instrucción tiene como objeto **limpiar el *Global Environment*** (memoria) de objetos de anteriores sesiones de trabajo.
+
+Luego, pueden **cargarse los paquetes que harán falta para ejecutar el código**, si bien se puden cargar en cualquier parte del script (aunque siempre antes de ejecutar una línea que requiera de algún elemento incluido en uno de estos paquetes).
+
+Obviamente, para cargar o activar un paquete, previamente debe de haber sido instalado en la máquina donde estamos trabajando. Anteriormente hemos visto como instalar un paquete del repositorio *CRAN*. De nuevo, si no hemos instalado antes el paquete `{gtExtras}`, tendremos que instalarlo.
+
+Pueden instalarse paquetes procedentes de otros repositorios (por ejemplo, *Github*), o incluso desde archivos en modo local. Por ejemplo, a fin de facilitar los análisis posteriores, hemos de instalar un paquete procedente del repositorio Github, denominado `{MATdatatools}`, que incluye diversas funciones sencillas para la preparación de datos cara a su análisis posterior. Para instalarlo, hemos de tener instalado previamente desde CRAN el paquete `{devtools}`. Para ello, lo instalaremos como ya vimos. Una vez instalado, podremos instalar `{MATdatatools}` ejecutando en la consola:
+
+```{r}
+devtools::install_github("teckel71/R_for_Economics/packages/MATdatatools")
+```
+
+Volviendo a nuestro *script*, ejecutaremos el código de carga o activación de los siguientes paquetes:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+# Cargando paquetes
+library(MATdatatools)
+library(gtExtras)
+```
+
+### Importación de datos desde Microsoft® Excel®.
+
+Lo más frecuente es que no tecleemos los datos, como hemos hecho hasta ahora; sino que los importemos a R desde algún contenedor externo (archivo de texto, hoja de cálculo, base de datos...). Nosotros vamos a importar nuestros datos desde Microsoft® Excel®.
+
+Si abrimos el archivo de Microsoft® Excel® "interestelar_100.xlsx", comprobaremos que se compone de tres hojas. La primera muestra un aviso sobre el uso exclusivo que se debe dar a los datos incorporados; la segunda recoge la descripción de las variables consideradas; y la tercera (hoja "Datos") guarda los datos que debemos **importar** desde R-Studio. Estos datos se corresponden con diferentes variables económico-financieras y de diverso índole de una muestra de empresas que se dedican al transporte de mercancías interestelar.
+
+Luego vamos a cerrar el archivo de Microsoft® Excel® y volveremos a RStudio®. Para importar los datos localizados en el archivo de Excel "interestelar_100.xlsx" el código será:
+
+```{r, eval=FALSE, echo=TRUE, message=FALSE}
+datos <- MATfexcel("interestelar_100.xlsx", "Datos",
+                        na_values = c("n.d.", "s.d."))
+```
+
+La función `MATfexcel()` del paquete `{MATdatatools}` permite fácilmente importar los datos, asignándolos a un ***data frame*** cuyo nombre podemos elegir (en este caso, "datos"). Para ello, hay que completar los siguientes argumentos: el nombre del archivo de Microsoft® Excel® (que debe estar en la carpeta de proyecto), la hoja donde se hallan los datos y, si es preciso, los caracteres que, en la hoja de Excel, encontraremos en las posiciones o celdas donde no hay dato (NA), si en estos casos la celda no se encuentra totalmente vacía.
+
+Al ejecutar el código, podemos observar cómo en el *Environment* ya aparece un objeto. Este objeto es una estructura de datos tipo *data frame*, se llama "datos" y contiene 28 columnas, una por cada una de las variables almacenadas en el archivo de Microsoft® Excel®. De estas variables, 4 son de tipo cualitativo, formadas por cadenas de caracteres.
+
+Además, en la consola aparecen los nombres de las variables que conforman el *data frame* que hemos creado al importar los datos desde la hoja de Microsoft® Excel®, con algunas medidas básicas (dependiendo del tipo de escala de la variable, en cada caso):
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE}
+library(readxl)
+datos <- read_excel("interestelar_100.xlsx", sheet = "Datos",
+                         na = c("n.d.", "s.d."))
+datos <- data.frame(datos, row.names = 1)
+library (dplyr)
+df <- select(datos, everything())
+# Número de variables por bloque
+variables_por_bloque <- 4
+
+# Dividir las variables en bloques
+for (i in seq(1, ncol(df), variables_por_bloque)) {
+  # Comentario: No mostramos el nombre del bloque
+  print(summary(df[, i:min(i + variables_por_bloque - 1, ncol(df))]))
+  cat("\n")
+}
+rm (i)
+rm (variables_por_bloque)
+rm (df)
+```
+
+Un modo visualmente más elegante de explorar el contenido del data frame es la utilización de la función `gt_plt_summary()` del paquete `{gtExtras}`:
+
+```{r, eval=FALSE, echo=TRUE, message=FALSE}
+# visualizando el data frame de modo elegante con {gtExtras}
+datos_df_graph <- gt_plt_summary(datos)
+```
+
+Este código asigna al nombre "datos_df_graph" (o al que queramos) un gráfico/tabla con las variables que contiene el data frame (en este caso, "datos", añadiendo características y medidas básicas de las diferentes variables (según sea su tipología). Podremos ver este gráfico/tabla evocando a su nombre:
+
+```{r, eval=FALSE, echo=TRUE, message=FALSE}
+datos_df_graph
+```
+
+Y el resultado será:
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+# visualizando el data frame de modo elegante con {gtExtras}
+datos_df_graph <- gt_plt_summary(datos)
+datos_df_graph
+```
+
+### **Preparación de los datos.**
+
+Vamos a suponer que queremos estudiar a variable de nuestro *data frame* "datos" llamada *Rentabilidad Económica* (RENECO).
+
+La **Rentabilidad Económica (RENECO)** es un indicador clave en la evaluación del desempeño económico de las empresas. Este indicador mide la capacidad de una entidad para generar beneficios a partir de los activos que posee, independientemente de la estructura de financiación utilizada.
+
+La Rentabilidad Económica se calcula utilizando la siguiente fórmula:
+
+$$
+\text{Rentabilidad Económica (RENECO)} = \frac{\text{Beneficio Operativo (BAII)}}{\text{Activo Total}} \times 100
+$$
+
+Donde:
+
+-   **Beneficio Operativo (BAII):** Es el resultado obtenido después de restar los costos operativos, pero antes de deducir intereses e impuestos.
+
+-   **Activo Total:** Representa el valor total de los recursos controlados por la empresa.
+
+La Rentabilidad Económica es crucial porque:
+
+1.  **Evalúa la eficiencia operativa:** Mide qué tan eficaz es la empresa al emplear sus activos para generar ganancias.
+
+2.  **Comparación entre empresas:** Al ser independiente de la estructura de financiación, permite comparar empresas con diferentes niveles de endeudamiento.
+
+3.  **Indicador estratégico:** Ayuda a los gestores a tomar decisiones informadas sobre inversión, mejora de operaciones y asignación de recursos.
+
+En el sector del transporte interestelar, este indicador permite analizar cómo las compañías utilizan sus flotas, infraestructura y tecnologías para maximizar los retornos operativos. Por ejemplo, empresas que optimizan rutas entre galaxias o minimizan costos en planetas con mayor densidad logística suelen presentar una RENECO más alta.
+
+Siguiendo con la explicación de nuestro *script*, la primera acción que debe realizarse es comprobar que todos los casos (empresas) tienen su correspondiente dato o valor para la variable RENECO, es decir, que no existen **valores perdidos o *missing values***. Si existen casos en los que no se tiene el valor de RENECO, se puede actuar de varios modos. Por ejemplo, se puede intentar obtener por otro canal de información el conjunto de valores de RENECO que no están disponibles, o recurrir a alguna estimación para los mismos y asignarlos. En caso de que esto sea difícil, se puede optar, simplemente, por eliminar estos casos, en especial cuando representan un porcentaje muy reducido respecto al total de casos.
+
+Si optamos por esta última vía, podremos identificar y eliminar los casos involucrados fácilmente con la función `MATmv()` del paquete `{MATdatatools}`. Para ello, ejecutaremos el código:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+# missing values
+MATmv(datos, RENECO)
+
+```
+
+Al ejecutar el código, se obtienen dos objetos que se almacenan en el *Global Environment*. Uno es un nuevo *data frame*, llamado "datos_sm", que contiene las mismas columnas o variables que "datos"; pero con un caso menos (103 casos). Este caso carecía de dato en la variable RENECO. El otro objeto es una "lista" llamada "datos_sm_info". Esta lista guarda dos elementos:
+
+-   Un gráfico llamado "grafico_vismiss", donde se muestran visualmente los valores perdidos de las variables seleccionadas en la función.
+
+-   Una tabla en formato *html*, llamada "tabla_na", donde se informa de los casos que no tenían valor en la variable RENECO, y que han sido eliminados.
+
+Para visualizar el gráfico, ejecutaremos:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+datos_sm_info$grafico_vis_miss
+```
+
+Y la tabla:
+
+```{r, eval=FALSE, echo=TRUE, message=FALSE}
+datos_sm_info$tabla_na
+```
+
+La empresa que no tenía dato en la variable RENECO era "Photon Pack Freight", y ha sido eliminada en el nuevo *data frame* "datos_sm".
+
+Una vez tratados los casos con valores perdidos o *missing values*, **conviene detectar la posible presencia en la muestra de *outliers*** o casos atípicos, que pudieran distorsionar los resultados derivados de ciertos análisis (por ejemplo, un ANOVA o un análisis de regresión). Si existen este tipo de casos, han de ser correctamente tratados. Como ocurría con los *missing values*, el tratamiento de los *outliers* depende de la información que se tenga, existiendo varias alternativas (corrección del dato, estimación, etc.) Si no se tiene información fiable, y los *outliers* no representan una gran proporción respecto al total de casos, puede optarse por su eliminación de la muestra.
+
+Si se opta por la eliminación de los casos considerados *outliers* con respecto a la variable analizada, se puede utilizar la función `MATout()` del paquete `{MATdatatools}` pata detectar y eliminar estos casos. Para la variable RENECO, el código sería este:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+MATout(datos_sm, RENECO)
+```
+
+Obviamente, hemos aplicado la función sobre el *data frame* que ya había sido tratado de los *missing values*, "datos_sm". Como resultado, se obtienen dos nuevos objetos almacenados en el *Global Environment*. Uno es un nuevo *data frame*, llamado "datos_sm_so", que contiene las mismas columnas o variables que "datos_sm"; pero con dos casos menos (101 casos). Esos casos son los que se comportaban como *outliers* en la variable RENECO. El otro objeto es una "lista" llamada "datos_sm_so_info". Esta lista guarda dos elementos:
+
+-   Un gráfico de caja o *box-plot* llamado "Boxplot", donde se muestran visualmente los casos considerados *outliers* para la variable RENECO.
+
+-   Una tabla en formato *html*, llamada "Outliers_table", donde se informa de los casos identificados como *outliers* para la variable RENECO, y que han sido eliminados.
+
+Para visualizar el gráfico de caja ejecutaremos:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+datos_sm_so_info$Boxplot
+```
+
+La "caja" contiene el 50% de los valores de la variable que toman los casos centrales (los que van del primer cuartil al tercero, cuya diferencia se llama *rango intercuartílico*), y contiene una línea horizontal que es la mediana (segundo cuartil). Por arriba sobresale un segmento que llega al mayor valor de la variable que toma algún caso y que no llega a ser atípico; y por debajo de la caja otro segmento que llega al menor valor de la variable que toma algún caso y que no llega a ser atípico. Los casos atípicos o outliers son aquellos que toman valores que se alejan más de 1.5 veces del rango intercuartílico (altura de la caja) del tercer cuartil, por arriba; o del primer cuartil, por abajo. Se registran mediante puntos. En nuestro caso, se registran dos empresas con valores atípicos en la variable de rentabilidad económica, RENECO, por la parte superior del gráfico (altas rentabilidades). Es decir, considerando la variable RENECO, existen dos *outliers*.
+
+En cuanto a la tabla, que contiene los casos que se comportan como outliers con respecto a la variable RENECO, se puede consultar mediante el código:
+
+```{r, eval=FALSE, echo=TRUE, message=FALSE}
+datos_sm_so_info$Outliers_Table
+```
+
+Se comprueba que esas dos empresas son "Jovian Logistics" y "Sandworm freight", con unas rentabilidades económicas del 94% y 89,5%, respectivamente. Algo, lógicamente, bastante atípico. Ambas empresas han sido eliminadas con la intención de que la muestra represente bien a la mayor parte del sector del transporte interestelar; pero hay que tener en cuenta que existen y, seguramente, habría que analizarlas de modo particular para saber qué motivos han llevado a que puedan presentar esas rentabilidades tan extraordinariamente altas.
+
+### Descripción de una variable.
+
+Una vez tratados los datos que constituyen nuestra materia prima y nuestra fuente de análisis, vamos a proceder a realizar un análisis descriptivo básico de la variable de rentabilidad económica RENECO.
+
+Si la muestra es relativamente grande, se nos plantea la duda de cómo presentar, en primer lugar, la distribución de tal muestra en cuanto a nuestra variable en estudio (sería bastante incómodo tener que recurrir a presentar un listado con unas 100 empresas). Una posibilidad cómoda la ofrece la función `MATtaf()` del paquete `{MATdatatools}`. Como argumentos básicos de la función, deben indicarse el *data frame* "limpio", en nuestro caso "datos_sm_so", y la variable a analizar:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+MATtaf(datos_sm_so, RENECO)
+```
+
+El resultado es una "lista" denominada "RENECO_intervalos_frecuencia", con dos elementos:
+
+-   Un gráfico tipo **histograma**, que representan los casos o frecuencias contabilizados para diversos intervalos de valores de la variable, y que se llama "histograma". Más adelante se profundizará en el análisis de este gráfico.
+
+-   Una tabla en *html* llamada "tabla", con la distribución de frecuencias de la variable a lo largo de la muestra, para una serie de intervalos de valores de la variable (los mismos que en el histograma). Los intervalos, por defectos, vienen determinados por la *regla de Sturges*, que también se comentará detalladamente más adelante.
+
+El histograma obtenido se puede visualizar ejecutando:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+RENECO_intervalos_frecuencia$histograma
+```
+
+La línea azul se corresponde con el valor medio de RENECO para la muestra. El histograma deja claro que la distribución tiene forma campaniforme. Más adelante se analizará este gráfico detenidamente.
+
+En cuanto a la tabla de distribución de frecuencias, se puede visualizar llamando al correspondiente elemento:
+
+```{r, eval=FALSE, echo=TRUE, message=FALSE}
+RENECO_intervalos_frecuencia$tabla
+```
+
+Las distintas columnas de la tabla son:
+
+1.  **Intervalo:** Representa los rangos de valores en los que se agrupan las observaciones de la variable RENECO. En este caso, los intervalos son de ancho uniforme y van desde 28 hasta 79,7.
+
+2.  **Frecuencia Absoluta (n):** Indica el número de empresas cuya rentabilidad económica cae dentro de cada intervalo.
+
+3.  **Frecuencia Absoluta Acumulada (N):** Es la suma acumulativa de las frecuencias absolutas hasta cada intervalo. Proporciona el total de empresas con rentabilidades menores o iguales al límite superior del intervalo.
+
+4.  **Frecuencia Relativa (f):** Expresa la proporción de empresas dentro de cada intervalo respecto al total. Se calcula dividiendo la frecuencia absoluta del intervalo entre el total de observaciones.
+
+5.  **Frecuencia Relativa Acumulada (F):** Es la suma acumulativa de las frecuencias relativas hasta cada intervalo. Indica el porcentaje acumulado de empresas con rentabilidades iguales o inferiores al límite superior del intervalo.
+
+En este caso, puede observarse que:
+
+-   **Concentración en los intervalos centrales:** Los intervalos [47,4-53,9] y [53,9-60,3] concentran la mayoría de las empresas (25 observaciones cada uno), lo que equivale al 24,8% de las empresas en cada intervalo. Esto muestra que la rentabilidad económica del sector está principalmente centrada entre 47,4% y 60,3%, lo que refleja un comportamiento homogéneo en la mayoría de las empresas.
+
+-   **Empresas con rentabilidades bajas:** En el extremo inferior, el intervalo [28-34,5] incluye solo 5 empresas, representando el 5% del total. Estas empresas probablemente enfrentan desafíos operativos o estrategias menos eficaces que limitan su rentabilidad.
+
+-   **Empresas con rentabilidades altas:** En el extremo superior, el intervalo [73,2-79,7] contiene 2 empresas, representando solo el 2% del total. Estas empresas podrían estar aprovechando ventajas competitivas significativas, como tecnologías avanzadas o acceso a mercados clave.
+
+-   **Frecuencia acumulada:** El 94% de las empresas tienen rentabilidades iguales o inferiores al límite del intervalo [60,3-66,8], lo que indica que solo una pequeña proporción supera ese rango. Esto subraya que los valores extremos son casos aislados dentro del sector.
+
+Por otro lado, un modo sencillo y rápido de obtener unos resultados descriptivos básicos es por medio del emple de la función `MATdescribe()` del paquete `{MATdatatools}`. Como argumentos básicos de la función, deben indicarse el *data frame* "limpio", en nuestro caso "datos_sm_so", y la variable a analizar:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+MATdescribe(datos_sm_so, RENECO)
+```
+
+Como resultado, se obtiene una "lista" llamada "RENECO_describe_info". Esta lista guarda tres elementos:
+
+-   Una tabla en formato *html*, llamada "estadisticos", donde se muestran los valores de algunas medidas descriptivas básicas: media, desviación típica, mediana, valor mínimo, valor máximo, coeficiente de asimetría de *Fisher*, y coeficiente de curtosis de *Fisher*.
+
+-   Una composición de 4 gráficos para visualizar las características esenciales de la variable, llamada "grafico_resumen": un histograma,un gráfico de densidad con la distribución normal de referencia, un diagrama de caja (box-plot), y un gráfico QQ para estudiar la normalidad de la distribución de la variable analizada.
+
+-   Una tabla en formato *html*, llamada "normalidad", donde se muestra el resultado de la aplicación a la distribución de la variable analizada de la prueba de normalidad de *Shapiro-Wilk*.
+
+Para visualizar la primera tabla, ejecutaremos el código:
+
+```{r, eval=FALSE, echo=TRUE, message=FALSE}
+RENECO_describe_info$estadisticos
+```
+
+La tabla presentada incluye las principales estadísticas descriptivas de la variable **RENECO** (Rentabilidad Económica). A continuación, se explican cada una de estas medidas y su relevancia, junto con una interpretación económica de los valores obtenidos:
+
+-   **Media:** Representa el valor promedio de la rentabilidad económica en la muestra. Un valor alto indica un desempeño rentable generalizado entre las empresas analizadas.
+-   **Desviación típica:** Mide la dispersión de los datos respecto a la media. Una alta desviación indica mayor variabilidad en las rentabilidades, mientras que una baja sugiere homogeneidad.
+-   **Mediana:** Es el valor central de la distribución, útil para identificar la tendencia central, especialmente si los datos están sesgados.
+-   **Valor mínimo y máximo:** Representan los extremos de la rentabilidad económica, ofreciendo información sobre los casos más desfavorables y favorables en la muestra.
+-   **Coeficiente de asimetría de Fisher:** Indica el grado de asimetría de la distribución. Un valor cercano a 0 sugiere simetría, mientras que valores positivos o negativos indican sesgos hacia valores altos o bajos, respectivamente.
+-   **Coeficiente de curtosis de Fisher:** Mide el grado de concentración de los datos alrededor de la media. Un valor cercano a 0 indica una curtosis normal (mesocúrtica), mientras que valores positivos o negativos implican mayor concentración (leptocúrtica) o dispersión (platicúrtica).
+
+En el caso de nuestra muestra, para la variable RENECO, pueden establecerse algunas conclusiones. La media del 52% señala que el sector del transporte interestelar está logrando, en general, buenos niveles de rentabilidad económica. Sin embargo, el rango de valores (28%-80%) y la desviación típica (10) evidencian que no todas las empresas tienen un desempeño homogéneo. Las firmas con mayor rentabilidad probablemente optimizan el uso de sus activos, como flotas espaciales y tecnología avanzada, mientras que aquellas en el rango inferior podrían estar enfrentando ineficiencias o altos costos operativos.
+
+La ligera simetría (asimetría de 0.14) sugiere que las rentabilidades están distribuidas de manera equilibrada, sin un predominio claro de empresas con resultados extremadamente altos o bajos. La curtosis, relativamente cercana a 0 (-0.19) respalda esta interpretación, ya que no hay una concentración excesiva de valores cerca de la media ni una dispersión extrema.
+
+La interpretación de las medidas descriptivas debe complementarse necesariamente con un análisis gráfico. Este análisis visual es el que permite, de un modo sencillo e intuitivo, extraer información de la distribución de frecuencias de una variable. La función `MATdescribe()` ofrece los 4 gráficos siguientes:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+RENECO_describe_info$grafico_resumen
+```
+
+Se trata de los siguientes gráficos:
+
+-   **Histograma:** El histograma es una representación gráfica de la distribución de frecuencias de una variable numérica. Divide los valores en intervalos o "bins" y muestra la cantidad de observaciones que caen dentro de cada intervalo.
+
+    -   **Interpretación:** Permite identificar la forma general de la distribución (simétrica, sesgada, uniforme, etc.), la concentración de valores y la presencia de posibles valores atípicos.
+
+    -   **Utilidad:** Es útil para explorar visualmente la distribución de los datos y evaluar su adecuación a modelos estadísticos.
+
+    -   **Nota:** la función `MATdescribe()` utiliza por defecto la *regla de Sturges* para plantear el número de intervalos en los que dividir la distribución. La *regla de Sturges* es un método ampliamente utilizado para calcular automáticamente el número de *bins* en un histograma. Se basa en una aproximación logarítmica, siendo especialmente útil para tamaños de muestra pequeños o moderados. La fórmula es la siguiente:
+
+        $$
+        k = 1 + \log_2(n)
+        $$
+
+        Donde: $k$ es el número de *bins* y $n$ es el tamaño de la muestra (el número total de observaciones).
+
+        Esta regla asume que los datos siguen una distribución aproximadamente normal. Su simplicidad la hace popular, pero tiende a subestimar el número de *bins* para muestras grandes, lo que puede llevar a una pérdida de detalle en la visualización del histograma.
+
+-   **Gráfico de Densidad:** El gráfico de densidad es una versión suavizada del histograma que utiliza una función de densidad de *Kernel* para estimar la distribución de probabilidad de una variable continua.
+
+    -   **Interpretación:** Facilita la identificación de la forma de la distribución, permitiendo una visualización más precisa de los picos, valles y la simetría de los datos.
+
+    -   **Utilidad:** Ideal para comparar distribuciones entre grupos o para observar patrones que pueden ser menos evidentes en un histograma.
+
+-   **Box-Plot (diagrama de caja y bigotes):** El box-plot, como ya vimos, es una representación gráfica de los datos basada en sus cuartiles, que incluye información sobre la mediana, el rango intercuartílico (IQR), y los valores extremos (outliers).
+
+    -   **Interpretación:** La caja central muestra el rango intercuartílico (del percentil 25 al 75), mientras que la línea dentro de la caja representa la mediana. Los "bigotes" indican la extensión de los datos hasta un máximo de 1.5 veces el IQR, y los puntos fuera de este rango son valores atípicos.
+    -   **Utilidad:** Es útil para identificar la dispersión, la simetría y los valores atípicos en una distribución.
+
+-   **Gráfico QQ (Quantile-Quantile):** El gráfico QQ compara los cuantiles de la distribución de los datos con los cuantiles de una distribución teórica (por ejemplo, normal). Representa los datos observados en el eje vertical y los cuantiles teóricos en el eje horizontal.
+
+    -   **Interpretación:** Si los puntos caen sobre una línea recta, indica que los datos se ajustan bien a la distribución teórica. Desviaciones sistemáticas de la línea recta pueden sugerir asimetría, curtosis o la presencia de valores extremos.
+    -   **Utilidad:** Es una herramienta clave para evaluar la normalidad de los datos y diagnosticar supuestos estadísticos.
+
+En nuestro caso, podemos realizar la siguiente Interpretación de los gráficos de la distribución de la variable RENECO:
+
+-   **Histograma:**
+
+    -   **Descripción:** El histograma muestra una distribución aproximadamente simétrica centrada alrededor de los valores de 50 a 60, que coincide con la media (52) y la mediana (50).
+
+    -   **Interpretación:** La mayoría de las empresas tienen rentabilidades económicas en este rango, lo que indica una relativa homogeneidad en el desempeño. Los extremos sugieren algunos casos de empresas con rentabilidades atípicamente bajas (cerca de 30) y otras excepcionalmente altas (alrededor de 80).
+
+-   **Gráfico de Densidad vs. Curva Normal:**
+
+    -   **Descripción:** El gráfico de densidad (línea amarilla) está suavizado para reflejar la distribución real de los datos, mientras que la línea azul representa una curva normal teórica basada en la media y desviación típica.
+
+    -   **Interpretación:** La distribución se asemeja mucho a la normal, pero presenta ligeras desviaciones (picos algo más pronunciados). Esto se alinea con el coeficiente de curtosis cercano a 0 (-0.19), indicando una distribución levemente achatada en comparación con la normal.
+
+-   **Box-Plot:**
+
+    -   **Descripción:** El box-plot confirma que la mayoría de las observaciones están concentradas entre 45 y 60 (rango intercuartílico). Hay algunos puntos dispersos fuera de los "bigotes", que corresponden a valores atípicos.
+    -   **Interpretación:** Los valores atípicos por encima de 60 representan empresas con un desempeño excepcionalmente alto, posiblemente debido a una gestión eficiente o ventajas tecnológicas en el sector. Los valores por debajo de 40 podrían estar asociados a desafíos operativos o estrategias menos competitivas.
+
+-   **QQ-Plot:**
+
+    -   **Descripción:** En el gráfico QQ, los puntos siguen de cerca la línea diagonal, lo que indica que los datos se ajustan razonablemente bien a una distribución normal, con ligeras desviaciones en los extremos.
+
+    -   **Interpretación:** Esto respalda que la variable RENECO tiene una distribución simétrica, lo que facilita el uso de modelos estadísticos que asumen normalidad para realizar inferencias sobre el sector.
+
+Estos gráficos reflejan un sector con una rentabilidad económica mayoritariamente homogénea, pero con algunas empresas destacadas y otras rezagadas. Las líderes (valores altos) probablemente optimizan sus activos e infraestructura, mientras que las rezagadas pueden estar enfrentando desafíos operativos o estratégicos. La aproximación a la normalidad también sugiere estabilidad en el sector, lo que puede favorecer el análisis predictivo y la comparación entre empresas.
+
+El último elemento que ofrece la lista generada a partir de la aplicación de la función `MATdescribe()` es una tabla donde se muestra el p-valor y la conclusión de la prueba estadística de normalidad de Shapiro-Wilk, que se obtendrá al ejecutar:
+
+```{r, eval=FALSE, echo=TRUE, message=FALSE}
+RENECO_describe_info$normalidad
+```
+
+La prueba de normalidad de ***Shapiro-Wilk*** es una herramienta estadística ampliamente utilizada para evaluar si una variable sigue una distribución normal. Esta prueba complementa el análisis visual realizado con el gráfico QQ, proporcionando un enfoque cuantitativo para determinar la normalidad de los datos.
+
+La normalidad en la distribución de una variable es crucial porque muchos modelos estadísticos y pruebas inferenciales se basan en el supuesto de que los datos siguen una distribución normal. La normalidad garantiza:
+
+-   **Validez de inferencias:** Permite aplicar pruebas paramétricas que son más eficientes y precisas bajo este supuesto.
+
+-   **Predicciones confiables:** Modelos como la regresión lineal o ANOVA dependen de la normalidad de los residuos para obtener estimaciones fiables.
+
+La prueba fue desarrollada en 1965 por S*amuel Shapiro* y *Martin Wilk*. Es considerada una de las pruebas más potentes para detectar desviaciones de la normalidad, especialmente en muestras pequeñas. La prueba calcula un estadístico que mide la correlación entre los datos observados y los valores esperados bajo una distribución normal.
+
+En nuestrocaso, el resultado de la prueba de *Shapiro-Wilk* para la variable RENECO arroja un p-valor de 0,971. Dado que este valor es mayor al nivel de significancia usual de 0,05, no se puede rechazar la hipótesis nula de que los datos siguen una distribución normal.
+
+La normalidad en la distribución de la variable RENECO sugiere que la rentabilidad económica de las empresas del sector presenta un comportamiento estable y predecible. Esto permite:
+
+-   **Aplicar modelos estadísticos paramétricos:** Como pruebas de medias o análisis de regresión, con mayor confianza en los resultados.
+
+-   **Comparaciones consistentes:** La simetría y concentración de los datos alrededor de la media facilitan la evaluación de estrategias operativas entre empresas.
+
+-   **Interpretaciones robustas:** Un comportamiento normal indica que los extremos (empresas con desempeño muy alto o muy bajo) no dominan el mercado, permitiendo un análisis más representativo del sector.
+
+En conjunto con el gráfico QQ, esta prueba confirma que los datos de RENECO cumplen los supuestos fundamentales para el uso de herramientas inferenciales y predictivas.
+
+A partir de un análisis descriptivo similar al anterior; la variable estará descrita y preparada para incluirse en análisis más complejos, lo que es objeto de siguientes capítulos.
