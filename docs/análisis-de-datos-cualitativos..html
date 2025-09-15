@@ -114,7 +114,7 @@
 <p>Dentro de “Datos”, existen dos variables categóricas, atributos o factores: la variable DIMENSION, que tiene, a su vez, tres categorías dependiendo del número de empresas que integradas en la matriz de la empresa en cuestión (“GRANDE”, “MEDIA” o “REDUCIDA”); y la variable VALORACION, que cuenta con tres categorías dependiendo de la opnión de un panel de expertos en cuanto a la situación económica de la empresa (“OPTIMA”, “NORMAL”, “PESIMA”). Nuestra intención es analizar si existe <strong>evidencia sobre asociación</strong> entre las dos variables categóricas, en el sentido de que los casos tienden a concentrarse con cierta facilidad en ciertas combinaciones de categorías de uno y otro factor, y/o a no posicionarse en otras combinaciones; o si por el contrario no se puede afirmar que exista asociación de este tipo.</p>
 <p>El código de R que iremos aplicando se encuentra en el <em>script</em> “<a href="https://drive.google.com/file/d/1u8gJa3jQH2cwuQ8KsISQ9esHKrFAO_au/view?usp=sharing">correspondencias_eolica.R</a>”. Trabajaremos en un proyecto específico de RStudio, si así lo valoramos como conveniente (en este ejemplo, el proyecto “correspondencias”).</p>
 <p>Al abrir el <em>script</em> en el editor de RStudio, lo primero que veremos será la instrucción para limpiar la memoria de objetos. Tras ello, se procede a la importación de los datos del fichero de <em>Excel</em>. Tras importar las variables, se procede a ajustar la importación para que la primera columna pase a ser el nombre de los casos (filas) del <em>data frame</em> que recibe y almacena los datos. Este <em>data frame</em> se denomina, por ejmplo, “eolicas”. Con un <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> comprobamos que las variables se han importado correctamente:</p>
-<div class="sourceCode" id="cb358"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb367"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Analisis de correspondencias simple de eolicas</span></span>
 <span><span class="co"># Disculpen por la falta de tildes!</span></span>
 <span></span>
@@ -178,7 +178,7 @@
 ##  Class :character   Class :character  
 ##  Mode  :character   Mode  :character</code></pre>
 <p>A continuación, creamos otro <em>data frame</em>, de nombre, por ejemplo, “originales”, con los dos atributos analizados: el factor DIMENSION y el factor VALORACION. Se comprueba si existen observaciones con <em>missing values</em> y, en tal caso, se eliminan dichas observaciones aplicando el filtro apropiado, a partir de la función <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> del paquete <a href="https://dplyr.tidyverse.org">dplyr</a>:</p>
-<div class="sourceCode" id="cb360"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb369"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Seleccionando factores/atributos para el analisis</span></span>
 <span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
@@ -188,23 +188,23 @@
 ##  Length:51          Length:51         
 ##  Class :character   Class :character  
 ##  Mode  :character   Mode  :character</code></pre>
-<div class="sourceCode" id="cb362"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb371"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Identificando missing values.</span></span>
 <span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/visdat/">visdat</a></span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss</a></span><span class="op">(</span><span class="va">originales</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-333-1.png" width="672"></div>
-<div class="sourceCode" id="cb363"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-459-1.png" width="672"></div>
+<div class="sourceCode" id="cb372"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">originales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">DIMENSION</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">VALORACION</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">DIMENSION</span>, <span class="va">VALORACION</span><span class="op">)</span>  </span></code></pre></div>
 <pre><code>## [1] DIMENSION  VALORACION
 ## &lt;0 rows&gt; (o 0- extensión row.names)</code></pre>
-<div class="sourceCode" id="cb365"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb374"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">originales</span> <span class="op">&lt;-</span> <span class="va">originales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">DIMENSION</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">VALORACION</span><span class="op">)</span><span class="op">)</span>  </span></code></pre></div>
 <p>En el ejemplo, se comprueba que no existen casos con <em>missing values</em>, por lo que la tabla queda en blanco y no se descarta ninguna observación.</p>
 <p>La siguiente etapa es la construcción de la “<strong>tabla de contingencia</strong>”. La función fundamental es <code><a href="https://rdrr.io/r/base/table.html">table()</a></code> que, como sabemos, hace un recuento de los casos (frecuencias) en los que una variable toma un determinado valor (o en los que un atributo adopta una determinada categoría o nivel). Cuando esta función se aplica a más de una variable o atributo, hace un recuento de los casos que adoptan las posibles combinacionesse entre valores/categorías o niveles de las variables o atributos implicados. Cuando se trata de dos atributos, por tanto, <code><a href="https://rdrr.io/r/base/table.html">table()</a></code> construye una tabla de contingencia mediante la formulación de una tabla de doble entrada. En nuestro ejemplo, a la tabla de contingencia la hemos denominado, por ejemplo, “tab.originales”. Luego, la hemos presentado con un formato de tabla elaborado con la función <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code> del paquete <a href="https://yihui.org/knitr/">knitr</a>, y algunas funciones adicionales del paquete <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>:</p>
-<div class="sourceCode" id="cb366"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb375"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># TABLA DE CONTINGENCIA</span></span>
 <span></span>
 <span>  <span class="va">tab.originales</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">originales</span><span class="op">)</span></span>
@@ -227,7 +227,7 @@
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/column_spec.html">column_spec</a></span><span class="op">(</span><span class="fl">1</span>, bold <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-335">Table 10.1: </span><span id="tab:unnamed-chunk-335">Table 10.2: </span>Empresas eólicas
+<span id="tab:unnamed-chunk-461">Table 10.1: </span><span id="tab:unnamed-chunk-461">Table 10.2: </span>Empresas eólicas
 </caption>
 <thead>
 <tr>
@@ -334,7 +334,7 @@ Sum
 </table></div>
 <p>Es de destacar que, en el código de la tabla, se ha añadido la función <code>addmargin()</code> para que se añadan las frecuencias marginales de las categorias de ambos atributos (sumas de filas y columnas). Además, se ha utilizado la función <code><a href="https://rdrr.io/pkg/kableExtra/man/add_header_above.html">add_header_above()</a></code> del paquete <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a> para añadir filas superiores al encabezado, que ocupen distintas cantidades de columnas.</p>
 <p>La tabla también se puede representar gráficamente mediante la función <code><a href="https://rdrr.io/pkg/vcd/man/mosaic.html">mosaic()</a></code> de la librería <code>{vcd}</code>, con lo que se percibirá mejor la magnitud de las frecuencias conjuntas (celdas de la tabla). A mayor frecuencia, mayor área del rectángulo correspondiente:</p>
-<div class="sourceCode" id="cb367"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb376"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va">vcd</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/vcd/man/mosaic.html">mosaic</a></span><span class="op">(</span><span class="va">tab.originales</span>,</span>
 <span>           main <span class="op">=</span> <span class="st">"Eólicas: Dimensión Matriz y Valoración Expertos."</span>,</span>
@@ -342,7 +342,7 @@ Sum
 <span>           gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/vcd/man/shadings.html">shading_Marimekko</a></span><span class="op">(</span><span class="va">tab.originales</span><span class="op">)</span>,</span>
 <span>           main_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">14</span><span class="op">)</span>,</span>
 <span>           sub_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-336-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-462-1.png" width="672"></div>
 <p>Los argumentos de la función <code><a href="https://rdrr.io/pkg/vcd/man/mosaic.html">mosaic()</a></code> juegan el siguiente papel:</p>
 <ol style="list-style-type: decimal">
 <li><p><strong><code>tab.originales</code></strong>: Es la tabla de contingencia que contiene los datos a visualizar en el gráfico mosaico. Debe ser una tabla de contingencia creada con la función <code><a href="https://rdrr.io/r/base/table.html">table()</a></code> o una matriz con datos categóricos.</p></li>
@@ -354,7 +354,7 @@ Sum
 </ol>
 <p>En nuestro ejemplo, podemos apreciar con claridad como una importante proporción de los casos (empresas) se concentran en la combinación de valoración óptima y dimensión de la empresa matriz reducida. También es destacable la combinación de valoración normal y dimensión de la compañía matriz grande. Por el lado opuesto, destaca la combinación de valoración normal y dimensión de la matriz media, que no posee ningún caso (frecuencia 0), y valoración pésima y dimesión de la matriz reducida.</p>
 <p>Otro modo de visualizar la estructura de la tabla es hacer gráficos de barras que muestren las frecuencias de las categorías de cada factor (frecuencias marginales), aunque en cada barra se pueda diferenciar, además, los casos o frecuencias que pertenecen a las categorías del otro factor. En nuestro caso:</p>
-<div class="sourceCode" id="cb368"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb377"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Representando frecuencias de categorias en factores</span></span>
 <span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
@@ -374,7 +374,7 @@ Sum
 <span></span>
 <span>    <span class="op">(</span><span class="va">g1</span> <span class="op">+</span> <span class="va">g2</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Frecuencias Marginales."</span>,</span>
 <span>                  theme <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-337-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-463-1.png" width="672"></div>
 <p>Se observa cómo, en cuanto al atributo o factor DIMENSION, la categoría más frecuente es la dimensión “REDUCIDA”, mientras que la categoría que menos se da en la muestra es, destacadamente, “MEDIA”. Además, como ya se ha comentado, destaca que la mayor parte de los casos de la categoría “REDUCIDA” tienen una valoración de “OPTIMA” en el factor VALORACION. También llama la atención que en la categoría “MEDIA” no existen casos con valoración “NORMAL”. En cuanto al gráfico del atributo o factor “VALORACION”, el mayor número de frecuencias, de modo muy destacado, se concentran en la categoría “OPTIMA”, estando las otras dos categorías bastante igualadas en cuanto al número de casos. Es reseñable también que, en la categoría “OPTIMA”, la mayor parte de casos tienen una dimensión “REDUCIDA”.</p>
 <p>Como ya hemos dicho, una de las cuestiones más importantes en el análisis de tablas de contingencia es <strong>determinar si existe asociación entre ambos atributos o factores</strong> (valoración de las empresas y dimensión de las compañías matrices), en el sentido de poder plantear que los casos (empresas) concentradas en ciertas categorías concretas de uno de los factores o atributos tienden a concentrarse, simultáneamente, en ciertas categorías concretas del otro factor o atributo; o al revés: que el hecho de que los casos no tiendan a concentrarse en ciertas categorías de uno de los factores o atributos está relacionado con que no se concentren en ciertas categorías del otro factor o atributo. En nuestro ejemplo, ya hemos señalado algunas combinaciones de categorías que podrían llevar a pensar a que existe cierto grado de asociación entre los atributos DIMENSION y VALORACION.</p>
 <p>Existen diferentes pruebas para verificar la posible existencia de asociación entre dos factores. Una de ellas es el <em><strong>contraste o prueba de asociación de Pearson</strong>.</em> Este contraste se base en un estadístico del contraste, que bajo la hipótesis nula de que no existe asociación sigue una distribución Chi/Ji Cuadrado. El estadístico, en realidad, es una medida global de <strong>lo distante que está la tabla de contingencia observada (sus frecuencias conjuntas) respecto a la estructura “ideal” que tendría que tener si existiera independencia</strong> “total” entre ambos atributos. Así, el estadístico del contraste de la <em>prueba de asociación de Pearson</em> es:</p>
@@ -398,7 +398,7 @@ Sum
 <li>( <span class="math inline">\(r_{ij}\)</span> ) es el residuo estandarizado para la celda en la fila ( i ) y la columna ( j ).</li>
 </ul>
 <p>El paquete <code>{stats}</code> de R (que se carga automáticamente, por defecto, al iniciar R, por lo que no hay que “activarlo”), contiene la función <code><a href="https://rdrr.io/r/stats/chisq.test.html">chisq.test()</a></code> que efectúa la prueba de asociación de <em>Pearson</em>. El código y resultado de la prueba es:</p>
-<div class="sourceCode" id="cb369"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb378"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># INDEPENDENCIA / ASOCIACION</span></span>
 <span>  </span>
 <span>  <span class="co"># Test de asociación de Pearson (Ji-Cuadrado)</span></span>
@@ -412,7 +412,7 @@ Sum
 ## X-squared = 11.494, df = 4, p-value = 0.02154</code></pre>
 <p>En nuestro caso, el <em>p-valor</em> es menor que 0,05, luego <strong>se rechaza la hipótesis nula de independencia</strong> de los atributos o factores, y admitimos que <strong>existe asociación entre ambos.</strong></p>
 <p>Precisamente, el paquete <code>{vcd}</code> ofrece la posibilidad de, para cada frecuencia conjunta, visualizar la diferencia estandarizada entre el valor observado y el que debería darse en el caso de que existiera independencia perfecta entre los dos atributos o factores (<em>residuo de Pearson</em>). Para ello, se aplica la función <code><a href="https://rdrr.io/pkg/vcd/man/assoc.html">assoc()</a></code>, destinada a construir un gráfico con los residuos de <em>Pearson</em> de la tabla de contingencia. Los residuos, si son estadísticamente significativos para una significación de 0,05, se colorean de naranja, y en caso contrario de gris. Para determinar los colores concretos, se ha creado la función <code>custom_shading()</code>, que se pasa en el argumento <code>gp=</code> para personalizar el color concreto de cada barra del gráfico:</p>
-<div class="sourceCode" id="cb371"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb380"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">Residuos_std</span> <span class="op">&lt;-</span> <span class="va">Prueba_asoc_Pearson</span><span class="op">$</span><span class="va">stdres</span></span>
 <span></span>
 <span>  <span class="co"># Definir una función de sombreado personalizada</span></span>
@@ -431,7 +431,7 @@ Sum
 <span>        gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu">custom_shading</span><span class="op">(</span><span class="va">Residuos_std</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>        main_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">14</span><span class="op">)</span>,</span>
 <span>        sub_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-339-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-465-1.png" width="672"></div>
 <p>Puede observarse cómo en las combinaciones GRANDE/NORMAL, GRANDE/OPTIMA y MEDIA/NORMAL los residuos de Pearson son estadísticamente significativos (lo que, a su vez, indica que las frecuencias correspondientes están muy alejadas de las que debería haber en caso de independencia perfecta), lo que llevaría que la prueba haya rechazado la hipótesis de independencia entre los atributos o factores.</p>
 </div>
 <div id="análisis-de-correspondencias." class="section level2" number="10.3">
@@ -456,7 +456,7 @@ Sum
 <li><p><strong>Coordenadas Dim. 1 y Dim. 2</strong>: Coordenadas de las filas o columnas en las dos dimensiones del espacio de correspondencias. Indican la posición de cada fila o columna en el espacio bidimensional.</p></li>
 <li><p><strong>cos2 Dim. 1 y Dim. 2 (Coseno Cuadrado)</strong>: El coseno cuadrado de los ángulos entre las filas o columnas y las dimensiones. Mide la calidad de la representación de las filas o columnas en las dimensiones. Valores cercanos a 1 indican que la fila o columna está bien representada en esa dimensión. Valores bajos indican una mala representación.</p></li>
 </ol>
-<div class="sourceCode" id="cb372"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb381"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ANALISIS DE CORRESPONDENCIAS SIMPLE</span></span>
 <span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="http://factominer.free.fr">FactoMineR</a></span><span class="op">)</span></span>
@@ -546,7 +546,7 @@ Sum
 <span>  <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-341">Table 10.3: </span><span id="tab:unnamed-chunk-341">Table 10.4: </span>Análisis de correspondencias: Dimensión Matrix vs Valoración.
+<span id="tab:unnamed-chunk-467">Table 10.3: </span><span id="tab:unnamed-chunk-467">Table 10.4: </span>Análisis de correspondencias: Dimensión Matrix vs Valoración.
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -596,7 +596,7 @@ Acumulada
 </table></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-341">Table 10.3: </span><span id="tab:unnamed-chunk-341">Table 10.3: </span>Análisis de correspondencias: DIMENSION.
+<span id="tab:unnamed-chunk-467">Table 10.3: </span><span id="tab:unnamed-chunk-467">Table 10.3: </span>Análisis de correspondencias: DIMENSION.
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -682,7 +682,7 @@ REDUCIDA
 </table></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-341">Table 10.3: </span>Análisis de correspondencias: VALORACION.
+<span id="tab:unnamed-chunk-467">Table 10.3: </span>Análisis de correspondencias: VALORACION.
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -780,7 +780,7 @@ PESIMA
 <p>El principal output del análisis de correspondencias es el gráfico bidimensional donde se representan las categorías de los atributos o factores. En general, cuanto más cerca se localicen determinada categoría de un factor y determinada categoría del otro, mayor será la relación estadística (asociación) entre ambas categorías, lo que implica a su vez mayor asociación entre los atributos o factores.</p>
 <p>Antes de presentar el gráfico bidimensional, vamos a construir un gráfico de barras con los porcentajes de la inercia total que asumen cada una de las dos dimenciones o ejes del gráfico. Esto es importante, ya que si la inercia recogida por la segunda dimensión o eje es muy pequeña, como a veces ocurre, habría que tener en cuenta, sobre todo, la localización de las categorías en la primera dimensión o eje, a la hora de establecer conclusiones en cuanto a la asociación o no entre categorías. También es necesario tener en cuenta la calidad con que cada eje representa a cada categoría de cada variable o factor, medida con el coseno cuadrado (cos2), como ya se ha comentado.</p>
 <p>Para crear de un modo sencillo el gráfico de contribuciones de los ejes o dimensiones a la inercia total, puede recurrirse a la función <code><a href="https://rdrr.io/pkg/factoextra/man/eigenvalue.html">fviz_screeplot()</a></code> del paquete <a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a>:</p>
-<div class="sourceCode" id="cb373"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb382"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Gráfico de contribuciones de las dimensiones  a la Inercia Total</span></span>
 <span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a></span><span class="op">)</span></span>
@@ -797,7 +797,7 @@ PESIMA
 <span>                <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">gcontrib</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-342-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-468-1.png" width="672"></div>
 <p>Puede observarse, como ya se recogió en la primera table de la solución, que la primera dimensión o eje asume el 77,5% de la inercia tital (varianza o comportamiento de las categorías), mientras que la segunda dimensión o eje asume el 22,5% restante.</p>
 <p>En cuanto al gráfico bidimensional, puede obtenerse igualmente mediante la función <code><a href="https://rdrr.io/pkg/factoextra/man/fviz_ca.html">fviz_ca_biplot()</a></code> de <a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a>. Este es el papel que juegan los diferentes argumentos de la función:</p>
 <ul>
@@ -810,7 +810,7 @@ PESIMA
 <li><p><strong><code><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme()</a></code></strong>: Ajusta el tamaño del texto en el gráfico.</p></li>
 </ul>
 <p>Es de destacar que el argumento <code>map=</code> controla cómo se representan las filas y columnas en el gráfico bidimensional del análisis de correspondencias. Este argumento tiene varias opciones que determinan la escala y la simetría de la representación. Para representar las posibles asociaciones entre las categorías de los dos factores implicados, la opción más apropiada es “symmetric”. Esta opción permite visualizar las filas y las columnas en el mismo espacio, facilitando la interpretación de las asociaciones entre las categorías de ambas variables.</p>
-<div class="sourceCode" id="cb374"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb383"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">gbiplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_ca.html">fviz_ca_biplot</a></span> <span class="op">(</span><span class="va">aceolicas</span>,</span>
 <span>                               axes<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,</span>
 <span>                               label<span class="op">=</span> <span class="st">"all"</span>,</span>
@@ -823,10 +823,10 @@ PESIMA
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">gbiplot</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-343-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-469-1.png" width="672"></div>
 <p>En nuestro ejemplo, se aprecia cómo hay una intensa asociación entre la categoría de VALORACIÓN “OPTIMA”, y la categoria de DIMENSION (de la empresa matriz correspondiente) “REDUCIDA”. También se aprecia cierta asociación entre las categorías de DIMENSION “GRANDE” y VALORACION “NORMAL”. Por último la categoría de VALORACION “PESIMA”, y la categoría del factor o atributo DIMENSION “MEDIA” están bastante alejados de otras categorías, lo que implica que parece no estar muy asociadas con otras categorías específicas.</p>
 <p>Finalmente, para una presentación más compacta de los dos últimos gráficos, puede recurrirse al paquete {patchwork}:</p>
-<div class="sourceCode" id="cb375"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb384"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">gcombinado</span> <span class="op">&lt;-</span> <span class="va">gcontrib</span> <span class="op">/</span> <span class="va">gbiplot</span></span>
 <span>    <span class="va">gcombinado</span> <span class="op">&lt;-</span> <span class="va">gcombinado</span> <span class="op">+</span></span>
 <span>      <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"DIMENSIÓN MATRIZ vs VALORACIÓN EXPERTOS."</span>,</span>
@@ -838,7 +838,7 @@ PESIMA
 <span>    <span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">gcombinado</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-344-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-470-1.png" width="672"></div>
 </div>
 <div id="modelos-logaritmico-lineales-aplicados-a-tablas-de-contingencia." class="section level2" number="10.4">
 <h2>
@@ -883,7 +883,7 @@ n_{ij} = \frac{R_i \cdot C_j}{N} = N \cdot \frac{R_i}{N} \cdot \frac{C_j}{N}
 </ul>
 <p>Los datos se encuentran alojados en la hoja “Datos” del archivo de Microsoft® Excel® “<a href="https://docs.google.com/spreadsheets/d/1f0OQaxyzjKIIXrqhCFL1vIBNcLLGx6R4/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">eolica_contingencia2.xlsx</a>”. El código a desarrollar está disponible en el <em>script</em> “<a href="https://drive.google.com/file/d/1xMmM2nrSHBCMU1EEDePb2BRuv_TbD-7r/view?usp=sharing">loglineal_eolica.R</a>”. Puede desarrollarse el ejemplo creando para ello un proyecto de RStudio, por ejemplo, el proyecto “loglineal”.</p>
 <p>Comenzando a ejecutar el código presente en el <em>script</em>, la primera parte se dedica, como es habitual, a la gestión de los datos: borrado previo de memoria, importación de los datos alojados en el archivo de Excel y volcado a un <em>data frame</em>, corrección del nombre de las filas de este, y selección de las variables categóricas del estudio:</p>
-<div class="sourceCode" id="cb376"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb385"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Analisis de Asociacion y modelos log-lineales de eolicas</span></span>
 <span><span class="co"># Disculpen por la falta de tildes!</span></span>
 <span></span>
@@ -904,7 +904,7 @@ n_{ij} = \frac{R_i \cdot C_j}{N} = N \cdot \frac{R_i}{N} \cdot \frac{C_j}{N}
 <span>    <span class="va">originales2</span> <span class="op">&lt;-</span> <span class="va">eolicas</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">DIMENSION</span>, <span class="va">AUTOFINA</span>, <span class="va">FJUR</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span> <span class="op">(</span><span class="va">originales2</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb377"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb386"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Analisis de Asociacion y modelos log-lineales de eolicas</span></span>
 <span><span class="co"># Disculpen por la falta de tildes!</span></span>
 <span></span>
@@ -977,13 +977,13 @@ n_{ij} = \frac{R_i \cdot C_j}{N} = N \cdot \frac{R_i}{N} \cdot \frac{C_j}{N}
 ##  Class :character   Class :character   Class :character  
 ##  Mode  :character   Mode  :character   Mode  :character</code></pre>
 <p>Posteriormente se desarrolla la localización y tratamiento de <em>missing data</em>, ya que para realizar el análisis es necesario que todos los casos posean dato en todas las variables. Para tener una idea general, se puede recurrir a la función <code><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss()</a></code> del paquete <a href="https://docs.ropensci.org/visdat/">visdat</a>, que localizará gráficamente los <em>missing values</em> de las diferentes variables, y calculará el porcentaje de casos que supone, con respecto al total de observaciones. En el ejemplo, los casos con missing data se concentran en el atributo o factor AUTOFINA, con 133 casos. El nombre concreto de los casos afectados se visualiza con un filtro construido a partir de la función <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> del paquete <a href="https://dplyr.tidyverse.org">dplyr</a>:</p>
-<div class="sourceCode" id="cb380"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb389"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Identificando missing values.</span></span>
 <span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/visdat/">visdat</a></span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss</a></span><span class="op">(</span><span class="va">originales2</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-349-1.png" width="672"></div>
-<div class="sourceCode" id="cb381"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-475-1.png" width="672"></div>
+<div class="sourceCode" id="cb390"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">originales2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">DIMENSION</span><span class="op">)</span> <span class="op">|</span></span>
 <span>                           <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">AUTOFINA</span><span class="op">)</span><span class="op">|</span></span>
 <span>                           <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">FJUR</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -1123,13 +1123,13 @@ n_{ij} = \frac{R_i \cdot C_j}{N} = N \cdot \frac{R_i}{N} \cdot \frac{C_j}{N}
 ## Wind Premier Monte Redondo, S.L.                                 GRANDE     &lt;NA&gt; Sociedad limitada
 ## Wind Premier Serra Pequena, S.L.                                 GRANDE     &lt;NA&gt; Sociedad limitada</code></pre>
 <p>Se decide eliminar los casos que carecen de valor en el atributo AUTOFINA, lo que se realiza mediante otro filtro:</p>
-<div class="sourceCode" id="cb383"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb392"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">originales2</span> <span class="op">&lt;-</span> <span class="va">originales2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">DIMENSION</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>           <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">AUTOFINA</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>           <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">FJUR</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
 <p>El siguiente bloque se ocupa de crear el objeto “table” que recoge la tabla de contingencia formada al cruzar la distribución de las frecuencias o casos entre las diferentes categorías de los distintos factores. La función para convertir el <em>data frame</em> en una estructura de almacenamiento de datos especial llamada table (que es la <strong>tabla de contingencia</strong>) es precisamente <code><a href="https://rdrr.io/r/base/table.html">table()</a></code>. La tabla de contingencia construida, de nombre “tab.originales2”, es posteriormente presentada como una tabla diseñada a partir de la función <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code> del paquete <a href="https://yihui.org/knitr/">knitr</a>, y otras funciones incluidas en el paquete <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>:</p>
-<div class="sourceCode" id="cb384"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb393"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># TABLA DE CONTINGENCIA</span></span>
 <span></span>
 <span>  <span class="va">tab.originales2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">originales2</span><span class="op">)</span></span>
@@ -1148,7 +1148,7 @@ n_{ij} = \frac{R_i \cdot C_j}{N} = N \cdot \frac{R_i}{N} \cdot \frac{C_j}{N}
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">0</span>, bold<span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-352">Table 10.5: </span><span id="tab:unnamed-chunk-352">Table 10.6: </span>Empresas eólicas
+<span id="tab:unnamed-chunk-478">Table 10.5: </span><span id="tab:unnamed-chunk-478">Table 10.6: </span>Empresas eólicas
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -1420,7 +1420,7 @@ Sociedad limitada
 </tbody>
 </table></div>
 <p>Un modo visual de obtener una primera idea de las relaciones que se incluyen en la tabla es construir un gráfico de mosaico, con la función <code><a href="https://rdrr.io/pkg/vcd/man/mosaic.html">mosaic()</a></code> del paquete <code>{vcd}</code>, en la que el área de los diferentes rectángulos sea proporcional a la frecuencia conjunta correspondiente:</p>
-<div class="sourceCode" id="cb385"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb394"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Representación gráfica de la tabla con mosaico</span></span>
 <span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va">vcd</span><span class="op">)</span></span>
@@ -1431,9 +1431,9 @@ Sociedad limitada
 <span>          main_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">14</span><span class="op">)</span>,</span>
 <span>          sub_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>,</span>
 <span>          labeling_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>gp_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">7</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-353-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-479-1.png" width="672"></div>
 <p>En cuanto a las frecuencias marginales de cada nivel o categoría de los tres atributos o factores, pueden representarse estas mediante gráficos de barras, generados mediante las funciones del paquete <a href="https://ggplot2.tidyverse.org">ggplot2</a>, y reunidos en una sola imagen mediante el paquete <a href="https://patchwork.data-imaginist.com">patchwork</a>. El código es el siguiente:</p>
-<div class="sourceCode" id="cb386"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb395"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Representando frecuencias de categorias en factores</span></span>
 <span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
@@ -1465,10 +1465,10 @@ Sociedad limitada
 <span></span>
 <span>    <span class="op">(</span><span class="va">g1b</span> <span class="op">/</span> <span class="va">g2b</span> <span class="op">/</span> <span class="va">g3b</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Frecuencias Marginales."</span>,</span>
 <span>                      theme <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-354-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-480-1.png" width="672"></div>
 <p>Los modelos log-lineales se especifican y estiman mediante la función <code>loglm()</code> de la librería <a href="http://www.stats.ox.ac.uk/pub/MASS4/">MASS</a> (el paquete MASS lo hemos activado junto a la propia función loglm() ya que, de hacerlo con la función <code><a href="https://rdrr.io/r/base/library.html">library()</a></code>, se crea un conflicto con la función <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> del paquete <a href="https://dplyr.tidyverse.org">dplyr</a>).</p>
 <p>Cuando se estiman los modelos, los diferentes resultados se almacenan en una lista. Entre estos elementos se encuentran los parámetros estimados, que, dentro de la lista de resultados, se almacenan, a su vez, en una estructura que, según la especificación que se elija del modelo, puede llegar a ser compleja. para facilitar el trabajo de extracción de los parámetros y almacenamiento en un data frame, se ha desarrollado una función denominada <code>extraer_coeficientes()</code>. Debido a la complejidad del código, y antes de proceder a estimar los modelos, exponemos el código de la función, que recibe como input o argumento el nombre de un modelo log-lineal estimado, y devuelve como output un data frame con los coeficientes o parámetros estimados:</p>
-<div class="sourceCode" id="cb387"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb396"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># MODELOS LOG-LINEALES</span></span>
 <span></span>
 <span><span class="co"># Función para extraer coeficientes y sus nombres de un modelo ##########</span></span>
@@ -1542,7 +1542,7 @@ Sociedad limitada
 <span><span class="co">############################################################################   </span></span></code></pre></div>
 <p>Del mismo modo, se ha creado otra función para facilitar la pesentación de la información más importante que se genera con la estimación del modelo loglineal. Es la función <code>generar_solucion()</code>. Esta función recibe como argumento o <em>intput</em> el nombre del modelo estimado, y devuelve tres elementos: dos tablas diseñadas con <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code>, que se almacenan en una lista, y un gráfico de <em>mosaico</em> que recoge los <strong>residuos del modelo</strong> (diferencias entre las frecuencias conjuntas reales u observadas de la tabla de contingencia, y sus estimaciones por parte del modelo). La primera de las tablas recoge las pruebas de validez de los modelos del <em>ratio de verosimilitud</em> (<code>deviance</code>), y de <em>Pearson</em>: nombre de la prueba, estadístico del contraste, grados de libertad y <em>p-valor</em>. La segunda tabla recoge los coeficientes o parámetros estimados, para lo cual la función llama, a su vez, a la función extraer_coeficientes(), toma el data frame que construya tal función, y la usa como base para diseñar la segunda tabla.</p>
 <p>El código de la función es el siguiente:</p>
-<div class="sourceCode" id="cb388"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb397"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">############################################################################</span></span>
 <span><span class="co"># Función generar tablas y gráfico a partir de modelo log-lineal</span></span>
 <span></span>
@@ -1606,14 +1606,14 @@ Sociedad limitada
 <span><span class="co">##########################################################################</span></span></code></pre></div>
 <p>Con el par de funciones anteriores, es fácil estimar un modelo log-lineal aplicado a tablas de contingencia y recopilar la información más relevante.</p>
 <p>Comenzaremos por el <strong>modelo de independencia</strong>, que plantea que solo existen efectos directos en la determinación de las frecuencias conjuntas de la tabla (no-asociación entre factores). La especificación y estimación del modelo es la siguiente:</p>
-<div class="sourceCode" id="cb389"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb398"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Modelo Independencia.</span></span>
 <span></span>
 <span>    <span class="va">modelo_indep</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/loglm.html">loglm</a></span><span class="op">(</span><span class="op">~</span> <span class="va">DIMENSION</span> <span class="op">+</span> <span class="va">AUTOFINA</span> <span class="op">+</span> <span class="va">FJUR</span>,</span>
 <span>                                data<span class="op">=</span> <span class="va">tab.originales2</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="fu">generar_solucion</span><span class="op">(</span><span class="va">modelo_indep</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-358-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-484-1.png" width="672"></div>
 <p>Puede comprobarse que se ha creado la lista “solucion_modelo_indep”, que guarda dos elementos ($Informacion y $Coeficientes), y se ha generado el gráfico de mosaico de los residuos. Cuanto más intensos son los colores, mayores serán los residuos (en valor absoluto) y, por lo tanto, peor será el ajuste obtenido, lo que se deberá a que se ha considerado (erróneamente) que no hay interacción entre los factores (no asociación o independencia). En cuanto a los tonos de color:</p>
 <ul>
 <li><p><strong>Rectángulos azulados</strong>: Indican que la frecuencia observada es mayor que la frecuencia estimada por el modelo. Es decir, el modelo subestima la frecuencia observada.</p></li>
@@ -1621,11 +1621,11 @@ Sociedad limitada
 </ul>
 <p>En nuestro caso, existen frecuencias en los que los residuos toman colores bastante intensos, lo que hace pensar en que no se ha producido un buen ajuste. Como este modelo planteaba un escenario en el que no hay asociación entre los atributos; el gráfico parece apoyar la hipótesis de que sí existe asociación, al menos entre algunos de los factores o atributos.</p>
 <p>Vamos a interpretar ahora el primer elemento de la lista “solucion_modelo_indep”, que es la tabla donde se disponen las pruebas de validez del modelo. Para obtener la tabla ejecutaremos:</p>
-<div class="sourceCode" id="cb390"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb399"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_indep</span><span class="op">$</span><span class="va">Informacion</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-358">Table 10.7: </span>Validación del modelo
+<span id="tab:unnamed-chunk-484">Table 10.7: </span>Validación del modelo
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -1674,11 +1674,11 @@ Pearson
 </table></div>
 <p>En ambas pruebas (ratio de verosimilitud y Pearson) se obtiene un p-valor de 0. Teniendo en cuenta que la hipótesis nula de ambas pruebas es que existe un buen ajuste; la conclusión es que, según los resultados, <strong>el modelo de independencia no es capaz de representar la realidad con suficiente precisión</strong> (de ahí la magnitud de los residuos). Esto se puede interpretar, a su vez, como que <strong>se rechaza la hipótesis de independencia entre los factores</strong> y se admite que existe asociación entre, al menos, algunos de ellos.</p>
 <p>Por último, vamos a mostrar el segundo elemento de la lista “solucion_modelo_indep”, que es la tabla donde se disponen los parámetros estimados del modelo, que en este caso corresponden solo a efectos directos o principales. Para obtener la tabla ejecutaremos:</p>
-<div class="sourceCode" id="cb391"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb400"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_indep</span><span class="op">$</span><span class="va">Coeficientes</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-358">Table 10.7: </span>Coeficientes del modelo
+<span id="tab:unnamed-chunk-484">Table 10.7: </span>Coeficientes del modelo
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -1766,20 +1766,20 @@ FJUR:Sociedad limitada
 <p>ssage=FALSE, warning=FALSE}</p>
 <p>Puede destacarse el hecho de que, que la capacidad de autofinanciación sea negativa, tiende a provocar una reducción del número de casos en las frecuencias conjuntas implicadas (signo negativo) También el hecho de que la forma jurídica adoptada sea la de <em>Sociedad Anónima</em>. En el extremo opuesto, destacan los signos positivos de la forma jurídica de <em>Sociedad Limitada</em> y la capacidad de autofinanciación alta, lo que implica que estas categorías tienden a acumular más frecuencias.</p>
 <p>Pasamos ahora al <strong>modelo saturado</strong>, en el cuál se especifican todos los efectos directos o principales de los factores, y todas las interacciones posibles entre dichos factores (interacciones dos a dos, y la interacción entre los tres factores de modo simultáneo). Este modelo, en la práctica, no es relevante porque, aunque explica al 100% las frecuencias observadas, no indica cuál de los niveles de los factores o atributos y sus interacciones son los más relevantes (modelo redundante). Para su estimación, simplemente se sustituyen los signos “+” del modelo anterior por los signos “*”. El modelo se denominará “modelo_sat”:</p>
-<div class="sourceCode" id="cb392"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb401"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Modelo Saturado.</span></span>
 <span></span>
 <span>    <span class="va">modelo_sat</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/loglm.html">loglm</a></span><span class="op">(</span><span class="op">~</span> <span class="va">DIMENSION</span> <span class="op">*</span> <span class="va">AUTOFINA</span> <span class="op">*</span> <span class="va">FJUR</span>,</span>
 <span>                              data<span class="op">=</span> <span class="va">tab.originales2</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="fu">generar_solucion</span><span class="op">(</span><span class="va">modelo_sat</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-361-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-487-1.png" width="672"></div>
 <p>El gráfico de mosaico muestra que, obviamente, todos los residuos son 0, ya que coinciden las frecuencias observadas y las estimadas por el modelo. En cuanto a la tabla de validación:</p>
-<div class="sourceCode" id="cb393"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb402"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_sat</span><span class="op">$</span><span class="va">Informacion</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-361">Table 10.8: </span>Validación del modelo
+<span id="tab:unnamed-chunk-487">Table 10.8: </span>Validación del modelo
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -1827,11 +1827,11 @@ Pearson
 </tbody>
 </table></div>
 <p>En ambas pruebas el p-valor es 1, dado que no se rechaza la hipótesis de que el modelo representa adecuadamente la realidad (de hecho, la representa perfectamente). Pero, como hemos dicho, desde el punto de vista del análisis estructural el modelo saturado no es muy útil, ya que no distingue entre los efectos e interacciones relevantes y los que son poco importantes. Por último, mostraremos la tabla con los coeficientes estimados, correspondientes tanto a los efectos principales o directos como a las interacciones:</p>
-<div class="sourceCode" id="cb394"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb403"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_sat</span><span class="op">$</span><span class="va">Coeficientes</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-361">Table 10.8: </span>Coeficientes del modelo
+<span id="tab:unnamed-chunk-487">Table 10.8: </span>Coeficientes del modelo
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -2229,7 +2229,7 @@ REDUCIDA:POSITIVA:Sociedad limitada
 </tbody>
 </table></div>
 <p>La estimación del modelo saturado permite aplicar algún algoritmo para la obtención de la especificación de un modelo que, sin llegar a ser el saturado, <strong>asegure una representación valida de la realidad obviando los efectos e interacciones que no sean estadísticamente relevantes</strong>. Por ejemplo, un método es el <em>step / backward</em>, que, en función del <em>Criterio de Información de Akaike</em> (AIC), irá probando a estimar especificaciones más simples que disminuyan el AIC (lo que implica una mejor especificación). En nuestro caso, se aplicará con el código:</p>
-<div class="sourceCode" id="cb395"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb404"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Elección del modelo final.</span></span>
 <span></span>
 <span>    <span class="va">modelo_def</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/step.html">step</a></span><span class="op">(</span><span class="va">modelo_sat</span>, scale <span class="op">=</span> <span class="fl">0</span>,</span>
@@ -2254,15 +2254,15 @@ REDUCIDA:POSITIVA:Sociedad limitada
 <p>En el código anterior, se genera el modelo óptimo siguiendo el proceso de eliminar los términos del modelo que más contribuyan a la reducción del valor de AIC, mediante la función <code><a href="https://rdrr.io/r/stats/step.html">step()</a></code>. El modelo así obtenido se guarda como “modelo_def”.</p>
 <p>En nuestro ejemplo, la especificación del modelo definitivo incluye los tres efectos directos o principales de los factores o atributos, y todas las interacciones entre pares de factores; es decir, se diferencia del modelo saturado en la no inclusión de la interacción entre los tres factores o atributos de modo simultáneo.</p>
 <p>Luego, se pasa el modelo a la función <code>generar_solución()</code> para obtener los resultados (el gráfico de mosaico y las dos tablas). El gráfico obtenido es:</p>
-<div class="sourceCode" id="cb397"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb406"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="fu">generar_solucion</span><span class="op">(</span><span class="va">modelo_def</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-365-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-491-1.png" width="672"></div>
 <p>Los tonos grisáceos y pardos indican que existen leves diferencias entre las frecuencias conjuntas observadas, y las estimadas por el modelo. En cuanto a la tabla de validación:</p>
-<div class="sourceCode" id="cb398"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb407"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_def</span><span class="op">$</span><span class="va">Informacion</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-365">Table 10.9: </span>Validación del modelo
+<span id="tab:unnamed-chunk-491">Table 10.9: </span>Validación del modelo
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -2310,11 +2310,11 @@ Pearson
 </tbody>
 </table></div>
 <p>Las dos pruebas muestran un <em>p-valor</em> superior a 0,05, lo que implica, para ese nivel de significación, el <strong>no rechazo de la hipótesis nula de validez o idoneidad del modelo</strong> para representar la realidad adecuadamente. En cuanto a los coeficientes estimados del modelo:</p>
-<div class="sourceCode" id="cb399"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb408"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_def</span><span class="op">$</span><span class="va">Coeficientes</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-365">Table 10.9: </span>Coeficientes del modelo
+<span id="tab:unnamed-chunk-491">Table 10.9: </span>Coeficientes del modelo
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -2612,7 +2612,7 @@ POSITIVA:Sociedad limitada
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2025-09-14.</p>
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2025-09-15.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

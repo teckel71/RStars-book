@@ -102,9 +102,11 @@ Para **seleccionar un elemento** concreto de un vector, indicaremos entre corche
 x[3]
 ```
 
-Si queremos que se nos muestre los elementos del vector x del 2º al 4º:
+Si queremos que se nos muestren los elementos del vector x del 2º al 4º:
 
-`{, warning=FALSE{r, eval=TRUE, echo=TRUE, message=FALSE} x[2:4]`
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+x[2:4]
+```
 
 Por último, si queremos sacar en pantalla los elementos 1º y 4º, tendremos que incluir una "c" seguida de un paréntesis que recoja el orden de los elementos que queremos seleccionar:
 
@@ -233,7 +235,84 @@ datos$Altura
 
 Obtenemos el mismo resultado.
 
-## Importando datos.
+### ![](figuras/key.svg){.hicon} Factores.
+
+En R, un factor es un tipo especial de objeto que se usa para representar datos categóricos. Es decir, datos que no son números continuos sino que pertenecen a un conjunto limitado de categorías (también llamadas niveles). Por ejemplo, anteriormente creamos el vector "Cl.ojos". Es un vector tipo carácter; pero, para R, aún no es factor.
+
+Para convertirlo en un objeto de la clase "factor", podemos ejecutar:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+Cl.ojosF <- factor(Cl.ojos)
+```
+
+En el Global Environment vemos que se ha creado el objaeto "Cl.ojosF", de tipo factor. Si representamos ambos objetos:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+Cl.ojos
+Cl.ojosF
+```
+
+Vemos como "Cl.ojosF" no es un vector de elementos tipo carácter; sino algo más: es una variable cuyos elementos pueden tomar dos valores categóricos (que pueden estar en el vector una vez, o estar repetidos, o no estar), categorías o niveles, que son "azules" y "marrones".
+
+¿Por qué es necesario, a veces, transformar los datos "categóricos" en "factores"?
+
+-   Ahorro de memoria: internamente, en lugar de guardar “marrones” muchas veces, guarda un número que representa la categoría (ej. 1 = marrones, 2 = azules).
+
+-   Orden y niveles: puedes definir si las categorías del factor están en escala ordinal. Por ejemplo, supongamos que tenemos las siguientes categorías de calificaciones: "Suspenso", "Aprobado", "Notable", "Sobresaliente". Si las guardamos como factor en escala ordinal, R puede saber que Suspenso \< Aprobado \< Notable \< Sobresaliente, lo que te permitirá hacer comparaciones, ordenar, etc.
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+notas <- factor(
+  c("Aprobado", "Notable", "Sobresaliente", "Suspenso"),
+  levels = c("Suspenso", "Aprobado", "Notable", "Sobresaliente"),
+  ordered = TRUE
+)
+notas
+```
+
+-   Modelos estadísticos: muchos métodos de R tratan automáticamente a los factores como variables cualitativas y hacen análisis adecuados (tablas de contingencia, regresiones categóricas, etc.).
+
+En síntesis, Un factor en R es como una etiqueta inteligente para categorías, que permite trabajar con datos cualitativos de forma más organizada y útil para análisis.
+
+### ![](figuras/key.svg){.hicon} Listas.
+
+Por último, una lista es un tipo de objeto que puede contener cualquier cosa dentro:
+
+-   números
+
+-   textos
+
+-   vectores
+
+-   matrices
+
+-   *data frames*
+
+-   otras listas
+
+Es decir, es como una caja organizadora con muchos compartimentos, y en cada compartimento puedes guardar un objeto distinto, tengan la naturaleza que tengan. Por ejemplo, vamos a crear la lista "mi_lista":
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+mi_lista <- list(
+  nombre = "María",
+  edad = 21,
+  notas = c(8.5, 9.0, 7.2),
+  aprobado = TRUE
+)
+
+mi_lista
+```
+
+Esta lista está almacenada en el Global Environment. Si queremos visualizar solo el tercer elemento podemos hacerlo invocando a su posición (con corchetes dobles), o bien a su nombre:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+mi_lista$notas
+mi_lista[[3]]
+
+```
+
+Las listas son las estructuras de almacenamiento más flexibles de R, y son muy utilizadas para organizar y empaquetar resultados complejos.
+
+## ![](figuras/pie-chart.svg){.hicon} Importando datos.
 
 Lo más frecuente es que no tecleemos los datos, como hemos hecho hasta ahora; sino que los importemos a R desde algún contenedor externo (archivo de texto, hoja de cálculo, base de datos...). Nosotros vamos a importar nuestros datos desde Microsoft® Excel®. Vamos a cerrar el script que hemos estado construyendo en los apartados anteriores (para conservarlo hay que guardarlo antes), aunque vamos a seguir trabajando en el mismo proyecto (que habíamos llamado "explora"). Iremos a la carpeta del proyecto y guardaremos en ella los dos archivos de esta práctica (obtén el enlace a los archivos en la sección final del capítulo):
 
@@ -268,7 +347,7 @@ Obviamente, para cargar o activar un paquete, previamente debe de haber sido ins
 
 Para instalar, por ejemplo,el paquete `{readxl}`, (que contiene el código necesario para importar datos de un archivo de Microsoft® Excel®), iremos a la ventana inferior-derecha y pulsaremos la pestaña `Packages`, pulsaremos en `Install`, y emergerá una ventana donde dejaremos el "repositorio" que viene por defecto. En el campo "Packages", escribiremos el nombre del "paquete" que contiene la librería que nos hace falta (normalmente coincide con el nombre de la propia librería, en nuestro caso `{readxl}`. Una vez descargado el "paquete", podremos ejecutar el código anterior sin problemas. Si hemos de instalar el paquete `{gtExtras}`, procederemos de idéntico modo.
 
-Para importar los datos localizados en el archivo de Excel® "interestelar_100.xlsx" el código que podemos usar es:
+Para importar los datos localizados en el archivo de Microsoft® Excel® "interestelar_100.xlsx" el código que podemos usar es:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 # DATOS
@@ -358,9 +437,9 @@ datos_df_graph
 
 Antes de seguir con la manipulación de nuestros datos, es preciso decir que existen otros muchos formatos de datos que pueden ser importados. Por ejemplo, con el paquete `{readr}` se pueden importar datos de archivos de texto de tipo tabular (por ejemplo, archivos \*.csv). Con el paquete `{haven}` se pueden capturar los datos almacenados en archivos de SPSS® (.sav), Stata® (.dta), SAS® (.sas7bdat), etc. Finamente, se pueden capturar datos almacenados en páginas web (archivos en formato JSON o XML, o en tablas HTML)) o en bases de datos gestionadas mediante diversos sistemas (SQLite, MySQL, MariaDB, PostgreSQL, Oracle®).
 
-## {dplyr}.
+## ![](figuras/pie-chart.svg){.hicon} {dplyr}.
 
-### El Tidyverse. Cargando {dplyr}.
+### ![](figuras/key.svg){.hicon} El Tidyverse. Cargando {dplyr}.
 
 El ***Tidyverse*** es un conjunto de paquetes / librerías con una filosofía común, como es el uso de ciertas estructuras gramaticales, que facilitan muchas de las tareas y análisis que podrían hacerse con el lenguaje R estándar. Una buena obra para profundizar en el Tidyverse es @Wickham2017R.
 
@@ -368,40 +447,17 @@ Uno de esos paquetes es `{dplyr}`, que proporciona una gramática más sencilla 
 
 Los data frames, como ya sabemos, son estructuras en las que se almacenan datos de modo que, por columnas, se disponen las variables del análisis; y por filas los casos que conforman la muestra / población.
 
-Vamos a suponer que trabajamos dentro del proyecto que hemos creado previamente, de nombre "explora" (ver capítulo 1). Dentro de la carpeta del proyecto guardaremos el script llamado "explora_dplyr.R" y el archivo de Microsoft® Excel® llamado "eolica_20.xlsx". Si abrimos este último archivo, comprobaremos que se compone de tres hojas. La hoja "Top 20" contiene los datos a importar desde R-Studio. Estos datos se corresponden con diferentes variables económico-financieras de 20 empresas productoras de electricidad mediante generación eólica.
+Vamos a suponer que trabajamos dentro del proyecto que hemos creado previamente, de nombre "explora" (ver capítulo 1), y que seguimos con el script "explora_rstars.R", co el que importamos los datos del archivo de Microsoft® Excel® "interestelar_100.xlsx", que contení información sobre 104 empresas de transporte de mercancías a escala interestelar.
 
-Luego cerraremos el archivo de Microsoft® Excel®, "eolica_20.xlsx", y volveremos a R-Studio. Después, abriremos nuestro script "explora_dplyr.R" con `File → Open File…` Este script contiene el programa que vamos a ir ejecutando en la práctica.
+Suponemos que hemos ejecutado la primera parte del script (importación de datos con corrección de la columna de nombres de las filas, al *data frame* interestelar_100, que está almacenado en el *Global Environment.*
 
-La primera línea / instrucción en los scripts suele ser:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
-rm(list = ls())
-```
-
-La instrucción tiene como objeto limpiar el *Environment* (memoria) de objetos de anteriores sesiones de trabajo.
-
-Para importar los datos que hay en la hoja "Top 20" del archivo de Microsoft® Excel® llamado "eolica_20.xlsx", ejecutaremos el código:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
-# DATOS
-
-library(readxl)
-eolica_20 <- read_excel("eolica_20.xlsx", sheet = "Top 20")
-```
-
-Podemos observar como en el *Environment* ya aparece un objeto. Este objeto es una estructura de datos tipo *data frame*, se llama "eolica_20" y contiene 11 columnas. R ha considerado la primera columna como una variable de tipo cualitativo. En realidad, la primera columna no es una variable, sino que está formada por el nombre (identificador) de los diferentes casos u observaciones. Para evitar que R tome los nombres de los casos como una variable más, podemos redefinir nuestro *data frame* diciéndole que tome esa primera columna como los *nombres de los individuos*:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
-eolica_20 <- data.frame(eolica_20, row.names = 1)
-```
-
-En la línea anterior hemos asignado al *data frame* "eolica_20" los propios datos de "eolica_20"; pero indicando que la primera columna de datos no es una variable; sino el nombre de los casos.
+Vamos a continuar desde este punto.
 
 A continuación, cargaremos el paquete `{dplyr}`. Si nunca antes se ha utilizado este paquete, cuando lo intentemos activar con la función `library()` nos dará un error o nos dirá que previamente hay que importarlo. En ese caso, iremos a la ventana inferior-derecha y pulsaremos la pestaña "Packages", pulsaremos en `Install`, y emergerá una ventana donde dejaremos el "repositorio" que viene por defecto y, en el campo `Packages`, escribiremos el nombre del "paquete" (en nuestro caso `{dplyr}`). Una vez descargado el "paquete", podremos ejecutar el código sin problemas:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 
-#Cargando dplyr
+# Cargando dplyr
 
 library (dplyr)
 
@@ -417,35 +473,33 @@ Para entender mejor la **sintaxis** que siguen las funciones o instrucciones a l
 
 En los siguientes subapartados practicaremos con algunas de las principales funciones que aporta `{dplyr}`.
 
-### Seleccionando columnas de un data frame.
+### ![](figuras/key.svg){.hicon} Seleccionando columnas de un data frame.
 
 La función clave de `{dplyr}` para seleccionar una o varias columnas (variables) de un *data frame* es la función `select()`.
 
-Así, vamos a imaginar por ejemplo que queremos eliminar de nuestro *data frame* la variable (de tipo "carácter") MATRIZ. Podremos ejecutar la asignación:
+Así, vamos a imaginar por ejemplo que queremos eliminar de nuestro *data frame* la variable (de tipo "carácter") FJUR (forma jurídica de la empresa). Podremos ejecutar la asignación:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 
-#Seleccionando variables
-
-eolica_20 <-select(eolica_20, -MATRIZ)
-summary (eolica_20)
+# Seleccionando variables
+interestelar_100 <-select(interestelar_100, -FJUR)
+summary (interestelar_100)
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
 
 #Seleccionando variables
-
-eolica_20 <-select(eolica_20, -MATRIZ)
+interestelar_100 <-select(interestelar_100, -FJUR)
 
 library (dplyr)
-df <- select(eolica_20, everything())
+df <- select(interestelar_100, everything())
 # Número de variables por bloque
 variables_por_bloque <- 3
 
 # Dividir las variables en bloques
-for (i in seq(1, ncol(eolica_20), variables_por_bloque)) {
+for (i in seq(1, ncol(interestelar_100), variables_por_bloque)) {
   # Comentario: No mostramos el nombre del bloque
-  print(summary(eolica_20[, i:min(i + variables_por_bloque - 1, ncol(eolica_20))]))
+  print(summary(interestelar_100[, i:min(i + variables_por_bloque - 1, ncol(interestelar_100))]))
   cat("\n")
 }
 rm (i)
@@ -453,16 +507,16 @@ rm (variables_por_bloque)
 rm (df)
 ```
 
-Podemos verificar que, en el *Environment,* el *data frame* ha pasado a tener una variable menos (9), ya que hemos eliminado la variable MATRIZ. Es decir, con el guión "-" se pueden eliminar directamente variables de un *data frame*.
+Podemos verificar que, en el *Environment,* el *data frame* ha pasado a tener una variable menos (27), ya que hemos eliminado la variable FJUR. Es decir, con el guión "-" se pueden eliminar directamente variables de un *data frame*.
 
-Ahora, suponemos que queremos visualizar las variables del *data frame* "eolica_20": ACTIVO, FPIOS, LIQUIDEZ, MARGEN, SOLVENCIA y APALANCA (es decir, todas las variables menos RES, RENECO, RENFIN). Para ello, ejecutaremos el código:
+Ahora, suponemos que queremos visualizar las variables del *data frame* "interestelar_100": ACTIVO, FPIOS, LIQUIDEZ, MARGEN, SOLVENCIA y APALANCA. Para ello, ejecutaremos el código:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
-select(eolica_20, ACTIVO, FPIOS, LIQUIDEZ, MARGEN, SOLVENCIA, APALANCA)
+select(interestelar_100, ACTIVO, FPIOS, LIQUIDEZ, MARGEN, SOLVENCIA, APALANCA)
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
-df <-select(eolica_20, ACTIVO, FPIOS, LIQUIDEZ, MARGEN, SOLVENCIA, APALANCA)
+df <-select(interestelar_100, ACTIVO, FPIOS, LIQUIDEZ, MARGEN, SOLVENCIA, APALANCA)
 
 # Número de columnas por bloque
 columnas_por_bloque <- 4
@@ -481,23 +535,23 @@ Como no hemos asignado el resultado de la función a ningún "nombre", R simplem
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 
-eolica_20A <-select(eolica_20, ACTIVO, FPIOS, LIQUIDEZ, MARGEN, SOLVENCIA, APALANCA)
-summary (eolica_20A)
+interestelar_100A <-select(interestelar_100, ACTIVO, FPIOS, LIQUIDEZ, MARGEN, SOLVENCIA, APALANCA)
+summary (interestelar_100A)
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
 
-eolica_20A <-select(eolica_20, ACTIVO, FPIOS, LIQUIDEZ, MARGEN, SOLVENCIA, APALANCA)
+interestelar_100A <-select(interestelar_100, ACTIVO, FPIOS, LIQUIDEZ, MARGEN, SOLVENCIA, APALANCA)
 
 library (dplyr)
-df <- select(eolica_20A, everything())
+df <- select(interestelar_100A, everything())
 # Número de variables por bloque
 variables_por_bloque <- 3
 
 # Dividir las variables en bloques
-for (i in seq(1, ncol(eolica_20), variables_por_bloque)) {
+for (i in seq(1, ncol(interestelar_100A), variables_por_bloque)) {
   # Comentario: No mostramos el nombre del bloque
-  print(summary(eolica_20[, i:min(i + variables_por_bloque - 1, ncol(eolica_20))]))
+  print(summary(interestelar_100A[, i:min(i + variables_por_bloque - 1, ncol(interestelar_100A))]))
   cat("\n")
 }
 rm (i)
@@ -505,40 +559,29 @@ rm (variables_por_bloque)
 rm (df)
 ```
 
-Podemos comprobar en el *Environment* cómo hay otro objeto *data frame* llamado "eolica_20A", con 6 variables (y los mismos 20 casos). Este *data frame* lo podríamos haber creado, también, eliminando del *data frame* original ("eolica_20"), las variables que nos sobran:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
-eolica_20A <-select(eolica_20, -RES, -RENECO, -RENFIN)
-```
-
-Más aún, si nos fijamos bien, los nombres de todas las variables que hemos excluido empiezan por "RE", a diferencia de las incluidas. Podríamos haber hecho también:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
-eolica_20A <-select(eolica_20, -(starts_with("RE")))
-```
-
-Y de nuevo obtendríamos el mismo resultado. El argumento `starts_with()` permite seleccionar variables cuyos nombres comienzan por cierta cadena de caracteres. También se puede hacer mismo con los caracteres finales (`ends_with()`) o contenidos en alguna posición del nombre (`contains()`).
+Podemos comprobar cómo en el *Global Environment* hay otro objeto *data frame* llamado "interestelar_100A", con 6 variables (y los mismos 104 casos).
 
 Otra posibilidad que tenemos es hacer una copia de un *data frame* rápidamente con el argumento `everything()`. Por ejemplo:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
-eolica_20_replica <-select(eolica_20, everything())
+interestelar_100_replica <-select(interestelar_100, everything())
 ```
 
-Se ha creado el *date frame* "eolica_20_replica" que es una copia exacta de "eolica_20".
+Se ha creado el *date frame* "interestelar_100_replica" que es una copia exacta de "interestelar_100".
 
-### Seleccionando casos de un *data frame*.
+### ![](figuras/key.svg){.hicon} Seleccionando casos de un *data frame*.
 
-Además de seleccionar variables, con `{dplyr}` también se pueden seleccionar casos que cumplan ciertas condiciones. La función para realizar este cometido es `filter()`. Por ejemplo, si queremos seleccionar las empresas eólicas con un resultado (variable RES) mayor o igual a 50.000 y presentarlas en pantalla, la instrucción será:
+Además de seleccionar variables, con `{dplyr}` también se pueden seleccionar casos que cumplan ciertas condiciones. La función para realizar este cometido es `filter()`. Por ejemplo, si queremos seleccionar las empresas con un resultado (variable RES) mayor o igual a 500 miles de PAVOs y presentarlas en pantalla, la instrucción será:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
-filter(eolica_20, RES >= 50000)
+# Seleccionando casos
+filter(interestelar_100, RES >= 500)
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
 
 #definir df
-df<-filter(eolica_20, RES >= 50000)
+df<-filter(interestelar_100, RES >= 500)
 
 # Número de columnas por bloque
 columnas_por_bloque <- 5
@@ -552,16 +595,16 @@ rm(df)
 rm(columnas_por_bloque)
 ```
 
-Se pueden incluir varias condiciones en un mismo filtro. Por ejemplo, vamos a construir un nuevo *data frame* llamado "eolica_20B" con las empresas que posean un resultado mayor o igual a 50000 y una rentabilidad económica (variable RENECO) inferior al 6%:
+Se pueden incluir varias condiciones en un mismo filtro. Por ejemplo, vamos a construir un nuevo *data frame* llamado "interestelar_100B" con las empresas que posean un resultado mayor o igual a 500 miles de PAVOs y una rentabilidad económica (variable RENECO) inferior al 40%:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
-eolica_20B <-filter(eolica_20, RES >= 50000 & RENECO < 6)
-eolica_20B
+interestelar_100B <-filter(interestelar_100, RES >= 500 & RENECO < 40)
+interestelar_100B
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
-eolica_20B <-filter(eolica_20, RES >= 50000 & RENECO < 6)
-df <- select(eolica_20B, everything())
+interestelar_100B <-filter(interestelar_100, RES >= 50000 & RENECO < 6)
+df <- select(interestelar_100B, everything())
 
 # Número de columnas por bloque
 columnas_por_bloque <- 3
@@ -575,20 +618,21 @@ rm(df)
 rm(columnas_por_bloque)
 ```
 
-En el *Environment* aparecerá el *data frame* "eolica_9B" con solo un caso: la empresa que cumple con ambas condiciones, introducidas mediante el operador lógico relacional "**&**", que es el equivalente a la conjunción "y" o, dicho de otro modo, la intersección. Otro operador lógico relacional muy utilizado es la barra vertical "**\|**", que es el equivalente a la conjunción "o", es decir, la unión.
+En el *Global* *Environment* aparecerá el *data frame* "interestelar_100B" con solo un caso: la empresa que cumple con ambas condiciones, introducidas mediante el operador lógico relacional "**&**", que es el equivalente a la conjunción "y" o, dicho de otro modo, la intersección. Otro operador lógico relacional muy utilizado es la barra vertical "**\|**", que es el equivalente a la conjunción "o", es decir, la unión.
 
 Los filtros más usuales son \>, \<, \>=, \<=, == (igual, ojo, con dos símbolos de igualdad seguidos) y != (no igual).
 
-### Ordenando casos de un *data frame*.
+### ![](figuras/key.svg){.hicon} Ordenando casos de un *data frame*.
 
 Además de seleccionar determinados casos u observaciones (filas) de un *data frame*, con las funciones de `{dplyr}` también se pueden ordenar estos casos a partir de los valores de ciertas variables (columnas). La función a utilizar es `arrange()`. Esta función, por defecto, ordena los casos de modo **ascendente**. Por ejemplo:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
-arrange(eolica_20, RENECO)
+# Ordenando casos
+arrange(interestelar_100, RENECO)
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
-df<-arrange(eolica_20, RENECO)
+df<-arrange(interestelar_100, RENECO)
 # Número de columnas por bloque
 columnas_por_bloque <- 3
 
@@ -604,12 +648,12 @@ rm(columnas_por_bloque)
 En cambio, para ordenar de modo descendente, hay que utilizar el argumento `desc()`:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
-arrange(eolica_20, desc(RENECO))
+arrange(interestelar_100, desc(RENECO))
 
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
-df<-arrange(eolica_20, desc(RENECO))
+df<-arrange(interestelar_100, desc(RENECO))
 # Número de columnas por bloque
 columnas_por_bloque <- 3
 
@@ -622,14 +666,14 @@ rm(df)
 rm(columnas_por_bloque)
 ```
 
-En el supuesto de que, por ejemplo, hubiera varias empresas con la misma rentabilidad económica (RENECO), podría añadirse otro criterio de ordenación con otra variable, que afectaría a tales empresas para deshacer el "empate" en rentabilidad económica. Por ejemplo, para ordenar de modo ascendente por rentabilidad y, en caso de que haya rentabilidades iguales, por liquidez (variable LIQUIDEZ), se ejecutaría:
+En el supuesto de que, en relación con una variable, hubiera varios casos con el mismo valor, podría añadirse otro criterio de ordenación con otra variable, que afectaría a tales casos para deshacer el "empate". Por ejemplo,vamos a ordenar las empresas según la variable EFLO (categorización de la antigüedad promedio de la flota, con categorías: ANTIGUA, MADURA, RENOVADA). Al ser una variable categórica, los casos se ordenarán por orden alfabético según la categoría a la que pertenenecen. Para ordenar los casos pertenecientes a una misma categoría de EFLO, utilizaremos, de nuevo RENECO (en orden de valor descendente):
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
-arrange(eolica_20, RENECO, LIQUIDEZ)
+arrange(interestelar_100, EFLO, desc(RENECO))
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
-df<-arrange(eolica_20, RENECO, LIQUIDEZ)
+df<-arrange(interestelar_100, EFLO, desc(RENECO))
 # Número de columnas por bloque
 columnas_por_bloque <- 3
 
@@ -643,20 +687,18 @@ rm(columnas_por_bloque)
 rm(i)
 ```
 
-Obviamente, en este ejemplo concreto el resultado es el mismo que se obtuvo con `arrange(eolica_20, RENECO)`, puesto que no hay rentabilidades iguales entre las 20 empresas de la muestra.
-
-### Cambiando el nombre de las variables de un *data frame*.
+### ![](figuras/key.svg){.hicon} Cambiando el nombre de las variables de un *data frame*.
 
 `{dplyr}` cuenta con una función que cambia fácilmente el nombre de una variable o columna de un *data frame*: la función `rename()`. Por ejemplo, si queremos cambiar el nombre de la variable SOLVENCIA por SOLVE, simplemente ejecutaremos:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
-#Renombrando variables
-eolica_20 <- rename(eolica_20, SOLVE = SOLVENCIA)
+# Renombrando variables
+interestelar_100 <- rename(interestelar_100, SOLVE = SOLVENCIA)
 ```
 
-Podemos comprobar en el *Environment*, despegando el objeto "eolica_20", cómo ya no aparece la variable SOLVENCIA; pero sí SOLVE en su lugar (obviamente, con los mismos datos). Es necesario tener en cuenta que en el **lado izquierdo** de la igualdad hay que poner el **nuevo nombre**, y en la derecha el antiguo. Además, en el mismo `rename()` se pueden cambiar los nombres de **varias variables**, separando las igualdades correspondientes con comas.
+Podemos comprobar en el *Global* *Environment*, despegando el *data frame* "interestelar_100", cómo ya no aparece la variable SOLVENCIA; pero sí SOLVE en su lugar (obviamente, con los mismos datos). Es necesario tener en cuenta que en el **lado izquierdo** de la igualdad hay que poner el **nuevo nombre**, y en la derecha el antiguo. Además, en el mismo `rename()` se pueden cambiar los nombres de **varias variables**, separando las igualdades correspondientes con comas.
 
-### **Añadiendo variables como transformación de otras variables en un *data frame*.**
+### ![](figuras/key.svg){.hicon} Añadiendo variables como transformación de otras variables en un *data frame*.
 
 El paquete `{dplyr}` también permite añadir a un *data frame* variables que son el resultado de **someter a otras variables a diversas transformaciones**. La función para realizar este cometido es `mutate()`.
 
@@ -664,23 +706,23 @@ Así, por ejemplo, imaginemos que necesitamos calcular una variable como el coci
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 # Añadiendo variables como transformacion de otras variables
-eolica_20 <- mutate (eolica_20, RATIO = RES / ACTIVO)
-summary(eolica_20)
+interestelar_100 <- mutate (interestelar_100, RATIO = RES / ACTIVO)
+summary(interestelar_100)
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
 # Añadiendo variables como transformacion de otras variables
-eolica_20 <- mutate (eolica_20, RATIO = RES / ACTIVO)
+interestelar_100 <- mutate (interestelar_100, RATIO = RES / ACTIVO)
 
 library (dplyr)
-df <- select(eolica_20, everything())
+df <- select(interestelar_100, everything())
 # Número de variables por bloque
 variables_por_bloque <- 4
 
 # Dividir las variables en bloques
-for (i in seq(1, ncol(eolica_20), variables_por_bloque)) {
+for (i in seq(1, ncol(interestelar_100), variables_por_bloque)) {
   # Comentario: No mostramos el nombre del bloque
-  print(summary(eolica_20[, i:min(i + variables_por_bloque - 1, ncol(eolica_20))]))
+  print(summary(interestelar_100[, i:min(i + variables_por_bloque - 1, ncol(interestelar_100))]))
   cat("\n")
 }
 rm (i)
@@ -691,137 +733,96 @@ rm (df)
 En la transformación de variables mediante la función `mutate()`, se pueden utilizar **funciones integradas en otros paquetes** de R. Por ejemplo, si queremos calcular la variable ACTIVOS_ACUM como la variable que recoge los activos acumulados de las empresas, comenzando por la empresa con menor activo, podríamos utilizar la función `cumsum()` del paquete `{base}`, y hacer:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
-eolica_20 <- arrange(eolica_20, ACTIVO)
-eolica_20 <- mutate (eolica_20, ACTIVOS_ACUM = cumsum(ACTIVO))
-select(eolica_20, ACTIVO, ACTIVOS_ACUM)
+interestelar_100 <- arrange(interestelar_100, ACTIVO)
+interestelar_100 <- mutate (interestelar_100, ACTIVOS_ACUM = cumsum(ACTIVO))
+select(interestelar_100, ACTIVO, ACTIVOS_ACUM)
 ```
 
 Podemos verificar cómo se ha integrado en el *data frame* la variable ACTIVOS_ACUM.
 
-Un último ejemplo de adición de una variable que es transformación de otras. En este caso, crearemos la variable TAM (tamaño), que es **categórica** (los datos son conjuntos de carcteres). Esta variable toma valor "G" para las empresas con un valor de la variable ACTIVO mayor que 1.000.000, y "P" para las que tengan un valor en la variable ACTIVO menor o igual a 1.000.000. Para calcular automáticamente esta nueva variable categórica, utilizaremos la función de `{base}` `cut()`. De este modo, haremos:
+Un último ejemplo de adición de una variable que es transformación de otras. En este caso, crearemos la variable DIM (dimensión), que es **categórica** (los datos son conjuntos de carcteres). Esta variable tomará valor "ALTA" para las empresas con un valor de la variable ACTIVO mayor o igual que 216 miles de PAVOs, "MEDIA" para las empresas con un ACTIVO menor que 216 miles de PAVOs y mayor o igual que 54 miles de PAVOs, y "REDUCIDA" para las que tengan un valor en la variable ACTIVO menor que 54 miles de PAVOs. Para calcular automáticamente esta nueva variable categórica, utilizaremos la función de `{base}` llamada `cut()`. De este modo, haremos:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
-eolica_20 <- mutate(eolica_20, TAM = cut(ACTIVO,
-  breaks = c(-Inf, 1000000, Inf), labels = c("P", "G")))
-select(eolica_20, ACTIVO, TAM)
+interestelar_100 <- mutate(interestelar_100,
+                           DIM = cut(ACTIVO,
+                                 breaks = c(-Inf, 54, 216, Inf),
+                                 labels = c("REDUCIDA", "MEDIA", "ALTA")))
+select(interestelar_100, ACTIVO, DIM)
 ```
 
-Podemos advertir cómo la función `cut()`, que incluimos dentro de nuestra función de `{dplyr}` `mutate()`, tiene, a su vez, varios argumentos: la variable numérica de referencia (ACTIVO); el argumento **"breaks"**, en el que decimos los intervalos en que quedarán divididos los casos (uno, de menos infinito a 1.000.000; y otro de 1.000.000 a más infinito), y **"labels"**, que es el valor que tomará la variable creada (TAM) según el intervalo en el que se sitúe cada caso de la muestra.
+Podemos advertir cómo la función `cut()`, que incluimos dentro de nuestra función de `{dplyr}` `mutate()`, tiene, a su vez, varios argumentos: la variable numérica de referencia (ACTIVO); el argumento `breaks =`, en el que decimos los intervalos en que quedarán divididos los casos (uno, de menos infinito a 54, otro de 54 a 216, y otro de 216 a más infinito), y `labels =`, que es el valor que tomará la variable creada (DIM) según el intervalo en el que se sitúe cada caso de la muestra.
 
-Cabe destacar que podíamos haber escrito el código para crear la variable TAM de un modo más elegante y cómodo, utilizando el operador **"*pipe*"** (**%\>%**). Este operador permite concatenar una serie de instrucciones:
+Cabe destacar que podíamos haber escrito el código para crear la variable TAM de un modo más elegante y cómodo, utilizando **el operador** **"*pipe*"** `%>%`. Este operador permite concatenar una serie de instrucciones:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
-eolica_20 <- eolica_20 %>% mutate(TAM = cut(ACTIVO,
-  breaks = c(-Inf, 1000000, Inf), labels = c("P", "G")))
-select(eolica_20, ACTIVO, TAM)
+interestelar_100 <- mutate(interestelar_100,
+                           DIM = cut(ACTIVO,
+                                     breaks = c(-Inf, 54, 216, Inf),
+                                     labels = c("REDUCIDA", "MEDIA", "ALTA")))
+select(interestelar_100, ACTIVO, DIM)
 ```
 
-Podríamos interpretar la línea de código así: "asigna al *data frame*"eolica_20" sus propios datos, después (%\>%) crea la variable TAM con la función cut() y añádela a "eolica_20".
+Podríamos interpretar la línea de código así: "asigna al *data frame* "interestelar_100" sus propios datos, después (`%>%`) crea la variable DIM con la función `cut()` y añádela a "interestelar_100".
 
-### Extrayendo y sintetizando información de las variables de un *data frame*.
+### ![](figuras/key.svg){.hicon} Extrayendo y sintetizando información de las variables de un *data frame*.
 
-Otra posibilidad que permite `{dplyr}` es extraer y sintetizar la información de las variables contenidas en un *data frame*. Para ello, nos ayudaremos de la función `summarise()`. Como ejemplo, calculemos la *rentabilidad financiera* media de las 20 empresas:
+Otra posibilidad que permite `{dplyr}` es extraer y sintetizar mediante *medidas* la información de las variables contenidas en un *data frame*. Para ello, nos ayudaremos de la función `summarise()`. Como ejemplo, calculemos la *rentabilidad financiera* media de las 20 empresas:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 #Extrayendo información de las variables de un data frame
-summarise(eolica_20, RENFIN_media = mean(RENFIN)) 
+summarise(interestelar_100, RENFIN_media = mean(RENFIN)) 
 ```
 
-A veces, es de gran utilidad combinar `summarise()` con `group_by()`, que extrae la información por grupos definidos por una de las variables. Para ilustrarlo, vamos a utilizar la variable recién creada TAM, para hacer dos grupos de empresas: las de menor ("P") y las de mayor ("G") volumen de activo; tras lo cual calcularemos la media de las rentabilidades para cada grupo:
+A veces, es de gran utilidad combinar `summarise()` con `group_by()`, que extrae la información dividiendo el conjunto de casos por grupos definidos por una de las variables. Para ilustrarlo, vamos a utilizar la variable recién creada DIM para hacer tres grupos de empresas, tras lo cual calcularemos la media de las rentabilidades para cada grupo:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
-eolica_20 %>%  group_by(TAM) %>% summarise(RENFIN_media = mean(RENFIN))
+interestelar_100 %>%
+  group_by(DIM) %>%
+  summarise(RENFIN_media = mean(RENFIN))
 ```
 
-Hemos utilizado el operador *pipe* (**%\>%)** para concatenar diferentes instrucciones de `{dplyr}`: primero agrupar casos, y luego calcular las medias de cada grupo. Es decir, en este caso se podría "traducir" la línea de código como: "Toma el *data frame*"eolica_9", divide los casos en grupos según el valor de la variable TAM, y para cada grupo calcula la media de la variable RENFIN".
+Hemos utilizado el operador *pipe* `%>%` para concatenar diferentes instrucciones de `{dplyr}`: primero agrupar casos, y luego calcular las medias de cada grupo. Es decir, en este caso se podría "traducir" la línea de código como: "Toma el *data frame*"interestelar_100", divide sus casos en grupos según el valor de la variable DIM, y para cada grupo calcula la media de la variable RENFIN". Es de destacar que hay elementos que tienen como valor categórico en DIM "NA" (es decir, no hay dato). Esto se debe a que, cuando se creo DIM, había una empresa sin valor de ACTIVO (exactamente, "Vega Transport").
 
-## Exportando datos.
+## ![](figuras/pie-chart.svg){.hicon}![](figuras/key.svg){.hicon} Exportando datos.
 
 Antes de concluir el capítulo, vamos a tratar brevemente el aspecto de la exportación de datos.
 
-R cuenta con un **formato propio de datos**, que se traduce en archivos de extensión "RData", y que puede incluir cualquier objeto de R. Como ejemplo, en el siguiente *script*, llamado "explora_exporta.R" (obtener aquí), vamos a importar los datos del archivo de Microsoft (R) Excel (R) "eolica_20.xlsx", y el *data frame* donde almacenemos los datos vamos a exportarlo como el archivo de datos de R "eolica_20.RData". Posteriormente, borraremos el *data frame* del *Environment* y recuperaremos los datos cargando ese archivo "eolica_20.RData". Por supuesto, seguimos trabajando, como en todo el capítulo, en el proyecto "explora".
+R cuenta con un **formato propio de datos**, que se traduce en archivos de extensión "RData", y que puede incluir cualquier objeto de R. Vamos a exportar el *data frame* "interestelar_100" como el archivo de datos de R "interestelar_100.RData". Posteriormente, borraremos el *data frame* del *Environment* y recuperaremos los datos cargando ese archivo "interestelar_100.RData".
 
-Tras abrir el *script* "explora_exporta.R", las primeras líneas de código que veremos serán las que ya hemos estudiado para borrar el contenido del *Environment*, importar los datos de la hoja "Top 20" del archivo "eolica_20.xlsx" (situado en nuestra carpeta de proyecto), y tratar la variable "NOMBRE" para transformarla en el conjunto de nombres de las filas:
-
-```{r, eval=FALSE, echo=TRUE, message=FALSE}
-# Exportando datos de empresas eolicas (disculpad la falta de tildes)
-
-rm(list = ls())
-
-# DATOS
-
-library(readxl)
-eolica_20 <- read_excel("eolica_20.xlsx", sheet = "Top 20")
-eolica_20 <- data.frame(eolica_20, row.names = 1)
-summary(eolica_20)
-```
-
-```{r, eval=TRUE, echo=FALSE, message=FALSE}
-# Exportando datos de empresas eolicas (disculpad la falta de tildes)
-
-rm(list = ls())
-
-# DATOS
-
-library(readxl)
-eolica_20 <- read_excel("eolica_20.xlsx", sheet = "Top 20")
-eolica_20 <- data.frame(eolica_20, row.names = 1)
-
-library (dplyr)
-df <- select(eolica_20, everything())
-# Número de variables por bloque
-variables_por_bloque <- 4
-
-# Dividir las variables en bloques
-for (i in seq(1, ncol(eolica_20), variables_por_bloque)) {
-  # Comentario: No mostramos el nombre del bloque
-  print(summary(eolica_20[, i:min(i + variables_por_bloque - 1, ncol(eolica_20))]))
-  cat("\n")
-}
-rm (i)
-rm (variables_por_bloque)
-rm (df)
-```
-
-Posteriormente, se exportará el data frame "eolica_20" al archivo de formato R, "eolica_20.RData", mediante la función `save`:
+Para exportar el *data frame* "interestelar_100" al archivo de formato R, "interestelar_100.RData", utilizaremos la función `save()`:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 # Exportando data frame a formato R (.RData)
-
-save(eolica_20, file = "eolica_20.RData")
+save(interestelar_100, file = "interestelar_100.RData")
 ```
 
-Puede comprobarse cómo se ha generado el archivo correspondiente en la carpeta de proyecto. Para comprobar que la exportación es correcta, vamos a borrar del *Environment* el *data frame* "eolica_20". Después, cargaremos el archivo "eolica_20.RData". Como resultado, podremos comprobar que tenemos un nuevo *data frame* "eolica_20" que es exactamente igual al que teníamos al principio:
+Puede comprobarse cómo se ha generado el archivo correspondiente en la carpeta de proyecto. Para comprobar que la exportación es correcta, vamos a borrar del *Global* *Environment* el *data frame* "interestelar_100" con la función `rm()` (remove). Después, cargaremos el archivo "interestelar_100.RData" con la función `load()`. Como resultado, podremos comprobar que tenemos un nuevo *data frame* "interestelar_100" que es exactamente igual al que teníamos al principio:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
-# Borrando el data frame eolica_20
-
-rm(eolica_20)
+# Borrando el data frame interestelar_100
+rm(interestelar_100)
 
 # Importando el archivo .RData con los mismos datos
-
-load("eolica_20.RData")
-summary (eolica_20)
+load("interestelar_100.RData")
+summary (interestelar_100)
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
-# Borrando el data frame eolica_20
-
-rm(eolica_20)
+# Borrando el data frame interestelar_100
+rm(interestelar_100)
 
 # Importando el archivo .RData con los mismos datos
-
-load("eolica_20.RData")
+load("interestelar_100.RData")
 
 library (dplyr)
-df <- select(eolica_20, everything())
+df <- select(interestelar_100, everything())
 # Número de variables por bloque
 variables_por_bloque <- 4
 
 # Dividir las variables en bloques
-for (i in seq(1, ncol(eolica_20), variables_por_bloque)) {
+for (i in seq(1, ncol(interestelar_100), variables_por_bloque)) {
   # Comentario: No mostramos el nombre del bloque
-  print(summary(eolica_20[, i:min(i + variables_por_bloque - 1, ncol(eolica_20))]))
+  print(summary(interestelar_100[, i:min(i + variables_por_bloque - 1, ncol(interestelar_100))]))
   cat("\n")
 }
 rm (i)
@@ -829,35 +830,384 @@ rm (variables_por_bloque)
 rm (df)
 ```
 
-Por supuesto, hay más formatos en los que se pueden exportar datos desde R. Por ejemplo, **a un archivo de Microsoft (R) Excel (R)**. Un modo de hacerlo es haciendo uso de la función `write_xlsx()` del paquete {writexl}. Para que en la hoja de cálculo resultante se incluyan los nombres de las filas (empresas eólicas), hemos tenido previamente que crear un vector con el nombre de estas (vector "NOMBRE"), mediante la función `row.names()`, y unir ese vector al *data frame* "eolica_20", a modo de primera columna, creando un nuevo finalmente un *data frame* llamado "eolica_20n", para lo que se ha utilizado la función `cbind()`, que permite **pegar columnas de datos** que tengan un mismo número de filas.
+Por supuesto, hay más formatos en los que se pueden exportar datos desde R. Por ejemplo, **a un archivo de Microsoft® Excel®**. Un modo de hacerlo es haciendo uso de la función `write_xlsx()` del paquete {writexl}. Para que en la hoja de cálculo resultante se incluyan los nombres de las filas (empresas eólicas), hemos tenido previamente que crear un vector con el nombre de estas (vector "NOMBRE"), mediante la función `row.names()`, y unir ese vector al *data frame* "interestelar_100", a modo de primera columna, creando un nuevo finalmente un *data frame* llamado "interestelar_100n", para lo que se ha utilizado la función `cbind()`, que permite **pegar columnas de datos** que tengan un mismo número de filas.
 
-Como resultado de todo el código, se ha obtenido el archivo de Microsoft (R) Excel (R) "eolica_20_new.xlsx":
+Como resultado de todo el código, se ha obtenido el archivo de Microsoft® Excel® "interestelar_100_new.xlsx":
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
-
-# Exportando el data frame eolica_20 a Microsoft Excel
-
+# Exportando el data frame interestelar_100 a Microsoft (R) Excel (R)
 library(writexl)
-NOMBRE <- row.names(eolica_20)
-eolica_20n <- cbind(NOMBRE, eolica_20)
-write_xlsx(eolica_20n, path = "eolica_20_new.xlsx")
+NOMBRE <- row.names(interestelar_100)
+interestelar_100n <- cbind(NOMBRE, interestelar_100)
+write_xlsx(interestelar_100n, path = "interestelar_100_new.xlsx")
 
-#Fin del script
-
+#Fin del script :)
 ```
 
-## Materiales para realizar las prácticas del capítulo.
+## ![](figuras/star.svg){.hicon} Las variables de la base de datos del proyecto R-Stars.
+
+La base de datos completa del proyecto R-Stars contiene datos económicos, financieros y de diversa índole de 300 empresas de trasnporte interestelar de mercancías, recogidos en unas 30 variables.
+
+El sector del transporte interestelar se extiende a lo largo y ancho de 5 galaxias. Son 30 los planetas donde se localizan las sedes de las 300 empresas.
+
+![[Galaxias y principales planetas del transporte de mercancías.]{.smallcaps}](figuras/mapa_galactico_final.jpg){width="100%"}
+
+Las galaxias donde se desarrolla este tipo de actividad son:
+
+-   **Andrómeda (M31), Vía Láctea y Galaxia del Triángulo (M33):** Son galaxias espirales, caracterizadas por un disco con brazos espirales, un bulbo central y un halo estelar. Presentan componentes como discos delgados y gruesos, bulbos y halos, con poblaciones estelares de diferentes edades y metalicidades.
+
+-   **Gran Nube de Magallanes (LMC) y Pequeña Nube de Magallanes (SMC):** Son galaxias irregulares, con estructuras menos definidas, ricas en gas y con intensa formación estelar. Su morfología es más caótica y carecen de un bulbo central prominente.
+
+En cuanto a las variables que componen la base de dato, son las siguientes:
+
+-   **NOMBRE.** Nombre de la empresa. Tipo de datos: carácter/categórico. NAs: 0.
+
+-   **SEDE.** Planeta principal donde se encuentra la base de operaciones de la empresa. Tipo de datos: carácter/categórico. NAs: 0.
+
+-   **GALAXIA.** Galaxia principal en la que opera la empresa. Tipo de datos: carácter/categórico. NAs: 0.
+
+-   **ACTIVO.** Valor total de los recursos de la empresa (miles de PAVOs). Tipo de datos: numérico (real o entero). NAs: 0. Distribución/aproximación: {'min': 17.55, 'q1': 50.53, 'median': 156.315, 'mean': 241.40656666666666, 'q3': 227.01749999999998, 'max': 2966.52}. Número estimado de outliers: 45.
+
+-   **FPIOS.** Fondos propios de la empresa. Tipo de datos: numérico (real o entero). NAs: 0. Distribución/aproximación: {'min': 8.67, 'q1': 22.53, 'median': 57.43, 'mean': 111.04200666666667, 'q3': 108.4075, 'max': 1453.45}. Número estimado de outliers: 23.
+
+-   **ING.** Ingresos generados por la actividad principal de la empresa. Tipo de datos: numérico (real o entero). NAs: 0. Distribución/aproximación: {'min': 19.4, 'q1': 42.005, 'median': 103.47, 'mean': 218.3861666666667, 'q3': 240.9725, 'max': 2471.54}. Número estimado de outliers: 23.
+
+-   **MARGEN.** Margen operativo como porcentaje sobre los ingresos. Tipo de datos: numérico (real o entero). NAs: 0. Distribución/aproximación: {'min': 12.43160707469143, 'q1': 48.094728067689005, 'median': 57.449284410494265, 'mean': 60.159512199694774, 'q3': 73.6097083921985, 'max': 96.48871372268005}. Número estimado de outliers: 0.
+
+-   **RES.** Resultado del ejercicio (beneficio neto). Tipo de datos: numérico (real o entero). NAs: 0. Distribución/aproximación: {'min': 9.62, 'q1': 25.315, 'median': 59.22, 'mean': 120.58346666666667, 'q3': 128.1775, 'max': 1561.93}. Número estimado de outliers: 28.
+
+-   **SOLVENCIA.** Capacidad de la empresa para cubrir sus obligaciones financieras a largo plazo. Tipo de datos: numérico (real o entero). NAs: 0. Distribución/aproximación: {'min': 123.07, 'q1': 164.7025, 'median': 182.06, 'mean': 185.7181, 'q3': 199.415, 'max': 325.32}. Número estimado de outliers: 10.
+
+ACTCOR
+
+Descripción: Activo corriente.
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 6.81, 'q1': 17.450000000000003, 'median': 24.005000000000003, 'mean': 59.78711333333333, 'q3': 55.635, 'max': 889.956}
+
+Número estimado de outliers: 36
+
+PASCOR
+
+Descripción: Pasivo corriente.
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 6.66, 'q1': 20.221875, 'median': 59.22375, 'mean': 97.77342, 'q3': 100.558125, 'max': 1143.81}
+
+Número estimado de outliers: 25
+
+LIQUIDEZ
+
+Descripción: Cociente entre ACTCOR y PASCOR.
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 0.2253031527890057, 'q1': 0.5258905294495814, 'median': 0.7055401985223915, 'mean': 0.7017208938995255, 'q3': 0.8363331747719515, 'max': 3.1175}
+
+Número estimado de outliers: 7
+
+APALANCA
+
+Descripción: Nivel de apalancamiento (Pasivo total / Fondos propios).
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 44.38, 'q1': 100.5925, 'median': 121.86, 'mean': 132.66719999999998, 'q3': 154.55, 'max': 433.55}
+
+Número estimado de outliers: 13
+
+RENECO
+
+Descripción: Rentabilidad económica.
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 24.0818338673897, 'q1': 44.11017192391375, 'median': 50.322615496080985, 'mean': 51.05483246133457, 'q3': 57.744859307359306, 'max': 93.8474791439971}
+
+Número estimado de outliers: 4
+
+RENFIN
+
+Descripción: Rentabilidad financiera.
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 51.38759229398286, 'q1': 95.62038443747954, 'median': 113.04759181292664, 'mean': 116.1380407827033, 'q3': 131.1379538686389, 'max': 262.245027239326}
+
+Número estimado de outliers: 6
+
+EMPLEA
+
+Descripción: Número de empleados.
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 7.0, 'q1': 22.75, 'median': 30.0, 'mean': 36.28666666666667, 'q3': 44.0, 'max': 106.0}
+
+Número estimado de outliers: 16
+
+FJUR
+
+Descripción: Forma jurídica de la empresa.
+
+Tipo de datos: carácter/categórico
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'SLG': 131, 'SAG': 87, 'CG': 82}
+
+Número estimado de outliers: No aplica
+
+FLOTA
+
+Descripción: Número de cargueros espaciales.
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 3.0, 'q1': 15.0, 'median': 24.0, 'mean': 26.143333333333334, 'q3': 38.0, 'max': 50.0}
+
+Número estimado de outliers: 0
+
+COSTOP
+
+Descripción: Costos operativos.
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 0.9800000000000004, 'q1': 15.305, 'median': 31.195, 'mean': 97.8027, 'q3': 105.1425, 'max': 1422.3}
+
+Número estimado de outliers: 28
+
+CAPEX
+
+Descripción: Gastos de capital.
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 1.038287729317929, 'q1': 6.155582323293937, 'median': 11.59993993880682, 'mean': 33.7481042038456, 'q3': 34.328503663564, 'max': 1087.195548557454}
+
+Número estimado de outliers: 29
+
+IMD
+
+Descripción: Gasto en I+D.
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 0.4779202472567501, 'q1': 1.409149294544295, 'median': 4.7002794818005755, 'mean': 15.20343463327611, 'q3': 18.239778326202334, 'max': 202.4779489786356}
+
+Número estimado de outliers: 40
+
+EFLO
+
+Descripción: Edad media de la flota (categorías).
+
+Tipo de datos: carácter/categórico
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'ANTIGUA': 148, 'MADURA': 90, 'RENOVADA': 62}
+
+Número estimado de outliers: No aplica
+
+RUTAS
+
+Descripción: Número de rutas atendidas.
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 36.0, 'q1': 176.0, 'median': 310.0, 'mean': 365.58, 'q3': 436.5, 'max': 3138.0}
+
+Número estimado de outliers: 12
+
+FROM
+
+Descripción: Inspiración temática de la empresa.
+
+Tipo de datos: carácter/categórico
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'Star Wars': 84, '2001: Una Odisea en el Espacio': 84, 'Dune': 52, 'Star Trek': 47, 'Interstellar': 33}
+
+Número estimado de outliers: No aplica
+
+IDIG
+
+Descripción: Índice de digitalización.
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 0.3378663961065547, 'q1': 8.497779899152183, 'median': 15.67220425672831, 'mean': 17.23429190850527, 'q3': 23.848371427139387, 'max': 60.83251420063471}
+
+Número estimado de outliers: 4
+
+IDIVERSE
+
+Descripción: Índice de diversificación.
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 0.0, 'q1': 11.654577691811731, 'median': 21.165377176015475, 'mean': 22.20967117988394, 'q3': 32.39039329464862, 'max': 78.29787234042553}
+
+Número estimado de outliers: 2
+
+IFIDE
+
+Descripción: Índice de fidelización.
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 5.260711052386895, 'q1': 36.927508537079916, 'median': 39.26811099440512, 'mean': 39.00159967860573, 'q3': 40.431855833880604, 'max': 79.15382971495461}
+
+Número estimado de outliers: 33
+
+GMEDRUT
+
+Descripción: Distancia media de las rutas (años luz).
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 0.005197255574614065, 'q1': 0.11182702558635398, 'median': 0.2235808625336927, 'mean': 0.31892273948109423, 'q3': 0.44811473004320435, 'max': 1.550434782608695}
+
+Número estimado de outliers: 10
+
+EFLO_FACTOR
+
+Descripción: Factor derivado de la edad media de la flota.
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 0.8, 'q1': 0.8, 'median': 1.0, 'mean': 0.9426666666666665, 'q3': 1.0, 'max': 1.2}
+
+Número estimado de outliers: 0
+
+GALAXY_FACTOR
+
+Descripción: Factor de distancia intergaláctica.
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 1.0, 'q1': 1.0, 'median': 2.5, 'mean': 2.8116666666666665, 'q3': 4.5, 'max': 5.0}
+
+Número estimado de outliers: 0
+
+DIST
+
+Descripción: Distancia operada globalmente.
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 0.1512896531277795, 'q1': 12.605721150251313, 'median': 44.228875683782675, 'mean': 133.68609306654542, 'q3': 165.29212487633055, 'max': 2151.641799196787}
+
+Número estimado de outliers: 26
+
+BMAL
+
+Descripción: Beneficio medio por año luz.
+
+Tipo de datos: numérico (real o entero)
+
+NAs: 0
+
+Observaciones corruptas: 0
+
+Distribución/aproximación: {'min': 24.1346865503376, 'q1': 466.11372981210417, 'median': 1491.4160131662015, 'mean': 6084.856716904903, 'q3': 4368.46087373694, 'max': 262555.8151022698}
+
+Número estimado de outliers: 31
+
+## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo.
 
 En esta sección se muestran los links de acceso a los diferentes materiales (*scripts*, datos...) necesarios para llevar a cabo los contenidos prácticos del capítulo.
 
-**Datos (en formato Microsoft (R) Excel (R)):**
+**Datos (en formato Microsoft® Excel®:**
 
--   eolica_20.xlsx ([obtener aquí](https://docs.google.com/spreadsheets/d/1YDFCd0Z7udeIi6WdNYwthYHGmJSrEfG1/edit?usp=drive_link&ouid=115375878280465826079&rtpof=true&sd=true))
+-   interestelar_100.xlsx ([obtener aquí](https://raw.githubusercontent.com/teckel71/RStars-book/main/download/interestelar_100.xlsx))
 
 **Scripts:**
 
--   explora_eolica.R ([obtener aquí](https://drive.google.com/file/d/1_rt1TtlYGU0VWtnvkWLpxM_MDGOrSFYZ/view?usp=drive_link))
-
--   explora_dplyr.R ([obtener aquí](https://drive.google.com/file/d/1Is4XOd6EmFswB6w2eZfC8_pp2mtu7aQK/view?usp=drive_link))
-
--   explora_exporta.R ([obtener aquí](https://drive.google.com/file/d/1NVkpJ6toD3pWJsE0w628Sf4e_c5dcffR/view?usp=sharing))
+-   explora_rstars.R ([obtener aquí](https://raw.githubusercontent.com/teckel71/RStars-book/main/download/explora_rstars.R))
