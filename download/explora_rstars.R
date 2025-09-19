@@ -17,6 +17,8 @@ summary (interestelar_100)
 datos_df_graph <- gt_plt_summary(interestelar_100)
 datos_df_graph
 
+## dplyr
+
 # Cargando dplyr
 library (dplyr)
 
@@ -24,22 +26,30 @@ library (dplyr)
 interestelar_100 <-select(interestelar_100, -FJUR)
 summary (interestelar_100)
 
-select(interestelar_100, ACTIVO, FPIOS, LIQUIDEZ, MARGEN, SOLVENCIA, APALANCA)
-interestelar_100A <-select(interestelar_100, ACTIVO, FPIOS, LIQUIDEZ, MARGEN, SOLVENCIA, APALANCA)
+select(interestelar_100, ACTIVO, FPIOS, LIQUIDEZ)
+interestelar_100A <-select(interestelar_100, ACTIVO, FPIOS, LIQUIDEZ)
 summary (interestelar_100A)
 
 interestelar_100_replica <-select(interestelar_100, everything())
 
 # Seleccionando casos
-filter(interestelar_100, RES >= 500)
+select(filter(interestelar_100, RES >= 500), RES, RENECO)
 
-interestelar_100B <-filter(interestelar_100, RES >= 500 & RENECO < 40)
+interestelar_100B <-select(filter(interestelar_100,
+                                  RES >= 500 & RENECO < 40),
+                           RES, RENECO, ACTIVO)
 interestelar_100B
 
 # Ordenando casos
-arrange(interestelar_100, RENECO)
-arrange(interestelar_100, desc(RENECO))
-arrange(interestelar_100, EFLO, desc(RENECO))
+interestelar_100C <- select(interestelar_100, RENECO, EFLO, ACTIVO)
+interestelar_100C <- arrange(interestelar_100C, RENECO)
+interestelar_100C
+
+interestelar_100D <- arrange(interestelar_100C, desc(RENECO))
+interestelar_100D
+
+interestelar_100E <- arrange(interestelar_100C, EFLO, desc(RENECO))
+interestelar_100E
 
 # Renombrando variables
 interestelar_100 <- rename(interestelar_100, SOLVE = SOLVENCIA)
@@ -59,10 +69,10 @@ interestelar_100 <- mutate(interestelar_100,
 select(interestelar_100, ACTIVO, DIM)
 
 interestelar_100 <- interestelar_100 %>%
-                    mutate(DIM = cut(ACTIVO,
-                                     breaks = c(-Inf, 54, 216, Inf),
-                                     labels = c("REDUCIDA", "MEDIA", "ALTA")))
-select(ACTIVO, DIM)
+  mutate(DIM = cut(ACTIVO,
+                   breaks = c(-Inf, 54, 216, Inf),
+                   labels = c("REDUCIDA", "MEDIA", "ALTA")))
+interestelar_100 %>% select(ACTIVO, DIM)
 
 #Extrayendo información de las variables de un data frame
 summarise(interestelar_100, RENFIN_media = mean(RENFIN))
@@ -70,6 +80,8 @@ summarise(interestelar_100, RENFIN_media = mean(RENFIN))
 interestelar_100 %>%
   group_by(DIM) %>%
   summarise(RENFIN_media = mean(RENFIN))
+
+## Exportación de datos
 
 # Exportando data frame a formato R (.RData)
 save(interestelar_100, file = "interestelar_100.RData")
@@ -87,4 +99,4 @@ NOMBRE <- row.names(interestelar_100)
 interestelar_100n <- cbind(NOMBRE, interestelar_100)
 write_xlsx(interestelar_100n, path = "interestelar_100_new.xlsx")
 
-# Fin de script :)
+#Fin del script :)
