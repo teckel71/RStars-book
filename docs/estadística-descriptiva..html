@@ -128,7 +128,7 @@ Las medidas son instrumentos matemáticos que extraen y sintetizan la informaci�
 Dentro de la carpeta del proyecto guardaremos el <em>script</em> llamado “<a href="https://drive.google.com/file/d/1pfyGPGQRmgOyo9wrZ7fr_KAFj49ecXID/view?usp=sharing">explora_trabajadores.R</a>” y el archivo de <em>Microsoft® Excel®</em> llamado “<a href="https://docs.google.com/spreadsheets/d/1e_h8P_0sBuD5Nvw6nkeWtXXeiqItFfdI/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">trabajadores.xlsx</a>”.</p>
 <p>Las primeras líneas del script se refieren, como ya hemos visto en otras secciones del libro, a la limpieza de la memoria o environment, eliminando objetos que se hayan podido crear con anterioridad, y en la importación de los datos que hay en la hoja “Datos” de “trabajadores.xlsx”.
 Estos datos se almacenan en el <em>data frame</em> “datos”, y consisten en el registro del salario (variable SALARIO, expresada en cientos de euros), el nivel de estudios (atributo NESTUDIOS) y departamento al que se pertenece (atributo DEP), correspondientes a los 49 trabajadores de una determinada empresa:</p>
-<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Script para la construcción de tablas de datos </span></span>
 <span><span class="co"># y trabajo con distribucionesde frecuencias univariantes.</span></span>
 <span><span class="co">#</span></span>
@@ -143,10 +143,10 @@ Estos datos se almacenan en el <em>data frame</em> “datos”, y consisten en e
 <span><span class="va">datos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"trabajadores.xlsx"</span>, sheet <span class="op">=</span> <span class="st">"Datos"</span><span class="op">)</span></span></code></pre></div>
 <p>Como sabemos, R interpreta el nombre de los trabajadores como una variable más, en lugar de como la identificador de cada “fila” o caso.
 Para corregir esto, y hacer saber a R que la primera columna no es una variable, sino el nombre de cada fila (caso, en este caso trabajador), añadimos la línea:</p>
-<div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">datos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">datos</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p>Posteriormente, podremos comprobar que “datos” contiene el valor del salario, el nivel de estudios y la categoría de departamento para cada uno de los 49 trabajadores de la empresa:</p>
-<div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span> <span class="op">(</span><span class="va">datos</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##     SALARIO       NESTUDIOS             DEP           
 ##  Min.   : 8.00   Length:49          Length:49         
@@ -162,14 +162,14 @@ Vamos a presentar tales datos de un modo más amigable, mediante la <strong>conf
 Este paquete contiene la función <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code>, que permite generar tablas en varios formatos y con diversas características que pueden ser personalizadas (como el título de la tabla).
 Si queremos personalizar más aún la apariencia de nuestras tablas, podemos usar las facilidades del paquete <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>, que complementa las posibilidades que ofrece la función <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code> de <a href="https://yihui.org/knitr/">knitr</a>.</p>
 <p>Para hacer una tabla con nuestros casos y variables, es decir, para escribir nuestro <em>data frame</em> “datos” de un modo más elegante, primero activaremos los paquetes anteriores, y añadiremos una línea donde diremos el formato de la tabla a generar (en nuestro ejemplo, formato .html), todo con el siguiente código:</p>
-<div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb144"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Tabla de datos</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span></span></code></pre></div>
 <p>Después, generaremos nuestra tabla con los datos contenidos en el <em>data frame</em> “datos”.
 El código para generar la tabla, y el resultado, es el siguiente:</p>
-<div class="sourceCode" id="cb146"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">knitr.table.format</span> <span class="op">=</span> <span class="st">"html"</span></span>
 <span>    <span class="va">datos</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>        <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Trabajadores asalariados de la empresa"</span>,</span>
@@ -181,7 +181,7 @@ El código para generar la tabla, y el resultado, es el siguiente:</p>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">datos</span><span class="op">)</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-242">Table 4.1: </span><span id="tab:unnamed-chunk-242">Table 4.2: </span>Trabajadores asalariados de la empresa
+<span id="tab:unnamed-chunk-176">Table 4.1: </span><span id="tab:unnamed-chunk-176">Table 4.2: </span>Trabajadores asalariados de la empresa
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -914,7 +914,7 @@ Es lo que vamos a hacer a continuación, tomando como variable a analizar la var
 <p>Lo primero a tener en cuenta es que, en las distribuciones de frecuencias, <strong>los valores de la variable suelen disponerse de menor a mayor</strong>.
 Para ello, previamente vamos a ordenar las filas del <em>data frame</em> “datos” según el valor que toma, en el caso correspondiente, la variable SALARIO y, si existen casos con el mismo valor de SALARIO, los ordenaremos por orden alfabético del nombre del caso (nombre del trabajador, o de la fila del <em>data frame</em>).
 Para realizar este reordenamiento de casos (filas) del <em>data frame</em> de un modo sencillo, vamos a utilizar la función <code><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange()</a></code> del paquete <code>{deplyr}</code>:</p>
-<div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb146"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Colocar los datos</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
@@ -922,7 +922,7 @@ Para realizar este reordenamiento de casos (filas) del <em>data frame</em> de un
 <p>Una vez que los casos están ordenados en el data frame de menor a mayor valor de SALARIO, calcularemos, para cada valor del SALARIO, el número de casos que lo poseen, es decir, la frecuencia absoluta de cada valor de la variable SALARIO.
 Para ello, vamos a crear un objeto denominado “conteo” que va a ser de clase “tabla” de la variable SALARIO.
 Todo ello lo realizamos mediante la función <code><a href="https://rdrr.io/r/base/table.html">table()</a></code>, como se muestra a continuación:</p>
-<div class="sourceCode" id="cb148"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">conteo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span></span>
 <span><span class="va">conteo</span></span></code></pre></div>
 <pre><code>## 
@@ -933,7 +933,7 @@ La primera se corresponde con los valores que toma la variable SALARIO en los di
 Es decir, el objeto “tabla” es la distribución de frecuencias de la variable SALARIO.</p>
 <p>Vamos a convertir este objeto “tabla” en un <em>data frame</em>, llamado “conteo_df”, con el objeto de poder representar de un modo más elegante la distribución de frecuencias.
 Para ello, ejecutaremos el código:</p>
-<div class="sourceCode" id="cb150"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb149"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Convertir el resultado a un data frame para una mejor visualización</span></span>
 <span></span>
 <span><span class="va">conteo_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">conteo</span><span class="op">)</span></span>
@@ -951,24 +951,24 @@ Para ello, ejecutaremos el código:</p>
 <p>Al mostrar en la consola el data frame “conteo_df”, observamos que consta de dos columnas o variables.
 “Var1” recoge los valores que toma la variable SALARIO en el grupo de casos, y “Freq” es el conjunto de frecuencias absolutas de los diferentes valores.
 Para que se entienda mejor qué es cada columna, las renombraremos:</p>
-<div class="sourceCode" id="cb152"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb151"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Renombrar las columnas para mayor claridad</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">conteo_df</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Valor"</span>, <span class="st">"Frecuencia"</span><span class="op">)</span></span></code></pre></div>
 <p>A continuación, vamos a calcular el resto de frecuencias que suelen calcularse para una variable.
 La <strong>frecuencia total</strong>, N, que es la suma de todas las frecuencias absolutas, es decir, el número total de casos, se puede calcular fácilmente como:</p>
-<div class="sourceCode" id="cb153"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb152"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calcular y guardar la frecuencia total</span></span>
 <span></span>
 <span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">conteo_df</span><span class="op">$</span><span class="va">Frecuencia</span><span class="op">)</span></span></code></pre></div>
 <p>La serie de frecuencias absolutas acumuladas se calcularán del siguiente modo:</p>
-<div class="sourceCode" id="cb154"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb153"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calcular frecuencias absolutas acumuladas</span></span>
 <span></span>
 <span><span class="va">conteo_df</span><span class="op">$</span><span class="va">Frecuencia_acum</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="va">conteo_df</span><span class="op">$</span><span class="va">Frecuencia</span><span class="op">)</span></span></code></pre></div>
 <p>Como sabemos, la última frecuencia absoluta acumulada debe coincidir con la frecuencia total.
 Por último, calcularemos las frecuencias relativas, que son las frecuencias absolutas divididas por la frecuencia total, y recogen la proporción de casos correspondientes al valor de la variable:</p>
-<div class="sourceCode" id="cb155"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb154"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calcular frecuencias relativas</span></span>
 <span></span>
 <span><span class="va">conteo_df</span><span class="op">$</span><span class="va">Frecuencia_R</span> <span class="op">&lt;-</span> <span class="va">conteo_df</span><span class="op">$</span><span class="va">Frecuencia</span> <span class="op">/</span> <span class="va">N</span></span>
@@ -980,7 +980,7 @@ Por último, calcularemos las frecuencias relativas, que son las frecuencias abs
 Además, la última frecuencia relativa acumulada siempre es, igualmente, 1.</p>
 <p>Ahora vamos a construir una tabla que recoja la distribución de frecuencias de la variable SALARIO (con los diversos tipos de frecuencias).
 Para ello, simplemente hemos de aplicar al data frame “conteo_df” las funciones <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code> del paquete <a href="https://yihui.org/knitr/">knitr</a>, y el resto de funciones auxiliares del paquete <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>:</p>
-<div class="sourceCode" id="cb156"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb155"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">conteo_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Distribución de frecuencias de los salarios de la empresa"</span>,</span>
 <span>        col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"x(i) = Salario"</span>, <span class="st">"Frecuencia absoluta n(i)"</span>,</span>
@@ -994,7 +994,7 @@ Para ello, simplemente hemos de aplicar al data frame “conteo_df” las funcio
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">conteo_df</span><span class="op">)</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-251">Table 4.3: </span><span id="tab:unnamed-chunk-251">Table 4.4: </span>Distribución de frecuencias de los salarios de la empresa
+<span id="tab:unnamed-chunk-185">Table 4.3: </span><span id="tab:unnamed-chunk-185">Table 4.4: </span>Distribución de frecuencias de los salarios de la empresa
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -1177,7 +1177,7 @@ Esto es lo que vamos a hacer ahora con la variable SALARIO.</p>
 <p>La primera tarea a realizar será formar los intervalos.
 Para ello podemos usar la función <code><a href="https://rdrr.io/r/base/cut.html">cut()</a></code>, que permite decir el número de intervalos (de la misma amplitud) en que queremos dividir el intervalo que va desde el menor valor de la distribución (menor salario) al mayor valor (mayor salario).
 Por ejemplo, si deseamos agrupar los valores en 4 intervalos, el código será:</p>
-<div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb156"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Distribución de frecuencias agrupadas en intervalos</span></span>
 <span><span class="co"># del salario de los trabajadores de la empresa.</span></span>
 <span></span>
@@ -1188,14 +1188,14 @@ El argumento lógico <code>include.lowest =</code> se especifica para indicar qu
 Lo usual es que, salvo este, el resto sean abiertos, es decir, que los casos que toman como valor de la variable un extremo de intervalo se contabilicen dentro del intervalo donde ese valor es el extremo superior.</p>
 <p>La columna “intervalos” es de la clase “factor”.
 Precisamente, los posibles “niveles” de ese factor son los 4 intervalos que se han creado con <code><a href="https://rdrr.io/r/base/cut.html">cut()</a></code>:</p>
-<div class="sourceCode" id="cb158"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Obtener los niveles de los intervalos</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">intervalos</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] "[7.98,13.5]" "(13.5,19]"   "(19,24.5]"   "(24.5,30]"</code></pre>
 <p>Es preciso advertir que el vector “limites” contiene elementos de clase caracter (aunque contengan cifras, ya que también contienen corchetes, paréntesis y comas).</p>
 <p>Las siguientes líneas de código son similares a las que vimos en el caso de distribuciones de frecuencias no agrupadas: se creará un objeto “tabla” para contabilizar el número de casos que pertenecen a cada intervalo (frecuencias absolutas), se transformará este objeto en un <em>data frame</em> para poder trabajar de un modo más fácil, y se cambiarán el nombre de las dos columnas para que se entienda mejor:</p>
-<div class="sourceCode" id="cb160"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb159"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Contar las frecuencias de cada intervalo</span></span>
 <span></span>
 <span><span class="va">conteo_intervalos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">intervalos</span><span class="op">)</span></span>
@@ -1212,7 +1212,7 @@ Precisamente, los posibles “niveles” de ese factor son los 4 intervalos que 
 <p>Una de estas informaciones es lo que denominamos “<strong>marca de clase</strong>” de un intervalo.
 La marca de clase de un intervalo de valores es simplemente el punto medio de dicho intervalo.</p>
 <p>La obtención en nuestro ejemplo de las marcas de clase puede resultar algo compleja, ya que hemos de recordar que los intervalos, tal y como están almacenados, son los niveles de una variable de clase “factor”:</p>
-<div class="sourceCode" id="cb161"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb160"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">marca_clase</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">conteo_intervalos_df</span><span class="op">$</span><span class="va">Intervalo</span><span class="op">)</span>, <span class="st">",|\\[|\\(|\\]"</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
@@ -1234,7 +1234,7 @@ Estos elementos corresponden con los límites del intervalo.
 <li><p><strong><code>marca_clase &lt;- ...</code></strong>: Finalmente, el resultado de <code><a href="https://rdrr.io/r/base/lapply.html">sapply()</a></code> se asigna al vector”marca_clase”, que contendrá los puntos medios de los 4 intervalos.</p></li>
 </ol>
 <p>El resto de código integra el vector “marca_clase” en el <em>data frame</em> “conteo_intervalo_df” como una variable más, reodena con la función select() del paquete {dplyr} el orden de las columnas del <em>data frame</em>, calcula el resto de frecuencias (absoluta acumulada, relativa, relativa acumulada), y diseña la tabla de presentación de la distribución de frecuencias de los salarios de los trabajadores de la empresa; pero agrupada en 4 intervalos de valores.</p>
-<div class="sourceCode" id="cb162"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb161"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Agregar la columna "marca_clase" al data frame</span></span>
 <span></span>
 <span><span class="va">conteo_intervalos_df</span><span class="op">$</span><span class="va">marca_clase</span> <span class="op">&lt;-</span> <span class="va">marca_clase</span></span>
@@ -1274,7 +1274,7 @@ Estos elementos corresponden con los límites del intervalo.
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">conteo_intervalos_df</span><span class="op">)</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-258">Table 4.5: </span><span id="tab:unnamed-chunk-258">Table 4.6: </span>Distribución de frecuencias agrupadas en intervalos de los salarios de la empresa
+<span id="tab:unnamed-chunk-192">Table 4.5: </span><span id="tab:unnamed-chunk-192">Table 4.6: </span>Distribución de frecuencias agrupadas en intervalos de los salarios de la empresa
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -1399,7 +1399,7 @@ De ellas, nos centraremos en la más común: la media aritmética.</p>
 \overline{x} = \frac{1}{N} \sum_{i=1}^{N} x_i
 \]</span> En R, la función para obtener la media de una variable es <code><a href="https://rdrr.io/r/base/mean.html">mean()</a></code>.
 Así, para obtener el salario medio de la variable SALARIO de los trabajadoes de la empresa, ejecutaremos el código:</p>
-<div class="sourceCode" id="cb163"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb162"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## MEDIDAS</span></span>
 <span></span>
 <span><span class="co"># Media aritmética.</span></span>
@@ -1418,7 +1418,7 @@ Si la distribución tiene frecuencia total par, los casos “frontera” entre l
 En tal caso, se suele tomar, como convenio, el promedio de de ambos valores para tener una única mediana.</p>
 <p>En R, la función para obtener la mediana de una variable es <code><a href="https://rdrr.io/r/stats/median.html">median()</a></code>.
 De este modo, para obtener el salario mediano de la variable SALARIO de los trabajadoes de la empresa, ejecutaremos el código:</p>
-<div class="sourceCode" id="cb165"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb164"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Mediana</span></span>
 <span></span>
 <span><span class="va">mediana</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span></span>
@@ -1430,7 +1430,7 @@ Es decir, 15 es el salario percibido por el caso 25, que es el trabajador que di
 Como desventajas tenemos que no tiene por qué ser única, y que no tiene en cuenta la totalidad de los valores de la distribución.</p>
 <p>Con <strong>la moda</strong> hacemos referencia al valor (o valores) que posee (o poseen) una mayorv frecuencia absoluta.</p>
 <p>En R, la moda se calcula mediante la función <code><a href="https://andrisignorell.github.io/DescTools/reference/Mode.html">Mode()</a></code> del paquete <a href="https://andrisignorell.github.io/DescTools/">DescTools</a>, que habremos de activar con <code><a href="https://rdrr.io/r/base/library.html">library()</a></code> (e instalar previamente, si aún no tenemos instalado este paquete):</p>
-<div class="sourceCode" id="cb167"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb166"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Moda</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://andrisignorell.github.io/DescTools/">DescTools</a></span><span class="op">)</span></span>
@@ -1453,7 +1453,7 @@ Y si queremos dividir la distribución de frecuencias en 100 grupos con el mismo
 Esos valores serán los <strong>percentiles</strong>.</p>
 <p>En R, la función para calcular los diferentes cuantiles es <code><a href="https://rdrr.io/r/stats/quantile.html">quantile()</a></code>.
 Para calcular, por ejemplo, los cuartiles de la variable SALARIO, procederemos así:</p>
-<div class="sourceCode" id="cb169"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb168"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calcular los cuartiles</span></span>
 <span><span class="va">cuartiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span>, probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">cuartiles</span></span></code></pre></div>
@@ -1504,25 +1504,25 @@ Además, pueden compararse coeficientes de distribuciones expresadas en unidades
 <p>A continuación, vamos a calcular varianza, desviación típica, cuasivarianza, y coeficiente de variación en R.
 Para ello, hemos de tener en cuenta que la función <code><a href="https://rdrr.io/r/stats/cor.html">var()</a></code> de R, en realidad, calcula la cuasivarianza.
 Para obtener la varianza, pues, hemos de realizar una corrección (en realidad, para un número de casos muy grande, ambas medidas prácticamente coinciden):</p>
-<div class="sourceCode" id="cb171"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb170"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Varianza</span></span>
 <span></span>
 <span><span class="va">varianza</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span><span class="op">*</span><span class="op">(</span><span class="va">N</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="va">N</span> <span class="co"># recordar que la frecuencia total N ya fue calculada</span></span>
 <span><span class="va">varianza</span></span></code></pre></div>
 <pre><code>## [1] 30.48813</code></pre>
-<div class="sourceCode" id="cb173"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb172"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Desviación típica</span></span>
 <span></span>
 <span><span class="va">desv</span> <span class="op">&lt;-</span> <span class="va">varianza</span> <span class="op">^</span> <span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">desv</span></span></code></pre></div>
 <pre><code>## [1] 5.521606</code></pre>
-<div class="sourceCode" id="cb175"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb174"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Cuasivarianza</span></span>
 <span></span>
 <span><span class="va">cuasivarianza</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span> <span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span></span>
 <span><span class="va">cuasivarianza</span></span></code></pre></div>
 <pre><code>## [1] 31.1233</code></pre>
-<div class="sourceCode" id="cb177"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb176"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Coeficiente de variación</span></span>
 <span></span>
 <span><span class="va">cvariacion</span> <span class="op">&lt;-</span> <span class="va">desv</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">media</span><span class="op">)</span></span>
@@ -1543,7 +1543,7 @@ Si suponemos que la distribución es unimodal y campaniforme, tendremos los caso
 <p>El tipo y grado de asimetría se puede obtener mediante el <strong>coeficiente de asimetría de Fisher</strong>.
 Este coeficiente toma valor negativo si la distribución es <em>asimétrica negativa</em> (mayores frecuencias a la derecha de la media), valor positivo si la distribución es <em>asimétrica positiva</em> (mayores frecuencias a la izquierda de la media), y se acerca a 0 en caso de que la distribución seaaproximadamente <em>simétrica</em>, aunque pueden darse casos de distribuciones no simétricas con coeficiente 0.
 En R, se puede obtener el coeficiente de asimetría mediante la función <code><a href="https://rdrr.io/pkg/moments/man/skewness.html">skewness()</a></code> del paquete <a href="https://www.r-project.org">moments</a>:</p>
-<div class="sourceCode" id="cb179"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb178"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Coeficiente de asimetría de Fisher</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.r-project.org">moments</a></span><span class="op">)</span></span>
@@ -1553,7 +1553,7 @@ En R, se puede obtener el coeficiente de asimetría mediante la función <code><
 <p>El valor obtenido para la variable SALARIO de nuestra distribución de frecuencias de los trabajadores de la empresa es positivo, lo que indica asimetría positiva: las mayores frecuencias se localizan a la derecha de la media.
 Esto se puede comprobar fácilmente construyendo el histograma de la variable SALARIO y trazando una línea vertical que pase por la media salarial.
 Para ello usamos el paquete <a href="https://ggplot2.tidyverse.org">ggplot2</a>:</p>
-<div class="sourceCode" id="cb181"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb180"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">datos</span>, map <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">SALARIO</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">7</span>, colour <span class="op">=</span> <span class="st">"red"</span>, fill <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1565,7 +1565,7 @@ Para ello usamos el paquete <a href="https://ggplot2.tidyverse.org">ggplot2</a>:
 ## ℹ Please use `linewidth` instead.
 ## This warning is displayed once every 8 hours.
 ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-265-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-199-1.png" width="672"></div>
 <p>Como comprobamos, la distribución es claramente asimétrica positiva.</p>
 <p>En cuanto a las <strong>medidas de curtosis</strong>, miden el grado de deformación horizontal con respecto a una distribución “tipo”, la distribución normal.
 Suponemos previamente que la distribución de frecuencias estudiada es campaniforme, unimodal y simétrica (o con ligera asimetría).
@@ -1577,7 +1577,7 @@ Pueden darse los casos que se muestran en la figura:</p>
 Este coeficiente toma valor negativo si la distribución es <em>platicúrtica</em> (más aplastada que la distribución normal), valor positivo si la distribución es <em>leptocúrtica</em> (más apuntada que la distribución normal), y se acerca a 0 en caso de que la distribución sea aproximadamente igual de apuntada que la distribución normal.
 En R, se puede obtener el coeficiente de asimetría mediante la función <code><a href="https://rdrr.io/pkg/moments/man/kurtosis.html">kurtosis()</a></code> del paquete <a href="https://www.r-project.org">moments</a>.
 Hay que tener en cuenta que para que esta versión coincida con lo dicho anteriormente, al valor calculado hay que restarle el valor “3”:</p>
-<div class="sourceCode" id="cb183"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb182"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Coeficiente de apuntamiento o curtosis de Fisher</span></span>
 <span></span>
 <span><span class="va">curtosis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/moments/man/kurtosis.html">kurtosis</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span> <span class="op">-</span> <span class="fl">3</span></span>
@@ -1585,7 +1585,7 @@ Hay que tener en cuenta que para que esta versión coincida con lo dicho anterio
 <pre><code>## [1] -0.8232965</code></pre>
 <p>Se aprecia como el coeficiente (corregido) es menor que 0, por lo que la distribución de frecuencias de la variable SALARIO es platicúrtica (más “aplastada” que la distribución de frecuencias normal. También hay que tener en cuenta que debemos tener precaución en la aplicación del coeficiente, ya que vimos con anterioridad que la distribución no es aproximadamente simétrica. Gráficamente, podemos comprobar lo anterior representando el histograma y una curva normal que posea la misma moda (que ya calculamos anteriormente).
 Para que sean comparables, debemos transformar el eje “y” del gráfico, pasando de “frecuencias” a “densidad”, para lo cuál se incluye en el <code><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram()</a></code> el argumento <code>aes(y = ..density..)</code>:</p>
-<div class="sourceCode" id="cb185"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb184"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">datos</span>, map <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">SALARIO</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">7</span>, colour <span class="op">=</span> <span class="st">"red"</span>, fill <span class="op">=</span> <span class="st">"orange"</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">..density..</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_function.html">stat_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">dnorm</span>, args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="va">moda</span>, sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"darkblue"</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1596,7 +1596,7 @@ Para que sean comparables, debemos transformar el eje “y” del gráfico, pasa
 ## ℹ Please use `after_stat(density)` instead.
 ## This warning is displayed once every 8 hours.
 ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-267-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-201-1.png" width="672"></div>
 </div>
 <div id="materiales-para-realizar-las-prácticas-del-capítulo.-2" class="section level2" number="4.6">
 <h2>
@@ -1642,7 +1642,7 @@ Para que sean comparables, debemos transformar el eje “y” del gráfico, pasa
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2025-09-19.</p>
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2025-09-24.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
