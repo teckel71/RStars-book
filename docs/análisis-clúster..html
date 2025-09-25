@@ -139,7 +139,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 <p>Vamos a considerar una serie de 4 variables que caracterizan a un grupo de 25 empresas de producción eléctrica mediante tecnología eólica. Nuestro objetivo es segmentar este conjunto de empresas, haciendo grupos homogéneos (conglomerados), y caracterizando a dichos grupos. Las variables clasificadoras son: el resultado del ejercicio (RES), el margen de beneficio (MARGEN), los fondos propios (FPIOS) y la solvencia (SOLVENCIA).</p>
 <p>Dado que son pocos los casos (empresas) a segmentar, vamos a utilizar un métodos jerárquico de agrupación de casos. En concreto, utilizaremos el <strong>método de Ward</strong>. Así, comenzaremos creando un proyecto de RStudio donde trabajar. Por ejemplo, un proyecto llamado “cluster”. Vamos a ir a la carpeta del proyecto y vamos a guardar en ella los dos archivos de esta práctica: un archivo de Microsoft® Excel® llamado “<a href="https://docs.google.com/spreadsheets/d/1iwD8-e19IM6n_ZykP49i69_f_dLpzosx/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">eolica_25.xlsx</a>” y un <em>script</em> denominado “<a href="https://drive.google.com/file/d/1pxGjprMpfP_yqNsaJ-oWKJtfVnSbVZUh/view?usp=sharing">cluster_eolica.R</a>”. Si abrimos el archivo de Microsoft® Excel®, comprobaremos que se compone de tres hojas. La primera muestra un aviso sobre la utilización de los datos, la segunda el nombre y definición de las variables disponibles, y la tercera (hoja “Datos”) guarda los datos que debemos importar desde R-Studio. Estos datos se corresponden con diferentes variables económico-financieras de 25 empresas productoras de electricidad mediante generación eólica.</p>
 <p>La primera parte del <em>script</em> se ocupa de importar los datos de la hoja de cálculo, limpiando previamente la memoria (<em>Environment</em>) de posibles objetos almacenados en sesiones anteriores:</p>
-<div class="sourceCode" id="cb246"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb239"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># DATOS</span></span>
@@ -177,7 +177,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 ##  Max.   : 99.08   Max.   : 1019.62</code></pre>
 <p>Podemos observar cómo, en el <em>Environment,</em> ya aparece un objeto. Este objeto es una estructura de datos tipo <em>data frame</em>, se llama “eolicos” y contiene 12 columnas, una por cada una de las variables almacenadas en el archivo de Microsoft® Excel®. De estas variables, dos son de tipo cualitativo (atributos o factores), formadas por cadenas de caracteres: el nombre de la sociedad matriz (grupo empresarial) a la que pertenece (MATRIZ). En realidad, R consideró la primera columna de la hoja de Excel (NOMBRE) como una variable de tipo cualitativo o atributo (por lo que había 13 columnas); pero, al no ser una variable, sino el nombre de los casos o filas (empresas), redefinimos nuestro <em>data frame</em> diciéndole que esa primera columna contenía los nombres de los casos (filas).</p>
 <p>En el análisis solo vamos a considerar como variables clasificadoras para construir los grupos o conglomerados las variables RES, MARGEN, FPIOS y SOLVENCIA. Por ello, crearemos con ellas un nuevo <em>data frame</em> llamado “originales” a partir de la función <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> del paquete <a href="https://dplyr.tidyverse.org">dplyr</a>:</p>
-<div class="sourceCode" id="cb248"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb241"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Seleccionando variables clasificadoras para el analisis.</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
@@ -192,41 +192,41 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 ##  Max.   :727548   Max.   : 223.956   Max.   :6904824   Max.   : 99.08  
 ##  NA's   :1</code></pre>
 <p>El siguiente paso consiste en localizar los posibles <strong><em>missing values</em></strong>, ya que para realizar el análisis es necesario que todos los casos posean dato para todas las variables originales. Para tener una idea general, se puede utilizar la función <code><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss()</a></code> del paquete <a href="https://docs.ropensci.org/visdat/">visdat</a>, que nos localizará gráficamente los <em>missing values</em> de las diferentes variables, y calculará el porcentaje de casos que supone, con respecto al total de observaciones.</p>
-<div class="sourceCode" id="cb250"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb243"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Identificando missing values.</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/visdat/">visdat</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss</a></span><span class="op">(</span><span class="va">originales</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-266-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-205-1.png" width="672"></div>
 <p>Una vez puesta de manifiesto la existencia de un <em>missing value</em>, localizaremos el caso concreto que lo contiene aplicando la función <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>. Se trata de la empresa “Biovent Energía S.A.”</p>
 <p>Sabemos que ante la existencia de <em>missing values</em>, se puede actuar de varios modos. Por ejemplo, <strong>se puede intentar obtener por otro canal de información el conjunto de valores</strong> que no están disponibles, <strong>o recurrir a alguna estimación</strong>. En caso de que esto sea difícil, se puede optar por <strong>eliminar</strong> estos casos, en especial cuando representan un porcentaje muy reducido respecto al total de casos. En nuestro ejemplo, supondremos que hemos optado por esta última vía, y eliminaremos este caso con otro filtro:</p>
-<div class="sourceCode" id="cb251"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb244"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">originales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">RES</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">MARGEN</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">FPIOS</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">SOLVENCIA</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">RES</span>, <span class="va">MARGEN</span>, <span class="va">FPIOS</span>, <span class="va">SOLVENCIA</span><span class="op">)</span>  </span></code></pre></div>
 <pre><code>##                    RES MARGEN FPIOS SOLVENCIA
 ## Biovent Energia SA  NA 22.792 70033    38.082</code></pre>
-<div class="sourceCode" id="cb253"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb246"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">originales</span> <span class="op">&lt;-</span> <span class="va">originales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">RES</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">MARGEN</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">FPIOS</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">SOLVENCIA</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>El <em>data frame</em> “originales” pasa a tener 24 observaciones, ya que se ha descartado a la empresa a la que le faltaba el dato del resultado del ejercicio (RES).</p>
 <p>El siguiente paso es la <strong>identificación de <em>outliers</em>.</strong> Para realizar este proceso, y dado que en nuestro análisis contamos con 4 variables, primero “resumiremos” el valor que toman dichas variables para cada caso, mediante el cálculo de la <em>distancia de Mahalanobis</em>. De hecho, las distancias de los diferentes casos se almacenarán en una nueva variable, a la que llamaremos MAHALANOBIS, que se incorporará al <em>data frame</em> “originales” por medio de la función <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>, y la función <code><a href="https://rdrr.io/r/stats/mahalanobis.html">mahalanobis()</a></code>. Recordemos que, en los diferentes argumentos de esta función, el punto “.” hace referencia al <em>data frame</em> que está delante del operador pipe (%&gt;%).</p>
-<div class="sourceCode" id="cb254"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb247"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Identificando outliers.</span></span>
 <span></span>
 <span><span class="va">originales</span> <span class="op">&lt;-</span> <span class="va">originales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>MAHALANOBIS <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/mahalanobis.html">mahalanobis</a></span><span class="op">(</span><span class="va">.</span>,</span>
 <span>                                    center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>,</span>
 <span>                                    cov<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Una vez creada la variable MAHALANOBIS, se estudia la existencia en sus valores de <em>outliers</em> mediante la construcción de un diagrama de caja o <em>boxplot</em>:</p>
-<div class="sourceCode" id="cb255"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb248"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">originales</span>, map <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">MAHALANOBIS</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"DISTANCIA DE MAHALANOBIS"</span>, subtitle <span class="op">=</span> <span class="st">"Empresas eólicas"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"MAHALANOBIS"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-269-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-208-1.png" width="672"></div>
 <p>En el gráfico se observa que existen, por encima de la caja, 4 outliers. Para identificarlos de modo concreto, hemos de calcular los cuartiles primero y tercero de la variable MAHALANOBIS y pasar el correspondiente filtro:</p>
-<div class="sourceCode" id="cb256"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb249"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Q1M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">originales</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">Q3M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">originales</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.75</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -241,11 +241,11 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 ## Sargon Energias SLU               14.61446  -2216.000 -615.625  -10985.0   -12.811</code></pre>
 <p>Estas empresas cuentan con un valor atípico en la variable MAHALANOBIS lo que, a su vez, implica que muestren valores atípicos en una o varias de las variables originales (RES, MARGEN, FPIOS, SOLVENCIA). En el desarrollo de otras técnicas, en este punto localizaríamos y eliminaríamos los <em>outliers</em>. En este caso <strong>no</strong> lo vamos a hacer, ya que queremos agrupar <strong>todos los casos</strong> que tenemos en el análisis. Precisamente, si hay algún caso que permanece aislado, sin agruparse con otros en el proceso de agrupación hasta las últimas etapas, quizá se trate de un candidato a <em>outlier</em>, por lo que el análisis clúster <strong>también puede considerarse una técnica de localización de casos atípicos</strong>.</p>
 <p>Por último, borramos la variable MAHALANOBIS del data frame “originales”, puesto que ya ha cumplido la función de localizar los casos atípicos:</p>
-<div class="sourceCode" id="cb258"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb251"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">originales</span> <span class="op">&lt;-</span> <span class="va">originales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">MAHALANOBIS</span><span class="op">)</span></span></code></pre></div>
 <p>La siguiente etapa y parte del script se refiere a la aplicación propia del análisis clúster al grupo de casos (24 empresas) que toman valores para las 4 variables incluidas en el análisis.</p>
 <p>Los métodos de agrupación usualmente se basan en la <strong>distancia euclídea</strong>. Como la distancia euclídea es sensible a las unidades de medida de las diferentes variables clasificadoras, es preciso trabajar con las <strong>variables tipificadas</strong>, lo que lograremos creando, por ejemplo, un <em>data frame</em> “zoriginales” con la función <code><a href="https://rdrr.io/r/base/scale.html">scale()</a></code>. Luego, aplicaremos el método seleccionado a este <em>data frame,</em> en lugar de al <em>data frame</em> que contiene los datos originales sin tipificar:</p>
-<div class="sourceCode" id="cb259"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb252"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># CLUSTER JERARQUICO CON VARIABLES ORIGINALES.</span></span>
 <span></span>
 <span><span class="co"># Tipificando variables</span></span>
@@ -261,23 +261,16 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 ##  Max.   : 4.6632   Max.   : 1.32264   Max.   : 4.5230   Max.   : 1.73657</code></pre>
 <p>Este nuevo <em>data frame</em> contiene las mismas variables del análisis; pero tipificadas (obsérvese, en el <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>, las medias de las variables).</p>
 <p>Previamente a aplicar un método de agrupación concreto, conviene calcular la <strong>matriz de distancias</strong> entre los casos, a la que llamaremos, por ejemplo, “d”. Esta matriz se calcula con la función <code><a href="https://rdrr.io/r/stats/dist.html">dist()</a></code>. Para visualizarla, una opción es representarla mediante el <em>gráfico de temperatura</em> que ofrece la función <code><a href="https://rdrr.io/pkg/factoextra/man/dist.html">fviz_dist()</a></code> del paquete <a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a>:</p>
-<div class="sourceCode" id="cb261"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb254"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Matriz de distancias</span></span>
 <span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/dist.html">dist</a></span><span class="op">(</span><span class="va">zoriginales</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/dist.html">fviz_dist</a></span><span class="op">(</span><span class="va">d</span>, lab_size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## Warning: `aes_string()` was deprecated in ggplot2 3.0.0.
-## ℹ Please use tidy evaluation idioms with `aes()`.
-## ℹ See also `vignette("ggplot2-in-packages")` for more information.
-## ℹ The deprecated feature was likely used in the factoextra package.
-##   Please report the issue at &lt;https://github.com/kassambara/factoextra/issues&gt;.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-273-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-212-1.png" width="672"></div>
 <p>Los casos con intersecciones en tonos anaranjados tenderán a agruparse con mayor facilidad (o a agruparse antes); mientras que los casos cuyas intersecciones están en tonos azulados tenderán a pertenecer a grupos diferentes (o a agruparse más tarde). Puede observarse cómo las distancias de tres de las empresas que fueron identificadas como <em>outliers</em> (“Holding de Negocios de Gas S. L.”, “Sargon Energías SLU” y “WPD Wind Investment S. L.”) matienen grandes distancias (casillas azuladas) con el resto de empresas. No ocurre lo mismo con la compañía identificada como <em>outlier</em>, “Global Power Generation, S. A.”, que mantiene distancias más discretas como “Viesgo Renovables S. L.”, “Saeta Yield S. A.” o “EDP Renovables España S. L. U.”</p>
 <p>Vamos a realizar el análisis clúster jerárquico mediante uno de los métodos más habituales, el de <strong><em>Ward</em></strong>, como es común en las aplicaciones prácticas, ya que este método proporciona grupos muy homogéneos (mínima varianza). La función a utilizar es <code><a href="https://rdrr.io/r/stats/hclust.html">hclust()</a></code>. La solución la guardaremos en el objeto (lista) que hemos llamado, por ejemplo, “cluster_j”. Luego se visualizará el <strong><em>dendograma</em></strong> construido con la función <code><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend()</a></code> del paquete <a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a>, que permite personalizar el gráfico con una gramática similar a la utilizada con los gráficos del paquete <a href="https://ggplot2.tidyverse.org">ggplot2</a>:</p>
-<div class="sourceCode" id="cb263"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb255"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Método de Ward.</span></span>
 <span></span>
 <span><span class="va">cluster_j</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span><span class="va">d</span>, method<span class="op">=</span><span class="st">"ward.D2"</span><span class="op">)</span></span>
@@ -288,12 +281,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Empresas eólicas"</span>,</span>
 <span>       subtitle <span class="op">=</span> <span class="st">"Método de Ward. Variables originales tipificadas."</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_grey</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## Warning: The `&lt;scale&gt;` argument of `guides()` cannot be `FALSE`. Use "none" instead as of ggplot2 3.3.4.
-## ℹ The deprecated feature was likely used in the factoextra package.
-##   Please report the issue at &lt;https://github.com/kassambara/factoextra/issues&gt;.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-274-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-213-1.png" width="672"></div>
 <p>En el código anterior:</p>
 <ul>
 <li><p><strong><code>cluster_j</code></strong>: Es el objeto que contiene el dendrograma que se desea visualizar.</p></li>
@@ -309,7 +297,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 <p>El eje vertical del <em>dendograma</em> recoge las distancias (o disimilitud) entre los casos y/o grupos previos que se van agrupando sucesivamente. La escala depende de cada método empleado. En el caso del método de <em>Ward</em>, la escala refleja la suma de cuadrados de la distancia de los casos dentro del clúster. Por otro lado, en este ejemplo, es interesante observar que tres de las empresas <em>outliers</em> (“Holding de Negocios de Gas S. L.”, “Sargon Energías SLU” y “WPD Wind Investment S. L.”) se agrupan con el resto de casos (o grupos nprecedentes) en una fase muy tardía del proceso de agrupamiento (muy cerca del único grupo). No es el caso de la tercera empresa identificada como <em>outlier</em>, “Gobal Power Generation S. A.”</p>
 <p>Una cuestión importante consiste en determinar con <strong>cuántos grupos</strong> hemos de quedarnos. Aunque existen algoritmos y paquetes de R que aconsejan un número (por ejemplo, la función <code><a href="https://rdrr.io/pkg/NbClust/man/NbClust.html">NbClust()</a></code> del paquete <a href="https://sites.google.com/site/malikacharrad/research/nbclust-package">NbClust</a>); puede ser preferible que el propio investigador decida el número de grupos a crear, mediante la observación del dendograma, y de acuerdo a los objetivos de su propia investigación.</p>
 <p>En este ejemplo, un número de grupos razonable podría ser 5, que contaría con el aval de mantener individualizadas a 3 de las empresas etiquetadas como <em>outliers</em>. Si se acepta esta opción, se podrá visualizar de nuevo el dendograma coloreando los grupos formados, con el código siguiente (debe modificarse el código para igualar el argumento <code>k =</code> al número de grupos seleccionado):</p>
-<div class="sourceCode" id="cb265"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb256"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">cluster_j</span>,</span>
 <span>          cex <span class="op">=</span> <span class="fl">0.6</span>,</span>
 <span>          k <span class="op">=</span> <span class="fl">5</span>, <span class="co"># número de grupos o conglomerados que se ha decidido formar!</span></span>
@@ -322,7 +310,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 <span>       subtitle <span class="op">=</span> <span class="st">"Método de Ward. Variables originales tipificadas."</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_grey</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Warning in get_col(col, k): Length of color vector was shorter than the number of clusters - color vector was recycled</code></pre>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-275-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-214-1.png" width="672"></div>
 <p>En el código anterior:</p>
 <ul>
 <li><p><strong><code>k = 5</code></strong>: Especifica el número de grupos o clústeres que se desea formar en el dendrograma. En este caso, se han decidido formar 5 grupos.</p></li>
@@ -333,14 +321,14 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 </ul>
 <p>En el dendograma se aprecia cómo hay un grupo formado por 14 empresas, otro de 7, y finalmente 3 grupos individuales (que se corresponden con tres de las empresas que, al comienzo del <em>script</em>, identificamos como <em>outliers</em>).</p>
 <p>A continuación vamos a <strong>identificar con mayor detalle los casos</strong> que integran cada uno de los grupos, así como a <strong>caracterizar tales grupos</strong> en función de los valores medios de las variables originales. Para ello, crearemos el vector de valores enteros que indica el grupo al que pertenece cada caso (empresa). A este vector se le llamará, por ejemplo, “whatcluster_j”, y se construirá mediante la función <code><a href="https://rdrr.io/r/stats/cutree.html">cutree()</a></code>, donde el primer argumento es el nombre del objeto que guarda la solución del análisis clúster (“cluster_j”), y el segundo argumento es el número de grupos que hemos decidido crear (k = 5). Conviene convertir esta variable en un factor con la función <code><a href="https://rdrr.io/r/base/factor.html">as.factor()</a></code>, para que deje de ser variable métrica, a efectos de incorporar una leyenda en gráficos posteriores, . Finalmente, ese factor se incorporará al <em>data frame</em> “originales” (importante: no a ”zoriginales”; sino al <em>data frame</em> que contiene a las variables no tipificadas):</p>
-<div class="sourceCode" id="cb267"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb258"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># CARACTERIZACIÓN Y COMPOSICIÓN DE GRUPOS.</span></span>
 <span></span>
 <span><span class="va">originales</span><span class="op">$</span><span class="va">whatcluster_j</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cutree.html">cutree</a></span><span class="op">(</span><span class="va">cluster_j</span>, k<span class="op">=</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">originales</span><span class="op">$</span><span class="va">whatcluster_j</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] "1" "2" "3" "4" "5"</code></pre>
 <p>Una vez incorporado el grupo de pertenencia de cada empresa al <em>data frame</em> “originales”, se podrán calcular y almacenar las medias de cada grupo de las distintas variables originales, usando las funciones <code>by_group()</code> y <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>. Los decimales se ajustarán utilizando la función <code><a href="https://rdrr.io/r/base/Round.html">round()</a></code>. Toda la información se asigna al <em>data frame</em> “tablamedias” para poder representarla en una tabla mediante las facilidades que ofrecen los paquetes <a href="https://yihui.org/knitr/">knitr</a> y <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>:</p>
-<div class="sourceCode" id="cb269"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb260"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Tabla con centroides de grupos.</span></span>
 <span></span>
 <span><span class="va">tablamedias</span> <span class="op">&lt;-</span> <span class="va">originales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -367,7 +355,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">tablamedias</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-278">Table 7.1: </span><span id="tab:unnamed-chunk-278">Table 7.2: </span>Método de Ward. 5 grupos. Medias de variables
+<span id="tab:unnamed-chunk-217">Table 7.1: </span><span id="tab:unnamed-chunk-217">Table 7.2: </span>Método de Ward. 5 grupos. Medias de variables
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -493,7 +481,7 @@ Solvencia
 </tbody>
 </table></div>
 <p>Obviamente, también se podrían comparar las medias de los grupos, para cada variable, con un simple gráfico de barras. A fin de crear un método que valga para cualquier número de variables, realizaremos la tarea con un bucle. El código es el siguiente:</p>
-<div class="sourceCode" id="cb270"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb261"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Gráficos de centroides</span></span>
 <span></span>
 <span>  <span class="co"># Vector de nombre de variables excluyendo la variable no deseada</span></span>
@@ -519,7 +507,7 @@ Solvencia
 <span><span class="op">}</span>  </span></code></pre></div>
 <p>En el código anterior, <code><a href="https://generics.r-lib.org/reference/setops.html">setdiff()</a></code> crea un vector “variables” que contiene todos los nombres de las columnas de <code>tablamedias</code>, excepto <code>"whatcluster_j"</code> y <code>"obs"</code>, que no son las variables originales. Luego se crea una lista vacía “graficos.centroides” para almacenar los gráficos generados. Con <code>for (i in seq_along(variables))</code> comienza el bucle, que recorre cada elemento del vector “variables”. En el código de gráfico, “var1” toma el nombre, en cada iteración, de la variable a representar. En el “mapeo”, es importante utilizar <code><a href="https://ggplot2.tidyverse.org/reference/aes_.html">aes_string()</a></code>, que requiere que los nombres de las variables se pasen como cadenas de texto (entre comillas), lo que es útil cuando los nombres de las variables se generan dinámicamente o se pasan como argumentos de función, y es útil en programación cuando se necesita construir <em>mapeos estéticos</em> de manera programática. Finalmente, con <code>graficos.centroides[[paste0("grafico_", var1)]] &lt;- grafico</code> se guarda el gráfico en la lista “graficos.centroides” con un nombre basado en “var1”.</p>
 <p>Los gráficos guardados en la lista “gráficos.centroides” se pueden agrupar en composiciones, de, por ejemplo, 2x2, utilizando el paquete <a href="https://patchwork.data-imaginist.com">patchwork</a>. En esta ocasión, vamos a diseñar una función que pueda ser utilizada con facilidad para estos gráficos y otros más generados con <a href="https://ggplot2.tidyverse.org">ggplot2</a> y guardados en una lista (antes hemos activado el paquete <a href="https://patchwork.data-imaginist.com">patchwork</a>). En concreto, la función crea agrupaciones de 4 gráficos (la última podrá tener menos) para presentar todos los gráficos almacenados de un modo más condensado. Hemos llamado a la función: <code>create_patchwork()</code></p>
-<div class="sourceCode" id="cb271"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb262"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span>  </span>
 <span></span>
 <span><span class="co"># Función para crear agrupaciones de 2x2 con espacios en blanco si es necesario</span></span>
@@ -568,7 +556,7 @@ Solvencia
 <li><p><strong><code>return(patchworks)</code></strong> finaliza la ejecución de la función y devuelve la lista “<code>patchworks"</code>.</p></li>
 </ul>
 <p>Una vez creada la función, se pasa a nuestra lista de gráficos, “gráficos.centroides”, creando la lista de “grupos de gráficos” llamada “grupos-graficos.centroides”:</p>
-<div class="sourceCode" id="cb272"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb263"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Aplicar a gráficos de centroides.</span></span>
 <span>  </span>
 <span>   <span class="va">grupos.graficos.centroides</span> <span class="op">&lt;-</span> <span class="fu">create_patchwork</span><span class="op">(</span><span class="va">graficos.centroides</span><span class="op">)</span></span>
@@ -577,10 +565,10 @@ Solvencia
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">n</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">grupos.graficos.centroides</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">grupos.graficos.centroides</span><span class="op">[[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-281-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-220-1.png" width="672"></div>
 <p>Hablando siempre en términos de la media (centroides), puede comprobarse cómo el grupo 1 destaca por su alto valor en el resultado y en los fondos propios, el grupo 2 por el alto margen y el alto valor de la solvencia, el tercer grupo por poseer valores discretos (pero no negativos) en las cuatro variables, el cuarto grupo por la elevada solvencia y el margen negativo, y el quinto grupo por el margen y la solvencia negativos.</p>
 <p>Por otro lado, se pueden presentar en diferentes tablas las composiciones e informaciones de cada grupo. Vamos a automatizar de nuevo el proceso de generación de las tablas mediante el empleo de un <em>bucle.</em> Las diferentes tablas se irán guardando en una lista de nombre, por ejemplo, “tablascompo”:</p>
-<div class="sourceCode" id="cb273"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb264"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Tablas con composiciones de grupos</span></span>
 <span></span>
 <span>  <span class="co"># Número de tablas y lista para guardarlas</span></span>
@@ -615,7 +603,7 @@ Solvencia
 <p>Las tablas obtenidas serán:</p>
 <p>Para representar los grupos gráficamente, tenemos la dificultad de contar con más de dos variables clasificadoras. Una idea es <strong>generar todas las combinaciones de variables posibles</strong>, generar los correspondientes gráficos de dispersión con los casos coloreados de modo diferente según el grupo de pertenencia, y presentar estos gráficos de modo compacto utilizando la función <code>create_patchwork()</code> que se incluyó anteriormente para hacer mediante <a href="https://patchwork.data-imaginist.com">patchwork</a>.composiciones de 2x2 gráficos.</p>
 <p>Vamos a realizar la tarea de generar todos los gráficos de modo automatizado. Primero generaremos un vector con el nombre de todas las variables (excluyendo al <em>factor</em> whatcluster_j) mediante la función <code><a href="https://generics.r-lib.org/reference/setops.html">setdiff()</a></code>. Luego, crearemos una lista para ir almacenando los gráficos (lista “graficos”). Por último, calcularemos todas las combinaciones de nombres de variables posibles, con la función <code><a href="https://rdrr.io/r/utils/combn.html">combn()</a></code>, y las almacenaremos en la lista “combinaciones”. En esta función, el argumento <strong><code>simplify = FALSE</code></strong> le dice a la función que no vuelque el resultado a una matriz. En su lugar, devuelve una lista donde cada elemento de la misma es una combinación de los elementos del vector original.</p>
-<div class="sourceCode" id="cb274"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb265"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Gráficos Variable vs Variable</span></span>
 <span></span>
 <span>  <span class="co"># Lista de variables excluyendo la variable no deseada</span></span>
@@ -627,7 +615,7 @@ Solvencia
 <span>  <span class="co"># Generar todas las combinaciones posibles de pares de variables</span></span>
 <span>    <span class="va">combinaciones</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/combn.html">combn</a></span><span class="op">(</span><span class="va">variables</span>, <span class="fl">2</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>El siguiente paso consiste en utilizar un bucle para generar los gráficos de dispersión de acuerdo a las combinaciones de variables obtenidas y guardarlos en la lista “graficos”. El bucle itera tantas veces como elementos guarda la lista “combinaciones” (argumento/función <code><a href="https://rdrr.io/r/base/seq.html">seq_along()</a></code>):</p>
-<div class="sourceCode" id="cb275"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb266"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Bucle para crear y almacenar los gráficos</span></span>
 <span>    <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">combinaciones</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">var1</span> <span class="op">&lt;-</span> <span class="va">combinaciones</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
@@ -645,7 +633,7 @@ Solvencia
 <span>      <span class="va">graficos</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"grafico_"</span>, <span class="va">var1</span>, <span class="st">"_"</span>, <span class="va">var2</span><span class="op">)</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">grafico</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>Una vez generados los gráficos de todas las combinaciones de variables (6 gráficos en el ejemplo), y almacenados en la lista “graficos”, se podrán reagrupar y presentar en composiciones de 2x2 mediante el empleo de la función <code>create_patchwork()</code>:</p>
-<div class="sourceCode" id="cb276"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb267"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Hacer agrupaciones con la función de patchworks creada anteriormente</span></span>
 <span></span>
 <span>    <span class="va">gruposgraficos</span> <span class="op">&lt;-</span> <span class="fu">create_patchwork</span><span class="op">(</span><span class="va">graficos</span><span class="op">)</span></span>
@@ -654,7 +642,7 @@ Solvencia
 <span>    <span class="kw">for</span> <span class="op">(</span><span class="va">n</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">gruposgraficos</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">gruposgraficos</span><span class="op">[[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span></code></pre></div>
-<p><img src="RstarS_files/figure-html/unnamed-chunk-287-1.png" width="672"><img src="RstarS_files/figure-html/unnamed-chunk-287-2.png" width="672"></p>
+<p><img src="RstarS_files/figure-html/unnamed-chunk-226-1.png" width="672"><img src="RstarS_files/figure-html/unnamed-chunk-226-2.png" width="672"></p>
 <p>De los gráficos anteriores, pueden extraerse algunas conclusiones. Por ejemplo, en los tres primeros gráficos, destaca la posición de la única empresa que forma el grupo 1 (Holding de Negocios de Gas, S. L.), sobre todo en cuanto al resultado RES (eje x). En este sentido, mención especial merece el gráfico 2 (RES-FPIOS), debido a la especial situación de esta empresa en cuanto a Fondos Propios (FPIOS), lo que se aprecia también en los gráficos 4 y 6. El grupo 4 también está constituido únicamente por una empresa (WPD Wind Investment S. L.), si bien en los diferentes gráficos no muestra una separación tan notable con respecto al resto de empresas y grupos. Tan solo en los gráficos 1, 4 y 5 destaca, debido a la influencia de la variable de margen de beneficio (MARGEN). El grupo 5 es el tercer y último grupo constituido por una única empresa (Sargon Energías S. L. U.). En este caso, su comportamiento destaca en los mismos gráficos que el caso anterior, debido también a su margen de beneficio (MARGEN), visiblemente por debajo del valor presente en el resto de empresas. En cuanto a los grupos constituidos por más de una empresa, las empresas de ambos grupos se muestran relativamente próximas, pudiéndose concluir que las empresas del grupo 2 tienen, en general, mayor volumen de fondos propios (FPIOS) y coeficiente de solvencia (SOLVENCIA) que las del grupo 3; mientras que en cuanto a margen (MARGEN) y resultado (RES) muestran, globalmente, valores próximos.</p>
 </div>
 <div id="métodos-de-agrupación-no-jerárquicos." class="section level2" number="7.3">
@@ -669,7 +657,7 @@ Solvencia
 <p>Para nuestro ejemplo práctico, vamos a volver a utilizar como variables clasificadoras las del ejemplo desarrollado para los métodos jerárquicos; pero esta vez para una muestra de 350 empresas de generación de electricidad mediante tecnología eólica. Estas variables son, de nuevo, resultado del ejercicio (RES), margen de beneficio (MARGEN), fondos propios (FPIOS), y solvencia (SOLVENCIA). Con base en ellas, queremos <strong>establecer una serie de perfiles o tipologías</strong> distintas de las empresas que componen el sector.</p>
 <p>Trabajaremos, como en el ejemplo de clúster jerarquizado, en el proyecto llamado “cluster”. Vamos a ir a la carpeta del proyecto y vamos a guardar en ella los dos archivos de esta práctica: un archivo de Microsoft® Excel® llamado “<a href="https://docs.google.com/spreadsheets/d/1Brtu_58lcfXL5ZTeOi9-xlxy7S9NfuxB/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">eolica_350.xlsx</a>” y un <em>script</em> denominado “<a href="https://drive.google.com/file/d/1nOBc99SsMKYACitAVRD0nnpP8q-8FqJZ/view?usp=sharing">kmedias_eolica.R</a>”. Si abrimos el archivo de Microsoft® Excel®, comprobaremos que se compone de tres hojas. La primera muestra un aviso sobre la utilización de los datos, la segunda el nombre y definición de las variables disponibles, y la tercera (hoja “Datos”) guarda los datos que debemos importar desde R-Studio. Estos datos se corresponden con diferentes variables económico-financieras de 350 empresas productoras de electricidad mediante generación eólica.</p>
 <p>La primera parte del <em>script</em> se ocupa de importar los datos de la hoja de cálculo, limpiando previamente la memoria (<em>Environment</em>) de posibles objetos almacenados en sesiones anteriores:</p>
-<div class="sourceCode" id="cb277"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb268"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># CLUSTER de k-medias productores eolicos. Disculpad la falta de tildes!!!!</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -735,43 +723,43 @@ Solvencia
 ##  Max.   : 78290.00   Max.   : 1790.12   Max.   :1382020.0   Max.   : 99.78  
 ##  NA's   :1</code></pre>
 <p>El siguiente paso consiste en localizar los posibles <strong><em>missing values</em></strong>, ya que para realizar el análisis es necesario que todos los casos posean dato para todas las variables originales. Para tener una idea general, se puede utilizar la función <code><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss()</a></code> del paquete <a href="https://docs.ropensci.org/visdat/">visdat</a>, que nos localizará gráficamente los <em>missing values</em> de las diferentes variables, y calculará el porcentaje de casos que supone, con respecto al total de observaciones:</p>
-<div class="sourceCode" id="cb280"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb271"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Identificando missing values.</span></span>
 <span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/visdat/">visdat</a></span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss</a></span><span class="op">(</span><span class="va">originales</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-291-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-230-1.png" width="672"></div>
 <p>Una vez puesta de manifiesto la existencia de un <em>missing value</em>, localizaremos el caso concreto que lo contiene aplicando la función <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>. El caso es la empresa “Desarrollos Eólicos de Teruel S. L.”:</p>
-<div class="sourceCode" id="cb281"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb272"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">originales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">RES</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">MARGEN</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">FPIOS</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">SOLVENCIA</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">RES</span>, <span class="va">MARGEN</span>, <span class="va">FPIOS</span>, <span class="va">SOLVENCIA</span><span class="op">)</span>  </span></code></pre></div>
 <pre><code>##                                  RES MARGEN   FPIOS SOLVENCIA
 ## Desarrollos Eolicos de Teruel SL  NA      0 18890.1    37.285</code></pre>
 <p>Sabemos que ante la existencia de <em>missing values</em>, se puede actuar de varios modos. Por ejemplo, <strong>se puede intentar obtener por otro canal de información el conjunto de valores</strong> que no están disponibles, <strong>o recurrir a alguna estimación</strong>. En caso de que esto sea difícil, se puede optar por <strong>eliminar</strong> estos casos, en especial cuando representan un porcentaje muy reducido respecto al total de casos. En nuestro ejemplo, supondremos que hemos optado por esta última vía, y eliminaremos este caso con otro filtro:</p>
-<div class="sourceCode" id="cb283"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb274"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">originales</span> <span class="op">&lt;-</span> <span class="va">originales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">RES</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">MARGEN</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">FPIOS</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>             <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">SOLVENCIA</span><span class="op">)</span><span class="op">)</span>  </span></code></pre></div>
 <p>El <em>data frame</em> “originales” pasa a tener 349 observaciones, ya que se ha descartado a la empresa a la que le faltaba el dato del resultado del ejercicio (RES).</p>
 <p>El siguiente paso es la <strong>identificación de <em>outliers</em>.</strong> Para realizar este proceso, y dado que en nuestro análisis contamos con 4 variables, primero “resumiremos” el valor que toman dichas variables para cada caso, mediante el cálculo de la <em>distancia de Mahalanobis</em>. De hecho, las distancias de los diferentes casos se almacenarán en una nueva variable, a la que llamaremos MAHALANOBIS, que se incorporará al <em>data frame</em> “originales” por medio de la función <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>, y la función <code><a href="https://rdrr.io/r/stats/mahalanobis.html">mahalanobis()</a></code>. Recordemos que, en los diferentes argumentos de esta función, el punto “.” hace referencia al <em>data frame</em> que está delante del operador pipe (<code>%&gt;%</code>):</p>
-<div class="sourceCode" id="cb284"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb275"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Identificando outliers.</span></span>
 <span></span>
 <span>    <span class="va">originales</span> <span class="op">&lt;-</span> <span class="va">originales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>MAHALANOBIS <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/mahalanobis.html">mahalanobis</a></span><span class="op">(</span><span class="op">(</span><span class="va">.</span><span class="op">)</span>,</span>
 <span>                                        center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>,</span>
 <span>                                        cov<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Una vez creada la variable MAHALANOBIS, se estudia la existencia en sus valores de <em>outliers</em> mediante la construcción de un diagrama de caja o <em>boxplot</em> (para una mejor visión de la “caja”, emplearemos la escala logarítmica):</p>
-<div class="sourceCode" id="cb285"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb276"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
 <span>    </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">originales</span>, map <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"DISTANCIA DE MAHALANOBIS"</span>, subtitle <span class="op">=</span> <span class="st">"Empresas eólicas"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"ln(MAHALANOBIS)"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-295-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-234-1.png" width="672"></div>
 <p>En el gráfico se observa que existen, por encima de la caja, varios outliers. Para identificarlos de modo concreto, hemos de calcular los cuartiles primero y tercero de la variable MAHALANOBIS y pasar el correspondiente filtro:</p>
-<div class="sourceCode" id="cb286"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb277"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">Q1M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">originales</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="va">Q3M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">originales</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.75</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -816,14 +804,14 @@ Solvencia
 ## Plafovolt SL                                                             12.144060
 ## Minicentrales Bouza Vella SL                                             50.866827</code></pre>
 <p>El filtro anterior nos ofrece un listado de 35 empresas consideradas <em>outliers</em>. Estas empresas cuentan con un valor atípico en la variable MAHALANOBIS lo que, a su vez, implica que seguramente posean valores atípicos en una o varias de las variables originales (RES, MARGEN, FPIOS, SOLVENCIA)<strong>. La presencia de <em>outliers</em> puede hacer que se distorsione el proceso de obtención de grupos de casos a partir de los cuáles se extraen perfiles o tipologías de empresas</strong>, debido a su influencia sobre el cálculo de los centroides de los grupos. Por tanto, procederemos a eliminar del análisis estas empresas, mediante el paso del correspondiente filtro, y la creación de un nuevo <em>data frame</em> sin casos outliers, al que llamaremos, por ejemplo, “originales_so”. Por último, borramos la variable MAHALANOBIS del <em>data frame “</em>originales”, puesto que ya ha cumplido la función de localizar los casos atípicos:</p>
-<div class="sourceCode" id="cb288"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb279"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">originales_so</span> <span class="op">&lt;-</span> <span class="va">originales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>                      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span> <span class="op">&lt;=</span> <span class="va">Q3M</span> <span class="op">+</span> <span class="fl">1.5</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html">IQR</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>                             <span class="va">MAHALANOBIS</span> <span class="op">&gt;=</span> <span class="va">Q1M</span> <span class="op">-</span> <span class="fl">1.5</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html">IQR</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">originales_so</span> <span class="op">&lt;-</span> <span class="va">originales_so</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">MAHALANOBIS</span><span class="op">)</span></span></code></pre></div>
 <p>Una vez preparados los datos, vamos a proceder a aplicar la técnica de formación de conglomerados no-jerárquica de k-medias. Primeramente, y puesto que se basa en el cálculo de las distancias euclídeas entre casos, procederemos a tipificar los valores de las variables, utilizando la función <code><a href="https://rdrr.io/r/base/scale.html">scale()</a></code>, y creando el data frame “zoriginales_so”:</p>
-<div class="sourceCode" id="cb289"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb280"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># CLUSTER K-MEDIAS CON VARIABLES ORIGINALES.</span></span>
 <span></span>
 <span>  <span class="co"># Tipificando variables</span></span>
@@ -838,7 +826,7 @@ Solvencia
 ##  3rd Qu.: 0.4271   3rd Qu.: 0.48147   3rd Qu.: 0.1449   3rd Qu.: 0.8381  
 ##  Max.   : 3.8714   Max.   : 7.20005   Max.   : 7.2526   Max.   : 1.8874</code></pre>
 <p>Una cuestión clave es la determinación previa del número de grupos a formar. Si no se tiene decidido un número de conglomerados <em>a priori</em> como consecuencia del interés o de los objetivos de la propia investigación, se puede recurrir como orientación a algún paquete de R que propone el número de grupos a formar. Uno de estos paquetes es <a href="https://sites.google.com/site/malikacharrad/research/nbclust-package">NbClust</a>, y en concreto su función <code><a href="https://rdrr.io/pkg/NbClust/man/NbClust.html">NbClust()</a></code>:</p>
-<div class="sourceCode" id="cb291"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb282"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Numero de grupos</span></span>
 <span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://sites.google.com/site/malikacharrad/research/nbclust-package">NbClust</a></span><span class="op">)</span></span>
@@ -847,8 +835,8 @@ Solvencia
 <span>                                     min.nc <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>                                     max.nc <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>                                     method <span class="op">=</span> <span class="st">"kmeans"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="RstarS_files/figure-html/unnamed-chunk-299-1.png" width="672"><img src="RstarS_files/figure-html/unnamed-chunk-299-2.png" width="672"></p>
-<div class="sourceCode" id="cb292"><pre class="downlit sourceCode r">
+<p><img src="RstarS_files/figure-html/unnamed-chunk-238-1.png" width="672"><img src="RstarS_files/figure-html/unnamed-chunk-238-2.png" width="672"></p>
+<div class="sourceCode" id="cb283"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">start_line</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"* Among all indices:"</span>, <span class="va">result</span><span class="op">)</span></span>
 <span>    <span class="va">end_line</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"* According to"</span>, <span class="va">result</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">[</span><span class="va">start_line</span><span class="op">:</span><span class="va">end_line</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
@@ -866,7 +854,7 @@ Solvencia
 ## [12] "* According to the majority rule, the best number of clusters is  3 "</code></pre>
 <p>La función <code><a href="https://rdrr.io/pkg/NbClust/man/NbClust.html">NbClust()</a></code> aplica una batería de entre 20-30 medidas e indicadores recogidos en la literatura científica desarrollados para determinar el número óptimo de grupos o clústeres a formar, y ofrece de modo los resultados. Precisamente, en el código anterior, se almacena el output que ofrece la función en el objeto “result”, luego se elige de entre todo ese <em>output</em> el texto donde se ofrece el resumen de los resultados (concretando la línea inicial y la final mediante la función <code><a href="https://rdrr.io/r/base/grep.html">grep()</a></code>), y se ofrece ese resumen. Según el mismo, la mayoría de los índices e indicadores proponen 3 grupos como la segmentación más adecuada.</p>
 <p>Una vez decidido el número de grupos (en el ejemplo, 3), se pasa tal número a una constante “k” para manejarlo con más comodidad en el resto del código. Después, se aplica el método de <strong><em>k-medias</em></strong>, en la versión de la función <code><a href="https://rdrr.io/pkg/ClusterR/man/KMeans_rcpp.html">KMeans_rcpp()</a></code> del paquete <a href="https://github.com/mlampros/ClusterR">ClusterR</a>, que permite obtener las “semillas” (centroides iniciales) mediante el algoritmo <em>kmeans++</em>, que ofrece buenos resultados frente a otras posibilidades de obtención de “semillas”, como la generación puramente aleatoria. La función <code><a href="https://rdrr.io/r/base/Random.html">set.seed()</a></code> fija la secuencia de generación de números aleatorios, de modo que, si se ejecuta varias veces el mismo código, se obtendrá la misma solución:</p>
-<div class="sourceCode" id="cb294"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb285"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">3</span>  <span class="co"># poner aquí número de grupos decidido!!!!</span></span>
 <span></span>
 <span>  <span class="co"># Aplicando k-means con inicializacion kmeans++</span></span>
@@ -882,7 +870,7 @@ Solvencia
 <span>                           initializer <span class="op">=</span> <span class="st">"kmeans++"</span><span class="op">)</span></span></code></pre></div>
 <p>En la función <code><a href="https://rdrr.io/pkg/ClusterR/man/KMeans_rcpp.html">KMeans_rcpp()</a></code>, el primer argumento es el <em>data frame</em> con las variables clasificadoras (en sus versiones tipificadas). El segundo es el número de clústeres o grupos a obtener (que lo hemos asignado anteriormente al parámetro “<strong>k</strong>”). El tercero, <code>num_init =</code>, es el número de veces que se repite el procedimiento a fin de retener la mejor solución. <code>Max_iters =</code> fija el máximo de iteraciones del procedimiento de k<em>-medias</em> hasta obtener una solución estable. <code>Initializer =</code> define el método de obtención de las semillas (en nuestro caso, <em>k-means++</em>). La solución final se guarda en el objeto “cluster_k”, como se puede apreciar en el <em>Environment</em>.</p>
 <p>Dentro de la solución, el vector con el grupo de pertenencia de cada empresa se obtiene con el elemento “$clusters”. Conviene guardar ese vector como factor. En concreto, se guardará como el factor <strong>“whatcluster_k”</strong>, integrado dentro del <em>data frame</em> “originales_so”:</p>
-<div class="sourceCode" id="cb295"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb286"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">originales_so</span><span class="op">$</span><span class="va">whatcluster_k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">cluster_k</span><span class="op">$</span><span class="va">clusters</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">originales_so</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##       RES               MARGEN            FPIOS         
@@ -901,7 +889,7 @@ Solvencia
 ##  3rd Qu.: 67.66                
 ##  Max.   : 99.78</code></pre>
 <p>A continuación vamos a <strong>caracterizar los grupos</strong> formados en función de las medias de las variables originales (coordenadas de los centroides). Así, se podrán mostrar en pantalla las medias de cada grupo de las distintas variables originales, usando las funciones <code>by_group()</code> y <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>. Los decimales se ajustarán utilizando la función <code><a href="https://rdrr.io/r/base/Round.html">round()</a></code>. Toda la información se asigna al <em>data frame</em> “tablamedias”, para poder posteriormente representado en una tabla mediante las facilidades que ofrecen los paquetes <a href="https://yihui.org/knitr/">knitr</a> y <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>:</p>
-<div class="sourceCode" id="cb297"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb288"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># CARACTERIZANDO GRUPOS FORMADOS</span></span>
 <span>  </span>
 <span>  <span class="co"># Tabla con centroides de grupos.</span></span>
@@ -930,7 +918,7 @@ Solvencia
 <span>      <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">tablamedias</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-304">Table 7.3: </span><span id="tab:unnamed-chunk-304">Table 7.4: </span>Método de k-medias. 3 grupos. Medias de variables
+<span id="tab:unnamed-chunk-243">Table 7.3: </span><span id="tab:unnamed-chunk-243">Table 7.4: </span>Método de k-medias. 3 grupos. Medias de variables
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -1016,7 +1004,7 @@ Solvencia
 </tbody>
 </table></div>
 <p>Obviamente, también se podrían comparar las medias de los grupos, para cada variable, con un gráfico de barras. El código es el siguiente:</p>
-<div class="sourceCode" id="cb298"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb289"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Gráficos de centroides</span></span>
 <span></span>
 <span>    <span class="co"># Vector de nombre de variables excluyendo la variable no deseada</span></span>
@@ -1041,7 +1029,7 @@ Solvencia
 <span>        <span class="va">graficos.centroides</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"grafico_"</span>, <span class="va">var1</span><span class="op">)</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">grafico</span></span>
 <span>      <span class="op">}</span>       </span></code></pre></div>
 <p>Para hacer composiciones de 4 gráficos (que en este caso será solo una, dado que hemos almacenado en la lista “graficos.centroides” 4 elementos correspondientes a las 4 variables clasificadoras), volveremos a utilizar la función <code>create_patchwork()</code>, que ya se mostró en el ejemplo de clúster jerárquico. De nuevo se incluye su código y se aplica a la lista de gráficos “graficos.centroides”:</p>
-<div class="sourceCode" id="cb299"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb290"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Función para crear agrupaciones de 2x2 con espacios en blanco si necesario</span></span>
 <span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span>    </span>
@@ -1080,13 +1068,13 @@ Solvencia
 <span>    <span class="kw">for</span> <span class="op">(</span><span class="va">n</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">grupos.graficos.centroides</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>         <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">grupos.graficos.centroides</span><span class="op">[[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-306-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-245-1.png" width="672"></div>
 <p>La lista “grupos.graficos.centroides” almacena las composiciones de 4 (o menos) gráficos generadas. En este ejemplo, solo tiene un elemento, que es mostrado al ejecutar el bucle de presentación de composiciones.</p>
 <p>Por medio de los gráficos se pueden establecer algunas conclusiones, comparando las medias de las variables para cada grupo de casos formado (coordenadas de los centroides). Por ejemplo, el grupo 1 destaca por tener, en media, un resultado y unos fondos propios muy superiores a los del resto de grupos. En cuanto a la solvencia, también tiene en media el mayor valor, aunque la diferencia no parece tan pronunciada con respecto al grupo 3. El grupo 2 se caracteriza por tener, en media, los valores inferiores en las 4 variables clasificadoras, siempre de un modo que se antoja muy pronunciado. Por último, el grupo 3 tiene, en media, el mayor valor de solvencia y, en cuanto al margen, se sitúa relativamente cerca del margen medio del grupo 1.</p>
 <p>El análisis gráfico anterior se puede complementar de un modo estadítico, a fin de verificar si las diferencias observadas entre los valores medios de los grupos, para cada variable, son significativas. Para ello, y teniendo en cuenta que los grupos se pueden considerar submuestras que representan a subpoblaciones, se puede aplicar alguna prueba de comparaciones múltiples de las medias de los grupos formados, de modo que se pueda confirmar, para cierta significación estadística (usualmente 0,05), <strong>si las diferencias en las medias de los grupos para cada variable son estadísticamente relevantes</strong> (significativas) o no.</p>
 <p>Una prueba clásica para llevar a cabo esta tarea es aplicar el <em>test de comparaciones múltiples de Tuckey</em>. No obstante, y dado que esta prueba requiere del cumplimiento de ciertos requisitos previos (normalidad de los grupos, varianzas homogéneas); hemos optado por la <strong><em>prueba robusta de Kruskal-Wallis</em>.</strong> Para cada una de las variable originales, realizaremos un gráfico múltiple de diagramas de caja, y procederemos a mostrar los resultados de la prueba.</p>
 <p>En primer lugar, vamos a definir el vector con el nombre de las variables que entran en el análisis (vector “variables”), e inicializaremos las listas para guardar los gráficos y los resultados de la prueba para cada variable (“graficos_kw” y “tablas_kw”, respectivamente). También se activa el paquete <a href="https://github.com/pgiraudoux/pgirmess">pgirmess</a>, que contiene la función para proceder a realizar la <em>prueba de comparaciones múltiples de Kruskal y Wallis</em>, <code><a href="https://rdrr.io/pkg/pgirmess/man/kruskalmc.html">kruskalmc()</a></code>:</p>
-<div class="sourceCode" id="cb300"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb291"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># ¿Centroides estadísticamente significativos?</span></span>
 <span></span>
 <span>    <span class="co"># Vector de nombre de variables excluyendo la variable no deseada</span></span>
@@ -1097,7 +1085,7 @@ Solvencia
 <span>      <span class="va">tablas_kw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>      <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pgiraudoux/pgirmess">pgirmess</a></span><span class="op">)</span></span></code></pre></div>
 <p>Luego, haremos un bucle para que se realice el gráfico de caja y se presente en una tabla el resultado de la <em>prueba de comparaciones múltiples de Kruskal y Wallis</em> para cada una de las variables. En la función para realizar la prueba, <code><a href="https://rdrr.io/pkg/pgirmess/man/kruskalmc.html">kruskalmc()</a></code>, la solución se guarda en un objeto, por ejemplo, “datos_kmc”, y los argumentos son, por un lado, la variable analizada y el factor que se utiliza para denominar los grupos (“whatcluster_k”), unidos por el símbolo “~”:</p>
-<div class="sourceCode" id="cb301"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb292"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Bucle para generar gráficos y análisis</span></span>
 <span>    <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">variables</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>         <span class="va">variable</span> <span class="op">&lt;-</span> <span class="va">variables</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span>
@@ -1150,7 +1138,7 @@ Solvencia
 <span>      <span class="va">tablas_kw</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">tabla</span></span>
 <span>    <span class="op">}</span></span></code></pre></div>
 <p>Una vez almacenados, para cada variable clasificadora, los gráficos de caja y las tablas con los resultados de la prueba de comparaciones múltiples, quedan por realizar dos tareas: Agrupar los gráficos en composiciones de 4 (o menos) mediante la función <code>create_patchwork()</code> en la lista “gruposgraficos_kw”, y presentar todos los elementos:</p>
-<div class="sourceCode" id="cb302"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb293"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="co"># Crear composiciones de gráficos.</span></span>
 <span></span>
 <span>      <span class="va">gruposgraficos_kw</span> <span class="op">&lt;-</span> <span class="fu">create_patchwork</span><span class="op">(</span><span class="va">graficos_kw</span><span class="op">)</span></span>
@@ -1160,8 +1148,8 @@ Solvencia
 <span>      <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">gruposgraficos_kw</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>           <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">gruposgraficos_kw</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>      <span class="op">}</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-310-1.png" width="672"></div>
-<div class="sourceCode" id="cb303"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-249-1.png" width="672"></div>
+<div class="sourceCode" id="cb294"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>      <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">tablas_kw</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>           <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">tablas_kw</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>      <span class="op">}</span></span></code></pre></div>
@@ -1173,7 +1161,7 @@ Solvencia
 <li><p>Variable de solvencia (SOLVENCIA): en términos medios, todas las diferencias en el grado de solvencia de las empresas de los distintos grupos son estadísticamente significativas.</p></li>
 </ul>
 <p>Finalmente. al centrarse nuestro objetivo en obtener perfiles de empresas más que en clasificar empresas concretas, y puesto que la muestra es numerosa, carece de sentido crear tablas con la información detallada de las empresas que componen cada uno, si bien la construcción de estas tablas es fácil, pudiéndose emplear el código que para tal objetivo se expuso en el apartado del análisis jerárquico. Lo que sí puede ser más interesante es mostrar como los elementos de cada grupo se disponen en los diagramas de dispersión producto de cruzar las variables clasificadoras entre sí. Para generar estos gráficos de un modo automatizado, primero generaremos un vector con el nombre de todas las variables (excluyendo al <em>factor</em> whatcluster_k mediante la función <code><a href="https://generics.r-lib.org/reference/setops.html">setdiff()</a></code>. Luego, crearemos una lista para ir almacenando los gráficos (lista “graficos”).Después, calcularemos todas las combinaciones de nombres de variables posibles, con la función <code><a href="https://rdrr.io/r/utils/combn.html">combn()</a></code>, y las almacenaremos en la lista “combinaciones”. En esta función, el argumento <strong><code>simplify = FALSE</code></strong> le dice a la función que no vuelque el resultado a una matriz:</p>
-<div class="sourceCode" id="cb304"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb295"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># GRÁFICOS Variable vs Variable</span></span>
 <span></span>
 <span>  <span class="co"># Lista de variables excluyendo la variable no deseada</span></span>
@@ -1185,7 +1173,7 @@ Solvencia
 <span>  <span class="co"># Generar todas las combinaciones posibles de pares de variables</span></span>
 <span>    <span class="va">combinaciones</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/combn.html">combn</a></span><span class="op">(</span><span class="va">variables</span>, <span class="fl">2</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>Una vez almacenados los elementos anteriores, procederemos a crear los gráficos de dispersión mediante un bucle. Estos gráficos se guardarán en la lista “graficos”, que se pasará por la función <code>create_patchwork()</code> para que se sinteticen en composiciones de 4 (o menos) gráficos. Estas composiciones se almacenan en la lista “gruposgraficos”, y se presentan mediante un nuevo bucle:</p>
-<div class="sourceCode" id="cb305"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb296"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Bucle para crear y almacenar los gráficos</span></span>
 <span>    <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">combinaciones</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>         <span class="va">var1</span> <span class="op">&lt;-</span> <span class="va">combinaciones</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
@@ -1211,7 +1199,7 @@ Solvencia
 <span>    <span class="kw">for</span> <span class="op">(</span><span class="va">n</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">gruposgraficos</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>         <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">gruposgraficos</span><span class="op">[[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span></code></pre></div>
-<p><img src="RstarS_files/figure-html/unnamed-chunk-312-1.png" width="672"><img src="RstarS_files/figure-html/unnamed-chunk-312-2.png" width="672"></p>
+<p><img src="RstarS_files/figure-html/unnamed-chunk-251-1.png" width="672"><img src="RstarS_files/figure-html/unnamed-chunk-251-2.png" width="672"></p>
 <p>A partir de los gráficos anteriores se aprecia cómo, en coherencia con los resultados obtenidos en el análisis de las medias de los grupos, las empresas del grupo 1 poseen, en general valores en las variables de resultados y fondos propios superiores a los del resto de grupos (gráficos 1, 2, 3, 4 y 6). En cuanto al margen, el grueso de las empresas de los tres grupos poseen márgenes muy parecidos, con una leve tendencia de algunas empresas del grupo 3 a ser menores, y del grupo 1 a ser mayores (gráficos 1, 4 y 5). Con referencia a la solvencia, se distingue con claridad que las empresas del grupo 3 tienen, en general, un mayor nivel, destacando también la dispersión de la variable a lo largo del grupo 1 (gráficos 3, 5 y 6).</p>
 </div>
 <div id="materiales-para-realizar-las-prácticas-del-capítulo.-5" class="section level2" number="7.4">
@@ -1258,7 +1246,7 @@ Solvencia
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2025-09-24.</p>
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2025-09-25.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
