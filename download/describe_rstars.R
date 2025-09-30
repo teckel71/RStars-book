@@ -72,7 +72,8 @@ conteo_df %>%
         col.names = c("x(i) = Salario", "Frecuencia absoluta n(i)",
                       "Frecuencia absoluta acum. N(i)", "Frecuencia relativa f(i)",
                       "Frecuencia relativa acum. F(i)"),
-                      format.args = list(decimal.mark = ".", digits = 2)) %>%
+        digits  = c(0, 0, 0, 2, 2),
+        format.args = list(decimal.mark = ".", scientific = FALSE)) %>%
   kable_styling(full_width = F,
                 bootstrap_options = "striped", "bordered", "condensed",
                 position = "center",
@@ -129,7 +130,8 @@ conteo_intervalos_df %>%
                       "Frecuencia absoluta acum. N(i)",
                       "Frecuencia relativa f(i)",
                       "Frecuencia relativa acum. F(i)"),
-        format.args = list(decimal.mark = ".", digits = 2)) %>%
+        digits  = c(NA, 2, 0, 0, 2, 2),
+        format.args = list(decimal.mark = ".", scientific = FALSE)) %>%
   kable_styling(full_width = F,
                 bootstrap_options = "striped", "bordered", "condensed",
                 position = "center",
