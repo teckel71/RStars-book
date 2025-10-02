@@ -112,7 +112,7 @@
 <p>En concreto, en esta práctica, comprobaremos <strong>si</strong> <strong>la dimensión del grupo empresarial al que pertenecen las empresas eólicas</strong> (medida en función del número de empresas integradas en el grupo empresarial, y concretada en el factor DIMENSION) <strong>tiene una influencia significativa sobre la rentabilidad económica</strong> (variable RENECO), <strong>en términos medios</strong>. Para ello se ha seleccionado una muestra constituida por 50 empresas productoras de electricidad mediante tecnología eólica. Así, la población, constituida por todas las empresas de generación eléctrica eólica de España, queda dividida en tres subpoblaciones: la subpoblación de empresas que pertenecen a grupos empresariales de DIMENSION (según el número de filiales contenidas) “GRANDE”, la subpoblación de empresas que pertenecen a grupos empresariales de DIMENSION “MEDIA”, y la subpoblación de empresas que pertenecen a grupos empresariales de DIMENSION “PEQUEÑA”. Cada una de estas subpoblaciones tendrán sus respectivas rentabilidades económicas medias, que desconocemos (ya que no tenemos los datos de la población, es decir, de todas las empresas eólicas del país; sino solo de una muestra de 50 empresas). Lo que si tenemos para cada subpoblación es una submuestra que la representa (parte de las 50 empresas de la muestra, que queda fraccionada en tres según el factor DIMENSION). Y de cada submuestra, tenemos la correspondiente rentabilidad media muestral. Lo que comprobaremos con el contraste de ANOVA, en definitiva, es si las diferencias observadas entre las rentabilidades medias de cada submuestra son lo suficientemente amplias como para pensar que, puede considerarse que existen diferencias importantes (significativas) entre las rentabilidades medias de las subpoblaciones (considerando todas las empresas eólicas que conforman la población).</p>
 <p>Los datos están almacenados en el archivo de Microsoft Excel “<a href="https://docs.google.com/spreadsheets/d/1PVRwLo1eAbFLOgSscLZw0bD9rgMk2X-w/edit?usp=sharing&amp;ouid=115375878280465826079&amp;rtpof=true&amp;sd=true">eolica_50.xls</a>”, y el script con el código del ejemplo se halla contenido en el fichero “<a href="https://drive.google.com/file/d/1p4p17OudRprwkpF7wvvF1gwHZG82uv89/view?usp=sharing">anova_cluster.R</a>”. Vamos a suponer que trabajaremos en un proyecto de RStudio al que denominaremos “anova”.</p>
 <p>Una vez abierto el <em>script</em> en el editor de RStudio , comprobaremos que la primera parte del código está dedicada a la limpieza de la memoria (<em>Environment</em>) y a la importación de los datos. Para ello, activaremos el paquete <a href="https://readxl.tidyverse.org">readxl</a> y utilizaremos la función <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code>, indicando en los argumentos el archivo a explorar, y la <em>hoja</em> en la cual se encuentran los datos (hoja “Datos”). También hemos de prestar atención a la cuestión de si existen en la hoja de <em>Excel</em> anotaciones en las celdas donde no haya dato, para completar adecuadamente el argumento <code>na=</code> . Los datos se almacenarán en el <em>data frame</em> “datos”. En este <em>data frame</em>, la primera columna no es una verdadera variable, sino que se compone de los nombres de los casos o empresas. Con una línea de código adicional transformaremos esa primera columna en el <em>nombre de las filas</em>, de modo que tal columna abandona su <em>rol</em> de variable. En definitiva, el código para importar los datos es:</p>
-<div class="sourceCode" id="cb296"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb295"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Análisis ANOVA de un factor.</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -159,25 +159,25 @@
 ##  Max.   :12244.351</code></pre>
 <p>Antes de proceder al <em>análisis de la varianza</em> propiamente dicho, hemos de preparar nuestros datos mediante la localización de <em>missing values</em> y <em>outliers</em>. Los <em>outliers</em>, en el ANOVA, pueden tener una gran influencia (ya que se trabaja en <em>términos medios</em>) sobre los resultados, por lo que deben ser tratados convenientemente.</p>
 <p>Para localizar los casos concretos de <strong><em>missing values</em></strong>, puede recurrirse a utilizar las herramientas de manejo de <em>data frames</em> del paquete <a href="https://dplyr.tidyverse.org">dplyr</a>. Previamente, realizaremos una <strong>copia</strong> del <em>data frame</em> original, “datos”, a la que llamaremos “muestra”, que es con la que trabajaremos (para mantener la integridad del primer <em>data frame</em>). Con la función <code>vismiss()</code> del paquete <a href="https://docs.ropensci.org/visdat/">visdat</a> podemos tener una visión gráfica general de los valores faltantes, en especial en el caso de la variable RENECO y el factor DIMENSION. Si hay casos faltantes en una de estas variables, los identificaremos filtrando el <em>data frame</em> con la función <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>. Ante la existencia de <em>missing values</em>, se puede actuar de varios modos. Por ejemplo, <strong>se puede intentar obtener por otro canal de información el conjunto de valores</strong> de RENECO que no están disponibles, <strong>o recurrir a alguna estimación</strong> para los mismos y asignarlos. En caso de que esto sea difícil, se puede optar, simplemente, por <strong>eliminar</strong> estos casos, en especial cuando representan un porcentaje muy reducido respecto al total de casos. En nuestro ejemplo, vamos a suponer que hemos optado por esta última vía, al no conseguir unos valores más o menos verosímiles de RENECO para las empresas de las que se carece de dato. Así, estos casos, finalmente, será exluidos del análisis, utilizando para ello un nuevo filtro:</p>
-<div class="sourceCode" id="cb298"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb297"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Missing values</span></span>
 <span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/visdat/">visdat</a></span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss</a></span><span class="op">(</span><span class="va">datos</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-290-1.png" width="672"></div>
-<div class="sourceCode" id="cb299"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-253-1.png" width="672"></div>
+<div class="sourceCode" id="cb298"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">datos</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">DIMENSION</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>            <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">RENECO</span>, <span class="va">DIMENSION</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##                       RENECO DIMENSION
 ## Sargon Energias SLU       NA     MEDIA
 ## Viesgo Renovables SL.     NA     MEDIA</code></pre>
-<div class="sourceCode" id="cb301"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb300"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">muestra</span> <span class="op">&lt;-</span> <span class="va">datos</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>             <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">DIMENSION</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Tras el código anterior, se han eliminado del <em>data frame</em> “muestra” las empresas “Sargon Energías S. L. U.” y “Viesgo Renovables S. L.”, empresas pertenecientes a grupos empresariales de dimensión media (DIMENSION), debido a que carecían de dato de rentabilidad económica (RENECO).</p>
 <p>Una vez tratados los casos con valores perdidos o <em>missing values</em>, <strong>es necesario detectar la presencia de <em>outliers</em></strong> o casos atípicos en la muestra, que pudieran desvirtuar los resultados derivados del ANOVA. Para ello, realizaremos un <strong><em>boxplot</em></strong> o gráfico de caja. Aplicaremos, por ejemplo, el código siguiente, que utiliza la gramática del paquete <a href="https://ggplot2.tidyverse.org">ggplot2</a>:</p>
-<div class="sourceCode" id="cb302"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb301"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Outliers</span></span>
 <span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
@@ -187,9 +187,9 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"RENTABILIDAD ECONÓMICA"</span>,</span>
 <span>          subtitle <span class="op">=</span> <span class="st">"100 empresas eólicas"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Rentabilidad Económica (%)"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-291-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-254-1.png" width="672"></div>
 <p>En el gráfico de caja se aprecia claramente que existe un <em>outlier</em>. Para identificar tal empresa, calcularemos, respecto a la variable RENECO, el primer y tercer cuartiles, que nos servirán para construir el filtro que capturará el caso atípico. Así, en el código, las dos primeras filas calculan los cuartiles primero (Q1) y tercero (Q3) mediante la función <code><a href="https://rdrr.io/r/stats/quantile.html">quantile()</a></code>. Luego se filtran, mediante la función <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>, los <em>outliers</em>, calculadoscomo aquellos casos con valores de RENECO mayores que Q3 más 1,5 veces el <em>rango intercuartílico</em> de la variable; o menores que Q1 menos 1,5 veces dicho rango intercuartílico. Para calcular el rango intercuartílico se recurre a la función <code><a href="https://rdrr.io/r/stats/IQR.html">IQR()</a></code>. Finalmente, con <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> se muestran los casos en la consola de RStudio:</p>
-<div class="sourceCode" id="cb303"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb302"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">Q1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">muestra</span><span class="op">$</span><span class="va">RENECO</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">Q3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">muestra</span><span class="op">$</span><span class="va">RENECO</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.75</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -200,11 +200,11 @@
 <pre><code>##                     RENECO
 ## Molinos Del Ebro SA 35.262</code></pre>
 <p>La empresa identificada como outlier es “Molinos del Ebro S. A”. Como ocurría con los <em>missing values</em>, el tratamiento de los <em>outliers</em> depende de la información que se tenga, existiendo varias alternativas (corrección del dato, estimación, etc.) Si no se tiene información fiable, y los <em>outliers</em> no representan una gran proporción respecto al total de casos, puede optarse por su eliminación de la muestra, como haremos en este ejemplo. Podemos hacerlo creando un nuevo <em>data frame</em> a partir de “muestra”; pero sin ese caso. Ese nuevo <em>data frame</em> se llamará, por ejemplo, “<strong>muestra_so</strong>”:</p>
-<div class="sourceCode" id="cb305"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb304"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">muestra_so</span> <span class="op">&lt;-</span> <span class="va">muestra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">RENECO</span> <span class="op">&lt;=</span> <span class="va">Q3</span> <span class="op">+</span> <span class="fl">1.5</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html">IQR</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>                                   <span class="va">RENECO</span> <span class="op">&gt;=</span> <span class="va">Q1</span> <span class="op">-</span> <span class="fl">1.5</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html">IQR</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Una vez preparados los datos, vamos a presentar los grupos de empresas eólicas y sus rentabilidades económicas medias. Para ello, diseñaremos una tabla con la función <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code> del paquete <a href="https://yihui.org/knitr/">knitr</a>, y personalizada con algunas funciones incluidas en el paquete <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>. Para construir la tabla, hemos de crear anteriormente un pequeño <em>data frame</em>, llamado por ejemplo “tablamedias”, en el que cada caso o fila sea uno de los grupos en que queda dividida la muestra a partir de los niveles del factor “DIMENSION”, y que contenga tres variables: la DIMENSION de cada grupo o submuestra, su número de casos contenidos (variable “observaciones”), y las respectivas rentabilidades medias (variable “media”):</p>
-<div class="sourceCode" id="cb306"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb305"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Visualizando número de frecuencias y medias de los grupos con dplyr:</span></span>
 <span>  </span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span></span>
@@ -228,7 +228,7 @@
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">tablamedias</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-295">Table 8.1: </span><span id="tab:unnamed-chunk-295">Table 8.2: </span>Rentabilidad Económica. Medias por grupos (tamaño matriz).
+<span id="tab:unnamed-chunk-258">Table 8.1: </span><span id="tab:unnamed-chunk-258">Table 8.2: </span>Rentabilidad Económica. Medias por grupos (tamaño matriz).
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -278,7 +278,7 @@ PEQUEÑA
 </tbody>
 </table></div>
 <p>Gráficamente, las tres submuestras de empresas pueden caracterizarse, en cuanto a la rentabilidad económica (RENECO), mediante dos tipos de gráficos: gráficos de densidad y gráficos de caja. Los gráficos serán construidos utilizando las facilidades del paquete <a href="https://ggplot2.tidyverse.org">ggplot2</a>. Además, combinaremos los gráficos en una composición utilizando el paquete <a href="https://patchwork.data-imaginist.com">patchwork</a>. El código es el siguiente:</p>
-<div class="sourceCode" id="cb307"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb306"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Graficando casos y medias.</span></span>
 <span></span>
 <span>  <span class="co"># Crear el gráfico de densidad</span></span>
@@ -316,12 +316,12 @@ PEQUEÑA
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="va">gdensidad</span> <span class="op">/</span> <span class="va">gbox</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-296-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-259-1.png" width="672"></div>
 <p>Cada grupo o submuestra “representa” a una subpoblación, según la dimensión que tenga la matriz empresarial. El ANOVA lo que intenta determinar es si, observadas las diferencias en las medias muestrales de la variable en estudio (aquí, RENECO), esas diferencias pueden considerarse o no estadísticamente significativas a nivel poblacional. En realidad, la hipótesis nula a contrastar es que ninguna de las diferencias entre las medias de la variable de las subpoblacionales es estadísticamente significativa; mientras que la hipótesis alternativa es que existe al menos una diferencia significativa entre las medias de las subpoblaciones. En definitiva, la <strong>hipótesis nula</strong> a contrastar sugiere <strong>que no existen diferencias entre las rentabilidades económicas medias de los grupos</strong> (subpoblaciones) de empresas eólicas (discriminadas por el tamaño del grupo empresarial al que pertenecen). De ser así, el factor DIMENSION no tendría una influencia estadísticamente significativa sobre el valor medio de la variable RENECO.</p>
 <p>Las conclusiones a las que lleguemos con el <em>contraste F de ANOVA</em> serán válidas en la medida en que se cumplan las <strong>hipótesis de normalidad y homogeneidad en las varianzas</strong> de la variable dependiente o métrica (RENECO), en los tres grupos o subpoblaciones en que queda dividida la población atendiendo los niveles o categorías del factor (DIMENSION). Hemos de contrastar, pues, ambas hipótesis, a partir de la información de las tres submuestras que tenemos y que representan, respectivamente, a cada una de esas subpoblaciones.</p>
 <p>En cuanto a la hipótesis de <strong>normalidad</strong>, se pueden usar dos vías para verificar su cumplimiento: el análisis gráfico y la realización de contrastes estadísticos.</p>
 <p>El análisis gráfico puede llevarse a cabo mediante la realización <em>de gráficos QQ</em> de la variable RENECO, a partir de las submuestras o grupos de empresas en que queda fragmentada la muestra a partir de la variable DIMENSION. Estos gráficos pueden generarse con la gramática del paquete <a href="https://ggplot2.tidyverse.org">ggplot2</a>:</p>
-<div class="sourceCode" id="cb308"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb307"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># PRERREQUISITOS / HIPÓTESIS ANOVA  </span></span>
 <span></span>
 <span>    <span class="co"># Normalidad / Gráfico QQ</span></span>
@@ -333,9 +333,9 @@ PEQUEÑA
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"RENTABILIDAD ECONÓMICA: QQ-PLOT"</span>,</span>
 <span>            subtitle <span class="op">=</span> <span class="st">"Empresas eólicas"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="va">.</span> <span class="op">~</span> <span class="va">DIMENSION</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-297-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-260-1.png" width="672"></div>
 <p>Los <em>gráficos QQ</em> parecen inidicar que la variable RENECO tiene un comportamiento distante a la Ley Normal en las submuestras (y, por tanto, en las correspondientes subpoblaciones), al localizarse, algunos de los puntos, relativamente alejados de la diagonal, especialmente en el caso de las empresas pertenecientes a matrices de dimensión “grande”. Para extraer una conclusión de un modo más preciso, vamos a realizar el contraste de normalidad de <em>Shapiro-Wilk</em>:</p>
-<div class="sourceCode" id="cb309"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb308"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="co"># Normalidad: Shapiro-Wilk para cada grupo</span></span>
 <span>    <span class="va">normalidad</span> <span class="op">&lt;-</span> <span class="va">muestra_so</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">DIMENSION</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -359,7 +359,7 @@ PEQUEÑA
 <p>En el código anterior, se crea un pequeño <em>data frame</em> denominado “normalidad”, que incluye, para cada submuestra definida por los niveles del factor DIMENSION, la variable “decide” con los <em>p-valores</em> de la prueba de <em>Shapiro-Wilk</em>, y un atributo llamado “decide”, creado mediante la función <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>, que adopta la categoría “NORMALIDAD” o “NO-NORMALIDAD” dependiendo de los p-valores. Posteriormente, el data frame “normalidad” se presenta como una tabla de nombre “tablashapiro”.</p>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-299">Table 8.3: </span><span id="tab:unnamed-chunk-299">Table 8.4: </span>Normalidad (Shapiro-Wilks).
+<span id="tab:unnamed-chunk-262">Table 8.3: </span><span id="tab:unnamed-chunk-262">Table 8.4: </span>Normalidad (Shapiro-Wilks).
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -410,7 +410,7 @@ NORMALIDAD
 </table></div>
 <p>En esta prueba, la hipótesis nula equivale al supuesto de normalidad. Para un 5% de significación estadística, un <strong>p-valor superior a 0,05 implicará el no-rechazo de la hipótesis nula de normalidad</strong>. En el ejemplo, la submuestra de empresas pertenecientes a matrices de dimensión “grande” llevan a pensar que esta subpoblación no sigue una distribución normal. En los otros dos casos, en cambio, podemos aceptar la existencia de normalidad.</p>
 <p>En cuanto a la <strong>homogeneidad de las varianzas</strong>, contrastamos este supuesto mediante la prueba de <em>Bartlett</em>.</p>
-<div class="sourceCode" id="cb310"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb309"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="co"># Homogeneidad en las varianzas</span></span>
 <span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/stats/bartlett.test.html">bartlett.test</a></span><span class="op">(</span><span class="va">muestra_so</span><span class="op">$</span><span class="va">RENECO</span> <span class="op">~</span> <span class="va">muestra_so</span><span class="op">$</span><span class="va">DIMENSION</span><span class="op">)</span></span></code></pre></div>
@@ -422,7 +422,7 @@ NORMALIDAD
 <p>El p-valor es menor que 0,05; luego <strong>se rechaza la hipótesis nula de homogeneidad de las varianzas de los grupos (subpoblaciones)</strong>.</p>
 <p>Puesto que en uno de los grupos (subpoblaciones) se rechaza la hipótesis de normalidad, y (sobre todo) puesto que no se puede considerar una dispersión similar en las tres subpoblaciones (varianzas homogéneas), los resultados de la prueba <strong><em>F de ANOVA</em></strong> pierden validez, y habría que optar por <strong>una alternativa robusta</strong>. No obstante, <strong>a modo ilustrativo</strong>, seguiremos adelante con la prueba <em>F de ANOVA</em>.</p>
 <p>El contraste <em>F de ANOVA</em> de igualdad en las medias de la variable en estudio (rentabilidad económica, RENECO) de las distintas (sub)poblaciones (grupos de empresas según el tamaño del grupo empresarial de pertenencia) se realiza en R mediante la función <code><a href="https://rdrr.io/r/stats/aov.html">aov()</a></code>, que guardaremos, por ejemplo, como el objeto “Datos.aov”, y que se almacenará en forma resumida en la lista “summary_aov”, de un solo elemento. Este elemento, que contiene la solución resumida del contraste ANOVA, se convierte en un <em>data frame</em> (de nombre “aov_table”) con el objetivo de presentarlo como una tabla de <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code>:</p>
-<div class="sourceCode" id="cb312"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb311"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Test F de ANOVA</span></span>
 <span></span>
 <span><span class="va">Datos.aov</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aov.html">aov</a></span><span class="op">(</span><span class="va">muestra_so</span><span class="op">$</span><span class="va">RENECO</span> <span class="op">~</span> <span class="va">muestra_so</span><span class="op">$</span><span class="va">DIMENSION</span><span class="op">)</span></span>
@@ -448,7 +448,7 @@ NORMALIDAD
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">aov_table</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-302">Table 8.5: </span><span id="tab:unnamed-chunk-302">Table 8.6: </span>Resultados del ANOVA
+<span id="tab:unnamed-chunk-265">Table 8.5: </span><span id="tab:unnamed-chunk-265">Table 8.6: </span>Resultados del ANOVA
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -519,7 +519,7 @@ NA
 <span class="header-section-number">8.3</span> Comparaciones múltiples.<a class="anchor" aria-label="anchor" href="#comparaciones-m%C3%BAltiples."><i class="fas fa-link"></i></a>
 </h2>
 <p>Cuando el resultado del contraste <em>F de ANOVA</em> es de rechazo de la hipótesis nula, se presenta otra cuestión interesante. La hipótesis alternativa dice que existe al menos una diferencia entre las medias de dos grupos que es “importante”. Pero no tienen porque ser todas. Entonces, cabe preguntarse que diferencias concretas entre medias son estadísticamente significativas, y cuáles no. Para dilucidar esta cuestión se han desarrollado diversas pruebas de <strong>comparaciones múltiples</strong>. Una de ellas es la prueba <em>HSD de Tuckey</em>. Un modo de obtener los resultados de esta prueba es ejecutarla a partir de las funciones del paquete <a href="https://rvlenth.github.io/emmeans/">emmeans</a>. En concreto, los resultados de la prueba <em>HSD de</em> <em>Tuckey</em> se obtendrán aplicando la función <code><a href="https://rdrr.io/r/graphics/pairs.html">pairs()</a></code> a un objeto creado previamente con la función <code><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html">emmeans()</a></code>, al que hemos llamado, por ejemplo, “medias”, y que tiene como argumentos el nombre de nuestra solución del contraste ANOVA anterior y, entrecomillado, el nombre de la variable que actúa como factor que divide a la muestra en los tres grupos (submuestras) comparados (DIMENSION). Los resultados se han guardado en el objeto “pares”, que posteriormente se ha transformado en un <em>data frame</em> para poder ser presentado como una tabla de <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code>:</p>
-<div class="sourceCode" id="cb313"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb312"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># COMPARACIONES MÚLTIPLES</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rvlenth.github.io/emmeans/">emmeans</a></span><span class="op">)</span></span>
@@ -543,7 +543,7 @@ NA
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">pares_df</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-304">Table 8.7: </span><span id="tab:unnamed-chunk-304">Table 8.8: </span>Resultados comparaciones múltiples
+<span id="tab:unnamed-chunk-267">Table 8.7: </span><span id="tab:unnamed-chunk-267">Table 8.8: </span>Resultados comparaciones múltiples
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -637,7 +637,7 @@ MEDIA - PEQUEÑA
 <p>En el ejemplo anterior hemos visto cómo, aunque hemos seguido el procedimiento de realización del contraste F de ANOVA y la prueba HSD de Tuckey de comparaciones múltiples; no sé cumplían algunos de los requisitos necesarios para confiar en los resultados de estos contrastes: la normalidad de las subpoblaciones (medida a través de las submuestras) y la homogeneidad de las varianzas de estas.</p>
 <p>Cuando esto ocurre, es necesario recurrir a técnicas robustas, puesto que el comportamiento de la variable analizada en las subpoblaciones (grupos) no se ajusta al necesario para poder aplicar los contrastes anteriores.</p>
 <p>Una prueba robusta que puede suplir al contraste F de ANOVA es la de Kruskal-Wallis. En esta prueba, la hipótesis nula vuelve a ser que no existen diferencias significativas entre las medias de la variable estudiada de las diferentes subpoblaciones (representadas por las correspondientes submuestras), mientras que la hipótesis alternativa apuesta porquela existencia al menos una diferencia significativa. Para aplicar la prueba de Kruskal-Wallis en R, puede recurrirse a la función <code><a href="https://rdrr.io/r/stats/kruskal.test.html">kruskal.test()</a></code> del paquete <a href="https://github.com/pgiraudoux/pgirmess">pgirmess</a>. Así, en nuestro ejemplo, tenemos:</p>
-<div class="sourceCode" id="cb314"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb313"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#Cuando se incumplen las hipotesis de ANOVA (test robusto)</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pgiraudoux/pgirmess">pgirmess</a></span><span class="op">)</span></span>
@@ -651,7 +651,7 @@ MEDIA - PEQUEÑA
 ## Kruskal-Wallis chi-squared = 14.718, df = 2, p-value = 0.0006368</code></pre>
 <p>Puede comprobarse cómo el <em>p-valor</em> es muy pequeño (menor a 0,05), por lo que hemos de rechazar la hipótesis nula de medias iguales y admitir que <strong>existe al menos dos grupos (subpoblaciones) en los que la diferencia entre la rentabilidad económica media es significativa</strong>.</p>
 <p>De nuevo, si se rechaza la hipótesis nula, cabe preguntarse cuáles son los grupos o subpoblaciones concretas cuyas medias de rentabilidad económica son significativamente diferentes. Kruskal-Wallis desarrollaron también la versión robusta de la prueba <em>HSD de Tuckey</em>, que se incluye en <a href="https://github.com/pgiraudoux/pgirmess">pgirmess</a>, con la función <code><a href="https://rdrr.io/pkg/pgirmess/man/kruskalmc.html">kruskalmc()</a></code>. En el siguiente código se aplica la función, cuya solución se guarda en el objeto “Datos.kmc”. El elemento de la solución “dif.com”, que contiene las comparaciones entre las medias, se pasa a un <em>data frame</em> para poder ser mostrado como una tabla de <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code>:</p>
-<div class="sourceCode" id="cb316"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb315"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Comparaciones múltiples</span></span>
 <span></span>
 <span>  <span class="va">Datos.kmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pgirmess/man/kruskalmc.html">kruskalmc</a></span><span class="op">(</span><span class="va">muestra_so</span><span class="op">$</span><span class="va">RENECO</span> <span class="op">~</span> <span class="va">muestra_so</span><span class="op">$</span><span class="va">DIMENSION</span><span class="op">)</span></span>
@@ -676,7 +676,7 @@ MEDIA - PEQUEÑA
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">Datos.kmc.df</span><span class="op">)</span>, bold <span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-307">Table 8.9: </span><span id="tab:unnamed-chunk-307">Table 8.10: </span>Kruskal-Wallis. Múltiples diferencias
+<span id="tab:unnamed-chunk-270">Table 8.9: </span><span id="tab:unnamed-chunk-270">Table 8.10: </span>Kruskal-Wallis. Múltiples diferencias
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -781,7 +781,7 @@ FALSE
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2025-09-30.</p>
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2025-10-02.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

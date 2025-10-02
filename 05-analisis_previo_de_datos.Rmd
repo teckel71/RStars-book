@@ -176,7 +176,7 @@ El operador **`!`** significa "no".
 
 Podemos comprobar cómo en el *Global Environment* aparece el *data frame* "muestra" con un caso menos (103).
 
-Una vez tratados los casos con valores perdidos o *missing values*, **conviene detectar la posible presencia en la muestra de *outliers*** o casos atípicos, que pudieran desvirtuar los resultados derivados de ciertos análisis. Al trabajar con una sola variable métrica (la rentabilidad económica, RENECO), podemos realizar esta tarea **representando gráficamente** la variable mediante un ***boxplot*** o *gráfico de caja*. Aplicaremos, por ejemplo, el código siguiente, que utiliza la gramática del paquete `{ggplot2}`:
+Una vez tratados los casos con valores perdidos o *missing values*, **conviene detectar la posible presencia en la muestra de *outliers*** o casos atípicos, que pudieran desvirtuar los resultados derivados de ciertos análisis. Al trabajar con una sola variable métrica (la rentabilidad económica, RENECO), podemos realizar esta tarea representando gráficamente la variable mediante un ***boxplot*** o *gráfico de caja*. Aplicaremos, por ejemplo, el código siguiente, que utiliza la gramática del paquete `{ggplot2}`:
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE}
 ## Localizando outliers
@@ -361,7 +361,7 @@ conteo_intervalos_df %>%
 }
 ```
 
-En conjunto, la **rentabilidad económica** de estas empresas se concentra en valores **medios–altos**: la gran mayoría se mueve en torno al **50–60%**, y **dos de cada cuatro** intervalos centrales (47,4–53,9 y 53,9–60,3) reúnen la mayor parte de los casos. En términos prácticos, **alrededor de ocho de cada diez** compañías quedan entre **41% y 66,8%**, lo que sugiere un sector relativamente **estable**, con resultados parecidos entre sí. En los extremos hay **pocas**: apenas un **5%** presenta rentabilidades muy bajas (por debajo del 34,5%) y sólo un **2%** llega a niveles muy altos (por encima del 73,2%). Económicamente, esto indica que la competencia y la eficiencia operativa tienden a “empujar” a las empresas hacia un rendimiento **razonable y sostenido**, mientras que los casos de fracaso o de éxito excepcional son **minoría**.
+En conjunto, la **rentabilidad económica** de estas empresas se concentra en valores **medios–altos**: la gran mayoría se mueve en torno al 50–60%, y dos de cada cuatro intervalos centrales (47,4–53,9 y 53,9–60,3) reúnen la mayor parte de los casos. En términos prácticos, alrededor de ocho de cada diez compañías quedan entre 41% y 66,8%, lo que sugiere un sector relativamente estable, con resultados parecidos entre sí. En los extremos hay pocas: apenas un 5% presenta rentabilidades muy bajas (por debajo del 34,5%) y sólo un 2% llega a niveles muy altos (por encima del 73,2%). Económicamente, esto indica que la competencia y la eficiencia operativa tienden a “empujar” a las empresas hacia un rendimiento **razonable y sostenido**, mientras que los casos de fracaso o de éxito excepcional son **minoría**.
 
 Por otro lado, el **análisis gráfico** suele dar una idea atractiva e intuitiva de la estructura de la distribución de frecuencias de nuestro conjunto de casos en relación con la variable a analizar.
 
@@ -416,7 +416,7 @@ ggplot(data = muestra_so, map = aes(x = RENECO)) +
 g2
 ```
 
-La curva naranja muestra cómo se distribuye la **rentabilidad económica**: tiene forma de “campana”, con la **mayoría de empresas** concentradas alrededor del **50–60%**. La línea vertical azul marca el **valor central** (media), en torno al **52%**. Comparada con la curva azul de referencia (la **normal**), la distribución real es **muy parecida**, aunque algo **más ancha** y con un **ligero peso extra en rentabilidades algo por debajo del centro**; en el extremo alto hay menos casos de lo que predeciría una campana perfecta. En términos económicos: el sector muestra un rendimiento **bastante estable** y similar entre compañías, con **pocas** muy rezagadas o extraordinariamente rentables.
+La curva naranja muestra cómo se distribuye la **rentabilidad económica**: tiene forma de “campana”, con la mayoría de empresas concentradas alrededor del 50–60%. La línea vertical azul marca el valor central (media), en torno al 52%. Comparada con la curva azul de referencia (la normal), la distribución real es muy parecida, aunque algo más ancha y con un ligero peso extra en rentabilidades algo por debajo del centro; en el extremo alto hay menos casos de lo que predeciría una campana perfecta. En términos económicos: el sector muestra un rendimiento **bastante estable** y similar entre compañías, con **pocas** muy rezagadas o extraordinariamente rentables.
 
 Un tercer gráfico útil es el ***box-plot*** una vez se eliminaron los casos *outliers*, con la incorporación de los valores que toman los casos que componen la muestra, para lo cuál se utiliza el `geom_jitter`:
 
@@ -507,15 +507,15 @@ estadisticos %>%
 
 La interpretación de estas medidas fueron comentadas en el capítulo 4. En general, puede decirse que:
 
--   La **rentabilidad típica** del sector está en torno al **51–52%** (media ≈ 51,6% y mediana ≈ 50,4%), lo que indica un **nivel medio-alto** y sin sesgos fuertes.
+-   La rentabilidad típica del sector está en torno al 51–52% (media ≈ 51,6% y mediana ≈ 50,4%), lo que indica un nivel medio-alto y sin sesgos fuertes.
 
--   La **variabilidad** es **moderada** (desv. típica ≈ **10 p.p.**): la mayoría de empresas se mueve, grosso modo, entre **\~42% y \~62%**. Es un sector relativamente **estable**.
+-   La variabilidad es moderada (desv. típica ≈ 10 p.p.): la mayoría de empresas se mueve, grosso modo, entre \~42% y \~62%. Es un sector relativamente estable.
 
--   La **asimetría** ligeramente **positiva** (**0,14**) sugiere que hay **algunas** compañías con rentabilidades **algo superiores** a lo habitual, pero no dominan el panorama.
+-   La asimetría ligeramente positiva (0,14) sugiere que hay algunas compañías con rentabilidades algo superiores a lo habitual, pero no dominan el panorama.
 
--   La **curtosis** **negativa** (**−0,19**, platicúrtica) implica una distribución **más “plana” que la normal**: **menos extremos** (tanto muy altos como muy bajos) y también algo menos de concentración en el centro. Económicamente: hay **diversidad razonable** de resultados, pero **pocos casos extremos** de fracaso o de éxito extraordinario.
+-   La curtosis negativa (−0,19, platicúrtica) implica una distribución más “plana” que la normal: menos extremos (tanto muy altos como muy bajos) y también algo menos de concentración en el centro. Económicamente: hay diversidad razonable de resultados, pero pocos casos extremos de fracaso o de éxito extraordinario.
 
--   Los **extremos observados** (≈ **28%** mínimo y ≈ **80%** máximo) existen, pero son **minoría**.
+-   Los extremos observados (≈ 28% mínimo y ≈ 80% máximo) existen, pero son minoría.
 
 -   **Conclusión:** el negocio de transporte interestelar muestra una **rentabilidad sostenida y relativamente homogénea**; hay diferencias entre empresas (gestión, escala, rutas, mix tecnológico), pero el **riesgo de resultados extremos** parece **contenido**, y los “superéxitos” son poco frecuentes.
 
@@ -659,13 +659,13 @@ muestra2 <- muestra2 %>%
 
 El *data frame* "muestra2" contiene los mismos datos que "interestelar_100", salvo los 3 casos con *missing values* que han sido eliminados (101): "Vega Transport", "Photon Pack Freight" y "Poe Dameron Cargo".
 
-Para la **detección de *outliers***, si las variables que entran en el análisis son numerosas, podría ser poco operativo estudiar las variables una a una. Una alternativa consiste en calcular la ***distancia de Mahalanobis*** de las variables del estudio, como **"resumen" del comportamiento de cada caso** en todas las variables del análisis, consideradas conjuntamente. En concreto, se puede considerar como una suerte de “**z-score multivariante**”: mide **cuántas desviaciones típicas** se aleja una observación del “centro” del conjunto, **teniendo en cuenta todas las variables a la vez y cómo se relacionan entre sí**.
+Para la **detección de *outliers***, si las variables que entran en el análisis son numerosas, podría ser poco operativo estudiar las variables una a una. Una alternativa consiste en calcular la ***distancia de Mahalanobis*** de las variables del estudio, como **"resumen" del comportamiento de cada caso** en todas las variables del análisis, consideradas conjuntamente. En concreto, se puede considerar como una suerte de “z-score multivariante”: mide cuántas desviaciones típicas se aleja una observación del “centro” del conjunto, teniendo en cuenta todas las variables a la vez y cómo se relacionan entre sí.
 
 Su utilización, intuitivamente, se puede justificar de este modo:
 
 -   Con una sola variable, el “raro” es el que está a muchos **z-scores** de la media.
 
--   Con **varias variables** (p. ej., rentabilidad, activo, margen, resultado), el “centro” es el **vector de medias** y la **forma de la nube** viene dada por la **covarianza** (las variables pueden estar en escalas distintas y estar correlacionadas).
+-   Con varias variables (p. ej., rentabilidad, activo, margen, resultado), el “centro” es el vector de medias y la forma de la nube viene dada por la covarianza (las variables pueden estar en escalas distintas y estar correlacionadas).
 
 -   La *distancia de Mahalanobis:*
 
@@ -782,20 +782,20 @@ La interpretación detallada del código es la siguiente:
 
 -   **`ggpairs(temporal)`**: crea una cuadrícula con una fila/columna por variable del data frame `temporal`.
 
-    -   **Triángulo inferior (`lower`)**: lo personalizamos para que muestre **números de correlación**.
+    -   **Triángulo inferior (`lower`)**: lo personalizamos para que muestre números de correlación.
 
 -   **`lower = list(continuous = wrap("cor", ...))`**\
     En las celdas del triángulo inferior, cuando ambas variables son numéricas (“continuous”):
 
     -   **`"cor"`**: escribe el **coeficiente de correlación** entre esas dos variables.
 
-    -   **`method = "pearson"`**: usa la correlación de **Pearson** (relación **lineal**).
+    -   **`method = "pearson"`**: usa la correlación de *Pearson* (relación lineal).
 
     -   **`size = 4.5`**: tamaño del número que aparece.
 
-    -   **`stars = TRUE`**: añade **asteriscos de significación** estadística junto al número. Habitual: `*` p \< 0.05, `**` p \< 0.01, `***` p \< 0.001 (más asteriscos ⇒ relación menos probable por azar).
+    -   **`stars = TRUE`**: añade asteriscos de significación estadística junto al número. Habitual: `*` p \< 0.05, `**` p \< 0.01, `***` p \< 0.001 (más asteriscos ⇒ relación menos probable por azar).
 
--   **`title = "Matriz de Correlación sin outliers"`**: título del conjunto. (Has calculado la matriz tras quitar outliers, para que éstos no distorsionen las correlaciones.)
+-   **`title = "Matriz de Correlación sin outliers"`**: título del conjunto.
 
 -   **Asignación `corr_plot_so <- ...`**: guarda la figura en el objeto `corr_plot_so`. Para verla, basta con escribir `corr_plot_so` en la consola.
 
