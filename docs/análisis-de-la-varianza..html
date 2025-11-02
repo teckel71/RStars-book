@@ -165,7 +165,7 @@
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/visdat/">visdat</a></span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss</a></span><span class="op">(</span><span class="va">datos</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-268-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-347-1.png" width="672"></div>
 <div class="sourceCode" id="cb307"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">datos</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">DIMENSION</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>            <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">RENECO</span>, <span class="va">DIMENSION</span><span class="op">)</span></span></code></pre></div>
@@ -187,7 +187,7 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"RENTABILIDAD ECONÓMICA"</span>,</span>
 <span>          subtitle <span class="op">=</span> <span class="st">"100 empresas eólicas"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Rentabilidad Económica (%)"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-269-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-348-1.png" width="672"></div>
 <p>En el gráfico de caja se aprecia claramente que existe un <em>outlier</em>. Para identificar tal empresa, calcularemos, respecto a la variable RENECO, el primer y tercer cuartiles, que nos servirán para construir el filtro que capturará el caso atípico. Así, en el código, las dos primeras filas calculan los cuartiles primero (Q1) y tercero (Q3) mediante la función <code><a href="https://rdrr.io/r/stats/quantile.html">quantile()</a></code>. Luego se filtran, mediante la función <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>, los <em>outliers</em>, calculadoscomo aquellos casos con valores de RENECO mayores que Q3 más 1,5 veces el <em>rango intercuartílico</em> de la variable; o menores que Q1 menos 1,5 veces dicho rango intercuartílico. Para calcular el rango intercuartílico se recurre a la función <code><a href="https://rdrr.io/r/stats/IQR.html">IQR()</a></code>. Finalmente, con <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> se muestran los casos en la consola de RStudio:</p>
 <div class="sourceCode" id="cb311"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">Q1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">muestra</span><span class="op">$</span><span class="va">RENECO</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
@@ -228,7 +228,7 @@
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">tablamedias</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-273">Table 8.1: </span><span id="tab:unnamed-chunk-273">Table 8.2: </span>Rentabilidad Económica. Medias por grupos (tamaño matriz).
+<span id="tab:unnamed-chunk-352">Table 8.1: </span><span id="tab:unnamed-chunk-352">Table 8.2: </span>Rentabilidad Económica. Medias por grupos (tamaño matriz).
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -316,7 +316,7 @@ PEQUEÑA
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="va">gdensidad</span> <span class="op">/</span> <span class="va">gbox</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-274-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-353-1.png" width="672"></div>
 <p>Cada grupo o submuestra “representa” a una subpoblación, según la dimensión que tenga la matriz empresarial. El ANOVA lo que intenta determinar es si, observadas las diferencias en las medias muestrales de la variable en estudio (aquí, RENECO), esas diferencias pueden considerarse o no estadísticamente significativas a nivel poblacional. En realidad, la hipótesis nula a contrastar es que ninguna de las diferencias entre las medias de la variable de las subpoblacionales es estadísticamente significativa; mientras que la hipótesis alternativa es que existe al menos una diferencia significativa entre las medias de las subpoblaciones. En definitiva, la <strong>hipótesis nula</strong> a contrastar sugiere <strong>que no existen diferencias entre las rentabilidades económicas medias de los grupos</strong> (subpoblaciones) de empresas eólicas (discriminadas por el tamaño del grupo empresarial al que pertenecen). De ser así, el factor DIMENSION no tendría una influencia estadísticamente significativa sobre el valor medio de la variable RENECO.</p>
 <p>Las conclusiones a las que lleguemos con el <em>contraste F de ANOVA</em> serán válidas en la medida en que se cumplan las <strong>hipótesis de normalidad y homogeneidad en las varianzas</strong> de la variable dependiente o métrica (RENECO), en los tres grupos o subpoblaciones en que queda dividida la población atendiendo los niveles o categorías del factor (DIMENSION). Hemos de contrastar, pues, ambas hipótesis, a partir de la información de las tres submuestras que tenemos y que representan, respectivamente, a cada una de esas subpoblaciones.</p>
 <p>En cuanto a la hipótesis de <strong>normalidad</strong>, se pueden usar dos vías para verificar su cumplimiento: el análisis gráfico y la realización de contrastes estadísticos.</p>
@@ -333,7 +333,7 @@ PEQUEÑA
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"RENTABILIDAD ECONÓMICA: QQ-PLOT"</span>,</span>
 <span>            subtitle <span class="op">=</span> <span class="st">"Empresas eólicas"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="va">.</span> <span class="op">~</span> <span class="va">DIMENSION</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-275-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-354-1.png" width="672"></div>
 <p>Los <em>gráficos QQ</em> parecen inidicar que la variable RENECO tiene un comportamiento distante a la Ley Normal en las submuestras (y, por tanto, en las correspondientes subpoblaciones), al localizarse, algunos de los puntos, relativamente alejados de la diagonal, especialmente en el caso de las empresas pertenecientes a matrices de dimensión “grande”. Para extraer una conclusión de un modo más preciso, vamos a realizar el contraste de normalidad de <em>Shapiro-Wilk</em>:</p>
 <div class="sourceCode" id="cb317"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="co"># Normalidad: Shapiro-Wilk para cada grupo</span></span>
@@ -359,7 +359,7 @@ PEQUEÑA
 <p>En el código anterior, se crea un pequeño <em>data frame</em> denominado “normalidad”, que incluye, para cada submuestra definida por los niveles del factor DIMENSION, la variable “decide” con los <em>p-valores</em> de la prueba de <em>Shapiro-Wilk</em>, y un atributo llamado “decide”, creado mediante la función <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>, que adopta la categoría “NORMALIDAD” o “NO-NORMALIDAD” dependiendo de los p-valores. Posteriormente, el data frame “normalidad” se presenta como una tabla de nombre “tablashapiro”.</p>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-277">Table 8.3: </span><span id="tab:unnamed-chunk-277">Table 8.4: </span>Normalidad (Shapiro-Wilks).
+<span id="tab:unnamed-chunk-356">Table 8.3: </span><span id="tab:unnamed-chunk-356">Table 8.4: </span>Normalidad (Shapiro-Wilks).
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -448,7 +448,7 @@ NORMALIDAD
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">aov_table</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-280">Table 8.5: </span><span id="tab:unnamed-chunk-280">Table 8.6: </span>Resultados del ANOVA
+<span id="tab:unnamed-chunk-359">Table 8.5: </span><span id="tab:unnamed-chunk-359">Table 8.6: </span>Resultados del ANOVA
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -543,7 +543,7 @@ NA
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">pares_df</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-282">Table 8.7: </span><span id="tab:unnamed-chunk-282">Table 8.8: </span>Resultados comparaciones múltiples
+<span id="tab:unnamed-chunk-361">Table 8.7: </span><span id="tab:unnamed-chunk-361">Table 8.8: </span>Resultados comparaciones múltiples
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -676,7 +676,7 @@ MEDIA - PEQUEÑA
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">Datos.kmc.df</span><span class="op">)</span>, bold <span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-285">Table 8.9: </span><span id="tab:unnamed-chunk-285">Table 8.10: </span>Kruskal-Wallis. Múltiples diferencias
+<span id="tab:unnamed-chunk-364">Table 8.9: </span><span id="tab:unnamed-chunk-364">Table 8.10: </span>Kruskal-Wallis. Múltiples diferencias
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
