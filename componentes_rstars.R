@@ -8,6 +8,7 @@ library(readxl)
 library(dplyr)
 library(ggplot2)
 library(gtExtras)
+library(visdat)
 library (GGally)
 library (knitr)
 library (kableExtra)
@@ -252,6 +253,59 @@ scores_all_top10 %>%
                 font_size = 12) %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:(nrow(scores_all_top10)),
+           bold= F,
+           align = "c") %>%
+  column_spec(1, bold = TRUE,
+              extra_css = "text-align: left;")
+
+# --- Obtención de componentes (ROBPCA de Hubert) --------------------------
+# "seleccion" debe ser un data.frame/matriz numérica (obs x vars)
+library(rrcov)
+
+componentes3 <- PcaHubert(
+  x        = seleccion,
+  k        = ncol(seleccion),        # 0 => deja que el método elija nº de comp.
+  scale    = TRUE,     # estandariza como en prcomp(scale=TRUE)
+  mcd      = TRUE,     # fase inicial robusta
+)
+
+summary(componentes3)
+
+# --- Cargas de cada componente ---
+cargas3 <- as.data.frame(unclass(componentes3@loadings))
+cargas3    # Atención! Las cargas de CP1 son negativas: el ranking debe ascender
+
+# --- Puntuaciones (Scores) ---
+# Si quieres la 1ª componente (equivalente a componentes2$x[,1]):
+scores3 <- as.numeric(componentes3@scores[, 1])
+# (Si quieres todas: scores3_all <- as.data.frame(componentes3@scores))
+
+scores3_df <- data.frame(scores3 = scores3) %>%
+  cbind(seleccion)
+
+# --- Top-10 por la 1ª componente (orden descendente, como en tu código original) ---
+scores3_top10 <- scores3_df %>%
+  arrange(scores3_df) %>%      # orden ascendente porque las cargas de PC1 son negativas (mejor empresa => menor puntuación)
+  slice(1:10)
+
+scores3_top10 %>%
+  kable(caption = "Puntuaciones emporesas TMI (Top-10, Hubert)",
+        col.names = c("Empresa",
+                      "Puntuación",
+                      "I. Diversif.",
+                      "I. Fidelizac.",
+                      "I. Digitalizac."),
+        digits = c(3, 3, 3, 3),
+        format.args = list(decimal.mark = ".",
+                           scientific = FALSE)) %>%
+  kable_styling(full_width = F,
+                bootstrap_options = "striped",
+                "bordered",
+                "condensed",
+                position = "center",
+                font_size = 12) %>%
+  row_spec(0, bold= T, align = "c") %>%
+  row_spec(1:(nrow(scores3_top10)),
            bold= F,
            align = "c") %>%
   column_spec(1, bold = TRUE,

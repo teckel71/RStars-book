@@ -146,7 +146,7 @@ g2 <-
                alpha = 0.7) +
   geom_vline(xintercept = mean(muestra_so$RENECO),
              color = "dark blue",
-             size = 0.8,
+             linewidth = 0.8,
              alpha = 0.8) +
   stat_function(fun = dnorm, args = list(mean = mean(muestra_so$RENECO),
                                          sd = sd(muestra_so$RENECO)),

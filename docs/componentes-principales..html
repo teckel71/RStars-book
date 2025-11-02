@@ -130,7 +130,7 @@
 <h2>
 <span class="header-section-number">6.3</span> <img src="figuras/star.svg" class="hicon"> La elección de <em>Arg-Us Korp</em>.<a class="anchor" aria-label="anchor" href="#la-elecci%C3%B3n-de-arg-us-korp."><i class="fas fa-link"></i></a>
 </h2>
-<p>Vamos a considerar el caso del sector del “Transporte Interestelar”. Tenemos una selección de 104 empresas o compañías. El “magnate” de los negocios a escala interplanetaria, <em>Arg-us</em> <em>Korp</em> en la imagen), está de compras: quiere adquirir una de las empresas que mejor proyección a futuro en el sector, tenga.</p>
+<p>Vamos a considerar el caso del sector del “Transporte Interestelar”. Tenemos una selección de 104 empresas o compañías. El “magnate” de los negocios a escala interplanetaria, <em>Arg-us</em> <em>Korp</em> en la imagen), está de compras: quiere adquirir una de las empresas que mejor proyección a futuro en el sector tenga.</p>
 <div class="float">
 <img src="figuras/Arg-Us%20Korp.jpg" class="d-block mx-auto" width="500" alt="Arg-Us Korp."><div class="figcaption"><span class="smallcaps">Arg-Us Korp.</span></div>
 </div>
@@ -192,8 +192,8 @@
 </li>
 </ol>
 <p>Estos indicadores reflejan la capacidad de innovación, estabilidad financiera, expansión de mercado y eficiencia operativa de las empresas, factores esenciales para su sostenibilidad en el tiempo y preparación para los desafíos futuros.</p>
-<p>De entre ellas, <em>Korp</em> ha seleccionado <strong>IDIVERSE</strong>, <strong>IFIDE</strong> e <strong>IDIG</strong> como aspectos que le importan especialmente. Aún así, su equipo sabe que su jefe quiere una respuesta precisa. Un nombre de una empresa.</p>
-<p>Así, el equipo ha pensado en crear un ranking de compañías basándose en estos tres indicadores. Pero, si tienen 3 variables, ¿cómo combinar su análisis para obtener un solo ranking de modo objetivo? ¿Cómo ponderar las tres variables?</p>
+<p>De entre ellas, <em>Korp</em> ha seleccionado <strong>IDIVERSE</strong>, <strong>IFIDE</strong> e <strong>IDIG</strong> como aspectos que le importan especialmente. Aun así, su equipo sabe que su jefe quiere una respuesta precisa. Un nombre de una empresa.</p>
+<p>Así, el equipo ha pensado en crear un <em>ranking</em> de compañías basándose en estos tres indicadores. Pero, si tienen 3 variables, ¿cómo combinar su análisis para obtener un solo <em>ranking</em> de modo objetivo? ¿Cómo ponderar las tres variables?</p>
 <p>La respuesta ha venido al comprobar que las tres variables guardan entre sí unas correlaciones relativamente altas (en valor absoluto). Es decir: aportan una información bastante parecida sobre cada una de las empresas de la selección. Esto es importante porque, si en gran medida comparten información “redundante”, pueden ser, seguramente, “resumidas” en un solo indicador, cuyo valor o puntuación para cada caso (empresa) podría servir para establecer el ranking de compañías candidatas a ser adquiridas.</p>
 <p>El método para obtener este indicador a partir de las tres variables originales se llama <strong><em>Análisis de Componentes Principales</em></strong> <strong>(PCA)</strong>, y puede ser fácilmente desarrollado con unas líneas de código de R. Ese indicador, que es la clave de toda la estrategia, será la primera “componente” del PCA, una combinación lineal de las tres variables originales; siempre y cuando su poder para “retener” la información global ofrecida por esas tres variables sea lo suficientemente alto.</p>
 </div>
@@ -207,7 +207,7 @@
 <li><p>El archivo de Microsoft® Excel® llamado “interestelar_100.xlsx”. Si abrimos este último archivo, comprobaremos que se compone de tres hojas. La primera muestra un mensaje sobre el uso de los datos, la segunda recoge la descripción de las variables consideradas, y la tercera (hoja “Datos”) almacena los datos que debemos importar. Estos datos se corresponden con diferentes variables económicas y financieras de 104 empresas dedicadas a los servicios de transporte interestelar de mercancías.</p></li>
 </ul>
 <p>Comenzaremos a ejecutar el código usual en cualquier <em>script</em>, esto es, limpiar el <em>Global Environment</em>, cargar los paquetes necesarios, importar los datos del archivo de Excel®, y tratar los casos con datos faltantes o <em>missing values</em>, y los casos que, para las variables estudiadas, se comportan como <em>ouliers</em>. En cuanto a los primeros pasos, tenemos:</p>
-<div class="sourceCode" id="cb213"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb211"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### Análisis de Componentes Principales ###</span></span>
 <span></span>
 <span><span class="co"># Limpiando el Global Environment</span></span>
@@ -237,24 +237,24 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">IDIVERSE</span>, <span class="va">IFIDE</span>, <span class="va">IDIG</span><span class="op">)</span></span>
 <span><span class="va">seleccion_df_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary</a></span><span class="op">(</span><span class="va">seleccion</span><span class="op">)</span></span>
 <span><span class="va">seleccion_df_graph</span></span></code></pre></div>
-<div id="ijtrmnqnfh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="zffttymikn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#ijtrmnqnfh table {
+#zffttymikn table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ijtrmnqnfh thead, #ijtrmnqnfh tbody, #ijtrmnqnfh tfoot, #ijtrmnqnfh tr, #ijtrmnqnfh td, #ijtrmnqnfh th {
+#zffttymikn thead, #zffttymikn tbody, #zffttymikn tfoot, #zffttymikn tr, #zffttymikn td, #zffttymikn th {
   border-style: none;
 }
 
-#ijtrmnqnfh p {
+#zffttymikn p {
   margin: 0;
   padding: 0;
 }
 
-#ijtrmnqnfh .gt_table {
+#zffttymikn .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -280,12 +280,12 @@
   border-left-color: #D3D3D3;
 }
 
-#ijtrmnqnfh .gt_caption {
+#zffttymikn .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ijtrmnqnfh .gt_title {
+#zffttymikn .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -297,7 +297,7 @@
   border-bottom-width: 0;
 }
 
-#ijtrmnqnfh .gt_subtitle {
+#zffttymikn .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -309,7 +309,7 @@
   border-top-width: 0;
 }
 
-#ijtrmnqnfh .gt_heading {
+#zffttymikn .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -321,13 +321,13 @@
   border-right-color: #D3D3D3;
 }
 
-#ijtrmnqnfh .gt_bottom_border {
+#zffttymikn .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 0px;
   border-bottom-color: #D3D3D3;
 }
 
-#ijtrmnqnfh .gt_col_headings {
+#zffttymikn .gt_col_headings {
   border-top-style: solid;
   border-top-width: 0px;
   border-top-color: #D3D3D3;
@@ -342,7 +342,7 @@
   border-right-color: #D3D3D3;
 }
 
-#ijtrmnqnfh .gt_col_heading {
+#zffttymikn .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -362,7 +362,7 @@
   overflow-x: hidden;
 }
 
-#ijtrmnqnfh .gt_column_spanner_outer {
+#zffttymikn .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -374,15 +374,15 @@
   padding-right: 4px;
 }
 
-#ijtrmnqnfh .gt_column_spanner_outer:first-child {
+#zffttymikn .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ijtrmnqnfh .gt_column_spanner_outer:last-child {
+#zffttymikn .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ijtrmnqnfh .gt_column_spanner {
+#zffttymikn .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -394,11 +394,11 @@
   width: 100%;
 }
 
-#ijtrmnqnfh .gt_spanner_row {
+#zffttymikn .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ijtrmnqnfh .gt_group_heading {
+#zffttymikn .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -424,7 +424,7 @@
   text-align: left;
 }
 
-#ijtrmnqnfh .gt_empty_group_heading {
+#zffttymikn .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -439,15 +439,15 @@
   vertical-align: middle;
 }
 
-#ijtrmnqnfh .gt_from_md > :first-child {
+#zffttymikn .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ijtrmnqnfh .gt_from_md > :last-child {
+#zffttymikn .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ijtrmnqnfh .gt_row {
+#zffttymikn .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -466,7 +466,7 @@
   overflow-x: hidden;
 }
 
-#ijtrmnqnfh .gt_stub {
+#zffttymikn .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -479,7 +479,7 @@
   padding-right: 5px;
 }
 
-#ijtrmnqnfh .gt_stub_row_group {
+#zffttymikn .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -493,15 +493,15 @@
   vertical-align: top;
 }
 
-#ijtrmnqnfh .gt_row_group_first td {
+#zffttymikn .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ijtrmnqnfh .gt_row_group_first th {
+#zffttymikn .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ijtrmnqnfh .gt_summary_row {
+#zffttymikn .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -511,16 +511,16 @@
   padding-right: 5px;
 }
 
-#ijtrmnqnfh .gt_first_summary_row {
+#zffttymikn .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ijtrmnqnfh .gt_first_summary_row.thick {
+#zffttymikn .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ijtrmnqnfh .gt_last_summary_row {
+#zffttymikn .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -530,7 +530,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#ijtrmnqnfh .gt_grand_summary_row {
+#zffttymikn .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -540,7 +540,7 @@
   padding-right: 5px;
 }
 
-#ijtrmnqnfh .gt_first_grand_summary_row {
+#zffttymikn .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -550,7 +550,7 @@
   border-top-color: #D3D3D3;
 }
 
-#ijtrmnqnfh .gt_last_grand_summary_row_top {
+#zffttymikn .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -560,11 +560,11 @@
   border-bottom-color: #D3D3D3;
 }
 
-#ijtrmnqnfh .gt_striped {
+#zffttymikn .gt_striped {
   background-color: #FAFAFA;
 }
 
-#ijtrmnqnfh .gt_table_body {
+#zffttymikn .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -573,7 +573,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#ijtrmnqnfh .gt_footnotes {
+#zffttymikn .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -587,7 +587,7 @@
   border-right-color: #D3D3D3;
 }
 
-#ijtrmnqnfh .gt_footnote {
+#zffttymikn .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -596,7 +596,7 @@
   padding-right: 5px;
 }
 
-#ijtrmnqnfh .gt_sourcenotes {
+#zffttymikn .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -610,7 +610,7 @@
   border-right-color: #D3D3D3;
 }
 
-#ijtrmnqnfh .gt_sourcenote {
+#zffttymikn .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -618,72 +618,72 @@
   padding-right: 5px;
 }
 
-#ijtrmnqnfh .gt_left {
+#zffttymikn .gt_left {
   text-align: left;
 }
 
-#ijtrmnqnfh .gt_center {
+#zffttymikn .gt_center {
   text-align: center;
 }
 
-#ijtrmnqnfh .gt_right {
+#zffttymikn .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ijtrmnqnfh .gt_font_normal {
+#zffttymikn .gt_font_normal {
   font-weight: normal;
 }
 
-#ijtrmnqnfh .gt_font_bold {
+#zffttymikn .gt_font_bold {
   font-weight: bold;
 }
 
-#ijtrmnqnfh .gt_font_italic {
+#zffttymikn .gt_font_italic {
   font-style: italic;
 }
 
-#ijtrmnqnfh .gt_super {
+#zffttymikn .gt_super {
   font-size: 65%;
 }
 
-#ijtrmnqnfh .gt_footnote_marks {
+#zffttymikn .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ijtrmnqnfh .gt_asterisk {
+#zffttymikn .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ijtrmnqnfh .gt_indent_1 {
+#zffttymikn .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ijtrmnqnfh .gt_indent_2 {
+#zffttymikn .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ijtrmnqnfh .gt_indent_3 {
+#zffttymikn .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ijtrmnqnfh .gt_indent_4 {
+#zffttymikn .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ijtrmnqnfh .gt_indent_5 {
+#zffttymikn .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ijtrmnqnfh .katex-display {
+#zffttymikn .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ijtrmnqnfh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#zffttymikn div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -743,8 +743,8 @@
 </table></div>
 </div>
 <p>Básicamente, en el código anterior se han almacenado los datos de la hoja de cálculo en el <em>data frame</em> “interestelar_100”. Luego, se ha creado un nuevo <em>data frame</em> más reducido con las únicas variables del análisis que vamos a realizar (IDIVERSE, IFIDE e IDIG), al que hemos llamado “seleccion”. Estas tres variables han sido exploradas a traves de una tabla gráfica a partir de la función <code><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary()</a></code> del paquete <a href="https://github.com/jthomasmock/gtExtras">gtExtras</a>.</p>
-<p>El siguiente paso será localizar los posibles <strong><em>missing values</em></strong>, ya que para obtener componentes principales es necesario que todos los casos posean dato para todas las variables del análisis. Para tener una idea general, se puede utilizar la función <code><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss()</a></code> del paquete <a href="https://docs.ropensci.org/visdat/">visdat</a>, que localizará gráficamente los <em>missing values</em> de las diferentes variables, y calculará el porcentaje de casos que supone, con respecto al total de observaciones:</p>
-<div class="sourceCode" id="cb214"><pre class="downlit sourceCode r">
+<p>El siguiente consistirá en localizar los posibles <strong><em>missing values</em></strong>, ya que para obtener componentes principales es necesario que todos los casos posean dato en todas las variables del análisis. Para tener una idea general, se puede utilizar la función <code><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss()</a></code> del paquete <a href="https://docs.ropensci.org/visdat/">visdat</a>, que localizará gráficamente los <em>missing values</em> de las diferentes variables, y calculará el porcentaje de casos que supone, con respecto al total de observaciones:</p>
+<div class="sourceCode" id="cb212"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Localizando missing values.</span></span>
 <span><span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -759,7 +759,7 @@
 <span>    plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-181-1.png" width="672"></div>
 <p>Del gráfico anterior se desprende que existen 2 <em>missing values</em> repartidos en 2 de las 3 variables del estudio. Para localizarlos, podemos filtrar nuestro <em>data frame</em> con las herramientas de <a href="https://dplyr.tidyverse.org">dplyr</a>:</p>
-<div class="sourceCode" id="cb215"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb213"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">IDIVERSE</span><span class="op">)</span> <span class="op">|</span></span>
 <span>                     <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">IFIDE</span><span class="op">)</span> <span class="op">|</span></span>
 <span>                     <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">IDIG</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -768,31 +768,37 @@
 ## ezra bridger haulage       NA 34.11209 29.06697
 ## alderaan freight     35.96067       NA 19.10291</code></pre>
 <p>Los casos con datos faltantes son las empresas <em>Ezra Bridger Haulage</em> y <em>Alderaan Freight</em>.</p>
-<p>Ante la existencia de <em>missing values</em>, se puede actuar de varios modos. Por ejemplo, <strong>se puede intentar obtener por otro canal de información el conjunto de valores</strong> que no están disponibles, <strong>o recurrir a alguna estimación</strong>. En caso de que esto sea difícil, se puede optar, simplemente, por <strong>eliminar</strong> estos casos, en especial cuando representan un porcentaje muy reducido respecto al total de casos. En nuestro ejemplo, supondremos que hemos optado por esta última vía, y eliminaremos estos casos con el código:</p>
-<div class="sourceCode" id="cb217"><pre class="downlit sourceCode r">
+<p>Ante la existencia de <em>missing values</em>, se puede actuar de varios modos. Por ejemplo, <strong>se puede intentar obtener el conjunto de valores que no están disponibles por otro canal de información,</strong> o recurrir <strong>a alguna estimación</strong>. En caso de que esto sea difícil, se puede optar, simplemente, por <strong>eliminar</strong> estos casos, en especial cuando representan un porcentaje muy reducido respecto al total de observaciones. En nuestro ejemplo, supondremos que hemos optado por esta última vía, y eliminaremos estos casos con el código:</p>
+<div class="sourceCode" id="cb215"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>             <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">IDIVERSE</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>                    <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">IFIDE</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>                    <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">IDIG</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Verificamos en el <em>Global Environment</em> que el <em>data frame</em> “seleccion” ha pasado a tener 102 casos.</p>
-<p>Por otro lado, la técnica de componentes principales <strong>es muy sensible a la existencia de <em>outliers</em></strong>. En consecuencia, deberán ser identificados y, en su caso, eliminados. Para realizar este proceso, y dado que en nuestro análisis contamos con 4 variables, primero “resumiremos” el valor que toman dichas variables para cada observación (empresa), mediante el cálculo de la <em>distancia de Mahalanobis</em>. De hecho, las distancias de los diferentes casos se almacenarán en una nueva columna o variable de nuestro <em>data frame,</em> a la que llamaremos MAHALANOBIS:</p>
-<div class="sourceCode" id="cb218"><pre class="downlit sourceCode r">
+<p>Por otro lado, la técnica de componentes principales <strong>es muy sensible a la existencia de <em>outliers</em></strong>. En concreto, las observaciones atípicas pueden afectar a los resultados a través de tres vías:</p>
+<ul>
+<li><p><strong>Distorsión de las componentes principales:</strong> pueden influir en la dirección de las componentes principales, haciendo que estas se ajusten más a los valores atípicos que a la mayoría de los datos. Esto puede llevar a una interpretación incorrecta de las relaciones entre las variables.</p></li>
+<li><p><strong>Afectación a las cargas de las variables:</strong> estas cargas son relevantes porque indican la importancia relativa de cada variable original en la formación de la componente, es decir, cuánto contribuye o se correlaciona una variable específica con una componente principal.</p></li>
+<li><p><strong>Modificación de la varianza explicada:</strong> pueden <em>inflar</em> la varianza total de los datos, lo que puede afectar a la proporción de varianza explicada por cada componente principal. Esto puede ocasionar una selección incorrecta del número de componentes a retener.</p></li>
+</ul>
+<p>En consecuencia, deberán ser identificados y, en su caso, eliminados. Para realizar este proceso, y dado que en nuestro análisis contamos con 4 variables, primero “resumiremos” el valor que toman dichas variables para cada observación (empresa), mediante el cálculo de la <em>distancia de Mahalanobis</em>. De hecho, las distancias de los diferentes casos se almacenarán en una nueva columna o variable de nuestro <em>data frame,</em> a la que llamaremos MAHALANOBIS:</p>
+<div class="sourceCode" id="cb216"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Identificando y descartando outliers con distancia de Mahalanobis.</span></span>
 <span><span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>MAHALANOBIS <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/mahalanobis.html">mahalanobis</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>,</span>
 <span>                                   center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>,</span>
 <span>                                   cov    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Dentro de los argumentos de la función <code>mahalanobis</code> incluida en la función <code>mutate</code> hay unos puntos entre paréntesis. Recordemos que estos puntos deben ser añadidos cuando una función no es la primera del operador “<em>pipe</em>” (<code>%&gt;%</code>), para indicar que las variables de los paréntesis hacen referencia al <em>data frame</em> “seleccion” (o, en general, el objeto que fluye a través del “<em>pipe</em>”).</p>
+<p>Dentro de los argumentos de la función <code><a href="https://rdrr.io/r/stats/mahalanobis.html">mahalanobis()</a></code> incluida en la función <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> hay unos puntos entre paréntesis. Recordemos que estos puntos deben ser añadidos cuando una función no es la primera del operador “<em>pipe</em>” (<code>%&gt;%</code>), para indicar que las variables de los paréntesis hacen referencia al <em>data frame</em> “seleccion” (o, en general, el objeto que fluye a través del “<em>pipe</em>”).</p>
 <p>A continuación, hemos construido un <em>box-plot</em> o diagrama de caja de la variable MAHALANOBIS, como si fuera cualquier otra variable, a partir de la función <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> del paquete <a href="https://ggplot2.tidyverse.org">ggplot2</a>:</p>
-<div class="sourceCode" id="cb219"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb217"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">seleccion</span>, map <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">MAHALANOBIS</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"DISTANCIA DE MAHALANOBIS"</span>,</span>
 <span>          subtitle <span class="op">=</span> <span class="st">"IDIVERSE, IFIDE, IDIG. Empresas TMI."</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"MAHALANOBIS"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-185-1.png" width="672"></div>
-<p>En el gráfico se observa que existen, por encima de la caja, varios <em>outliers</em>. Para identificarlos de modo concreto, hemos de calcular los cuartiles primero y tercero de la variable MAHALANOBIS y pasar el correspondiente filtro:</p>
-<div class="sourceCode" id="cb220"><pre class="downlit sourceCode r">
+<p>En el gráfico se aprecia que existen, por encima de la caja, varios <em>outliers</em>. Para identificarlos de modo concreto, hemos de calcular los cuartiles primero y tercero de la variable MAHALANOBIS y pasar el correspondiente filtro:</p>
+<div class="sourceCode" id="cb218"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Q1M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">seleccion</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">Q3M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">seleccion</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.75</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -814,8 +820,8 @@
 ## home one cargo                20.784784 22.1760155 46.77635 60.8325142
 ## arrakis freight               34.687429 38.8813669 73.30230 58.5101128
 ## kobol cargo systems            5.449331  0.7736944 39.46283  0.6007237</code></pre>
-<p>Son 13 las compañías que se comportan como outliers, considerando conjuntamente las tres variables (a través de la distancia de Mahalanobis). La eliminación de estos casos puede realizarse fácilmente con el código:</p>
-<div class="sourceCode" id="cb222"><pre class="downlit sourceCode r">
+<p>Las compañías que se comportan como <em>outliers</em>, considerando conjuntamente las tres variables (a través de la distancia de Mahalanobis), son 13. La eliminación de estos casos puede realizarse fácilmente con el código:</p>
+<div class="sourceCode" id="cb220"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Creando nuevo df sin outliers.</span></span>
 <span><span class="va">seleccion_so</span> <span class="op">&lt;-</span> <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span> <span class="op">&lt;=</span> <span class="va">Q3M</span> <span class="op">+</span> <span class="fl">1.5</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html">IQR</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span><span class="op">)</span> <span class="op">&amp;</span></span>
@@ -824,14 +830,14 @@
 <span><span class="co"># Eliminando variable MAHALANOBIS de los df</span></span>
 <span><span class="va">seleccion</span>    <span class="op">&lt;-</span> <span class="va">seleccion</span>    <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">MAHALANOBIS</span><span class="op">)</span></span>
 <span><span class="va">seleccion_so</span> <span class="op">&lt;-</span> <span class="va">seleccion_so</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">MAHALANOBIS</span><span class="op">)</span></span></code></pre></div>
-<p>Se ha creado un nuevo <em>data frame</em> llamado seleccion_so” con los casos (89) que <strong>no</strong> son <em>outliers</em> (y que no contienen <em>missing values</em>), y se ha eliminado la variable MAHALANOBIS, puesto que su única utilidad era la de localizar y filtrar los <em>outliers</em>. Con este <em>data frame</em> “seleccion_so” es con el que se procederá al cálculo de las componentes.</p>
+<p>Se ha creado un nuevo <em>data frame</em> llamado “seleccion_so” con los casos (89) que <strong>no</strong> son <em>outliers</em> (y que no contienen <em>missing values</em>), y se ha eliminado la variable MAHALANOBIS, puesto que su única utilidad era la de localizar y filtrar los <em>outliers</em>. Con este <em>data frame</em> “seleccion_so” es con el que se procederá al cálculo de las componentes.</p>
 </div>
 <div id="cálculo-de-componentes." class="section level2" number="6.5">
 <h2>
 <span class="header-section-number">6.5</span> <img src="figuras/pie-chart.svg" class="hicon"> Cálculo de componentes.<a class="anchor" aria-label="anchor" href="#c%C3%A1lculo-de-componentes."><i class="fas fa-link"></i></a>
 </h2>
-<p>La <strong>condición previa</strong> para el <strong>cálculo de componentes</strong> es que las variables originales del análisis contengan información redundante, es decir, que en buena medida aporten una “misma información” sobre los casos (empresas). Esto se verifica con la existencia de altas correlaciones entre las variables (al menos, entre algunas de ellas). Por tanto, hemos de calcular la matriz de correlaciones correspondiente. Un modo gráfico visualmente efectivo es utilizar las posibilidades que nos ofrece el paquete <a href="https://ggobi.github.io/ggally/">GGally</a> mediante la función <code><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs()</a></code>:</p>
-<div class="sourceCode" id="cb223"><pre class="downlit sourceCode r">
+<p>La <strong>condición previa</strong> para el <strong>cálculo de componentes</strong> es que las variables originales del análisis contengan información redundante, es decir, que en buena medida tengan una capacidad para diferenciar a los casos (empresas) parecida. Esto se verifica con la existencia de <strong>altas correlaciones</strong>, en valor absoluto, entre ellas (al menos, entre <em>algunas</em>). Por tanto, hemos de calcular la matriz de correlaciones correspondiente. Un modo gráfico visualmente efectivo es utilizar las posibilidades que nos ofrece el paquete <a href="https://ggobi.github.io/ggally/">GGally</a>, mediante la función <code><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs()</a></code>:</p>
+<div class="sourceCode" id="cb221"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Correlaciones.</span></span>
 <span><span class="va">corr_plot_so</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs</a></span><span class="op">(</span><span class="va">seleccion_so</span>, </span>
 <span>                        lower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>continuous <span class="op">=</span> <span class="fu"><a href="https://ggobi.github.io/ggally/reference/wrap.html">wrap</a></span><span class="op">(</span><span class="st">"cor"</span>,</span>
@@ -843,7 +849,7 @@
 <div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-188-1.png" width="672"></div>
 <p>Puede apreciarse cómo existen altas correlaciones (en valor absoluto) entre todas las variables. Por tanto, tiene sentido hacer un análisis de componentes principales, ya que hay variables que parecen <strong>compartir información</strong>.</p>
 <p>La obtención de las componentes se va a realizar mediante la función <code><a href="https://rdrr.io/r/stats/prcomp.html">prcomp()</a></code> del paquete <code>{stats}</code>, que es un paquete cargado por defecto al abrir R. Es conveniente que activemos el argumento <code>scale =</code> con “T” (<em>true</em>) para que las variables originales sean consideradas en sus <strong>versiones tipificadas</strong>. Vamos a asignar los resultados a un objeto de nombre, por ejemplo, “componentes”. Por último, guardaremos el <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> o resumen de los resultados con un nombre provisional, por ejemplo, “temporal”. El código es el siguiente:</p>
-<div class="sourceCode" id="cb224"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb222"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Obtencion de componentes.</span></span>
 <span><span class="va">componentes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html">prcomp</a></span> <span class="op">(</span><span class="va">seleccion_so</span>, scale<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
 <span><span class="va">temporal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span> <span class="op">(</span><span class="va">componentes</span><span class="op">)</span></span>
@@ -854,9 +860,9 @@
 ## Proportion of Variance 0.7119 0.1757 0.1124
 ## Cumulative Proportion  0.7119 0.8876 1.0000</code></pre>
 <p>La “<em>Standard deviation</em>” es la raíz cuadrada de los autovalores asociados a cada componente. “<em>Proportion of Variance</em>” nos dice la proporción de la suma de varianzas de las variables originales (<em>comunalidad</em>) recogida por cada componente, proporción que se acumula en “<em>Cumulative Proportion</em>”. Nótese que las componentes aparecen ordenadas de más a menos importantes en función de la cantidad de varianza que capturan.</p>
-<p>En este caso, de la tabla anterior podemos destacar que la primera componente recoge más del 71% de la varianza (<em>comunalidad</em>) o información puesta en juego globalmente por las tres variables originales. Las dos primeras componentes, en conjunto, aglutinan casi el 89% de la información de las tres variables ofrecen sobre el comportamiento de las empresas. Entre las tres componentes, lógicamente se recoge el 100% de la <em>comunalidad</em> o varianza global.</p>
-<p>Si el elemento “importance” del <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> o resumen “temporal” lo convertimos en un <em>data frame</em>, por ejemplo “summary_df”, podremos presentar los resultados por medio de una tabla estéticamente más atractiva, a partir de la función <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code> del paquete <a href="https://yihui.org/knitr/">knitr</a>, y las funciones complementarias del paquete <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>:</p>
-<div class="sourceCode" id="cb226"><pre class="downlit sourceCode r">
+<p>En este caso, a partir de la tabla anterior podemos destacar que la primera componente recoge más del 71% de la varianza (<em>comunalidad</em>) o información puesta en juego globalmente por las tres variables originales. Las dos primeras componentes, en conjunto, aglutinan casi el 89% de la información de las tres variables ofrecen sobre el comportamiento de las empresas. Entre las tres componentes, lógicamente se recoge el 100% de la <em>comunalidad</em> o varianza global.</p>
+<p>Si el elemento “<em>importance</em>” del <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> o resumen “temporal” lo convertimos en un <em>data frame</em>, por ejemplo “summary_df”, podremos presentar los resultados por medio de una tabla estéticamente más atractiva, a partir de la función <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code> del paquete <a href="https://yihui.org/knitr/">knitr</a>, y las funciones complementarias del paquete <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>:</p>
+<div class="sourceCode" id="cb224"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Convertir el resumen en un data frame</span></span>
 <span><span class="va">summary_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">temporal</span><span class="op">$</span><span class="va">importance</span><span class="op">)</span></span>
 <span><span class="va">summary_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">summary_df</span><span class="op">)</span>  <span class="co"># Transponer para mejor visualización</span></span>
@@ -940,8 +946,8 @@ PC3
 </tr>
 </tbody>
 </table></div>
-<p>Los coeficientes o <strong>cargas</strong> de cada componente se obtienen pidiendo a nuestro objeto “componentes” el elemento “rotation”. Estas cargas las vamos a guardar en un nuevo objeto que llamaremos, por ejemplo, “cargas”, que presentaremos mediante una pequeña tabla diseñada con la función <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code> del paquete <a href="https://yihui.org/knitr/">knitr</a> y otras funciones del paquete <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>:</p>
-<div class="sourceCode" id="cb227"><pre class="downlit sourceCode r">
+<p>Los coeficientes o <strong>cargas</strong> de cada componente se obtienen pidiendo a nuestro objeto “<em>componentes</em>” el elemento “<em>rotation</em>”. Estas cargas las vamos a guardar en un nuevo objeto que llamaremos, por ejemplo, “cargas”, que presentaremos mediante una pequeña tabla diseñada con la función <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code> del paquete <a href="https://yihui.org/knitr/">knitr</a> y otras funciones del paquete <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>:</p>
+<div class="sourceCode" id="cb225"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Cargas de cada componente.</span></span>
 <span><span class="va">cargas</span> <span class="op">&lt;-</span> <span class="va">componentes</span><span class="op">$</span><span class="va">rotation</span></span>
 <span><span class="va">cargas</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -1019,17 +1025,18 @@ IDIG
 <p>En la tabla, se muestran las cargas (<em>loads</em>), que son los coeficientes que intervienen en las combinaciones lineales que definen cada componente, a partir de las variables originales (tipificadas). Por tanto, con base en las cargas se pueden explicitar las ecuaciones correspondientes a cada componente. Por ejemplo, para la primera componente, la ecuación será:</p>
 <p><span class="math display">\[
 \text{CP}_{i1} = 0.6006 \cdot \text{IDIVERSE}_{i1} + 0.5442 \cdot \text{IFIDE}_{i1} + 0.5858 \cdot \text{IDIG}_{i1}
-\]</span> Puede apreciarse que, en cuanto a la primera componente, que es la que especialmente nos interesa como “indicador” de la “preparación de las diferentes compañías de transporte para afrontar el futuro” en el caso de las empresas de transporte interestelar de mercancías, las 3 cargas tienen signo positivo, lo que implica que, cuanto mayores sean los valores de una empresa en las variables <strong>IDIVERSE</strong> (índice de diversificación), <strong>IFIDE</strong> (índice de fidelidad) e <strong>IDIG</strong> (índice de digitalización), mayor será el valor del indicador y, por tanto, su preparación. Además, como las variables fueron tipificadas, los valores de las cargas son comparables. De este modo, vemos cómo, dentro de la primera componente, que es la que adoptamos como indicador, la mayor importancia la tiene <strong>IDIVERSE</strong>, seguido de <strong>IDIG</strong> y, por último, <strong>IFIDE</strong>.</p>
+\]</span></p>
+<p>Puede observarse que, en cuanto a la primera componente, que es la que especialmente nos interesa como <em>indicador</em> de la “preparación de las diferentes compañías de transporte para afrontar el futuro”, las 3 cargas tienen signo positivo, lo que implica que, cuanto mayores sean los valores de una empresa en las variables <strong>IDIVERSE</strong> (<em>índice de diversificación</em>), <strong>IFIDE</strong> (<em>índice de fidelidad</em>) e <strong>IDIG</strong> (<em>índice de digitalización</em>), mayor será el valor del indicador y, por tanto, su preparación. Además, como las variables fueron tipificadas, los valores de las cargas son comparables. De este modo, vemos cómo, dentro de la primera componente, que es la que adoptamos como indicador, la mayor importancia la tiene <strong>IDIVERSE</strong>, seguido de <strong>IDIG</strong> y, por último, <strong>IFIDE</strong>.</p>
 </div>
 <div id="retención-de-componentes." class="section level2" number="6.6">
 <h2>
 <span class="header-section-number">6.6</span> <img src="figuras/pie-chart.svg" class="hicon"> Retención de componentes.<a class="anchor" aria-label="anchor" href="#retenci%C3%B3n-de-componentes."><i class="fas fa-link"></i></a>
 </h2>
-<p>La etapa de retención de componentes consiste en decidir cuántas de las componentes generadas (recordemos que, en un principio, se calculan tantas componentes como variable originales) consideramos que resumen de un modo aceptable la información contenida en las variables originales. Estas <strong>componentes “retenidas” se convertirán en las componentes principales</strong>.</p>
-<p>La primera componente siempre es retenida y, por tanto, es una “componente principal”. El resto, que van capturando proporciones cada vez menores de la varianza común de las variables originales (<em>comunalidad</em>), podrán o no retenerse; aunque, siempre, la retención de una componente implica que se han retenido todas las anteriores. En este caso práctico, buscamos un único indicador de la “preparación de las diferentes compañías de transporte para afrontar el futuro”, por lo que solo vamos a “retener” la primera componente. En otras aplicaciones, podría ser necesario retener todas las componentes que sean adecuadas para recoger la suficiente comunalidad.</p>
-<p>Hay varios procedimientos o criterios para tomar la decisión de cuántas componentes retener. Uno de ellos, comúnmente aplicado, es el de <strong>retener aquellas componentes cuyo autovalor es mayor que 1</strong> (suponiendo que se ha trabajado con las variables en sus versiones tipificadas). Los autovalores son el cuadrado de los elementos “Desviación típica” (valores “Standard deviation” (sdev) del objeto “componentes” que hemos generado a partir de la función <code><a href="https://rdrr.io/r/stats/prcomp.html">prcomp()</a></code>).</p>
+<p>La etapa de retención de componentes consiste en decidir cuántas de las componentes generadas (recordemos que, en un principio, se calculan tantas componentes como variables originales) consideramos que resumen de un modo aceptable la información contenida en las variables originales. Estas <strong>componentes “retenidas” se convertirán en las componentes principales</strong>.</p>
+<p>La primera componente siempre es retenida y, por tanto, es una “componente principal”. El resto, que van capturando proporciones cada vez menores de la varianza común de las variables originales (<em>comunalidad</em>), podrán o no retenerse; aunque, siempre, la retención de una componente implica que se han retenido todas las anteriores. En este caso práctico, buscamos un único indicador de la “preparación de las diferentes compañías de transporte para afrontar el futuro”, por lo que solo vamos a “retener” la primera componente. En otras aplicaciones, podría ser necesario retener varias para recoger la suficiente comunalidad.</p>
+<p>Hay varios procedimientos o criterios para decidir cuántas componentes retener. Uno de ellos, comúnmente aplicado, es el de <strong>retener aquellas componentes cuyo autovalor es mayor que 1</strong> (suponiendo que se ha trabajado con las variables en sus versiones tipificadas). Los autovalores son el cuadrado de los elementos “Desviación típica” (valores “<em>Standard deviation</em>” (sdev) del objeto “componentes” que hemos generado a partir de la función <code><a href="https://rdrr.io/r/stats/prcomp.html">prcomp()</a></code>).</p>
 <p>Hemos creado un <em>data frame</em> con estos autovalores calculados (y su orden de importancia, al que hemos llamado variable o columna “orden”, y que es un vector de números enteros consecutivos que va desde uno hasta número de variables originales o de componentes) y los hemos dispuesto en un gráfico de barras:</p>
-<div class="sourceCode" id="cb228"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb226"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Determinacion Componentes a retener.</span></span>
 <span><span class="co"># Criterio del Autovalor mayor que 1.</span></span>
 <span><span class="va">orden</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">seleccion_so</span><span class="op">)</span><span class="op">)</span></span>
@@ -1056,17 +1063,17 @@ IDIG
 <span></span>
 <span><span class="va">autograph</span></span></code></pre></div>
 <div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-194-1.png" width="672"></div>
-<p>Respecto al gráfico, conviene recordar que, al ser un de barras, si no se quieren representar las frecuencias sino los valores que toma una variable (en este caso, “autovalor”) para cada valor de la otra variable (en este caso, “orden”); en el <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar()</a></code> habrá que añadir el argumento <code>stat =</code> con el valor “identity”. Además, se utiliza el elemento <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous()</a></code> para pesonalizar la escala del eje x, y que se divida dicho eje en tantos tramos como componentes hay.</p>
-<p>En el gráfico obtenido se advierte que Las componentes cuyas barras atraviesan esta línea son las que deberían ser retenidas, ya que son el menor número de componentes que resumen de modo suficiente la información ofrecida sobre el comportamiento de los casos por las variables originales. En este caso, basta con retener solo la primera componente (por lo tanto, solo contamos con una <strong>componente principal</strong>). Este es un resultado favorable cara a nuestro propósito, ya que nos dice que podemos usar como indicador solo una componente, la primera. y con ella resumiremos suficientemente a las tres variables originales. Por tanto, es un buen indicador, en ese sentido.</p>
+<p>Respecto al gráfico, conviene recordar que, al ser de barras, si no se quieren representar las frecuencias sino los valores que toma una variable (en este caso, “autovalor”) para cada valor de la otra variable (en este caso, “orden”); en el <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar()</a></code> habrá que añadir el argumento <code>stat =</code> con el valor “identity”. Además, se utiliza el elemento <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous()</a></code> para pesonalizar la escala del eje x, y que se divida dicho eje en tantos tramos como componentes hay.</p>
+<p>En el gráfico obtenido, las componentes cuyas barras atraviesan la línea que pasa por el valor “1” son las que deberían ser retenidas, ya que son las componentes que resumen de modo suficiente la información ofrecida sobre el comportamiento de los casos por las variables originales. En este caso, basta con retener solo la primera componente (por lo tanto, solo contamos con una <strong>componente principal</strong>). Este es un resultado favorable cara a nuestro propósito, ya que nos indica que podemos usar como indicador solo una componente, la primera, y con ella resumiremos suficientemente las tres variables originales. Por tanto, es un buen indicador, en ese sentido.</p>
 <p>Un gráfico complementario útil es el que muestra, para cada componente, el porcentaje de varianza total (comunalidad) acumulada al ir reteniendo las sucesivas componentes, un resultado que ya se obtuvo anteriormente en forma de tabla:</p>
-<div class="sourceCode" id="cb229"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb227"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Comunalidad acumulada.</span></span>
 <span><span class="va">autovalores</span> <span class="op">&lt;-</span> <span class="va">autovalores</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>variacum <span class="op">=</span> <span class="fl">100</span><span class="op">*</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="op">(</span><span class="va">autovalor</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">autovalores</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">checkcp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">autovalores</span><span class="op">$</span><span class="va">autovalor</span> <span class="op">&gt;=</span> <span class="fl">1</span>, <span class="st">"CP"</span>, <span class="st">"NCP"</span><span class="op">)</span></span>
 <span><span class="va">checkcp</span></span></code></pre></div>
 <pre><code>## [1] "CP"  "NCP" "NCP"</code></pre>
-<div class="sourceCode" id="cb231"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb229"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vacumgraph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">autovalores</span>, map <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">orden</span>,</span>
 <span>                                                    y <span class="op">=</span> <span class="va">variacum</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>              <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span>,</span>
@@ -1087,7 +1094,7 @@ IDIG
 <p>Para obtener el gráfico anterior, se comienza añadiendo al <em>data frame</em> “autovalores” una columna o variable que es la <em>suma acumulada del porcentaje de comunalidad</em> recogido por las sucesivas componentes, que están ordenadas de mayor a menor autovalor. Para calcular el porcentaje, se usa la función <code><a href="https://rdrr.io/r/base/cumsum.html">cumsum()</a></code>, y se tiene en cuenta que, como las variables fueron tipificadas para calcular las componentes, la <em>comunalidad</em>, que coincide con la suma de las varianzas de las componentes (autovalores), es igual al número de variables o componentes (valor que toma la función <code><a href="https://rdrr.io/r/base/nrow.html">nrow()</a></code>).</p>
 <p>Después, se ha creado un vector que contiene tantos elementos como variables o componentes hay en el análisis (vector “checkcp”). Con la función condicional <code><a href="https://rdrr.io/r/base/ifelse.html">ifelse()</a></code> se consigue que los elementos de “checkcp” sean “CP” o “NCP” según los correspondientes autovalores sean mayores o no que 1. Finalmente, según sea el valor de cada elemento de “checkcp”, las barras del gráfico se colorearán de uno u otro modo.</p>
 <p>Posteriormente, mediante el paquete <a href="https://patchwork.data-imaginist.com">patchwork</a>, se han unido los dos gráficos creados en esta fase, poniendo uno debajo del otro:</p>
-<div class="sourceCode" id="cb232"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb230"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">combinado</span> <span class="op">&lt;-</span> <span class="va">autograph</span> <span class="op">/</span> <span class="va">vacumgraph</span></span>
 <span><span class="va">combinado</span> <span class="op">&lt;-</span> <span class="va">combinado</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html">plot_annotation</a></span><span class="op">(</span></span>
@@ -1105,14 +1112,14 @@ IDIG
 <span>      <span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">combinado</span></span></code></pre></div>
 <div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-196-1.png" width="672"></div>
-<p>Un a vez confirmado el hecho de que la primera componente es suficiente para contar con un buen indicador de “preparación de las diferentes compañías de transporte para afrontar el futuro”, considerando los aspectos de digitalización, diversificación, y fidelización de clientes, pasaremos a estudiar qué casos concretos ofrecen mejores (mayores) valores en el indicador, para lo cual hemos de calcular sus puntuaciones.</p>
+<p>Un a vez confirmado el hecho de que la primera componente es suficiente para contar con un buen indicador de “preparación de las diferentes compañías de transporte para afrontar el futuro”, considerando los aspectos de <em>digitalización</em>, <em>diversificación</em> y <em>fidelización</em> de clientes, pasaremos a estudiar qué casos concretos ofrecen mejores (mayores) valores en el indicador, para lo cual hemos de calcular sus puntuaciones.</p>
 </div>
 <div id="puntuaciones-de-los-casos-scores." class="section level2" number="6.7">
 <h2>
 <span class="header-section-number">6.7</span> <img src="figuras/pie-chart.svg" class="hicon"> Puntuaciones de los casos (scores).<a class="anchor" aria-label="anchor" href="#puntuaciones-de-los-casos-scores."><i class="fas fa-link"></i></a>
 </h2>
 <p>Para obtener las puntuaciones de cada caso (empresa) en el indicador de “preparación de las diferentes compañías de transporte para afrontar el futuro” (y que es nuestra componente principal, que a su vez coincide con la primera componente), simplemente debemos tener en cuenta que tales puntuaciones están guardadas en la matriz “x” del objeto <code><a href="https://rdrr.io/r/stats/prcomp.html">prcomp()</a></code> creado. Vamos a renombrar a las primera columna (componente) de esta matriz como “scores” y vamos a recolocar las filas (empresas) de mayor a menor valor de la puntuación (lo que se consigue mediante la función <code><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange()</a></code> del paquete <a href="https://dplyr.tidyverse.org">dplyr</a>. Finalmente, mostraremos en una tabla el <em>ranking</em> de las 10 mejores empresas (según sus puntuaciones en el indicador), “cortando” el <em>data frame</em> con la función <code><a href="https://dplyr.tidyverse.org/reference/slice.html">slice()</a></code>:</p>
-<div class="sourceCode" id="cb233"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb231"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Puntuaciones o Scores</span></span>
 <span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="va">componentes</span><span class="op">$</span><span class="va">x</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>  <span class="co">#tantas columnas como componentes retenidas</span></span>
 <span><span class="va">scores_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span></span>
@@ -1339,8 +1346,8 @@ dagobah freightlines
 </table></div>
 <p>De la tabla y gráfico anteriores podemos concluir que las empresas más preparadas para afrontar el futuro, según nuestro indicador (primera componente del análisis PCA) son, por este orden, <em>Shuttlepod Movers</em>, <em>Kamino Movers</em> e <em>Ícarus Star Transport</em>.</p>
 <p>¿Seguro?</p>
-<p>Este <em>ranking</em> se ha elaborado a partir de las compañías que formaron la muestra para realizar el análisis de componentes principales. Estas empresas eran aquellas que tenían dato en las tres variables originales, y que habían sido calificadas de <em>outliers</em>. Los <em>outliers</em> se apartaron de la muestra para evitar distorsiones y sesgos en el análisis. Pero una cuestión que podríamos plantearnos es si, una vez calculadas las combinaciones lineales que son las componentes sin su influencia, podrían ser ahora, en virtud de esas componentes calculadas, puntuadas. Que una compañía se comporte como <em>outlier</em> en una o varias de las variables originales, y no se cuente con ella a la hora de calcular las componentes; no quiere decir necesariamente que no sea una buena candidata a ser la elegida para ser adquirida por su preparación para afrontar el futuro (incluso podría concluirse que en algún aspecto está “especialmente preparada”).</p>
-<div class="sourceCode" id="cb234"><pre class="downlit sourceCode r">
+<p>Este <em>ranking</em> se ha elaborado a partir de las compañías que formaron la muestra para realizar el análisis de componentes principales. Estas empresas eran aquellas que tenían dato en las tres variables originales y que <strong>no habían sido calificadas como <em>outliers</em></strong>. Los <em>outliers</em> se apartaron de la muestra para evitar distorsiones y sesgos en el análisis. Pero una cuestión que podríamos plantearnos es si, una vez calculadas las combinaciones lineales que son las <em>componentes</em> sin su influencia, podrían ser ahora, en virtud de esas componentes calculadas, puntuadas. Que una compañía se comporte como <em>outlier</em> en una o varias de las variables originales, y no se cuente con ella a la hora de calcular las componentes; no quiere decir necesariamente que no sea una buena candidata a ser la elegida para ser adquirida por su preparación para afrontar el futuro (incluso podría concluirse que en algún aspecto está “especialmente preparada”).</p>
+<div class="sourceCode" id="cb232"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Scores puntuando outliers</span></span>
 <span><span class="va">scores_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">componentes</span>, newdata <span class="op">=</span> <span class="va">seleccion</span><span class="op">)</span></span>
 <span><span class="va">scores_all</span> <span class="op">&lt;-</span> <span class="va">scores_all</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span></span>
@@ -1566,20 +1573,493 @@ sith transport corp.
 </tr>
 </tbody>
 </table></div>
-<p>Vemos como el <em>ranking</em> cambia radicalmente, y pasa a estar encabezado por las compañías <strong><em>Arrakis Freight</em></strong>, <strong><em>Chakotay Cargo Systems</em></strong> e <strong><em>Hyperdrive Express</em></strong>. Si un análisis particularizado de estas empresas por parte del equipo encargado del estudio da como resultado que sus datos son correctos, serían, seguramente, las candidatas para ser adquiridas por el magnate Arg-Us Korp.</p>
+<p>Vemos como el <em>ranking</em> cambia radicalmente, y pasa a estar encabezado por las compañías <strong><em>Arrakis Freight</em></strong>, <strong><em>Chakotay Cargo Systems</em></strong> e <strong><em>Hyperdrive Express</em></strong>. Si un análisis particularizado de estas empresas por parte del equipo encargado del estudio da como resultado que sus datos son correctos, serían, seguramente, las candidatas para ser adquiridas por el magnate <em>Arg-Us Korp</em>.</p>
 </div>
-<div id="materiales-para-realizar-las-prácticas-del-capítulo.-4" class="section level2" number="6.8">
+<div id="puntuaciones-de-los-casos-scores.-1" class="section level2" number="6.8">
 <h2>
-<span class="header-section-number">6.8</span> <img src="figuras/arrow-down-circle.svg" class="hicon"> Materiales para realizar las prácticas del capítulo.<a class="anchor" aria-label="anchor" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-4"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.8</span> <img src="figuras/paperclip.svg" class="hicon"> Puntuaciones de los casos (scores).<a class="anchor" aria-label="anchor" href="#puntuaciones-de-los-casos-scores.-1"><i class="fas fa-link"></i></a>
+</h2>
+<p>Cabe hacerse una pregunta antes de cerrar esta historia. ¿Qué hubiera ocurrido si se hubieran calculado las componentes sin eliminar los <em>outliers</em> previamente? ¿Hubieran cambiado los resultados? ¿era tan relevante el efecto de estos casos sobre los resultados, como comentamos al comienzo del tema, en la parte teórica?</p>
+<p>En R, el código es fácil de adaptar: basta con sustituir el <em>data frame</em> “seleccion_so” por el <em>data frame</em> “seleccion”, desde el apartado del cálculo de componentes hasta la formación del primer <em>ranking</em> basado en las puntuaciones de las compañías en la primera componente.</p>
+<p>El <em>ranking</em> obtenido de este modo es el siguiente:</p>
+<div class="inline-table"><table class="table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-201">Table 6.9: </span><span id="tab:unnamed-chunk-201">Table 6.10: </span>Puntuaciones emporesas TMI (Top-10, outliers en cálculo)
+</caption>
+<thead><tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Empresa
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Puntuación
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+I. Diversif.
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+I. Fidelizac.
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+I. Digitalizac.
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+arrakis freight
+</td>
+<td style="text-align:right;text-align: center;">
+5.999
+</td>
+<td style="text-align:right;text-align: center;">
+38.881
+</td>
+<td style="text-align:right;text-align: center;">
+73.302
+</td>
+<td style="text-align:right;text-align: center;">
+58.510
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+chakotay cargo systems
+</td>
+<td style="text-align:right;text-align: center;">
+4.962
+</td>
+<td style="text-align:right;text-align: center;">
+54.368
+</td>
+<td style="text-align:right;text-align: center;">
+64.260
+</td>
+<td style="text-align:right;text-align: center;">
+42.720
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+hyperdrive express
+</td>
+<td style="text-align:right;text-align: center;">
+4.044
+</td>
+<td style="text-align:right;text-align: center;">
+35.790
+</td>
+<td style="text-align:right;text-align: center;">
+68.148
+</td>
+<td style="text-align:right;text-align: center;">
+33.662
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+home one cargo
+</td>
+<td style="text-align:right;text-align: center;">
+2.930
+</td>
+<td style="text-align:right;text-align: center;">
+22.176
+</td>
+<td style="text-align:right;text-align: center;">
+46.776
+</td>
+<td style="text-align:right;text-align: center;">
+60.833
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+andromeda cargo
+</td>
+<td style="text-align:right;text-align: center;">
+2.892
+</td>
+<td style="text-align:right;text-align: center;">
+46.054
+</td>
+<td style="text-align:right;text-align: center;">
+44.989
+</td>
+<td style="text-align:right;text-align: center;">
+44.342
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+shuttlepod movers
+</td>
+<td style="text-align:right;text-align: center;">
+1.606
+</td>
+<td style="text-align:right;text-align: center;">
+40.677
+</td>
+<td style="text-align:right;text-align: center;">
+43.071
+</td>
+<td style="text-align:right;text-align: center;">
+28.098
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+mirror universe cargo
+</td>
+<td style="text-align:right;text-align: center;">
+1.526
+</td>
+<td style="text-align:right;text-align: center;">
+43.021
+</td>
+<td style="text-align:right;text-align: center;">
+41.104
+</td>
+<td style="text-align:right;text-align: center;">
+28.170
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+icarus star transport
+</td>
+<td style="text-align:right;text-align: center;">
+1.491
+</td>
+<td style="text-align:right;text-align: center;">
+35.055
+</td>
+<td style="text-align:right;text-align: center;">
+41.709
+</td>
+<td style="text-align:right;text-align: center;">
+32.762
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+adama transport
+</td>
+<td style="text-align:right;text-align: center;">
+1.431
+</td>
+<td style="text-align:right;text-align: center;">
+42.547
+</td>
+<td style="text-align:right;text-align: center;">
+40.666
+</td>
+<td style="text-align:right;text-align: center;">
+27.549
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+kamino movers
+</td>
+<td style="text-align:right;text-align: center;">
+1.391
+</td>
+<td style="text-align:right;text-align: center;">
+26.602
+</td>
+<td style="text-align:right;text-align: center;">
+44.526
+</td>
+<td style="text-align:right;text-align: center;">
+32.715
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Como puede repararse, los cambios, en este caso, no parecen ser relevantes. Solo a partir de la séptima posición se registran cambios en el orden de las empresas.</p>
+<p>No obstante, hay una tercera vía para proceder al análisis de componentes principales que nos libera de la necesidad de tener que decidir si es conveniente incluir en el cálculo los <em>outliers</em> o no: la utilización de <strong>técnicas robustas</strong>.</p>
+</div>
+<div id="utilización-de-técnicas-robustas-método-de-hubert." class="section level2" number="6.9">
+<h2>
+<span class="header-section-number">6.9</span> <img src="figuras/paperclip.svg" class="hicon"> Utilización de técnicas robustas: método de Hubert.<a class="anchor" aria-label="anchor" href="#utilizaci%C3%B3n-de-t%C3%A9cnicas-robustas-m%C3%A9todo-de-hubert."><i class="fas fa-link"></i></a>
+</h2>
+<p>La presencia de <em>outliers</em>, según comentamos, puede distorsionar los resultados del análisis. Esto se debe, en esencia, a los efectos que estos elementos tienen en el cálculo de <em>la matriz de varianzas-covarianzas de las variables originales</em>, básica en el cálculo de componentes. Este efecto se manifiesta, por ejemplo, en un incremento <em>artificial</em> de las varianzas, debido a la mayor dispersión inducida por los <em>outliers</em>.</p>
+<p>En la literatura se han desarrollado métodos de cálculo de esta matriz de varianzas-covarianzas que minimizan este efecto distorsionador de los <em>outliers</em>. Son los <strong>métodos robustos</strong>. Este es el caso de la variante del análisis de componentes principales de <strong><em>Hubert</em></strong>, que emplea estimadores robustos de la matriz de varianzas y covarianzas tales como <em>MCD</em> o <em>S-estimators</em>.</p>
+<p>El siguiente código permite obtener las componentes por <em>Hubert</em>, y realizar el ranking de empresas de acuerdo a las puntuaciones de la primera componente. Hay que tener en cuenta que, en esta ocasión, las cargas de la primera componente son negativas, luego las mejores compañías en términos de diversificación de operaciones, fidelización de clientes y digitalización serán aquellas que presenten <strong>menores</strong> puntuaciones:</p>
+<div class="sourceCode" id="cb233"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># --- Obtención de componentes (ROBPCA de Hubert) ---</span></span>
+<span><span class="co"># "seleccion" debe ser un data.frame/matriz numérica (obs x vars)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/valentint/rrcov">rrcov</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">componentes3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rrcov/man/PcaHubert.html">PcaHubert</a></span><span class="op">(</span></span>
+<span>  x        <span class="op">=</span> <span class="va">seleccion</span>,</span>
+<span>  k        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">seleccion</span><span class="op">)</span>,        <span class="co"># 0 =&gt; deja que el método elija nº de comp.</span></span>
+<span>  scale    <span class="op">=</span> <span class="cn">TRUE</span>,     <span class="co"># estandariza como en prcomp(scale=TRUE)</span></span>
+<span>  mcd      <span class="op">=</span> <span class="cn">TRUE</span>,     <span class="co"># fase inicial robusta</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">componentes3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># --- Cargas de cada componente ---</span></span>
+<span><span class="va">cargas3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/class.html">unclass</a></span><span class="op">(</span><span class="va">componentes3</span><span class="op">@</span><span class="va">loadings</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">cargas3</span>    <span class="co"># Atención! Las cargas de CP1 son negativas: el ranking debe ascender</span></span>
+<span></span>
+<span><span class="co"># --- Puntuaciones (Scores) ---</span></span>
+<span><span class="co"># Si quieres la 1ª componente (equivalente a componentes2$x[,1]):</span></span>
+<span><span class="va">scores3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">componentes3</span><span class="op">@</span><span class="va">scores</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co"># (Si quieres todas: scores3_all &lt;- as.data.frame(componentes3@scores))</span></span>
+<span></span>
+<span><span class="va">scores3_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>scores3 <span class="op">=</span> <span class="va">scores3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">seleccion</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># --- Top-10 por la 1ª componente (orden descendente, como en tu código original) ---</span></span>
+<span><span class="va">scores3_top10</span> <span class="op">&lt;-</span> <span class="va">scores3_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">scores3_df</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>      <span class="co"># orden ascendente porque las cargas de PC1 son negativas (mejor empresa =&gt; menor puntuación)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">scores3_top10</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Puntuaciones emporesas TMI (Top-10, Hubert)"</span>,</span>
+<span>        col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Empresa"</span>,</span>
+<span>                      <span class="st">"Puntuación"</span>,</span>
+<span>                      <span class="st">"I. Diversif."</span>,</span>
+<span>                      <span class="st">"I. Fidelizac."</span>,</span>
+<span>                      <span class="st">"I. Digitalizac."</span><span class="op">)</span>,</span>
+<span>        digits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>        format.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>decimal.mark <span class="op">=</span> <span class="st">"."</span>,</span>
+<span>                           scientific <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                bootstrap_options <span class="op">=</span> <span class="st">"striped"</span>,</span>
+<span>                <span class="st">"bordered"</span>,</span>
+<span>                <span class="st">"condensed"</span>,</span>
+<span>                position <span class="op">=</span> <span class="st">"center"</span>,</span>
+<span>                font_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">0</span>, bold<span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">scores3_top10</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>           bold<span class="op">=</span> <span class="cn">F</span>,</span>
+<span>           align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/column_spec.html">column_spec</a></span><span class="op">(</span><span class="fl">1</span>, bold <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>              extra_css <span class="op">=</span> <span class="st">"text-align: left;"</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## 
+## Call:
+## PcaHubert(x = seleccion, k = ncol(seleccion), mcd = TRUE, scale = TRUE)
+## Importance of components:
+##                           PC1     PC2    PC3
+## Standard deviation     1.2003 0.30914 0.2684
+## Proportion of Variance 0.8958 0.05942 0.0448
+## Cumulative Proportion  0.8958 0.95520 1.0000</code></pre>
+<pre><code>##                 PC1         PC2        PC3
+## IDIVERSE -0.7929785  0.07582335 -0.6045129
+## IFIDE    -0.2189863  0.89044224  0.3989456
+## IDIG     -0.5685332 -0.44873537  0.6894973</code></pre>
+<div class="inline-table"><table class="table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-203">Table 6.11: </span><span id="tab:unnamed-chunk-203">Table 6.12: </span>Puntuaciones emporesas TMI (Top-10, Hubert)
+</caption>
+<thead><tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+Empresa
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Puntuación
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+I. Diversif.
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+I. Fidelizac.
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+I. Digitalizac.
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+arrakis freight
+</td>
+<td style="text-align:right;text-align: center;">
+-4.443
+</td>
+<td style="text-align:right;text-align: center;">
+38.881
+</td>
+<td style="text-align:right;text-align: center;">
+73.302
+</td>
+<td style="text-align:right;text-align: center;">
+58.510
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+chakotay cargo systems
+</td>
+<td style="text-align:right;text-align: center;">
+-4.235
+</td>
+<td style="text-align:right;text-align: center;">
+54.368
+</td>
+<td style="text-align:right;text-align: center;">
+64.260
+</td>
+<td style="text-align:right;text-align: center;">
+42.720
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+andromeda cargo
+</td>
+<td style="text-align:right;text-align: center;">
+-3.134
+</td>
+<td style="text-align:right;text-align: center;">
+46.054
+</td>
+<td style="text-align:right;text-align: center;">
+44.989
+</td>
+<td style="text-align:right;text-align: center;">
+44.342
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+hyperdrive express
+</td>
+<td style="text-align:right;text-align: center;">
+-2.787
+</td>
+<td style="text-align:right;text-align: center;">
+35.790
+</td>
+<td style="text-align:right;text-align: center;">
+68.148
+</td>
+<td style="text-align:right;text-align: center;">
+33.662
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+home one cargo
+</td>
+<td style="text-align:right;text-align: center;">
+-2.617
+</td>
+<td style="text-align:right;text-align: center;">
+22.176
+</td>
+<td style="text-align:right;text-align: center;">
+46.776
+</td>
+<td style="text-align:right;text-align: center;">
+60.833
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+ripley interstellar freight
+</td>
+<td style="text-align:right;text-align: center;">
+-2.416
+</td>
+<td style="text-align:right;text-align: center;">
+71.351
+</td>
+<td style="text-align:right;text-align: center;">
+40.130
+</td>
+<td style="text-align:right;text-align: center;">
+4.446
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+mirror universe cargo
+</td>
+<td style="text-align:right;text-align: center;">
+-1.976
+</td>
+<td style="text-align:right;text-align: center;">
+43.021
+</td>
+<td style="text-align:right;text-align: center;">
+41.104
+</td>
+<td style="text-align:right;text-align: center;">
+28.170
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+shuttlepod movers
+</td>
+<td style="text-align:right;text-align: center;">
+-1.901
+</td>
+<td style="text-align:right;text-align: center;">
+40.677
+</td>
+<td style="text-align:right;text-align: center;">
+43.071
+</td>
+<td style="text-align:right;text-align: center;">
+28.098
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+adama transport
+</td>
+<td style="text-align:right;text-align: center;">
+-1.900
+</td>
+<td style="text-align:right;text-align: center;">
+42.547
+</td>
+<td style="text-align:right;text-align: center;">
+40.666
+</td>
+<td style="text-align:right;text-align: center;">
+27.549
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;font-weight: bold;text-align: left;">
+io star transport
+</td>
+<td style="text-align:right;text-align: center;">
+-1.777
+</td>
+<td style="text-align:right;text-align: center;">
+38.021
+</td>
+<td style="text-align:right;text-align: center;">
+33.829
+</td>
+<td style="text-align:right;text-align: center;">
+35.118
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>En la tabla se comprueba que existen leves variaciones con respecto a las clasificaciones anteriores. A destacar la inclusión en el <em>top-10</em> de <em>Ripley Interestellar Freight</em>, y la desparición de <em>Kamino Movers</em>.</p>
+<p>¿cuál de los 3 ránkings elegirías tú?</p>
+</div>
+<div id="materiales-para-realizar-las-prácticas-del-capítulo.-4" class="section level2" number="6.10">
+<h2>
+<span class="header-section-number">6.10</span> <img src="figuras/arrow-down-circle.svg" class="hicon"> Materiales para realizar las prácticas del capítulo.<a class="anchor" aria-label="anchor" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-4"><i class="fas fa-link"></i></a>
 </h2>
 <p>En esta sección se muestran los links de acceso a los diferentes materiales (<em>scripts</em>, datos…) necesarios para llevar a cabo los contenidos prácticos del capítulo.</p>
 <p><strong>Datos (en formato Microsoft (R) Excel (R)):</strong></p>
 <ul>
-<li>interestelar_100.xlsx (<a href="https://raw.githubusercontent.com/teckel71/RStars-book/main/download/trabajadores.xlsx">obtener aquí</a>)</li>
+<li>interestelar_100.xlsx (<a href="https://raw.githubusercontent.com/teckel71/RStars-book/main/download/interestelar_100.xlsx">obtener aquí</a>)</li>
 </ul>
 <p><strong>Scripts:</strong></p>
 <ul>
-<li>componentes_rstars.R (<a href="https://raw.githubusercontent.com/teckel71/RStars-book/main/download/previo_rstars.R">obtener aquí</a>)</li>
+<li>componentes_rstars.R (<a href="https://raw.githubusercontent.com/teckel71/RStars-book/main/download/componentes_rstars.R">obtener aquí</a>)</li>
 </ul>
 </div>
 </div>
@@ -1597,7 +2077,9 @@ sith transport corp.
 <li><a class="nav-link" href="#c%C3%A1lculo-de-componentes."><span class="header-section-number">6.5</span>  Cálculo de componentes.</a></li>
 <li><a class="nav-link" href="#retenci%C3%B3n-de-componentes."><span class="header-section-number">6.6</span>  Retención de componentes.</a></li>
 <li><a class="nav-link" href="#puntuaciones-de-los-casos-scores."><span class="header-section-number">6.7</span>  Puntuaciones de los casos (scores).</a></li>
-<li><a class="nav-link" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-4"><span class="header-section-number">6.8</span>  Materiales para realizar las prácticas del capítulo.</a></li>
+<li><a class="nav-link" href="#puntuaciones-de-los-casos-scores.-1"><span class="header-section-number">6.8</span>  Puntuaciones de los casos (scores).</a></li>
+<li><a class="nav-link" href="#utilizaci%C3%B3n-de-t%C3%A9cnicas-robustas-m%C3%A9todo-de-hubert."><span class="header-section-number">6.9</span>  Utilización de técnicas robustas: método de Hubert.</a></li>
+<li><a class="nav-link" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-4"><span class="header-section-number">6.10</span>  Materiales para realizar las prácticas del capítulo.</a></li>
 </ul>
 
       <div class="book-extra">
@@ -1614,7 +2096,7 @@ sith transport corp.
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2025-10-02.</p>
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2025-11-02.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
