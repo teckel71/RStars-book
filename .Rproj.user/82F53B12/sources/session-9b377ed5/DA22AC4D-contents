@@ -591,6 +591,8 @@ Por otro lado, se pueden presentar en diferentes **tablas** las informaciones de
   }
 ```
 
+Las tablas obtenidas serán:
+
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 # Tablas con composiciones de grupos
 
@@ -604,8 +606,8 @@ Por otro lado, se pueden presentar en diferentes **tablas** las informaciones de
 tipo_output <- c("html") # pdf, html, docx
 knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
 
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 for (n in 1:numclusters){
+if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
       tabla <- seleccion %>%
       filter(whatcluster_j == as.character(n)) %>%
       select(IDIVERSE, IFIDE, IDIG) %>%
@@ -624,9 +626,7 @@ for (n in 1:numclusters){
                     font_size = 12) %>%
       row_spec(0, bold = TRUE, align = "c")
       tablascompo[[n]] <- tabla
-   }
 }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-for (n in 1:numclusters){
       tabla <- seleccion %>%
       filter(whatcluster_j == as.character(n)) %>%
       select(IDIVERSE, IFIDE, IDIG) %>%
@@ -640,15 +640,12 @@ for (n in 1:numclusters){
   tablascompo[[n]] <- tabla
   }
 }
-```
-
-Las tablas obtenidas serán:
-
-```{r, eval=TRUE, echo=FALSE, message=FALSE, results='asis', warning=FALSE}
   # Presentar las tablas
-  for (n in 1:numclusters){
-    tablascompo[[n]]
-  }
+tablascompo[[1]]
+tablascompo[[2]]
+tablascompo[[3]]
+tablascompo[[4]]
+tablascompo[[5]]
 ```
 
 Para representar los grupos gráficamente, tenemos la dificultad de contar con más de dos variables clasificadoras. Una idea es **generar todas las combinaciones de variables posibles** y los correspondientes gráficos de dispersión con los casos coloreados de modo diferente según el grupo de pertenencia. Finalmente, los gráficos de modo compacto utilizando la función `create_patchwork()` que se incluyó anteriormente en el *script* para hacer mediante `{patchwork}`.composiciones de 2x2 gráficos.
@@ -1296,7 +1293,7 @@ En cuanto a la prueba de *comparaciones múltiples*, la función que se ocupa de
 
       for (i in seq_along(tablas_kw)) {
            print(tablas_kw[[i]])
-      }
+      } 
 ```
 
 A partir del código anterior se obtienen los siguientes resultados, concernientes al análisis de comparaciones múltiples (de medias) de *Kruskal-Wallis*. Cada fila compara dos grupos. Las columnas indican:
@@ -1350,10 +1347,9 @@ tabla <- datos_kmc$dif.com %>%
   }
   
     # Mostrar tablas almacenadas
-
-      for (i in seq_along(tablas_kw)) {
-           print(tablas_kw[[i]])
-      }  
+tablas_kw[[1]]
+tablas_kw[[2]]
+tablas_kw[[3]]
 ```
 
 En el caso de la variable **IDIVERSE** (grado de diversificación del negocio), se aprecia que los grupos 1 y 6, con los mayores valores medios de diversificación (~35 puntos), no difieren entre sí, pero sí del resto. Son empresas altamente diversificadas, posiblemente grandes corporaciones con presencia en múltiples rutas galácticas y segmentos de carga. Por otro lado, los grupos 4 y 5, con valores muy bajos (≈7–11), se sitúan en el extremo opuesto, significativamente diferentes de casi todos los demás. Representan compañías especializadas o locales, con operaciones limitadas y modelos menos flexibles. Los grupos 2, 3 y 7 ocupan posiciones intermedias, sin diferencias significativas entre ellos. Podrían estar en una fase de transición o exploración de nuevos mercados, con estrategias aún en consolidación.
