@@ -647,7 +647,7 @@ Las tablas obtenidas serán:
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, results='asis', warning=FALSE}
   # Presentar las tablas
   for (n in 1:numclusters){
-    print(tablascompo[[n]])
+    tablascompo[[n]]
   }
 ```
 
@@ -1307,7 +1307,7 @@ A partir del código anterior se obtienen los siguientes resultados, concernient
 
 - Significación (TRUE/FALSE): indica si la diferencia es estadísticamente significativa (TRUE) o no (FALSE).
 
-```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 tipo_output <- c("html") # pdf, html, docx
 knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
 
@@ -2163,7 +2163,7 @@ seleccion_out %>%
                       "I. Diversificación",
                       "I. Fidelizac.",
                       "I. Digitalizac."),
-        digits = c(NA, 0, 3, 3, 3),
+        digits = c(NA, 3, 3, 3, 3),
         format.args = list(decimal.mark = ".",
                            scientific = FALSE)) %>%
   kable_styling(full_width = F,
@@ -2231,7 +2231,7 @@ seleccion_out %>%
                       "I. Diversificación",
                       "I. Fidelizac.",
                       "I. Digitalizac."),
-        digits = c(NA, 0, 3, 3, 3),
+        digits = c(NA, 3, 3, 3, 3),
         format.args = list(decimal.mark = ".",
                            scientific = FALSE))
 }
