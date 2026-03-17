@@ -7,7 +7,7 @@
 <title>7 Análisis Clúster. | R-Stars: La Guía</title>
 <meta name="author" content="Miguel-Ángel Tarancón">
 <meta name="description" content="Grupos de cargueros en travesía.  7.1 Introducción. El análisis de conglomerados —o análisis de clústeres (AC)— agrupa casos con características similares en función de un conjunto de variables...">
-<meta name="generator" content="bookdown 0.44 with bs4_book()">
+<meta name="generator" content="bookdown 0.46 with bs4_book()">
 <meta property="og:title" content="7 Análisis Clúster. | R-Stars: La Guía">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://teckel71.github.io/RStars-book/análisis-clúster..html">
@@ -19,10 +19,10 @@
 <meta name="twitter:image" content="https://teckel71.github.io/RStars-book/figuras/Portada_v3-2.jpg">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><link href="libs/Inter-0.4.10/font.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><link href="libs/Source_Serif_4-0.4.10/font.css" rel="stylesheet">
 <link href="libs/JetBrains_Mono-0.4.10/font.css" rel="stylesheet">
-<link href="libs/Inter_Tight-0.4.10/font.css" rel="stylesheet">
-<script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<link href="libs/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
+<script src="libs/bs3compat-0.10.0/transition.js"></script><script src="libs/bs3compat-0.10.0/tabs.js"></script><script src="libs/bs3compat-0.10.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
@@ -137,7 +137,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 <li><p><strong>Otros métodos:</strong> vinculación intergrupos (average linkage between groups), vinculación intragrupos (whithin-group)…</p></li>
 </ul>
 <p>De entre ellos, ¿cuál elegir?</p>
-<p>La cuestión no es fácil de resolver, y no tiene por qué tener una única respuesta. Por otro lado, cada método proporciona soluciones que pueden variar mucho entre sí. Una estrategia puede pasar por probar con varios métodos y se seleccionar la solución que parezca más coherente desde el punto de vista teórico, y estable desde el punto de vista empírico.</p>
+<p>La cuestión no es fácil de resolver, y no tiene por qué tener una única respuesta. Por otro lado, cada método proporciona soluciones que pueden variar mucho entre sí. Una estrategia puede pasar por probar con varios métodos y seleccionar la solución que parezca más coherente desde el punto de vista teórico, y estable desde el punto de vista empírico.</p>
 <p>En la práctica, uno de los métodos más utilizados es el <strong>método de Ward</strong>, porque proporciona grupos muy homogéneos, ya que se basa en la minimización de la varianza o dispersión de los elementos que componen cada grupo con respecto a su centro de gravedad o <strong>centroide.</strong> Precisamente, este método será aplicado en el ejemplo práctico que desarrollaremos en R a continuación.</p>
 <div id="el-informe-bluebird." class="section level3" number="7.2.1">
 <h3>
@@ -175,7 +175,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jthomasmock/gtExtras">gtExtras</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/visdat/">visdat</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://github.com/kassambara/factoextra">factoextra</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span></code></pre></div>
@@ -221,24 +221,24 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">IDIVERSE</span>, <span class="va">IFIDE</span>, <span class="va">IDIG</span><span class="op">)</span></span>
 <span><span class="va">seleccion_df_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary</a></span><span class="op">(</span><span class="va">seleccion</span><span class="op">)</span></span>
 <span><span class="va">seleccion_df_graph</span></span></code></pre></div>
-<div id="csgurzotrs" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="pqjropztxq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#csgurzotrs table {
+#pqjropztxq table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#csgurzotrs thead, #csgurzotrs tbody, #csgurzotrs tfoot, #csgurzotrs tr, #csgurzotrs td, #csgurzotrs th {
+#pqjropztxq thead, #pqjropztxq tbody, #pqjropztxq tfoot, #pqjropztxq tr, #pqjropztxq td, #pqjropztxq th {
   border-style: none;
 }
 
-#csgurzotrs p {
+#pqjropztxq p {
   margin: 0;
   padding: 0;
 }
 
-#csgurzotrs .gt_table {
+#pqjropztxq .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -264,12 +264,12 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   border-left-color: #D3D3D3;
 }
 
-#csgurzotrs .gt_caption {
+#pqjropztxq .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#csgurzotrs .gt_title {
+#pqjropztxq .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -281,7 +281,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   border-bottom-width: 0;
 }
 
-#csgurzotrs .gt_subtitle {
+#pqjropztxq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -293,7 +293,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   border-top-width: 0;
 }
 
-#csgurzotrs .gt_heading {
+#pqjropztxq .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -305,13 +305,13 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   border-right-color: #D3D3D3;
 }
 
-#csgurzotrs .gt_bottom_border {
+#pqjropztxq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 0px;
   border-bottom-color: #D3D3D3;
 }
 
-#csgurzotrs .gt_col_headings {
+#pqjropztxq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 0px;
   border-top-color: #D3D3D3;
@@ -326,7 +326,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   border-right-color: #D3D3D3;
 }
 
-#csgurzotrs .gt_col_heading {
+#pqjropztxq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -346,7 +346,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   overflow-x: hidden;
 }
 
-#csgurzotrs .gt_column_spanner_outer {
+#pqjropztxq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -358,15 +358,15 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   padding-right: 4px;
 }
 
-#csgurzotrs .gt_column_spanner_outer:first-child {
+#pqjropztxq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#csgurzotrs .gt_column_spanner_outer:last-child {
+#pqjropztxq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#csgurzotrs .gt_column_spanner {
+#pqjropztxq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -378,11 +378,11 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   width: 100%;
 }
 
-#csgurzotrs .gt_spanner_row {
+#pqjropztxq .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#csgurzotrs .gt_group_heading {
+#pqjropztxq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -408,7 +408,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   text-align: left;
 }
 
-#csgurzotrs .gt_empty_group_heading {
+#pqjropztxq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -423,15 +423,15 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   vertical-align: middle;
 }
 
-#csgurzotrs .gt_from_md > :first-child {
+#pqjropztxq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#csgurzotrs .gt_from_md > :last-child {
+#pqjropztxq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#csgurzotrs .gt_row {
+#pqjropztxq .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -450,7 +450,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   overflow-x: hidden;
 }
 
-#csgurzotrs .gt_stub {
+#pqjropztxq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -463,7 +463,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   padding-right: 5px;
 }
 
-#csgurzotrs .gt_stub_row_group {
+#pqjropztxq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -477,15 +477,15 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   vertical-align: top;
 }
 
-#csgurzotrs .gt_row_group_first td {
+#pqjropztxq .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#csgurzotrs .gt_row_group_first th {
+#pqjropztxq .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#csgurzotrs .gt_summary_row {
+#pqjropztxq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -495,16 +495,16 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   padding-right: 5px;
 }
 
-#csgurzotrs .gt_first_summary_row {
+#pqjropztxq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#csgurzotrs .gt_first_summary_row.thick {
+#pqjropztxq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#csgurzotrs .gt_last_summary_row {
+#pqjropztxq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -514,7 +514,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   border-bottom-color: #D3D3D3;
 }
 
-#csgurzotrs .gt_grand_summary_row {
+#pqjropztxq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -524,7 +524,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   padding-right: 5px;
 }
 
-#csgurzotrs .gt_first_grand_summary_row {
+#pqjropztxq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -534,7 +534,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   border-top-color: #D3D3D3;
 }
 
-#csgurzotrs .gt_last_grand_summary_row_top {
+#pqjropztxq .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -544,11 +544,11 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   border-bottom-color: #D3D3D3;
 }
 
-#csgurzotrs .gt_striped {
+#pqjropztxq .gt_striped {
   background-color: #FAFAFA;
 }
 
-#csgurzotrs .gt_table_body {
+#pqjropztxq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -557,7 +557,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   border-bottom-color: #D3D3D3;
 }
 
-#csgurzotrs .gt_footnotes {
+#pqjropztxq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -571,7 +571,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   border-right-color: #D3D3D3;
 }
 
-#csgurzotrs .gt_footnote {
+#pqjropztxq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -580,7 +580,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   padding-right: 5px;
 }
 
-#csgurzotrs .gt_sourcenotes {
+#pqjropztxq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -594,7 +594,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   border-right-color: #D3D3D3;
 }
 
-#csgurzotrs .gt_sourcenote {
+#pqjropztxq .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -602,72 +602,72 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
   padding-right: 5px;
 }
 
-#csgurzotrs .gt_left {
+#pqjropztxq .gt_left {
   text-align: left;
 }
 
-#csgurzotrs .gt_center {
+#pqjropztxq .gt_center {
   text-align: center;
 }
 
-#csgurzotrs .gt_right {
+#pqjropztxq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#csgurzotrs .gt_font_normal {
+#pqjropztxq .gt_font_normal {
   font-weight: normal;
 }
 
-#csgurzotrs .gt_font_bold {
+#pqjropztxq .gt_font_bold {
   font-weight: bold;
 }
 
-#csgurzotrs .gt_font_italic {
+#pqjropztxq .gt_font_italic {
   font-style: italic;
 }
 
-#csgurzotrs .gt_super {
+#pqjropztxq .gt_super {
   font-size: 65%;
 }
 
-#csgurzotrs .gt_footnote_marks {
+#pqjropztxq .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#csgurzotrs .gt_asterisk {
+#pqjropztxq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#csgurzotrs .gt_indent_1 {
+#pqjropztxq .gt_indent_1 {
   text-indent: 5px;
 }
 
-#csgurzotrs .gt_indent_2 {
+#pqjropztxq .gt_indent_2 {
   text-indent: 10px;
 }
 
-#csgurzotrs .gt_indent_3 {
+#pqjropztxq .gt_indent_3 {
   text-indent: 15px;
 }
 
-#csgurzotrs .gt_indent_4 {
+#pqjropztxq .gt_indent_4 {
   text-indent: 20px;
 }
 
-#csgurzotrs .gt_indent_5 {
+#pqjropztxq .gt_indent_5 {
   text-indent: 25px;
 }
 
-#csgurzotrs .katex-display {
+#pqjropztxq .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#csgurzotrs div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#pqjropztxq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -739,7 +739,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 <span>    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"TRUE"</span> <span class="op">=</span> <span class="st">"NA"</span>, <span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"Presente"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span></span>
 <span>    plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-277-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-206-1.png" alt="" width="672"></div>
 <div class="sourceCode" id="cb240"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">IDIVERSE</span><span class="op">)</span> <span class="op">|</span></span>
 <span>                       <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">IFIDE</span><span class="op">)</span> <span class="op">|</span></span>
@@ -773,7 +773,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"DISTANCIA DE MAHALANOBIS"</span>,</span>
 <span>          subtitle <span class="op">=</span> <span class="st">"IDIVERSE, IFIDE, IDIG. Empresas TMI."</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"MAHALANOBIS"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-279-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-208-1.png" alt="" width="672"></div>
 <p>En el gráfico se observa que existen, por encima de la caja, 4 <em>outliers</em>. Para identificarlos de modo concreto, hemos de calcular los cuartiles primero y tercero de la variable MAHALANOBIS y pasar el correspondiente filtro:</p>
 <div class="sourceCode" id="cb245"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Q1M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">seleccion</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
@@ -815,14 +815,14 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 ##  3rd Qu.: 0.7956   3rd Qu.: 0.22847   3rd Qu.: 0.5436  
 ##  Max.   : 2.2679   Max.   : 3.71756   Max.   : 3.1734</code></pre>
 <p>Este nuevo <em>data frame</em> contiene las mismas variables del análisis; pero tipificadas (obsérvese, en el <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>, las medias de las variables).</p>
-<p>Previamente a aplicar un método de agrupación concreto, es necesario calcular la <strong>matriz de distancias</strong> entre los casos, a la que llamaremos, por ejemplo, <strong>“d”</strong>. Esta matriz se calcula con la función <code><a href="https://rdrr.io/r/stats/dist.html">dist()</a></code>. Para visualizarla, una opción es representarla mediante el <em>gráfico de temperatura</em> que ofrece la función <code><a href="https://rdrr.io/pkg/factoextra/man/dist.html">fviz_dist()</a></code> del paquete <a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a>:</p>
+<p>Previamente a aplicar un método de agrupación concreto, es necesario calcular la <strong>matriz de distancias</strong> entre los casos, a la que llamaremos, por ejemplo, <strong>“d”</strong>. Esta matriz se calcula con la función <code><a href="https://rdrr.io/r/stats/dist.html">dist()</a></code>. Para visualizarla, una opción es representarla mediante el <em>gráfico de temperatura</em> que ofrece la función <code><a href="https://rdrr.io/pkg/factoextra/man/dist.html">fviz_dist()</a></code> del paquete <a href="https://github.com/kassambara/factoextra">factoextra</a>:</p>
 <div class="sourceCode" id="cb250"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Matriz de distancias</span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/dist.html">dist</a></span><span class="op">(</span><span class="va">zseleccion</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/dist.html">fviz_dist</a></span><span class="op">(</span><span class="va">d</span>, lab_size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>  <span class="co"># Del paquete {factoextra}</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-283-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-212-1.png" alt="" width="672"></div>
 <p>Los casos con intersecciones en tonos anaranjados tenderán a agruparse con mayor facilidad (o a agruparse antes); mientras que los casos cuyas intersecciones están en tonos azulados tenderán a pertenecer a grupos diferentes (o a agruparse más tarde). Cabe destacar los colores azulados asociados a las empresas <em>Chakotay Cargo Systems</em>, <em>Home One Cargo</em>, que precisamente eran las dos compañías identificadas más claramente como <em>outliers</em>.</p>
-<p>Vamos a realizar el análisis clúster jerárquico mediante uno de los métodos más habituales, el de <strong><em>Ward</em></strong>, como es común en las aplicaciones prácticas, ya que este método proporciona grupos muy homogéneos (mínima varianza). La función a utilizar es <code><a href="https://rdrr.io/r/stats/hclust.html">hclust()</a></code>. La solución la guardaremos en el objeto (lista) que hemos llamado, por ejemplo, “cluster_j”. Luego se visualizará el <strong><em>dendograma</em></strong> construido con la función <code><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend()</a></code> del paquete <a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a>, que permite personalizar el gráfico con una gramática similar a la utilizada con los gráficos del paquete <a href="https://ggplot2.tidyverse.org">ggplot2</a>:</p>
+<p>Vamos a realizar el análisis clúster jerárquico mediante uno de los métodos más habituales, el de <strong><em>Ward</em></strong>, como es común en las aplicaciones prácticas, ya que este método proporciona grupos muy homogéneos (mínima varianza). La función a utilizar es <code><a href="https://rdrr.io/r/stats/hclust.html">hclust()</a></code>. La solución la guardaremos en el objeto (lista) que hemos llamado, por ejemplo, “cluster_j”. Luego se visualizará el <strong><em>dendograma</em></strong> construido con la función <code><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend()</a></code> del paquete <a href="https://github.com/kassambara/factoextra">factoextra</a>, que permite personalizar el gráfico con una gramática similar a la utilizada con los gráficos del paquete <a href="https://ggplot2.tidyverse.org">ggplot2</a>:</p>
 <div class="sourceCode" id="cb251"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Método de Ward.</span></span>
 <span><span class="va">cluster_j</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span><span class="va">d</span>, method<span class="op">=</span><span class="st">"ward.D2"</span><span class="op">)</span></span>
@@ -834,7 +834,7 @@ d(i, i') = \sqrt{\sum_{j=1}^{m} (x_{ij} - x_{i'j})^2}
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Empresas TMI."</span>,</span>
 <span>       subtitle <span class="op">=</span> <span class="st">"Método de Ward. Variables originales tipificadas."</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_grey</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-284-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-213-1.png" alt="" width="672"></div>
 <p>En el código anterior:</p>
 <ul>
 <li><p><strong><code>cluster_j</code></strong>: Es el objeto que contiene el dendrograma que se desea visualizar.</p></li>
@@ -869,7 +869,7 @@ s_i = \frac{b_i - a_i}{\max(a_i, b_i)}
 <li><p>Se selecciona el <span class="math inline">\(k\)</span> que maximiza el <strong>promedio de la silueta</strong>, lo que indica que la partición es más adecuada.</p></li>
 </ol>
 <p>De todos modos, es necesario insistir en que estos métodos no llevan a una conclusión única ni irrevocable; por lo que puede ser preferible que el <strong>propio investigador</strong> decida el número de grupos a crear, mediante la observación del dendograma, y de acuerdo a los objetivos de su propia investigación, tomando los métodos cuantitativos solo como <strong>orientación</strong>.</p>
-<p>En nuestro caso, el gráfico del <em>método de la silueta</em> se obtiene a partir de la función <code>fviz_nbclust</code> del paquete <a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a>, con el código:</p>
+<p>En nuestro caso, el gráfico del <em>método de la silueta</em> se obtiene a partir de la función <code>fviz_nbclust</code> del paquete <a href="https://github.com/kassambara/factoextra">factoextra</a>, con el código:</p>
 <div class="sourceCode" id="cb252"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Método de obtención de número de grupos (k) del Ancho de Silueta.</span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_nbclust.html">fviz_nbclust</a></span><span class="op">(</span></span>
@@ -880,7 +880,7 @@ s_i = \frac{b_i - a_i}{\max(a_i, b_i)}
 <span>  k.max <span class="op">=</span> <span class="fl">15</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">p</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-285-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-214-1.png" alt="" width="672"></div>
 <p>El método aconseja una división de los casos en 8 grupos o conglomerados diferentes. Sin embargo, parece un número excesivo si se quieren caracterizar posteriormente los grupos e incidir en sus diferencias. Un segundo número de grupos apropiado según el método es 2; pero podría ocurrir lo contrario que el caso anterior: sería un valor demasiado bajo, lo que provocaría que tan solo se distinguiese un grupo con los dos outliers de otro con los 23 casos restantes. Así, el investigador puede decidir qué número de grupos parece equilibrado y se ajusta a sus intereses. En este ejemplo, <strong>un número de grupos razonable podría ser 5</strong>, que contaría con el aval de mantener individualizadas a 2 de las empresas etiquetadas como <em>outliers</em>.</p>
 <p>Si se acepta esta opción, se podrá visualizar de nuevo el dendograma coloreando los grupos formados, con el código siguiente (debe modificarse el código para igualar el argumento <code>k =</code> al número de grupos seleccionado):</p>
 <div class="sourceCode" id="cb253"><pre class="downlit sourceCode r">
@@ -896,7 +896,7 @@ s_i = \frac{b_i - a_i}{\max(a_i, b_i)}
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Empresas TMI."</span>,</span>
 <span>       subtitle <span class="op">=</span> <span class="st">"Método de Ward. Variables originales tipificadas."</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_grey</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-286-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-215-1.png" alt="" width="672"></div>
 <p>En el código anterior:</p>
 <ul>
 <li><p><strong><code>k = 5</code></strong>: Especifica el número de grupos o clústeres que se desea formar en el dendrograma. En este caso, se han decidido formar 5 grupos.</p></li>
@@ -1024,7 +1024,7 @@ s_i = \frac{b_i - a_i}{\max(a_i, b_i)}
 <span>           align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-289">Table 7.1: </span><span id="tab:unnamed-chunk-289">Table 7.2: </span>Método de Ward. 5 grupos. Medias de variables
+<span id="tab:unnamed-chunk-218">Table 7.1: </span><span id="tab:unnamed-chunk-218">Table 7.2: </span>Método de Ward. 5 grupos. Medias de variables
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -1166,7 +1166,7 @@ I. Digitalizac.
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">n</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">grupos.graficos.centroides</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>       <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">grupos.graficos.centroides</span><span class="op">[[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-291-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-220-1.png" alt="" width="672"></div>
 <p>Como solo hay 3 variables originales en el análisis; “grupos.graficos.centroides” solo cuenta con un elemento o composición, que contiene tres gráficos (valores medios de IDIVERSE, IFIDE e IDIG, por conglomerado).</p>
 <p>Hablando siempre en términos de la media (centroides), puede comprobarse cómo el grupo 4 (compañía <em>Chakotay Cargo Systems</em>) destaca por su alto valor en el índice de diversificación y en el Fidelización, quedando en segunda posición en el índice de digitalización. El otro grupo de una única compañía, el grupo 5, que contiene a la empresa <em>Home One Cargo</em>, destca por poseer el mayor índice de digitalización. En adición, ocupa la segunda posición en el índice de fidelización. Por último, en cuanto al índice de diversificación, ocupa una posición media. En cuanto al grupo 3, em promedio es un conglomerado formado por empresas con índices de fidelización y digitalización medios, mientras que en cuando a la diversificación ocupa una destacada segunda posición, solo por detrás del grupo 4. Por su parte, las empresas del grupo 2, en promedio, presentan un índice de fidelización medio, mientras que los índices de diversificación y digitalización son más bien bajos. Por último, el grupo 1, compuesto por las compañías <em>Hyperion Star Haulage</em> y <em>Event Horizon Haulage</em>, se caracteriza por mostrar los menores valores medios en los tres indicadores.</p>
 <p>Por otro lado, se pueden presentar en diferentes <strong>tablas</strong> las informaciones de <strong>cada grupo</strong>. Vamos a automatizar de nuevo el proceso de generación de las tablas mediante el empleo de un <em>bucle.</em> Las diferentes tablas se irán guardando en una lista de nombre, por ejemplo, “tablascompo”:</p>
@@ -1208,7 +1208,7 @@ I. Digitalizac.
 <p>Las tablas obtenidas serán:</p>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-293">Table 7.3: </span><span id="tab:unnamed-chunk-293">Table 7.4: </span>Método de Ward. Grupo 1 .
+<span id="tab:unnamed-chunk-222">Table 7.3: </span><span id="tab:unnamed-chunk-222">Table 7.4: </span>Método de Ward. Grupo 1 .
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -1256,7 +1256,7 @@ event horizon haulage
 </table></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-293">Table 7.3: </span><span id="tab:unnamed-chunk-293">Table 7.3: </span>Método de Ward. Grupo 2 .
+<span id="tab:unnamed-chunk-222">Table 7.3: </span><span id="tab:unnamed-chunk-222">Table 7.3: </span>Método de Ward. Grupo 2 .
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -1472,7 +1472,7 @@ razor star freight
 </table></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-293">Table 7.3: </span><span id="tab:unnamed-chunk-293">Table 7.3: </span>Método de Ward. Grupo 3 .
+<span id="tab:unnamed-chunk-222">Table 7.3: </span><span id="tab:unnamed-chunk-222">Table 7.3: </span>Método de Ward. Grupo 3 .
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -1590,7 +1590,7 @@ skywalker freight co.
 </table></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-293">Table 7.3: </span><span id="tab:unnamed-chunk-293">Table 7.3: </span>Método de Ward. Grupo 4 .
+<span id="tab:unnamed-chunk-222">Table 7.3: </span><span id="tab:unnamed-chunk-222">Table 7.3: </span>Método de Ward. Grupo 4 .
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -1622,7 +1622,7 @@ chakotay cargo systems
 </table></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-293">Table 7.3: </span><span id="tab:unnamed-chunk-293">Table 7.3: </span>Método de Ward. Grupo 5 .
+<span id="tab:unnamed-chunk-222">Table 7.3: </span><span id="tab:unnamed-chunk-222">Table 7.3: </span>Método de Ward. Grupo 5 .
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -1692,7 +1692,7 @@ home one cargo
 <span>    <span class="kw">for</span> <span class="op">(</span><span class="va">n</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">gruposgraficos</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">gruposgraficos</span><span class="op">[[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-296-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-225-1.png" alt="" width="672"></div>
 <p>Pueden extraerse algunas conclusiones, a partir de estos gráficos, sobre cada uno de los grupos, que confirman las ideas anteriores:</p>
 <p><strong>1. Grupos 1 y 2:</strong> empresas tradicionales de baja diversificación.</p>
 <p>Los clústeres 1 y 2 se sitúan en la parte baja del eje de diversificación (IDIVERSE &lt; 30).</p>
@@ -1746,7 +1746,7 @@ home one cargo
 </h3>
 <p>La primera parte del script es semejante a la del <em>script</em> de la parte de “clúster jerárquico”, <em>cluster_rstars.R</em>. Solo cambia en los siguientes aspectos:</p>
 <ul>
-<li>No utiliza el paquete <a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a>, y sí utiliza los paquetes <a href="https://svn.r-project.org/R-packages/trunk/cluster/">cluster</a>y <a href="https://github.com/mlampros/ClusterR">ClusterR</a>.</li>
+<li>No utiliza el paquete <a href="https://github.com/kassambara/factoextra">factoextra</a>, y sí utiliza los paquetes <a href="https://svn.r-project.org/R-packages/trunk/cluster/">cluster</a>y <a href="https://github.com/mlampros/ClusterR">ClusterR</a>.</li>
 <li>El archivo a importar es <em>interestelar_300.xlsx</em>, y los datos se almacenan en el <em>data frame</em> “interestelar_300”.</li>
 <li>Los <em>outliers</em>, en esta ocasión, sí son eliminados, con lo que se trabajará con un <em>data frame</em> sin casos atípicos, denominado “seleccion_so”.</li>
 </ul>
@@ -1808,24 +1808,24 @@ home one cargo
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">IDIVERSE</span>, <span class="va">IFIDE</span>, <span class="va">IDIG</span><span class="op">)</span></span>
 <span><span class="va">seleccion_df_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary</a></span><span class="op">(</span><span class="va">seleccion</span><span class="op">)</span></span>
 <span><span class="va">seleccion_df_graph</span></span></code></pre></div>
-<div id="osncjrvket" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="btzlhnrmtq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#osncjrvket table {
+#btzlhnrmtq table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#osncjrvket thead, #osncjrvket tbody, #osncjrvket tfoot, #osncjrvket tr, #osncjrvket td, #osncjrvket th {
+#btzlhnrmtq thead, #btzlhnrmtq tbody, #btzlhnrmtq tfoot, #btzlhnrmtq tr, #btzlhnrmtq td, #btzlhnrmtq th {
   border-style: none;
 }
 
-#osncjrvket p {
+#btzlhnrmtq p {
   margin: 0;
   padding: 0;
 }
 
-#osncjrvket .gt_table {
+#btzlhnrmtq .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1851,12 +1851,12 @@ home one cargo
   border-left-color: #D3D3D3;
 }
 
-#osncjrvket .gt_caption {
+#btzlhnrmtq .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#osncjrvket .gt_title {
+#btzlhnrmtq .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -1868,7 +1868,7 @@ home one cargo
   border-bottom-width: 0;
 }
 
-#osncjrvket .gt_subtitle {
+#btzlhnrmtq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1880,7 +1880,7 @@ home one cargo
   border-top-width: 0;
 }
 
-#osncjrvket .gt_heading {
+#btzlhnrmtq .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -1892,13 +1892,13 @@ home one cargo
   border-right-color: #D3D3D3;
 }
 
-#osncjrvket .gt_bottom_border {
+#btzlhnrmtq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 0px;
   border-bottom-color: #D3D3D3;
 }
 
-#osncjrvket .gt_col_headings {
+#btzlhnrmtq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 0px;
   border-top-color: #D3D3D3;
@@ -1913,7 +1913,7 @@ home one cargo
   border-right-color: #D3D3D3;
 }
 
-#osncjrvket .gt_col_heading {
+#btzlhnrmtq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -1933,7 +1933,7 @@ home one cargo
   overflow-x: hidden;
 }
 
-#osncjrvket .gt_column_spanner_outer {
+#btzlhnrmtq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -1945,15 +1945,15 @@ home one cargo
   padding-right: 4px;
 }
 
-#osncjrvket .gt_column_spanner_outer:first-child {
+#btzlhnrmtq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#osncjrvket .gt_column_spanner_outer:last-child {
+#btzlhnrmtq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#osncjrvket .gt_column_spanner {
+#btzlhnrmtq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1965,11 +1965,11 @@ home one cargo
   width: 100%;
 }
 
-#osncjrvket .gt_spanner_row {
+#btzlhnrmtq .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#osncjrvket .gt_group_heading {
+#btzlhnrmtq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1995,7 +1995,7 @@ home one cargo
   text-align: left;
 }
 
-#osncjrvket .gt_empty_group_heading {
+#btzlhnrmtq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2010,15 +2010,15 @@ home one cargo
   vertical-align: middle;
 }
 
-#osncjrvket .gt_from_md > :first-child {
+#btzlhnrmtq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#osncjrvket .gt_from_md > :last-child {
+#btzlhnrmtq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#osncjrvket .gt_row {
+#btzlhnrmtq .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -2037,7 +2037,7 @@ home one cargo
   overflow-x: hidden;
 }
 
-#osncjrvket .gt_stub {
+#btzlhnrmtq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -2050,7 +2050,7 @@ home one cargo
   padding-right: 5px;
 }
 
-#osncjrvket .gt_stub_row_group {
+#btzlhnrmtq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2064,15 +2064,15 @@ home one cargo
   vertical-align: top;
 }
 
-#osncjrvket .gt_row_group_first td {
+#btzlhnrmtq .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#osncjrvket .gt_row_group_first th {
+#btzlhnrmtq .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#osncjrvket .gt_summary_row {
+#btzlhnrmtq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2082,16 +2082,16 @@ home one cargo
   padding-right: 5px;
 }
 
-#osncjrvket .gt_first_summary_row {
+#btzlhnrmtq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#osncjrvket .gt_first_summary_row.thick {
+#btzlhnrmtq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#osncjrvket .gt_last_summary_row {
+#btzlhnrmtq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2101,7 +2101,7 @@ home one cargo
   border-bottom-color: #D3D3D3;
 }
 
-#osncjrvket .gt_grand_summary_row {
+#btzlhnrmtq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2111,7 +2111,7 @@ home one cargo
   padding-right: 5px;
 }
 
-#osncjrvket .gt_first_grand_summary_row {
+#btzlhnrmtq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2121,7 +2121,7 @@ home one cargo
   border-top-color: #D3D3D3;
 }
 
-#osncjrvket .gt_last_grand_summary_row_top {
+#btzlhnrmtq .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2131,11 +2131,11 @@ home one cargo
   border-bottom-color: #D3D3D3;
 }
 
-#osncjrvket .gt_striped {
+#btzlhnrmtq .gt_striped {
   background-color: #FAFAFA;
 }
 
-#osncjrvket .gt_table_body {
+#btzlhnrmtq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2144,7 +2144,7 @@ home one cargo
   border-bottom-color: #D3D3D3;
 }
 
-#osncjrvket .gt_footnotes {
+#btzlhnrmtq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2158,7 +2158,7 @@ home one cargo
   border-right-color: #D3D3D3;
 }
 
-#osncjrvket .gt_footnote {
+#btzlhnrmtq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2167,7 +2167,7 @@ home one cargo
   padding-right: 5px;
 }
 
-#osncjrvket .gt_sourcenotes {
+#btzlhnrmtq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2181,7 +2181,7 @@ home one cargo
   border-right-color: #D3D3D3;
 }
 
-#osncjrvket .gt_sourcenote {
+#btzlhnrmtq .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2189,72 +2189,72 @@ home one cargo
   padding-right: 5px;
 }
 
-#osncjrvket .gt_left {
+#btzlhnrmtq .gt_left {
   text-align: left;
 }
 
-#osncjrvket .gt_center {
+#btzlhnrmtq .gt_center {
   text-align: center;
 }
 
-#osncjrvket .gt_right {
+#btzlhnrmtq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#osncjrvket .gt_font_normal {
+#btzlhnrmtq .gt_font_normal {
   font-weight: normal;
 }
 
-#osncjrvket .gt_font_bold {
+#btzlhnrmtq .gt_font_bold {
   font-weight: bold;
 }
 
-#osncjrvket .gt_font_italic {
+#btzlhnrmtq .gt_font_italic {
   font-style: italic;
 }
 
-#osncjrvket .gt_super {
+#btzlhnrmtq .gt_super {
   font-size: 65%;
 }
 
-#osncjrvket .gt_footnote_marks {
+#btzlhnrmtq .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#osncjrvket .gt_asterisk {
+#btzlhnrmtq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#osncjrvket .gt_indent_1 {
+#btzlhnrmtq .gt_indent_1 {
   text-indent: 5px;
 }
 
-#osncjrvket .gt_indent_2 {
+#btzlhnrmtq .gt_indent_2 {
   text-indent: 10px;
 }
 
-#osncjrvket .gt_indent_3 {
+#btzlhnrmtq .gt_indent_3 {
   text-indent: 15px;
 }
 
-#osncjrvket .gt_indent_4 {
+#btzlhnrmtq .gt_indent_4 {
   text-indent: 20px;
 }
 
-#osncjrvket .gt_indent_5 {
+#btzlhnrmtq .gt_indent_5 {
   text-indent: 25px;
 }
 
-#osncjrvket .katex-display {
+#btzlhnrmtq .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#osncjrvket div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#btzlhnrmtq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2326,7 +2326,7 @@ home one cargo
 <span>    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"TRUE"</span> <span class="op">=</span> <span class="st">"NA"</span>, <span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"Presente"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span></span>
 <span>    plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-297-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-226-1.png" alt="" width="672"></div>
 <div class="sourceCode" id="cb264"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">IDIVERSE</span><span class="op">)</span> <span class="op">|</span></span>
 <span>                       <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">IFIDE</span><span class="op">)</span> <span class="op">|</span></span>
@@ -2353,7 +2353,7 @@ home one cargo
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"DISTANCIA DE MAHALANOBIS"</span>,</span>
 <span>          subtitle <span class="op">=</span> <span class="st">"IDIVERSE, IFIDE, IDIG. Empresas TMI."</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"MAHALANOBIS"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-298-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-227-1.png" alt="" width="672"></div>
 <p>Una vez se constata que existen casos <em>outliers</em>, se pueden identificar con el código:</p>
 <div class="sourceCode" id="cb268"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Q1M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">seleccion</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
@@ -2423,13 +2423,13 @@ home one cargo
 <div class="sourceCode" id="cb274"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/dist.html">dist</a></span><span class="op">(</span><span class="va">zseleccion_so</span><span class="op">)</span></span></code></pre></div>
 <p>Una cuestión clave es la determinación previa del número de grupos a formar. Si no se tiene decidido un número de conglomerados <em>a priori</em> como consecuencia del interés o de los objetivos de la propia investigación, se puede recurrir como orientación a algún método o algoritmo “objetivo”. De nuevo, puede recurrirse al **método de la *anchura media de silueta**, proponiendo diferentes números de grupos (parámetro <em>k</em>).</p>
-<p>La función <code><a href="https://rdrr.io/pkg/ClusterR/man/KMeans_rcpp.html">KMeans_rcpp()</a></code> del paquete <a href="https://github.com/mlampros/ClusterR">ClusterR</a> permite calcular la <em>anchura media de Silueta</em> para cada número de grupos propuesto, estimando los grupos mediante el método de <strong>k-medias++</strong>. Aplicaremos el método para cada número de grupos <em>k</em> propuesto, mediante una función que guarda el ancho medio de silueta en un vector:</p>
+<p>La función <code><a href="https://mlampros.github.io/ClusterR/reference/KMeans_rcpp.html">KMeans_rcpp()</a></code> del paquete <a href="https://github.com/mlampros/ClusterR">ClusterR</a> permite calcular la <em>anchura media de Silueta</em> para cada número de grupos propuesto, estimando los grupos mediante el método de <strong>k-medias++</strong>. Aplicaremos el método para cada número de grupos <em>k</em> propuesto, mediante una función que guarda el ancho medio de silueta en un vector:</p>
 <div class="sourceCode" id="cb275"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># --- Calcular el ancho medio de silueta para distintos k ---</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">res_sil</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">10</span>, </span>
 <span>                  <span class="kw">function</span><span class="op">(</span><span class="va">k</span><span class="op">)</span> <span class="op">{</span></span>
-<span>                    <span class="va">km</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ClusterR/man/KMeans_rcpp.html">KMeans_rcpp</a></span><span class="op">(</span><span class="va">zseleccion_so</span>,</span>
+<span>                    <span class="va">km</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mlampros.github.io/ClusterR/reference/KMeans_rcpp.html">KMeans_rcpp</a></span><span class="op">(</span><span class="va">zseleccion_so</span>,</span>
 <span>                    clusters <span class="op">=</span> <span class="va">k</span>,</span>
 <span>                    num_init <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>                    max_iters <span class="op">=</span> <span class="fl">100</span>,</span>
@@ -2450,7 +2450,7 @@ home one cargo
 <li>Dentro de la función anónima <strong><code>function(k) { ... }</code></strong>:</li>
 </ol>
 <ul>
-<li><p><code><a href="https://rdrr.io/pkg/ClusterR/man/KMeans_rcpp.html">KMeans_rcpp()</a></code> (del paquete <a href="https://github.com/mlampros/ClusterR">ClusterR</a>) ejecuta <em>k-medias</em> sobre los datos del <em>data frame</em> “zseleccion_so”.</p></li>
+<li><p><code><a href="https://mlampros.github.io/ClusterR/reference/KMeans_rcpp.html">KMeans_rcpp()</a></code> (del paquete <a href="https://github.com/mlampros/ClusterR">ClusterR</a>) ejecuta <em>k-medias</em> sobre los datos del <em>data frame</em> “zseleccion_so”.</p></li>
 <li><p><code>clusters = k</code>: número de grupos que queremos formar.</p></li>
 <li><p><code>num_init = 10</code>: ejecuta el algoritmo 10 veces con diferentes inicios y se queda con la mejor solución (esto reduce la mala suerte de una mala inicialización).</p></li>
 <li><p><code>max_iters = 100</code>: tope de iteraciones por ejecución.</p></li>
@@ -2483,26 +2483,26 @@ home one cargo
 <span>       x <span class="op">=</span> <span class="st">"Número de clústeres (k)"</span>,</span>
 <span>       y <span class="op">=</span> <span class="st">"Silueta media"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">13</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-304-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-233-1.png" alt="" width="672"></div>
 <p>El número de clústeres aconsejado por el gráfico es k=2 (primer punto, el más alto). No obstante, dos grupos puede aportar poco detalle en cuanto a la identificación de patrones de empresa diferentes. La segunda opción, según el gráfico, es la de <strong>7 grupos</strong>. Es la que adoptaremos.</p>
 </div>
 <div id="aplicación-del-método-de-k-medias-con-determinación-de-semillas-kmeans." class="section level3" number="7.3.3">
 <h3>
 <span class="header-section-number">7.3.3</span> <img src="figuras/pie-chart.svg"> Aplicación del método de k-medias con determinación de semillas <em>kmeans++</em>.<a class="anchor" aria-label="anchor" href="#aplicaci%C3%B3n-del-m%C3%A9todo-de-k-medias-con-determinaci%C3%B3n-de-semillas-kmeans."><i class="fas fa-link"></i></a>
 </h3>
-<p>Una vez decidido el número de grupos (en el ejemplo, 7), se aplica (de nuevo) el método de <strong><em>k-medias</em></strong>, en la versión de la función <code><a href="https://rdrr.io/pkg/ClusterR/man/KMeans_rcpp.html">KMeans_rcpp()</a></code> del paquete <a href="https://github.com/mlampros/ClusterR">ClusterR</a>, que permite obtener las “semillas” (centroides iniciales) mediante el algoritmo <em>kmeans++</em>, que ofrece buenos resultados frente a otras posibilidades de obtención de “semillas”, como la generación puramente aleatoria. La solución final se guarda en el objeto “cluster_k”:</p>
+<p>Una vez decidido el número de grupos (en el ejemplo, 7), se aplica (de nuevo) el método de <strong><em>k-medias</em></strong>, en la versión de la función <code><a href="https://mlampros.github.io/ClusterR/reference/KMeans_rcpp.html">KMeans_rcpp()</a></code> del paquete <a href="https://github.com/mlampros/ClusterR">ClusterR</a>, que permite obtener las “semillas” (centroides iniciales) mediante el algoritmo <em>kmeans++</em>, que ofrece buenos resultados frente a otras posibilidades de obtención de “semillas”, como la generación puramente aleatoria. La solución final se guarda en el objeto “cluster_k”:</p>
 <div class="sourceCode" id="cb277"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Aplicación definitiva de k-medias.</span></span>
 <span>  <span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">7</span>  <span class="co"># poner aquí número de grupos decidido!!!!</span></span>
 <span></span>
 <span>  <span class="co"># Aplicando k-means con inicializacion kmeans++</span></span>
 <span></span>
-<span>  <span class="va">cluster_k</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/pkg/ClusterR/man/KMeans_rcpp.html">KMeans_rcpp</a></span> <span class="op">(</span><span class="va">zseleccion_so</span>,</span>
+<span>  <span class="va">cluster_k</span> <span class="op">&lt;-</span><span class="fu"><a href="https://mlampros.github.io/ClusterR/reference/KMeans_rcpp.html">KMeans_rcpp</a></span> <span class="op">(</span><span class="va">zseleccion_so</span>,</span>
 <span>                           clusters <span class="op">=</span> <span class="va">k</span>,</span>
 <span>                           num_init <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>                           max_iters <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>                           initializer <span class="op">=</span> <span class="st">"kmeans++"</span><span class="op">)</span></span></code></pre></div>
-<p>Como se acaba de explicar, en la función <code><a href="https://rdrr.io/pkg/ClusterR/man/KMeans_rcpp.html">KMeans_rcpp()</a></code>, el primer argumento es el <em>data frame</em> con las variables clasificadoras (en sus versiones tipificadas). El segundo es el número de clústeres o grupos a obtener (que lo hemos asignado anteriormente al parámetro “<strong>k</strong>”). El tercero, <code>num_init =</code>, es el número de veces que se repite el procedimiento a fin de retener la mejor solución. <code>Max_iters =</code> fija el máximo de iteraciones del procedimiento de <em>k-medias</em> hasta obtener una solución estable. <code>Initializer =</code> define el método de obtención de las semillas (en nuestro caso, <em>k-means++</em>). La solución final se guarda en el objeto “cluster_k”, como se puede apreciar en el <em>Environment</em>.</p>
+<p>Como se acaba de explicar, en la función <code><a href="https://mlampros.github.io/ClusterR/reference/KMeans_rcpp.html">KMeans_rcpp()</a></code>, el primer argumento es el <em>data frame</em> con las variables clasificadoras (en sus versiones tipificadas). El segundo es el número de clústeres o grupos a obtener (que lo hemos asignado anteriormente al parámetro “<strong>k</strong>”). El tercero, <code>num_init =</code>, es el número de veces que se repite el procedimiento a fin de retener la mejor solución. <code>Max_iters =</code> fija el máximo de iteraciones del procedimiento de <em>k-medias</em> hasta obtener una solución estable. <code>Initializer =</code> define el método de obtención de las semillas (en nuestro caso, <em>k-means++</em>). La solución final se guarda en el objeto “cluster_k”, como se puede apreciar en el <em>Environment</em>.</p>
 <p>Dentro de la solución, el vector con el grupo de pertenencia de cada empresa se obtiene con el elemento “$clusters”. Conviene guardar ese vector como factor. En concreto, se ha añadido como el factor <strong><code>whatcluster_k</code></strong>, integrado dentro del <em>data frame</em> “seleccion_so”.</p>
 <div class="sourceCode" id="cb278"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">seleccion_so</span><span class="op">$</span><span class="va">whatcluster_k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">cluster_k</span><span class="op">$</span><span class="va">clusters</span><span class="op">)</span></span></code></pre></div>
@@ -2546,7 +2546,7 @@ home one cargo
 <span>             align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-308">Table 7.5: </span><span id="tab:unnamed-chunk-308">Table 7.6: </span>Método de k-medias. 7 grupos. Medias de variables
+<span id="tab:unnamed-chunk-237">Table 7.5: </span><span id="tab:unnamed-chunk-237">Table 7.6: </span>Método de k-medias. 7 grupos. Medias de variables
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -2721,7 +2721,7 @@ I. Digitalizac.
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">n</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">grupos.graficos.centroides</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">grupos.graficos.centroides</span><span class="op">[[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-310-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-239-1.png" alt="" width="672"></div>
 <p>La lista “grupos.graficos.centroides” almacena las composiciones de 4 (o menos) gráficos generadas. En este ejemplo, solo tiene un elemento, que es mostrado al ejecutar el bucle de presentación de composiciones.</p>
 <p>Por medio de la tabla y los gráficos anteriores se pueden trazar algunas conclusiones, comparando las medias de las variables para cada grupo de casos formado (coordenadas de los centroides). El análisis revela una clara heterogeneidad estructural entre las empresas de transporte de mercancías interestelar. Las tres dimensiones —diversificación, fidelización y digitalización— se combinan de manera diferente en cada grupo, reflejando distintos modelos de negocio y grados de madurez estratégica. Así, podemos distinguir tres grandes perfiles:</p>
 <ul>
@@ -2796,7 +2796,7 @@ Perspectiva futura: Su foco estratégico y digitalización pueden asegurarles cr
 <span>            <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">gruposgraficos_kw</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>              <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">gruposgraficos_kw</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>    <span class="op">}</span>   </span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-312-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-241-1.png" alt="" width="672"></div>
 <p>En cuanto a la prueba de <em>comparaciones múltiples</em>, la función que se ocupa de llevarla a cabo es <code><a href="https://rdrr.io/pkg/pgirmess/man/kruskalmc.html">kruskalmc()</a></code>, del paquete <a href="https://github.com/pgiraudoux/pgirmess">pgirmess</a>. la solución se guarda en un objeto, por ejemplo, “datos_kmc”, y los argumentos son, por un lado, la variable analizada y el factor que se utiliza para denominar los grupos (“whatcluster_k”), unidos por el símbolo “~”. La función se aplica dentro del bucle que permite aplicar la prueba a cada una de las tres variables. Además, los resultados se pasan en tablas que son almacenadas en la lista “tablas_kw”:</p>
 <div class="sourceCode" id="cb284"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="co"># Realizar el análisis de Kruskal-Wallis  y llevar resultados a tablas</span></span>
@@ -2842,7 +2842,7 @@ Perspectiva futura: Su foco estratégico y digitalización pueden asegurarles cr
 </ul>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-314">Table 7.7: </span><span id="tab:unnamed-chunk-314">Table 7.8: </span>k-medias. Diferencias de Centroides IDIVERSE
+<span id="tab:unnamed-chunk-243">Table 7.7: </span><span id="tab:unnamed-chunk-243">Table 7.8: </span>k-medias. Diferencias de Centroides IDIVERSE
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -3156,7 +3156,7 @@ TRUE
 </table></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-314">Table 7.7: </span><span id="tab:unnamed-chunk-314">Table 7.7: </span>k-medias. Diferencias de Centroides IFIDE
+<span id="tab:unnamed-chunk-243">Table 7.7: </span><span id="tab:unnamed-chunk-243">Table 7.7: </span>k-medias. Diferencias de Centroides IFIDE
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -3470,7 +3470,7 @@ TRUE
 </table></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-314">Table 7.7: </span><span id="tab:unnamed-chunk-314">Table 7.7: </span>k-medias. Diferencias de Centroides IDIG
+<span id="tab:unnamed-chunk-243">Table 7.7: </span><span id="tab:unnamed-chunk-243">Table 7.7: </span>k-medias. Diferencias de Centroides IDIG
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -3830,7 +3830,7 @@ TRUE
 <span>    <span class="kw">for</span> <span class="op">(</span><span class="va">n</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">gruposgraficos</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>         <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">gruposgraficos</span><span class="op">[[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-316-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-245-1.png" alt="" width="672"></div>
 <p>Los gráficos de dispersión muestran con claridad la estructura espacial de los siete clústeres y su correspondencia con los niveles de <strong>diversificación</strong>, <strong>fidelización</strong> y <strong>digitalización</strong> de las empresas. Los grupos 4 y 5 se concentran en la zona inferior izquierda de los diagramas, caracterizados por los valores más bajos en todas las variables —empresas con escasa diversificación y digitalización, y menor fidelidad de clientes—, mientras que el grupo 6 se sitúa de forma destacada en el extremo superior derecho, evidenciando su liderazgo tecnológico y su alta diversificación. Los grupos 1 y 7 se ubican en posiciones intermedias, aunque algo más desplazados hacia niveles medios-altos de fidelidad y diversificación, lo que los perfila como empresas con potencial de crecimiento. Finalmente, los grupos 2 y 3, más concentrados en la parte superior central, presentan altos niveles de fidelización y moderada digitalización, pero con menor dispersión en diversificación, lo que sugiere estrategias más focalizadas.</p>
 <p>En conjunto, los diagramas reflejan relaciones positivas entre las tres variables, especialmente entre diversificación y digitalización (IDIVERSE–IDIG), donde se observa un patrón casi lineal: las empresas más diversificadas tienden también a estar más digitalizadas. La relación entre fidelización y digitalización (IFIDE–IDIG) es más dispersa, aunque se vislumbra una pendiente positiva: la digitalización parece acompañarse de cierta mejora en la fidelidad de los clientes. En cambio, la asociación fidelidad–diversificación (IFIDE–IDIVERSE) resulta más compleja, con un grupo principal en torno a valores medios-altos de fidelización independientemente de la diversificación, lo que podría indicar que la fidelidad no depende directamente de la amplitud del negocio, sino de otros factores como la calidad del servicio o la relación cliente–empresa.</p>
 </div>
@@ -4003,9 +4003,9 @@ De este modo, DBSCAN no necesita especificar el número de clústeres a priori: 
 <span><span class="co"># Eliminando variable MAHALANOBIS del df con outliers</span></span>
 <span><span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">MAHALANOBIS</span><span class="op">)</span></span></code></pre></div>
 <p>Aunque el <em>script</em> incluye el código para detectar y eliminar posibles <em>missing values</em>, el gráfico generado por <code><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss()</a></code> confirma que no existen datos ausentes en las tres variables de interés. Por tanto, el <em>data frame</em> “seleccion” mantiene los 300 casos originales:</p>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-319-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-248-1.png" alt="" width="672"></div>
 <p>En la detección de <em>outliers</em>, se calcularon las <em>distancias de Mahalanobis</em> y se representaron mediante un <em>boxplot</em>. El gráfico evidenció la presencia de casos atípicos, que fueron identificados mediante el filtro habitual (26 observaciones):</p>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-321-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-250-1.png" alt="" width="672"></div>
 <pre><code>##                             MAHALANOBIS  IDIVERSE     IFIDE       IDIG
 ## arrakis freight               34.783752 38.881367 73.302303 58.5101128
 ## vader and company             23.777077 34.387492 68.770819 42.4288883
@@ -4318,7 +4318,7 @@ no es realmente un clúster; sino que reúne a los casos considerados atípicos,
 <p>Con el código anterior, por ejemplo, podemos construir la tabla de número de elementos y medias de cada clúster:</p>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-333">Table 7.9: </span><span id="tab:unnamed-chunk-333">Table 7.10: </span>Método DBSCAN. Medias de variables (Grupo 0 = Ruido)
+<span id="tab:unnamed-chunk-262">Table 7.9: </span><span id="tab:unnamed-chunk-262">Table 7.10: </span>Método DBSCAN. Medias de variables (Grupo 0 = Ruido)
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -4426,7 +4426,7 @@ I. Digitalizac.
 </tbody>
 </table></div>
 <p>Además, obtenemos los gráficos de las medias de los clústeres y de dispersión de las variables 2 a 2:</p>
-<p><img src="RstarS_files/figure-html/unnamed-chunk-334-1.png" width="672"><img src="RstarS_files/figure-html/unnamed-chunk-334-2.png" width="672"></p>
+<p><img src="RstarS_files/figure-html/unnamed-chunk-263-1.png" alt="" width="672"><img src="RstarS_files/figure-html/unnamed-chunk-263-2.png" alt="" width="672"></p>
 <p>Se deja al lector, como ejercicio práctico, la interpretación de estos gráficos a fin de caracterizar los 4 clústeres identificados (ha de tenerse en cuenta que el grupo 0 no es un clúster, sino que recoge los elementos <em>ruido</em>, y por tanto, su interpretación carece de sentido, al menos en térmisnos de valores medios de las variables).</p>
 <p>Para concluir, conviene hacerse una pregunta relevante: <strong>¿Cómo ha clasificado <em>DBSCAN</em> a los casos 26 que fueron identificados como <em>outliers</em>?</strong> ¿Los ha etiquetado como “ruido”, como sería lo coherente?</p>
 <p>La siguiente tabla nos muestra la respuesta:</p>
@@ -4470,7 +4470,7 @@ I. Digitalizac.
 <span>           align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-336">Table 7.11: </span><span id="tab:unnamed-chunk-336">Table 7.12: </span>¿Outliers son ruido? (Grupo 0 = Ruido)
+<span id="tab:unnamed-chunk-265">Table 7.11: </span><span id="tab:unnamed-chunk-265">Table 7.12: </span>¿Outliers son ruido? (Grupo 0 = Ruido)
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -5020,7 +5020,7 @@ ripley interstellar freight
 </div>
 <div id="materiales-para-realizar-las-prácticas-del-capítulo.-5" class="section level2" number="7.5">
 <h2>
-<span class="header-section-number">7.5</span> Materiales para realizar las prácticas del capítulo.<a class="anchor" aria-label="anchor" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-5"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.5</span> <img src="figuras/arrow-down-circle.svg" class="hicon"> Materiales para realizar las prácticas del capítulo.<a class="anchor" aria-label="anchor" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-5"><i class="fas fa-link"></i></a>
 </h2>
 <p>En esta sección se muestran los links de acceso a los diferentes materiales (<em>scripts</em>, datos…) necesarios para llevar a cabo los contenidos prácticos del capítulo.</p>
 <p><strong>Datos (en formato Microsoft (R) Excel (R)):</strong></p>
@@ -5067,7 +5067,7 @@ ripley interstellar freight
 <li><a class="nav-link" href="#caracterizaci%C3%B3n-de-los-cl%C3%BAsteres-o-grupos-formados."><span class="header-section-number">7.4.3</span>  Caracterización de los clústeres o grupos formados.</a></li>
 </ul>
 </li>
-<li><a class="nav-link" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-5"><span class="header-section-number">7.5</span> Materiales para realizar las prácticas del capítulo.</a></li>
+<li><a class="nav-link" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-5"><span class="header-section-number">7.5</span>  Materiales para realizar las prácticas del capítulo.</a></li>
 </ul>
 
       <div class="book-extra">
@@ -5084,7 +5084,7 @@ ripley interstellar freight
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2025-11-02.</p>
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2026-03-17.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

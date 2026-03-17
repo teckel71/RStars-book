@@ -1,0 +1,339 @@
+#### Modelos log-lineales para Tablas de Contingencia Multidimensionales #######
+################################################################################
+
+# Limpiando el Global Environment
+rm(list = ls())
+
+# Cargando paquetes
+
+library (readxl)
+library (dplyr)
+library (ggplot2)
+library (gtExtras)
+library (visdat)
+library (knitr)
+library (kableExtra)
+library (pander)     # Tablas multifactoriales compactas en Rmarkdown
+library (vcd)        # Visualización tablas de contingencia
+library (MASS)       # Estimación log-lineales
+
+# FUNCIONES
+
+#### Detección de celdas 0 (robusta a k dimensiones)############################
+detect_zeros_any <- function(tab) {
+  idx <- which(tab == 0, arr.ind = TRUE)
+  # Si no hay ceros, devuelve NULL
+  if (is.null(idx) ||
+     (is.matrix(idx) && nrow(idx) == 0) || 
+     (is.vector(idx) && length(idx) == 0)) {
+    return(NULL)
+  }
+  idx <- as.data.frame(idx)
+  dn  <- dimnames(tab)
+  dn_names <- names(dn)
+  if (is.null(dn_names) || any(nchar(dn_names) == 0)) {
+    dn_names <- paste0("Var", seq_along(dn))
+  }
+  # Mapear índices -> etiquetas por dimensión (si hay dimnames)
+  out_cols <- lapply(seq_along(dn), function(k) {
+    if (!is.null(dn[[k]])) dn[[k]][ idx[[k]] ] else idx[[k]]
+  })
+  names(out_cols) <- dn_names
+  out <- as.data.frame(out_cols, stringsAsFactors = FALSE)
+  out$Frecuencia_Original <- 0L
+  out
+}
+
+################################################################################
+
+#### Imputación 0->1 con reporte como atributo (no toca celdas > 0) ############
+impute_zeros_with_one <- function(tab, value = 1L) {
+  zeros_df <- detect_zeros_any(tab)
+  tab_adj <- tab
+  tab_adj[tab_adj == 0] <- value
+  
+  if (!is.null(zeros_df)) {
+    zeros_df$Frecuencia_Imputada <- value
+    attr(tab_adj, "zeros_imputados") <- zeros_df
+    attr(tab_adj, "nota_imputacion") <-
+      sprintf("Se imputaron %d celdas 0 con valor %d para poder preparar la estimación.",
+              nrow(zeros_df), value)
+  } else {
+    attr(tab_adj, "zeros_imputados") <- NULL
+    attr(tab_adj, "nota_imputacion") <- "No había celdas con frecuencia 0."
+  }
+  tab_adj
+}
+################################################################################      
+
+#### Función para extraer coeficientes y sus nombres de un modelo ##############
+extraer_coeficientes <- function(modelo) {
+  # Extraer los parámetros del modelo
+  parametros <- modelo$param
+  
+  # Crear listas para almacenar nombres y valores de coeficientes
+  coef_names <- c()
+  coef_values <- c()
+  
+  # Función para generar nombres de coeficientes
+  generate_coef_name <- function(levels) {
+    return(paste(levels, collapse = ":"))
+  }
+  
+  # Recorrer los coeficientes y extraer los nombres y valores
+  for (term in names(parametros)) {
+    if (term == "(Intercept)") {
+      coef_names <- c(coef_names, "T. Independiente")
+      coef_values <- c(coef_values, parametros[[term]])
+    } else if (is.matrix(parametros[[term]])) {
+      # Si es una matriz, recorrer filas y columnas
+      for (i in 1:nrow(parametros[[term]])) {
+        for (j in 1:ncol(parametros[[term]])) {
+          coef_names <- c(coef_names,
+                          paste(rownames(parametros[[term]])[i],
+                                colnames(parametros[[term]])[j],
+                                sep = ":"))
+          coef_values <- c(coef_values, parametros[[term]][i, j])
+        }
+      }
+    } else if (is.array(parametros[[term]])) {
+      # Si es un array de más de dos dimensiones
+      dims <- dim(parametros[[term]])
+      dimnames_list <- dimnames(parametros[[term]])
+      for (i in seq_len(dims[1])) {
+        for (j in seq_len(dims[2])) {
+          for (k in seq_len(dims[3])) {
+            coef_name <- paste(dimnames_list[[1]][i],
+                               dimnames_list[[2]][j],
+                               dimnames_list[[3]][k],
+                               sep = ":")
+            coef_names <- c(coef_names, coef_name)
+            coef_values <- c(coef_values,
+                             parametros[[term]][i, j, k])
+          }
+        }
+      }
+    } else {
+      levels <- names(parametros[[term]])
+      for (level in levels) {
+        coef_names <- c(coef_names,
+                        generate_coef_name(c(term, level)))
+        coef_values <- c(coef_values,
+                         parametros[[term]][[level]])
+      }
+    }
+  }
+  
+  # Verificar la longitud de los vectores antes de crear el data frame
+  if (length(coef_names) == length(coef_values)) {
+    tabla_coeficientes <- data.frame(Coefficient = coef_names,
+                                     Value = coef_values,
+                                     stringsAsFactors = FALSE)
+    return(tabla_coeficientes)
+  } else {
+    stop("Error: Las longitudes de coef_names y coef_values no coinciden.")
+  }
+}
+################################################################################
+
+#### Función generar tablas y gráfico a partir de modelo log-lineal ############
+
+generar_solucion <- function(modelo) {
+  # Extraer la información del modelo
+  summary_modelo <- summary(modelo)
+  
+  # Crear una tabla con la información relevante de las pruebas de validez
+  tabla_informacion <- data.frame(
+    Statistic = c("Likelihood Ratio", "Pearson"),
+    X2 = c(summary_modelo$tests[1, "X^2"], summary_modelo$tests[2, "X^2"]),
+    df = c(summary_modelo$tests[1, "df"], summary_modelo$tests[2, "df"]),
+    P_value = c(summary_modelo$tests[1, "P(> X^2)"],
+                summary_modelo$tests[2, "P(> X^2)"]),
+    stringsAsFactors = FALSE
+  )
+  
+  # Formatear la tabla usando kable
+  independencia_valida_tab <- tabla_informacion %>%
+    kable(caption ="Validación del modelo",
+          format = "html",
+          col.names = c("Prueba", "Estadístico",
+                        "Grados Libertad",
+                        "P-valor")) %>%
+    kable_styling(full_width = F,
+                  bootstrap_options = c("striped", "bordered", "condensed"),
+                  position = "center",
+                  font_size = 12) %>%
+    row_spec(0, bold= T, align = "c")
+  
+  # Extraer los coeficientes del modelo
+  independencia_df <- extraer_coeficientes(modelo)
+  
+  # Formatear la tabla de coeficientes usando kable
+  independencia_coef_tab <- independencia_df %>%
+    kable(format = "html",
+          caption ="Coeficientes del modelo",
+          digits = 3) %>%
+    kable_styling(full_width = F,
+                  bootstrap_options = c("striped", "bordered", "condensed"),
+                  position = "center",
+                  font_size = 12) %>%
+    row_spec(0, bold= T, align = "c")
+  
+  # Crear el gráfico de mosaico con residuos y mostrarlo en pantalla
+  plot(modelo, panel = mosaic,
+       main="Residuos del modelo",
+       residuals_type = c("deviance"),
+       gp = shading_hcl,
+       gp_args = list(interpolate = c(0, 1)),
+       main_gp = gpar(fontsize = 14),
+       sub_gp = gpar(fontsize = 9),
+       labeling_args = list(rot_labels = c(0, 45),
+                            gp_labels = gpar(fontsize = 8)))
+  
+  # Guardar las tablas en una lista
+  solucion_nombre <- paste0("solucion_", deparse(substitute(modelo)))
+  solucion_lista <- list(
+    Informacion = independencia_valida_tab,
+    Coeficientes = independencia_coef_tab
+  )
+  
+  assign(solucion_nombre, solucion_lista, envir = .GlobalEnv)
+}
+################################################################################
+
+# DATOS
+
+## Importando datos
+
+library (readxl)
+interestelar_300 <- read_excel("interestelar_300.xlsx", sheet ="Datos")
+interestelar_300 <- data.frame(interestelar_300, row.names = 1)
+
+# Seleccionando variables para el analisis.
+seleccion <- interestelar_300 %>%
+  dplyr::select(GALAXIA,
+                FJUR,
+                EFLO)
+seleccion_df_graph <- gt_plt_summary(seleccion)
+seleccion_df_graph
+
+# Localizando missing values.
+seleccion %>%
+  vis_miss() +
+  labs(title = "Tablas de contingencia.",
+       subtitle = "Transporte de mercancías interestelar",
+       y = "Observación",
+       fill = NULL) +
+  scale_fill_manual(
+    values = c("TRUE" = "red", "FALSE" = "grey"),
+    labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
+  theme(
+    plot.title = element_text(face = "bold", size = 14))
+
+seleccion %>% filter(is.na(GALAXIA) |
+                       is.na(FJUR) |
+                       is.na(EFLO))%>%
+              dplyr::select(GALAXIA,
+                            FJUR,
+                            EFLO)
+
+seleccion <- seleccion %>%
+  filter(! is.na(GALAXIA) &
+           ! is.na(FJUR) &
+           ! is.na(EFLO)) %>%
+  mutate(GALAXIA = recode(GALAXIA,
+                          "Gran Nube de Magallanes" = "GN Mag.",
+                          "Pequeña Nube de Magallanes" = "PN Mag.",
+                          "Galaxia de Andrómeda" = "Andrómeda",
+                          "Galaxia del Triángulo" = "Triángulo",
+                          "Vía Láctea" = "V. Láctea"))
+
+# Pasar variables categóricas a factores
+seleccion <- seleccion %>% mutate(across(everything(), as.factor))
+
+# Construir tabla original
+tab0 <- xtabs(~ GALAXIA + FJUR + EFLO, data = seleccion)
+
+# Reportar celdas 0 (si existen)
+zeros_report <- detect_zeros_any(tab0)
+
+if (is.null(zeros_report)) {
+  message("No se han detectado celdas con frecuencia 0 en la tabla original.")
+} else {
+  knitr.table.format <- "html"
+  zeros_report %>%
+    kable(format = knitr.table.format,
+          caption = "Combinaciones con 0 detectadas (antes de imputar)") %>%
+    kable_styling(full_width = FALSE,
+                  bootstrap_options = c("striped","bordered","condensed"),
+                  position = "center", font_size = 12) %>%
+    row_spec(0, bold = TRUE, align = "c")
+}
+
+# Imputar 0 -> 1 (solo celdas con 0) y anotar nota + reporte como atributo
+tab_use <- impute_zeros_with_one(tab0, value = 1L)
+
+# Mostrar nota de imputación y, si aplica, el detalle de celdas imputadas
+cat("\nNOTA IMPUTACIÓN: ", attr(tab_use, "nota_imputacion"), "\n")
+
+if (!is.null(attr(tab_use, "zeros_imputados"))) {
+  attr(tab_use, "zeros_imputados") %>%
+    kable(format = "html",
+          caption = "Combinaciones imputadas (0 → 1) para estimar modelo") %>%
+    kable_styling(full_width = FALSE,
+                  bootstrap_options = c("striped","bordered","condensed"),
+                  position = "center", font_size = 12) %>%
+    row_spec(0, bold = TRUE, align = "c")
+}
+
+# Mostrar tabla
+
+pander("Tabla de contingencia GALAXIA × FJUR × EFLO")
+pander(tab0, style= "rmarkdown")
+
+pander("Tabla de contingencia GALAXIA × FJUR × EFLO (imputación puntual 0→1)")
+pander(tab_use, style= "rmarkdown")
+
+# Representación gráfica de la tabla con mosaico
+mosaic(tab0,
+       main = "Galaxia, Forma Jurídica y Antigüedad media de la flota",
+       sub = "Empresas TMI",
+       gp = shading_Marimekko(tab0),
+       labeling_args = list(rot_labels = c(0, 45),
+                            gp_labels = gpar(fontsize = 8)),
+       main_gp = gpar(fontsize = 16),
+       sub_gp = gpar(fontsize = 14))
+
+# ESTIMACIÓN
+
+# Modelo Independencia.
+
+modelo_indep <- MASS::loglm(~ GALAXIA + EFLO + FJUR,
+                            data= tab_use)
+
+generar_solucion(modelo_indep)
+
+solucion_modelo_indep$Informacion
+solucion_modelo_indep$Coeficientes
+
+# Modelo Saturado.
+
+modelo_sat <- MASS::loglm(~ GALAXIA * EFLO * FJUR,
+                          data= tab_use)
+
+generar_solucion(modelo_sat)
+solucion_modelo_sat$Informacion
+solucion_modelo_sat$Coeficientes
+
+# Elección del modelo final.
+
+modelo_def <- step(modelo_sat, scale = 0,
+                   direction = c("backward"),
+                   trace = 1, steps = 1000)
+
+generar_solucion(modelo_def)
+
+solucion_modelo_def$Informacion
+solucion_modelo_def$Coeficientes
+
+# Fin del script :)

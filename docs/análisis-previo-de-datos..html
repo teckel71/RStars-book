@@ -7,7 +7,7 @@
 <title>5 Análisis previo de datos. | R-Stars: La Guía</title>
 <meta name="author" content="Miguel-Ángel Tarancón">
 <meta name="description" content="Comandante de rogue one freight supervisando los datos de travesía.  5.1 Introducción. Antes de la aplicación de técnicas complejas que permitan extraer de los datos conclusiones relevantes, es...">
-<meta name="generator" content="bookdown 0.44 with bs4_book()">
+<meta name="generator" content="bookdown 0.46 with bs4_book()">
 <meta property="og:title" content="5 Análisis previo de datos. | R-Stars: La Guía">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://teckel71.github.io/RStars-book/análisis-previo-de-datos..html">
@@ -19,10 +19,10 @@
 <meta name="twitter:image" content="https://teckel71.github.io/RStars-book/figuras/Portada_v3-2.jpg">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><link href="libs/Inter-0.4.10/font.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><link href="libs/Source_Serif_4-0.4.10/font.css" rel="stylesheet">
 <link href="libs/JetBrains_Mono-0.4.10/font.css" rel="stylesheet">
-<link href="libs/Inter_Tight-0.4.10/font.css" rel="stylesheet">
-<script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<link href="libs/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
+<script src="libs/bs3compat-0.10.0/transition.js"></script><script src="libs/bs3compat-0.10.0/tabs.js"></script><script src="libs/bs3compat-0.10.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
@@ -150,24 +150,24 @@
 <span><span class="va">datos_df_graph</span></span></code></pre></div>
 <p>Por defecto, R considera las celdas en blanco de la hoja de cálculo como NAs; pero hemos de advertirle del resto de posibilidades que existen en la hoja para comunicar que falta un dato determinado, como ya se ha comentado. Para ello, hemos añadido en la función <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> el argumento <code>na =</code>, que recoge los contenidos de celda de la hoja de cálculo que indican que falta el dato en cuestión.</p>
 <p>Por otro lado, R ha tomado la primera columna como una variable categórica. En realidad, esta columna no es una variable, sino que está formada por los nombres de los diferentes casos u observaciones. Para evitar que R vea la columna de los nombres de los casos como una variable más, hemos redefinido nuestro <em>data frame</em> diciéndole que tome esa primera columna como el conjunto de los <em>nombres</em> de los casos (filas).</p>
-<div id="xxuwidpwcq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="ntjnyvfvlf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#xxuwidpwcq table {
+#ntjnyvfvlf table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#xxuwidpwcq thead, #xxuwidpwcq tbody, #xxuwidpwcq tfoot, #xxuwidpwcq tr, #xxuwidpwcq td, #xxuwidpwcq th {
+#ntjnyvfvlf thead, #ntjnyvfvlf tbody, #ntjnyvfvlf tfoot, #ntjnyvfvlf tr, #ntjnyvfvlf td, #ntjnyvfvlf th {
   border-style: none;
 }
 
-#xxuwidpwcq p {
+#ntjnyvfvlf p {
   margin: 0;
   padding: 0;
 }
 
-#xxuwidpwcq .gt_table {
+#ntjnyvfvlf .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -193,12 +193,12 @@
   border-left-color: #D3D3D3;
 }
 
-#xxuwidpwcq .gt_caption {
+#ntjnyvfvlf .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#xxuwidpwcq .gt_title {
+#ntjnyvfvlf .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -210,7 +210,7 @@
   border-bottom-width: 0;
 }
 
-#xxuwidpwcq .gt_subtitle {
+#ntjnyvfvlf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -222,7 +222,7 @@
   border-top-width: 0;
 }
 
-#xxuwidpwcq .gt_heading {
+#ntjnyvfvlf .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -234,13 +234,13 @@
   border-right-color: #D3D3D3;
 }
 
-#xxuwidpwcq .gt_bottom_border {
+#ntjnyvfvlf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 0px;
   border-bottom-color: #D3D3D3;
 }
 
-#xxuwidpwcq .gt_col_headings {
+#ntjnyvfvlf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 0px;
   border-top-color: #D3D3D3;
@@ -255,7 +255,7 @@
   border-right-color: #D3D3D3;
 }
 
-#xxuwidpwcq .gt_col_heading {
+#ntjnyvfvlf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -275,7 +275,7 @@
   overflow-x: hidden;
 }
 
-#xxuwidpwcq .gt_column_spanner_outer {
+#ntjnyvfvlf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -287,15 +287,15 @@
   padding-right: 4px;
 }
 
-#xxuwidpwcq .gt_column_spanner_outer:first-child {
+#ntjnyvfvlf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#xxuwidpwcq .gt_column_spanner_outer:last-child {
+#ntjnyvfvlf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#xxuwidpwcq .gt_column_spanner {
+#ntjnyvfvlf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -307,11 +307,11 @@
   width: 100%;
 }
 
-#xxuwidpwcq .gt_spanner_row {
+#ntjnyvfvlf .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#xxuwidpwcq .gt_group_heading {
+#ntjnyvfvlf .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -337,7 +337,7 @@
   text-align: left;
 }
 
-#xxuwidpwcq .gt_empty_group_heading {
+#ntjnyvfvlf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -352,15 +352,15 @@
   vertical-align: middle;
 }
 
-#xxuwidpwcq .gt_from_md > :first-child {
+#ntjnyvfvlf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#xxuwidpwcq .gt_from_md > :last-child {
+#ntjnyvfvlf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#xxuwidpwcq .gt_row {
+#ntjnyvfvlf .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -379,7 +379,7 @@
   overflow-x: hidden;
 }
 
-#xxuwidpwcq .gt_stub {
+#ntjnyvfvlf .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -392,7 +392,7 @@
   padding-right: 5px;
 }
 
-#xxuwidpwcq .gt_stub_row_group {
+#ntjnyvfvlf .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -406,15 +406,15 @@
   vertical-align: top;
 }
 
-#xxuwidpwcq .gt_row_group_first td {
+#ntjnyvfvlf .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#xxuwidpwcq .gt_row_group_first th {
+#ntjnyvfvlf .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#xxuwidpwcq .gt_summary_row {
+#ntjnyvfvlf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -424,16 +424,16 @@
   padding-right: 5px;
 }
 
-#xxuwidpwcq .gt_first_summary_row {
+#ntjnyvfvlf .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#xxuwidpwcq .gt_first_summary_row.thick {
+#ntjnyvfvlf .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#xxuwidpwcq .gt_last_summary_row {
+#ntjnyvfvlf .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -443,7 +443,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#xxuwidpwcq .gt_grand_summary_row {
+#ntjnyvfvlf .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -453,7 +453,7 @@
   padding-right: 5px;
 }
 
-#xxuwidpwcq .gt_first_grand_summary_row {
+#ntjnyvfvlf .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -463,7 +463,7 @@
   border-top-color: #D3D3D3;
 }
 
-#xxuwidpwcq .gt_last_grand_summary_row_top {
+#ntjnyvfvlf .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -473,11 +473,11 @@
   border-bottom-color: #D3D3D3;
 }
 
-#xxuwidpwcq .gt_striped {
+#ntjnyvfvlf .gt_striped {
   background-color: #FAFAFA;
 }
 
-#xxuwidpwcq .gt_table_body {
+#ntjnyvfvlf .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -486,7 +486,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#xxuwidpwcq .gt_footnotes {
+#ntjnyvfvlf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -500,7 +500,7 @@
   border-right-color: #D3D3D3;
 }
 
-#xxuwidpwcq .gt_footnote {
+#ntjnyvfvlf .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -509,7 +509,7 @@
   padding-right: 5px;
 }
 
-#xxuwidpwcq .gt_sourcenotes {
+#ntjnyvfvlf .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -523,7 +523,7 @@
   border-right-color: #D3D3D3;
 }
 
-#xxuwidpwcq .gt_sourcenote {
+#ntjnyvfvlf .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -531,72 +531,72 @@
   padding-right: 5px;
 }
 
-#xxuwidpwcq .gt_left {
+#ntjnyvfvlf .gt_left {
   text-align: left;
 }
 
-#xxuwidpwcq .gt_center {
+#ntjnyvfvlf .gt_center {
   text-align: center;
 }
 
-#xxuwidpwcq .gt_right {
+#ntjnyvfvlf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#xxuwidpwcq .gt_font_normal {
+#ntjnyvfvlf .gt_font_normal {
   font-weight: normal;
 }
 
-#xxuwidpwcq .gt_font_bold {
+#ntjnyvfvlf .gt_font_bold {
   font-weight: bold;
 }
 
-#xxuwidpwcq .gt_font_italic {
+#ntjnyvfvlf .gt_font_italic {
   font-style: italic;
 }
 
-#xxuwidpwcq .gt_super {
+#ntjnyvfvlf .gt_super {
   font-size: 65%;
 }
 
-#xxuwidpwcq .gt_footnote_marks {
+#ntjnyvfvlf .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#xxuwidpwcq .gt_asterisk {
+#ntjnyvfvlf .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#xxuwidpwcq .gt_indent_1 {
+#ntjnyvfvlf .gt_indent_1 {
   text-indent: 5px;
 }
 
-#xxuwidpwcq .gt_indent_2 {
+#ntjnyvfvlf .gt_indent_2 {
   text-indent: 10px;
 }
 
-#xxuwidpwcq .gt_indent_3 {
+#ntjnyvfvlf .gt_indent_3 {
   text-indent: 15px;
 }
 
-#xxuwidpwcq .gt_indent_4 {
+#ntjnyvfvlf .gt_indent_4 {
   text-indent: 20px;
 }
 
-#xxuwidpwcq .gt_indent_5 {
+#ntjnyvfvlf .gt_indent_5 {
   text-indent: 25px;
 }
 
-#xxuwidpwcq .katex-display {
+#ntjnyvfvlf .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#xxuwidpwcq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ntjnyvfvlf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -978,7 +978,7 @@ ANTIGUA, MADURA and RENOVADA
 <span>      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"TRUE"</span> <span class="op">=</span> <span class="st">"NA"</span>, <span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"Presente"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span></span>
 <span>    plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-218-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-147-1.png" alt="" width="672"></div>
 <p>La explicación detallada del código es la siguiente:</p>
 <ul>
 <li><p><strong><code>muestra %&gt;%:</code></strong> Usa el <em>pipe</em> de <strong>dplyr</strong> para encadenar operaciones de forma legible.</p></li>
@@ -1031,7 +1031,7 @@ ANTIGUA, MADURA and RENOVADA
 <span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Rentabilidad Económica (%)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Obteniéndose el gráfico:</p>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-223-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-152-1.png" alt="" width="672"></div>
 <p>La “caja” contiene el 50% de los valores de la variable que toman los casos centrales (los que van del primer cuartil al tercero, cuya diferencia se llama <em>rango intercuartílico</em>), y contiene una línea horizontal que es la mediana (segundo cuartil). Por arriba sobresale un segmento que llega al mayor valor de la variable que toma algún caso y que no llega a ser atípico; y por debajo de la caja otro segmento que llega al menor valor de la variable que toma algún caso y que no llega a ser atípico. Los casos atípicos o <em>outliers</em> son aquellos que toman valores que se alejan más de 1.5 veces del rango intercuartílico (altura de la caja) del tercer cuartil, por arriba; o del primer cuartil, por abajo. Se registran mediante puntos.</p>
 <p>En nuestro caso, el <em>boxplot</em> ratifica la existencia de dos casos atípicos. Para identificar esos dos casos concretos, podemos recurrir al paquete <a href="https://dplyr.tidyverse.org">dplyr</a>, y <strong>establecer un filtro</strong> con el siguiente código:</p>
 <div class="sourceCode" id="cb188"><pre class="downlit sourceCode r">
@@ -1110,7 +1110,7 @@ ANTIGUA, MADURA and RENOVADA
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">conteo_intervalos_df</span><span class="op">)</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-230">Table 5.1: </span><span id="tab:unnamed-chunk-230">Table 5.2: </span>Distribución de frecuencias agrupadas en intervalos de Rentabilidad Económica
+<span id="tab:unnamed-chunk-159">Table 5.1: </span><span id="tab:unnamed-chunk-159">Table 5.2: </span>Distribución de frecuencias agrupadas en intervalos de Rentabilidad Económica
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -1290,7 +1290,7 @@ Frecuencia relativa acum. F(i)
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Frecuencias"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">g1</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-231-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-160-1.png" alt="" width="672"></div>
 <p>En el gráfico vemos de un modo nítido la distribución de frecuencias en cuanto a la rentabilidad económica (RENECO). Se ha incorporado una línea vertical azul (mediante <code><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline()</a></code>) para localizar la rentabilidad media. Entre otras cosas, se puede apreciar que la distribución de frecuencias es acampanada y prácticamente simétrica.</p>
 <p>Como complemento al histograma, podemos realizar un gráfico de densidad de RENECO, al que añadiremos una curva normal con la misma media y desviación típica que nuestra distribución de frecuencias, y que se añade mediante <code><a href="https://ggplot2.tidyverse.org/reference/geom_function.html">stat_function()</a></code> y el argumento <code>fun = dnorm</code>. Este gráfico representa la distribución de probabilidad empírica de la muestra, es una especie de histograma “suavizado”. De este modo, se podrán verificar de un modo fácil algunas de las características avanzadas con la observación del histograma, como la asimetría positiva. El código es:</p>
 <div class="sourceCode" id="cb193"><pre class="downlit sourceCode r">
@@ -1314,7 +1314,7 @@ Frecuencia relativa acum. F(i)
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Densidad"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">g2</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-232-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-161-1.png" alt="" width="672"></div>
 <p>La curva naranja muestra cómo se distribuye la <strong>rentabilidad económica</strong>: tiene forma de “campana”, con la mayoría de empresas concentradas alrededor del 50–60%. La línea vertical azul marca el valor central (media), en torno al 52%. Comparada con la curva azul de referencia (la normal), la distribución real es muy parecida, aunque algo más ancha y con un ligero peso extra en rentabilidades algo por debajo del centro; en el extremo alto hay menos casos de lo que predeciría una campana perfecta. En términos económicos: el sector muestra un rendimiento <strong>bastante estable</strong> y similar entre compañías, con <strong>pocas</strong> muy rezagadas o extraordinariamente rentables.</p>
 <p>Un tercer gráfico útil es el <strong><em>box-plot</em></strong> una vez se eliminaron los casos <em>outliers</em>, con la incorporación de los valores que toman los casos que componen la muestra, para lo cual se utiliza el <code>geom_jitter</code>:</p>
 <div class="sourceCode" id="cb194"><pre class="downlit sourceCode r">
@@ -1335,7 +1335,7 @@ Frecuencia relativa acum. F(i)
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Rentabilidad Económica (%)"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">g3</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-233-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-162-1.png" alt="" width="672"></div>
 <p>El <em>box-plot</em> confirma que la rentabilidad económica está bastante concentrada en la zona central. La <strong>mediana</strong> ronda el <strong>50%</strong> (línea dentro de la caja) y la mitad de las empresas cae aproximadamente entre 46% y 59% (altura de la caja, IQR), lo que sugiere variabilidad moderada. El rombo azul (media) está muy cerca de la mediana, indicando casi simetría. Los bigotes se extienden hacia valores en torno a 35–70% y aparecen pocos <em>outliers</em> tanto por abajo (≈30%) como por arriba (hasta ≈80%). En términos económicos: la mayoría de compañías rinde de forma similar y estable alrededor del 50–60%, con casos extremos poco frecuentes.</p>
 <p>Por otro lado, conviene tener conocimiento del valor de las principales <strong>medidas descriptivas</strong> (de posición, dispersión, forma) que caracterizan a la distribución de la variable a analizar. Para ello, vamos a crear un <em>data frame</em> llamado, por ejemplo, “estadisticos”, que recogerá las diferentes medidas, calculadas al aplicar a la variable RENECO del <em>data frame</em> “muestra_so” la función de <code>{deplyr}</code> llamada <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code>. Se calcularán la media, desviación típica, valor mínimo, mediana, valor máximo, el coeficiente de asimetría de <em>Fisher</em>, y el coeficiente de apuntamiento o curtosis de <em>Fisher</em>. Precisamente, para poder calcular esta última medida, es preciso activar el paquete <a href="https://www.r-project.org">moments</a>, que contiene la función <code><a href="https://rdrr.io/pkg/moments/man/kurtosis.html">kurtosis()</a></code>. La versión del coeficiente de apuntamiento de esta función dispone como distribución perfectamente mesocúrtica el valor de 3, por lo que se le restará 3 en la versión que manejaremos para que la distribución mesocúrtica se sitúe en un coeficiente de 0. El código es:</p>
 <div class="sourceCode" id="cb195"><pre class="downlit sourceCode r">
@@ -1365,7 +1365,7 @@ Frecuencia relativa acum. F(i)
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">estadisticos</span><span class="op">)</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-236">Table 5.3: </span><span id="tab:unnamed-chunk-236">Table 5.4: </span>Principales Estadísticos de la Rentabilidad Económica
+<span id="tab:unnamed-chunk-165">Table 5.3: </span><span id="tab:unnamed-chunk-165">Table 5.4: </span>Principales Estadísticos de la Rentabilidad Económica
 </caption>
 <thead><tr>
 <th style="text-align:right;font-weight: bold;text-align: center;">
@@ -1442,7 +1442,7 @@ C. Curtosis Fisher
 <span></span>
 <span><span class="va">g4</span></span></code></pre></div>
 <p>Y el resultado:</p>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-238-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-167-1.png" alt="" width="672"></div>
 <p>A veces, es difícil obtener una conclusión sólida con el gráfico <em>qq</em>; aunque en el ejemplo la separación de los puntos respecto al eje diagonal induce a pensar en que podría seguirse una distribución normal.</p>
 <p>Si queremos ser más precisos, en lugar de un análisis gráfico se puede recurrir a realizar un análisis formal, basado en la realización de <strong>contrastes de hipótesis</strong>. Una prueba muy usual es la <strong>prueba de normalidad de <em>Shapiro y Wilk</em></strong>, que tiene un buen comportamiento en muestras relativamente reducidas. En esta prueba, la hipótesis nula equivale al supuesto de normalidad. Para un 5% de significación estadística, un p-valor superior a 0.05 implicará el no-rechazo de la hipótesis de normalidad. Para realizar la prueba, se ejecutará el código:</p>
 <div class="sourceCode" id="cb198"><pre class="downlit sourceCode r">
@@ -1481,7 +1481,7 @@ C. Curtosis Fisher
 <span>        size <span class="op">=</span> <span class="fl">12</span></span>
 <span>      <span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">resumen</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-241-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-170-1.png" alt="" width="672"></div>
 <p>La composición gráfica se guarda en el <em>Global Environment</em> con el nombre “resumen”. El bloque <code><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html">plot_annotation()</a></code> determina y caracteriza el título y subtítulo del conjunto de gráficos.</p>
 </div>
 </div>
@@ -1518,7 +1518,7 @@ C. Curtosis Fisher
 <span>      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"TRUE"</span> <span class="op">=</span> <span class="st">"NA"</span>, <span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"Presente"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span></span>
 <span>    plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-242-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-171-1.png" alt="" width="672"></div>
 <p>Podemos apreciar cómo existen varios casos con <em>missing values</em> en las variables objeto de estudio.</p>
 <p>Para localizar los casos concretos con <em>missing values</em>, podemos recurrir al siguiente código. En él, hemos sometido a “muestra2” a un <em>filtro</em> para detectar los casos en los que no hay valor para alguna (o varias) de las variables analizadas. El operador <strong><code>|</code></strong> significa “o”. Posteriormente, hemos decidido eliminar esos casos (podría optarse por otro tipo de tratamiento, como la estimación de valores). Para ello asignamos a “muestra2” el resultado de pasar un filtro en el que se eligen los casos que no tienen valores faltantes en ninguna de las variables. El operador <strong><code>&amp;</code></strong> significa “y”:</p>
 <div class="sourceCode" id="cb202"><pre class="downlit sourceCode r">
@@ -1585,7 +1585,7 @@ D_M(\mathbf{x})
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"DISTANCIA DE MAHALANOBIS"</span>,</span>
 <span>            subtitle <span class="op">=</span> <span class="st">"RENECO, ACTIVO, MARGEN, RES. Empresas TMI."</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"MAHALANOBIS"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-245-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-174-1.png" alt="" width="672"></div>
 <p>Se observa cómo existen varios casos <em>outliers</em>. Para saber de qué casos concretos se trata, se podrá ejecutar el código:</p>
 <div class="sourceCode" id="cb207"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Q1M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">muestra2</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
@@ -1642,7 +1642,7 @@ D_M(\mathbf{x})
 <span>                        title <span class="op">=</span> <span class="st">"Matriz de Correlación (sin outliers)"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span><span class="va">temporal</span><span class="op">)</span></span>
 <span><span class="va">corr_plot_so</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-249-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-178-1.png" alt="" width="672"></div>
 <p>La interpretación detallada del código es la siguiente:</p>
 <ul>
 <li>
@@ -1667,7 +1667,7 @@ En las celdas del triángulo inferior, cuando ambas variables son numéricas (�
 </ul>
 <p>Un coeficiente de correlación puede tomar un valor entre <strong>-1</strong> (fuerte relación, en sentido opuesto) y <strong>+1</strong> (fuerte relación, en el mismo sentido). Como puede apreciarse en el gráfico, las variables ACTIVO y RES mantienen una relación muy intensa y en sentido positivo. Entre MARGEN y RENECO existe también una relación de intensidad destacable. En cambio, ACTIVO y MARGEN; y RENECO y ACTIVO apenas están estadísticamente relacionadas.</p>
 <p>Para finalizar, vamos a comparar las correlaciones anteriores con las que se dan si se incluyen los casos outliers en la muestra:</p>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-250-1.png" width="672"></div>
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-179-1.png" alt="" width="672"></div>
 <p>Se aprecia cómo la presencia de outliers puede variar la relación entre las variables. Salvo el caso de la correlación entre ACTIVO y RES, que se fortalece; las correlaciones entre RENECO y MARGEN, y RENECO y RES se debilitan. Esto redunda en la idea, ya expuesta, de que <strong>la decisión de trabajar con o sin los casos <em>outliers</em></strong> es una cuestión, a veces, muy <strong>relevante</strong> y compleja.</p>
 </div>
 </div>
@@ -1725,7 +1725,7 @@ En las celdas del triángulo inferior, cuando ambas variables son numéricas (�
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2025-11-02.</p>
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2026-03-17.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

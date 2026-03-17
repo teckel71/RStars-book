@@ -7,7 +7,7 @@
 <title>9 Análisis de Regresión Lineal Múltiple. | R-Stars: La Guía</title>
 <meta name="author" content="Miguel-Ángel Tarancón">
 <meta name="description" content="Recorriendo la nube de puntos…  9.1 Introducción. El análisis de regresión (lineal) múltiple es una de las técnicas de análisis de dependencias más profusamente utilizadas. En el modelo de...">
-<meta name="generator" content="bookdown 0.44 with bs4_book()">
+<meta name="generator" content="bookdown 0.46 with bs4_book()">
 <meta property="og:title" content="9 Análisis de Regresión Lineal Múltiple. | R-Stars: La Guía">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://teckel71.github.io/RStars-book/análisis-de-regresión-lineal-múltiple..html">
@@ -19,14 +19,37 @@
 <meta name="twitter:image" content="https://teckel71.github.io/RStars-book/figuras/Portada_v3-2.jpg">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><link href="libs/Inter-0.4.10/font.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><link href="libs/Source_Serif_4-0.4.10/font.css" rel="stylesheet">
 <link href="libs/JetBrains_Mono-0.4.10/font.css" rel="stylesheet">
-<link href="libs/Inter_Tight-0.4.10/font.css" rel="stylesheet">
-<script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<link href="libs/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
+<script src="libs/bs3compat-0.10.0/transition.js"></script><script src="libs/bs3compat-0.10.0/tabs.js"></script><script src="libs/bs3compat-0.10.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+          margin-bottom: 0em;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
   </style>
 <link rel="stylesheet" href="assets/styles.css">
 </head>
@@ -49,7 +72,21 @@
 </form>
 
       <nav aria-label="Table of contents"><h2>Table of contents</h2>
-        <ul class="book-toc list-unstyled"><li><a class="" href="index.html"><span class="header-section-number">9</span> Análisis de Regresión Lineal Múltiple.</a></li></ul>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html"></a></li>
+<li><a class="" href="prefacio.html">Prefacio</a></li>
+<li><a class="" href="introducci%C3%B3n..html"><span class="header-section-number">1</span> Introducción.</a></li>
+<li><a class="" href="almacenando-y-manipulando-datos..html"><span class="header-section-number">2</span> Almacenando y manipulando datos.</a></li>
+<li><a class="" href="gr%C3%A1ficos..html"><span class="header-section-number">3</span> Gráficos.</a></li>
+<li><a class="" href="estad%C3%ADstica-descriptiva..html"><span class="header-section-number">4</span> Estadística descriptiva.</a></li>
+<li><a class="" href="an%C3%A1lisis-previo-de-datos..html"><span class="header-section-number">5</span> Análisis previo de datos.</a></li>
+<li><a class="" href="componentes-principales..html"><span class="header-section-number">6</span> Componentes principales.</a></li>
+<li><a class="" href="an%C3%A1lisis-cl%C3%BAster..html"><span class="header-section-number">7</span> Análisis Clúster.</a></li>
+<li><a class="" href="an%C3%A1lisis-de-la-varianza..html"><span class="header-section-number">8</span> Análisis de la varianza.</a></li>
+<li><a class="active" href="an%C3%A1lisis-de-regresi%C3%B3n-lineal-m%C3%BAltiple..html"><span class="header-section-number">9</span> Análisis de Regresión Lineal Múltiple.</a></li>
+<li><a class="" href="an%C3%A1lisis-de-datos-cualitativos..html"><span class="header-section-number">10</span> Análisis de Datos Cualitativos.</a></li>
+<li><a class="" href="bibliograf%C3%ADa.html">Bibliografía</a></li>
+</ul>
 
         <div class="book-extra">
           
@@ -186,7 +223,7 @@ y=X\beta+u
 <li><p>El script con el código que vamos a ir ejecutando se llama “regresion_rstars.R”.</p></li>
 </ul>
 <p>Una vez abierto el <em>script</em> en el editor de RStudio , comprobaremos que la primera parte del código está dedicada a la limpieza de la memoria (<em>Environment</em>). Además, se cargan los paquetes que harán falta para ejecutar el código:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb325"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### REGRESIÓN MÚLTIPLE. Empresas TMI. ###</span></span>
 <span></span>
 <span><span class="co"># Limpiando el Global Environment</span></span>
@@ -202,14 +239,14 @@ y=X\beta+u
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://broom.tidymodels.org/">broom</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://r-forge.r-project.org/projects/car/">car</a></span><span class="op">)</span> <span class="co"># para obtener el vif</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://github.com/bprice2652/car_repo">car</a></span><span class="op">)</span> <span class="co"># para obtener el vif</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va">lmtest</span><span class="op">)</span></span></code></pre></div>
 <p>A continuación, se han integrado distintas funciones que serán operativamente útiles a la hora de obtener resultados. Estas funciones son:</p>
 <ul>
 <li>
 <strong>Función <code>create_patchwork()</code></strong>: obtiene, a partir de una lista de gráficos elaborados con <a href="https://ggplot2.tidyverse.org">ggplot2</a>, sucesivas composiciones de 4 gráficos (o menos, si es necesario), que devuelve a otra lista:</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb326"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">##### Función para crear composiciones de gráficos con patchwork ###############</span></span>
 <span><span class="va">create_patchwork</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">plot_list</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">plot_list</span><span class="op">)</span></span>
@@ -250,7 +287,7 @@ y=X\beta+u
 <li><p><strong>BIC</strong>: El criterio de información bayesiano.</p></li>
 <li><p><strong>deviance</strong>: La desviación del modelo.</p></li>
 </ol>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb327"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">##### Definir la función de presentación de resultados:  presenta_modelo() #####</span></span>
 <span></span>
 <span><span class="va">presenta_modelo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">modelo</span><span class="op">)</span> <span class="op">{</span></span>
@@ -350,7 +387,7 @@ y=X\beta+u
 <li>
 <strong>Función <code>predict_from_excel_scenarios()</code></strong>: Función que facilita la lectura de escenarios de simulación / previsión detallados en un archivo de Microsoft® Excel®, incluyendo para las variables explicativas tanto valores como fórmulas de cálculo de R (devuelve tabla con resultados):</li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb328"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">############################################################################</span></span>
 <span><span class="co">#### Predicción por escenarios (valores o fórmulas con df$var)  ############</span></span>
 <span><span class="co">#### =========================================================  ############</span></span>
@@ -518,7 +555,7 @@ y=X\beta+u
 <span></span>
 <span><span class="co">###############################################################################</span></span></code></pre></div>
 <p>Posteriormente, como es habitual, se importan los datos, en nuestro caso desde el archivo correspondiente de Microsoft® Excel®. Para ello, utilizamos la función <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> del paquete <a href="https://readxl.tidyverse.org">readxl</a>, indicando en los argumentos el archivo a explorar, y la <em>hoja</em> en la cual se encuentran los datos (hoja “Datos”). También hemos de prestar atención a la cuestión de si existen en la hoja de <em>Excel</em> anotaciones en las celdas donde no haya dato, para completar adecuadamente el argumento <code>na=</code> . Los datos se almacenarán en el <em>data frame</em> “interestelar_300”. En este <em>data frame</em>, la primera columna no es una verdadera variable, sino que se compone de los nombres de los casos o empresas. Con una línea de código adicional transformaremos esa primera columna en el <em>nombre de las filas</em>, de modo que tal columna abandona su <em>rol</em> de variable. En definitiva, el código para importar los datos es:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb329"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## DATOS</span></span>
 <span></span>
 <span><span class="co"># Importando datos desde Excel</span></span>
@@ -527,7 +564,7 @@ y=X\beta+u
 <span>                               na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"n.d."</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">interestelar_300</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">interestelar_300</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p>Tras la importación, se seleccionan las variables que se usarán en el análisis y se procederá a localizar los (posibles) casos con <em>missing values</em>. Si existen casos con datos faltantes, se eliminarán:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb330"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Seleccionando variables para el analisis.</span></span>
 <span><span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="va">interestelar_300</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">BMAL</span>,</span>
@@ -538,24 +575,24 @@ y=X\beta+u
 <span>         <span class="va">EFLO</span><span class="op">)</span></span>
 <span><span class="va">seleccion_df_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary</a></span><span class="op">(</span><span class="va">seleccion</span><span class="op">)</span></span>
 <span><span class="va">seleccion_df_graph</span></span></code></pre></div>
-<div id="wiaxbfqiti" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="pynbqwljvr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#wiaxbfqiti table {
+#pynbqwljvr table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#wiaxbfqiti thead, #wiaxbfqiti tbody, #wiaxbfqiti tfoot, #wiaxbfqiti tr, #wiaxbfqiti td, #wiaxbfqiti th {
+#pynbqwljvr thead, #pynbqwljvr tbody, #pynbqwljvr tfoot, #pynbqwljvr tr, #pynbqwljvr td, #pynbqwljvr th {
   border-style: none;
 }
 
-#wiaxbfqiti p {
+#pynbqwljvr p {
   margin: 0;
   padding: 0;
 }
 
-#wiaxbfqiti .gt_table {
+#pynbqwljvr .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -581,12 +618,12 @@ y=X\beta+u
   border-left-color: #D3D3D3;
 }
 
-#wiaxbfqiti .gt_caption {
+#pynbqwljvr .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#wiaxbfqiti .gt_title {
+#pynbqwljvr .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -598,7 +635,7 @@ y=X\beta+u
   border-bottom-width: 0;
 }
 
-#wiaxbfqiti .gt_subtitle {
+#pynbqwljvr .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -610,7 +647,7 @@ y=X\beta+u
   border-top-width: 0;
 }
 
-#wiaxbfqiti .gt_heading {
+#pynbqwljvr .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -622,13 +659,13 @@ y=X\beta+u
   border-right-color: #D3D3D3;
 }
 
-#wiaxbfqiti .gt_bottom_border {
+#pynbqwljvr .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 0px;
   border-bottom-color: #D3D3D3;
 }
 
-#wiaxbfqiti .gt_col_headings {
+#pynbqwljvr .gt_col_headings {
   border-top-style: solid;
   border-top-width: 0px;
   border-top-color: #D3D3D3;
@@ -643,7 +680,7 @@ y=X\beta+u
   border-right-color: #D3D3D3;
 }
 
-#wiaxbfqiti .gt_col_heading {
+#pynbqwljvr .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -663,7 +700,7 @@ y=X\beta+u
   overflow-x: hidden;
 }
 
-#wiaxbfqiti .gt_column_spanner_outer {
+#pynbqwljvr .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -675,15 +712,15 @@ y=X\beta+u
   padding-right: 4px;
 }
 
-#wiaxbfqiti .gt_column_spanner_outer:first-child {
+#pynbqwljvr .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#wiaxbfqiti .gt_column_spanner_outer:last-child {
+#pynbqwljvr .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#wiaxbfqiti .gt_column_spanner {
+#pynbqwljvr .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -695,11 +732,11 @@ y=X\beta+u
   width: 100%;
 }
 
-#wiaxbfqiti .gt_spanner_row {
+#pynbqwljvr .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#wiaxbfqiti .gt_group_heading {
+#pynbqwljvr .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -725,7 +762,7 @@ y=X\beta+u
   text-align: left;
 }
 
-#wiaxbfqiti .gt_empty_group_heading {
+#pynbqwljvr .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -740,15 +777,15 @@ y=X\beta+u
   vertical-align: middle;
 }
 
-#wiaxbfqiti .gt_from_md > :first-child {
+#pynbqwljvr .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#wiaxbfqiti .gt_from_md > :last-child {
+#pynbqwljvr .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#wiaxbfqiti .gt_row {
+#pynbqwljvr .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -767,7 +804,7 @@ y=X\beta+u
   overflow-x: hidden;
 }
 
-#wiaxbfqiti .gt_stub {
+#pynbqwljvr .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -780,7 +817,7 @@ y=X\beta+u
   padding-right: 5px;
 }
 
-#wiaxbfqiti .gt_stub_row_group {
+#pynbqwljvr .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -794,15 +831,15 @@ y=X\beta+u
   vertical-align: top;
 }
 
-#wiaxbfqiti .gt_row_group_first td {
+#pynbqwljvr .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#wiaxbfqiti .gt_row_group_first th {
+#pynbqwljvr .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#wiaxbfqiti .gt_summary_row {
+#pynbqwljvr .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -812,16 +849,16 @@ y=X\beta+u
   padding-right: 5px;
 }
 
-#wiaxbfqiti .gt_first_summary_row {
+#pynbqwljvr .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#wiaxbfqiti .gt_first_summary_row.thick {
+#pynbqwljvr .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#wiaxbfqiti .gt_last_summary_row {
+#pynbqwljvr .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -831,7 +868,7 @@ y=X\beta+u
   border-bottom-color: #D3D3D3;
 }
 
-#wiaxbfqiti .gt_grand_summary_row {
+#pynbqwljvr .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -841,7 +878,7 @@ y=X\beta+u
   padding-right: 5px;
 }
 
-#wiaxbfqiti .gt_first_grand_summary_row {
+#pynbqwljvr .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -851,7 +888,7 @@ y=X\beta+u
   border-top-color: #D3D3D3;
 }
 
-#wiaxbfqiti .gt_last_grand_summary_row_top {
+#pynbqwljvr .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -861,11 +898,11 @@ y=X\beta+u
   border-bottom-color: #D3D3D3;
 }
 
-#wiaxbfqiti .gt_striped {
+#pynbqwljvr .gt_striped {
   background-color: #FAFAFA;
 }
 
-#wiaxbfqiti .gt_table_body {
+#pynbqwljvr .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -874,7 +911,7 @@ y=X\beta+u
   border-bottom-color: #D3D3D3;
 }
 
-#wiaxbfqiti .gt_footnotes {
+#pynbqwljvr .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -888,7 +925,7 @@ y=X\beta+u
   border-right-color: #D3D3D3;
 }
 
-#wiaxbfqiti .gt_footnote {
+#pynbqwljvr .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -897,7 +934,7 @@ y=X\beta+u
   padding-right: 5px;
 }
 
-#wiaxbfqiti .gt_sourcenotes {
+#pynbqwljvr .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -911,7 +948,7 @@ y=X\beta+u
   border-right-color: #D3D3D3;
 }
 
-#wiaxbfqiti .gt_sourcenote {
+#pynbqwljvr .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -919,72 +956,72 @@ y=X\beta+u
   padding-right: 5px;
 }
 
-#wiaxbfqiti .gt_left {
+#pynbqwljvr .gt_left {
   text-align: left;
 }
 
-#wiaxbfqiti .gt_center {
+#pynbqwljvr .gt_center {
   text-align: center;
 }
 
-#wiaxbfqiti .gt_right {
+#pynbqwljvr .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#wiaxbfqiti .gt_font_normal {
+#pynbqwljvr .gt_font_normal {
   font-weight: normal;
 }
 
-#wiaxbfqiti .gt_font_bold {
+#pynbqwljvr .gt_font_bold {
   font-weight: bold;
 }
 
-#wiaxbfqiti .gt_font_italic {
+#pynbqwljvr .gt_font_italic {
   font-style: italic;
 }
 
-#wiaxbfqiti .gt_super {
+#pynbqwljvr .gt_super {
   font-size: 65%;
 }
 
-#wiaxbfqiti .gt_footnote_marks {
+#pynbqwljvr .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#wiaxbfqiti .gt_asterisk {
+#pynbqwljvr .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#wiaxbfqiti .gt_indent_1 {
+#pynbqwljvr .gt_indent_1 {
   text-indent: 5px;
 }
 
-#wiaxbfqiti .gt_indent_2 {
+#pynbqwljvr .gt_indent_2 {
   text-indent: 10px;
 }
 
-#wiaxbfqiti .gt_indent_3 {
+#pynbqwljvr .gt_indent_3 {
   text-indent: 15px;
 }
 
-#wiaxbfqiti .gt_indent_4 {
+#pynbqwljvr .gt_indent_4 {
   text-indent: 20px;
 }
 
-#wiaxbfqiti .gt_indent_5 {
+#pynbqwljvr .gt_indent_5 {
   text-indent: 25px;
 }
 
-#wiaxbfqiti .katex-display {
+#pynbqwljvr .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#wiaxbfqiti div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#pynbqwljvr div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1080,7 +1117,7 @@ ANTIGUA, MADURA and RENOVADA
 </tbody>
 </table></div>
 </div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb331"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Localizando missing values.</span></span>
 <span><span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1093,8 +1130,8 @@ ANTIGUA, MADURA and RENOVADA
 <span>    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"TRUE"</span> <span class="op">=</span> <span class="st">"NA"</span>, <span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"Presente"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span></span>
 <span>    plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-7-1.png" width="672"></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-292-1.png" alt="" width="672"></div>
+<div class="sourceCode" id="cb332"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">BMAL</span><span class="op">)</span> <span class="op">|</span></span>
 <span>                     <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">DIST</span><span class="op">)</span> <span class="op">|</span></span>
 <span>                     <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">IDIVERSE</span><span class="op">)</span> <span class="op">|</span></span>
@@ -1109,7 +1146,7 @@ ANTIGUA, MADURA and RENOVADA
 <span>                      <span class="va">EFLO</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] BMAL     DIST     IDIVERSE ACTIVO   LIQUIDEZ EFLO    
 ## &lt;0 rows&gt; (o 0- extensión row.names)</code></pre>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb334"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">BMAL</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>         <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">DIST</span><span class="op">)</span> <span class="op">&amp;</span></span>
@@ -1119,7 +1156,7 @@ ANTIGUA, MADURA and RENOVADA
 <span>         <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">EFLO</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
 <p>No se ha localizado ninguna observación con <em>missing values</em>, luego no se ha de realizar ningún tipo de tratamiento.</p>
 <p>El siguiente paso es la <strong>identificación de <em>outliers</em>.</strong> Para realizar este proceso, y dado que en nuestro análisis contamos con 3 variables, primero “resumiremos” el valor que toman dichas variables para cada caso, mediante el cálculo de la <em>distancia de Mahalanobis</em>. De hecho, las distancias de los diferentes casos se almacenarán en una nueva variable, a la que llamaremos MAHALANOBIS, que se incorporará al <em>data frame</em> “originales” por medio de la función <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>, y la función <code><a href="https://rdrr.io/r/stats/mahalanobis.html">mahalanobis()</a></code>. Recordemos que, en los diferentes argumentos de esta función, el punto “.” hace referencia al <em>data frame</em> que está delante del operador pipe (%&gt;%).</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb335"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Identificando outliers con distancia de Mahalanobis.</span></span>
 <span><span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
@@ -1135,8 +1172,8 @@ ANTIGUA, MADURA and RENOVADA
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"DISTANCIA DE MAHALANOBIS"</span>,</span>
 <span>          subtitle <span class="op">=</span> <span class="st">"BMAL, DIST, IDIVERSE, ACTIVO, LIQUIDEZ. Empresas TMI."</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"MAHALANOBIS"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-8-1.png" width="672"></div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="RstarS_files/figure-html/unnamed-chunk-293-1.png" alt="" width="672"></div>
+<div class="sourceCode" id="cb336"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Q1M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">seleccion</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">Q3M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">seleccion</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.75</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -1144,66 +1181,37 @@ ANTIGUA, MADURA and RENOVADA
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span> <span class="op">&gt;</span> <span class="va">Q3M</span> <span class="op">+</span> <span class="fl">1.5</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html">IQR</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span><span class="op">)</span> <span class="op">|</span></span>
 <span>           <span class="va">MAHALANOBIS</span> <span class="op">&lt;</span> <span class="va">Q1M</span> <span class="op">-</span> <span class="fl">1.5</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html">IQR</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span><span class="op">)</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span>, <span class="va">BMAL</span>, <span class="va">DIST</span>, <span class="va">IDIVERSE</span>, <span class="va">ACTIVO</span>, <span class="va">LIQUIDEZ</span><span class="op">)</span></span></code></pre></div>
-<pre><code>##                             MAHALANOBIS         BMAL         DIST   IDIVERSE
-## arrakis freight               49.830436   1871.70840  635.7079972 38.8813669
-## vader and company             41.211502   1518.79919  690.8352396 34.3874919
-## excalibur freight systems     38.265075   5895.20330  264.9493021 36.1831077
-## hyperdrive express            35.706003   2900.02096  389.7006322 35.7898130
-## kaiju haulage co.             31.178140   1137.01868  862.0526787 49.8484848
-## starship express              30.270456   5940.47472  160.1202000 33.5332044
-## chakotay cargo systems        27.237248    862.15938  928.8421833 54.3681496
-## mothership movers              7.970612  14936.41470   48.8979460 21.6795616
-## chekov freight lines          21.502745    234.86237 1104.6043807 39.0296583
-## echo star logistics           11.344964  76097.33950    4.0076303  8.5396518
-## max rebo movers               11.097553    235.10138  843.4233909 39.1263701
-## io star transport            110.003709     79.31618 2151.6417992 38.0206319
-## supreme leader logistics       7.813016  10490.96349   22.9808254 40.4480980
-## bb-8 haulage                  24.999973    178.59704 1185.9659189 43.1689233
-## valerian freight co.           7.254093    216.47045  690.8564262 29.6647324
-## jovian logistics              24.441084    205.57143 1006.9006166 22.3920052
-## bajoran star transport       147.348298 262555.81510    0.5432750  1.2637008
-## mirror universe cargo          7.445652    191.78319  619.5537781 43.0206319
-## t'pol haulage                 10.014118  69882.52093    1.6374624  9.9032882
-## tannhäuser freight             7.168106    929.84721   76.4964387 47.8884591
-## raddus logistics               7.889709  65801.14943    1.3900365  8.8588008
-## kobol cargo systems           94.112369 211927.91005    0.1512897  0.7736944
-## pandora cargo                 12.289240  78061.04143    0.3989186  0.0000000
-## endor movers                  26.157972     71.03431  291.9715964 78.2978723
-## kessel run couriers            7.306453    559.75264   32.1391962 13.0109607
-## greedo logistics              42.143063   2910.61695    6.2083058  7.2791747
-## miller cargo systems          70.814977    184.59699  121.5079412 29.3649259
-## ripley interstellar freight   19.081559     39.96811  379.0522255 71.3507415
-##                              ACTIVO  LIQUIDEZ
-## arrakis freight             2966.52 0.9101802
-## vader and company           2665.75 0.9842890
-## excalibur freight systems   2524.75 0.9347233
-## hyperdrive express          2499.94 0.9405814
-## kaiju haulage co.           2332.33 0.8334711
-## starship express            2255.25 0.6573923
-## chakotay cargo systems      2158.69 0.5963287
-## mothership movers           1193.48 0.7910477
-## chekov freight lines         530.88 0.5909113
-## echo star logistics          515.38 0.6857834
-## max rebo movers              501.99 0.7670461
-## io star transport            498.00 0.3510524
-## supreme leader logistics     496.46 0.2659547
-## bb-8 haulage                 495.19 0.5873095
-## valerian freight co.         493.99 0.5741498
-## jovian logistics             220.56 0.5358355
-## bajoran star transport       219.85 0.9392612
-## mirror universe cargo        217.70 0.2829529
-## t'pol haulage                198.77 0.4144962
-## tannhäuser freight           190.52 0.5827857
-## raddus logistics             180.78 0.7836891
-## kobol cargo systems           67.46 0.7624534
-## pandora cargo                 57.85 0.7497248
-## endor movers                  46.98 0.8143438
-## kessel run couriers           42.30 1.4572864
-## greedo logistics              39.77 2.5572519
-## miller cargo systems          39.44 3.1175000
-## ripley interstellar freight   37.07 0.8586790</code></pre>
+<pre><code>##                             MAHALANOBIS         BMAL         DIST   IDIVERSE  ACTIVO  LIQUIDEZ
+## arrakis freight               49.830436   1871.70840  635.7079972 38.8813669 2966.52 0.9101802
+## vader and company             41.211502   1518.79919  690.8352396 34.3874919 2665.75 0.9842890
+## excalibur freight systems     38.265075   5895.20330  264.9493021 36.1831077 2524.75 0.9347233
+## hyperdrive express            35.706003   2900.02096  389.7006322 35.7898130 2499.94 0.9405814
+## kaiju haulage co.             31.178140   1137.01868  862.0526787 49.8484848 2332.33 0.8334711
+## starship express              30.270456   5940.47472  160.1202000 33.5332044 2255.25 0.6573923
+## chakotay cargo systems        27.237248    862.15938  928.8421833 54.3681496 2158.69 0.5963287
+## mothership movers              7.970612  14936.41470   48.8979460 21.6795616 1193.48 0.7910477
+## chekov freight lines          21.502745    234.86237 1104.6043807 39.0296583  530.88 0.5909113
+## echo star logistics           11.344964  76097.33950    4.0076303  8.5396518  515.38 0.6857834
+## max rebo movers               11.097553    235.10138  843.4233909 39.1263701  501.99 0.7670461
+## io star transport            110.003709     79.31618 2151.6417992 38.0206319  498.00 0.3510524
+## supreme leader logistics       7.813016  10490.96349   22.9808254 40.4480980  496.46 0.2659547
+## bb-8 haulage                  24.999973    178.59704 1185.9659189 43.1689233  495.19 0.5873095
+## valerian freight co.           7.254093    216.47045  690.8564262 29.6647324  493.99 0.5741498
+## jovian logistics              24.441084    205.57143 1006.9006166 22.3920052  220.56 0.5358355
+## bajoran star transport       147.348298 262555.81510    0.5432750  1.2637008  219.85 0.9392612
+## mirror universe cargo          7.445652    191.78319  619.5537781 43.0206319  217.70 0.2829529
+## t'pol haulage                 10.014118  69882.52093    1.6374624  9.9032882  198.77 0.4144962
+## tannhäuser freight             7.168106    929.84721   76.4964387 47.8884591  190.52 0.5827857
+## raddus logistics               7.889709  65801.14943    1.3900365  8.8588008  180.78 0.7836891
+## kobol cargo systems           94.112369 211927.91005    0.1512897  0.7736944   67.46 0.7624534
+## pandora cargo                 12.289240  78061.04143    0.3989186  0.0000000   57.85 0.7497248
+## endor movers                  26.157972     71.03431  291.9715964 78.2978723   46.98 0.8143438
+## kessel run couriers            7.306453    559.75264   32.1391962 13.0109607   42.30 1.4572864
+## greedo logistics              42.143063   2910.61695    6.2083058  7.2791747   39.77 2.5572519
+## miller cargo systems          70.814977    184.59699  121.5079412 29.3649259   39.44 3.1175000
+## ripley interstellar freight   19.081559     39.96811  379.0522255 71.3507415   37.07 0.8586790</code></pre>
 <p>Puede comprobarse que son 28 casos. Vamos a optar por eliminar estas observaciones, ya que el análisis de regresión lineal es muy sensible a la presencia de <em>casos atípicos</em>. Para eliminar los <em>outliers</em>, y la propia variable MAHALANOBIS una vez ha desempeñado su cometido, ejecutaremos:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb338"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Eliminando outliers.</span></span>
 <span><span class="va">seleccion_so</span> <span class="op">&lt;-</span><span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span> <span class="op">&lt;=</span> <span class="va">Q3M</span> <span class="op">+</span> <span class="fl">1.5</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html">IQR</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span><span class="op">)</span> <span class="op">&amp;</span></span>
@@ -1213,7 +1221,7 @@ ANTIGUA, MADURA and RENOVADA
 <span><span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">MAHALANOBIS</span><span class="op">)</span></span>
 <span><span class="va">seleccion_so</span> <span class="op">&lt;-</span> <span class="va">seleccion_so</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">MAHALANOBIS</span><span class="op">)</span></span></code></pre></div>
 <p>Antes de pasar a la especificación y estimación inicial del modelo, queda un detalle: es necesario, si existen variables explicativas categóricas, definirlas como <strong>factores</strong>, a fin de que puedan ser debidamente integradas en el modelo. Tal es el caso de la variable EFLO:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb339"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Convertir variable EFLO en Factor.</span></span>
 <span></span>
 <span><span class="va">seleccion_so</span><span class="op">$</span><span class="va">EFLO</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">seleccion_so</span><span class="op">$</span><span class="va">EFLO</span><span class="op">)</span></span>
@@ -1226,7 +1234,7 @@ ANTIGUA, MADURA and RENOVADA
 <span class="header-section-number">9.2.4</span> <img src="figuras/pie-chart.svg"> Especificación y estimación inicial del modelo.<a class="anchor" aria-label="anchor" href="#especificaci%C3%B3n-y-estimaci%C3%B3n-inicial-del-modelo."><i class="fas fa-link"></i></a>
 </h3>
 <p>El modelo básico de regresión lineal, estimado mediante el método de mínimos cuadrados ordinarios (MCO), se obtendrá mediante la función <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>. Los resultados los guardaremos en un objeto de nombre, por ejemplo, “ecua0”. Luego, se realizará un <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> para ver dicha estimación.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb341"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## ESPECIFICACION Y ESTIMACION</span></span>
 <span></span>
 <span><span class="co"># Especificar el modelo de regresión lineal</span></span>
@@ -1290,18 +1298,18 @@ ANTIGUA, MADURA and RENOVADA
 <p>El signo positivo es coherente: flotas más modernas son más eficientes energéticamente y pueden operar rutas con menos desgaste, generando mayor beneficio ajustado por distancia. El hecho de que solo EFLORENOVADA alcance una significación marginal (10 %) indica que la renovación de la flota sí tiene un efecto apreciable, aunque no determinante, sobre BMAL.</p>
 <p>Hay otras informaciones importantes a la hora de valorar la especificación (inicial) del modelo que no se recogen en el <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> del mismo, y que hemos de extraer. Además, conviene presentar los resultados de un modo más elegante y coherente.</p>
 <p>Para poder hacer esto con este modelo inicial estimado, o con cualquier otra estimación, vamos a integrar el código correspondiente en una función de R. Llamaremos a esta función <code>presenta_modelo()</code>, y recibirá como input la estimación lineal de un modelo, ofreciendo como output tres tablas contenidas en una <em>lista</em>: la primera es una <em>versión</em> del <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>, la segunda es una tabla con otras informaciones adicionales, como el valor del <em>Criterio de Información de Akaike</em> (AIC), y la tercera contiene los valores del <em>factor de inflación de la varianza</em> (VIF) de las variables del modelo. Previamente a mostrar el código de la función, fijaremos el parámetro “knitr.table.format” que utiliza la función <code>presenta_modelo()</code> para recoger el formato en el que se generarán las tablas diseñadas:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb343"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Diseña salida ordenador y presentar</span></span>
 <span>    </span>
 <span>  <span class="va">knitr.table.format</span> <span class="op">=</span> <span class="st">"html"</span></span></code></pre></div>
 <p>Después, basta con aplicar la función al modelo estimado inicial <em>(ecua_0)</em>, guardando las tres tablas generadas en la lista cuyo nombre determinaremos (en nuestro caso, <em>modelo_0</em>). Las tablas serán visualizadas:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb344"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">modelo_0</span> <span class="op">&lt;-</span> <span class="fu">presenta_modelo</span><span class="op">(</span><span class="va">ecua0</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="va">modelo_0</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-15">Table 9.1: </span><span id="tab:unnamed-chunk-15">Table 9.2: </span>Modelo Lineal
+<span id="tab:unnamed-chunk-300">Table 9.1: </span><span id="tab:unnamed-chunk-300">Table 9.2: </span>Modelo Lineal
 </caption>
 <thead><tr>
 <th style="text-align:left;">
@@ -1464,11 +1472,11 @@ EFLORENOVADA
 </tr>
 </tbody>
 </table></div>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb345"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">modelo_0</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-15">Table 9.1: </span><span id="tab:unnamed-chunk-15">Table 9.1: </span>Estadísticos del modelo
+<span id="tab:unnamed-chunk-300">Table 9.1: </span><span id="tab:unnamed-chunk-300">Table 9.1: </span>Estadísticos del modelo
 </caption>
 <thead><tr>
 <th style="text-align:center;">
@@ -1517,11 +1525,11 @@ num. observaciones
 </td>
 </tr></tbody>
 </table></div>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb346"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">modelo_0</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-15">Table 9.1: </span><span id="tab:unnamed-chunk-15">Table 9.1: </span>Factor de inflación de la varianza
+<span id="tab:unnamed-chunk-300">Table 9.1: </span><span id="tab:unnamed-chunk-300">Table 9.1: </span>Factor de inflación de la varianza
 </caption>
 <thead><tr>
 <th style="text-align:center;">
@@ -1579,7 +1587,7 @@ EFLO
 <p>La búsqueda de una especificación alternativa que sea más adecuada puede atender a múltiples estrategias del analista, y del propio propósito para el que se quiere utilizar el modelo. En todo caso, implica una <strong>gran carga de subjetividad</strong>. Por ejemplo, si se quiere emplear el modelo a efectos predictivos, no sería relevante la presencia de multicolinealidad, siempre que el modelo realice buenas previsiones. En cambio, si el objetivo guarda relación con el análisis estructural (análisis del papel que juegan las diferentes variables explicativas en el comportamiento de la variable dependiente), la multicolinealidad puede distorsionar este análisis (influyendo incluso en el signo de los parámetros estimados).</p>
 <p>En este ejemplo, y puesto que nuestro objetivo tiene que ver con el efecto de la renovación tecnológica de la flota (medido a través del factor EFLO) sobre el rendimiento (medido mediante BMAL), vamos a eliminar la variable ACTIVO, para intentar mitigar los posibles efectos adversos de una probable multicolinealidad sobre el análisis estructural de nuestro estudio.</p>
 <p>Así pues, plantearemos una nueva especificación (modelo “ecua1”) sin la inclusión del ACTIVO:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb347"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">ecua1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">seleccion_so</span>,</span>
 <span>                <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">BMAL</span><span class="op">)</span> <span class="op">~</span> </span>
 <span>                  <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">DIST</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1611,13 +1619,13 @@ EFLO
 ## Residual standard error: 0.2653 on 266 degrees of freedom
 ## Multiple R-squared:  0.9677, Adjusted R-squared:  0.967 
 ## F-statistic:  1592 on 5 and 266 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb349"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">modelo_1</span> <span class="op">&lt;-</span> <span class="fu">presenta_modelo</span><span class="op">(</span><span class="va">ecua1</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="va">modelo_1</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-17">Table 9.3: </span><span id="tab:unnamed-chunk-17">Table 9.4: </span>Modelo Lineal
+<span id="tab:unnamed-chunk-302">Table 9.3: </span><span id="tab:unnamed-chunk-302">Table 9.4: </span>Modelo Lineal
 </caption>
 <thead><tr>
 <th style="text-align:left;">
@@ -1761,11 +1769,11 @@ EFLORENOVADA
 </tr>
 </tbody>
 </table></div>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb350"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">modelo_1</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-17">Table 9.3: </span><span id="tab:unnamed-chunk-17">Table 9.3: </span>Estadísticos del modelo
+<span id="tab:unnamed-chunk-302">Table 9.3: </span><span id="tab:unnamed-chunk-302">Table 9.3: </span>Estadísticos del modelo
 </caption>
 <thead><tr>
 <th style="text-align:center;">
@@ -1814,11 +1822,11 @@ num. observaciones
 </td>
 </tr></tbody>
 </table></div>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb351"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">modelo_1</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-17">Table 9.3: </span><span id="tab:unnamed-chunk-17">Table 9.3: </span>Factor de inflación de la varianza
+<span id="tab:unnamed-chunk-302">Table 9.3: </span><span id="tab:unnamed-chunk-302">Table 9.3: </span>Factor de inflación de la varianza
 </caption>
 <thead><tr>
 <th style="text-align:center;">
@@ -1869,7 +1877,7 @@ EFLO
 <p>Al eliminar log(ACTIVO) para mejorar la estabilidad del modelo y aislar el impacto tecnológico de la flota (<em>ecua1</em>), la multicolinealidad desaparece y los VIF pasan a ser muy bajos. Como consecuencia, EFLO se convierte en un predictor altamente significativo, con coeficientes positivos y de gran magnitud, lo que refuerza la interpretación económica de que flotas más modernas (categorías MADURA y RENOVADA) generan un rendimiento operativo sustancialmente mayor. El R² ajustado se reduce ligeramente al 96,7 %, pero sigue siendo muy elevado para un modelo aplicado a datos empresariales. Además, el signo y la significación del resto de variables se mantienen coherentes: la distancia recorrida continúa siendo un determinante negativo y significativo del rendimiento; IDIVERSE gana significación estadística al eliminarse la colinealidad; y LIQUIDEZ mantiene un coeficiente negativo no significativo, lo cual sugiere que su efecto sobre BMAL es poco concluyente.</p>
 <p>En conjunto, aunque el modelo con ACTIVO ofrece un ajuste matemático ligeramente superior, el modelo sin ACTIVO proporciona mayor claridad interpretativa, evita problemas de multicolinealidad y permite identificar con nitidez el efecto tecnológico de la flota sobre el rendimiento</p>
 <p>Una vez eliminado el riesgo de que el modelo adolezca de problemas derivados de la presencia de multicolinealidad, queda plantearse si todavía puede ser mejorada la especificación. Si se busca obtener una estructura más sencilla sin una pérdida grande de bondad de la regresión (<em>Principio de Parsimonia</em>), puede recurrirse a la aplicación de algún método automatizado, como el <em>step / backward</em> que, en función del <em>Criterio de Información de Akaike (AIC)</em>, irá probando a estimar especificaciones más simples que disminuyan el AIC (lo que implica una mejor especificación). En nuestro caso, se aplicará con el código:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb352"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">ecuaDEF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/step.html">step</a></span><span class="op">(</span><span class="va">ecua1</span>, scale <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>                  direction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"backward"</span><span class="op">)</span>,</span>
 <span>                  trace <span class="op">=</span> <span class="fl">1</span>, steps <span class="op">=</span> <span class="fl">1000</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
@@ -1891,7 +1899,7 @@ EFLO
 ## - log(IDIVERSE)  1     0.291  19.132 -714.00
 ## - EFLO           2   202.012 220.854  -50.66
 ## - log(DIST)      1   292.145 310.987   44.43</code></pre>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb354"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span> <span class="op">(</span><span class="va">ecuaDEF</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## 
 ## Call:
@@ -1915,13 +1923,13 @@ EFLO
 ## Multiple R-squared:  0.9674, Adjusted R-squared:  0.967 
 ## F-statistic:  1983 on 4 and 267 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>El resultado del algoritmo es una especificación del modelo, cuya estimación se almacena en memoria con el nombre, por ejemplo, <em>ecuaDEF</em>. Se ha mostrado el <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> del modelo. También se puede aplicar la función <code>presenta_modelo()</code>, para obtener un <em>output</em> de la estimación más detallado:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb356"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">modelo_DEF</span> <span class="op">&lt;-</span> <span class="fu">presenta_modelo</span><span class="op">(</span><span class="va">ecuaDEF</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="va">modelo_DEF</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-19">Table 9.5: </span><span id="tab:unnamed-chunk-19">Table 9.6: </span>Modelo Lineal
+<span id="tab:unnamed-chunk-304">Table 9.5: </span><span id="tab:unnamed-chunk-304">Table 9.6: </span>Modelo Lineal
 </caption>
 <thead><tr>
 <th style="text-align:left;">
@@ -2046,11 +2054,11 @@ EFLORENOVADA
 </tr>
 </tbody>
 </table></div>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb357"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">modelo_DEF</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-19">Table 9.5: </span><span id="tab:unnamed-chunk-19">Table 9.5: </span>Estadísticos del modelo
+<span id="tab:unnamed-chunk-304">Table 9.5: </span><span id="tab:unnamed-chunk-304">Table 9.5: </span>Estadísticos del modelo
 </caption>
 <thead><tr>
 <th style="text-align:center;">
@@ -2099,11 +2107,11 @@ num. observaciones
 </td>
 </tr></tbody>
 </table></div>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb358"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">modelo_DEF</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-19">Table 9.5: </span><span id="tab:unnamed-chunk-19">Table 9.5: </span>Factor de inflación de la varianza
+<span id="tab:unnamed-chunk-304">Table 9.5: </span><span id="tab:unnamed-chunk-304">Table 9.5: </span>Factor de inflación de la varianza
 </caption>
 <thead><tr>
 <th style="text-align:center;">
@@ -2152,7 +2160,7 @@ EFLO
 </h2>
 <p>Antes de pasar a aplicar las pruebas específicas para evaluar el grado de las hipótesis que sustentan al modelo básico de regresión lineal, es conveniente generar varios gráficos de gran utilidad.</p>
 <p>Para facilitar esta tarea, recurriremos a la función <code><a href="https://generics.r-lib.org/reference/augment.html">augment()</a></code> del paquete <a href="https://broom.tidymodels.org/">broom</a>. Esta función, aplicada a un modelo, genera algunas series de datos fundamentales relacionadas con el mismo, y las almacena junto a las variables del modelo especificado en un <em>data frame</em>. En nuestro caso, hemos llamado al <em>data frame</em> “series_ecuaDEF”, y hemos cambiado el nombre a las series que vamos a utilizar posteriormente: los valores ajustados de la variable dependiente (logBMAL.est), los residuos (residuos), y los valores de la distancia de Cook (cooksd). Además, hemos creado una variable llamada ORDEN para asignar un valor correlativo a cada observación o caso de la muestra:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb359"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># MODELO FINAL: CONTRASTACIÓN.</span></span>
 <span></span>
 <span>  <span class="co"># Generar series útiles.</span></span>
@@ -2211,7 +2219,7 @@ EFLO
 <li><p>El cuarto representa, para cada caso, el <em>valor de la distancia de Cook</em>. Los valores altos de la distancia de Cook en un modelo de regresión indican observaciones que tienen una influencia significativa en los coeficientes estimados del modelo. Son considerados “altos” los valores que superan <em>el valor inverso de 4 por el número de observaciones muestrales</em>.</p></li>
 </ul>
 <p>Los 4 gráficos se agrupan mediante la gramática del paquete {patchwork}. Finalmente, se genera una tabla a partir de un filtro para identificar los casos concretos que tienen valores “altos” de la distancia de Cook. En definitiva, el código es:</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb361"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Gráficos.</span></span>
 <span>  </span>
 <span><span class="va">g_real_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">series_ecuaDEF</span><span class="op">)</span> <span class="op">+</span></span>
@@ -2274,9 +2282,9 @@ EFLO
 <span></span>
 <span>    <span class="va">tablaCook</span></span></code></pre></div>
 <p>Los gráficos obtenidos son:</p>
-<img src="RstarS_files/figure-html/unnamed-chunk-23-1.png" width="672"><div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<img src="RstarS_files/figure-html/unnamed-chunk-308-1.png" alt="" width="672"><div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-23">Table 9.7: </span>Casos destacados distancia de Cook
+<span id="tab:unnamed-chunk-308">Table 9.7: </span>Casos destacados distancia de Cook
 </caption>
 <thead><tr>
 <th style="text-align:left;">
@@ -2404,7 +2412,7 @@ pike freight co.
 <p>En cuanto a la tabla con los casos con valores de la <em>distancia de Cook</em> más relevantes:</p>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-24">Table 9.8: </span><span id="tab:unnamed-chunk-24">Table 9.9: </span>Casos destacados distancia de Cook
+<span id="tab:unnamed-chunk-309">Table 9.8: </span><span id="tab:unnamed-chunk-309">Table 9.9: </span>Casos destacados distancia de Cook
 </caption>
 <thead><tr>
 <th style="text-align:left;">
@@ -2522,7 +2530,7 @@ pike freight co.
 </tbody>
 </table></div>
 <p>Tras estudiar los gráficos, vamos a pasar a <strong>contrastar las hipótesis básicas del modelo básico de regresión lineal</strong> referidas a la <em>forma funcional</em>, y la <em>normalidad</em> y <em>comportamiento homoscedástico</em> de la perturbación aleatoria. Para ello se aplicarán las pruebas de <em>Ramsey-Reset</em>, <em>Shapiro-Wilk</em> y <em>Breusch-Pagan</em>, respectivamente. Los resultados de las tres pruebas se presentarán condensados en una tabla, en la que, además, se incluirá la conclusión del contraste, para una significación de 0,05. Para crear la tabla, primero se generará un <em>data frame</em> con sus elementos, denominado, por ejemplo, “check_hipotesis”. El código es:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb362"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Hipótesis básicas MBR.</span></span>
 <span></span>
 <span>    <span class="va">reset_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/resettest.html">resettest</a></span><span class="op">(</span><span class="va">ecuaDEF</span>, data<span class="op">=</span> <span class="va">originales_so</span><span class="op">)</span> <span class="co"># F. Funcional</span></span>
@@ -2581,7 +2589,7 @@ pike freight co.
 <p>Y la tabla:</p>
 <div class="inline-table"><table class="table table-striped" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-26">Table 9.10: </span><span id="tab:unnamed-chunk-26">Table 9.11: </span>Contrastes de hipótesis del MBR
+<span id="tab:unnamed-chunk-311">Table 9.10: </span><span id="tab:unnamed-chunk-311">Table 9.11: </span>Contrastes de hipótesis del MBR
 </caption>
 <thead><tr>
 <th style="text-align:left;">
@@ -2708,7 +2716,7 @@ Heteroscedasticidad
 <p>D: 1,05 × mediana de DIST con outliers.</p>
 <p>El ejercicio permite comparar cómo cambian las predicciones cuando DIST se fija atendiendo a una medida de posición central diferente (media o mediana), y cómo influyen los <em>outliers</em> según formen o no parte del cálculo.</p>
 <p>Para obtener el resultado, se aplicará el código:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb363"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># SIMULACIÓN</span></span>
 <span>    </span>
 <span>    <span class="va">res_Simula1</span> <span class="op">&lt;-</span> <span class="fu">predict_from_excel_scenarios</span><span class="op">(</span></span>
@@ -2727,11 +2735,11 @@ Heteroscedasticidad
 <span>      return_kable   <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>    <span class="op">)</span></span></code></pre></div>
 <p>Y el resultado será:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb364"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">res_Simula1</span><span class="op">[[</span><span class="st">"table"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-27">Table 9.12: </span>Predicciones por escenario — Variable dependiente: BMAL (prediction 95%) — valores antilog.
+<span id="tab:unnamed-chunk-312">Table 9.12: </span>Predicciones por escenario — Variable dependiente: BMAL (prediction 95%) — valores antilog.
 </caption>
 <thead><tr>
 <th style="text-align:center;">
@@ -2918,7 +2926,7 @@ TRUE
 </div>
 <p>Como se ve, el segundo ejercicio plantea tres escenarios de renovación tecnológica de la flota —Antigua, Madura y Renovada— manteniendo constantes las demás variables en valores representativos de una empresa media del sector. Este planteamiento es esencial para los objetivos del estudio porque permite <strong>aislar el efecto puro de la modernización de la flota (EFLO) sobre el rendimiento económico BMAL, cuantificando el beneficio esperado de invertir en tecnología avanzada</strong>. Mediante esta simulación, <em>Data-Evidence</em> puede ofrecer a <em>Dixitaliza</em> una estimación sólida y basada en datos del impacto económico atribuible únicamente al grado de renovación, lo que constituye una herramienta clave para justificar decisiones estratégicas, diseñar propuestas comerciales y demostrar, con evidencia empírica, la conveniencia de adoptar soluciones tecnológicas de última generación en el transporte interestelar de mercancías.</p>
 <p>En esta ocasión, se aplicará el código:</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb365"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># SIMULACIÓN</span></span>
 <span>    </span>
 <span>    <span class="va">res_Simula2</span> <span class="op">&lt;-</span> <span class="fu">predict_from_excel_scenarios</span><span class="op">(</span></span>
@@ -2937,11 +2945,11 @@ TRUE
 <span>      return_kable   <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>    <span class="op">)</span></span></code></pre></div>
 <p>Y el resultado será:</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb366"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">res_Simula2</span><span class="op">[[</span><span class="st">"table"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-29">Table 9.13: </span>Predicciones por escenario — Variable dependiente: BMAL (prediction 95%) — valores antilog.
+<span id="tab:unnamed-chunk-314">Table 9.13: </span>Predicciones por escenario — Variable dependiente: BMAL (prediction 95%) — valores antilog.
 </caption>
 <thead><tr>
 <th style="text-align:center;">
@@ -3105,11 +3113,25 @@ TRUE
 </div>
 </div>
   <div class="chapter-nav">
-<div class="empty"></div>
-<div class="empty"></div>
+<div class="prev"><a href="an%C3%A1lisis-de-la-varianza..html"><span class="header-section-number">8</span> Análisis de la varianza.</a></div>
+<div class="next"><a href="an%C3%A1lisis-de-datos-cualitativos..html"><span class="header-section-number">10</span> Análisis de Datos Cualitativos.</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <div id="book-on-this-page"></div>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#an%C3%A1lisis-de-regresi%C3%B3n-lineal-m%C3%BAltiple."><span class="header-section-number">9</span> Análisis de Regresión Lineal Múltiple.</a></li>
+<li><a class="nav-link" href="#introducci%C3%B3n.-5"><span class="header-section-number">9.1</span>  Introducción.</a></li>
+<li>
+<a class="nav-link" href="#especificaci%C3%B3n-del-mbr.-datos-de-corte-transversal."><span class="header-section-number">9.2</span>  Especificación del MBR. Datos de corte transversal.</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#renovarse-o-morir."><span class="header-section-number">9.2.1</span>  Renovarse o morir.</a></li>
+<li><a class="nav-link" href="#planteamiento-inicial-del-modelo."><span class="header-section-number">9.2.2</span>  Planteamiento inicial del modelo.</a></li>
+<li><a class="nav-link" href="#preparaci%C3%B3n-de-los-datos.-3"><span class="header-section-number">9.2.3</span>  Preparación de los datos.</a></li>
+<li><a class="nav-link" href="#especificaci%C3%B3n-y-estimaci%C3%B3n-inicial-del-modelo."><span class="header-section-number">9.2.4</span>  Especificación y estimación inicial del modelo.</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#contraste-del-modelo-b%C3%A1sico-de-regresi%C3%B3n-lineal."><span class="header-section-number">9.3</span>  Contraste del modelo básico de regresión lineal.</a></li>
+<li><a class="nav-link" href="#utilizaci%C3%B3n-del-modelo-estimado-simulaci%C3%B3n."><span class="header-section-number">9.4</span>  Utilización del modelo estimado: simulación.</a></li>
+<li><a class="nav-link" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-7"><span class="header-section-number">9.5</span>  Materiales para realizar las prácticas del capítulo.</a></li>
+</ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
@@ -3125,7 +3147,7 @@ TRUE
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2025-11-21.</p>
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2026-03-17.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
