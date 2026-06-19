@@ -172,7 +172,7 @@ knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
 
 if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
   tablamedias %>%
-    kable(caption = "IRE. Medias por astillero.",
+    kbl(caption = "IRE. Medias por astillero.",
       col.names = c("Astillero", "Observaciones", "IRE medio")) %>%
   kable_styling(full_width = F,
                 bootstrap_options = "striped", "bordered", "condensed",
@@ -182,7 +182,7 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
   row_spec(1:nrow(tablamedias), bold= F, align = "c")
 }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
  tablamedias %>%
-    kable(caption = "IRE. Medias por astillero.",
+    kbl(caption = "IRE. Medias por astillero.",
       col.names = c("Astillero", "Observaciones", "IRE medio"))
 }
 ```
@@ -292,7 +292,7 @@ En el código anterior, se crea un pequeño *data frame* denominado "normalidad"
 knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
 if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
     tablashapiro <- normalidad %>%
-    kable(caption = "Normalidad (Shapiro-Wilks).",
+    kbl(caption = "Normalidad (Shapiro-Wilks).",
           col.names = c("Astillero", "p-valor", "Conclusión")) %>%
     kable_styling(full_width = F,
                   bootstrap_options = "striped", "bordered", "condensed",
@@ -304,7 +304,7 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
     tablashapiro
 }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
 tablashapiro <- normalidad %>%
-  kable(caption = "Normalidad (Shapiro-Wilks).",
+  kbl(caption = "Normalidad (Shapiro-Wilks).",
       col.names = c("Astillero", "p-valor", "Conclusión"))
 }
 ```
@@ -365,7 +365,7 @@ summary_aov <- summary(Datos.aov)
 knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
 if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
   aov_table %>%
-    kable(caption = "Resultados del ANOVA",
+    kbl(caption = "Resultados del ANOVA",
           col.names = c("Grados Libertad",
                         "Suma cuadrados",
                         "Media suma cuadrados",
@@ -379,7 +379,7 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
     row_spec(1:nrow(aov_table), bold= F, align = "c")
 }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
     aov_table %>%
-    kable(caption = "Resultados del ANOVA",
+    kbl(caption = "Resultados del ANOVA",
           col.names = c("Grados Libertad",
                         "Suma cuadrados",
                         "Media suma cuadrados",
@@ -430,7 +430,7 @@ tipo_output <- c("html") # pdf, html, docx
 knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
 if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 pares_df %>%
-  kable(caption = "Resultados comparaciones múltiples",
+  kbl(caption = "Resultados comparaciones múltiples",
         col.names = c("Grupos",
                       "Diferencia estimada",
                       "Desviación Típica",
@@ -445,7 +445,7 @@ pares_df %>%
   row_spec(1:nrow(pares_df), bold= F, align = "c")
 }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
   pares_df %>%
-  kable(caption = "Resultados comparaciones múltiples",
+  kbl(caption = "Resultados comparaciones múltiples",
         col.names = c("Grupos",
                       "Diferencia estimada",
                       "Desviación Típica",
@@ -524,7 +524,7 @@ tipo_output <- c("html") # pdf, html, docx
 knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
 if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
   tablamedias2 %>%
-    kable(caption = "IIG. Medias por astillero.",
+    kbl(caption = "IIG. Medias por astillero.",
       col.names = c("Astillero", "Observaciones", "IIG medio")) %>%
   kable_styling(full_width = F,
                 bootstrap_options = "striped", "bordered", "condensed",
@@ -534,7 +534,7 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
   row_spec(1:nrow(tablamedias2), bold= F, align = "c")
 }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
   tablamedias2 %>%
-    kable(caption = "IIG. Medias por astillero.",
+    kbl(caption = "IIG. Medias por astillero.",
       col.names = c("Astillero", "Observaciones", "IIG medio"))
 }
 ```
@@ -621,7 +621,7 @@ Procedemos al contraste de normalidad mediante el gráfico QQ y la prueba de *Sh
 knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
 if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
     tablashapiro2 <- normalidad2 %>%
-    kable(caption = "Normalidad del IIG (Shapiro-Wilks).",
+    kbl(caption = "Normalidad del IIG (Shapiro-Wilks).",
           col.names = c("Astillero", "p-valor", "Conclusión")) %>%
     kable_styling(full_width = F,
                   bootstrap_options = "striped", "bordered", "condensed",
@@ -633,7 +633,7 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
     tablashapiro2
 }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
 tablashapiro2 <- normalidad2 %>%
-  kable(caption = "Normalidad del IIG (Shapiro-Wilks).",
+  kbl(caption = "Normalidad del IIG (Shapiro-Wilks).",
       col.names = c("Astillero", "p-valor", "Conclusión"))
 }
 ```
@@ -680,7 +680,7 @@ tipo_output <- c("html") # pdf, html, docx
 knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
 if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
   aov_table2 %>%
-    kable(caption = "Resultados del ANOVA — IIG (solo ilustrativo)",
+    kbl(caption = "Resultados del ANOVA — IIG (solo ilustrativo)",
           col.names = c("Grados Libertad",
                         "Suma cuadrados",
                         "Media suma cuadrados",
@@ -694,7 +694,7 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
     row_spec(1:nrow(aov_table2), bold= F, align = "c")
 }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
     aov_table2 %>%
-    kable(caption = "Resultados del ANOVA — IIG (solo ilustrativo)",
+    kbl(caption = "Resultados del ANOVA — IIG (solo ilustrativo)",
           col.names = c("Grados Libertad",
                         "Suma cuadrados",
                         "Media suma cuadrados",
@@ -758,7 +758,7 @@ De nuevo, si se rechaza la hipótesis nula, cabe preguntarse cuáles son los gru
 knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
 if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
   Datos.kmc.df %>%
-    kable(caption = "Kruskal-Wallis. Múltiples diferencias",
+    kbl(caption = "Kruskal-Wallis. Múltiples diferencias",
           col.names = c("Diferencias medias",
                         "Diferencias críticas",
                         "Significación")) %>%
@@ -772,7 +772,7 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
     row_spec(1:nrow(Datos.kmc.df), bold = F, align = "c")
 }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
   Datos.kmc.df %>%
-    kable(caption = "Kruskal-Wallis. Múltiples diferencias",
+    kbl(caption = "Kruskal-Wallis. Múltiples diferencias",
           col.names = c("Diferencias medias",
                         "Diferencias críticas",
                         "Significación"))
