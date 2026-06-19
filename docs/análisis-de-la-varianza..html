@@ -6,16 +6,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>8 Análisis de la varianza. | R-Stars: La Guía</title>
 <meta name="author" content="Miguel-Ángel Tarancón">
-<meta name="description" content="8.1 Introducción. El análisis de la varianza (ANOVA) puede considerarse una generalización del contraste de hipótesis de medias poblacionales iguales para el caso de poblaciones normales y con...">
+<meta name="description" content="Astillero interestelar en órbita estacionaria.  8.1 Introducción. El análisis de la varianza (ANOVA) puede considerarse una generalización del contraste de hipótesis de medias poblacionales...">
 <meta name="generator" content="bookdown 0.46 with bs4_book()">
 <meta property="og:title" content="8 Análisis de la varianza. | R-Stars: La Guía">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://teckel71.github.io/RStars-book/análisis-de-la-varianza..html">
 <meta property="og:image" content="https://teckel71.github.io/RStars-book/figuras/Portada_v3-2.jpg">
-<meta property="og:description" content="8.1 Introducción. El análisis de la varianza (ANOVA) puede considerarse una generalización del contraste de hipótesis de medias poblacionales iguales para el caso de poblaciones normales y con...">
+<meta property="og:description" content="Astillero interestelar en órbita estacionaria.  8.1 Introducción. El análisis de la varianza (ANOVA) puede considerarse una generalización del contraste de hipótesis de medias poblacionales...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="8 Análisis de la varianza. | R-Stars: La Guía">
-<meta name="twitter:description" content="8.1 Introducción. El análisis de la varianza (ANOVA) puede considerarse una generalización del contraste de hipótesis de medias poblacionales iguales para el caso de poblaciones normales y con...">
+<meta name="twitter:description" content="Astillero interestelar en órbita estacionaria.  8.1 Introducción. El análisis de la varianza (ANOVA) puede considerarse una generalización del contraste de hipótesis de medias poblacionales...">
 <meta name="twitter:image" content="https://teckel71.github.io/RStars-book/figuras/Portada_v3-2.jpg">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
@@ -60,6 +60,9 @@
 <h1>
 <span class="header-section-number">8</span> Análisis de la varianza.<a class="anchor" aria-label="anchor" href="#an%C3%A1lisis-de-la-varianza."><i class="fas fa-link"></i></a>
 </h1>
+<div class="float">
+<img src="figuras/08%20anova%20astilleros.jpg" style="width:100.0%" alt="Astillero interestelar en órbita estacionaria."><div class="figcaption"><span class="smallcaps">Astillero interestelar en órbita estacionaria.</span></div>
+</div>
 <div id="introducción.-4" class="section level2" number="8.1">
 <h2>
 <span class="header-section-number">8.1</span> Introducción.<a class="anchor" aria-label="anchor" href="#introducci%C3%B3n.-4"><i class="fas fa-link"></i></a>
@@ -76,16 +79,11 @@
 <h3>
 <span class="header-section-number">8.2.1</span> El Informe <em>Crestfall</em>.<a class="anchor" aria-label="anchor" href="#el-informe-crestfall."><i class="fas fa-link"></i></a>
 </h3>
-<div class="float">
-<img src="figuras/08%20astillero%20interestelar.jpg" alt="Astillero interestelar en órbita estacionaria."><div class="figcaption">Astillero interestelar en órbita estacionaria.</div>
-</div>
-<p>Astillero interestelar en órbita estacionaria.</p>
 <p>Todas las naves del sector del transporte interestelar de mercancías se propulsan con un mismo combustible: la <em>especia</em>. Sin embargo, no todas las naves se construyen igual. El diseño, los materiales, los sistemas de navegación y los protocolos de mantenimiento son responsabilidad de los grandes <strong>astilleros interestelares</strong>: las compañías que diseñan, fabrican y suministran los cargueros que luego operan las distintas empresas de transporte. La calidad y las prestaciones de las naves dependen, en buena medida, del astillero del que proceden.</p>
-<p>La <em>Agencia Interplanetaria de Transporte de Mercancías</em> (AITM) realiza, cada cierto tiempo, estudios comparativos entre los principales astilleros del sector. El estudio que reproduciremos en este capítulo lleva a cabo dicha comparación entre los tres grandes astilleros activos en el momento: <strong>Korrigan Heavy Works</strong>, <strong>Selene Dynamics</strong> y <strong>Arcturus Shipyards</strong>. La investigación está dirigida por el doctor <em>Oren Crestfall</em> (en la imagen), analista técnico de la agencia, por lo que el informe que recoge sus resultados se conoce como <em>Informe Crestfall</em>.</p>
+<p>La <em>Agencia Interplanetaria de Transporte de Mercancías</em> (AITM) realiza, cada cierto tiempo, estudios comparativos entre los principales astilleros del sector. El estudio que reproduciremos en este capítulo lleva a cabo dicha comparación entre los tres grandes astilleros activos en el momento: <strong>Korrigan Heavy Works</strong>, <strong>Selene Dynamics</strong> y <strong>Arcturus Shipyards</strong>. La investigación está dirigida por el doctor <em>Oren Crestfall</em>, analista técnico de la agencia, por lo que el informe que recoge sus resultados se conoce como <em>Informe Crestfall</em>.</p>
 <div class="float">
-<img src="figuras/Crestfall.jpg" alt="Oren Crestfall, analista técnico de la AITM."><div class="figcaption">Oren Crestfall, analista técnico de la AITM.</div>
+<img src="figuras/08%20anova%20planos.jpg" style="width:100.0%" alt="Planos de diversos modelos de cargueros de mercancías."><div class="figcaption"><span class="smallcaps">Planos de diversos modelos de cargueros de mercancías.</span></div>
 </div>
-<p>Oren Crestfall, analista técnico de la AITM.</p>
 <p>En el estudio se han seleccionado <strong>48 naves cargueras</strong>, 16 de cada uno de los tres astilleros, con independencia de cuál sea la empresa de transporte que las opera actualmente. Sobre cada nave se ha registrado, entre otras variables, su <strong>Índice de Rendimiento Energético (IRE)</strong> —toneladas de carga útil transportadas por unidad de especia consumida en la ruta estándar de referencia Sol–Centauri B— y su <strong>Índice de Incidencias Graves (IIG)</strong> —número de averías mayores registradas a lo largo de su vida operativa—. El factor que clasifica las naves es, por tanto, el <strong>ASTILLERO</strong> fabricante.</p>
 <p>La AITM se plantea dos preguntas:</p>
 <ul>
@@ -98,7 +96,7 @@
 <h3>
 <span class="header-section-number">8.2.2</span> Preparación de los datos.<a class="anchor" aria-label="anchor" href="#preparaci%C3%B3n-de-los-datos.-3"><i class="fas fa-link"></i></a>
 </h3>
-<p>Los datos están almacenados en el archivo de Microsoft Excel “<a href="#">astilleros_48.xlsx</a>”, y el script con el código del ejemplo se halla contenido en el fichero “<a href="#">anova_rstars.R</a>”. Vamos a suponer que trabajaremos en un proyecto de RStudio al que denominaremos “anova”.</p>
+<p>Los datos están almacenados en el archivo de Microsoft Excel “<a href="https://raw.githubusercontent.com/teckel71/RStars-book/main/download/astilleros_48.xlsx">astilleros_48.xlsx</a>”, y el script con el código del ejemplo se halla contenido en el fichero “<a href="https://raw.githubusercontent.com/teckel71/RStars-book/main/download/anova_rstars.R">anova_rstars.R</a>”. Vamos a suponer que trabajaremos en un proyecto de RStudio al que denominaremos “anova”.</p>
 <p>Una vez abierto el <em>script</em> en el editor de RStudio, comprobaremos que la primera parte del código está dedicada a la limpieza de la memoria (<em>Environment</em>) y a la importación de los datos. Para ello, activaremos el paquete <a href="https://readxl.tidyverse.org">readxl</a> y utilizaremos la función <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code>, indicando en los argumentos el archivo a explorar, y la <em>hoja</em> en la cual se encuentran los datos (hoja “Datos”). Los datos se almacenarán en el <em>data frame</em> “datos”. En este <em>data frame</em>, la primera columna no es una verdadera variable, sino que se compone de los nombres de los casos o naves. Con una línea de código adicional transformaremos esa primera columna en el <em>nombre de las filas</em>, de modo que tal columna abandona su <em>rol</em> de variable. En definitiva, el código para importar los datos es:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Análisis ANOVA de un factor.</span></span>
@@ -1027,11 +1025,11 @@ TRUE
 <p>En esta sección se muestran los links de acceso a los diferentes materiales (<em>scripts</em>, datos…) necesarios para llevar a cabo los contenidos prácticos del capítulo.</p>
 <p><strong>Datos (en formato Microsoft (R) Excel (R)):</strong></p>
 <ul>
-<li>astilleros_48.xlsx (<a href="#">obtener aquí</a>)</li>
+<li>astilleros_48.xlsx (<a href="https://raw.githubusercontent.com/teckel71/RStars-book/main/download/astilleros_48.xlsx">obtener aquí</a>)</li>
 </ul>
 <p><strong>Scripts:</strong></p>
 <ul>
-<li>anova_rstars.R (<a href="#">obtener aquí</a>)</li>
+<li>anova_rstars.R (<a href="https://raw.githubusercontent.com/teckel71/RStars-book/main/download/anova_rstars.R">obtener aquí</a>)</li>
 </ul>
 </div>
 </div>
@@ -1056,7 +1054,7 @@ TRUE
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2026-06-17.</p>
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2026-06-19.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
