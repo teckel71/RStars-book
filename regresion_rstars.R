@@ -198,7 +198,7 @@ predict_from_excel_scenarios <- function(model,
   }
   
   # Entorno de evaluación para las fórmulas de Excel
-  env_eval <- new.env(parent = .GlobalEnv)
+  env_eval <- new.env(parent = parent.frame())
   
   if (length(eval_dfs)) {
     nms <- names(eval_dfs)

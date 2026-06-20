@@ -2983,7 +2983,8 @@ correspondientes:</p>
 <div class="sourceCode" id="cb408"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Modelo de independencia (solo efectos principales, sin interacciones)</span></span>
 <span><span class="va">modelo_indep</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/loglm.html">loglm</a></span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">+</span> <span class="va">EFLO</span> <span class="op">+</span> <span class="va">FJUR</span>,</span>
-<span>                            data <span class="op">=</span> <span class="va">tab_use</span><span class="op">)</span></span>
+<span>                            data   <span class="op">=</span> <span class="va">tab_use</span>,</span>
+<span>                            fitted <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">generar_solucion</span><span class="op">(</span><span class="va">modelo_indep</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-351-1.png" alt="" width="672"></div>
@@ -3406,7 +3407,8 @@ anterior por los signos “*”. El modelo se denominará “modelo_sat”:</p>
 <code class="sourceCode R"><span><span class="co"># Modelo Saturado.</span></span>
 <span></span>
 <span><span class="va">modelo_sat</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/loglm.html">loglm</a></span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">*</span> <span class="va">EFLO</span> <span class="op">*</span> <span class="va">FJUR</span>,</span>
-<span>                          data<span class="op">=</span> <span class="va">tab_use</span><span class="op">)</span></span>
+<span>                          data   <span class="op">=</span> <span class="va">tab_use</span>,</span>
+<span>                          fitted <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">generar_solucion</span><span class="op">(</span><span class="va">modelo_sat</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-354-1.png" alt="" width="672"></div>
@@ -4273,48 +4275,113 @@ eficiente entre ajuste y complejidad.</p>
 dispersión fija), <code>trace = 1</code> muestra en pantalla cada paso del proceso
 para monitorizar cómo evoluciona el AIC y qué términos se eliminan, y
 <code>steps = 1000</code> garantiza que no haya limitaciones en el número máximo de
-iteraciones, permitiendo explorar completamente el espacio de modelos.
-El resultado final, almacenado como <code>modelo_def</code>, es la especificación
+iteraciones, permitiendo explorar completamente el espacio de modelos.</p>
+<p><strong>Nota técnica:</strong> la función genérica <code><a href="https://rdrr.io/r/stats/step.html">step()</a></code> localiza, para cada
+submodelo que prueba, la tabla de datos original contando internamente
+cuántas llamadas hay por encima en la pila de ejecución
+(<code><a href="https://rdrr.io/r/base/eval.html">eval.parent()</a></code>). Esto funciona sin problema en una sesión interactiva,
+pero es <strong>frágil cuando el documento se compila a través de varias capas
+de funciones</strong> (por ejemplo, al llamar a <code><a href="https://pkgs.rstudio.com/bookdown/reference/render_book.html">bookdown::render_book()</a></code> desde
+dentro de una función como <code>build_book()</code>), ya que entonces cambia el
+número de llamadas apiladas y <code><a href="https://rdrr.io/r/stats/step.html">step()</a></code> deja de encontrar correctamente
+los datos, provocando un error solo al renderizar el libro. Para
+evitarlo, implementamos manualmente el mismo algoritmo de selección
+<em>backward</em> por AIC (respetando la jerarquía de los términos), pero
+reajustando cada submodelo con una llamada directa y autocontenida a
+<code><a href="https://rdrr.io/pkg/MASS/man/loglm.html">MASS::loglm()</a></code>, sin depender de <code><a href="https://rdrr.io/r/stats/update.html">update()</a></code> ni de la pila de llamadas:</p>
+<div class="sourceCode" id="cb414"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Selección backward por AIC, robusta frente al contexto de ejecución</span></span>
+<span><span class="co"># (consola, knitr, bookdown, funciones envolventes, etc.).</span></span>
+<span></span>
+<span><span class="va">step_loglm_backward</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span>, <span class="va">trace</span> <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">steps</span> <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span> <span class="op">{</span></span>
+<span></span>
+<span>  <span class="va">ajustar</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">form</span><span class="op">)</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/loglm.html">loglm</a></span><span class="op">(</span><span class="va">form</span>, data <span class="op">=</span> <span class="va">data</span>, fitted <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="va">aic_de</span>  <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/extractAIC.html">extractAIC</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
+<span></span>
+<span>  <span class="va">formula_actual</span> <span class="op">&lt;-</span> <span class="va">formula</span></span>
+<span>  <span class="va">ajuste_actual</span>  <span class="op">&lt;-</span> <span class="fu">ajustar</span><span class="op">(</span><span class="va">formula_actual</span><span class="op">)</span></span>
+<span>  <span class="va">aic_actual</span>     <span class="op">&lt;-</span> <span class="fu">aic_de</span><span class="op">(</span><span class="va">ajuste_actual</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">trace</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"Start:  AIC="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">aic_actual</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/deparse.html">deparse</a></span><span class="op">(</span><span class="va">formula_actual</span><span class="op">)</span>, <span class="st">"\n\n"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="va">steps</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span></span>
+<span>    <span class="va">terminos</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/factor.scope.html">drop.scope</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/terms.html">terms</a></span><span class="op">(</span><span class="va">formula_actual</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">terminos</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="kw">break</span></span>
+<span></span>
+<span>    <span class="va">aics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span><span class="op">(</span><span class="va">terminos</span>, <span class="kw">function</span><span class="op">(</span><span class="va">term</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">nueva_formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.formula.html">update.formula</a></span><span class="op">(</span><span class="va">formula_actual</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"~ . -"</span>, <span class="va">term</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="va">ajuste</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html">tryCatch</a></span><span class="op">(</span><span class="fu">ajustar</span><span class="op">(</span><span class="va">nueva_formula</span><span class="op">)</span>, error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span>      <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">ajuste</span><span class="op">)</span><span class="op">)</span> <span class="cn">Inf</span> <span class="kw">else</span> <span class="fu">aic_de</span><span class="op">(</span><span class="va">ajuste</span><span class="op">)</span></span>
+<span>    <span class="op">}</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">trace</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"Step"</span>, <span class="va">i</span>, <span class="st">":\n"</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"&lt;none&gt;"</span>, <span class="va">terminos</span><span class="op">)</span>,</span>
+<span>                        AIC  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">aic_actual</span>, <span class="va">aics</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>            row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"\n"</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span></span>
+<span>    <span class="va">mejor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.min</a></span><span class="op">(</span><span class="va">aics</span><span class="op">)</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">aics</span><span class="op">[</span><span class="va">mejor</span><span class="op">]</span> <span class="op">&gt;=</span> <span class="va">aic_actual</span><span class="op">)</span> <span class="kw">break</span></span>
+<span></span>
+<span>    <span class="va">formula_actual</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.formula.html">update.formula</a></span><span class="op">(</span><span class="va">formula_actual</span>,</span>
+<span>                                      <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"~ . -"</span>, <span class="va">terminos</span><span class="op">[</span><span class="va">mejor</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">aic_actual</span> <span class="op">&lt;-</span> <span class="va">aics</span><span class="op">[</span><span class="va">mejor</span><span class="op">]</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="va">ajuste_final</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/loglm.html">loglm</a></span><span class="op">(</span><span class="va">formula_actual</span>, data <span class="op">=</span> <span class="va">data</span>, fitted <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">trace</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"\nFormula final:\n"</span>, <span class="fu"><a href="https://rdrr.io/r/base/deparse.html">deparse</a></span><span class="op">(</span><span class="va">formula_actual</span><span class="op">)</span>, <span class="st">"\n"</span>,</span>
+<span>        <span class="st">"AIC final = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu">aic_de</span><span class="op">(</span><span class="va">ajuste_final</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">ajuste_final</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>El resultado final, almacenado como <code>modelo_def</code>, es la especificación
 óptima según el AIC, más simple que el modelo saturado pero
 suficientemente expresiva para captar los patrones esenciales de
 asociación entre los factores:</p>
-<div class="sourceCode" id="cb414"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb415"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Elección del modelo final.</span></span>
 <span></span>
-<span><span class="va">modelo_def</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/step.html">step</a></span><span class="op">(</span><span class="va">modelo_sat</span>, scale <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>                   direction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"backward"</span><span class="op">)</span>,</span>
-<span>                   trace <span class="op">=</span> <span class="fl">1</span>, steps <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">modelo_def</span> <span class="op">&lt;-</span> <span class="fu">step_loglm_backward</span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">*</span> <span class="va">EFLO</span> <span class="op">*</span> <span class="va">FJUR</span>,</span>
+<span>                                   data  <span class="op">=</span> <span class="va">tab_use</span>,</span>
+<span>                                   trace <span class="op">=</span> <span class="cn">TRUE</span>, steps <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Start:  AIC=90
 ## ~GALAXIA * EFLO * FJUR
 ## 
-##                     Df    AIC
-## - GALAXIA:EFLO:FJUR 16 69.505
-## &lt;none&gt;                 90.000
+## Step 1 :
+##               Term  AIC
+##             &lt;none&gt; 90.0
+##  GALAXIA:EFLO:FJUR 69.5
 ## 
-## Step:  AIC=69.5
-## ~GALAXIA + EFLO + FJUR + GALAXIA:EFLO + GALAXIA:FJUR + EFLO:FJUR
+## Step 2 :
+##          Term   AIC
+##        &lt;none&gt; 69.50
+##  GALAXIA:EFLO 63.13
+##  GALAXIA:FJUR 69.28
+##     EFLO:FJUR 65.20
 ## 
-##                Df    AIC
-## - GALAXIA:EFLO  8 63.126
-## - EFLO:FJUR     4 65.200
-## - GALAXIA:FJUR  8 69.277
-## &lt;none&gt;            69.505
+## Step 3 :
+##          Term   AIC
+##        &lt;none&gt; 63.13
+##  GALAXIA:FJUR 63.44
+##     EFLO:FJUR 59.36
 ## 
-## Step:  AIC=63.13
-## ~GALAXIA + EFLO + FJUR + GALAXIA:FJUR + EFLO:FJUR
+## Step 4 :
+##          Term   AIC
+##        &lt;none&gt; 59.36
+##          EFLO 92.22
+##  GALAXIA:FJUR 59.67
 ## 
-##                Df    AIC
-## - EFLO:FJUR     4 59.359
-## &lt;none&gt;            63.126
-## - GALAXIA:FJUR  8 63.436
 ## 
-## Step:  AIC=59.36
+## Formula final:
 ## ~GALAXIA + EFLO + FJUR + GALAXIA:FJUR
-## 
-##                Df    AIC
-## &lt;none&gt;            59.359
-## - GALAXIA:FJUR  8 59.670
-## - EFLO          2 92.219</code></pre>
+## AIC final = 59.36</code></pre>
 <p>En nuestro ejemplo, la especificación del modelo definitivo incluye los
 tres efectos directos o principales de los factores o atributos, y la
 interacción entre los factores de la forma jurídica (FJUR) y la Galaxia
@@ -4325,9 +4392,9 @@ interacciones triples entre los tres factores.</p>
 <p>Luego, se pasa el modelo a la función <code>generar_solución()</code> para obtener
 los resultados (el gráfico de mosaico y las dos tablas). El gráfico
 obtenido es:</p>
-<div class="sourceCode" id="cb416"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb417"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="fu">generar_solucion</span><span class="op">(</span><span class="va">modelo_def</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-358-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-359-1.png" alt="" width="672"></div>
 <p>El gráfico de residuos del modelo seleccionado muestra un ajuste
 considerablemente mejor que el del modelo de independencia. La mayoría
 de los rectángulos presentan tonalidades suaves, señal de que las
@@ -4351,11 +4418,11 @@ modelo final proporciona una representación parsimoniosa y
 estadísticamente coherente de las dependencias esenciales entre los
 factores analizados.</p>
 <p>En cuanto a la tabla de validación:</p>
-<div class="sourceCode" id="cb417"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb418"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_def</span><span class="op">$</span><span class="va">Informacion</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-358">Table 10.6: </span>Validación del modelo
+<span id="tab:unnamed-chunk-359">Table 10.6: </span>Validación del modelo
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -4416,11 +4483,11 @@ concluimos que <strong>no es necesario añadir interacciones adicionales</strong
 que la especificación elegida representa correctamente la estructura de
 dependencias presente en la tabla de contingencia tridimensional.</p>
 <p>En lo que se refiere a los coeficientes estimados del modelo:</p>
-<div class="sourceCode" id="cb418"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb419"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_def</span><span class="op">$</span><span class="va">Coeficientes</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-358">Table 10.6: </span>Coeficientes del modelo
+<span id="tab:unnamed-chunk-359">Table 10.6: </span>Coeficientes del modelo
 </caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -4749,7 +4816,7 @@ aquí</a>)</p></li>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2026-06-19.</p>
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón. It was last built on 2026-06-20.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

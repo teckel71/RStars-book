@@ -1735,7 +1735,8 @@ correspondientes:
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 # Modelo de independencia (solo efectos principales, sin interacciones)
 modelo_indep <- MASS::loglm(~ GALAXIA + EFLO + FJUR,
-                            data = tab_use)
+                            data   = tab_use,
+                            fitted = TRUE)
 
 generar_solucion(modelo_indep)
 ```
@@ -1997,7 +1998,8 @@ anterior por los signos “\*”. El modelo se denominará "modelo_sat":
 # Modelo Saturado.
 
 modelo_sat <- MASS::loglm(~ GALAXIA * EFLO * FJUR,
-                          data= tab_use)
+                          data   = tab_use,
+                          fitted = TRUE)
 
 generar_solucion(modelo_sat)
 ```
@@ -2042,6 +2044,75 @@ dispersión fija), `trace = 1` muestra en pantalla cada paso del proceso
 para monitorizar cómo evoluciona el AIC y qué términos se eliminan, y
 `steps = 1000` garantiza que no haya limitaciones en el número máximo de
 iteraciones, permitiendo explorar completamente el espacio de modelos.
+
+**Nota técnica:** la función genérica `step()` localiza, para cada
+submodelo que prueba, la tabla de datos original contando internamente
+cuántas llamadas hay por encima en la pila de ejecución
+(`eval.parent()`). Esto funciona sin problema en una sesión interactiva,
+pero es **frágil cuando el documento se compila a través de varias capas
+de funciones** (por ejemplo, al llamar a `bookdown::render_book()` desde
+dentro de una función como `build_book()`), ya que entonces cambia el
+número de llamadas apiladas y `step()` deja de encontrar correctamente
+los datos, provocando un error solo al renderizar el libro. Para
+evitarlo, implementamos manualmente el mismo algoritmo de selección
+*backward* por AIC (respetando la jerarquía de los términos), pero
+reajustando cada submodelo con una llamada directa y autocontenida a
+`MASS::loglm()`, sin depender de `update()` ni de la pila de llamadas:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+# Selección backward por AIC, robusta frente al contexto de ejecución
+# (consola, knitr, bookdown, funciones envolventes, etc.).
+
+step_loglm_backward <- function(formula, data, trace = TRUE, steps = 1000) {
+
+  ajustar <- function(form) MASS::loglm(form, data = data, fitted = FALSE)
+  aic_de  <- function(fit) stats::extractAIC(fit)[2]
+
+  formula_actual <- formula
+  ajuste_actual  <- ajustar(formula_actual)
+  aic_actual     <- aic_de(ajuste_actual)
+
+  if (trace) {
+    cat("Start:  AIC=", round(aic_actual, 2), "\n",
+        deparse(formula_actual), "\n\n", sep = "")
+  }
+
+  for (i in seq_len(steps)) {
+
+    terminos <- stats::drop.scope(stats::terms(formula_actual))
+    if (length(terminos) == 0) break
+
+    aics <- vapply(terminos, function(term) {
+      nueva_formula <- update.formula(formula_actual, paste("~ . -", term))
+      ajuste <- tryCatch(ajustar(nueva_formula), error = function(e) NULL)
+      if (is.null(ajuste)) Inf else aic_de(ajuste)
+    }, numeric(1))
+
+    if (trace) {
+      cat("Step", i, ":\n")
+      print(data.frame(Term = c("<none>", terminos),
+                        AIC  = round(c(aic_actual, aics), 2)),
+            row.names = FALSE)
+      cat("\n")
+    }
+
+    mejor <- which.min(aics)
+    if (aics[mejor] >= aic_actual) break
+
+    formula_actual <- update.formula(formula_actual,
+                                      paste("~ . -", terminos[mejor]))
+    aic_actual <- aics[mejor]
+  }
+
+  ajuste_final <- MASS::loglm(formula_actual, data = data, fitted = TRUE)
+  if (trace) {
+    cat("\nFormula final:\n", deparse(formula_actual), "\n",
+        "AIC final = ", round(aic_de(ajuste_final), 2), "\n", sep = "")
+  }
+  ajuste_final
+}
+```
+
 El resultado final, almacenado como `modelo_def`, es la especificación
 óptima según el AIC, más simple que el modelo saturado pero
 suficientemente expresiva para captar los patrones esenciales de
@@ -2050,9 +2121,9 @@ asociación entre los factores:
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 # Elección del modelo final.
 
-modelo_def <- step(modelo_sat, scale = 0,
-                   direction = c("backward"),
-                   trace = 1, steps = 1000)
+modelo_def <- step_loglm_backward(~ GALAXIA * EFLO * FJUR,
+                                   data  = tab_use,
+                                   trace = TRUE, steps = 1000)
 ```
 
 En nuestro ejemplo, la especificación del modelo definitivo incluye los
