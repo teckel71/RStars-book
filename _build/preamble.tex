@@ -1,0 +1,38 @@
+% preamble.tex
+
+\ifxetex
+  \usepackage{polyglossia}
+  \setmainlanguage{spanish}
+% Tabla en lugar de cuadro
+  \gappto\captionsspanish{\renewcommand{\tablename}{Tabla}  
+          \renewcommand{\listtablename}{Índice de tablas}}
+\else
+  \usepackage[spanish,es-tabla]{babel}
+\fi
+
+% Configuración de márgenes
+\usepackage[left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm, headheight=15pt]{geometry}
+
+% Números de página en la parte inferior
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+% Otras configuraciones personalizadas (si las necesitas)
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\makeatother
+\let\Oldincludegraphics\includegraphics
+\renewcommand{\includegraphics}[2][]{%
+  \Oldincludegraphics[#1]{#2}%
+}
+
+\usepackage{caption}
+\captionsetup[table]{singlelinecheck=false, justification=justified}
+
+% Fin del archivo preamble.tex
+
+

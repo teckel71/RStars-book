@@ -1229,23 +1229,7 @@ g_real_pred <- ggplot(series_ecuaDEF) +
     ylab("Distancias")
 
   (g_real_pred | g_resid) / (g_hresid | g_cook)
-
-  tablaCook <- series_ecuaDEF %>%
-    filter ( cooksd > 4/nrow(series_ecuaDEF)) %>%
-    select (.rownames, cooksd) %>%
-    kable(format = knitr.table.format,
-          caption = "Casos destacados distancia de Cook",
-          col.names = c("Caso","Distancia de Cook"),
-          digits = 3,
-          align = c("l","c")) %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = "striped",
-                                      "bordered",
-                                      "condensed",
-                  position = "center",
-                  font_size = 11)
-
-    tablaCook
+  
 ```
 
 A partir de los gráficos se puede concluir:
