@@ -4812,9 +4812,1509 @@ configuraciones organizativas resultan más estables o rentables en
 determinadas regiones del universo económico analizado.</p>
 </div>
 </div>
-<div id="materiales-para-realizar-las-prácticas-del-capítulo.-8" class="section level2" number="10.4">
+<div id="análisis-de-correspondencias." class="section level2" number="10.4">
 <h2>
-<span class="header-section-number">10.4</span> <img src="figuras/arrow-down-circle.svg" class="hicon"> Materiales para realizar las prácticas del capítulo.<a class="anchor" aria-label="anchor" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-8"><i class="fas fa-link"></i></a>
+<span class="header-section-number">10.4</span> <img src="figuras/book.svg" class="hicon"> Análisis de correspondencias.<a class="anchor" aria-label="anchor" href="#an%C3%A1lisis-de-correspondencias."><i class="fas fa-link"></i></a>
+</h2>
+<p>El <strong>análisis de correspondencias</strong> es una técnica destinada a
+<strong>representar visualmente</strong> una tabla de contingencia, situando en un
+gráfico bidimensional las categorías de los atributos o factores
+implicados. Puede utilizarse para representar una tabla de dos atributos
+o factores (<strong>análisis de correspondencias simple</strong>) o de más de dos
+(<strong>análisis de correspondencias múltiple</strong>). Cuando en el gráfico
+bidimensional se representan más de dos atributos o factores, este
+análisis se convierte, además, en una técnica de reducción de la
+dimensión de la información. De hecho, puede afirmarse que el análisis
+de correspondencias es una suerte de <strong>análisis de componentes
+principales aplicado a variables categóricas</strong>.</p>
+<p>De acuerdo con lo anterior, se pueden establecer los siguientes
+paralelismos con el análisis de componentes principales:</p>
+<ul>
+<li><p>Las <strong>componentes</strong> en el análisis de componentes principales
+equivalen a los <strong>ejes o dimensiones</strong> del análisis de
+correspondencias.</p></li>
+<li><p>La <strong>varianza total</strong> o comunalidad de las variables originales
+métricas del análisis de componentes principales pasa a ser, en el
+análisis de correspondencias, la <strong>inercia total</strong>.</p></li>
+<li><p>La varianza que es capaz de asumir cada componente en el análisis de
+componentes principales ahora se denomina <strong>inercia principal</strong> (del
+eje o dimensión en cuestión).</p></li>
+<li><p>Las <strong>puntuaciones</strong> de las componentes para un caso son, ahora, las
+<strong>coordenadas</strong> de una categoría de uno de los atributos o factores.</p></li>
+<li><p>El papel de las <strong>cargas</strong> de las variables en las componentes
+principales lo asumen las <strong>contribuciones</strong> de las categorías o
+niveles de los factores o atributos en los ejes o dimensiones.</p></li>
+</ul>
+<p>Como principal resultado del análisis se obtendrá un <strong>gráfico de dos
+ejes (dimensiones)</strong> en el cual se situarán más próximas las categorías
+de uno y otro factor que mantengan entre sí cierta tendencia a
+asociarse.</p>
+<p>Existe una <strong>limitación matemática</strong> que conviene recordar respecto al
+número de dimensiones o ejes que se pueden calcular. Para una tabla de
+contingencia con <span class="math inline">\(r\)</span> filas (categorías del primer factor) y <span class="math inline">\(c\)</span>
+columnas (categorías del segundo factor), el número máximo de
+dimensiones no triviales que puede extraer el análisis de
+correspondencias simple es:</p>
+<p><span class="math display">\[
+\text{Dimensiones máximas} = \min(r-1,\, c-1)
+\]</span></p>
+<p>Este número marca cuántos ejes son necesarios para reproducir
+exactamente la información de la tabla. Así:</p>
+<ul>
+<li><p>En una tabla <span class="math inline">\(3 \times 3\)</span>, se calculan como máximo <span class="math inline">\(\min(2,2) = 2\)</span>
+dimensiones, y ambas capturan el <strong>100%</strong> de la inercia total.</p></li>
+<li><p>En una tabla <span class="math inline">\(5 \times 3\)</span>, como la que se utilizará en el ejemplo
+(5 galaxias y 3 formas jurídicas), se calculan
+<span class="math inline">\(\min(4,2) = 2\)</span> dimensiones, que también asumen el <strong>100%</strong> de la
+inercia total.</p></li>
+<li><p>Sin embargo, en una tabla <span class="math inline">\(5 \times 5\)</span>, se pueden calcular hasta
+<span class="math inline">\(\min(4,4) = 4\)</span> dimensiones; y si se representan solo dos, el
+gráfico bidimensional recoge únicamente una parte de la inercia
+total.</p></li>
+</ul>
+<p>Este matiz es importante: <strong>la representación bidimensional recoge el
+100% de la información solo cuando el número de dimensiones no triviales
+es exactamente 2</strong>, es decir, cuando el factor con menos categorías
+tiene exactamente 3 categorías (y el otro tiene 3 o más). En otro caso,
+habrá que revisar con especial atención qué porcentaje de la inercia
+total captura el plano formado por las dos primeras dimensiones.</p>
+<p>Existen varios paquetes de R que permiten desarrollar un análisis de
+correspondencias simple, como es nuestro ejemplo. Optaremos por
+utilizar el paquete <a href="http://factominer.free.fr">FactoMineR</a>, que dispone de la función <code><a href="https://rdrr.io/pkg/FactoMineR/man/CA.html">CA()</a></code>,
+encargada de realizar los cálculos del análisis. Para la visualización
+de los resultados nos apoyaremos en el paquete <a href="https://github.com/kassambara/factoextra">factoextra</a>.</p>
+<div id="de-la-asociación-a-su-mapa-galaxia-y-forma-jurídica-revisitadas." class="section level3" number="10.4.1">
+<h3>
+<span class="header-section-number">10.4.1</span> <img src="figuras/star.svg" class="hicon"><img src="figuras/pie-chart.svg" class="hicon"> De la asociación a su mapa: Galaxia y Forma Jurídica revisitadas.<a class="anchor" aria-label="anchor" href="#de-la-asociaci%C3%B3n-a-su-mapa-galaxia-y-forma-jur%C3%ADdica-revisitadas."><i class="fas fa-link"></i></a>
+</h3>
+<p>En el apartado dedicado a las tablas de contingencia bidimensionales
+concluimos que existe <strong>asociación estadísticamente significativa</strong>
+entre la galaxia donde operan las empresas de transporte interestelar
+(GALAXIA) y su forma jurídica (FJUR): la prueba ji-cuadrado de Pearson
+arrojó un p-valor de 0.0197. Además, los residuos estandarizados
+ajustados apuntaron a varias celdas relevantes: la sobrerrepresentación
+de las <strong>CG</strong> en la <strong>Gran Nube de Magallanes</strong> y de las <strong>SLG</strong> en la
+<strong>Pequeña Nube de Magallanes</strong>, entre otras. Sabemos, por tanto,
+<strong>que</strong> existe asociación; y sabemos, para algunas celdas concretas,
+<strong>dónde</strong> se manifiesta. Lo que nos falta es una <strong>representación
+sintética y visual</strong> de esa asociación que permita, de un vistazo,
+ubicar qué formas jurídicas gravitan hacia qué galaxias.</p>
+<p>Esta es, precisamente, la utilidad del análisis de correspondencias:
+sintetizar en un mapa bidimensional las relaciones entre las categorías
+de ambos atributos. En este mapa, las categorías que aparecen próximas
+tienden a asociarse (frecuencias observadas por encima de lo esperado
+bajo independencia), y las que aparecen alejadas tienden a excluirse.</p>
+<p>Vamos a trabajar en un proyecto de nombre, por ejemplo,
+“correspondencias”. En la carpeta de este proyecto hemos de guardar
+estos dos elementos:</p>
+<ul>
+<li><p>el archivo de Microsoft® Excel® “interestelar_300.xlsx”, ya
+conocido de los apartados anteriores.</p></li>
+<li><p>el script con el código que vamos a ir ejecutando, que se llamará
+“correspondencias_rstars.R”.</p></li>
+</ul>
+<p>Una vez abierto el <em>script</em> en el editor de RStudio, comprobaremos que
+la primera parte del código está dedicada a la limpieza de la memoria
+(<em>Environment</em>). Además, se cargan los paquetes que harán falta para
+ejecutar el código:</p>
+<div class="sourceCode" id="cb423"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#### Análisis de Correspondencias Simple. Universo R-Stars ####################</span></span>
+<span><span class="co">################################################################################</span></span>
+<span></span>
+<span><span class="co"># Limpiando el Global Environment</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Cargando paquetes</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://github.com/jthomasmock/gtExtras">gtExtras</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/visdat/">visdat</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va">vcd</span><span class="op">)</span>         <span class="co"># Visualización tablas de contingencia</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="http://factominer.free.fr">FactoMineR</a></span><span class="op">)</span>  <span class="co"># Cálculo del análisis de correspondencias</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://github.com/kassambara/factoextra">factoextra</a></span><span class="op">)</span>  <span class="co"># Visualización de resultados del A. de Corresp.</span></span></code></pre></div>
+<p>A continuación, como es habitual, se <strong>importan los datos</strong> desde la
+hoja “Datos” del archivo Excel, y se <strong>seleccionan las variables
+categóricas</strong> que intervendrán en el análisis: GALAXIA y FJUR. Se
+comprueban los posibles <em>missing values</em> con <code><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss()</a></code>, y se
+recodifican los nombres de las galaxias para facilitar la lectura de
+los gráficos:</p>
+<div class="sourceCode" id="cb424"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># DATOS</span></span>
+<span></span>
+<span>  <span class="co"># Importando datos</span></span>
+<span></span>
+<span>    <span class="va">interestelar_300</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"interestelar_300.xlsx"</span>, sheet <span class="op">=</span> <span class="st">"Datos"</span><span class="op">)</span></span>
+<span>    <span class="va">interestelar_300</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">interestelar_300</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Seleccionando variables categoricas para el analisis</span></span>
+<span></span>
+<span>    <span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="va">interestelar_300</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">GALAXIA</span>,</span>
+<span>                    <span class="va">FJUR</span><span class="op">)</span></span>
+<span>    <span class="va">seleccion_df_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary</a></span><span class="op">(</span><span class="va">seleccion</span><span class="op">)</span></span>
+<span>    <span class="va">seleccion_df_graph</span></span></code></pre></div>
+<div id="cbsmctgdhj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+#cbsmctgdhj table {
+  font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#cbsmctgdhj thead, #cbsmctgdhj tbody, #cbsmctgdhj tfoot, #cbsmctgdhj tr, #cbsmctgdhj td, #cbsmctgdhj th {
+  border-style: none;
+}
+
+#cbsmctgdhj p {
+  margin: 0;
+  padding: 0;
+}
+
+#cbsmctgdhj .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 3px;
+  border-top-color: #FFFFFF;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#cbsmctgdhj .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#cbsmctgdhj .gt_title {
+  color: #333333;
+  font-size: 24px;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#cbsmctgdhj .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#cbsmctgdhj .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#cbsmctgdhj .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 0px;
+  border-bottom-color: #D3D3D3;
+}
+
+#cbsmctgdhj .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 0px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#cbsmctgdhj .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 80%;
+  font-weight: bolder;
+  text-transform: uppercase;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#cbsmctgdhj .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 80%;
+  font-weight: bolder;
+  text-transform: uppercase;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#cbsmctgdhj .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#cbsmctgdhj .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#cbsmctgdhj .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#cbsmctgdhj .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#cbsmctgdhj .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 80%;
+  font-weight: bolder;
+  text-transform: uppercase;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#cbsmctgdhj .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 80%;
+  font-weight: bolder;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#cbsmctgdhj .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#cbsmctgdhj .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#cbsmctgdhj .gt_row {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #F6F7F7;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#cbsmctgdhj .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 80%;
+  font-weight: bolder;
+  text-transform: uppercase;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cbsmctgdhj .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#cbsmctgdhj .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#cbsmctgdhj .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#cbsmctgdhj .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cbsmctgdhj .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#cbsmctgdhj .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#cbsmctgdhj .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#cbsmctgdhj .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cbsmctgdhj .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#cbsmctgdhj .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#cbsmctgdhj .gt_striped {
+  background-color: #FAFAFA;
+}
+
+#cbsmctgdhj .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#cbsmctgdhj .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#cbsmctgdhj .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cbsmctgdhj .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#cbsmctgdhj .gt_sourcenote {
+  font-size: 12px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cbsmctgdhj .gt_left {
+  text-align: left;
+}
+
+#cbsmctgdhj .gt_center {
+  text-align: center;
+}
+
+#cbsmctgdhj .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#cbsmctgdhj .gt_font_normal {
+  font-weight: normal;
+}
+
+#cbsmctgdhj .gt_font_bold {
+  font-weight: bold;
+}
+
+#cbsmctgdhj .gt_font_italic {
+  font-style: italic;
+}
+
+#cbsmctgdhj .gt_super {
+  font-size: 65%;
+}
+
+#cbsmctgdhj .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#cbsmctgdhj .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#cbsmctgdhj .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#cbsmctgdhj .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#cbsmctgdhj .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#cbsmctgdhj .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#cbsmctgdhj .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#cbsmctgdhj .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#cbsmctgdhj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<div class="inline-table"><table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading">
+<td colspan="7" class="gt_heading gt_title gt_font_normal" style>seleccion</td>
+    </tr>
+<tr class="gt_heading">
+<td colspan="7" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>300 rows x 2 cols</td>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="type"></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="name">Column</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="value">Plot Overview</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="n_missing">Missing</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="Mean">Mean</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="Median">Median</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="SD">SD</th>
+    </tr>
+</thead>
+<tbody class="gt_table_body">
+<tr>
+<td headers="type" class="gt_row gt_left"><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:20px;width:20px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#4e79a7;overflow:visible;position:relative;"><path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"></path></svg></td>
+<td headers="name" class="gt_row gt_left" style="font-weight: bold;"><div style="max-width: 150px;">
+    <details style="font-weight: normal !important;"><summary style="font-weight: bold !important;">GALAXIA</summary>
+Galaxia de Andrómeda, Vía Láctea, Gran Nube de Magallanes, Galaxia del Triángulo and Pequeña Nube de Magallanes
+</details>
+</div></td>
+<td headers="value" class="gt_row gt_center">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="141.73pt" height="34.02pt" viewbox="0 0 141.73 34.02"><g class="svglite"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }    .svglite g.glyphgroup path {      fill: inherit;      stroke: none;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg=="><rect x="0.00" y="0.00" width="141.73" height="34.02"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg==)"><rect x="0.00" y="0.00" width="141.73" height="34.02" style="stroke-width: 0.00; stroke: none;"></rect></g><defs><clippath id="cpMS4wMHwxNDAuNzR8Mi45OXwyMy42MQ=="><rect x="1.00" y="2.99" width="139.74" height="20.62"></rect></clippath></defs><g clip-path="url(#cpMS4wMHwxNDAuNzR8Mi45OXwyMy42MQ==)"><rect x="125.36" y="3.93" width="15.37" height="18.75" style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #DDEAF7;"></rect><rect x="103.47" y="3.93" width="21.89" height="18.75" style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #B7CFE9;"></rect><rect x="79.25" y="3.93" width="24.22" height="18.75" style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #91B4DA;"></rect><rect x="40.12" y="3.93" width="39.13" height="18.75" style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #679ACC;"></rect><rect x="1.00" y="3.93" width="39.13" height="18.75" style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #3181BD;"></rect></g><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg==)"><text x="1.00" y="30.18" style='font-size: 8.00px; font-family: "Arial";' textlength="43.61px" lengthadjust="spacingAndGlyphs">5 categories</text></g></g></svg>
+</td>
+<td headers="n_missing" class="gt_row gt_right">0.0%</td>
+<td headers="Mean" class="gt_row gt_center">—</td>
+<td headers="Median" class="gt_row gt_center">—</td>
+<td headers="SD" class="gt_row gt_center">—</td>
+</tr>
+<tr>
+<td headers="type" class="gt_row gt_left gt_striped"><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:20px;width:20px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#4e79a7;overflow:visible;position:relative;"><path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"></path></svg></td>
+<td headers="name" class="gt_row gt_left gt_striped" style="font-weight: bold;"><div style="max-width: 150px;">
+    <details style="font-weight: normal !important;"><summary style="font-weight: bold !important;">FJUR</summary>
+SLG, SAG and CG
+</details>
+</div></td>
+<td headers="value" class="gt_row gt_center gt_striped">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="141.73pt" height="34.02pt" viewbox="0 0 141.73 34.02"><g class="svglite"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }    .svglite g.glyphgroup path {      fill: inherit;      stroke: none;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg=="><rect x="0.00" y="0.00" width="141.73" height="34.02"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg==)"><rect x="0.00" y="0.00" width="141.73" height="34.02" style="stroke-width: 0.00; stroke: none;"></rect></g><defs><clippath id="cpMS4wMHwxNDAuNzR8Mi45OXwyMy42MQ=="><rect x="1.00" y="2.99" width="139.74" height="20.62"></rect></clippath></defs><g clip-path="url(#cpMS4wMHwxNDAuNzR8Mi45OXwyMy42MQ==)"><rect x="102.54" y="3.93" width="38.20" height="18.75" style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #DDEAF7;"></rect><rect x="62.02" y="3.93" width="40.52" height="18.75" style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #91B4DA;"></rect><rect x="1.00" y="3.93" width="61.02" height="18.75" style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #3181BD;"></rect></g><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg==)"><text x="1.00" y="30.18" style='font-size: 8.00px; font-family: "Arial";' textlength="43.61px" lengthadjust="spacingAndGlyphs">3 categories</text></g></g></svg>
+</td>
+<td headers="n_missing" class="gt_row gt_right gt_striped">0.0%</td>
+<td headers="Mean" class="gt_row gt_center gt_striped">—</td>
+<td headers="Median" class="gt_row gt_center gt_striped">—</td>
+<td headers="SD" class="gt_row gt_center gt_striped">—</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div style="text-align: center;">
+<p><strong>Tabla 10.16</strong></p>
+</div>
+<p>El resumen visual confirma que el <em>data frame</em> <code>seleccion</code> contiene
+las dos variables categóricas necesarias para el análisis de
+correspondencias simple: <strong>GALAXIA</strong> (5 categorías) y <strong>FJUR</strong> (3
+categorías). Ambas aparecen completas, sin valores perdidos:</p>
+<div class="sourceCode" id="cb425"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Localizando (posibles) missing values</span></span>
+<span></span>
+<span>    <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Análisis de correspondencias."</span>,</span>
+<span>           subtitle <span class="op">=</span> <span class="st">"Transporte de mercancías interestelar"</span>,</span>
+<span>           y <span class="op">=</span> <span class="st">"Observación"</span>,</span>
+<span>           fill <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual</a></span><span class="op">(</span></span>
+<span>        values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"TRUE"</span> <span class="op">=</span> <span class="st">"red"</span>, <span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"grey"</span><span class="op">)</span>,</span>
+<span>        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"TRUE"</span> <span class="op">=</span> <span class="st">"NA"</span>, <span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"Presente"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span></span>
+<span>        plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-395-1.png" alt="" width="672"></div>
+<div style="text-align: center;">
+<p><strong>Figura 10.14</strong></p>
+</div>
+<div class="sourceCode" id="cb426"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">GALAXIA</span><span class="op">)</span> <span class="op">|</span></span>
+<span>                         <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">FJUR</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">GALAXIA</span>,</span>
+<span>                                <span class="va">FJUR</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] GALAXIA FJUR   
+## &lt;0 rows&gt; (o 0- extensión row.names)</code></pre>
+<div class="sourceCode" id="cb428"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Eliminando (si procede) filas con NA, y renombrando los niveles de GALAXIA</span></span>
+<span></span>
+<span>    <span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">GALAXIA</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span>             <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">FJUR</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>GALAXIA <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_match.html">case_match</a></span><span class="op">(</span><span class="va">GALAXIA</span>,</span>
+<span>        <span class="st">"Gran Nube de Magallanes"</span>    <span class="op">~</span> <span class="st">"GN Magallanes"</span>,</span>
+<span>        <span class="st">"Pequeña Nube de Magallanes"</span> <span class="op">~</span> <span class="st">"PN Magallanes"</span>,</span>
+<span>        <span class="st">"Galaxia de Andrómeda"</span>       <span class="op">~</span> <span class="st">"Andrómeda"</span>,</span>
+<span>        <span class="st">"Galaxia del Triángulo"</span>      <span class="op">~</span> <span class="st">"Triángulo"</span>,</span>
+<span>        <span class="st">"Vía Láctea"</span>                 <span class="op">~</span> <span class="st">"Vía Láctea"</span>,</span>
+<span>        .default <span class="op">=</span> <span class="va">GALAXIA</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Confirmado que no hay valores perdidos y renombradas las categorías de
+GALAXIA, construimos la <strong>tabla de contingencia</strong> de partida, sobre la
+cual se aplicará el análisis:</p>
+<div class="sourceCode" id="cb429"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># TABLA DE CONTINGENCIA (GALAXIA X FJUR)</span></span>
+<span></span>
+<span>  <span class="va">tab.GA.FJ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">seleccion</span>, <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">GALAXIA</span>, <span class="va">FJUR</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">knitr.table.format</span> <span class="op">=</span> <span class="st">"html"</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/addmargins.html">addmargins</a></span><span class="op">(</span><span class="va">tab.GA.FJ</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>format <span class="op">=</span> <span class="va">knitr.table.format</span>,</span>
+<span>          caption <span class="op">=</span> <span class="st">"Empresas TMI: Galaxia y Forma Jurídica."</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                  bootstrap_options <span class="op">=</span> <span class="st">"striped"</span>, <span class="st">"bordered"</span>, <span class="st">"condensed"</span>,</span>
+<span>                  position <span class="op">=</span> <span class="st">"center"</span>,</span>
+<span>                  font_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/add_header_above.html">add_header_above</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>GALAXIA <span class="op">=</span> <span class="fl">1</span>, FJUR <span class="op">=</span> <span class="fl">3</span>, <span class="st">" "</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>                     bold <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>                     line <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">0</span>, bold <span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/column_spec.html">column_spec</a></span><span class="op">(</span><span class="fl">1</span>, bold <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; font-weight: bold; " colspan="1">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+GALAXIA
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; font-weight: bold; " colspan="3">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+FJUR
+</div>
+</th>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+</tr>
+<tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+CG
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+SAG
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+SLG
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Sum
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+Andrómeda
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+29
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+84
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+GN Magallanes
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+52
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+PN Magallanes
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+33
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+Triángulo
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+47
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+Vía Láctea
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+37
+</td>
+<td style="text-align:right;">
+84
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+Sum
+</td>
+<td style="text-align:right;">
+82
+</td>
+<td style="text-align:right;">
+87
+</td>
+<td style="text-align:right;">
+131
+</td>
+<td style="text-align:right;">
+300
+</td>
+</tr>
+</tbody>
+</table></div>
+<div style="text-align: center;">
+<p><strong>Tabla 10.17.</strong> Empresas TMI: Galaxia y Forma Jurídica.</p>
+</div>
+<p>Ya disponemos de la tabla sobre la que se aplicará el análisis. Se
+trata de una tabla <span class="math inline">\(5 \times 3\)</span>, por lo que el número máximo de
+dimensiones no triviales que se pueden extraer es
+<span class="math inline">\(\min(4, 2) = 2\)</span>. Esto implica que la representación bidimensional
+podrá recoger el <strong>100% de la inercia total</strong>, algo que no siempre
+ocurre y que resulta especialmente cómodo desde el punto de vista
+interpretativo.</p>
+<p>En el siguiente código, el análisis de correspondencias se aplica a la
+tabla <code>tab.GA.FJ</code>, y la solución se almacena en el objeto
+<code>acinterestelar</code>. Además, se prepara la lista <code>SolucionCA</code> para reunir
+tres tablas con los principales resultados numéricos: la primera
+recoge la información de las <strong>dimensiones</strong> (autovalores, porcentaje
+de inercia principal y porcentaje acumulado), la segunda desglosa la
+información de las <strong>filas</strong> (categorías de GALAXIA) y la tercera
+desglosa la información de las <strong>columnas</strong> (categorías de FJUR):</p>
+<div class="sourceCode" id="cb430"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ANALISIS DE CORRESPONDENCIAS SIMPLE</span></span>
+<span></span>
+<span>  <span class="co"># Formato de las tablas de resultados</span></span>
+<span></span>
+<span>    <span class="va">knitr.table.format</span> <span class="op">&lt;-</span> <span class="st">"html"</span></span>
+<span></span>
+<span>  <span class="co"># Cálculo del análisis con la función CA() de {FactoMineR}</span></span>
+<span></span>
+<span>    <span class="va">acinterestelar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FactoMineR/man/CA.html">CA</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">tab.GA.FJ</span>, graph <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Estructura general de la solución</span></span>
+<span></span>
+<span>    <span class="va">SolucionCA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Tabla 1: Inercia principal por dimensión</span></span>
+<span></span>
+<span>    <span class="va">EigenCA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">acinterestelar</span><span class="op">$</span><span class="va">eig</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">EigenCA</span><span class="op">$</span><span class="va">elemento</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Inercia Total"</span>,</span>
+<span>                          <span class="st">"% Inercia Principal"</span>,</span>
+<span>                          <span class="st">"Acumulada"</span><span class="op">)</span></span>
+<span>    <span class="va">EigenCA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">EigenCA</span>, row.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">EigenCA</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>En cuanto a las tablas correspondientes a las filas (GALAXIA) y
+columnas (FJUR), sus columnas se interpretan del siguiente modo:</p>
+<ul>
+<li><p><strong>Inercia</strong>: mide la varianza aportada por cada fila o columna
+(categoría de alguno de los atributos) al análisis. Valores altos
+indican que esa categoría contribuye mucho a la inercia total.</p></li>
+<li><p><strong>Coordenadas Dim. 1 y Dim. 2</strong>: son las coordenadas de la
+categoría en las dos dimensiones o ejes, e indican su posición en
+el espacio bidimensional del análisis.</p></li>
+<li><p><strong>cos² Dim. 1 y Dim. 2</strong> (coseno cuadrado): mide la <strong>calidad de
+la representación</strong> de la categoría en cada dimensión. Valores
+cercanos a 1 indican que la categoría está muy bien representada en
+esa dimensión; valores bajos indican una representación pobre. La
+suma del coseno cuadrado en todas las dimensiones no triviales es 1.</p></li>
+</ul>
+<p>El código para construir las tres tablas es:</p>
+<div class="sourceCode" id="cb431"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Tabla 1: Inercia principal por dimensión</span></span>
+<span></span>
+<span>    <span class="va">TableEigenCA</span> <span class="op">&lt;-</span> <span class="va">EigenCA</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>format <span class="op">=</span> <span class="va">knitr.table.format</span>,</span>
+<span>            </span>
+<span>            digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>            align <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"c"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">EigenCA</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                    bootstrap_options <span class="op">=</span> <span class="st">"striped"</span>, <span class="st">"bordered"</span>, <span class="st">"condensed"</span>,</span>
+<span>                    position <span class="op">=</span> <span class="st">"center"</span>,</span>
+<span>                    font_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">0</span>, bold <span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">TableEigenCA</span></span>
+<span></span>
+<span>  <span class="co"># Tabla 2: Categorías de las filas (GALAXIA)</span></span>
+<span></span>
+<span>    <span class="va">rows_data</span>  <span class="op">&lt;-</span> <span class="va">acinterestelar</span><span class="op">$</span><span class="va">row</span><span class="op">$</span><span class="va">coord</span></span>
+<span>    <span class="va">rows_cos2</span>  <span class="op">&lt;-</span> <span class="va">acinterestelar</span><span class="op">$</span><span class="va">row</span><span class="op">$</span><span class="va">cos2</span></span>
+<span></span>
+<span>    <span class="va">rows_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>      Inercia <span class="op">=</span> <span class="va">acinterestelar</span><span class="op">$</span><span class="va">row</span><span class="op">$</span><span class="va">inertia</span>,</span>
+<span>      Dim_1   <span class="op">=</span> <span class="va">rows_data</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>,</span>
+<span>      cos2_1  <span class="op">=</span> <span class="va">rows_cos2</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>,</span>
+<span>      Dim_2   <span class="op">=</span> <span class="va">rows_data</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>,</span>
+<span>      cos2_2  <span class="op">=</span> <span class="va">rows_cos2</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span>
+<span>    <span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">rows_df</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">rows_data</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">TableRows</span> <span class="op">&lt;-</span> <span class="va">rows_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>format <span class="op">=</span> <span class="va">knitr.table.format</span>,</span>
+<span>            </span>
+<span></span>
+<span>            col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Inercia"</span>,</span>
+<span>                          <span class="st">"Coordenadas Dim. 1"</span>, <span class="st">"Cos2 Dim. 1"</span>,</span>
+<span>                          <span class="st">"Coordenadas Dim. 2"</span>, <span class="st">"Cos2 Dim. 2"</span><span class="op">)</span>,</span>
+<span>            digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>            align <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"c"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>, <span class="st">"c"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                    bootstrap_options <span class="op">=</span> <span class="st">"striped"</span>, <span class="st">"bordered"</span>, <span class="st">"condensed"</span>,</span>
+<span>                    position <span class="op">=</span> <span class="st">"center"</span>,</span>
+<span>                    font_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">0</span>, bold <span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">TableRows</span></span>
+<span></span>
+<span>  <span class="co"># Tabla 3: Categorías de las columnas (FJUR)</span></span>
+<span></span>
+<span>    <span class="va">columns_data</span> <span class="op">&lt;-</span> <span class="va">acinterestelar</span><span class="op">$</span><span class="va">col</span><span class="op">$</span><span class="va">coord</span></span>
+<span>    <span class="va">columns_cos2</span> <span class="op">&lt;-</span> <span class="va">acinterestelar</span><span class="op">$</span><span class="va">col</span><span class="op">$</span><span class="va">cos2</span></span>
+<span></span>
+<span>    <span class="va">columns_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>      Inercia <span class="op">=</span> <span class="va">acinterestelar</span><span class="op">$</span><span class="va">col</span><span class="op">$</span><span class="va">inertia</span>,</span>
+<span>      Dim_1   <span class="op">=</span> <span class="va">columns_data</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>,</span>
+<span>      cos2_1  <span class="op">=</span> <span class="va">columns_cos2</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>,</span>
+<span>      Dim_2   <span class="op">=</span> <span class="va">columns_data</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>,</span>
+<span>      cos2_2  <span class="op">=</span> <span class="va">columns_cos2</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span>
+<span>    <span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">columns_df</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">columns_data</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">TableCols</span> <span class="op">&lt;-</span> <span class="va">columns_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>format <span class="op">=</span> <span class="va">knitr.table.format</span>,</span>
+<span>            </span>
+<span></span>
+<span>            col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Inercia"</span>,</span>
+<span>                          <span class="st">"Coordenadas Dim. 1"</span>, <span class="st">"Cos2 Dim. 1"</span>,</span>
+<span>                          <span class="st">"Coordenadas Dim. 2"</span>, <span class="st">"Cos2 Dim. 2"</span><span class="op">)</span>,</span>
+<span>            digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>            align <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"c"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>, <span class="st">"c"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                    bootstrap_options <span class="op">=</span> <span class="st">"striped"</span>, <span class="st">"bordered"</span>, <span class="st">"condensed"</span>,</span>
+<span>                    position <span class="op">=</span> <span class="st">"center"</span>,</span>
+<span>                    font_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">0</span>, bold <span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">TableCols</span></span></code></pre></div>
+<p>La primera tabla resume la <strong>descomposición de la inercia</strong> entre las
+dimensiones extraídas:</p>
+<div class="sourceCode" id="cb432"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+</th>
+<th style="text-align:center;font-weight: bold;text-align: center;">
+dim.1
+</th>
+<th style="text-align:center;font-weight: bold;text-align: center;">
+dim.2
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Inercia Total
+</td>
+<td style="text-align:center;">
+0.046
+</td>
+<td style="text-align:center;">
+0.015
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+% Inercia Principal
+</td>
+<td style="text-align:center;">
+75.374
+</td>
+<td style="text-align:center;">
+24.626
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Acumulada
+</td>
+<td style="text-align:center;">
+75.374
+</td>
+<td style="text-align:center;">
+100.000
+</td>
+</tr>
+</tbody>
+</table></div>
+<div style="text-align: center;">
+<p><strong>Tabla 10.18</strong></p>
+</div>
+<p>Como se aprecia, la <strong>primera dimensión</strong> recoge el <strong>75.4%</strong> de la
+inercia total (varianza o comportamiento asociativo de las categorías),
+mientras que la <strong>segunda dimensión</strong> asume el <strong>24.6%</strong> restante. Al
+tratarse de una tabla <span class="math inline">\(5 \times 3\)</span>, sabemos que solo pueden calcularse
+<span class="math inline">\(\min(4, 2) = 2\)</span> dimensiones, y estas dos, por construcción, recogen
+el <strong>100%</strong> de la inercia. El gráfico bidimensional será, por tanto,
+una <strong>representación exacta</strong> de la asociación entre las categorías.</p>
+<p>Es habitual que los porcentajes de inercia principal asumidos por
+ambas dimensiones estén bastante desequilibrados a favor del primer
+eje, sobre todo cuando la asociación entre los atributos es fuerte y
+dominada por unas pocas parejas de categorías. Aquí, sin ser extremo,
+el primer eje domina claramente, lo que sugiere que la mayor parte de
+la asociación entre GALAXIA y FJUR se ordena a lo largo de una única
+dirección de contraste. Algunas características que ayudan a un mayor
+equilibrio son: una distribución balanceada de las frecuencias en la
+tabla, un número similar de categorías en ambos factores, relaciones
+simétricas entre categorías (sin parejas de asociación dominantes),
+tamaños de muestra grandes y categorías internamente homogéneas
+respecto a sus asociaciones.</p>
+<p>La segunda tabla, correspondiente al factor GALAXIA, permite
+identificar qué categorías contribuyen más a la inercia y qué tan bien
+están representadas en cada dimensión:</p>
+<div class="sourceCode" id="cb433"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+</th>
+<th style="text-align:center;font-weight: bold;text-align: center;">
+Inercia
+</th>
+<th style="text-align:center;font-weight: bold;text-align: center;">
+Coordenadas Dim. 1
+</th>
+<th style="text-align:center;font-weight: bold;text-align: center;">
+Cos2 Dim. 1
+</th>
+<th style="text-align:center;font-weight: bold;text-align: center;">
+Coordenadas Dim. 2
+</th>
+<th style="text-align:center;font-weight: bold;text-align: center;">
+Cos2 Dim. 2
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Andrómeda
+</td>
+<td style="text-align:center;">
+0.004
+</td>
+<td style="text-align:center;">
+-0.047
+</td>
+<td style="text-align:center;">
+0.141
+</td>
+<td style="text-align:center;">
+0.117
+</td>
+<td style="text-align:center;">
+0.859
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GN Magallanes
+</td>
+<td style="text-align:center;">
+0.025
+</td>
+<td style="text-align:center;">
+0.369
+</td>
+<td style="text-align:center;">
+0.944
+</td>
+<td style="text-align:center;">
+-0.090
+</td>
+<td style="text-align:center;">
+0.056
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PN Magallanes
+</td>
+<td style="text-align:center;">
+0.025
+</td>
+<td style="text-align:center;">
+-0.422
+</td>
+<td style="text-align:center;">
+0.787
+</td>
+<td style="text-align:center;">
+-0.220
+</td>
+<td style="text-align:center;">
+0.213
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Triángulo
+</td>
+<td style="text-align:center;">
+0.005
+</td>
+<td style="text-align:center;">
+-0.097
+</td>
+<td style="text-align:center;">
+0.302
+</td>
+<td style="text-align:center;">
+0.148
+</td>
+<td style="text-align:center;">
+0.698
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Vía Láctea
+</td>
+<td style="text-align:center;">
+0.001
+</td>
+<td style="text-align:center;">
+0.040
+</td>
+<td style="text-align:center;">
+0.318
+</td>
+<td style="text-align:center;">
+-0.058
+</td>
+<td style="text-align:center;">
+0.682
+</td>
+</tr>
+</tbody>
+</table></div>
+<div style="text-align: center;">
+<p><strong>Tabla 10.19</strong></p>
+</div>
+<p>Se observa que las categorías con <strong>mayor inercia</strong> son la <strong>Gran Nube
+de Magallanes</strong> y la <strong>Pequeña Nube de Magallanes</strong>, es decir, son las
+galaxias que más “peso” tienen en la estructura de asociación con la
+forma jurídica: aportan una parte importante de la separación observada
+en el análisis. En el otro extremo, <strong>Vía Láctea</strong> presenta una inercia
+muy baja, lo que indica que su perfil de forma jurídica es próximo al
+perfil medio (lo que cabría esperar bajo independencia). En cuanto a
+la <strong>calidad de la representación</strong> (cos²), la <strong>Gran Nube de
+Magallanes</strong> y la <strong>Pequeña Nube de Magallanes</strong> están fuertemente
+representadas por la <strong>Dimensión 1</strong> (cos² de 0.944 y 0.787,
+respectivamente), mientras que <strong>Andrómeda</strong>, <strong>Triángulo</strong> y <strong>Vía
+Láctea</strong> encuentran mejor representación en la <strong>Dimensión 2</strong> (cos²
+entre 0.68 y 0.86 en el segundo eje).</p>
+<p>La tercera tabla recoge la información análoga para el factor FJUR:</p>
+<div class="sourceCode" id="cb434"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-striped" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+</th>
+<th style="text-align:center;font-weight: bold;text-align: center;">
+Inercia
+</th>
+<th style="text-align:center;font-weight: bold;text-align: center;">
+Coordenadas Dim. 1
+</th>
+<th style="text-align:center;font-weight: bold;text-align: center;">
+Cos2 Dim. 1
+</th>
+<th style="text-align:center;font-weight: bold;text-align: center;">
+Coordenadas Dim. 2
+</th>
+<th style="text-align:center;font-weight: bold;text-align: center;">
+Cos2 Dim. 2
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+CG
+</td>
+<td style="text-align:center;">
+0.031
+</td>
+<td style="text-align:center;">
+0.334
+</td>
+<td style="text-align:center;">
+0.971
+</td>
+<td style="text-align:center;">
+-0.057
+</td>
+<td style="text-align:center;">
+0.029
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SAG
+</td>
+<td style="text-align:center;">
+0.011
+</td>
+<td style="text-align:center;">
+-0.037
+</td>
+<td style="text-align:center;">
+0.037
+</td>
+<td style="text-align:center;">
+0.190
+</td>
+<td style="text-align:center;">
+0.963
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SLG
+</td>
+<td style="text-align:center;">
+0.018
+</td>
+<td style="text-align:center;">
+-0.184
+</td>
+<td style="text-align:center;">
+0.806
+</td>
+<td style="text-align:center;">
+-0.090
+</td>
+<td style="text-align:center;">
+0.194
+</td>
+</tr>
+</tbody>
+</table></div>
+<div style="text-align: center;">
+<p><strong>Tabla 10.20</strong></p>
+</div>
+<p>La categoría de forma jurídica con <strong>mayor inercia</strong> es <strong>CG</strong>,
+seguida de <strong>SLG</strong> y, a distancia, <strong>SAG</strong>. Esto indica que las
+sociedades de tipo CG son las que más contribuyen a diferenciar
+galaxias en función de su composición jurídica. En cuanto a la
+representación, <strong>CG</strong> aparece prácticamente identificada con la
+<strong>Dimensión 1</strong> (cos² = 0.971), lo que la convierte en el “extremo
+positivo” natural de dicho eje. <strong>SLG</strong> también está bien
+representada por la primera dimensión (cos² = 0.806), aunque no de
+forma tan exclusiva. En cambio, <strong>SAG</strong> queda claramente representada
+por la <strong>Dimensión 2</strong> (cos² = 0.963), lo que indica que su
+diferenciación respecto al perfil medio se produce principalmente en
+esa segunda dirección.</p>
+<p>El principal <em>output</em> del análisis de correspondencias es el <strong>gráfico
+bidimensional</strong> donde se representan las categorías de los atributos o
+factores. En general, cuanto más cerca se localicen determinada
+categoría de un factor y determinada categoría del otro, mayor será la
+tendencia estadística a asociarse (asociación), lo que implica a su
+vez mayor asociación entre los atributos o factores.</p>
+<p>Antes de presentar ese gráfico, resulta útil visualizar el
+<strong>porcentaje de inercia total asumido por cada dimensión</strong> en forma de
+gráfico de barras. Esto es importante, ya que si la inercia recogida
+por la segunda dimensión fuera muy pequeña (algo que aquí no ocurre en
+grado extremo), habría que ponderar con especial atención la posición
+de las categorías en la primera dimensión a la hora de establecer
+conclusiones. Para crear este gráfico de contribuciones puede
+recurrirse a la función <code><a href="https://rdrr.io/pkg/factoextra/man/eigenvalue.html">fviz_screeplot()</a></code> del paquete <a href="https://github.com/kassambara/factoextra">factoextra</a>:</p>
+<div class="sourceCode" id="cb435"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># GRÁFICOS DEL ANÁLISIS DE CORRESPONDENCIAS</span></span>
+<span></span>
+<span>  <span class="co"># Gráfico de contribuciones de las dimensiones a la Inercia Total</span></span>
+<span></span>
+<span>    <span class="va">gcontrib</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/eigenvalue.html">fviz_screeplot</a></span><span class="op">(</span><span class="va">acinterestelar</span>,</span>
+<span>                               addlabels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                               barcolor <span class="op">=</span> <span class="st">"darkblue"</span>,</span>
+<span>                               barfill <span class="op">=</span> <span class="st">"orange"</span>,</span>
+<span>                               linecolor <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Contribución de los ejes a la Inercia Total."</span>,</span>
+<span>           subtitle <span class="op">=</span> <span class="st">"Galaxia y Forma Jurídica."</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Porcentaje de Inercia Total"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Eje"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">gcontrib</span></span></code></pre></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-404-1.png" alt="" width="672"></div>
+<div style="text-align: center;">
+<p><strong>Figura 10.15</strong></p>
+</div>
+<p>El gráfico confirma visualmente lo que ya sabíamos por la primera
+tabla: la primera dimensión asume aproximadamente tres cuartas partes
+de la inercia total, mientras que la segunda asume el cuarto restante.
+No se descarta ninguna dimensión, dado que solo son dos las que pueden
+extraerse en esta tabla.</p>
+<p>Es útil, además, ver <strong>qué categorías contribuyen más a cada
+dimensión</strong>. Para ello, <a href="https://github.com/kassambara/factoextra">factoextra</a> proporciona la función
+<code><a href="https://rdrr.io/pkg/factoextra/man/fviz_contrib.html">fviz_contrib()</a></code>, que genera un gráfico de barras con las
+contribuciones (en porcentaje) de las categorías al eje seleccionado.
+La línea roja discontinua marca el nivel de contribución esperado bajo
+uniformidad; las barras que la superan corresponden a las categorías
+que “explican” más ese eje. A continuación se construyen los cuatro
+gráficos (filas y columnas × dimensiones 1 y 2) y se disponen
+conjuntamente con <a href="https://patchwork.data-imaginist.com">patchwork</a>:</p>
+<div class="sourceCode" id="cb436"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Contribución de las categorías (filas y columnas) a las dimensiones</span></span>
+<span></span>
+<span>    <span class="va">grow_dim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_contrib.html">fviz_contrib</a></span><span class="op">(</span><span class="va">acinterestelar</span>,</span>
+<span>                              choice <span class="op">=</span> <span class="st">"row"</span>,</span>
+<span>                              axes <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                              fill <span class="op">=</span> <span class="st">"orange"</span>,</span>
+<span>                              color <span class="op">=</span> <span class="st">"darkblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">9</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">grow_dim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_contrib.html">fviz_contrib</a></span><span class="op">(</span><span class="va">acinterestelar</span>,</span>
+<span>                              choice <span class="op">=</span> <span class="st">"row"</span>,</span>
+<span>                              axes <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>                              fill <span class="op">=</span> <span class="st">"orange"</span>,</span>
+<span>                              color <span class="op">=</span> <span class="st">"darkblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">9</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">gcol_dim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_contrib.html">fviz_contrib</a></span><span class="op">(</span><span class="va">acinterestelar</span>,</span>
+<span>                              choice <span class="op">=</span> <span class="st">"col"</span>,</span>
+<span>                              axes <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                              fill <span class="op">=</span> <span class="st">"orange"</span>,</span>
+<span>                              color <span class="op">=</span> <span class="st">"darkblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">9</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">gcol_dim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_contrib.html">fviz_contrib</a></span><span class="op">(</span><span class="va">acinterestelar</span>,</span>
+<span>                              choice <span class="op">=</span> <span class="st">"col"</span>,</span>
+<span>                              axes <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>                              fill <span class="op">=</span> <span class="st">"orange"</span>,</span>
+<span>                              color <span class="op">=</span> <span class="st">"darkblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">9</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">gcontribs</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">grow_dim1</span> <span class="op">+</span> <span class="va">grow_dim2</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">gcol_dim1</span> <span class="op">+</span> <span class="va">gcol_dim2</span><span class="op">)</span></span>
+<span>    <span class="va">gcontribs</span> <span class="op">&lt;-</span> <span class="va">gcontribs</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Contribuciones de las categorías a las dimensiones."</span>,</span>
+<span>                      subtitle <span class="op">=</span> <span class="st">"Empresas TMI: Galaxia y Forma Jurídica."</span>,</span>
+<span>                      theme <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">14</span>, face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span>,</span>
+<span>                                    plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">gcontribs</span></span></code></pre></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-405-1.png" alt="" width="672"></div>
+<div style="text-align: center;">
+<p><strong>Figura 10.16</strong></p>
+</div>
+<p>En la fila superior se observa que la <strong>Dimensión 1</strong> viene explicada,
+sobre todo, por <strong>GN Magallanes</strong> y <strong>PN Magallanes</strong>, mientras que
+la <strong>Dimensión 2</strong> se apoya especialmente en <strong>Andrómeda</strong>, con
+aportaciones relevantes también de <strong>Triángulo</strong> y <strong>PN Magallanes</strong>.
+En la fila inferior se aprecia que la <strong>Dimensión 1</strong> está claramente
+dominada por <strong>CG</strong> y, en menor grado, por <strong>SLG</strong>, mientras que la
+<strong>Dimensión 2</strong> viene explicada casi exclusivamente por <strong>SAG</strong>. En
+conjunto, estos gráficos anticipan la lectura del biplot: el primer
+eje contrapondrá galaxias con perfiles muy diferentes en CG/SLG, y el
+segundo eje aislará la posición particular de SAG y las galaxias con
+las que más se asocia.</p>
+<p>Finalmente, llega el <strong>gráfico bidimensional o biplot</strong>, que se puede
+obtener mediante la función <code><a href="https://rdrr.io/pkg/factoextra/man/fviz_ca.html">fviz_ca_biplot()</a></code> de <a href="https://github.com/kassambara/factoextra">factoextra</a>.
+Sus principales argumentos son:</p>
+<ul>
+<li><p><code>map = "symmetric"</code>: representa filas y columnas en el mismo
+espacio, utilizando la misma escala. Es la opción más apropiada
+para visualizar la asociación entre categorías de los dos factores.</p></li>
+<li><p><code>axes = c(1, 2)</code>: selecciona las dos primeras dimensiones.</p></li>
+<li><p><code>label = "all"</code>: muestra las etiquetas de todas las categorías.</p></li>
+<li><p><code>repel = TRUE</code>: evita la superposición de etiquetas.</p></li>
+<li><p><code>col.col</code> y <code>col.row</code>: colores para columnas (FJUR) y filas
+(GALAXIA) respectivamente.</p></li>
+<li><p><code><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs()</a></code> y <code><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme()</a></code>: añaden títulos, subtítulos y ajustan el
+tamaño del texto en el gráfico.</p></li>
+</ul>
+<p>Es especialmente relevante la elección de <code>map = "symmetric"</code>, ya que
+permite interpretar las cercanías entre categorías de uno y otro factor
+de forma coherente:</p>
+<div class="sourceCode" id="cb437"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Gráfico bidimensional (biplot simétrico) de categorías</span></span>
+<span></span>
+<span>    <span class="va">gbiplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_ca.html">fviz_ca_biplot</a></span><span class="op">(</span><span class="va">acinterestelar</span>,</span>
+<span>                              axes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                              label <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>                              repel <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                              col.col <span class="op">=</span> <span class="st">"orange"</span>,</span>
+<span>                              col.row <span class="op">=</span> <span class="st">"darkblue"</span>,</span>
+<span>                              map <span class="op">=</span> <span class="st">"symmetric"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Gráfico de dispersión de categorías."</span>,</span>
+<span>           subtitle <span class="op">=</span> <span class="st">"Empresas TMI: Galaxia y Forma Jurídica."</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">gbiplot</span></span></code></pre></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-406-1.png" alt="" width="672"></div>
+<div style="text-align: center;">
+<p><strong>Figura 10.17</strong></p>
+</div>
+<p>En el mapa bidimensional se aprecia con claridad la <strong>estructura de
+asociación</strong> entre galaxias y formas jurídicas. En el extremo derecho
+del eje horizontal (Dimensión 1) se concentran la <strong>Gran Nube de
+Magallanes</strong> y la forma jurídica <strong>CG</strong>, muy próximas entre sí: son
+compañeras naturales de asociación, lo que coincide plenamente con
+los residuos significativos detectados en el apartado 10.2. En el
+extremo opuesto (izquierda del eje) se sitúa la <strong>Pequeña Nube de
+Magallanes</strong>, cercana a la forma jurídica <strong>SLG</strong>: otra asociación
+destacada ya identificada por los residuos. Por su parte, la
+<strong>Dimensión 2</strong> (eje vertical) aísla a la forma jurídica <strong>SAG</strong> en la
+parte inferior, próxima a las galaxias <strong>Andrómeda</strong> y <strong>Triángulo</strong>,
+lo que indica que las sociedades tipo SAG tienden a concentrarse más
+de lo esperado en esas dos galaxias. Finalmente, la <strong>Vía Láctea</strong>
+aparece próxima al origen, lo que confirma que su perfil de forma
+jurídica es el más “medio” o cercano al que cabría esperar bajo
+independencia, sin asociaciones marcadas con ninguna forma jurídica
+concreta.</p>
+<p>Esta lectura visual <strong>completa y sintetiza</strong> las conclusiones del
+apartado 10.2: la asociación entre galaxia y forma jurídica no es
+homogénea, sino que se articula en torno a <strong>parejas específicas de
+categorías</strong> que se atraen entre sí (CG-GN Magallanes, SLG-PN Magallanes,
+SAG-Andrómeda/Triángulo), mientras que otras categorías se comportan
+de manera más neutra. El análisis de correspondencias, en definitiva,
+<strong>pone rostro gráfico</strong> a la asociación estadística detectada por la
+prueba ji-cuadrado.</p>
+<p>Para una presentación más compacta que combine el gráfico de
+contribuciones y el biplot, puede recurrirse nuevamente al paquete
+<a href="https://patchwork.data-imaginist.com">patchwork</a>:</p>
+<div class="sourceCode" id="cb438"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Presentación compacta: contribuciones + biplot</span></span>
+<span></span>
+<span>    <span class="va">gcombinado</span> <span class="op">&lt;-</span> <span class="va">gcontrib</span> <span class="op">/</span> <span class="va">gbiplot</span></span>
+<span>    <span class="va">gcombinado</span> <span class="op">&lt;-</span> <span class="va">gcombinado</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"GALAXIA vs FORMA JURÍDICA."</span>,</span>
+<span>                      subtitle <span class="op">=</span> <span class="st">"Empresas TMI."</span>,</span>
+<span>                      caption <span class="op">=</span> <span class="st">"Análisis de Correspondencias Simple."</span>,</span>
+<span>                      theme <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">16</span>, face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span>,</span>
+<span>                                    plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span>,</span>
+<span>                                    plot.caption <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">gcombinado</span></span></code></pre></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-407-1.png" alt="" width="672"></div>
+<div style="text-align: center;">
+<p><strong>Figura 10.18</strong></p>
+</div>
+<p>El gráfico combinado ofrece una vista de conjunto muy útil para
+comunicar los resultados: la parte superior informa de la calidad de
+la representación bidimensional (qué porcentaje de la inercia total
+queda recogido por los dos ejes), y la parte inferior muestra el
+propio mapa de asociación entre categorías. Con esta representación
+única quedan cubiertas, al mismo tiempo, las dos preguntas clave del
+análisis de correspondencias: <strong>cuánta información</strong> captura el
+gráfico y <strong>qué asociaciones específicas</strong> se producen entre las
+categorías de los factores.</p>
+</div>
+</div>
+<div id="materiales-para-realizar-las-prácticas-del-capítulo.-8" class="section level2" number="10.5">
+<h2>
+<span class="header-section-number">10.5</span> <img src="figuras/arrow-down-circle.svg" class="hicon"> Materiales para realizar las prácticas del capítulo.<a class="anchor" aria-label="anchor" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-8"><i class="fas fa-link"></i></a>
 </h2>
 <p>En esta sección se muestran los links de acceso a los diferentes
 materiales (<em>scripts</em>, datos…) necesarios para llevar a cabo los
@@ -4829,6 +6329,8 @@ aquí</a>)</li>
 <li><p>contingencia_rstars.R (<a href="https://raw.githubusercontent.com/teckel71/RStars-book/main/download/contingencia_rstars.R">obtener
 aquí</a>)</p></li>
 <li><p>loglineal_rstars.R (<a href="https://raw.githubusercontent.com/teckel71/RStars-book/main/download/loglineal_rstars.R">obtener
+aquí</a>)</p></li>
+<li><p>correspondencias_rstars.R (<a href="https://raw.githubusercontent.com/teckel71/RStars-book/main/download/correspondencias_rstars.R">obtener
 aquí</a>)</p></li>
 </ul>
 </div>
@@ -4851,7 +6353,10 @@ aquí</a>)</p></li>
 <li>
 <a class="nav-link" href="#modelos-logaritmico-lineales-aplicados-a-tablas-de-contingencia."><span class="header-section-number">10.3</span>  Modelos logaritmico-lineales aplicados a tablas de contingencia.</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#la-complejidad-del-sistema-de-relaciones-galaxia-x-fjur-x-eflo."><span class="header-section-number">10.3.1</span>  La complejidad del sistema de relaciones (GALAXIA X FJUR X EFLO).</a></li></ul>
 </li>
-<li><a class="nav-link" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-8"><span class="header-section-number">10.4</span>  Materiales para realizar las prácticas del capítulo.</a></li>
+<li>
+<a class="nav-link" href="#an%C3%A1lisis-de-correspondencias."><span class="header-section-number">10.4</span>  Análisis de correspondencias.</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#de-la-asociaci%C3%B3n-a-su-mapa-galaxia-y-forma-jur%C3%ADdica-revisitadas."><span class="header-section-number">10.4.1</span>  De la asociación a su mapa: Galaxia y Forma Jurídica revisitadas.</a></li></ul>
+</li>
+<li><a class="nav-link" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-8"><span class="header-section-number">10.5</span>  Materiales para realizar las prácticas del capítulo.</a></li>
 </ul>
 
       <div class="book-extra">
@@ -4868,7 +6373,7 @@ aquí</a>)</p></li>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón Morán. It was last built on 2026-07-08.</p>
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón Morán. It was last built on 2026-07-09.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
