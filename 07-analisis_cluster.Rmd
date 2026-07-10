@@ -6,9 +6,8 @@
 
 El análisis de conglomerados —o análisis de clústeres (AC)— agrupa casos con características similares en función de un conjunto de variables clasificadoras. El objetivo es que:
 
-- Los casos de un mismo clúster sean lo más homogéneos posible entre sí.
-- Los clústeres entre sí sean lo más heterogéneos posible, de acuerdo con las variables consideradas.
-
+-   Los casos de un mismo clúster sean lo más homogéneos posible entre sí.
+-   Los clústeres entre sí sean lo más heterogéneos posible, de acuerdo con las variables consideradas.
 
 En general, el proceso de determinación de los grupos, conglomerados o clústeres de casos es el siguiente:
 
@@ -69,7 +68,7 @@ Vamos a suponer que trabajamos dentro de un **proyecto** que hemos creado previa
 
 -   El archivo de Microsoft® Excel® llamado "interestelar_25.xlsx". Si abrimos este último archivo, comprobaremos que se compone de tres hojas. La primera muestra un mensaje sobre el uso de los datos, la segunda recoge la descripción de las variables consideradas, y la tercera (hoja "Datos") almacena los datos que debemos importar. Estos datos se corresponden con diferentes variables económicas y financieras de 25 empresas dedicadas a los servicios de transporte interestelar de mercancías.
 
-Comenzaremos a ejecutar el código del *script*. En primer lugar, el código se ocupa de limpiar el *Global Environment* y cargar los paquetes necesarios:
+Comenzaremos a ejecutar el código del *script*. En primer lugar, el código se ocupa de limpiar el *Global Environment* y cargar los paquetes necesarios. Uno de ellos es `{MATrstars}`, un paquete propio del libro que reúne funciones auxiliares utilizadas a lo largo de los distintos capítulos. Como no está disponible en CRAN, se instala directamente desde GitHub la primera vez; en las siguientes ocasiones bastará con activarlo con `library(MATrstars)`. Los detalles del paquete y de las funciones que contiene se recogen en el **Apéndice: Funciones auxiliares del paquete `MATrstars`**.
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 ### CLUSTER jerárquico 25 empresas TMI.###
@@ -87,37 +86,14 @@ library (factoextra)
 library (knitr)
 library (kableExtra)
 library (patchwork)
-```
 
-La siguiente sección de código es algo especial. Se trata de una **función**, en la que no se entrará en detalle, dada la complejidad de su código. Basta decir que el *input* de la función es una **lista** de gráficos generados con el paquete `{ggplot2}`. El *output* será una serie de **composiciones** de dimensión 4X4 realizada con los gráficos de la lista de modo automático, dejando los huecos en blanco necesarios en caso de que el número de gráficos no sea múltiplo de 4. La función se denomina `create_patchwork()`.
-
-A lo largo del script se llamará dos veces a esta función, lo que ahorrará una buena cantidad de código. Se ha ubicado al comienzo del script para asegurar su ejecución previa a sus llamadas, aunque, en realidad, lo más adecuado sería integrar la función en un paquete, instalarlo y activarlo, y así evitar alargar el script con su código (se deja esta opción para usuarios avanzados).
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-##### Función para crear composiciones de gráficos con patchwork ###############
-create_patchwork <- function(plot_list) {
-  n <- length(plot_list)
-  if (n == 0) return(NULL)
-  full_rows <- n %/% 4
-  remaining <- n %% 4
-  patchworks <- list()
-  
-  if (full_rows > 0) {
-    for (i in seq(1, full_rows * 4, by = 4)) {
-      patchworks <- c(patchworks, list((plot_list[[i]] + plot_list[[i+1]]) / 
-                                         (plot_list[[i+2]] + plot_list[[i+3]])))
-    }
-  }
-  
-  if (remaining > 0) {
-   last_plots <- plot_list[(full_rows * 4 + 1):n]
-   empty_plots <- lapply(1:(4 - remaining), function(x) ggplot() + theme_void())
-   last_patchwork <- do.call(patchwork::wrap_plots, c(last_plots, empty_plots))
-   patchworks <- c(patchworks, list(last_patchwork))
-  }
-  return(patchworks)
+# Paquete MATrstars: funciones auxiliares del libro R-Stars.
+# Si no está instalado, se instala desde GitHub (solo la primera vez).
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
 }
-################################################################################
+library(MATrstars)
 ```
 
 Posteriormente importaremos los datos del archivo de Excel®, y trataremos los casos con datos faltantes o *missing values*:
@@ -344,19 +320,19 @@ En el código anterior:
 
 Al observar el gráfico, pueden destacarse varios conglomerados:
 
-- Primer grupo (rojo, izquierda):
+-   Primer grupo (rojo, izquierda):
 
 Integrado por *Hyperion Star Haulage* y *Event Horizon Haulage*. Estas dos empresas están muy próximas entre sí, indicando un alto grado de similitud en sus características. Se separan tempranamente del resto, lo que sugiere que poseen un perfil muy diferenciado respecto al resto de compañías (quizá por especialización extrema o tamaño atípico).
 
-- Segundo grupo (azul, central):
+-   Segundo grupo (azul, central):
 
 Es el grupo más numeroso (14), e incluye empresas como *Bib Fortuna Haulage*, *Razor Freight Lines*, *Kashyyyk Logistics* o *Tatooine Movers*, entre otras. Aglutina compañías con comportamientos relativamente homogéneos, posiblemente representando el segmento “medio” del sector. Dentro de este grupo se distinguen subgrupos internos, lo que refleja cierta diversidad en estrategias o mercados específicos.
 
-- Tercer grupo (verde, derecha):
+-   Tercer grupo (verde, derecha):
 
 Formado por empresas (7) como *Terminator Freight*, *Blizzard Transport* y *Rebel Alliance Transport*. Su distancia con respecto al grupo azul indica una diferenciación moderada, quizá por operar en mercados más especializados o disponer de tecnologías más avanzadas.
 
-- Por último, aparecen a la derecha las compañías *Chakotay Cargo Systems* y *Home One Cargo*, que son nuestros *outliers* más destacados en el análisis previo y en el estudio de la matriz de distancias. Su aislamiento sugiere perfiles muy particulares.
+-   Por último, aparecen a la derecha las compañías *Chakotay Cargo Systems* y *Home One Cargo*, que son nuestros *outliers* más destacados en el análisis previo y en el estudio de la matriz de distancias. Su aislamiento sugiere perfiles muy particulares.
 
 A continuación vamos a **identificar con mayor detalle los casos** que integran cada uno de los grupos, así como a **caracterizar tales grupos** en función de los valores medios de las variables originales. Para ello, crearemos el vector de valores enteros que indica el grupo al que pertenece cada caso (empresa). A este vector se le llamará, por ejemplo, “whatcluster_j”, y se construirá mediante la función `cutree()`, donde el primer argumento es el nombre del objeto que guarda la solución del análisis clúster (“cluster_j”), y el segundo argumento es el número de grupos que hemos decidido crear (k = 5).
 
@@ -388,37 +364,37 @@ seleccion$whatcluster_j <- whatcluster_j
 
 En el código anterior:
 
-- **`cl <- cutree(cluster_j, k = ngrupos)`**: Asigna a cada observación un número de clúster del 1 a k (pero ese 1..k es arbitrario respecto al dibujo). Resultado: *cl* es un vector nombrado:
+-   **`cl <- cutree(cluster_j, k = ngrupos)`**: Asigna a cada observación un número de clúster del 1 a k (pero ese 1..k es arbitrario respecto al dibujo). Resultado: *cl* es un vector nombrado:
 
-  - Nombres = labels/casos.
-  - Valores = nombre o id de clúster (arbitrario).
+    -   Nombres = labels/casos.
+    -   Valores = nombre o id de clúster (arbitrario).
 
-- **`ord_labels <- cluster_j$labels[cluster_j$order]`**: `ord_labels` es un vector de nombres de casos en el mismo orden visual que se ve en `fviz_dend()`. En objetos de clustering jerárquico (p.ej., de `hclust()`),
+-   **`ord_labels <- cluster_j$labels[cluster_j$order]`**: `ord_labels` es un vector de nombres de casos en el mismo orden visual que se ve en `fviz_dend()`. En objetos de clustering jerárquico (p.ej., de `hclust()`),
 
-  - `cluster_j$labels` son las etiquetas de las hojas (casos).
-  - `cluster_j$order` da el índice que ordena esas hojas como aparecen en el dendrograma de izquierda a derecha.
+    -   `cluster_j$labels` son las etiquetas de las hojas (casos).
+    -   `cluster_j$order` da el índice que ordena esas hojas como aparecen en el dendrograma de izquierda a derecha.
 
-- **`pos <- match(names(cl), ord_labels)`**: `names(cl)` son los casos en el orden “normal” (no visual). `match(…, ord_labels)` devuelve, para cada caso, en qué posición (1..n) cae dentro del orden del dendrograma. Como resultado, `pos[i]` es la posición (izquierda→derecha) del caso `names(cl)[i]`.
+-   **`pos <- match(names(cl), ord_labels)`**: `names(cl)` son los casos en el orden “normal” (no visual). `match(…, ord_labels)` devuelve, para cada caso, en qué posición (1..n) cae dentro del orden del dendrograma. Como resultado, `pos[i]` es la posición (izquierda→derecha) del caso `names(cl)[i]`.
 
-- **`mins <- tapply(pos, cl, min)`**: la idea clave es que si se observa un clúster en el dendrograma, su “anclaje” más a la izquierda es la menor posición de sus casos. Lo que hace esta instrucción, pues, agrupa las posiciones pos por el identificador o nombre en `cl` (el nombre “viejo”). Luego toma el mínimo de cada grupo (“la primera hoja” de ese clúster al recorrer de izquierda a derecha), y de este modo `mins` queda nombrado por los nombres de clúster originales (p.ej., "1", "2", …) y con valores numéricos (la mínima posición).
+-   **`mins <- tapply(pos, cl, min)`**: la idea clave es que si se observa un clúster en el dendrograma, su “anclaje” más a la izquierda es la menor posición de sus casos. Lo que hace esta instrucción, pues, agrupa las posiciones pos por el identificador o nombre en `cl` (el nombre “viejo”). Luego toma el mínimo de cada grupo (“la primera hoja” de ese clúster al recorrer de izquierda a derecha), y de este modo `mins` queda nombrado por los nombres de clúster originales (p.ej., "1", "2", …) y con valores numéricos (la mínima posición).
 
-- **`sort(mins)`** ordena los clústeres por esa primera aparición, de izquierda a derecha.
+-   **`sort(mins)`** ordena los clústeres por esa primera aparición, de izquierda a derecha.
 
-- **`names(sort(mins))`** produce `old_order`, que es el orden de los nombres de clúster (ids) originales según se avanza de izquierda a derecha.
+-   **`names(sort(mins))`** produce `old_order`, que es el orden de los nombres de clúster (ids) originales según se avanza de izquierda a derecha.
 
-- **`setNames(seq_along(old_order), old_order)`** construye `map`:
+-   **`setNames(seq_along(old_order), old_order)`** construye `map`:
 
-  - Las claves son los nombres de clúster o ids originales (tipo carácter).
-  - Los Valores son los nombres de clúster o ids nuevos en 1..k siguiendo el recorrido de izquierda a derecha.
-  - Por ejemplo, si el clúster “3” aparece primero a la izquierda, `map["3"] = 1`; si el “1” aparece segundo, `map["1"] = 2`, etc.
-  
-- En cuanto a **`whatcluster_j <- factor(map[as.character(cl)], levels = 1:ngrupos)`**:
+    -   Las claves son los nombres de clúster o ids originales (tipo carácter).
+    -   Los Valores son los nombres de clúster o ids nuevos en 1..k siguiendo el recorrido de izquierda a derecha.
+    -   Por ejemplo, si el clúster “3” aparece primero a la izquierda, `map["3"] = 1`; si el “1” aparece segundo, `map["1"] = 2`, etc.
 
-  - `as.character(cl)` convierte los nombres de clúster o ids antiguos (numéricos) a texto para que casen con las claves de `map` (que son caracteres).
-  - `map[as.character(cl)]` reemplaza, caso a caso, y de izquierda a derecha, el nombre o id viejo por el nuevo.
-  - Se envuelve en `factor(..., levels = 1:ngrupos)` para asegurar que los niveles estén completos y ordenados (1, 2, …, k), aunque algún grupo no apareciera en un subconjunto.
+-   En cuanto a **`whatcluster_j <- factor(map[as.character(cl)], levels = 1:ngrupos)`**:
 
-- Se guarda en el *data frame* "seleccion" como variable `whatcluster_j`
+    -   `as.character(cl)` convierte los nombres de clúster o ids antiguos (numéricos) a texto para que casen con las claves de `map` (que son caracteres).
+    -   `map[as.character(cl)]` reemplaza, caso a caso, y de izquierda a derecha, el nombre o id viejo por el nuevo.
+    -   Se envuelve en `factor(..., levels = 1:ngrupos)` para asegurar que los niveles estén completos y ordenados (1, 2, …, k), aunque algún grupo no apareciera en un subconjunto.
+
+-   Se guarda en el *data frame* "seleccion" como variable `whatcluster_j`
 
 ### ![](figuras/pie-chart.svg) Caracterización de los grupos o conglomerados.
 
@@ -536,7 +512,9 @@ Obviamente, también se podrían comparar las medias de los grupos, para cada va
 
 En el código anterior, `setdiff()` crea un vector "variables" que contiene todos los nombres de las columnas del *data frame* "tablamedias", excepto `whatcluster_j` y `obs`, que no son las variables originales. Luego se crea una lista vacía "graficos.centroides" para almacenar los gráficos generados. Con `for (i in seq_along(variables))` comienza el bucle, que recorre cada elemento del vector "variables". En el código de gráfico, "var1" toma el nombre, en cada iteración, de la variable a representar. En el "mapeo", es importante utilizar `aes_string()`, que requiere que los nombres de las variables se pasen como cadenas de texto (entre comillas), lo que es útil cuando los nombres de las variables se generan dinámicamente o se pasan como argumentos de función, y cuando se necesitan construir *mapeos estéticos* de manera programática. Finalmente, con `graficos.centroides[[paste0("grafico_", var1)]] <- grafico` se guarda el gráfico en la lista "graficos.centroides" con un nombre basado en "var1".
 
-Los gráficos guardados en la lista "gráficos.centroides" se pueden agrupar en composiciones, de, por ejemplo, 2x2, utilizando el paquete `{patchwork}`, empleando la función `create.patchwork()`que ya incorporamos al comienzo del script. Con esta función, crearemos la lista de composiciones de gráficos denominada, por ejemplo, "grupos.graficos.centroides":
+Los gráficos guardados en la lista "gráficos.centroides" se pueden agrupar en composiciones, por ejemplo de 2x2 gráficos, utilizando el paquete `{patchwork}`. Para automatizar el proceso emplearemos la función `create_patchwork()`, incluida en el paquete `{MATrstars}` que hemos cargado al inicio del *script*. Esta función recibe una **lista de gráficos** generados con `{ggplot2}` y devuelve una **lista de composiciones** en las que los gráficos se disponen en retículas de 2 filas por 2 columnas (cuatro gráficos por composición); si el número total de gráficos no es múltiplo de cuatro, la última composición se completa con paneles vacíos para que la retícula quede uniforme. En el **Apéndice: Funciones auxiliares del paquete `MATrstars`** puede consultarse su descripción detallada y el enlace al código fuente.
+
+Con esta función, crearemos la lista de composiciones de gráficos denominada, por ejemplo, "grupos.graficos.centroides":
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 # Aplicar función de composiciones a gráficos de centroides.
@@ -648,7 +626,7 @@ tablascompo[[4]]
 tablascompo[[5]]
 ```
 
-Para representar los grupos gráficamente, tenemos la dificultad de contar con más de dos variables clasificadoras. Una idea es **generar todas las combinaciones de variables posibles** y los correspondientes gráficos de dispersión con los casos coloreados de modo diferente según el grupo de pertenencia. Finalmente, los gráficos de modo compacto utilizando la función `create_patchwork()` que se incluyó anteriormente en el *script* para hacer mediante `{patchwork}`.composiciones de 2x2 gráficos.
+Para representar los grupos gráficamente, tenemos la dificultad de contar con más de dos variables clasificadoras. Una idea es **generar todas las combinaciones de variables posibles** y los correspondientes gráficos de dispersión con los casos coloreados de modo diferente según el grupo de pertenencia. Finalmente, esos gráficos se presentan de modo compacto utilizando de nuevo la función `create_patchwork()` del paquete `{MATrstars}`, ya empleada antes, para hacer mediante `{patchwork}` composiciones de 2x2 gráficos.
 
 Vamos a realizar la tarea de generar todos los gráficos de modo automatizado. Primero generaremos un vector con el nombre de todas las variables (excluyendo al *factor* whatcluster_j) mediante la función `setdiff()`. Luego, crearemos una lista para ir almacenando los gráficos (lista "graficos"). Por último, calcularemos todas las combinaciones de nombres de variables posibles, con la función `combn()`, y las almacenaremos en la lista "combinaciones". En esta función, el argumento **`simplify = FALSE`** le dice a la función que no vuelque el resultado a una matriz. En su lugar, devuelve una lista donde cada elemento de la misma es una combinación de los elementos del vector original.
 
@@ -790,7 +768,7 @@ La primera parte del script es semejante a la del *script* de la parte de "clús
 -   El archivo a importar es *interestelar_300.xlsx*, y los datos se almacenan en el *data frame* "interestelar_300".
 -   Los *outliers*, en esta ocasión, sí son eliminados, con lo que se trabajará con un *data frame* sin casos atípicos, denominado "seleccion_so".
 
-Dicho esto, pasamos a transcribir el código correspondiente a la limpieza del *Global Environment*, carga de paquetes, función para crear composiciones de 2X2 gráficos con `{patchwork}`, importación de datos:
+Dicho esto, pasamos a transcribir el código correspondiente a la limpieza del *Global Environment*, carga de paquetes (incluido el paquete `{MATrstars}`, que contiene la función auxiliar `create_patchwork()` que ya utilizamos en el ejemplo anterior) e importación de datos:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 ### CLUSTER de k-medias empresas TMI. ###
@@ -811,30 +789,13 @@ library (kableExtra)
 library (patchwork)
 library (pgirmess)
 
-##### Función para crear composiciones de gráficos con patchwork ###############
-create_patchwork <- function(plot_list) {
-  n <- length(plot_list)
-  if (n == 0) return(NULL)
-  full_rows <- n %/% 4
-  remaining <- n %% 4
-  patchworks <- list()
-  
-  if (full_rows > 0) {
-    for (i in seq(1, full_rows * 4, by = 4)) {
-      patchworks <- c(patchworks, list((plot_list[[i]] + plot_list[[i+1]]) / 
-                                         (plot_list[[i+2]] + plot_list[[i+3]])))
-    }
-  }
-  
-  if (remaining > 0) {
-    last_plots <- plot_list[(full_rows * 4 + 1):n]
-    empty_plots <- lapply(1:(4 - remaining), function(x) ggplot() + theme_void())
-    last_patchwork <- do.call(patchwork::wrap_plots, c(last_plots, empty_plots))
-    patchworks <- c(patchworks, list(last_patchwork))
-  }
-  return(patchworks)
+# Paquete MATrstars: funciones auxiliares del libro R-Stars.
+# Si no está instalado, se instala desde GitHub (solo la primera vez).
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
 }
-################################################################################
+library(MATrstars)
 
 ## DATOS
 
@@ -875,7 +836,7 @@ seleccion <- seleccion %>%
 
 Aunque se ha incluido el código para identificar y eliminar los casos con ***missing values***, el gráfico generado con la función `vis_miss()` ya informó de que no había ningún dato ausente en las tres variables de interés, almacenadas en el *data frame* "seleccion", luego se siguen manteniendo los 300 casos.
 
-Para la detección de ***outliers***, se ha utilizado también el mismo código que en el análisis clúster jerárquico: obtención de las distancias de *Mahalanobis*, y aplicación de diagrama de caja o *boxplot*: 
+Para la detección de ***outliers***, se ha utilizado también el mismo código que en el análisis clúster jerárquico: obtención de las distancias de *Mahalanobis*, y aplicación de diagrama de caja o *boxplot*:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 # Identificando outliers con distancia de Mahalanobis.
@@ -934,7 +895,7 @@ summary(zseleccion_so)
 d <- dist(zseleccion_so)
 ```
 
-Una cuestión clave es la determinación previa del número de grupos a formar. Si no se tiene decidido un número de conglomerados *a priori* como consecuencia del interés o de los objetivos de la propia investigación, se puede recurrir como orientación a algún método o algoritmo "objetivo". De nuevo, puede recurrirse al **método de la *anchura media de silueta**, proponiendo diferentes números de grupos (parámetro *k*).
+Una cuestión clave es la determinación previa del número de grupos a formar. Si no se tiene decidido un número de conglomerados *a priori* como consecuencia del interés o de los objetivos de la propia investigación, se puede recurrir como orientación a algún método o algoritmo "objetivo". De nuevo, puede recurrirse al \*\*método de la \*anchura media de silueta\*\*, proponiendo diferentes números de grupos (parámetro *k*).
 
 La función `KMeans_rcpp()` del paquete `{ClusterR}` permite calcular la *anchura media de Silueta* para cada número de grupos propuesto, estimando los grupos mediante el método de **k-medias++**. Aplicaremos el método para cada número de grupos *k* propuesto, mediante una función que guarda el ancho medio de silueta en un vector:
 
@@ -955,39 +916,39 @@ res_sil <- sapply(2:10,
 
 El código anterior ejecuta la siguiente secuencia:
 
-1. **`set.seed(123)`** fija la “semilla” aleatoria. *k-medias* (incluso con *kmeans++*) usa un poco de azar al empezar; fijar la semilla hace que siempre se obtengan los mismos resultados al repetir el código (reproducibilidad).
+1.  **`set.seed(123)`** fija la “semilla” aleatoria. *k-medias* (incluso con *kmeans++*) usa un poco de azar al empezar; fijar la semilla hace que siempre se obtengan los mismos resultados al repetir el código (reproducibilidad).
 
 2.  **`sapply(2:10, function(k) { ... })`**:
 
-  - 2:10 es la secuencia de valores de *k* que vamos a probar (de 2 a 10 clústeres).
+-   2:10 es la secuencia de valores de *k* que vamos a probar (de 2 a 10 clústeres).
 
-  - `sapply(..., function(k) { ... })` aplica la función a cada *k* y devuelve el vector numérico *res_sil* con los resultados.
-  
+-   `sapply(..., function(k) { ... })` aplica la función a cada *k* y devuelve el vector numérico *res_sil* con los resultados.
+
 3.  Dentro de la función anónima **`function(k) { ... }`**:
 
-  - `KMeans_rcpp()` (del paquete `{ClusterR}`) ejecuta *k-medias* sobre los datos del *data frame* "zseleccion_so".
+-   `KMeans_rcpp()` (del paquete `{ClusterR}`) ejecuta *k-medias* sobre los datos del *data frame* "zseleccion_so".
 
-  - `clusters = k`: número de grupos que queremos formar.
-  
-  - `num_init = 10`: ejecuta el algoritmo 10 veces con diferentes inicios y se queda con la mejor solución (esto reduce la mala suerte de una mala inicialización).
-  
-  - `max_iters = 100`: tope de iteraciones por ejecución.
-  
-  - `initializer = "kmeans++"`: estrategia de inicio que suele dar mejores resultados que un inicio totalmente aleatorio.
-  
+-   `clusters = k`: número de grupos que queremos formar.
+
+-   `num_init = 10`: ejecuta el algoritmo 10 veces con diferentes inicios y se queda con la mejor solución (esto reduce la mala suerte de una mala inicialización).
+
+-   `max_iters = 100`: tope de iteraciones por ejecución.
+
+-   `initializer = "kmeans++"`: estrategia de inicio que suele dar mejores resultados que un inicio totalmente aleatorio.
+
 El objeto `km` contiene, entre otras cosas, `km$clusters`, que es el vector de asignaciones: dice a qué cluster pertenece (1, 2, 3, …, k) cada caso.
 
 `silhouette(...)` (del paquete cluster) calcula, para cada observación, su ancho de silueta. Necesita:
 
-  - `km$clusters`: las etiquetas de clúster.
+-   `km$clusters`: las etiquetas de clúster.
 
-  - `d`: matriz de distancias entre observaciones.
+-   `d`: matriz de distancias entre observaciones.
 
 El resultado de silhouette es una matriz con columnas; una de ellas es `"sil_width" =`, que es el ancho de silueta de cada punto.
 
-  - `[...] [, "sil_width"]` extrae esa columna.
+-   `[...] [, "sil_width"]` extrae esa columna.
 
-  - `mean(...)` hace la media: se obtiene el ancho medio de la silueta para ese k.
+-   `mean(...)` hace la media: se obtiene el ancho medio de la silueta para ese k.
 
 El resultado final es el vector "res_sil", con 9 valores (para k = 2, 3, …, 10). Cada valor es el ancho medio de silueta correspondiente. Servirá para crear, junto a cada valor de "k", un pequeño *data frame* de nombre "df_sil" que será la base, a su vez, para representar los *anchos de silueta* gráficamente con `{ggplot2}`:
 
@@ -1152,7 +1113,7 @@ Obviamente, también se podrían comparar las medias de los grupos, para cada va
   }          
 ```
 
-Para hacer composiciones de 4 gráficos (que en este caso será solo una, dado que hemos almacenado en la lista "graficos.centroides" 4 elementos correspondientes a las 4 variables clasificadoras), volveremos a utilizar la función `create_patchwork()`, que ya se mostró en el ejemplo de clúster jerárquico. De nuevo se incluye su código y se aplica a la lista de gráficos "graficos.centroides":
+Para hacer composiciones de 4 gráficos (que en este caso será solo una, dado que hemos almacenado en la lista "graficos.centroides" 4 elementos correspondientes a las 4 variables clasificadoras), volveremos a utilizar la función `create_patchwork()` del paquete `{MATrstars}`, ya empleada en el ejemplo de clúster jerárquico. La función se aplica directamente a la lista de gráficos "graficos.centroides":
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
   # Aplicar función de composiciones a gráficos de centroides.
@@ -1168,28 +1129,27 @@ La lista "grupos.graficos.centroides" almacena las composiciones de 4 (o menos) 
 
 Por medio de la tabla y los gráficos anteriores se pueden trazar algunas conclusiones, comparando las medias de las variables para cada grupo de casos formado (coordenadas de los centroides). El análisis revela una clara heterogeneidad estructural entre las empresas de transporte de mercancías interestelar. Las tres dimensiones —diversificación, fidelización y digitalización— se combinan de manera diferente en cada grupo, reflejando distintos modelos de negocio y grados de madurez estratégica. Así, podemos distinguir tres grandes perfiles:
 
-- Empresas avanzadas e innovadoras (altos niveles en las tres dimensiones).
+-   Empresas avanzadas e innovadoras (altos niveles en las tres dimensiones).
 
-- Empresas especializadas tradicionales, con baja digitalización y diversificación.
+-   Empresas especializadas tradicionales, con baja digitalización y diversificación.
 
-- Empresas en transición o de nicho, con fortalezas parciales (por ejemplo, alta fidelidad pero baja digitalización).
+-   Empresas en transición o de nicho, con fortalezas parciales (por ejemplo, alta fidelidad pero baja digitalización).
 
 Analizando cada grupo de modo individualizado:
 
-- **Grupo 1** (57 empresas). Alta diversificación (35.8), alta fidelidad (40.2), digitalización media (22.2). En general, el grupo se compone de empresas sólidas, con una base de clientes fiel y estrategias diversificadas que les permiten operar en distintos segmentos o rutas. Aunque su digitalización es moderada, su estructura sugiere estabilidad y resiliencia. Perspectiva futura: Si invierten más en tecnología, podrían convertirse en líderes del sector, con ventajas competitivas sostenibles a largo plazo.
+-   **Grupo 1** (57 empresas). Alta diversificación (35.8), alta fidelidad (40.2), digitalización media (22.2). En general, el grupo se compone de empresas sólidas, con una base de clientes fiel y estrategias diversificadas que les permiten operar en distintos segmentos o rutas. Aunque su digitalización es moderada, su estructura sugiere estabilidad y resiliencia. Perspectiva futura: Si invierten más en tecnología, podrían convertirse en líderes del sector, con ventajas competitivas sostenibles a largo plazo.
 
-- **Grupo 2** (17 empresas). Diversificación media-baja (17.9), muy alta fidelidad (43.1), alta digitalización (26.0). Se compone de empresas tecnológicamente dinámicas y con gran fidelidad, pero con un negocio poco diversificado. Probablemente dominan un nicho específico del transporte interestelar.
-Perspectiva futura: Su foco estratégico y digitalización pueden asegurarles crecimiento, aunque deberían explorar una mayor diversificación para reducir riesgos sectoriales.
+-   **Grupo 2** (17 empresas). Diversificación media-baja (17.9), muy alta fidelidad (43.1), alta digitalización (26.0). Se compone de empresas tecnológicamente dinámicas y con gran fidelidad, pero con un negocio poco diversificado. Probablemente dominan un nicho específico del transporte interestelar. Perspectiva futura: Su foco estratégico y digitalización pueden asegurarles crecimiento, aunque deberían explorar una mayor diversificación para reducir riesgos sectoriales.
 
-- **Grupo 3** (17 empresas). Baja diversificación (15.8), fidelidad media (34.8), digitalización media (21.8). Las empresas que conforman este conglomerado se encuentran, en general, en fase de consolidación, con cierto desarrollo digital pero sin un posicionamiento claro ni fidelización destacable. Perspectiva futura: Si no fortalecen su propuesta de valor o amplían su mercado, podrían quedar rezagadas frente a competidores más innovadores.
+-   **Grupo 3** (17 empresas). Baja diversificación (15.8), fidelidad media (34.8), digitalización media (21.8). Las empresas que conforman este conglomerado se encuentran, en general, en fase de consolidación, con cierto desarrollo digital pero sin un posicionamiento claro ni fidelización destacable. Perspectiva futura: Si no fortalecen su propuesta de valor o amplían su mercado, podrían quedar rezagadas frente a competidores más innovadores.
 
-- **Grupo 4** (30 empresas). Muy baja diversificación (7.5), fidelidad baja (31.6), muy baja digitalización (7.8). Este grupo reúne las empresas más rezagadas, con escasa adaptación tecnológica y un modelo de negocio poco flexible.Perspectiva futura: Riesgo elevado de obsolescencia o pérdida de cuota de mercado. Necesitan transformarse urgentemente mediante digitalización y estrategias de retención de clientes.
+-   **Grupo 4** (30 empresas). Muy baja diversificación (7.5), fidelidad baja (31.6), muy baja digitalización (7.8). Este grupo reúne las empresas más rezagadas, con escasa adaptación tecnológica y un modelo de negocio poco flexible.Perspectiva futura: Riesgo elevado de obsolescencia o pérdida de cuota de mercado. Necesitan transformarse urgentemente mediante digitalización y estrategias de retención de clientes.
 
-- **Grupo 5** (74 empresas, grupo más numeroso). Diversificación baja (11.1), fidelidad media-alta (38.1), muy baja digitalización (6.8). Grupo formado, en término medio, por empresas tradicionales, que conservan buena relación con sus clientes pero no han avanzado en digitalización. Representan el núcleo clásico del sector TMI. Perspectiva futura: Son vulnerables a la disrupción tecnológica. Sin inversión en digitalización y diversificación, podrían perder relevancia en mercados más competitivos.
+-   **Grupo 5** (74 empresas, grupo más numeroso). Diversificación baja (11.1), fidelidad media-alta (38.1), muy baja digitalización (6.8). Grupo formado, en término medio, por empresas tradicionales, que conservan buena relación con sus clientes pero no han avanzado en digitalización. Representan el núcleo clásico del sector TMI. Perspectiva futura: Son vulnerables a la disrupción tecnológica. Sin inversión en digitalización y diversificación, podrían perder relevancia en mercados más competitivos.
 
-- **Grupo 6** (18 empresas). Alta diversificación (35.9), muy alta fidelidad (43.7), muy alta digitalización (33.7). Grupo constituido por las empresas punteras del sector, con máximos en las tres dimensiones. Combinan diversificación de servicios, lealtad de clientes y transformación digital. Perspectiva futura: Tienen el liderazgo asegurado y marcan el estándar competitivo. Probablemente sean grandes corporaciones interplanetarias con capacidad de expansión internacional.
+-   **Grupo 6** (18 empresas). Alta diversificación (35.9), muy alta fidelidad (43.7), muy alta digitalización (33.7). Grupo constituido por las empresas punteras del sector, con máximos en las tres dimensiones. Combinan diversificación de servicios, lealtad de clientes y transformación digital. Perspectiva futura: Tienen el liderazgo asegurado y marcan el estándar competitivo. Probablemente sean grandes corporaciones interplanetarias con capacidad de expansión internacional.
 
-- **Grupo 7** (61 empresas). Diversificación media (24.6), fidelidad alta (39.3), digitalización baja-media (14.8). Grupo formado por empresas en transición digital, con buen posicionamiento comercial y cierta diversificación. Perspectiva futura: Si continúan su proceso de digitalización, pueden convertirse en empresas de alto rendimiento similares al grupo 1 o incluso al 6.
+-   **Grupo 7** (61 empresas). Diversificación media (24.6), fidelidad alta (39.3), digitalización baja-media (14.8). Grupo formado por empresas en transición digital, con buen posicionamiento comercial y cierta diversificación. Perspectiva futura: Si continúan su proceso de digitalización, pueden convertirse en empresas de alto rendimiento similares al grupo 1 o incluso al 6.
 
 Conclusión **general**: El Grupo 6 es el referente: altamente competitivo, innovador y sostenible. El Grupo 4 y parte del Grupo 5 enfrentan los mayores desafíos estructurales. Los Grupos 1 y 7 son prometedores si logran acelerar su digitalización. Los Grupos 2 y 3 podrían especializarse o asociarse para sobrevivir en un mercado cada vez más concentrado y tecnológico. En conjunto, el análisis sugiere que la digitalización se convierte en el factor diferenciador clave para la supervivencia y crecimiento en el transporte de mercancías interestelar, actuando como catalizador de la fidelidad y la diversificación.
 
@@ -1197,7 +1157,7 @@ El análisis gráfico anterior se puede complementar de un modo más formal, a f
 
 Una prueba clásica para llevar a cabo esta tarea es aplicar el *test de comparaciones múltiples de Tuckey*. No obstante, y dado que esta prueba requiere del cumplimiento de ciertos requisitos previos (normalidad de los grupos, varianzas homogéneas); hemos optado por la ***prueba robusta de Kruskal-Wallis*****.** Para cada una de las variable originales, realizaremos un gráfico múltiple de diagramas de caja, y procederemos a mostrar los resultados de la prueba.
 
-En primer lugar, vamos a definir el vector con el nombre de las variables que entran en el análisis (vector "variables"), e inicializaremos las listas para guardar los gráficos y los resultados de la prueba para cada variable ("graficos_kw" y "tablas_kw", respectivamente): 
+En primer lugar, vamos a definir el vector con el nombre de las variables que entran en el análisis (vector "variables"), e inicializaremos las listas para guardar los gráficos y los resultados de la prueba para cada variable ("graficos_kw" y "tablas_kw", respectivamente):
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
   # ¿Centroides estadísticamente significativos?
@@ -1210,7 +1170,7 @@ En primer lugar, vamos a definir el vector con el nombre de las variables que en
       tablas_kw <- list()
 ```
 
-Luego, haremos un bucle para que se realice el gráfico de caja para cada una de las variables. Los gráficos se almacenan en la lista "graficos_kw", que luego pasan a la función `create_patchwork()`para agruparse en elementos de la lista "gruposgraficos_kw" (que solo tendrá un elemento, puesto que únicamente hay tres gráficos que agrupar en composiciones de 4 o menos. 
+Luego, haremos un bucle para que se realice el gráfico de caja para cada una de las variables. Los gráficos se almacenan en la lista "graficos_kw", que luego pasan a la función `create_patchwork()`para agruparse en elementos de la lista "gruposgraficos_kw" (que solo tendrá un elemento, puesto que únicamente hay tres gráficos que agrupar en composiciones de 4 o menos.
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
   # ¿Diferencias entre centroides estadísticamente significativas?
@@ -1298,11 +1258,11 @@ En cuanto a la prueba de *comparaciones múltiples*, la función que se ocupa de
 
 A partir del código anterior se obtienen los siguientes resultados, concernientes al análisis de comparaciones múltiples (de medias) de *Kruskal-Wallis*. Cada fila compara dos grupos. Las columnas indican:
 
-- Diferencias centros: diferencia absoluta entre los rangos medios de esos dos grupos.
+-   Diferencias centros: diferencia absoluta entre los rangos medios de esos dos grupos.
 
-- Diferencias críticas: umbral mínimo que esa diferencia debe superar para considerarse significativa.
+-   Diferencias críticas: umbral mínimo que esa diferencia debe superar para considerarse significativa.
 
-- Significación (TRUE/FALSE): indica si la diferencia es estadísticamente significativa (TRUE) o no (FALSE).
+-   Significación (TRUE/FALSE): indica si la diferencia es estadísticamente significativa (TRUE) o no (FALSE).
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 tipo_output <- c("html") # pdf, html, docx
@@ -1352,19 +1312,19 @@ tablas_kw[[2]]
 tablas_kw[[3]]
 ```
 
-En el caso de la variable **IDIVERSE** (grado de diversificación del negocio), se aprecia que los grupos 1 y 6, con los mayores valores medios de diversificación (~35 puntos), no difieren entre sí, pero sí del resto. Son empresas altamente diversificadas, posiblemente grandes corporaciones con presencia en múltiples rutas galácticas y segmentos de carga. Por otro lado, los grupos 4 y 5, con valores muy bajos (≈7–11), se sitúan en el extremo opuesto, significativamente diferentes de casi todos los demás. Representan compañías especializadas o locales, con operaciones limitadas y modelos menos flexibles. Los grupos 2, 3 y 7 ocupan posiciones intermedias, sin diferencias significativas entre ellos. Podrían estar en una fase de transición o exploración de nuevos mercados, con estrategias aún en consolidación.
+En el caso de la variable **IDIVERSE** (grado de diversificación del negocio), se aprecia que los grupos 1 y 6, con los mayores valores medios de diversificación (\~35 puntos), no difieren entre sí, pero sí del resto. Son empresas altamente diversificadas, posiblemente grandes corporaciones con presencia en múltiples rutas galácticas y segmentos de carga. Por otro lado, los grupos 4 y 5, con valores muy bajos (≈7–11), se sitúan en el extremo opuesto, significativamente diferentes de casi todos los demás. Representan compañías especializadas o locales, con operaciones limitadas y modelos menos flexibles. Los grupos 2, 3 y 7 ocupan posiciones intermedias, sin diferencias significativas entre ellos. Podrían estar en una fase de transición o exploración de nuevos mercados, con estrategias aún en consolidación.
 
 En cuanto a la variable **IFIDE** (grado de fidelización de los clientes del negocio), se puede deducir que los grupos 2 y 6 son los “campeones de fidelización”: no muestran diferencias significativas entre sí, pero sí con casi todos los demás grupos. Representan empresas muy consolidadas comercialmente, con redes de clientes leales. Económicamente, disfrutan de ingresos estables y bajos costes de adquisición de clientes, lo que les confiere ventaja competitiva sostenida. Por otro lado, los grupos 1 y 7 exhiben una “alta fidelidad consolidada”, similar entre ambos, sin diferencias significativas con los campeones (2 y 6) en algunos casos. Estas compañías probablemente combinan buen servicio y reputación con cierto margen para mejorar la digitalización o la personalización de su oferta. Adicionalmente, el grupo 5 se caracteriza por una fidelidad media, es decir, alcanzan un nivel aceptable, pero significativamente inferior al de los grupos líderes. Finalmente, los grupos 3 y 4 adolecen de una fidelización débil. No difieren entre sí, pero sí del resto. Son, en general grupos formados por empresas con poca orientación al cliente o escaso conocimiento del mismo, probablemente con modelos operativos más básicos y precios competitivos. Desde una perspectiva de futuro, son las más vulnerables a la pérdida de clientes y a la competencia.
 
 PO último, en relación con la variable **IDIG** (grado de digitalización de cada empresa: integración de sistemas inteligentes, automatización logística, uso de IA en gestión de flotas, plataformas de clientes, etc.), podemos distinguir cuatro niveles tecnológicos:
 
-- Grupo 6 (media 33.7). Difere significativamente de casi todos los grupos, menos 1, 2 y 3. Representa a las empresas más avanzadas tecnológicamente, probablemente grandes corporaciones con sistemas integrados de navegación, inteligencia artificial en mantenimiento predictivo y plataformas de comercio galáctico.
+-   Grupo 6 (media 33.7). Difere significativamente de casi todos los grupos, menos 1, 2 y 3. Representa a las empresas más avanzadas tecnológicamente, probablemente grandes corporaciones con sistemas integrados de navegación, inteligencia artificial en mantenimiento predictivo y plataformas de comercio galáctico.
 
-- Grupos 1 (22.2), 2 (26.0), 3 (21.8). No hay diferencias significativas entre ellos, lo que indica un bloque intermedio tecnológicamente.Han avanzado en digitalización (probablemente con sistemas de trazabilidad o automatización parcial), pero aún no alcanzan la madurez total del grupo 6.
+-   Grupos 1 (22.2), 2 (26.0), 3 (21.8). No hay diferencias significativas entre ellos, lo que indica un bloque intermedio tecnológicamente.Han avanzado en digitalización (probablemente con sistemas de trazabilidad o automatización parcial), pero aún no alcanzan la madurez total del grupo 6.
 
-- Grupo 7 (14.8). Difiere significativamente de casi todos los grupos más avanzados, pero no de 3. Empresas con digitalización parcial o básica (gestión digital de clientes o control de flota limitado).
+-   Grupo 7 (14.8). Difiere significativamente de casi todos los grupos más avanzados, pero no de 3. Empresas con digitalización parcial o básica (gestión digital de clientes o control de flota limitado).
 
-- Grupos 4 (7.8) y 5 (6.8). No difieren entre sí, pero sí de todos los demás.Son los más rezagados tecnológicamente: probablemente dependientes de procesos manuales, escasa automatización y baja conectividad. 
+-   Grupos 4 (7.8) y 5 (6.8). No difieren entre sí, pero sí de todos los demás.Son los más rezagados tecnológicamente: probablemente dependientes de procesos manuales, escasa automatización y baja conectividad.
 
 Finalmente, es interesante mostrar cómo los elementos de cada grupo se disponen en los diagramas de dispersión producto de cruzar las variables clasificadoras entre sí. Para generar estos gráficos de un modo automatizado, primero generaremos un vector con el nombre de todas las variables (excluyendo al *factor* whatcluster_k mediante la función `setdiff()`. Luego, crearemos una lista para ir almacenando los gráficos (lista "graficos").a continuación, calcularemos todas las combinaciones de nombres de variables posibles, con la función `combn()`, y las almacenaremos en la lista "combinaciones". En esta función, el argumento **`simplify = FALSE`** le dice a la función que no vuelque el resultado a una matriz:
 
@@ -1427,37 +1387,36 @@ Así, el algoritmo forma clústeres a partir de regiones densas y deja fuera los
 
 En este método, cada punto o caso se clasifica según su *vecindad*:
 
-- **Punto núcleo (core point):** tiene al menos `minPts` vecinos a una distancia menor que `eps`.  
-- **Punto borde (border point):** no cumple esa condición, pero pertenece a la vecindad de un punto núcleo.  
-- **Ruido:** punto que no pertenece a ningún clúster.
+-   **Punto núcleo (core point):** tiene al menos `minPts` vecinos a una distancia menor que `eps`.\
+-   **Punto borde (border point):** no cumple esa condición, pero pertenece a la vecindad de un punto núcleo.\
+-   **Ruido:** punto que no pertenece a ningún clúster.
 
-El proceso se repite hasta que todos los puntos han sido etiquetados.
-De este modo, DBSCAN no necesita especificar el número de clústeres a priori: el número total emerge de los patrones de densidad del propio conjunto de datos.
+El proceso se repite hasta que todos los puntos han sido etiquetados. De este modo, DBSCAN no necesita especificar el número de clústeres a priori: el número total emerge de los patrones de densidad del propio conjunto de datos.
 
 Los dos **hiperparámetros clave** de la técnica son:
 
 | Parámetro | Significado | Efecto principal |
-|------------|--------------|------------------|
+|----|----|----|
 | `eps` | Radio máximo para considerar vecindad | Si es muy grande, fusiona clústeres distintos. Si es muy pequeño, genera exceso de ruido. |
 | `minPts` | Número mínimo de puntos para formar un clúster denso | Valores típicos entre 4 y 10 según el tamaño de muestra. |
 
 Como **ventajas** frente a los métodos *jerárquicos* y de *k-medias* podemos destacar:
 
-- **No requiere fijar k**: a diferencia de *k-medias*, donde el número de grupos se define manualmente, *DBSCAN* detecta automáticamente cuántos clústeres existen.
+-   **No requiere fijar k**: a diferencia de *k-medias*, donde el número de grupos se define manualmente, *DBSCAN* detecta automáticamente cuántos clústeres existen.
 
-- **Identifica ruido y *outliers* **: los métodos clásicos fuerzan la asignación de todos los casos a algún grupo; *DBSCAN* puede dejarlos fuera, lo que resulta muy útil cuando hay observaciones anómalas.
+-   **Identifica ruido y *outliers*** : los métodos clásicos fuerzan la asignación de todos los casos a algún grupo; *DBSCAN* puede dejarlos fuera, lo que resulta muy útil cuando hay observaciones anómalas.
 
-- **Detecta clústeres de forma irregular**: *k-medias* tiende a producir grupos esféricos; *DBSCAN* permite clústeres de formas arbitrarias y de tamaños distintos.
+-   **Detecta clústeres de forma irregular**: *k-medias* tiende a producir grupos esféricos; *DBSCAN* permite clústeres de formas arbitrarias y de tamaños distintos.
 
-- **Escala bien con datos medianos o grandes**: es eficiente para conjuntos de varios miles de observaciones.
+-   **Escala bien con datos medianos o grandes**: es eficiente para conjuntos de varios miles de observaciones.
 
 En cuanto a sus **limitaciones**, y las **precauciones que se han de tener en cuenta**, hemos de advertir:
 
-- **Sensibilidad a los parámetros *eps* y *minPts* **: su resultado depende fuertemente de estos valores. Si *eps* es demasiado pequeño, surgen muchos puntos de ruido; si es demasiado grande, los clústeres se fusionan.
+-   **Sensibilidad a los parámetros *eps* y *minPts*** : su resultado depende fuertemente de estos valores. Si *eps* es demasiado pequeño, surgen muchos puntos de ruido; si es demasiado grande, los clústeres se fusionan.
 
-- **Dificultad en densidades heterogéneas**: cuando existen regiones con densidades muy distintas, un único eps puede ser inadecuado para todas (en esos casos, el algoritmo *HDBSCAN*, su versión jerárquica, ofrece mejores resultados).
+-   **Dificultad en densidades heterogéneas**: cuando existen regiones con densidades muy distintas, un único eps puede ser inadecuado para todas (en esos casos, el algoritmo *HDBSCAN*, su versión jerárquica, ofrece mejores resultados).
 
-- **Escalado y distancia**: requiere que las variables estén en la misma escala y que la métrica de distancia sea representativa del problema.
+-   **Escalado y distancia**: requiere que las variables estén en la misma escala y que la métrica de distancia sea representativa del problema.
 
 Una de las mayores virtudes de DBSCAN es su **robustez ante outliers**. En los métodos jerárquicos o de partición (*k-medias*, *Ward*), un punto extremo puede distorsionar el cálculo de distancias o medias y alterar significativamente la estructura de los grupos. En cambio, *DBSCAN* identifica explícitamente los puntos atípicos como ruido, y no los utiliza para formar ni expandir clústeres. Dicho de otro modo: los *outliers* no influyen en los límites de los clústeres; y el algoritmo no intenta “forzarlos” a pertenecer a algún grupo, sino que los deja fuera de la estructura principal. Esto convierte a *DBSCAN* en una técnica intrínsecamente más robusta frente a observaciones anómalas, especialmente cuando los datos han sido previamente tipificados.
 
@@ -1467,7 +1426,7 @@ Trabajaremos dentro del proyecto denominado "cluster", donde guardaremos los dos
 
 ### ![](figuras/pie-chart.svg) Preparación de los datos.
 
-La primera parte del script reproduce exactamente el mismo código que vimos en el ejemplo de k-medias: limpieza de *Global Environment*, activación de paquetes, código de la función `create_patchwork()`, importación de los datos, selección y presentación de las variables del análisis, tratamiento de *missing values* e identificación de *outliers*:
+La primera parte del script reproduce esencialmente el mismo esquema que en el ejemplo de *k-medias*: limpieza del *Global Environment*, activación de paquetes (con carga del paquete `{MATrstars}` para disponer de la función `create_patchwork()`), importación de los datos, selección y presentación de las variables del análisis, tratamiento de *missing values* e identificación de *outliers*:
 
 ```{r, eval=FALSE, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
 ### CLUSTER por algoritmo DBScan empresas TMI. ###
@@ -1486,30 +1445,13 @@ library (knitr)
 library (kableExtra)
 library (patchwork)
 
-##### Función para crear composiciones de gráficos con patchwork ###############
-create_patchwork <- function(plot_list) {
-  n <- length(plot_list)
-  if (n == 0) return(NULL)
-  full_rows <- n %/% 4
-  remaining <- n %% 4
-  patchworks <- list()
-  
-  if (full_rows > 0) {
-    for (i in seq(1, full_rows * 4, by = 4)) {
-      patchworks <- c(patchworks, list((plot_list[[i]] + plot_list[[i+1]]) / 
-                                         (plot_list[[i+2]] + plot_list[[i+3]])))
-    }
-  }
-  
-  if (remaining > 0) {
-    last_plots <- plot_list[(full_rows * 4 + 1):n]
-    empty_plots <- lapply(1:(4 - remaining), function(x) ggplot() + theme_void())
-    last_patchwork <- do.call(patchwork::wrap_plots, c(last_plots, empty_plots))
-    patchworks <- c(patchworks, list(last_patchwork))
-  }
-  return(patchworks)
+# Paquete MATrstars: funciones auxiliares del libro R-Stars.
+# Si no está instalado, se instala desde GitHub (solo la primera vez).
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
 }
-################################################################################
+library(MATrstars)
 
 ## DATOS
 
@@ -1590,30 +1532,13 @@ library (knitr)
 library (kableExtra)
 library (patchwork)
 
-##### Función para crear composiciones de gráficos con patchwork ###############
-create_patchwork <- function(plot_list) {
-  n <- length(plot_list)
-  if (n == 0) return(NULL)
-  full_rows <- n %/% 4
-  remaining <- n %% 4
-  patchworks <- list()
-  
-  if (full_rows > 0) {
-    for (i in seq(1, full_rows * 4, by = 4)) {
-      patchworks <- c(patchworks, list((plot_list[[i]] + plot_list[[i+1]]) / 
-                                         (plot_list[[i+2]] + plot_list[[i+3]])))
-    }
-  }
-  
-  if (remaining > 0) {
-    last_plots <- plot_list[(full_rows * 4 + 1):n]
-    empty_plots <- lapply(1:(4 - remaining), function(x) ggplot() + theme_void())
-    last_patchwork <- do.call(patchwork::wrap_plots, c(last_plots, empty_plots))
-    patchworks <- c(patchworks, list(last_patchwork))
-  }
-  return(patchworks)
+# Paquete MATrstars: funciones auxiliares del libro R-Stars.
+# Si no está instalado, se instala desde GitHub (solo la primera vez).
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
 }
-################################################################################
+library(MATrstars)
 
 ## DATOS
 
@@ -1709,9 +1634,9 @@ zseleccion <- as.matrix(zseleccion)  # dbscan espera matriz/numérico
 
 Como ya se precisó, *DBSCAN* depende de dos parámetros principales que determinan cómo se definen las regiones densas del espacio de datos:
 
-- **minPts**: número mínimo de observaciones que deben encontrarse dentro de un vecindario para que se considere suficientemente denso como para formar parte de un clúster.
+-   **minPts**: número mínimo de observaciones que deben encontrarse dentro de un vecindario para que se considere suficientemente denso como para formar parte de un clúster.
 
-- **eps**: radio del vecindario, es decir, la distancia máxima que define si dos puntos son vecinos.
+-   **eps**: radio del vecindario, es decir, la distancia máxima que define si dos puntos son vecinos.
 
 En la práctica, una regla empírica útil es **minPts = 2 × p**, donde *p* es el número de variables métricas. Este valor garantiza que el algoritmo considere suficiente densidad en función de la dimensionalidad del problema. Como en nuestro caso p = 3, usaremos minPts = 6.
 
@@ -1727,13 +1652,13 @@ max_iter  <- 30   # tope de iteraciones
 
 En este bloque de código, los parámetros cumplen las siguientes funciones:
 
-- **`minPts0`**: define la **densidad mínima** requerida para formar un clúster (en este caso, seis puntos).
+-   **`minPts0`**: define la **densidad mínima** requerida para formar un clúster (en este caso, seis puntos).
 
-- **`ruido_obj`**: fija la **proporción** deseada de observaciones que se considerarán **ruido** o casos atípicos.
+-   **`ruido_obj`**: fija la **proporción** deseada de observaciones que se considerarán **ruido** o casos atípicos.
 
-- **`tol_ruido`**: margen de **tolerancia** aceptado respecto al valor objetivo de ruido (±2 puntos porcentuales).
+-   **`tol_ruido`**: margen de **tolerancia** aceptado respecto al valor objetivo de ruido (±2 puntos porcentuales).
 
-- **`max_iter`**: número *máximo de iteraciones* permitidas para ajustar *eps* y alcanzar la proporción de ruido deseada.
+-   **`max_iter`**: número *máximo de iteraciones* permitidas para ajustar *eps* y alcanzar la proporción de ruido deseada.
 
 Para comenzar la búsqueda de un valor adecuado para el radio *eps*, analizamos la distribución de las **distancias al (minPts − 1)-ésimo vecino más cercano** de cada observación. Este gráfico, conocido como *curva kNN*, suele presentar una primera zona plana (puntos en regiones densas) y, a partir de cierto valor, un “codo” o cambio brusco de pendiente que marca la transición hacia las zonas menos densas o de ruido. Ese punto de inflexión nos orienta sobre el **rango de valores razonables** para *eps*.
 
@@ -1752,11 +1677,11 @@ El código anterior calcula un rango inicial de búsqueda para el parámetro *ep
 
 A continuación:
 
-- **`cknn_d`** guarda todas esas distancias.
+-   **`cknn_d`** guarda todas esas distancias.
 
-- **`d_sorted`** las ordena de menor a mayor para facilitar su análisis.
+-   **`d_sorted`** las ordena de menor a mayor para facilitar su análisis.
 
-- **`eps_lo`** y **`eps_hi`** definen, respectivamente, los límites inferior y superior del rango dentro del cual se buscará el valor óptimo de *eps*.
+-   **`eps_lo`** y **`eps_hi`** definen, respectivamente, los límites inferior y superior del rango dentro del cual se buscará el valor óptimo de *eps*.
 
 El límite inferior (`eps_lo`) se fija ligeramente por debajo de la distancia mínima observada. El límite superior (`eps_hi`) se amplía un 50 % por encima del valor máximo, para garantizar que el rango incluya tanto las zonas densas como las menos densas del espacio de datos.
 
@@ -1804,23 +1729,23 @@ for (i in seq_len(max_iter)) {
 
 En este código:
 
-- Se crea primero el *data frame* "tested", que almacenará los pares de valores *eps* y la proporción de ruido (ruido) obtenidos en cada iteración.
+-   Se crea primero el *data frame* "tested", que almacenará los pares de valores *eps* y la proporción de ruido (ruido) obtenidos en cada iteración.
 
-- En cada paso del bucle for:
+-   En cada paso del bucle for:
 
-  1.  Se calcula un **valor intermedio del radio**, `eps_mid`, como el punto medio entre los límites actuales del rango (`eps_lo` y `eps_hi`).
+    1.  Se calcula un **valor intermedio del radio**, `eps_mid`, como el punto medio entre los límites actuales del rango (`eps_lo` y `eps_hi`).
 
-  2.  Se ejecuta la función `noise_rate()` para ese valor de *eps*, obteniendo la proporción de ruido `r_mid`.
+    2.  Se ejecuta la función `noise_rate()` para ese valor de *eps*, obteniendo la proporción de ruido `r_mid`.
 
-  3.  El resultado se guarda en el *data frame* "tested" para poder consultarlo o graficarlo posteriormente.
+    3.  El resultado se guarda en el *data frame* "tested" para poder consultarlo o graficarlo posteriormente.
 
-- A continuación, el código compara el ruido obtenido `r_mid` con el ruido objetivo `ruido_obj`:
+-   A continuación, el código compara el ruido obtenido `r_mid` con el ruido objetivo `ruido_obj`:
 
-  - Si la diferencia está dentro de la tolerancia admitida (`tol_ruido`), el bucle se detiene porque se ha encontrado un *eps* adecuado.
+    -   Si la diferencia está dentro de la tolerancia admitida (`tol_ruido`), el bucle se detiene porque se ha encontrado un *eps* adecuado.
 
-  - Si el ruido actual es demasiado alto, significa que los clústeres son demasiado pequeños; para corregirlo, se aumenta *eps*, lo que amplía los vecindarios y une más puntos.
+    -   Si el ruido actual es demasiado alto, significa que los clústeres son demasiado pequeños; para corregirlo, se aumenta *eps*, lo que amplía los vecindarios y une más puntos.
 
-  - Si el ruido es demasiado bajo, se reduce *eps*, haciendo los clústeres más estrictos y separando más puntos como atípicos.
+    -   Si el ruido es demasiado bajo, se reduce *eps*, haciendo los clústeres más estrictos y separando más puntos como atípicos.
 
 Este proceso se repite hasta alcanzar la proporción deseada de ruido o hasta completar el número máximo de iteraciones definido en `max_iter`.
 
@@ -1839,13 +1764,13 @@ ruido_est <- tested$ruido[ix_best]
 
 En este fragmento de código:
 
-- "tested" es el *data frame* generado en la etapa anterior, que contiene todas las combinaciones de *eps* evaluadas junto con su proporción de ruido.
+-   "tested" es el *data frame* generado en la etapa anterior, que contiene todas las combinaciones de *eps* evaluadas junto con su proporción de ruido.
 
-- La instrucción `which.min(abs(tested$ruido - ruido_obj))` identifica el índice (`ix_best`) del valor de *eps* cuya proporción de ruido está más cerca del objetivo deseado. A partir de ese índice:
+-   La instrucción `which.min(abs(tested$ruido - ruido_obj))` identifica el índice (`ix_best`) del valor de *eps* cuya proporción de ruido está más cerca del objetivo deseado. A partir de ese índice:
 
-  - `eps_final` guarda el valor de **radio óptimo** que se empleará finalmente en el algoritmo *DBSCAN*.
+    -   `eps_final` guarda el valor de **radio óptimo** que se empleará finalmente en el algoritmo *DBSCAN*.
 
-  - `ruido_est` almacena la **proporción real de ruido** que produce ese valor óptimo.
+    -   `ruido_est` almacena la **proporción real de ruido** que produce ese valor óptimo.
 
 Este paso resume todo el proceso de búsqueda en un resultado claro y cuantitativo: el radio `eps_final`, ajustado para lograr la densidad de agrupación coherente con el nivel de ruido que se considera adecuado para el análisis.
 
@@ -1859,11 +1784,11 @@ modelo_db
 
 En este bloque:
 
-- La función `dbscan()` ejecuta el algoritmo con los parámetros óptimos:
+-   La función `dbscan()` ejecuta el algoritmo con los parámetros óptimos:
 
-  - `eps = eps_final`, el radio de vecindad que determina qué puntos se consideran cercanos.
+    -   `eps = eps_final`, el radio de vecindad que determina qué puntos se consideran cercanos.
 
-  - `minPts = minPts0`, el número mínimo de observaciones necesarias en un vecindario para formar un clúster.
+    -   `minPts = minPts0`, el número mínimo de observaciones necesarias en un vecindario para formar un clúster.
 
 El resultado se guarda en el objeto "modelo_db", que contiene toda la información del agrupamiento: número de clústeres detectados, tamaño de cada grupo y proporción de ruido. AL mostrarlo en pantalla, R presenta un resumen con el conteo de puntos por clúster y el porcentaje de observaciones no asignadas (ruido).
 
@@ -1883,13 +1808,13 @@ seleccion$whatcluster_dbs <- as.factor(modelo_db$cluster)
 
 En este bloque:
 
-- La función `cat()` imprime un resumen limpio con los valores finales:
+-   La función `cat()` imprime un resumen limpio con los valores finales:
 
-- `eps_final`, el radio óptimo de vecindad.
+-   `eps_final`, el radio óptimo de vecindad.
 
-- `ruido_obj`, la proporción de ruido objetivo definida por el usuario.
+-   `ruido_obj`, la proporción de ruido objetivo definida por el usuario.
 
-- `ruido_est`, el porcentaje real de observaciones que el modelo ha clasificado como ruido.
+-   `ruido_est`, el porcentaje real de observaciones que el modelo ha clasificado como ruido.
 
 Este breve informe permite verificar si el algoritmo alcanzó el nivel de ruido esperado o si se desvió ligeramente dentro del margen de tolerancia.
 
@@ -1899,8 +1824,7 @@ Finalmente, la instrucción `seleccion$whatcluster_dbs <- as.factor(modelo_db$cl
 
 ### ![](figuras/pie-chart.svg) Caracterización de los clústeres o grupos formados.
 
-Una vez obtenidos los clústeres, y asignados los elementos (teniendo en cuenta que el *grupo 0*
-no es realmente un clúster; sino que reúne a los casos considerados atípicos, *ouliers* o *ruido*), puede aplicarse el mismo código que se empleó en el caso de *k-medias* a la hora de caracterizar tales grupos (omitimos por no extender el código la prueba de comparaciones múltiples de *Kruskal-Wallis*):
+Una vez obtenidos los clústeres, y asignados los elementos (teniendo en cuenta que el *grupo 0* no es realmente un clúster; sino que reúne a los casos considerados atípicos, *ouliers* o *ruido*), puede aplicarse el mismo código que se empleó en el caso de *k-medias* a la hora de caracterizar tales grupos (omitimos por no extender el código la prueba de comparaciones múltiples de *Kruskal-Wallis*):
 
 ```{r, eval=FALSE, echo=TRUE, results='hide', fig.show='hide', message=FALSE, warning=FALSE}
 # CARACTERIZANDO GRUPOS FORMADOS
@@ -2054,7 +1978,6 @@ tablamedias %>%
                            scientific = FALSE))
 }  
 ```
-
 
 Además, obtenemos los gráficos de las medias de los clústeres y de dispersión de las variables 2 a 2:
 

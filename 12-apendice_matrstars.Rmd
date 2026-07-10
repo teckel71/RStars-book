@@ -1,0 +1,71 @@
+# Apéndice: Funciones auxiliares del paquete `MATrstars`. {.unnumbered}
+
+A lo largo del libro se utilizan de forma recurrente pequeñas **funciones auxiliares** que ayudan a organizar el código de los *scripts*: generación de composiciones de gráficos, tratamiento de tablas, presentación de resultados, etc. Con el fin de mantener los *scripts* de las prácticas centrados en el análisis estadístico y evitar el bloque repetitivo de "fontanería" al inicio de cada uno, todas esas funciones se han agrupado en un paquete propio del libro llamado `MATrstars`.
+
+`MATrstars` no está disponible en CRAN. Se distribuye a través de un repositorio público de GitHub, desde el que se instala con una sola línea:
+
+```{r, eval=FALSE, echo=TRUE}
+# install.packages("remotes")           # solo si no está instalado
+remotes::install_github("teckel71/MATrstars")
+```
+
+En los *scripts* del libro se ha incluido un bloque estándar que **comprueba si el paquete ya está instalado**; si no lo está, lo instala automáticamente desde GitHub, y en cualquier caso lo activa con `library(MATrstars)`. Por tanto, los alumnos no necesitan preocuparse por la instalación: la primera ejecución del *script* la resuelve.
+
+El repositorio con el código fuente completo del paquete se encuentra en:
+
+-   <https://github.com/teckel71/MATrstars>
+
+En las secciones siguientes se describe cada una de las funciones que integran el paquete: qué hacen, cómo se invocan, qué argumentos aceptan, qué devuelven y cómo utilizarlas.
+
+## `create_patchwork()`. {.unnumbered}
+
+### Propósito. {.unnumbered}
+
+Toma una lista de gráficos `ggplot` y los agrupa en **composiciones de 2 filas por 2 columnas** (cuatro gráficos por composición), utilizando los operadores de composición del paquete `{patchwork}`. Cuando el número total de gráficos no es múltiplo de cuatro, la última composición se completa con paneles vacíos (utilizando `theme_void()`) para mantener la retícula uniforme.
+
+Esta función resulta especialmente útil cuando se genera una batería de gráficos de forma programática (por ejemplo, mediante un bucle sobre un conjunto de variables) y se desean presentar de manera compacta y ordenada. Aparece en los capítulos de análisis clúster (tanto jerárquico como no-jerárquico), en el capítulo de regresión lineal múltiple y, en general, cuando conviene resumir una batería de gráficos comparativos.
+
+### Sintaxis. {.unnumbered}
+
+```{r, eval=FALSE, echo=TRUE}
+create_patchwork(plot_list)
+```
+
+### Argumentos. {.unnumbered}
+
+-   **`plot_list`**: lista de objetos `ggplot`. Si la lista está vacía, la función devuelve `NULL`.
+
+### Valor devuelto. {.unnumbered}
+
+Una **lista de composiciones** `patchwork`. Cada elemento de la lista contiene, como máximo, cuatro gráficos dispuestos en una retícula 2x2. Para presentar las composiciones basta con recorrer la lista con un bucle `for` e imprimir cada elemento con `print()`, tal y como se muestra en el ejemplo siguiente.
+
+### Ejemplo. {.unnumbered}
+
+```{r, eval=FALSE, echo=TRUE}
+library(ggplot2)
+library(MATrstars)
+
+# Lista de 5 gráficos de ejemplo (uno más que un múltiplo de 4)
+graficos <- lapply(1:5, function(i) {
+  ggplot(mtcars, aes(x = wt, y = mpg)) +
+    geom_point() +
+    ggtitle(paste("Gráfico", i))
+})
+
+# Aplicar la función del paquete
+composiciones <- create_patchwork(graficos)
+
+# Ver cuántas composiciones se han generado (será 2)
+length(composiciones)
+
+# Imprimir las composiciones una a una:
+#  la primera con 4 gráficos completos,
+#  la segunda con 1 gráfico y 3 paneles vacíos.
+for (comp in composiciones) print(comp)
+```
+
+### Código fuente. {.unnumbered}
+
+El archivo con el código completo de la función, incluyendo la documentación en formato `{roxygen2}`, puede consultarse y descargarse desde el repositorio del paquete en GitHub:
+
+-   [`R/create_patchwork.R`](https://github.com/teckel71/MATrstars/blob/main/R/create_patchwork.R)
