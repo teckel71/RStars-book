@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Apéndice: Funciones auxiliares del paquete MATrstars. | R-Stars: La Guía</title>
+<meta name="author" content="Miguel-Ángel Tarancón Morán">
+<meta name="description" content="A lo largo del libro se utilizan de forma recurrente pequeñas funciones auxiliares que ayudan a organizar el código de los scripts: generación de composiciones de gráficos, tratamiento de tablas,...">
+<meta name="generator" content="bookdown 0.46 with bs4_book()">
+<meta property="og:title" content="Apéndice: Funciones auxiliares del paquete MATrstars. | R-Stars: La Guía">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://teckel71.github.io/RStars-book/apéndice-funciones-auxiliares-del-paquete-matrstars..html">
+<meta property="og:image" content="https://teckel71.github.io/RStars-book/figuras/Portada_v3-2.jpg">
+<meta property="og:description" content="A lo largo del libro se utilizan de forma recurrente pequeñas funciones auxiliares que ayudan a organizar el código de los scripts: generación de composiciones de gráficos, tratamiento de tablas,...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Apéndice: Funciones auxiliares del paquete MATrstars. | R-Stars: La Guía">
+<meta name="twitter:description" content="A lo largo del libro se utilizan de forma recurrente pequeñas funciones auxiliares que ayudan a organizar el código de los scripts: generación de composiciones de gráficos, tratamiento de tablas,...">
+<meta name="twitter:image" content="https://teckel71.github.io/RStars-book/figuras/Portada_v3-2.jpg">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><link href="libs/Source_Serif_4-0.4.10/font.css" rel="stylesheet">
+<link href="libs/JetBrains_Mono-0.4.10/font.css" rel="stylesheet">
+<link href="libs/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
+<script src="libs/bs3compat-0.10.0/transition.js"></script><script src="libs/bs3compat-0.10.0/tabs.js"></script><script src="libs/bs3compat-0.10.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+          margin-bottom: 0em;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">R-Stars: La Guía</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html"></a></li>
+<li><a class="" href="prefacio.html">Prefacio</a></li>
+<li><a class="" href="introducci%C3%B3n..html"><span class="header-section-number">1</span> Introducción.</a></li>
+<li><a class="" href="almacenando-y-manipulando-datos..html"><span class="header-section-number">2</span> Almacenando y manipulando datos.</a></li>
+<li><a class="" href="gr%C3%A1ficos..html"><span class="header-section-number">3</span> Gráficos.</a></li>
+<li><a class="" href="estad%C3%ADstica-descriptiva..html"><span class="header-section-number">4</span> Estadística descriptiva.</a></li>
+<li><a class="" href="an%C3%A1lisis-previo-de-datos..html"><span class="header-section-number">5</span> Análisis previo de datos.</a></li>
+<li><a class="" href="componentes-principales..html"><span class="header-section-number">6</span> Componentes principales.</a></li>
+<li><a class="" href="an%C3%A1lisis-cl%C3%BAster..html"><span class="header-section-number">7</span> Análisis Clúster.</a></li>
+<li><a class="" href="an%C3%A1lisis-de-la-varianza..html"><span class="header-section-number">8</span> Análisis de la varianza.</a></li>
+<li><a class="" href="an%C3%A1lisis-de-regresi%C3%B3n-lineal-m%C3%BAltiple..html"><span class="header-section-number">9</span> Análisis de Regresión Lineal Múltiple.</a></li>
+<li><a class="" href="an%C3%A1lisis-de-datos-cualitativos..html"><span class="header-section-number">10</span> Análisis de Datos Cualitativos.</a></li>
+<li><a class="" href="bibliograf%C3%ADa.html">Bibliografía</a></li>
+<li><a class="active" href="ap%C3%A9ndice-funciones-auxiliares-del-paquete-matrstars..html">Apéndice: Funciones auxiliares del paquete MATrstars.</a></li>
+<li><a class="" href="licencia.html">Licencia</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="apéndice-funciones-auxiliares-del-paquete-matrstars." class="section level1 unnumbered">
+<h1>Apéndice: Funciones auxiliares del paquete <code>MATrstars</code>.<a class="anchor" aria-label="anchor" href="#ap%C3%A9ndice-funciones-auxiliares-del-paquete-matrstars."><i class="fas fa-link"></i></a>
+</h1>
+<p>A lo largo del libro se utilizan de forma recurrente pequeñas <strong>funciones auxiliares</strong> que ayudan a organizar el código de los <em>scripts</em>: generación de composiciones de gráficos, tratamiento de tablas, presentación de resultados, etc. Con el fin de mantener los <em>scripts</em> de las prácticas centrados en el análisis estadístico y evitar el bloque repetitivo de “fontanería” al inicio de cada uno, todas esas funciones se han agrupado en un paquete propio del libro llamado <code>MATrstars</code>.</p>
+<p><code>MATrstars</code> no está disponible en CRAN. Se distribuye a través de un repositorio público de GitHub, desde el que se instala con una sola línea:</p>
+<div class="sourceCode" id="cb438"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("remotes")           # solo si no está instalado</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"teckel71/MATrstars"</span><span class="op">)</span></span></code></pre></div>
+<p>En los <em>scripts</em> del libro se ha incluido un bloque estándar que <strong>comprueba si el paquete ya está instalado</strong>; si no lo está, lo instala automáticamente desde GitHub, y en cualquier caso lo activa con <code><a href="https://github.com/teckel71/MATrstars">library(MATrstars)</a></code>. Por tanto, los alumnos no necesitan preocuparse por la instalación: la primera ejecución del <em>script</em> la resuelve.</p>
+<p>El repositorio con el código fuente completo del paquete se encuentra en:</p>
+<ul>
+<li><a href="https://github.com/teckel71/MATrstars" class="uri">https://github.com/teckel71/MATrstars</a></li>
+</ul>
+<p>En las secciones siguientes se describe cada una de las funciones que integran el paquete: qué hacen, cómo se invocan, qué argumentos aceptan, qué devuelven y cómo utilizarlas.</p>
+<div id="create_patchwork." class="section level2 unnumbered">
+<h2>
+<code>create_patchwork()</code>.<a class="anchor" aria-label="anchor" href="#create_patchwork."><i class="fas fa-link"></i></a>
+</h2>
+<div id="propósito." class="section level3 unnumbered">
+<h3>Propósito.<a class="anchor" aria-label="anchor" href="#prop%C3%B3sito."><i class="fas fa-link"></i></a>
+</h3>
+<p>Toma una lista de gráficos <code>ggplot</code> y los agrupa en <strong>composiciones de 2 filas por 2 columnas</strong> (cuatro gráficos por composición), utilizando los operadores de composición del paquete <a href="https://patchwork.data-imaginist.com">patchwork</a>. Cuando el número total de gráficos no es múltiplo de cuatro, la última composición se completa con paneles vacíos (utilizando <code><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void()</a></code>) para mantener la retícula uniforme.</p>
+<p>Esta función resulta especialmente útil cuando se genera una batería de gráficos de forma programática (por ejemplo, mediante un bucle sobre un conjunto de variables) y se desean presentar de manera compacta y ordenada. Aparece en los capítulos de análisis clúster (tanto jerárquico como no-jerárquico), en el capítulo de regresión lineal múltiple y, en general, cuando conviene resumir una batería de gráficos comparativos.</p>
+</div>
+<div id="sintaxis." class="section level3 unnumbered">
+<h3>Sintaxis.<a class="anchor" aria-label="anchor" href="#sintaxis."><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb439"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/create_patchwork.html">create_patchwork</a></span><span class="op">(</span><span class="va">plot_list</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="argumentos." class="section level3 unnumbered">
+<h3>Argumentos.<a class="anchor" aria-label="anchor" href="#argumentos."><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>
+<strong><code>plot_list</code></strong>: lista de objetos <code>ggplot</code>. Si la lista está vacía, la función devuelve <code>NULL</code>.</li>
+</ul>
+</div>
+<div id="valor-devuelto." class="section level3 unnumbered">
+<h3>Valor devuelto.<a class="anchor" aria-label="anchor" href="#valor-devuelto."><i class="fas fa-link"></i></a>
+</h3>
+<p>Una <strong>lista de composiciones</strong> <code>patchwork</code>. Cada elemento de la lista contiene, como máximo, cuatro gráficos dispuestos en una retícula 2x2. Para presentar las composiciones basta con recorrer la lista con un bucle <code>for</code> e imprimir cada elemento con <code><a href="https://rdrr.io/r/base/print.html">print()</a></code>, tal y como se muestra en el ejemplo siguiente.</p>
+</div>
+<div id="ejemplo." class="section level3 unnumbered">
+<h3>Ejemplo.<a class="anchor" aria-label="anchor" href="#ejemplo."><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb440"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/teckel71/MATrstars">MATrstars</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Lista de 5 gráficos de ejemplo (uno más que un múltiplo de 4)</span></span>
+<span><span class="va">graficos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">mpg</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Gráfico"</span>, <span class="va">i</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Aplicar la función del paquete</span></span>
+<span><span class="va">composiciones</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/create_patchwork.html">create_patchwork</a></span><span class="op">(</span><span class="va">graficos</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Ver cuántas composiciones se han generado (será 2)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">composiciones</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Imprimir las composiciones una a una:</span></span>
+<span><span class="co">#  la primera con 4 gráficos completos,</span></span>
+<span><span class="co">#  la segunda con 1 gráfico y 3 paneles vacíos.</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">comp</span> <span class="kw">in</span> <span class="va">composiciones</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">comp</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="código-fuente." class="section level3 unnumbered">
+<h3>Código fuente.<a class="anchor" aria-label="anchor" href="#c%C3%B3digo-fuente."><i class="fas fa-link"></i></a>
+</h3>
+<p>El archivo con el código completo de la función, incluyendo la documentación en formato <a href="https://roxygen2.r-lib.org/">roxygen2</a>, puede consultarse y descargarse desde el repositorio del paquete en GitHub:</p>
+<ul>
+<li><a href="https://github.com/teckel71/MATrstars/blob/main/R/create_patchwork.R"><code>R/create_patchwork.R</code></a></li>
+</ul>
+</div>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="bibliograf%C3%ADa.html">Bibliografía</a></div>
+<div class="next"><a href="licencia.html">Licencia</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#ap%C3%A9ndice-funciones-auxiliares-del-paquete-matrstars.">Apéndice: Funciones auxiliares del paquete MATrstars.</a></li>
+<li>
+<a class="nav-link" href="#create_patchwork.">create_patchwork().</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#prop%C3%B3sito.">Propósito.</a></li>
+<li><a class="nav-link" href="#sintaxis.">Sintaxis.</a></li>
+<li><a class="nav-link" href="#argumentos.">Argumentos.</a></li>
+<li><a class="nav-link" href="#valor-devuelto.">Valor devuelto.</a></li>
+<li><a class="nav-link" href="#ejemplo.">Ejemplo.</a></li>
+<li><a class="nav-link" href="#c%C3%B3digo-fuente.">Código fuente.</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón Morán. It was last built on 2026-07-10.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>
