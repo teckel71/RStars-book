@@ -16,30 +16,14 @@ library (kableExtra)
 library (patchwork)
 library (pgirmess)
 
-##### Función para crear composiciones de gráficos con patchwork ###############
-create_patchwork <- function(plot_list) {
-  n <- length(plot_list)
-  if (n == 0) return(NULL)
-  full_rows <- n %/% 4
-  remaining <- n %% 4
-  patchworks <- list()
-  
-  if (full_rows > 0) {
-    for (i in seq(1, full_rows * 4, by = 4)) {
-      patchworks <- c(patchworks, list((plot_list[[i]] + plot_list[[i+1]]) / 
-                                         (plot_list[[i+2]] + plot_list[[i+3]])))
-    }
-  }
-  
-  if (remaining > 0) {
-    last_plots <- plot_list[(full_rows * 4 + 1):n]
-    empty_plots <- lapply(1:(4 - remaining), function(x) ggplot() + theme_void())
-    last_patchwork <- do.call(patchwork::wrap_plots, c(last_plots, empty_plots))
-    patchworks <- c(patchworks, list(last_patchwork))
-  }
-  return(patchworks)
+# Paquete MATrstars: funciones auxiliares del libro R-Stars.
+# Contiene, entre otras, la función create_patchwork(), utilizada más adelante.
+# Si el paquete no está instalado, se instala desde GitHub (una sola vez).
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
 }
-################################################################################
+library(MATrstars)
 
 ## DATOS
 

@@ -174,35 +174,6 @@ library (lmtest)
 
 A continuación, se han integrado distintas funciones que serán operativamente útiles a la hora de obtener resultados. Estas funciones son:
 
--   **Función `create_patchwork()`**: obtiene, a partir de una lista de gráficos elaborados con `{ggplot2}`, sucesivas composiciones de 4 gráficos (o menos, si es necesario), que devuelve a otra lista:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-##### Función para crear composiciones de gráficos con patchwork ###############
-create_patchwork <- function(plot_list) {
-  n <- length(plot_list)
-  if (n == 0) return(NULL)
-  full_rows <- n %/% 4
-  remaining <- n %% 4
-  patchworks <- list()
-  
-  if (full_rows > 0) {
-    for (i in seq(1, full_rows * 4, by = 4)) {
-      patchworks <- c(patchworks, list((plot_list[[i]] + plot_list[[i+1]]) / 
-                                         (plot_list[[i+2]] + plot_list[[i+3]])))
-    }
-  }
-  
-  if (remaining > 0) {
-    last_plots <- plot_list[(full_rows * 4 + 1):n]
-    empty_plots <- lapply(1:(4 - remaining), function(x) ggplot() + theme_void())
-    last_patchwork <- do.call(patchwork::wrap_plots, c(last_plots, empty_plots))
-    patchworks <- c(patchworks, list(last_patchwork))
-  }
-  return(patchworks)
-}
-################################################################################
-```
-
 -   **Función `presenta_modelo()`**: función que convierte el objeto "lista" con la solución del modelo de regresión en una presentación de los resultados detallada, compuesta de tres tablas que son almacenadas en una nueva list. Un elemento fundamental para realizar este cometido es el empleo de la función `tidy()` del paquete `{broom}`, que sirve para convertir los resultados de modelos estadísticos u objetos analíticos en un *data frame* organizado (*tidy data*), con columnas estandarizadas como estimaciones, errores estándar, estadísticos y p-values. Además, la función `glance()`, también del paquete `{broom}`, extrae las siguientes informaciones:
 
 1.  **r.squared**: El coeficiente de determinación R², que indica el porcentaje de variación explicada por el modelo.
