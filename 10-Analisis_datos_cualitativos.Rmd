@@ -260,12 +260,8 @@ con un formato de tabla elaborado con la función `kable()` del paquete
 
   tab.GA.FJ <- with(seleccion, table(GALAXIA, FJUR))
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-      if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {      
  addmargins(tab.GA.FJ) %>%
-  kable(format = tipo_output,
+  kable(format = "html",
         caption="Empresas TMI") %>%
   kable_styling(full_width = F,
                 bootstrap_options = "striped", "bordered", "condensed",
@@ -276,11 +272,6 @@ knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
                    line=T) %>%
   row_spec(0, bold= T, align = "c") %>%
   column_spec(1, bold = T)
-      }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-addmargins(tab.GA.FJ) %>%
-  kable(format = "pandoc",
-        caption="Empresas TMI")
-      }        
 ```
 
 Es de destacar que, en el código de la tabla, se ha añadido la función
@@ -594,12 +585,8 @@ mostrando aquí los principales resultados.
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
   tab.FJ.EF <- with(seleccion, table(FJUR, EFLO))
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-      if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {      
  addmargins(tab.FJ.EF) %>%
-  kable(format = tipo_output,
+  kable(format = "html",
         caption="Empresas TMI") %>%
   kable_styling(full_width = F,
                 bootstrap_options = "striped", "bordered", "condensed",
@@ -610,11 +597,6 @@ knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
                    line=T) %>%
   row_spec(0, bold= T, align = "c") %>%
   column_spec(1, bold = T)
-      }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-addmargins(tab.FJ.EF) %>%
-  kable(format = "pandoc",
-        caption="Empresas TMI")
-      }        
 ```
 
 La tabla de contingencia de la Fase 2 muestra cómo se distribuye el
@@ -1265,8 +1247,6 @@ extraer_coeficientes <- function(modelo) {
 #### Función generar tablas y gráfico a partir de modelo log-lineal ############
 
 generar_solucion <- function(modelo) {
-  # Detectar formato de salida actual (html, docx, pdf, ...)
-  tipo_output <- knitr::opts_knit$get("rmarkdown.pandoc.to")
   
   # Extraer la información del modelo
   summary_modelo <- summary(modelo)
@@ -1284,7 +1264,6 @@ generar_solucion <- function(modelo) {
   )
   
   # Formatear la tabla de validación usando kable
-  if (tipo_output == "html") {
     independencia_valida_tab <- tabla_informacion %>%
       kable(caption   = "Validación del modelo",
             format    = "html",
@@ -1295,25 +1274,11 @@ generar_solucion <- function(modelo) {
                     position = "center",
                     font_size = 12) %>%
       row_spec(0, bold = TRUE, align = "c")
-  } else if (tipo_output == "docx") {
-    independencia_valida_tab <- tabla_informacion %>%
-      kable(caption   = "Validación del modelo",
-            format    = "pandoc",
-            col.names = c("Prueba", "Estadístico",
-                          "Grados Libertad", "P-valor"))
-  } else { 
-    # Otras salidas (pdf, etc.): tabla sencilla genérica
-    independencia_valida_tab <- tabla_informacion %>%
-      kable(caption   = "Validación del modelo",
-            col.names = c("Prueba", "Estadístico",
-                          "Grados Libertad", "P-valor"))
-  }
   
   # Extraer los coeficientes del modelo
   independencia_df <- extraer_coeficientes(modelo)
   
   # Formatear la tabla de coeficientes usando kable
-  if (tipo_output == "html") {
     independencia_coef_tab <- independencia_df %>%
       kable(format   = "html",
             caption  = "Coeficientes del modelo",
@@ -1323,16 +1288,6 @@ generar_solucion <- function(modelo) {
                     position = "center",
                     font_size = 12) %>%
       row_spec(0, bold = TRUE, align = "c")
-  } else if (tipo_output == "docx") {
-    independencia_coef_tab <- independencia_df %>%
-      kable(format  = "pandoc",
-            caption = "Coeficientes del modelo",
-            digits  = 3)
-  } else {
-    independencia_coef_tab <- independencia_df %>%
-      kable(caption = "Coeficientes del modelo",
-            digits  = 3)
-  }
   
   # Crear el gráfico de mosaico con residuos y mostrarlo en pantalla
   plot(modelo, panel = mosaic,
@@ -1532,16 +1487,12 @@ if (!is.null(attr(tab_use, "zeros_imputados"))) {
 # Construir tabla original
 tab0 <- xtabs(~ GALAXIA + FJUR + EFLO, data = seleccion)
 
-# Detectar formato de salida actual
-tipo_output <- knitr::opts_knit$get("rmarkdown.pandoc.to")
-
 # Reportar celdas 0 (si existen)
 zeros_report <- detect_zeros_any(tab0)
 
 if (is.null(zeros_report)) {
   message("No se han detectado celdas con frecuencia 0 en la tabla original.")
 } else {
-  if (tipo_output == "html") {
     zeros_report %>%
       kable(format  = "html",
             caption = "Combinaciones con 0 detectadas (antes de imputar)") %>%
@@ -1550,14 +1501,6 @@ if (is.null(zeros_report)) {
                     position = "center",
                     font_size = 12) %>%
       row_spec(0, bold = TRUE, align = "c")
-  } else if (tipo_output == "docx") {
-    zeros_report %>%
-      kable(format  = "pandoc",
-            caption = "Combinaciones con 0 detectadas (antes de imputar)")
-  } else {
-    zeros_report %>%
-      kable(caption = "Combinaciones con 0 detectadas (antes de imputar)")
-  }
 }
 
 # Imputar 0 -> 1 (solo celdas con 0) y anotar nota + reporte como atributo
@@ -1570,7 +1513,6 @@ cat("\nNOTA IMPUTACIÓN: ", attr(tab_use, "nota_imputacion"), "\n")
 if (!is.null(attr(tab_use, "zeros_imputados"))) {
   zeros_imputados <- attr(tab_use, "zeros_imputados")
   
-  if (tipo_output == "html") {
     zeros_imputados %>%
       kable(format  = "html",
             caption = "Combinaciones imputadas (0 → 1) para estimar modelo") %>%
@@ -1579,14 +1521,6 @@ if (!is.null(attr(tab_use, "zeros_imputados"))) {
                     position = "center",
                     font_size = 12) %>%
       row_spec(0, bold = TRUE, align = "c")
-  } else if (tipo_output == "docx") {
-    zeros_imputados %>%
-      kable(format  = "pandoc",
-            caption = "Combinaciones imputadas (0 → 1) para estimar modelo")
-  } else {
-    zeros_imputados %>%
-      kable(caption = "Combinaciones imputadas (0 → 1) para estimar modelo")
-  }
 }
 ```
 
@@ -2470,12 +2404,8 @@ cual se aplicará el análisis:
 
   tab.GA.FJ <- with(seleccion, table(GALAXIA, FJUR))
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-      if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
  addmargins(tab.GA.FJ) %>%
-  kable(format = tipo_output,
+  kable(format = "html",
         caption = "Empresas TMI: Galaxia y Forma Jurídica.") %>%
   kable_styling(full_width = F,
                 bootstrap_options = "striped", "bordered", "condensed",
@@ -2486,11 +2416,6 @@ knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
                    line = T) %>%
   row_spec(0, bold = T, align = "c") %>%
   column_spec(1, bold = T)
-      }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-addmargins(tab.GA.FJ) %>%
-  kable(format = "pandoc",
-        caption = "Empresas TMI: Galaxia y Forma Jurídica.")
-      }
 ```
 
 Ya disponemos de la tabla sobre la que se aplicará el análisis. Se

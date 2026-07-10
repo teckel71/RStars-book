@@ -119,14 +119,14 @@
 <p>Es muy importante observar que, en la hoja de cálculo, existen variables con datos faltantes (<em>missing values</em>). En concreto, podemos identificar estas faltas de dato por la presencia de celdas en blanco; pero también por la existencia de celdas con el texto, por ejemplo, “n.d.” (no dato). Así, es clave identificar el modo en que quedan recogidos los datos faltantes en la hoja de cálculo, ya que <strong>tendremos que aplicar código adicional</strong> en el comando de importación de R <strong>para que estos casos queden correctamente recogidos como <em>NAs</em></strong> (<em>not available</em>).</p>
 <p>Cerraremos el archivo de Microsoft® Excel®, “interestelar_100.xlsx” y volveremos a RStudio. Después, abriremos nuestro <em>script</em> “previo_rstars.R” con <code>File → Open File…</code> Este <em>script</em> contiene el código que vamos a ir ejecutando en la práctica.</p>
 <p>La primera línea / instrucción en el <em>script</em> es:</p>
-<div class="sourceCode" id="cb179"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb180"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Tratamiento y análisis previo de datos.</span></span>
 <span></span>
 <span><span class="co"># Limpiando el Global Environment</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>La instrucción tiene como objeto limpiar el <em>Global Environment</em> (memoria) de objetos de anteriores sesiones de trabajo.</p>
 <p>Luego, si queremos despreocuparnos de la carga de los paquetes que utilizaremos en el script, podemos activarlos ahora:</p>
-<div class="sourceCode" id="cb180"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb181"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Cargando paquetes</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://github.com/jthomasmock/gtExtras">gtExtras</a></span><span class="op">)</span></span>
@@ -139,7 +139,7 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://ggobi.github.io/ggally/">GGally</a></span><span class="op">)</span></span></code></pre></div>
 <p>Para importar los datos que hay en la hoja “Datos” del archivo de Microsoft® Excel® y hacer una primera inspección de las variables que contiene, ejecutaremos el código:</p>
-<div class="sourceCode" id="cb181"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb182"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## DATOS</span></span>
 <span></span>
 <span><span class="co"># Importando datos desde Excel</span></span>
@@ -153,24 +153,24 @@
 <span><span class="va">datos_df_graph</span></span></code></pre></div>
 <p>Por defecto, R considera las celdas en blanco de la hoja de cálculo como NAs; pero hemos de advertirle del resto de posibilidades que existen en la hoja para comunicar que falta un dato determinado, como ya se ha comentado. Para ello, hemos añadido en la función <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> el argumento <code>na =</code>, que recoge los contenidos de celda de la hoja de cálculo que indican que falta el dato en cuestión.</p>
 <p>Por otro lado, R ha tomado la primera columna como una variable categórica. En realidad, esta columna no es una variable, sino que está formada por los nombres de los diferentes casos u observaciones. Para evitar que R vea la columna de los nombres de los casos como una variable más, hemos redefinido nuestro <em>data frame</em> diciéndole que tome esa primera columna como el conjunto de los <em>nombres</em> de los casos (filas).</p>
-<div id="maolrvvklt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="wzvclghxya" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#maolrvvklt table {
+#wzvclghxya table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#maolrvvklt thead, #maolrvvklt tbody, #maolrvvklt tfoot, #maolrvvklt tr, #maolrvvklt td, #maolrvvklt th {
+#wzvclghxya thead, #wzvclghxya tbody, #wzvclghxya tfoot, #wzvclghxya tr, #wzvclghxya td, #wzvclghxya th {
   border-style: none;
 }
 
-#maolrvvklt p {
+#wzvclghxya p {
   margin: 0;
   padding: 0;
 }
 
-#maolrvvklt .gt_table {
+#wzvclghxya .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -196,12 +196,12 @@
   border-left-color: #D3D3D3;
 }
 
-#maolrvvklt .gt_caption {
+#wzvclghxya .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#maolrvvklt .gt_title {
+#wzvclghxya .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -213,7 +213,7 @@
   border-bottom-width: 0;
 }
 
-#maolrvvklt .gt_subtitle {
+#wzvclghxya .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -225,7 +225,7 @@
   border-top-width: 0;
 }
 
-#maolrvvklt .gt_heading {
+#wzvclghxya .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -237,13 +237,13 @@
   border-right-color: #D3D3D3;
 }
 
-#maolrvvklt .gt_bottom_border {
+#wzvclghxya .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 0px;
   border-bottom-color: #D3D3D3;
 }
 
-#maolrvvklt .gt_col_headings {
+#wzvclghxya .gt_col_headings {
   border-top-style: solid;
   border-top-width: 0px;
   border-top-color: #D3D3D3;
@@ -258,7 +258,7 @@
   border-right-color: #D3D3D3;
 }
 
-#maolrvvklt .gt_col_heading {
+#wzvclghxya .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -278,7 +278,7 @@
   overflow-x: hidden;
 }
 
-#maolrvvklt .gt_column_spanner_outer {
+#wzvclghxya .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -290,15 +290,15 @@
   padding-right: 4px;
 }
 
-#maolrvvklt .gt_column_spanner_outer:first-child {
+#wzvclghxya .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#maolrvvklt .gt_column_spanner_outer:last-child {
+#wzvclghxya .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#maolrvvklt .gt_column_spanner {
+#wzvclghxya .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -310,11 +310,11 @@
   width: 100%;
 }
 
-#maolrvvklt .gt_spanner_row {
+#wzvclghxya .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#maolrvvklt .gt_group_heading {
+#wzvclghxya .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -340,7 +340,7 @@
   text-align: left;
 }
 
-#maolrvvklt .gt_empty_group_heading {
+#wzvclghxya .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -355,15 +355,15 @@
   vertical-align: middle;
 }
 
-#maolrvvklt .gt_from_md > :first-child {
+#wzvclghxya .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#maolrvvklt .gt_from_md > :last-child {
+#wzvclghxya .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#maolrvvklt .gt_row {
+#wzvclghxya .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -382,7 +382,7 @@
   overflow-x: hidden;
 }
 
-#maolrvvklt .gt_stub {
+#wzvclghxya .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -395,7 +395,7 @@
   padding-right: 5px;
 }
 
-#maolrvvklt .gt_stub_row_group {
+#wzvclghxya .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -409,15 +409,15 @@
   vertical-align: top;
 }
 
-#maolrvvklt .gt_row_group_first td {
+#wzvclghxya .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#maolrvvklt .gt_row_group_first th {
+#wzvclghxya .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#maolrvvklt .gt_summary_row {
+#wzvclghxya .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -427,16 +427,16 @@
   padding-right: 5px;
 }
 
-#maolrvvklt .gt_first_summary_row {
+#wzvclghxya .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#maolrvvklt .gt_first_summary_row.thick {
+#wzvclghxya .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#maolrvvklt .gt_last_summary_row {
+#wzvclghxya .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -446,7 +446,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#maolrvvklt .gt_grand_summary_row {
+#wzvclghxya .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -456,7 +456,7 @@
   padding-right: 5px;
 }
 
-#maolrvvklt .gt_first_grand_summary_row {
+#wzvclghxya .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -466,7 +466,7 @@
   border-top-color: #D3D3D3;
 }
 
-#maolrvvklt .gt_last_grand_summary_row_top {
+#wzvclghxya .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -476,11 +476,11 @@
   border-bottom-color: #D3D3D3;
 }
 
-#maolrvvklt .gt_striped {
+#wzvclghxya .gt_striped {
   background-color: #FAFAFA;
 }
 
-#maolrvvklt .gt_table_body {
+#wzvclghxya .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -489,7 +489,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#maolrvvklt .gt_footnotes {
+#wzvclghxya .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -503,7 +503,7 @@
   border-right-color: #D3D3D3;
 }
 
-#maolrvvklt .gt_footnote {
+#wzvclghxya .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -512,7 +512,7 @@
   padding-right: 5px;
 }
 
-#maolrvvklt .gt_sourcenotes {
+#wzvclghxya .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -526,7 +526,7 @@
   border-right-color: #D3D3D3;
 }
 
-#maolrvvklt .gt_sourcenote {
+#wzvclghxya .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -534,72 +534,72 @@
   padding-right: 5px;
 }
 
-#maolrvvklt .gt_left {
+#wzvclghxya .gt_left {
   text-align: left;
 }
 
-#maolrvvklt .gt_center {
+#wzvclghxya .gt_center {
   text-align: center;
 }
 
-#maolrvvklt .gt_right {
+#wzvclghxya .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#maolrvvklt .gt_font_normal {
+#wzvclghxya .gt_font_normal {
   font-weight: normal;
 }
 
-#maolrvvklt .gt_font_bold {
+#wzvclghxya .gt_font_bold {
   font-weight: bold;
 }
 
-#maolrvvklt .gt_font_italic {
+#wzvclghxya .gt_font_italic {
   font-style: italic;
 }
 
-#maolrvvklt .gt_super {
+#wzvclghxya .gt_super {
   font-size: 65%;
 }
 
-#maolrvvklt .gt_footnote_marks {
+#wzvclghxya .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#maolrvvklt .gt_asterisk {
+#wzvclghxya .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#maolrvvklt .gt_indent_1 {
+#wzvclghxya .gt_indent_1 {
   text-indent: 5px;
 }
 
-#maolrvvklt .gt_indent_2 {
+#wzvclghxya .gt_indent_2 {
   text-indent: 10px;
 }
 
-#maolrvvklt .gt_indent_3 {
+#wzvclghxya .gt_indent_3 {
   text-indent: 15px;
 }
 
-#maolrvvklt .gt_indent_4 {
+#wzvclghxya .gt_indent_4 {
   text-indent: 20px;
 }
 
-#maolrvvklt .gt_indent_5 {
+#wzvclghxya .gt_indent_5 {
   text-indent: 25px;
 }
 
-#maolrvvklt .katex-display {
+#wzvclghxya .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#maolrvvklt div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#wzvclghxya div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -963,12 +963,12 @@ ANTIGUA, MADURA and RENOVADA
 <span class="header-section-number">5.2.1</span> <img src="figuras/key.svg" class="hicon"> Buscando <em>missing values</em> y <em>outliers</em>.<a class="anchor" aria-label="anchor" href="#buscando-missing-values-y-outliers."><i class="fas fa-link"></i></a>
 </h3>
 <p>Vamos a suponer que la variable que queremos estudiar es la variable <em>Rentabilidad Económica</em> (RENECO). Es una buena práctica el trabajar con una copia del <em>data frame</em> original. Con ello, conseguimos mantener la integridad de este <em>data frame</em>, y que el código sea fácilmente utilizable en otros scripts, al utilizar en la copia un nombre genérico. Utilizaremos la función <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> con el argumento <code><a href="https://tidyselect.r-lib.org/reference/everything.html">everything()</a></code> del paquete <a href="https://dplyr.tidyverse.org">dplyr</a>:</p>
-<div class="sourceCode" id="cb182"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb183"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Copia de df</span></span>
 <span><span class="va">muestra</span><span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">interestelar_100</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>La primera acción que debe realizarse es comprobar que todos los casos (empresas) tienen su correspondiente dato o valor para la variable (RENECO), es decir, que no existen <strong>valores perdidos o <em>missing values</em></strong>.</p>
 <p>Para tener una idea general, se puede utilizar la función <code><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss()</a></code> del paquete <a href="https://docs.ropensci.org/visdat/">visdat</a>, que localizará gráficamente los <em>missing values</em> de las diferentes variables, y calculará el porcentaje de casos que supone, con respecto al total de observaciones. Para limitar el análisis solo a la variable RENECO, filtraremos de <em>data frame</em> con la función <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> del paquete <a href="https://dplyr.tidyverse.org">dplyr</a>:</p>
-<div class="sourceCode" id="cb183"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb184"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Analisis de una variable.</span></span>
 <span></span>
 <span><span class="co"># Localizando missing values.</span></span>
@@ -984,7 +984,7 @@ ANTIGUA, MADURA and RENOVADA
 <span>      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"TRUE"</span> <span class="op">=</span> <span class="st">"NA"</span>, <span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"Presente"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span></span>
 <span>    plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-147-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-146-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 5.2</strong></p>
 </div>
@@ -1018,7 +1018,7 @@ ANTIGUA, MADURA and RENOVADA
 <li><p><strong><code>theme(plot.title = element_text(face = "bold", size = 14)):</code></strong> Pone el título en negrita y con tamaño 14.</p></li>
 </ul>
 <p>Puede observarse cómo, en el caso concreto de la variable RENECO, un 1% (aproximadamente) de los casos no tienen dato (es decir, uno de los 104 casos). Para localizar el caso concreto, recurriremos a las herramientas de manejo de <em>data frames</em> del paquete <a href="https://dplyr.tidyverse.org">dplyr</a>. En concreto, filtraremos los casos para detectar aquellos que carecen de valor en la variable RENECO:</p>
-<div class="sourceCode" id="cb184"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb185"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Mostrar casos concretos de NAs</span></span>
 <span><span class="va">muestra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span></span></code></pre></div>
 <p>La función <code><a href="https://rdrr.io/r/base/NA.html">is.na()</a></code> comprueba si, en la posición correspondiente a una fila o caso, para la variable escrita en el argumento; hay o no un dato o valor. Como resultado se obtiene una empresa, para la que se puede corroborar que no hay valor para la variable RENECO:</p>
@@ -1026,12 +1026,12 @@ ANTIGUA, MADURA and RENOVADA
 ## photon pack freight     NA</code></pre>
 <p>Comprobamos que la empresa sin valor en RENECO es <em>Photon Pack Freight</em>.</p>
 <p>Ante la existencia de <em>missing values</em>, se puede actuar de varios modos. Por ejemplo, se puede intentar obtener por otro canal de información el conjunto de valores de RENECO que no están disponibles, o recurrir a alguna estimación para los mismos y asignarlos. En caso de que esto sea difícil, se puede optar, simplemente, por eliminar estos casos, en especial cuando representan un porcentaje muy reducido respecto al total. En nuestro ejemplo, vamos a suponer que hemos optado por esta última vía, al no conseguir unos valores más o menos verosímiles de RENECO para las empresas de las que se carece de dato. Esta <strong>eliminación de casos</strong> se podrá realizar mediante el código:</p>
-<div class="sourceCode" id="cb186"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb187"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">muestra</span> <span class="op">&lt;-</span> <span class="va">muestra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>El operador <strong><code>!</code></strong> significa “no”.</p>
 <p>Podemos comprobar cómo en el <em>Global Environment</em> aparece el <em>data frame</em> “muestra” con un caso menos (103).</p>
 <p>Una vez tratados los casos con valores perdidos o <em>missing values</em>, <strong>conviene detectar la posible presencia en la muestra de <em>outliers</em></strong> o casos atípicos, que pudieran desvirtuar los resultados derivados de ciertos análisis. Al trabajar con una sola variable métrica (la rentabilidad económica, RENECO), podemos realizar esta tarea representando gráficamente la variable mediante un <strong><em>boxplot</em></strong> o <em>gráfico de caja</em>. Aplicaremos, por ejemplo, el código siguiente, que utiliza la gramática del paquete <a href="https://ggplot2.tidyverse.org">ggplot2</a>:</p>
-<div class="sourceCode" id="cb187"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb188"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Localizando outliers</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">muestra</span>, map <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">RENECO</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1040,13 +1040,13 @@ ANTIGUA, MADURA and RENOVADA
 <span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Rentabilidad Económica (%)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Obteniéndose el gráfico:</p>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-152-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-151-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 5.3</strong></p>
 </div>
 <p>La “caja” contiene el 50% de los valores de la variable que toman los casos centrales (los que van del primer cuartil al tercero, cuya diferencia se llama <em>rango intercuartílico</em>), y contiene una línea horizontal que es la mediana (segundo cuartil). Por arriba sobresale un segmento que llega al mayor valor de la variable que toma algún caso y que no llega a ser atípico; y por debajo de la caja otro segmento que llega al menor valor de la variable que toma algún caso y que no llega a ser atípico. Los casos atípicos o <em>outliers</em> son aquellos que toman valores que se alejan más de 1.5 veces del rango intercuartílico (altura de la caja) del tercer cuartil, por arriba; o del primer cuartil, por abajo. Se registran mediante puntos.</p>
 <p>En nuestro caso, el <em>boxplot</em> ratifica la existencia de dos casos atípicos. Para identificar esos dos casos concretos, podemos recurrir al paquete <a href="https://dplyr.tidyverse.org">dplyr</a>, y <strong>establecer un filtro</strong> con el siguiente código:</p>
-<div class="sourceCode" id="cb188"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb189"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Mostrar casos concretos de outliers</span></span>
 <span><span class="va">Q1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">muestra</span><span class="op">$</span><span class="va">RENECO</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">Q3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">muestra</span><span class="op">$</span><span class="va">RENECO</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.75</span><span class="op">)</span><span class="op">)</span></span>
@@ -1062,7 +1062,7 @@ ANTIGUA, MADURA and RENOVADA
 <p>Los casos atípicos o <em>outliers</em> en la variable RENECO son <em>Jovian Logistics</em> y <em>Sandworm Freight</em>.</p>
 <p>Como ocurría con los <em>missing values</em>, el <strong>tratamiento de los <em>outliers</em></strong> depende de la información que se tenga, y del enfoque que se quiera seguir en la aplicación de las diferentes técnicas, existiendo varias alternativas (corrección del dato, estimación, eliminación del caso, mantenimiento del caso tal y como está y utilización de <em>técnicas robustas</em>, etc.) Es un tema que a veces resulta <strong>complejo</strong>, y que no está exento de divergencias en la opinión de los investigadores.</p>
 <p>Por tanto, una opción posible es, si no se tiene información fiable y los <em>outliers</em> no representan una gran proporción respecto al total de casos, la eliminación de los casos que presentan valores atípicos en las variables en estudio. En este ejemplo, efectivamente, <strong>eliminaremos estas dos empresas con comportamiento atípico</strong> en la rentabilidad económica (RENECO), a fin de que su presencia en la muestra <strong>no</strong> <strong>distorsione los resultados en la aplicación posterior de ciertas técnicas</strong> (por ejemplo, un ANOVA o un análisis de regresión). Podemos hacerlo creando un nuevo <em>data frame</em> a partir de “muestra”; pero sin esos dos casos. Ese nuevo <em>data frame</em> se llamará, por ejemplo, “muestra_so”:</p>
-<div class="sourceCode" id="cb190"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb191"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Eliminar outliers</span></span>
 <span><span class="va">muestra_so</span> <span class="op">&lt;-</span> <span class="va">muestra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>              <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">RENECO</span> <span class="op">&lt;=</span> <span class="va">Q3</span> <span class="op">+</span> <span class="fl">1.5</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html">IQR</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span> <span class="op">&amp;</span></span>
@@ -1075,7 +1075,7 @@ ANTIGUA, MADURA and RENOVADA
 </h3>
 <p>Una vez que se tiene preparada la base de datos, con un tratamiento adecuado de los <em>missing values</em> y de los <em>outliers,</em> y <strong>antes</strong> de proceder a la aplicación de una técnica adecuada según los objetivos perseguidos en el estudio; suelen presentarse una serie de <strong>gráficos</strong> básicos y <strong>medidas</strong> descriptivas que proporcionan una <strong>idea inicial de la estructura</strong> del sector para la variable o variables analizadas. Nos referimos a medidas y/o gráficos de posición, dispersión y forma (asimetría y curtosis).</p>
 <p>Antes de ello, es conveniente presentar una tabla donde se recoja la distribución de frecuencias de la variable. Si son muchos los casos (en el ejemplo, 101), la distribución podría presentarse agrupada en intervalos, como ya se vio en el capítulo 4 de este libro. De este modo, el código para generar la tabla podría ser (recordar que tienen que estar activos los paquetes <a href="https://yihui.org/knitr/">knitr</a> y <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>):</p>
-<div class="sourceCode" id="cb191"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb192"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Tabla de datos (distribución de frecuencias agrupadas en intervalos)</span></span>
 <span><span class="co"># Colocando casos</span></span>
 <span><span class="va">muestra_so</span> <span class="op">&lt;-</span> <span class="va">muestra_so</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">RENECO</span>, <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">muestra_so</span><span class="op">)</span><span class="op">)</span></span>
@@ -1283,7 +1283,7 @@ Frecuencia relativa acum. F(i)
 <p>En conjunto, la <strong>rentabilidad económica</strong> de estas empresas se concentra en valores <strong>medios–altos</strong>: la gran mayoría se mueve en torno al 50–60%, y dos de cada cuatro intervalos centrales (47,4–53,9 y 53,9–60,3) reúnen la mayor parte de los casos. En términos prácticos, alrededor de ocho de cada diez compañías quedan entre 41% y 66,8%, lo que sugiere un sector relativamente estable, con resultados parecidos entre sí. En los extremos hay pocas: apenas un 5% presenta rentabilidades muy bajas (por debajo del 34,5%) y sólo un 2% llega a niveles muy altos (por encima del 73,2%). Económicamente, esto indica que la competencia y la eficiencia operativa tienden a “empujar” a las empresas hacia un rendimiento <strong>razonable y sostenido</strong>, mientras que los casos de fracaso o de éxito excepcional son <strong>minoría</strong>.</p>
 <p>Por otro lado, el <strong>análisis gráfico</strong> suele dar una idea atractiva e intuitiva de la estructura de la distribución de frecuencias de nuestro conjunto de casos en relación con la variable a analizar.</p>
 <p>Un gráfico fundamental es el <strong>histograma</strong> de la variable estudiada. Para ello, utilizaremos la gramática del paquete <a href="https://ggplot2.tidyverse.org">ggplot2</a>:</p>
-<div class="sourceCode" id="cb192"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb193"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Descriptivos básicos</span></span>
 <span></span>
 <span><span class="co"># Gráficos básicos</span></span>
@@ -1303,12 +1303,12 @@ Frecuencia relativa acum. F(i)
 <div style="text-align: center;">
 <p><strong>Figura 5.4</strong></p>
 </div>
-<div class="sourceCode" id="cb193"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb194"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g1</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-161-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-159-1.png" alt="" width="672"></div>
 <p>En el gráfico vemos de un modo nítido la distribución de frecuencias en cuanto a la rentabilidad económica (RENECO). Se ha incorporado una línea vertical azul (mediante <code><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline()</a></code>) para localizar la rentabilidad media. Entre otras cosas, se puede apreciar que la distribución de frecuencias es acampanada y prácticamente simétrica.</p>
 <p>Como complemento al histograma, podemos realizar un gráfico de densidad de RENECO, al que añadiremos una curva normal con la misma media y desviación típica que nuestra distribución de frecuencias, y que se añade mediante <code><a href="https://ggplot2.tidyverse.org/reference/geom_function.html">stat_function()</a></code> y el argumento <code>fun = dnorm</code>. Este gráfico representa la distribución de probabilidad empírica de la muestra, es una especie de histograma “suavizado”. De este modo, se podrán verificar de un modo fácil algunas de las características avanzadas con la observación del histograma, como la asimetría positiva. El código es:</p>
-<div class="sourceCode" id="cb194"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb195"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g2</span> <span class="op">&lt;-</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">muestra_so</span>, map <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">RENECO</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"red"</span>,</span>
@@ -1330,12 +1330,12 @@ Frecuencia relativa acum. F(i)
 <div style="text-align: center;">
 <p><strong>Figura 5.5</strong></p>
 </div>
-<div class="sourceCode" id="cb195"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb196"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g2</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-163-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-161-1.png" alt="" width="672"></div>
 <p>La curva naranja muestra cómo se distribuye la <strong>rentabilidad económica</strong>: tiene forma de “campana”, con la mayoría de empresas concentradas alrededor del 50–60%. La línea vertical azul marca el valor central (media), en torno al 52%. Comparada con la curva azul de referencia (la normal), la distribución real es muy parecida, aunque algo más ancha y con un ligero peso extra en rentabilidades algo por debajo del centro; en el extremo alto hay menos casos de lo que predeciría una campana perfecta. En términos económicos: el sector muestra un rendimiento <strong>bastante estable</strong> y similar entre compañías, con <strong>pocas</strong> muy rezagadas o extraordinariamente rentables.</p>
 <p>Un tercer gráfico útil es el <strong><em>box-plot</em></strong> una vez se eliminaron los casos <em>outliers</em>, con la incorporación de los valores que toman los casos que componen la muestra, para lo cual se utiliza el <code>geom_jitter</code>:</p>
-<div class="sourceCode" id="cb196"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb197"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g3</span> <span class="op">&lt;-</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">muestra_so</span>, map <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">""</span>, y <span class="op">=</span> <span class="va">RENECO</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"red"</span>,</span>
@@ -1354,12 +1354,12 @@ Frecuencia relativa acum. F(i)
 <div style="text-align: center;">
 <p><strong>Figura 5.6</strong></p>
 </div>
-<div class="sourceCode" id="cb197"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb198"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g3</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-165-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-163-1.png" alt="" width="672"></div>
 <p>El <em>box-plot</em> confirma que la rentabilidad económica está bastante concentrada en la zona central. La <strong>mediana</strong> ronda el <strong>50%</strong> (línea dentro de la caja) y la mitad de las empresas cae aproximadamente entre 46% y 59% (altura de la caja, IQR), lo que sugiere variabilidad moderada. El rombo azul (media) está muy cerca de la mediana, indicando casi simetría. Los bigotes se extienden hacia valores en torno a 35–70% y aparecen pocos <em>outliers</em> tanto por abajo (≈30%) como por arriba (hasta ≈80%). En términos económicos: la mayoría de compañías rinde de forma similar y estable alrededor del 50–60%, con casos extremos poco frecuentes.</p>
 <p>Por otro lado, conviene tener conocimiento del valor de las principales <strong>medidas descriptivas</strong> (de posición, dispersión, forma) que caracterizan a la distribución de la variable a analizar. Para ello, vamos a crear un <em>data frame</em> llamado, por ejemplo, “estadisticos”, que recogerá las diferentes medidas, calculadas al aplicar a la variable RENECO del <em>data frame</em> “muestra_so” la función de <code>{deplyr}</code> llamada <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code>. Se calcularán la media, desviación típica, valor mínimo, mediana, valor máximo, el coeficiente de asimetría de <em>Fisher</em>, y el coeficiente de apuntamiento o curtosis de <em>Fisher</em>. Precisamente, para poder calcular esta última medida, es preciso activar el paquete <a href="https://www.r-project.org">moments</a>, que contiene la función <code><a href="https://rdrr.io/pkg/moments/man/kurtosis.html">kurtosis()</a></code>. La versión del coeficiente de apuntamiento de esta función dispone como distribución perfectamente mesocúrtica el valor de 3, por lo que se le restará 3 en la versión que manejaremos para que la distribución mesocúrtica se sitúe en un coeficiente de 0. El código es:</p>
-<div class="sourceCode" id="cb198"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb199"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calcular estadísticos</span></span>
 <span><span class="va">estadisticos</span> <span class="op">&lt;-</span> <span class="va">muestra_so</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span> Media <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span>,</span>
 <span>                                          DT <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span>,</span>
@@ -1369,7 +1369,7 @@ Frecuencia relativa acum. F(i)
 <span>                                          Asimetria <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/moments/man/skewness.html">skewness</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span>,</span>
 <span>                                          Curtosis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/moments/man/kurtosis.html">kurtosis</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span> <span class="op">-</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p>La ventaja de volcar las medidas y estadísticos en el <em>data frame</em> (de un solo caso) “estadisticos” es que se pueden mostrar los valores en una tabla elegante generada a partir de el mismo mediante las funciones <code>knitr()</code> y <code>kableExtra()</code>, como ya sabemos:</p>
-<div class="sourceCode" id="cb199"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb200"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Mostrar estadisticos</span></span>
 <span><span class="va">estadisticos</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Principales Estadísticos de la Rentabilidad Económica"</span>,</span>
@@ -1451,7 +1451,7 @@ C. Curtosis Fisher
 </h3>
 <p>En muchas técnicas multivariantes basadas en métodos inferenciales (por ejemplo, análisis de la varianza, o en la regresión lineal), se requiere que las variables sigan una <strong>distribución normal</strong>. Para comprobarlo, se puede a recurrir a análisis gráficos o a análisis formales, estos últimos basados en contrastar la hipótesis nula de normalidad.</p>
 <p>Vamos a mostrar un <strong>método gráfico</strong> muy extendido. Comprobaremos la normalidad de la variable RENECO mediante un <strong><em>gráfico qq</em></strong> (cuantil-cuantil), que compara los cuantiles de nuestra muestra con los de una distribución normal teórica (con la misma media y desviación típica). Si los puntos se sitúan cercanos a la diagonal, entonces se asumirá un comportamiento (aproximadamente) normal. El código para realizar el gráfico con las herramientas del paquete <a href="https://ggplot2.tidyverse.org">ggplot2</a> es:</p>
-<div class="sourceCode" id="cb200"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb201"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Normalidad</span></span>
 <span></span>
 <span><span class="co"># Grafico QQ</span></span>
@@ -1466,10 +1466,10 @@ C. Curtosis Fisher
 <div style="text-align: center;">
 <p><strong>Figura 5.7</strong></p>
 </div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-171-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-169-1.png" alt="" width="672"></div>
 <p>A veces, es difícil obtener una conclusión sólida con el gráfico <em>qq</em>; aunque en el ejemplo la separación de los puntos respecto al eje diagonal induce a pensar en que podría seguirse una distribución normal.</p>
 <p>Si queremos ser más precisos, en lugar de un análisis gráfico se puede recurrir a realizar un análisis formal, basado en la realización de <strong>contrastes de hipótesis</strong>. Una prueba muy usual es la <strong>prueba de normalidad de <em>Shapiro y Wilk</em></strong>, que tiene un buen comportamiento en muestras relativamente reducidas. En esta prueba, la hipótesis nula equivale al supuesto de normalidad. Para un 5% de significación estadística, un p-valor superior a 0.05 implicará el no-rechazo de la hipótesis de normalidad. Para realizar la prueba, se ejecutará el código:</p>
-<div class="sourceCode" id="cb201"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb202"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Prueba de Shapiro-Wilk</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/shapiro.test.html">shapiro.test</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">muestra_so</span><span class="op">$</span><span class="va">RENECO</span><span class="op">)</span></span></code></pre></div>
@@ -1486,7 +1486,7 @@ C. Curtosis Fisher
 <span class="header-section-number">5.2.4</span> <img src="figuras/paperclip.svg" class="hicon"> Resumen: 4 gráficos básicos en la descripción de una variable.<a class="anchor" aria-label="anchor" href="#resumen-4-gr%C3%A1ficos-b%C3%A1sicos-en-la-descripci%C3%B3n-de-una-variable."><i class="fas fa-link"></i></a>
 </h3>
 <p>En definitiva, para describir de un modo inicial una distribución de frecuencias de una variable (en escala métrica), podrían analizarse los 4 gráficos que se han comentado anteriormente. Estos gráficos se pueden presentar conjuntamente, para ahorrar espacio en un informe, utilizando el paquete <a href="https://patchwork.data-imaginist.com">patchwork</a>, que permite combinar e integrar en una sola imagen varios gráficos generados con <a href="https://ggplot2.tidyverse.org">ggplot2</a>. En nuestro ejemplo, vamos a generar una figura que integra los 4 gráficos anteriores (que hemos denominado “g1”, “g2”, “g3” y “g4”). Para ello creamos el objeto “resumen”, que integra los gráficos, mediante una asignación con la sintaxis del paquete <a href="https://patchwork.data-imaginist.com">patchwork</a>: El operador <code>/</code> indica que los gráficos siguientes se dispondrán inmediatamente debajo; mientras que <code>|</code> indica que el gráfico siguiente se dispone al lado del anterior. Luego, se le añade también un título y un subtítulo personalizados:</p>
-<div class="sourceCode" id="cb203"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb204"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Resumen gráfico</span></span>
 <span></span>
 <span><span class="va">resumen</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">g1</span> <span class="op">|</span> <span class="va">g2</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="va">g3</span> <span class="op">|</span> <span class="va">g4</span><span class="op">)</span></span>
@@ -1505,7 +1505,7 @@ C. Curtosis Fisher
 <span>        size <span class="op">=</span> <span class="fl">12</span></span>
 <span>      <span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">resumen</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-174-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-172-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 5.8</strong></p>
 </div>
@@ -1526,7 +1526,7 @@ C. Curtosis Fisher
 <p>Para trabajar con múltiples variables, en primer lugar es preciso localizar los casos con <strong>valores perdidos o <em>missing values</em></strong>, para decidir cómo procesarlos (eliminación del caso, estimación del valor faltante, etc.)</p>
 <p>Vamos a imaginar que queremos realizar un análisis en el que tendremos en cuenta las variables RENECO (rentabilidad económica), ACTIVO (volumen de activos de la empresa), MARGEN (margen de beneficio) y RES (resultado del ejercicio).</p>
 <p>En primer lugar, generaremos una copia del <em>data frame</em> original, “interestelar_100”, para preservar su integridad. A esa copia la hemos llamado “muestra2”. Ya vimos cómo el siguiente código nos aporta gráficamente una idea de la posible existencia de valores faltantes:</p>
-<div class="sourceCode" id="cb204"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb205"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Trabajando con multiples variables.</span></span>
 <span></span>
 <span><span class="co"># Copia de df original.</span></span>
@@ -1545,13 +1545,13 @@ C. Curtosis Fisher
 <span>      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"TRUE"</span> <span class="op">=</span> <span class="st">"NA"</span>, <span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"Presente"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span></span>
 <span>    plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-175-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-173-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 5.9</strong></p>
 </div>
 <p>Podemos apreciar cómo existen varios casos con <em>missing values</em> en las variables objeto de estudio.</p>
 <p>Para localizar los casos concretos con <em>missing values</em>, podemos recurrir al siguiente código. En él, hemos sometido a “muestra2” a un <em>filtro</em> para detectar los casos en los que no hay valor para alguna (o varias) de las variables analizadas. El operador <strong><code>|</code></strong> significa “o”. Posteriormente, hemos decidido eliminar esos casos (podría optarse por otro tipo de tratamiento, como la estimación de valores). Para ello asignamos a “muestra2” el resultado de pasar un filtro en el que se eligen los casos que no tienen valores faltantes en ninguna de las variables. El operador <strong><code>&amp;</code></strong> significa “y”:</p>
-<div class="sourceCode" id="cb205"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb206"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Trabajando con multiples variables.</span></span>
 <span></span>
 <span><span class="co"># Localizando y descartando casos con missing values.</span></span>
@@ -1564,7 +1564,7 @@ C. Curtosis Fisher
 ## vega transport      50.42554     NA 48.4567 104.87
 ## photon pack freight       NA  57.78 48.7883  24.36
 ## poe dameron cargo   54.20692  49.68      NA  26.93</code></pre>
-<div class="sourceCode" id="cb207"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb208"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">muestra2</span> <span class="op">&lt;-</span> <span class="va">muestra2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>            <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>                     <span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">ACTIVO</span><span class="op">)</span> <span class="op">&amp;</span></span>
@@ -1597,7 +1597,7 @@ D_M(\mathbf{x})
 <li><p>La matriz de varianzas y covarianzas de las variables para las que se calcula la distancia (argumento <code>cov =</code>).</p></li>
 </ul>
 <p>En definitiva, el código es:</p>
-<div class="sourceCode" id="cb208"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb209"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Identificando y descartando outliers con distancia de Mahalanobis.</span></span>
 <span><span class="va">muestra2</span> <span class="op">&lt;-</span> <span class="va">muestra2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
@@ -1609,18 +1609,18 @@ D_M(\mathbf{x})
 <span>    <span class="op">}</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p>Posteriormente, se puede construir el diagrama de caja de la variable MAHALANOBIS, como cualquier otra variable:</p>
-<div class="sourceCode" id="cb209"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb210"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">muestra2</span>, map <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">MAHALANOBIS</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"DISTANCIA DE MAHALANOBIS"</span>,</span>
 <span>            subtitle <span class="op">=</span> <span class="st">"RENECO, ACTIVO, MARGEN, RES. Empresas TMI."</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"MAHALANOBIS"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-178-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-176-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 5.10</strong></p>
 </div>
 <p>Se observa cómo existen varios casos <em>outliers</em>. Para saber de qué casos concretos se trata, se podrá ejecutar el código:</p>
-<div class="sourceCode" id="cb210"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb211"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Q1M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">muestra2</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">Q3M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">muestra2</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.75</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -1653,7 +1653,7 @@ D_M(\mathbf{x})
 ## home one cargo         48.62131  609.58
 ## arrakis freight        51.42027 1189.86</code></pre>
 <p>Si se opta por eliminar estos casos cara al análisis a aplicar posteriormente, se podrá crear un nuevo <em>data frame</em>, por ejemplo “muestra2_so”, con el código siguiente:</p>
-<div class="sourceCode" id="cb212"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb213"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">muestra2_so</span> <span class="op">&lt;-</span> <span class="va">muestra2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span> <span class="op">&lt;=</span> <span class="va">Q3M</span> <span class="op">+</span> <span class="fl">1.5</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html">IQR</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>           <span class="va">MAHALANOBIS</span> <span class="op">&gt;=</span> <span class="va">Q1M</span> <span class="op">-</span> <span class="fl">1.5</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html">IQR</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
@@ -1664,7 +1664,7 @@ D_M(\mathbf{x})
 <span class="header-section-number">5.3.2</span> <img src="figuras/key.svg" class="hicon"> Correlación entre variables.<a class="anchor" aria-label="anchor" href="#correlaci%C3%B3n-entre-variables."><i class="fas fa-link"></i></a>
 </h3>
 <p>Cuando trabajamos con más de una variable, una característica muy importante viene dada por la intensidad con la que tales variables están relacionadas estadísticamente entre sí, es decir, el estudio de las correlaciones. Un modo atractivo y rápido de visualizar la <strong>matriz de correlaciones</strong> de las variables es a través de la función <code><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs()</a></code> del paquete <a href="https://ggobi.github.io/ggally/">GGally</a>. Para aplicar la función, hemos creado el <em>data frame</em> “temporal” con las variables (métricas) del estudio, que borramos tras general el gráfico:</p>
-<div class="sourceCode" id="cb213"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb214"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Correlaciones entre variables.</span></span>
 <span><span class="va">temporal</span> <span class="op">&lt;-</span> <span class="va">muestra2_so</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">RENECO</span>, <span class="va">ACTIVO</span>, <span class="va">MARGEN</span>, <span class="va">RES</span><span class="op">)</span></span>
 <span><span class="va">corr_plot_so</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs</a></span><span class="op">(</span><span class="va">temporal</span>, </span>
@@ -1675,7 +1675,7 @@ D_M(\mathbf{x})
 <span>                        title <span class="op">=</span> <span class="st">"Matriz de Correlación (sin outliers)"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span><span class="va">temporal</span><span class="op">)</span></span>
 <span><span class="va">corr_plot_so</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-182-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-180-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 5.11</strong></p>
 </div>
@@ -1703,7 +1703,7 @@ En las celdas del triángulo inferior, cuando ambas variables son numéricas (�
 </ul>
 <p>Un coeficiente de correlación puede tomar un valor entre <strong>-1</strong> (fuerte relación, en sentido opuesto) y <strong>+1</strong> (fuerte relación, en el mismo sentido). Como puede apreciarse en el gráfico, las variables ACTIVO y RES mantienen una relación muy intensa y en sentido positivo. Entre MARGEN y RENECO existe también una relación de intensidad destacable. En cambio, ACTIVO y MARGEN; y RENECO y ACTIVO apenas están estadísticamente relacionadas.</p>
 <p>Para finalizar, vamos a comparar las correlaciones anteriores con las que se dan si se incluyen los casos outliers en la muestra:</p>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-183-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-181-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 5.12</strong></p>
 </div>

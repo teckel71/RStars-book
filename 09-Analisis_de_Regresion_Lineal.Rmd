@@ -463,9 +463,6 @@ predict_from_excel_scenarios <- function(model,
 #### (kableExtra es opcional, solo se quiere tabla formateada)  ############
 ############################################################################
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
 predict_from_excel_scenarios <- function(model,
                                          train_df,
                                          excel_path,
@@ -599,7 +596,6 @@ predict_from_excel_scenarios <- function(model,
   
   if (return_kable) {
     knitr.table.format <- "html"
-    if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
         tab <- kableExtra::kbl(
       out_df,
       format = knitr.table.format,
@@ -618,19 +614,6 @@ predict_from_excel_scenarios <- function(model,
         position = "center",
         font_size = 11
       )
-  }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-    tab <- kableExtra::kbl(
-      out_df,
-      format = knitr.table.format,
-      caption = paste0(
-        kable_caption,
-        " — Variable dependiente: ", y_name,
-        " (", interval, " ", level*100, "%)",
-        if (transforma_log) " — valores antilog."
-      ),
-      digits = kable_digits,
-      align = "c"
-    )}
   } else {
     tab <- NULL
   }
@@ -831,9 +814,6 @@ Para poder hacer esto con este modelo inicial estimado, o con cualquier otra est
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
   # Definir la función de presentación de resultados:  presenta_modelo() #####
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
     presenta_modelo <- function(modelo) {
 
     # Lista de piezas
@@ -859,7 +839,6 @@ knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
   
     # Crear la tabla con kable
 
-      if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {      
       tabla1 <- resultados %>%
         kable(caption = "Modelo Lineal",
           col.names = c("Variable", "Coeficiente", "Desv. Típica",
@@ -872,14 +851,6 @@ knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
                                           "condensed",
                       position = "center",
                       font_size = 11)
-      }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-       tabla1 <- resultados %>%
-        kable(caption = "Modelo Lineal",
-          col.names = c("Variable", "Coeficiente", "Desv. Típica",
-                        "Estadístico t", "p-valor", "Sig."),
-          digits = 3,
-          align = c("l", "c", "c", "c", "c", "c"))
-      }
       modelo_piezas[[1]] <- tabla1
   
     # Aplicar la función glance
@@ -892,7 +863,6 @@ knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
                                       "AIC",
                                       "nobs")]
     # Crear la tabla con kable
-      if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
       tabla2 <- estadisticos %>%
         kable(caption = "Estadísticos del modelo",
           col.names = c("R2", "R2 ajustado", "Sigma", "Estadístico F",
@@ -905,14 +875,6 @@ knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
                                           "condensed",
                       position = "center",
                       font_size = 11)
-      }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-        tabla2 <- estadisticos %>%
-        kable(caption = "Estadísticos del modelo",
-          col.names = c("R2", "R2 ajustado", "Sigma", "Estadístico F",
-                        "p-valor", "AIC", "num. observaciones"),
-          digits = 3,
-          align = "c")
-      }
       modelo_piezas[[2]] <- tabla2  
 
     # Obtener VIF
@@ -924,7 +886,6 @@ knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
       rownames_to_column(var = "Variable")
   
     # Crear tabla con kable
-      if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
       tabla3 <- vif_df[,1:2] %>%
         kable(caption = "Factor de inflación de la varianza",
               col.names = c("Variable","Valor VIF"),
@@ -936,13 +897,6 @@ knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
                                           "condensed",
                       position = "center",
                       font_size = 11)
-      }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-        tabla3 <- vif_df[,1:2] %>%
-        kable(caption = "Factor de inflación de la varianza",
-              col.names = c("Variable","Valor VIF"),
-              digits = 3,
-              align = "c")
-      }
       modelo_piezas[[3]] <- tabla3
   
     return(modelo_piezas)
@@ -1218,10 +1172,6 @@ Es importante recalcar que la *distancia de Cook* y la *presencia de outliers* e
 En cuanto a la tabla con los casos con valores de la *distancia de Cook* más relevantes:
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
-  tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {        
 tablaCook <- series_ecuaDEF %>%
     filter ( cooksd > 4/nrow(series_ecuaDEF)) %>%
     select (.rownames, cooksd) %>%
@@ -1235,15 +1185,6 @@ tablaCook <- series_ecuaDEF %>%
                                       "condensed",
                   position = "center",
                   font_size = 11)
- }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-   tablaCook <- series_ecuaDEF %>%
-    filter ( cooksd > 4/nrow(series_ecuaDEF)) %>%
-    select (.rownames, cooksd) %>%
-    kable(caption = "Casos destacados distancia de Cook",
-          col.names = c("Caso","Distancia de Cook"),
-          digits = 3,
-          align = c("l","c"))
- }
     tablaCook
 ```
 
@@ -1347,10 +1288,6 @@ Y la tabla:
 
   # Crear la tabla con kable
 
-      tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {      
     tabla_check <- check_hipotesis %>%
       kable(caption = "Contrastes de hipótesis del MBR",
             col.names = c("Tipo de prueba",
@@ -1366,17 +1303,6 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
                                         "condensed",
                     position = "center",
                     font_size = 11)
- }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-    tabla_check <- check_hipotesis %>%   
-      kable(caption = "Contrastes de hipótesis del MBR",
-            col.names = c("Tipo de prueba",
-                          "Prueba",
-                          "Estadístico",
-                          "P-valor",
-                          "Conclusión"),
-            digits = 3,
-            align = c("l", "c", "c", "c", "c"))    
- }  
     tabla_check
 ```
 

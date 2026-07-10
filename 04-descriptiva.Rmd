@@ -121,11 +121,6 @@ Un paquete de R muy popular para generar tablas de datos es `{knitr}`. Este paqu
 
 Para hacer una tabla con nuestros casos y variables, es decir, para escribir nuestro *data frame* "datos" de un modo más elegante, activaremos los paquetes anteriores (si no lo hemos hecho ya), y generaremos nuestra tabla con los datos contenidos en el *data frame* "datos". El código para generar la tabla, y el resultado, es el siguiente:
 
-```{r, eval=TRUE, echo=FALSE, message=FALSE}
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-```
-
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 # Tabla de datos
 datos %>%
@@ -161,7 +156,6 @@ Por último, hacemos uso dos veces de la función `row_spec()` del paquete `{kab
 El resultado es:
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
-  if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 datos %>%
   kable(caption = "Trabajadores de Shuttlepod Movers",
         col.names = c("Trabajador", "Salario", "Nivel de estudios",
@@ -172,16 +166,6 @@ datos %>%
                 font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:(nrow(datos)), bold= F, align = "c")
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-  kable(caption = "Trabajadores de Shuttlepod Movers",
-        col.names = c("Trabajador", "Salario", "Nivel de estudios",
-                      "Departamento"))
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "pdf") {
-  kable(caption = "Trabajadores de Shuttlepod Movers",
-        col.names = c("Trabajador", "Salario", "Nivel de estudios",
-                      "Departamento")) %>%
-       kable_styling(latex_options = c("striped", "hold_position"))
-}
 ```
 
 A veces, puede ocurrir que solo nos interese estudiar una variable (columna del *data frame*). Además, es posible que el conjunto de casos sea muy numeroso, y que, adicionalmente, algunos de los valores de la variable que queremos estudiar estén repetidos para varios casos. Cuando esto ocurre, una opción interesante es, en lugar de representar en una tabla todos nuestros datos, **representar la distribución de frecuencias** de la variable (o atributo) que nos interesa. Es lo que vamos a hacer a continuación, tomando SALARIO como variable a analizar.
@@ -265,7 +249,6 @@ conteo_df %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 conteo_df %>%
   kable(caption = "Distribución de frecuencias de salarios. Shuttlepod Movers",
         col.names = c("x(i) = Salario", "Frecuencia absoluta n(i)",
@@ -279,15 +262,6 @@ conteo_df %>%
                 font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:(nrow(conteo_df)), bold= F, align = "c")
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-conteo_df %>%
-  kable(caption = "Distribución de frecuencias de salarios. Shuttlepod Movers",
-        col.names = c("x(i) = Salario", "Frecuencia absoluta n(i)",
-                      "Frecuencia absoluta acum. N(i)", "Frecuencia relativa f(i)",
-                      "Frecuencia relativa acum. F(i)"),
-        digits  = c(0, 0, 0, 2, 2),
-        format.args = list(decimal.mark = ".", scientific = FALSE))
-}
 ```
 
 Hemos de advertir que en la función `kable()` se han insertado dos nuevos argumentos:
@@ -419,7 +393,6 @@ conteo_intervalos_df$Frecuencia_R_acum <- cumsum(conteo_intervalos_df$Frecuencia
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
 # Mostrar el resultado
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 conteo_intervalos_df %>%
   kable(caption = "Distribución de frecuencias agrupadas en intervalos de salarios. Shuttlepod Movers",
         col.names = c("Intervalo salarial",
@@ -436,18 +409,6 @@ conteo_intervalos_df %>%
                 font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:(nrow(conteo_intervalos_df)), bold= F, align = "c")
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-conteo_intervalos_df %>%
-  kable(caption = "Distribución de frecuencias agrupadas en intervalos de salarios. Shuttlepod Movers",
-        col.names = c("Intervalo salarial",
-                      "Marca de clase x(i)",
-                      "Frecuencia absoluta n(i)",
-                      "Frecuencia absoluta acum. N(i)",
-                      "Frecuencia relativa f(i)",
-                      "Frecuencia relativa acum. F(i)"),
-        digits  = c(NA, 2, 0, 0, 2, 2),
-        format.args = list(decimal.mark = ".", scientific = FALSE))
-}
 ```
 
 La distribución agrupada de salarios en *Shuttlepod Movers,* expresada en cientos de PAVOs, confirma la concentración de la plantilla en niveles intermedios de ingresos. En particular, los intervalos [7.98, 11.1] y (14.3, 17.4] concentran cada uno un 22% de los trabajadores, mientras que los tramos (11.1, 14.3] y (17.4, 20.6] aportan un 16% adicional cada uno. Esto refleja que casi tres cuartas partes de la fuerza laboral percibe salarios entre 8 y 20 cientos de PAVOs, lo que configura una estructura salarial predominantemente media. Los tramos superiores muestran menor densidad: solo un 10% supera los 23.7 cientos de PAVOs, y el salario máximo (30 cientos) corresponde a un único trabajador.

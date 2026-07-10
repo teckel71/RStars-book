@@ -350,14 +350,8 @@ conteo_intervalos_df$Frecuencia_R_acum <- cumsum(conteo_intervalos_df$Frecuencia
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-```
-
-```{r, eval=TRUE, echo=FALSE, message=FALSE}
 
 # Mostrar el resultado
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 conteo_intervalos_df %>%
   kable(
         col.names = c("Intervalo rentabilidad", "Frecuencia absoluta n(i)",
@@ -370,15 +364,6 @@ conteo_intervalos_df %>%
                 position = "center", font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:(nrow(conteo_intervalos_df)), bold= F, align = "c")
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-conteo_intervalos_df %>%
-  kable(
-        col.names = c("Intervalo rentabilidad", "Frecuencia absoluta n(i)",
-                      "Frecuencia absoluta acum. N(i)", "Frecuencia relativa f(i)",
-                      "Frecuencia relativa acum. F(i)"),
-        digits    = c(NA, 0, 0, 2, 2),
-        format.args = list(decimal.mark = ".", scientific = FALSE))
-}
 ```
 
 ::: {style="text-align: center;"}
@@ -517,11 +502,6 @@ estadisticos %>%
 ```
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE}
-# Determinar el formato de salida actual
-output_format <- knitr::opts_knit$get("rmarkdown.pandoc.to")
-
-# Formatear la tabla según el formato de salida
-if (output_format == "html") {
   estadisticos %>%
   kable(
         col.names = c("Media", "Mediana",
@@ -535,16 +515,6 @@ if (output_format == "html") {
                 position = "center", font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:(nrow(estadisticos)), bold= F, align = "c")
-} else if (output_format == "latex") {
-estadisticos %>%
-  kable(
-        col.names = c("Media", "Mediana",
-                      "Desviación Típica", "Valor mínimo",
-                      "Valor Máximo", "C. Asimetría Fisher",
-                      "C. Curtosis Fisher"),
-        digits    = c(2, 2, 2, 2, 2, 2, 2),
-        format.args = list(decimal.mark = ".", scientific = FALSE))
-}  
 ```
 
 ::: {style="text-align: center;"}

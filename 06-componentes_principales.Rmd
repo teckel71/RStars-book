@@ -293,10 +293,6 @@ rm (temporal)
 # Crear la tabla con kable y personalizarla con kableExtra
 library (knitr)
 library (kableExtra)
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 summary_df %>%
   kable(caption = "Resumen de Componentes",
         col.names = c("Componente", 
@@ -311,16 +307,6 @@ summary_df %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:(nrow(summary_df)), bold= F, align = "c") %>%
   column_spec(1, bold = TRUE, extra_css = "text-align: center;")
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-summary_df %>%
-  kable(caption = "Resumen de Componentes",
-        col.names = c("Componente", 
-                      "Desv. típica",
-                      "Proporción de varianza (comunalidad)",
-                      "Proporción de varianza (comunalidad) acumulada"),
-        digits = c(2, 2, 2),
-        format.args = list(decimal.mark = ".", scientific = FALSE)) 
-}  
 ```
 
 Los coeficientes o **cargas** de cada componente se obtienen pidiendo a nuestro objeto “*componentes*” el elemento “*rotation*”. Estas cargas las vamos a guardar en un nuevo objeto que llamaremos, por ejemplo, “cargas”, que presentaremos mediante una pequeña tabla diseñada con la función `kable()` del paquete `{knitr}` y otras funciones del paquete `{kableExtra}`:
@@ -344,10 +330,6 @@ cargas %>%
 # Cargas de cada componente.
 
 cargas <- componentes$rotation
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 cargas %>%
   kable(caption = "Cargas de las componentes obtenidas",
         digits = c(3, 3, 3),
@@ -358,12 +340,6 @@ cargas %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:(nrow(cargas)), bold= F, align = "c") %>%
   column_spec(1, bold = TRUE, extra_css = "text-align: left;")
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-cargas %>%
-  kable(caption = "Cargas de las componentes obtenidas",
-        digits = c(3, 3, 3),
-        format.args = list(decimal.mark = ".", scientific = FALSE))
-}
 ```
 
 En la tabla, se muestran las cargas (*loads*), que son los coeficientes que intervienen en las combinaciones lineales que definen cada componente, a partir de las variables originales (tipificadas). Por tanto, con base en las cargas se pueden explicitar las ecuaciones correspondientes a cada componente. Por ejemplo, para la primera componente, la ecuación será:
@@ -516,10 +492,6 @@ scores_top10 <- scores_df %>%
   arrange(desc(scores)) %>%
   slice(1:10)
   
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 scores_top10 %>%
   kable(caption = "Puntuaciones emporesas TMI (Top-10, sin outliers)",
         col.names = c("Empresa",
@@ -542,18 +514,6 @@ scores_top10 %>%
            align = "c") %>%
   column_spec(1, bold = TRUE,
               extra_css = "text-align: left;")
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-scores_top10 %>%
-  kable(caption = "Puntuaciones emporesas TMI (Top-10, sin outliers)",
-        col.names = c("Empresa",
-                      "Puntuación",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE))
-}
 ```
 
 De la tabla y gráfico anteriores podemos concluir que las empresas más preparadas para afrontar el futuro, según nuestro indicador (primera componente del análisis PCA) son, por este orden, *Shuttlepod Movers*, *Kamino Movers* e *Ícarus Star Transport*.
@@ -606,10 +566,6 @@ scores_all_top10 <- scores_all_df %>%
   arrange(desc(scores_all)) %>%
   slice(1:10)
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 scores_all_top10 %>%
   kable(caption = "Puntuaciones emporesas TMI (Top-10, con outliers)",
         col.names = c("Empresa",
@@ -632,18 +588,6 @@ scores_all_top10 %>%
            align = "c") %>%
   column_spec(1, bold = TRUE,
               extra_css = "text-align: left;")
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {  
-scores_all_top10 %>%
-  kable(caption = "Puntuaciones emporesas TMI (Top-10, con outliers)",
-        col.names = c("Empresa",
-                      "Puntuación",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE))
-}
 ```
 
 Vemos como el *ranking* cambia radicalmente, y pasa a estar encabezado por las compañías ***Arrakis Freight***, ***Chakotay Cargo Systems*** e ***Hyperdrive Express***. Si un análisis particularizado de estas empresas por parte del equipo encargado del estudio da como resultado que sus datos son correctos, serían, seguramente, las candidatas para ser adquiridas por el magnate *Arg-Us Korp*.
@@ -670,10 +614,6 @@ scores2_top10 <- scores2_df %>%
   arrange(desc(scores2)) %>%
   slice(1:10)
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 scores2_top10 %>%
   kable(caption = "Puntuaciones emporesas TMI (Top-10, outliers en cálculo)",
         col.names = c("Empresa",
@@ -696,18 +636,6 @@ scores2_top10 %>%
            align = "c") %>%
   column_spec(1, bold = TRUE,
               extra_css = "text-align: left;")
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {  
-scores2_top10 %>%
-  kable(caption = "Puntuaciones emporesas TMI (Top-10, outliers en cálculo)",
-        col.names = c("Empresa",
-                      "Puntuación",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE))
-}  
 ```
 
 Como puede repararse, los cambios, en este caso, no parecen ser relevantes. Solo a partir de la séptima posición se registran cambios en el orden de las empresas.
@@ -808,10 +736,6 @@ scores3_top10 <- scores3_df %>%
   arrange(scores3_df) %>%      # orden ascendente porque las cargas de PC1 son negativas (mejor empresa => menor puntuación)
   slice(1:10)
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 scores3_top10 %>%
   kable(caption = "Puntuaciones emporesas TMI (Top-10, Hubert)",
         col.names = c("Empresa",
@@ -834,18 +758,6 @@ scores3_top10 %>%
            align = "c") %>%
   column_spec(1, bold = TRUE,
               extra_css = "text-align: left;")
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-  scores3_top10 %>%
-  kable(caption = "Puntuaciones emporesas TMI (Top-10, Hubert)",
-        col.names = c("Empresa",
-                      "Puntuación",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE))
-}  
 ```
 En la tabla se comprueba que existen leves variaciones con respecto a las clasificaciones anteriores. A destacar la inclusión en el *top-10* de *Ripley Interestellar Freight*, y la desparición de  *Kamino Movers*.
 

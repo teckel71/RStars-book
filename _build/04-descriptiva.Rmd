@@ -136,11 +136,6 @@ Un paquete de R muy popular para generar tablas de datos es `{knitr}`. Este paqu
 
 Para hacer una tabla con nuestros casos y variables, es decir, para escribir nuestro *data frame* "datos" de un modo más elegante, activaremos los paquetes anteriores (si no lo hemos hecho ya), y generaremos nuestra tabla con los datos contenidos en el *data frame* "datos". El código para generar la tabla, y el resultado, es el siguiente:
 
-```{r, eval=TRUE, echo=FALSE, message=FALSE}
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-```
-
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 # Tabla de datos
 datos %>%
@@ -176,7 +171,6 @@ Por último, hacemos uso dos veces de la función `row_spec()` del paquete `{kab
 El resultado es:
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
-  if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 datos %>%
   kable(
         col.names = c("Trabajador", "Salario", "Nivel de estudios",
@@ -187,16 +181,6 @@ datos %>%
                 font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:(nrow(datos)), bold= F, align = "c")
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-  kable(
-        col.names = c("Trabajador", "Salario", "Nivel de estudios",
-                      "Departamento"))
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "pdf") {
-  kable(
-        col.names = c("Trabajador", "Salario", "Nivel de estudios",
-                      "Departamento")) %>%
-       kable_styling(latex_options = c("striped", "hold_position"))
-}
 ```
 
 ::: {style="text-align: center;"}
@@ -285,7 +269,6 @@ conteo_df %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 conteo_df %>%
   kable(
         col.names = c("x(i) = Salario", "Frecuencia absoluta n(i)",
@@ -299,15 +282,6 @@ conteo_df %>%
                 font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:(nrow(conteo_df)), bold= F, align = "c")
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-conteo_df %>%
-  kable(
-        col.names = c("x(i) = Salario", "Frecuencia absoluta n(i)",
-                      "Frecuencia absoluta acum. N(i)", "Frecuencia relativa f(i)",
-                      "Frecuencia relativa acum. F(i)"),
-        digits  = c(0, 0, 0, 2, 2),
-        format.args = list(decimal.mark = ".", scientific = FALSE))
-}
 ```
 
 ::: {style="text-align: center;"}
@@ -444,7 +418,6 @@ conteo_intervalos_df$Frecuencia_R_acum <- cumsum(conteo_intervalos_df$Frecuencia
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
 # Mostrar el resultado
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 conteo_intervalos_df %>%
   kable(
         col.names = c("Intervalo salarial",
@@ -461,18 +434,6 @@ conteo_intervalos_df %>%
                 font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:(nrow(conteo_intervalos_df)), bold= F, align = "c")
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-conteo_intervalos_df %>%
-  kable(
-        col.names = c("Intervalo salarial",
-                      "Marca de clase x(i)",
-                      "Frecuencia absoluta n(i)",
-                      "Frecuencia absoluta acum. N(i)",
-                      "Frecuencia relativa f(i)",
-                      "Frecuencia relativa acum. F(i)"),
-        digits  = c(NA, 2, 0, 0, 2, 2),
-        format.args = list(decimal.mark = ".", scientific = FALSE))
-}
 ```
 
 ::: {style="text-align: center;"}

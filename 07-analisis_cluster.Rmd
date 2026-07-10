@@ -443,10 +443,6 @@ tablamedias <- seleccion %>%
                                       Ifide = mean(IFIDE),
                                       Idig = mean(IDIG))
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 tablamedias %>%
   kable(caption = "Método de Ward. 5 grupos. Medias de variables",
         col.names = c("Clúster",
@@ -468,18 +464,6 @@ tablamedias %>%
   row_spec(1:nrow(tablamedias),
            bold= F,
            align = "c")
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-tablamedias %>%
-  kable(caption = "Método de Ward. 5 grupos. Medias de variables",
-        col.names = c("Clúster",
-                      "Observaciones",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(0, 0, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE))
-}  
 ```
 
 Obviamente, también se podrían comparar las medias de los grupos, para cada variable, con un simple gráfico de barras. A fin de crear un método que valga para cualquier número de variables, realizaremos la tarea con un bucle. El código es el siguiente:
@@ -581,11 +565,7 @@ Las tablas obtenidas serán:
 
 # Bucle para generar las tablas
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
 for (n in 1:numclusters){
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
       tabla <- seleccion %>%
       filter(whatcluster_j == as.character(n)) %>%
       select(IDIVERSE, IFIDE, IDIG) %>%
@@ -604,19 +584,6 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
                     font_size = 12) %>%
       row_spec(0, bold = TRUE, align = "c")
       tablascompo[[n]] <- tabla
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-      tabla <- seleccion %>%
-      filter(whatcluster_j == as.character(n)) %>%
-      select(IDIVERSE, IFIDE, IDIG) %>%
-      kable(caption = paste("Método de Ward. Grupo ", n, "."),
-            col.names = c("I. Diversificación",
-                          "I. Fidelización",
-                          "I. Digitalización"),
-            digits = c(0, 3, 3, 3),
-            format.args = list(decimal.mark = ".",
-                               scientific = FALSE))
-  tablascompo[[n]] <- tabla
-  }
 }
   # Presentar las tablas
 tablascompo[[1]]
@@ -1045,11 +1012,6 @@ A continuación vamos a **caracterizar los grupos** formados en función de las 
               Ifide = mean(IFIDE),
               Idig = mean(IDIG))
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-    if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
-
     tablamedias %>%
     kable(caption = "Método de k-medias. 7 grupos. Medias de variables",
           col.names = c("Clúster",
@@ -1071,18 +1033,6 @@ knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
     row_spec(1:nrow(tablamedias),
              bold= F,
              align = "c")
-    }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {      
-tablamedias %>%
-    kable(caption = "Método de k-medias. 7 grupos. Medias de variables",
-          col.names = c("Clúster",
-                        "Observaciones",
-                        "I. Diversif.",
-                        "I. Fidelizac.",
-                        "I. Digitalizac."),
-          digits = c(NA, 0, 3, 3, 3),
-          format.args = list(decimal.mark = ".",
-                             scientific = FALSE))
-    }
 ```
 
 Obviamente, también se podrían comparar las medias de los grupos, para cada variable, con un gráfico de barras. El código es el siguiente:
@@ -1265,9 +1215,6 @@ A partir del código anterior se obtienen los siguientes resultados, concernient
 -   Significación (TRUE/FALSE): indica si la diferencia es estadísticamente significativa (TRUE) o no (FALSE).
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
     # Realizar el análisis de Kruskal-Wallis  y llevar resultados a tablas
 
             tablas_kw <- list()
@@ -1275,7 +1222,6 @@ knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
               variable <- variables[i]
               datos_kmc <- kruskalmc(as.formula(paste(variable, "~ whatcluster_k")),
                                      data = seleccion_so)
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
               tabla <- datos_kmc$dif.com %>%
                 kable(caption = paste("k-medias. Diferencias de Centroides", variable),
                       col.names = c("Diferencias centros",
@@ -1292,16 +1238,6 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
                 font_size = 11) %>%
   row_spec(0, bold = T, align = "c") %>%
   row_spec(1:nrow(datos_kmc$dif.com), bold = F, align = "c")
-  }else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-tabla <- datos_kmc$dif.com %>%
-                kable(caption = paste("k-medias. Diferencias de Centroides", variable),
-                      col.names = c("Diferencias centros",
-                                    "Diferencias críticas",
-                                    "Significación"),
-              digits = c(3, 3, NA),
-              format.args = list(decimal.mark = ".",
-                                 scientific = FALSE))
-  }
    # Almacenar la tabla en la lista
      tablas_kw[[i]] <- tabla
   }
@@ -1940,10 +1876,6 @@ tablamedias <- seleccion %>%
                                       Ifide = mean(IFIDE),
                                       Idig = mean(IDIG))
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 tablamedias %>%
   kable(caption = "Método DBSCAN. Medias de variables (Grupo 0 = Ruido)",
         col.names = c("Clúster",
@@ -1965,18 +1897,6 @@ tablamedias %>%
   row_spec(1:nrow(tablamedias),
            bold= F,
            align = "c")
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-tablamedias %>%
-  kable(caption = "Método DBSCAN. Medias de variables (Grupo 0 = Ruido)",
-        col.names = c("Clúster",
-                      "Observaciones",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(0, 0, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE))
-}  
 ```
 
 Además, obtenemos los gráficos de las medias de los clústeres y de dispersión de las variables 2 a 2:
@@ -2113,10 +2033,6 @@ seleccion_out <- seleccion %>%
            MAHALANOBIS < Q1M - 1.5*IQR(MAHALANOBIS))%>%
   select(whatcluster_dbs, MAHALANOBIS, IDIVERSE, IFIDE, IDIG)
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 seleccion_out %>%
   kable(caption = "¿Outliers son ruido? (Grupo 0 = Ruido)",
         col.names = c("Caso",
@@ -2140,20 +2056,6 @@ seleccion_out %>%
   row_spec(1:nrow(seleccion_out),
            bold= F,
            align = "c")
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-  seleccion_out %>%
-  kable(caption = "¿Outliers son ruido? (Grupo 0 = Ruido)",
-        col.names = c("Caso",
-                      "Observaciones",
-                      "Grupo (0=ruido)",
-                      "D. Mahalanobis",
-                      "I. Diversificación",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(NA, 3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE))
-}
 ```
 
 En efecto, todas las compañías que fueron identificadas como *outliers* han sido clasificadas como *ruido* (es decir, no pertenecen a ninguno de los clústeres identificados). De hecho, *DBSCAN* ha sido más exigente, y ha clasificado como *ruido* otras empresas que no fueron localizadas, por el método tradicional, como *outliers*.

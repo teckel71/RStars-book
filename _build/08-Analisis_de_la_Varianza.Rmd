@@ -182,8 +182,6 @@ Una vez preparados los datos, vamos a presentar los grupos de naves y sus rendim
   
   library (knitr)
   library (kableExtra)
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
   knitr.table.format = "html" 
 
   tablamedias <-  muestra_so %>%
@@ -191,7 +189,6 @@ knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
                     summarise (observaciones = length(ASTILLERO),
                                media = mean(IRE))
 
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
   tablamedias %>%
     kbl(
       col.names = c("Astillero", "Observaciones", "IRE medio")) %>%
@@ -201,11 +198,6 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
                 font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:nrow(tablamedias), bold= F, align = "c")
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
- tablamedias %>%
-    kbl(
-      col.names = c("Astillero", "Observaciones", "IRE medio"))
-}
 ```
 
 ::: {style="text-align: center;"}
@@ -324,9 +316,6 @@ En el código anterior, se crea un pequeño *data frame* denominado "normalidad"
                             "NORMALIDAD",
                             "NO-NORMALIDAD"))
 
-    tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
     tablashapiro <- normalidad %>%
     kbl(
           col.names = c("Astillero", "p-valor", "Conclusión")) %>%
@@ -338,11 +327,6 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
     row_spec(1:nrow(normalidad), bold= F, align = "c")
 
     tablashapiro
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-tablashapiro <- normalidad %>%
-  kbl(
-      col.names = c("Astillero", "p-valor", "Conclusión"))
-}
 ```
 
 ::: {style="text-align: center;"}
@@ -402,9 +386,6 @@ summary_aov <- summary(Datos.aov)
   aov_table <- as.data.frame(summary_aov[[1]])
 
   # Convertir la tabla en una tabla de kable
-  tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
   aov_table %>%
     kbl(
           col.names = c("Grados Libertad",
@@ -418,15 +399,6 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
                   font_size = 11) %>%
     row_spec(0, bold= T, align = "c") %>%
     row_spec(1:nrow(aov_table), bold= F, align = "c")
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-    aov_table %>%
-    kbl(
-          col.names = c("Grados Libertad",
-                        "Suma cuadrados",
-                        "Media suma cuadrados",
-                        "Estadístico F",
-                        "p-valor"))
-}  
 ```
 
 ::: {style="text-align: center;"}
@@ -472,9 +444,6 @@ medias <- emmeans(Datos.aov, "ASTILLERO")
 pares <- pairs(medias)
 pares_df <- as.data.frame(pares)
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 pares_df %>%
   kbl(
         col.names = c("Grupos",
@@ -489,16 +458,6 @@ pares_df %>%
                 font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:nrow(pares_df), bold= F, align = "c")
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-  pares_df %>%
-  kbl(
-        col.names = c("Grupos",
-                      "Diferencia estimada",
-                      "Desviación Típica",
-                      "Grados de libertad",
-                      "Estadístico t",
-                      "p-valor"))
-}  
 ```
 
 ::: {style="text-align: center;"}
@@ -576,9 +535,6 @@ Construimos a continuación la tabla de medias por astillero:
                     summarise (observaciones = length(ASTILLERO),
                                media = mean(IIG))
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
   tablamedias2 %>%
     kbl(
       col.names = c("Astillero", "Observaciones", "IIG medio")) %>%
@@ -588,11 +544,6 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
                 font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:nrow(tablamedias2), bold= F, align = "c")
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-  tablamedias2 %>%
-    kbl(
-      col.names = c("Astillero", "Observaciones", "IIG medio"))
-}
 ```
 
 ::: {style="text-align: center;"}
@@ -688,9 +639,6 @@ Procedemos al contraste de normalidad mediante el gráfico QQ y la prueba de *Sh
                             "NORMALIDAD",
                             "NO-NORMALIDAD"))
 
-    tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
     tablashapiro2 <- normalidad2 %>%
     kbl(
           col.names = c("Astillero", "p-valor", "Conclusión")) %>%
@@ -702,11 +650,6 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
     row_spec(1:nrow(normalidad2), bold= F, align = "c")
 
     tablashapiro2
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-tablashapiro2 <- normalidad2 %>%
-  kbl(
-      col.names = c("Astillero", "p-valor", "Conclusión"))
-}
 ```
 
 ::: {style="text-align: center;"}
@@ -752,9 +695,6 @@ Datos.aov2 <- aov(muestra2_so$IIG ~ muestra2_so$ASTILLERO)
 summary_aov2 <- summary(Datos.aov2)
 aov_table2 <- as.data.frame(summary_aov2[[1]])
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
   aov_table2 %>%
     kbl(
           col.names = c("Grados Libertad",
@@ -768,15 +708,6 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
                   font_size = 11) %>%
     row_spec(0, bold= T, align = "c") %>%
     row_spec(1:nrow(aov_table2), bold= F, align = "c")
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-    aov_table2 %>%
-    kbl(
-          col.names = c("Grados Libertad",
-                        "Suma cuadrados",
-                        "Media suma cuadrados",
-                        "Estadístico F",
-                        "p-valor"))
-}  
 ```
 
 ::: {style="text-align: center;"}
@@ -835,9 +766,6 @@ De nuevo, si se rechaza la hipótesis nula, cabe preguntarse cuáles son los gru
 
   Datos.kmc.df <- as.data.frame(Datos.kmc$dif.com)
 
-  tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
   Datos.kmc.df %>%
     kbl(
           col.names = c("Diferencias medias",
@@ -851,13 +779,6 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
                   font_size = 11) %>%
     row_spec(0, bold = T, align = "c") %>%
     row_spec(1:nrow(Datos.kmc.df), bold = F, align = "c")
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-  Datos.kmc.df %>%
-    kbl(
-          col.names = c("Diferencias medias",
-                        "Diferencias críticas",
-                        "Significación"))
-}
 ```
 
 ::: {style="text-align: center;"}

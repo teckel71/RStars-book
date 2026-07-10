@@ -161,8 +161,6 @@ Una vez preparados los datos, vamos a presentar los grupos de naves y sus rendim
   
   library (knitr)
   library (kableExtra)
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
   knitr.table.format = "html" 
 
   tablamedias <-  muestra_so %>%
@@ -170,7 +168,6 @@ knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
                     summarise (observaciones = length(ASTILLERO),
                                media = mean(IRE))
 
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
   tablamedias %>%
     kbl(caption = "IRE. Medias por astillero.",
       col.names = c("Astillero", "Observaciones", "IRE medio")) %>%
@@ -180,11 +177,6 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
                 font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:nrow(tablamedias), bold= F, align = "c")
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
- tablamedias %>%
-    kbl(caption = "IRE. Medias por astillero.",
-      col.names = c("Astillero", "Observaciones", "IRE medio"))
-}
 ```
 
 Gráficamente, las tres submuestras de naves pueden caracterizarse, en cuanto al rendimiento energético (IRE), mediante dos tipos de gráficos: gráficos de densidad y gráficos de caja. Los gráficos serán construidos utilizando las facilidades del paquete `{ggplot2}`. Además, combinaremos los gráficos en una composición utilizando el paquete `{patchwork}`. El código es el siguiente:
@@ -288,9 +280,6 @@ En el código anterior, se crea un pequeño *data frame* denominado "normalidad"
                             "NORMALIDAD",
                             "NO-NORMALIDAD"))
 
-    tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
     tablashapiro <- normalidad %>%
     kbl(caption = "Normalidad (Shapiro-Wilks).",
           col.names = c("Astillero", "p-valor", "Conclusión")) %>%
@@ -302,11 +291,6 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
     row_spec(1:nrow(normalidad), bold= F, align = "c")
 
     tablashapiro
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-tablashapiro <- normalidad %>%
-  kbl(caption = "Normalidad (Shapiro-Wilks).",
-      col.names = c("Astillero", "p-valor", "Conclusión"))
-}
 ```
 
 En esta prueba, la hipótesis nula equivale al supuesto de normalidad. Para un 5% de significación estadística, un **p-valor superior a 0,05 implicará el no-rechazo de la hipótesis nula de normalidad**. En el ejemplo, los tres astilleros presentan p-valores claramente por encima de 0,05, por lo que **podemos aceptar la existencia de normalidad en las tres subpoblaciones**.
@@ -361,9 +345,6 @@ summary_aov <- summary(Datos.aov)
   aov_table <- as.data.frame(summary_aov[[1]])
 
   # Convertir la tabla en una tabla de kable
-  tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
   aov_table %>%
     kbl(caption = "Resultados del ANOVA",
           col.names = c("Grados Libertad",
@@ -377,15 +358,6 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
                   font_size = 11) %>%
     row_spec(0, bold= T, align = "c") %>%
     row_spec(1:nrow(aov_table), bold= F, align = "c")
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-    aov_table %>%
-    kbl(caption = "Resultados del ANOVA",
-          col.names = c("Grados Libertad",
-                        "Suma cuadrados",
-                        "Media suma cuadrados",
-                        "Estadístico F",
-                        "p-valor"))
-}  
 ```
 
 El valor del estadístico F de ANOVA es muy elevado, con un p-valor asociado prácticamente nulo. Como el p-valor es menor que 0,05, **se rechaza la hipótesis nula de medias iguales**; por lo que podremos afirmar (para una significación del 5%) que **el astillero fabricante influye, en media, en el rendimiento energético de las naves cargueras**.
@@ -426,9 +398,6 @@ medias <- emmeans(Datos.aov, "ASTILLERO")
 pares <- pairs(medias)
 pares_df <- as.data.frame(pares)
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 pares_df %>%
   kbl(caption = "Resultados comparaciones múltiples",
         col.names = c("Grupos",
@@ -443,16 +412,6 @@ pares_df %>%
                 font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:nrow(pares_df), bold= F, align = "c")
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-  pares_df %>%
-  kbl(caption = "Resultados comparaciones múltiples",
-        col.names = c("Grupos",
-                      "Diferencia estimada",
-                      "Desviación Típica",
-                      "Grados de libertad",
-                      "Estadístico t",
-                      "p-valor"))
-}  
 ```
 
 En la tabla generada, cada fila recoge la diferencia entre el IRE medio de las naves incluidas en las submuestras de los distintos astilleros. En la última columna, se muestran los *p-valores.* La hipótesis nula implica que la diferencia entre los IRE medios de los dos grupos implicados son tan pequeñas que pueden considerarse nulas. Por tanto, p-valores muy pequeños (menores que 0,05) implican un rechazo de esta hipótesis, y la admisión de que esas diferencias son significativamente distintas a 0, o sea, "importantes". En el ejemplo se observa que las tres comparaciones por pares arrojan p-valores muy pequeños, lo que indica que **las diferencias en el IRE medio entre los tres astilleros son todas estadísticamente significativas**. En particular, las naves construidas por *Selene Dynamics* presentan un rendimiento energético medio claramente superior al de las naves construidas por *Arcturus Shipyards*, y este, a su vez, es superior al de las naves construidas por *Korrigan Heavy Works*. La AITM puede, por tanto, afirmar con sólido respaldo estadístico que el astillero fabricante es un factor relevante a la hora de explicar las diferencias de rendimiento energético entre las naves del sector.
@@ -520,9 +479,6 @@ Construimos a continuación la tabla de medias por astillero:
                     summarise (observaciones = length(ASTILLERO),
                                media = mean(IIG))
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
   tablamedias2 %>%
     kbl(caption = "IIG. Medias por astillero.",
       col.names = c("Astillero", "Observaciones", "IIG medio")) %>%
@@ -532,11 +488,6 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
                 font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:nrow(tablamedias2), bold= F, align = "c")
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-  tablamedias2 %>%
-    kbl(caption = "IIG. Medias por astillero.",
-      col.names = c("Astillero", "Observaciones", "IIG medio"))
-}
 ```
 
 Y los gráficos de densidad y caja:
@@ -617,9 +568,6 @@ Procedemos al contraste de normalidad mediante el gráfico QQ y la prueba de *Sh
                             "NORMALIDAD",
                             "NO-NORMALIDAD"))
 
-    tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
     tablashapiro2 <- normalidad2 %>%
     kbl(caption = "Normalidad del IIG (Shapiro-Wilks).",
           col.names = c("Astillero", "p-valor", "Conclusión")) %>%
@@ -631,11 +579,6 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
     row_spec(1:nrow(normalidad2), bold= F, align = "c")
 
     tablashapiro2
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-tablashapiro2 <- normalidad2 %>%
-  kbl(caption = "Normalidad del IIG (Shapiro-Wilks).",
-      col.names = c("Astillero", "p-valor", "Conclusión"))
-}
 ```
 
 A diferencia del caso del IRE, ahora la prueba de *Shapiro-Wilk* rechaza la hipótesis de normalidad para el grupo de *Selene Dynamics* (su p-valor es prácticamente nulo). Esta no-normalidad **no se debe a la presencia de *outliers*** —ya los habíamos eliminado—, sino a una característica estructural de la subpoblación: las naves de Selene son, casi todas, sistemáticamente muy fiables, por lo que el IIG se acumula de manera asimétrica en torno a 0-1 averías. Ningún proceso de limpieza de la muestra podría corregir este hecho.
@@ -676,9 +619,6 @@ Datos.aov2 <- aov(muestra2_so$IIG ~ muestra2_so$ASTILLERO)
 summary_aov2 <- summary(Datos.aov2)
 aov_table2 <- as.data.frame(summary_aov2[[1]])
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
   aov_table2 %>%
     kbl(caption = "Resultados del ANOVA — IIG (solo ilustrativo)",
           col.names = c("Grados Libertad",
@@ -692,15 +632,6 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
                   font_size = 11) %>%
     row_spec(0, bold= T, align = "c") %>%
     row_spec(1:nrow(aov_table2), bold= F, align = "c")
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-    aov_table2 %>%
-    kbl(caption = "Resultados del ANOVA — IIG (solo ilustrativo)",
-          col.names = c("Grados Libertad",
-                        "Suma cuadrados",
-                        "Media suma cuadrados",
-                        "Estadístico F",
-                        "p-valor"))
-}  
 ```
 
 Como no se cumplen las hipótesis del ANOVA, **estos resultados no son fiables y no debemos basar nuestras conclusiones en ellos**. Es necesario recurrir a técnicas robustas, puesto que el comportamiento de la variable analizada en las subpoblaciones (grupos) no se ajusta al necesario para poder aplicar los contrastes anteriores.
@@ -754,9 +685,6 @@ De nuevo, si se rechaza la hipótesis nula, cabe preguntarse cuáles son los gru
 
   Datos.kmc.df <- as.data.frame(Datos.kmc$dif.com)
 
-  tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
   Datos.kmc.df %>%
     kbl(caption = "Kruskal-Wallis. Múltiples diferencias",
           col.names = c("Diferencias medias",
@@ -770,13 +698,6 @@ if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
                   font_size = 11) %>%
     row_spec(0, bold = T, align = "c") %>%
     row_spec(1:nrow(Datos.kmc.df), bold = F, align = "c")
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-  Datos.kmc.df %>%
-    kbl(caption = "Kruskal-Wallis. Múltiples diferencias",
-          col.names = c("Diferencias medias",
-                        "Diferencias críticas",
-                        "Significación"))
-}
 ```
 
 En la tabla generada se comprueba qué comparaciones por pares resultan estadísticamente significativas (para un 0,05 de significación). El *Informe Crestfall* concluye, así, que **las naves de *Selene Dynamics* son significativamente más fiables que las de los otros dos astilleros**, mientras que, entre *Korrigan Heavy Works* y *Arcturus Shipyards*, las diferencias de fiabilidad no resultan tan claras. Esta conclusión, obtenida mediante la técnica robusta apropiada al caso, sí puede ser incorporada con plenas garantías al informe que la AITM entregará a las empresas del sector.

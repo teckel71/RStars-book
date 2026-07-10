@@ -330,14 +330,8 @@ conteo_intervalos_df$Frecuencia_R_acum <- cumsum(conteo_intervalos_df$Frecuencia
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-```
-
-```{r, eval=TRUE, echo=FALSE, message=FALSE}
 
 # Mostrar el resultado
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 conteo_intervalos_df %>%
   kable(caption = "Distribución de frecuencias agrupadas en intervalos de Rentabilidad Económica",
         col.names = c("Intervalo rentabilidad", "Frecuencia absoluta n(i)",
@@ -350,15 +344,6 @@ conteo_intervalos_df %>%
                 position = "center", font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:(nrow(conteo_intervalos_df)), bold= F, align = "c")
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-conteo_intervalos_df %>%
-  kable(caption = "Distribución de frecuencias agrupadas en intervalos de Rentabilidad Económica",
-        col.names = c("Intervalo rentabilidad", "Frecuencia absoluta n(i)",
-                      "Frecuencia absoluta acum. N(i)", "Frecuencia relativa f(i)",
-                      "Frecuencia relativa acum. F(i)"),
-        digits    = c(NA, 0, 0, 2, 2),
-        format.args = list(decimal.mark = ".", scientific = FALSE))
-}
 ```
 
 En conjunto, la **rentabilidad económica** de estas empresas se concentra en valores **medios–altos**: la gran mayoría se mueve en torno al 50–60%, y dos de cada cuatro intervalos centrales (47,4–53,9 y 53,9–60,3) reúnen la mayor parte de los casos. En términos prácticos, alrededor de ocho de cada diez compañías quedan entre 41% y 66,8%, lo que sugiere un sector relativamente estable, con resultados parecidos entre sí. En los extremos hay pocas: apenas un 5% presenta rentabilidades muy bajas (por debajo del 34,5%) y sólo un 2% llega a niveles muy altos (por encima del 73,2%). Económicamente, esto indica que la competencia y la eficiencia operativa tienden a “empujar” a las empresas hacia un rendimiento **razonable y sostenido**, mientras que los casos de fracaso o de éxito excepcional son **minoría**.
@@ -474,11 +459,6 @@ estadisticos %>%
 ```
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE}
-# Determinar el formato de salida actual
-output_format <- knitr::opts_knit$get("rmarkdown.pandoc.to")
-
-# Formatear la tabla según el formato de salida
-if (output_format == "html") {
   estadisticos %>%
   kable(caption = "Principales Estadísticos de la Rentabilidad Económica",
         col.names = c("Media", "Mediana",
@@ -492,16 +472,6 @@ if (output_format == "html") {
                 position = "center", font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:(nrow(estadisticos)), bold= F, align = "c")
-} else if (output_format == "latex") {
-estadisticos %>%
-  kable(caption = "Principales Estadísticos de la Rentabilidad Económica",
-        col.names = c("Media", "Mediana",
-                      "Desviación Típica", "Valor mínimo",
-                      "Valor Máximo", "C. Asimetría Fisher",
-                      "C. Curtosis Fisher"),
-        digits    = c(2, 2, 2, 2, 2, 2, 2),
-        format.args = list(decimal.mark = ".", scientific = FALSE))
-}  
 ```
 
 La interpretación de estas medidas fueron comentadas en el capítulo 4. En general, puede decirse que:

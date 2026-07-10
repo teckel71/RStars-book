@@ -328,10 +328,6 @@ rm (temporal)
 # Crear la tabla con kable y personalizarla con kableExtra
 library (knitr)
 library (kableExtra)
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 summary_df %>%
   kable(
         col.names = c("Componente", 
@@ -346,16 +342,6 @@ summary_df %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:(nrow(summary_df)), bold= F, align = "c") %>%
   column_spec(1, bold = TRUE, extra_css = "text-align: center;")
-}else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-summary_df %>%
-  kable(
-        col.names = c("Componente", 
-                      "Desv. típica",
-                      "Proporción de varianza (comunalidad)",
-                      "Proporción de varianza (comunalidad) acumulada"),
-        digits = c(2, 2, 2),
-        format.args = list(decimal.mark = ".", scientific = FALSE)) 
-}  
 ```
 
 ::: {style="text-align: center;"}
@@ -384,10 +370,6 @@ cargas %>%
 # Cargas de cada componente.
 
 cargas <- componentes$rotation
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 cargas %>%
   kable(
         digits = c(3, 3, 3),
@@ -398,12 +380,6 @@ cargas %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:(nrow(cargas)), bold= F, align = "c") %>%
   column_spec(1, bold = TRUE, extra_css = "text-align: left;")
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-cargas %>%
-  kable(
-        digits = c(3, 3, 3),
-        format.args = list(decimal.mark = ".", scientific = FALSE))
-}
 ```
 
 ::: {style="text-align: center;"}
@@ -576,10 +552,6 @@ scores_top10 <- scores_df %>%
   arrange(desc(scores)) %>%
   slice(1:10)
   
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 scores_top10 %>%
   kable(
         col.names = c("Empresa",
@@ -602,18 +574,6 @@ scores_top10 %>%
            align = "c") %>%
   column_spec(1, bold = TRUE,
               extra_css = "text-align: left;")
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-scores_top10 %>%
-  kable(
-        col.names = c("Empresa",
-                      "Puntuación",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE))
-}
 ```
 
 ::: {style="text-align: center;"}
@@ -671,10 +631,6 @@ scores_all_top10 <- scores_all_df %>%
   arrange(desc(scores_all)) %>%
   slice(1:10)
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 scores_all_top10 %>%
   kable(
         col.names = c("Empresa",
@@ -697,18 +653,6 @@ scores_all_top10 %>%
            align = "c") %>%
   column_spec(1, bold = TRUE,
               extra_css = "text-align: left;")
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {  
-scores_all_top10 %>%
-  kable(
-        col.names = c("Empresa",
-                      "Puntuación",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE))
-}
 ```
 
 ::: {style="text-align: center;"}
@@ -740,10 +684,6 @@ scores2_top10 <- scores2_df %>%
   arrange(desc(scores2)) %>%
   slice(1:10)
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 scores2_top10 %>%
   kable(
         col.names = c("Empresa",
@@ -766,18 +706,6 @@ scores2_top10 %>%
            align = "c") %>%
   column_spec(1, bold = TRUE,
               extra_css = "text-align: left;")
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {  
-scores2_top10 %>%
-  kable(
-        col.names = c("Empresa",
-                      "Puntuación",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE))
-}  
 ```
 
 ::: {style="text-align: center;"}
@@ -883,10 +811,6 @@ scores3_top10 <- scores3_df %>%
   arrange(scores3_df) %>%      # orden ascendente porque las cargas de PC1 son negativas (mejor empresa => menor puntuación)
   slice(1:10)
 
-tipo_output <- c("html") # pdf, html, docx
-knitr::opts_knit$set(rmarkdown.pandoc.to = tipo_output)
-
-if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "html") {
 scores3_top10 %>%
   kable(
         col.names = c("Empresa",
@@ -909,18 +833,6 @@ scores3_top10 %>%
            align = "c") %>%
   column_spec(1, bold = TRUE,
               extra_css = "text-align: left;")
-} else if (knitr::opts_knit$get("rmarkdown.pandoc.to") == "docx") {
-  scores3_top10 %>%
-  kable(
-        col.names = c("Empresa",
-                      "Puntuación",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE))
-}  
 ```
 
 ::: {style="text-align: center;"}
