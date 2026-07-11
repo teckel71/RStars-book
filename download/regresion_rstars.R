@@ -9,12 +9,19 @@ library (dplyr)
 library (ggplot2)
 library (gtExtras)
 library (visdat)
-library (knitr)
-library (kableExtra)
 library (patchwork)
 library (broom)
 library (car) # para obtener el vif
 library (lmtest)
+
+# Paquete MATrstars: funciones auxiliares del libro R-Stars.
+# Contiene, entre otras, la función kable_rstars(), utilizada más adelante.
+# Si el paquete no está instalado, se instala desde GitHub (una sola vez).
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
+}
+library(MATrstars)
 
 ##### Definir la función de presentación de resultados:  presenta_modelo() #####
 
@@ -41,20 +48,12 @@ presenta_modelo <- function(modelo) {
                                  format = "f",
                                  digits = 5)
   
-  # Crear la tabla con kable
+  # Crear la tabla con kable_rstars
   tabla1 <- resultados %>%
-    kable(format = knitr.table.format,
-          caption = "Modelo Lineal",
-          col.names = c("Variable", "Coeficiente", "Desv. Típica",
-                        "Estadístico t", "p-valor", "Sig."),
-          digits = 3,
-          align = c("l", "c", "c", "c", "c", "c")) %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = "striped",
-                  "bordered",
-                  "condensed",
-                  position = "center",
-                  font_size = 11)
+    kable_rstars(caption   = "Modelo Lineal",
+                 col.names = c("Variable", "Coeficiente", "Desv. Típica",
+                               "Estadístico t", "p-valor", "Sig."),
+                 digits    = 3)
   
   modelo_piezas[[1]] <- tabla1
   
@@ -67,20 +66,12 @@ presenta_modelo <- function(modelo) {
                                   "p.value",
                                   "AIC",
                                   "nobs")]
-  # Crear la tabla con kable
+  # Crear la tabla con kable_rstars
   tabla2 <- estadisticos %>%
-    kable(format = knitr.table.format,
-          caption = "Estadísticos del modelo",
-          col.names = c("R2", "R2 ajustado", "Sigma", "Estadístico F",
-                        "p-valor", "AIC", "num. observaciones"),
-          digits = 3,
-          align = "c") %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = "striped",
-                  "bordered",
-                  "condensed",
-                  position = "center",
-                  font_size = 11)
+    kable_rstars(caption   = "Estadísticos del modelo",
+                 col.names = c("R2", "R2 ajustado", "Sigma", "Estadístico F",
+                               "p-valor", "AIC", "num. observaciones"),
+                 digits    = 3)
   
   modelo_piezas[[2]] <- tabla2  
   
@@ -92,19 +83,11 @@ presenta_modelo <- function(modelo) {
   vif_df <- vif_df %>%
     rownames_to_column(var = "Variable")
   
-  # Crear tabla con kable
+  # Crear tabla con kable_rstars
   tabla3 <- vif_df[,1:2] %>%
-    kable(format = knitr.table.format,
-          caption = "Factor de inflación de la varianza",
-          col.names = c("Variable","Valor VIF"),
-          digits = 3,
-          align = "c") %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = "striped",
-                  "bordered",
-                  "condensed",
-                  position = "center",
-                  font_size = 11)
+    kable_rstars(caption   = "Factor de inflación de la varianza",
+                 col.names = c("Variable","Valor VIF"),
+                 digits    = 3)
   
   modelo_piezas[[3]] <- tabla3
   
@@ -249,25 +232,16 @@ predict_from_excel_scenarios <- function(model,
   )
   
   if (return_kable) {
-    knitr.table.format <- "html"
-    tab <- kableExtra::kbl(
+    tab <- kable_rstars(
       out_df,
-      format = knitr.table.format,
       caption = paste0(
         kable_caption,
         " — Variable dependiente: ", y_name,
         " (", interval, " ", level*100, "%)",
         if (transforma_log) " — valores antilog."
       ),
-      digits = kable_digits,
-      align = "c"
-    ) |>
-      kableExtra::kable_styling(
-        full_width = FALSE,
-        bootstrap_options = c("striped","bordered","condensed"),
-        position = "center",
-        font_size = 11
-      )
+      digits = kable_digits
+    )
   } else {
     tab <- NULL
   }
@@ -381,8 +355,6 @@ seleccion_so$EFLO <- as.factor(seleccion_so$EFLO)
 
 # Diseña salida ordenador y presentar
     
-  knitr.table.format = "html"
-
   modelo_0 <- presenta_modelo(ecua0)
 
   modelo_0[[1]]
@@ -481,17 +453,9 @@ seleccion_so$EFLO <- as.factor(seleccion_so$EFLO)
   tablaCook <- series_ecuaDEF %>%
     filter ( cooksd > 4/nrow(series_ecuaDEF)) %>%
     select (.rownames, cooksd) %>%
-    kable(format = knitr.table.format,
-          caption = "Casos destacados distancia de Cook",
-          col.names = c("Caso","Distancia de Cook"),
-          digits = 3,
-          align = c("l","c")) %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = "striped",
-                                      "bordered",
-                                      "condensed",
-                  position = "center",
-                  font_size = 11)
+    kable_rstars(caption   = "Casos destacados distancia de Cook",
+                 col.names = c("Caso","Distancia de Cook"),
+                 digits    = 3)
 
     tablaCook
 
@@ -530,24 +494,16 @@ seleccion_so$EFLO <- as.factor(seleccion_so$EFLO)
 
     row.names(check_hipotesis) <- NULL
 
-  # Crear la tabla con kable
+  # Crear la tabla con kable_rstars
     
     tabla_check <- check_hipotesis %>%
-      kable(format = knitr.table.format,
-            caption = "Contrastes de hipótesis del MBR",
-            col.names = c("Tipo de prueba",
-                          "Prueba",
-                          "Estadístico",
-                          "P-valor",
-                          "Conclusión"),
-            digits = 3,
-            align = c("l", "c", "c", "c", "c")) %>%
-      kable_styling(full_width = F,
-                    bootstrap_options = "striped",
-                                        "bordered",
-                                        "condensed",
-                    position = "center",
-                    font_size = 11)
+      kable_rstars(caption   = "Contrastes de hipótesis del MBR",
+                   col.names = c("Tipo de prueba",
+                                 "Prueba",
+                                 "Estadístico",
+                                 "P-valor",
+                                 "Conclusión"),
+                   digits    = 3)
 
     tabla_check
 
