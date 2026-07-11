@@ -130,14 +130,18 @@ Las naves identificadas como *outliers* son "iron sovereign" (un viejo carguero 
                                    IRE >= Q1 - 1.5*IQR(IRE))
 ```
 
-Una vez preparados los datos, vamos a presentar los grupos de naves y sus rendimientos energéticos medios. Para ello, diseñaremos una tabla con la función `kable()` del paquete `{knitr}`, y personalizada con algunas funciones incluidas en el paquete `{kableExtra}`. Para construir la tabla, hemos de crear anteriormente un pequeño *data frame*, llamado por ejemplo "tablamedias", en el que cada caso o fila sea uno de los grupos en que queda dividida la muestra a partir de los niveles del factor "ASTILLERO", y que contenga tres variables: el ASTILLERO de cada grupo o submuestra, su número de casos contenidos (variable "observaciones"), y los respectivos IRE medios (variable "media"):
+Una vez preparados los datos, vamos a presentar los grupos de naves y sus rendimientos energéticos medios. Para ello, diseñaremos una tabla con la función `kable_rstars()` del paquete `{MATrstars}`, un envoltorio de las funciones `kable()` de `{knitr}` y `kable_styling()` de `{kableExtra}` que aplica automáticamente el estilo tipográfico habitual del libro (encabezado en negrita centrado, filas alternas rayadas, bordes discretos, cuerpo centrado). El paquete `{MATrstars}` reúne funciones auxiliares utilizadas a lo largo de los distintos capítulos; los detalles y la descripción completa de cada función se recogen en el **Apéndice: Funciones auxiliares del paquete `MATrstars`**. Para construir la tabla, hemos de crear anteriormente un pequeño *data frame*, llamado por ejemplo "tablamedias", en el que cada caso o fila sea uno de los grupos en que queda dividida la muestra a partir de los niveles del factor "ASTILLERO", y que contenga tres variables: el ASTILLERO de cada grupo o submuestra, su número de casos contenidos (variable "observaciones"), y los respectivos IRE medios (variable "media"):
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
   # Visualizando número de frecuencias y medias de los grupos con dplyr:
-  
-  library (knitr)
-  library (kableExtra)
-  knitr.table.format = "html" 
+
+  # Paquete MATrstars: funciones auxiliares del libro R-Stars.
+  # Si no está instalado, se instala desde GitHub (solo la primera vez).
+  if (!requireNamespace("MATrstars", quietly = TRUE)) {
+    if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+    remotes::install_github("teckel71/MATrstars")
+  }
+  library(MATrstars)
 
   tablamedias <-  muestra_so %>%
                     group_by(ASTILLERO) %>%
@@ -145,23 +149,20 @@ Una vez preparados los datos, vamos a presentar los grupos de naves y sus rendim
                                media = mean(IRE))
 
   tablamedias %>%
-    kable(format = knitr.table.format,
-      caption = "IRE. Medias por astillero.",
-      col.names = c("Astillero", "Observaciones", "IRE medio")) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped", "bordered", "condensed",
-                position = "center",
-                font_size = 11) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:nrow(tablamedias), bold= F, align = "c")
+    kable_rstars(caption   = "IRE. Medias por astillero.",
+                 col.names = c("Astillero", "Observaciones", "IRE medio"))
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
   # Visualizando número de frecuencias y medias de los grupos con dplyr:
-  
-  library (knitr)
-  library (kableExtra)
-  knitr.table.format = "html" 
+
+  # Paquete MATrstars: funciones auxiliares del libro R-Stars.
+  # Si no está instalado, se instala desde GitHub (solo la primera vez).
+  if (!requireNamespace("MATrstars", quietly = TRUE)) {
+    if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+    remotes::install_github("teckel71/MATrstars")
+  }
+  library(MATrstars)
 
   tablamedias <-  muestra_so %>%
                     group_by(ASTILLERO) %>%
@@ -169,14 +170,8 @@ Una vez preparados los datos, vamos a presentar los grupos de naves y sus rendim
                                media = mean(IRE))
 
   tablamedias %>%
-    kbl(caption = "IRE. Medias por astillero.",
-      col.names = c("Astillero", "Observaciones", "IRE medio")) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped", "bordered", "condensed",
-                position = "center",
-                font_size = 11) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:nrow(tablamedias), bold= F, align = "c")
+    kable_rstars(caption   = "IRE. Medias por astillero.",
+                 col.names = c("Astillero", "Observaciones", "IRE medio"))
 ```
 
 Gráficamente, las tres submuestras de naves pueden caracterizarse, en cuanto al rendimiento energético (IRE), mediante dos tipos de gráficos: gráficos de densidad y gráficos de caja. Los gráficos serán construidos utilizando las facilidades del paquete `{ggplot2}`. Además, combinaremos los gráficos en una composición utilizando el paquete `{patchwork}`. El código es el siguiente:
@@ -255,15 +250,8 @@ Los *gráficos QQ* muestran un buen ajuste de los puntos a la diagonal en los tr
                             "NO-NORMALIDAD"))
 
     tablashapiro <- normalidad %>%
-    kable(format = knitr.table.format,
-          caption = "Normalidad (Shapiro-Wilks)",
-          col.names = c("Astillero", "p-valor", "Conclusión")) %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = "striped", "bordered", "condensed",
-                  position = "center",
-                  font_size = 11) %>%
-    row_spec(0, bold= T, align = "c") %>%
-    row_spec(1:nrow(normalidad), bold= F, align = "c")
+    kable_rstars(caption   = "Normalidad (Shapiro-Wilks)",
+                 col.names = c("Astillero", "p-valor", "Conclusión"))
 
     tablashapiro
 
@@ -281,14 +269,8 @@ En el código anterior, se crea un pequeño *data frame* denominado "normalidad"
                             "NO-NORMALIDAD"))
 
     tablashapiro <- normalidad %>%
-    kbl(caption = "Normalidad (Shapiro-Wilks).",
-          col.names = c("Astillero", "p-valor", "Conclusión")) %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = "striped", "bordered", "condensed",
-                  position = "center",
-                  font_size = 11) %>%
-    row_spec(0, bold= T, align = "c") %>%
-    row_spec(1:nrow(normalidad), bold= F, align = "c")
+    kable_rstars(caption   = "Normalidad (Shapiro-Wilks).",
+                 col.names = c("Astillero", "p-valor", "Conclusión"))
 
     tablashapiro
 ```
@@ -307,7 +289,7 @@ El p-valor es claramente superior a 0,05; luego **no se rechaza la hipótesis nu
 
 Puesto que se cumplen tanto la hipótesis de normalidad en las tres subpoblaciones como la de homogeneidad de las varianzas, **los resultados del contraste *F de ANOVA* serán plenamente válidos**.
 
-El contraste *F de ANOVA* de igualdad en las medias de la variable en estudio (IRE) de las distintas (sub)poblaciones (grupos de naves según el astillero fabricante) se realiza en R mediante la función `aov()`, que guardaremos, por ejemplo, como el objeto "Datos.aov", y que se almacenará en forma resumida en la lista "summary_aov", de un solo elemento. Este elemento, que contiene la solución resumida del contraste ANOVA, se convierte en un *data frame* (de nombre "aov_table") con el objetivo de presentarlo como una tabla de `kable()`:
+El contraste *F de ANOVA* de igualdad en las medias de la variable en estudio (IRE) de las distintas (sub)poblaciones (grupos de naves según el astillero fabricante) se realiza en R mediante la función `aov()`, que guardaremos, por ejemplo, como el objeto "Datos.aov", y que se almacenará en forma resumida en la lista "summary_aov", de un solo elemento. Este elemento, que contiene la solución resumida del contraste ANOVA, se convierte en un *data frame* (de nombre "aov_table") con el objetivo de presentarlo como una tabla con `kable_rstars()`:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
 # Test F de ANOVA
@@ -320,19 +302,12 @@ summary_aov <- summary(Datos.aov)
 
   # Convertir la tabla en una tabla de kable
   aov_table %>%
-    kable(format = knitr.table.format,
-          caption = "Resultados del ANOVA",
-          col.names = c("Grados Libertad",
-                        "Suma cuadrados",
-                        "Media suma cuadrados",
-                        "Estadístico F",
-                        "p-valor")) %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = "striped", "bordered", "condensed",
-                  position = "center",
-                  font_size = 11) %>%
-    row_spec(0, bold= T, align = "c") %>%
-    row_spec(1:nrow(aov_table), bold= F, align = "c")
+    kable_rstars(caption   = "Resultados del ANOVA",
+                 col.names = c("Grados Libertad",
+                               "Suma cuadrados",
+                               "Media suma cuadrados",
+                               "Estadístico F",
+                               "p-valor"))
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
@@ -346,25 +321,19 @@ summary_aov <- summary(Datos.aov)
 
   # Convertir la tabla en una tabla de kable
   aov_table %>%
-    kbl(caption = "Resultados del ANOVA",
-          col.names = c("Grados Libertad",
-                        "Suma cuadrados",
-                        "Media suma cuadrados",
-                        "Estadístico F",
-                        "p-valor")) %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = "striped", "bordered", "condensed",
-                  position = "center",
-                  font_size = 11) %>%
-    row_spec(0, bold= T, align = "c") %>%
-    row_spec(1:nrow(aov_table), bold= F, align = "c")
+    kable_rstars(caption   = "Resultados del ANOVA",
+                 col.names = c("Grados Libertad",
+                               "Suma cuadrados",
+                               "Media suma cuadrados",
+                               "Estadístico F",
+                               "p-valor"))
 ```
 
 El valor del estadístico F de ANOVA es muy elevado, con un p-valor asociado prácticamente nulo. Como el p-valor es menor que 0,05, **se rechaza la hipótesis nula de medias iguales**; por lo que podremos afirmar (para una significación del 5%) que **el astillero fabricante influye, en media, en el rendimiento energético de las naves cargueras**.
 
 ## Comparaciones múltiples.
 
-Cuando el resultado del contraste *F de ANOVA* es de rechazo de la hipótesis nula, se presenta otra cuestión interesante. La hipótesis alternativa dice que existe al menos una diferencia entre las medias de dos grupos que es "importante". Pero no tienen porque ser todas. Entonces, cabe preguntarse que diferencias concretas entre medias son estadísticamente significativas, y cuáles no. Para dilucidar esta cuestión se han desarrollado diversas pruebas de **comparaciones múltiples**. Una de ellas es la prueba *HSD de Tuckey*. Un modo de obtener los resultados de esta prueba es ejecutarla a partir de las funciones del paquete `{emmeans}`. En concreto, los resultados de la prueba *HSD de* *Tuckey* se obtendrán aplicando la función `pairs()` a un objeto creado previamente con la función `emmeans()`, al que hemos llamado, por ejemplo, "medias", y que tiene como argumentos el nombre de nuestra solución del contraste ANOVA anterior y, entrecomillado, el nombre de la variable que actúa como factor que divide a la muestra en los tres grupos (submuestras) comparados (ASTILLERO). Los resultados se han guardado en el objeto "pares", que posteriormente se ha transformado en un *data frame* para poder ser presentado como una tabla de `kable()`:
+Cuando el resultado del contraste *F de ANOVA* es de rechazo de la hipótesis nula, se presenta otra cuestión interesante. La hipótesis alternativa dice que existe al menos una diferencia entre las medias de dos grupos que es "importante". Pero no tienen porque ser todas. Entonces, cabe preguntarse que diferencias concretas entre medias son estadísticamente significativas, y cuáles no. Para dilucidar esta cuestión se han desarrollado diversas pruebas de **comparaciones múltiples**. Una de ellas es la prueba *HSD de Tuckey*. Un modo de obtener los resultados de esta prueba es ejecutarla a partir de las funciones del paquete `{emmeans}`. En concreto, los resultados de la prueba *HSD de* *Tuckey* se obtendrán aplicando la función `pairs()` a un objeto creado previamente con la función `emmeans()`, al que hemos llamado, por ejemplo, "medias", y que tiene como argumentos el nombre de nuestra solución del contraste ANOVA anterior y, entrecomillado, el nombre de la variable que actúa como factor que divide a la muestra en los tres grupos (submuestras) comparados (ASTILLERO). Los resultados se han guardado en el objeto "pares", que posteriormente se ha transformado en un *data frame* para poder ser presentado como una tabla con `kable_rstars()`:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
 # COMPARACIONES MÚLTIPLES
@@ -374,20 +343,13 @@ medias <- emmeans(Datos.aov, "ASTILLERO")
 pares <- pairs(medias)
 pares_df <- as.data.frame(pares)
 pares_df %>%
-  kable(format = knitr.table.format,
-        caption = "Resultados comparaciones múltiples",
-        col.names = c("Grupos",
-                      "Diferencia estimada",
-                      "Desviación Típica",
-                      "Grados de libertad",
-                      "Estadístico t",
-                      "p-valor")) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped", "bordered", "condensed",
-                position = "center",
-                font_size = 11) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:nrow(pares_df), bold= F, align = "c")
+  kable_rstars(caption   = "Resultados comparaciones múltiples",
+               col.names = c("Grupos",
+                             "Diferencia estimada",
+                             "Desviación Típica",
+                             "Grados de libertad",
+                             "Estadístico t",
+                             "p-valor"))
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
@@ -399,19 +361,13 @@ pares <- pairs(medias)
 pares_df <- as.data.frame(pares)
 
 pares_df %>%
-  kbl(caption = "Resultados comparaciones múltiples",
-        col.names = c("Grupos",
-                      "Diferencia estimada",
-                      "Desviación Típica",
-                      "Grados de libertad",
-                      "Estadístico t",
-                      "p-valor")) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped", "bordered", "condensed",
-                position = "center",
-                font_size = 11) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:nrow(pares_df), bold= F, align = "c")
+  kable_rstars(caption   = "Resultados comparaciones múltiples",
+               col.names = c("Grupos",
+                             "Diferencia estimada",
+                             "Desviación Típica",
+                             "Grados de libertad",
+                             "Estadístico t",
+                             "p-valor"))
 ```
 
 En la tabla generada, cada fila recoge la diferencia entre el IRE medio de las naves incluidas en las submuestras de los distintos astilleros. En la última columna, se muestran los *p-valores.* La hipótesis nula implica que la diferencia entre los IRE medios de los dos grupos implicados son tan pequeñas que pueden considerarse nulas. Por tanto, p-valores muy pequeños (menores que 0,05) implican un rechazo de esta hipótesis, y la admisión de que esas diferencias son significativamente distintas a 0, o sea, "importantes". En el ejemplo se observa que las tres comparaciones por pares arrojan p-valores muy pequeños, lo que indica que **las diferencias en el IRE medio entre los tres astilleros son todas estadísticamente significativas**. En particular, las naves construidas por *Selene Dynamics* presentan un rendimiento energético medio claramente superior al de las naves construidas por *Arcturus Shipyards*, y este, a su vez, es superior al de las naves construidas por *Korrigan Heavy Works*. La AITM puede, por tanto, afirmar con sólido respaldo estadístico que el astillero fabricante es un factor relevante a la hora de explicar las diferencias de rendimiento energético entre las naves del sector.
@@ -462,15 +418,8 @@ Construimos a continuación la tabla de medias por astillero:
                                media = mean(IIG))
 
   tablamedias2 %>%
-    kable(format = knitr.table.format,
-      caption = "IIG. Medias por astillero.",
-      col.names = c("Astillero", "Observaciones", "IIG medio")) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped", "bordered", "condensed",
-                position = "center",
-                font_size = 11) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:nrow(tablamedias2), bold= F, align = "c")
+    kable_rstars(caption   = "IIG. Medias por astillero.",
+                 col.names = c("Astillero", "Observaciones", "IIG medio"))
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
@@ -480,14 +429,8 @@ Construimos a continuación la tabla de medias por astillero:
                                media = mean(IIG))
 
   tablamedias2 %>%
-    kbl(caption = "IIG. Medias por astillero.",
-      col.names = c("Astillero", "Observaciones", "IIG medio")) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped", "bordered", "condensed",
-                position = "center",
-                font_size = 11) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:nrow(tablamedias2), bold= F, align = "c")
+    kable_rstars(caption   = "IIG. Medias por astillero.",
+                 col.names = c("Astillero", "Observaciones", "IIG medio"))
 ```
 
 Y los gráficos de densidad y caja:
@@ -547,15 +490,8 @@ Procedemos al contraste de normalidad mediante el gráfico QQ y la prueba de *Sh
                             "NO-NORMALIDAD"))
 
     tablashapiro2 <- normalidad2 %>%
-    kable(format = knitr.table.format,
-          caption = "Normalidad del IIG (Shapiro-Wilks)",
-          col.names = c("Astillero", "p-valor", "Conclusión")) %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = "striped", "bordered", "condensed",
-                  position = "center",
-                  font_size = 11) %>%
-    row_spec(0, bold= T, align = "c") %>%
-    row_spec(1:nrow(normalidad2), bold= F, align = "c")
+    kable_rstars(caption   = "Normalidad del IIG (Shapiro-Wilks)",
+                 col.names = c("Astillero", "p-valor", "Conclusión"))
 
     tablashapiro2
 ```
@@ -569,14 +505,8 @@ Procedemos al contraste de normalidad mediante el gráfico QQ y la prueba de *Sh
                             "NO-NORMALIDAD"))
 
     tablashapiro2 <- normalidad2 %>%
-    kbl(caption = "Normalidad del IIG (Shapiro-Wilks).",
-          col.names = c("Astillero", "p-valor", "Conclusión")) %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = "striped", "bordered", "condensed",
-                  position = "center",
-                  font_size = 11) %>%
-    row_spec(0, bold= T, align = "c") %>%
-    row_spec(1:nrow(normalidad2), bold= F, align = "c")
+    kable_rstars(caption   = "Normalidad del IIG (Shapiro-Wilks).",
+                 col.names = c("Astillero", "p-valor", "Conclusión"))
 
     tablashapiro2
 ```
@@ -599,19 +529,12 @@ summary_aov2 <- summary(Datos.aov2)
 aov_table2 <- as.data.frame(summary_aov2[[1]])
 
 aov_table2 %>%
-    kable(format = knitr.table.format,
-          caption = "Resultados del ANOVA — IIG (solo ilustrativo)",
-          col.names = c("Grados Libertad",
-                        "Suma cuadrados",
-                        "Media suma cuadrados",
-                        "Estadístico F",
-                        "p-valor")) %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = "striped", "bordered", "condensed",
-                  position = "center",
-                  font_size = 11) %>%
-    row_spec(0, bold= T, align = "c") %>%
-    row_spec(1:nrow(aov_table2), bold= F, align = "c")
+    kable_rstars(caption   = "Resultados del ANOVA — IIG (solo ilustrativo)",
+                 col.names = c("Grados Libertad",
+                               "Suma cuadrados",
+                               "Media suma cuadrados",
+                               "Estadístico F",
+                               "p-valor"))
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
@@ -620,18 +543,12 @@ summary_aov2 <- summary(Datos.aov2)
 aov_table2 <- as.data.frame(summary_aov2[[1]])
 
   aov_table2 %>%
-    kbl(caption = "Resultados del ANOVA — IIG (solo ilustrativo)",
-          col.names = c("Grados Libertad",
-                        "Suma cuadrados",
-                        "Media suma cuadrados",
-                        "Estadístico F",
-                        "p-valor")) %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = "striped", "bordered", "condensed",
-                  position = "center",
-                  font_size = 11) %>%
-    row_spec(0, bold= T, align = "c") %>%
-    row_spec(1:nrow(aov_table2), bold= F, align = "c")
+    kable_rstars(caption   = "Resultados del ANOVA — IIG (solo ilustrativo)",
+                 col.names = c("Grados Libertad",
+                               "Suma cuadrados",
+                               "Media suma cuadrados",
+                               "Estadístico F",
+                               "p-valor"))
 ```
 
 Como no se cumplen las hipótesis del ANOVA, **estos resultados no son fiables y no debemos basar nuestras conclusiones en ellos**. Es necesario recurrir a técnicas robustas, puesto que el comportamiento de la variable analizada en las subpoblaciones (grupos) no se ajusta al necesario para poder aplicar los contrastes anteriores.
@@ -649,7 +566,7 @@ Datos.K
 
 Puede comprobarse cómo el *p-valor* es muy pequeño (menor a 0,05), por lo que hemos de rechazar la hipótesis nula de medias iguales y admitir que **existen al menos dos grupos (subpoblaciones) en los que la diferencia entre el IIG medio es significativa**.
 
-De nuevo, si se rechaza la hipótesis nula, cabe preguntarse cuáles son los grupos o subpoblaciones concretas cuyas medias del IIG son significativamente diferentes. *Kruskal* y *Wallis* desarrollaron también la versión robusta de la prueba *HSD de Tuckey*, que se incluye en `{pgirmess}`, con la función `kruskalmc()`. En el siguiente código se aplica la función, cuya solución se guarda en el objeto "Datos.kmc". El elemento de la solución "dif.com", que contiene las comparaciones entre las medias, se pasa a un *data frame* para poder ser mostrado como una tabla de `kable()`:
+De nuevo, si se rechaza la hipótesis nula, cabe preguntarse cuáles son los grupos o subpoblaciones concretas cuyas medias del IIG son significativamente diferentes. *Kruskal* y *Wallis* desarrollaron también la versión robusta de la prueba *HSD de Tuckey*, que se incluye en `{pgirmess}`, con la función `kruskalmc()`. En el siguiente código se aplica la función, cuya solución se guarda en el objeto "Datos.kmc". El elemento de la solución "dif.com", que contiene las comparaciones entre las medias, se pasa a un *data frame* para poder ser mostrado como una tabla con `kable_rstars()`:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
   # Comparaciones múltiples
@@ -661,19 +578,10 @@ De nuevo, si se rechaza la hipótesis nula, cabe preguntarse cuáles son los gru
   Datos.kmc.df <- as.data.frame(Datos.kmc$dif.com)
 
   Datos.kmc.df %>%
-    kable(format = knitr.table.format,
-          caption = "Kruskal-Wallis. Múltiples diferencias",
-          col.names = c("Diferencias medias",
-                        "Diferencias críticas",
-                        "Significación")) %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = c("striped",
-                                        "bordered",
-                                        "condensed"),
-                  position = "center",
-                  font_size = 11) %>%
-    row_spec(0, bold = T, align = "c") %>%
-    row_spec(1:nrow(Datos.kmc.df), bold = F, align = "c")
+    kable_rstars(caption   = "Kruskal-Wallis. Múltiples diferencias",
+                 col.names = c("Diferencias medias",
+                               "Diferencias críticas",
+                               "Significación"))
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
@@ -686,18 +594,10 @@ De nuevo, si se rechaza la hipótesis nula, cabe preguntarse cuáles son los gru
   Datos.kmc.df <- as.data.frame(Datos.kmc$dif.com)
 
   Datos.kmc.df %>%
-    kbl(caption = "Kruskal-Wallis. Múltiples diferencias",
-          col.names = c("Diferencias medias",
-                        "Diferencias críticas",
-                        "Significación")) %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = c("striped",
-                                        "bordered",
-                                        "condensed"),
-                  position = "center",
-                  font_size = 11) %>%
-    row_spec(0, bold = T, align = "c") %>%
-    row_spec(1:nrow(Datos.kmc.df), bold = F, align = "c")
+    kable_rstars(caption   = "Kruskal-Wallis. Múltiples diferencias",
+                 col.names = c("Diferencias medias",
+                               "Diferencias críticas",
+                               "Significación"))
 ```
 
 En la tabla generada se comprueba qué comparaciones por pares resultan estadísticamente significativas (para un 0,05 de significación). El *Informe Crestfall* concluye, así, que **las naves de *Selene Dynamics* son significativamente más fiables que las de los otros dos astilleros**, mientras que, entre *Korrigan Heavy Works* y *Arcturus Shipyards*, las diferencias de fiabilidad no resultan tan claras. Esta conclusión, obtenida mediante la técnica robusta apropiada al caso, sí puede ser incorporada con plenas garantías al informe que la AITM entregará a las empresas del sector.

@@ -1,4 +1,4 @@
-# Apéndice: Funciones auxiliares del paquete `MATrstars`. {.unnumbered}
+# Apéndice: Funciones auxiliares del paquete `MATrstars`. {-}
 
 A lo largo del libro se utilizan de forma recurrente pequeñas **funciones auxiliares** que ayudan a organizar el código de los *scripts*: generación de composiciones de gráficos, tratamiento de tablas, presentación de resultados, etc. Con el fin de mantener los *scripts* de las prácticas centrados en el análisis estadístico y evitar el bloque repetitivo de "fontanería" al inicio de cada uno, todas esas funciones se han agrupado en un paquete propio del libro llamado `MATrstars`.
 
@@ -13,33 +13,33 @@ En los *scripts* del libro se ha incluido un bloque estándar que **comprueba si
 
 El repositorio con el código fuente completo del paquete se encuentra en:
 
--   <https://github.com/teckel71/MATrstars>
+- [https://github.com/teckel71/MATrstars](https://github.com/teckel71/MATrstars)
 
 En las secciones siguientes se describe cada una de las funciones que integran el paquete: qué hacen, cómo se invocan, qué argumentos aceptan, qué devuelven y cómo utilizarlas.
 
-## `create_patchwork()`. {.unnumbered}
+## `create_patchwork()`. {-}
 
-### Propósito. {.unnumbered}
+### Propósito. {-}
 
 Toma una lista de gráficos `ggplot` y los agrupa en **composiciones de 2 filas por 2 columnas** (cuatro gráficos por composición), utilizando los operadores de composición del paquete `{patchwork}`. Cuando el número total de gráficos no es múltiplo de cuatro, la última composición se completa con paneles vacíos (utilizando `theme_void()`) para mantener la retícula uniforme.
 
 Esta función resulta especialmente útil cuando se genera una batería de gráficos de forma programática (por ejemplo, mediante un bucle sobre un conjunto de variables) y se desean presentar de manera compacta y ordenada. Aparece en los capítulos de análisis clúster (tanto jerárquico como no-jerárquico), en el capítulo de regresión lineal múltiple y, en general, cuando conviene resumir una batería de gráficos comparativos.
 
-### Sintaxis. {.unnumbered}
+### Sintaxis. {-}
 
 ```{r, eval=FALSE, echo=TRUE}
 create_patchwork(plot_list)
 ```
 
-### Argumentos. {.unnumbered}
+### Argumentos. {-}
 
--   **`plot_list`**: lista de objetos `ggplot`. Si la lista está vacía, la función devuelve `NULL`.
+- **`plot_list`**: lista de objetos `ggplot`. Si la lista está vacía, la función devuelve `NULL`.
 
-### Valor devuelto. {.unnumbered}
+### Valor devuelto. {-}
 
 Una **lista de composiciones** `patchwork`. Cada elemento de la lista contiene, como máximo, cuatro gráficos dispuestos en una retícula 2x2. Para presentar las composiciones basta con recorrer la lista con un bucle `for` e imprimir cada elemento con `print()`, tal y como se muestra en el ejemplo siguiente.
 
-### Ejemplo. {.unnumbered}
+### Ejemplo. {-}
 
 ```{r, eval=FALSE, echo=TRUE}
 library(ggplot2)
@@ -64,8 +64,74 @@ length(composiciones)
 for (comp in composiciones) print(comp)
 ```
 
-### Código fuente. {.unnumbered}
+### Código fuente. {-}
 
 El archivo con el código completo de la función, incluyendo la documentación en formato `{roxygen2}`, puede consultarse y descargarse desde el repositorio del paquete en GitHub:
 
--   [`R/create_patchwork.R`](https://github.com/teckel71/MATrstars/blob/main/R/create_patchwork.R)
+- [`R/create_patchwork.R`](https://github.com/teckel71/MATrstars/blob/main/R/create_patchwork.R)
+
+## `kable_rstars()`. {-}
+
+### Propósito. {-}
+
+Genera una tabla HTML con el estilo tipográfico utilizado sistemáticamente en el libro *R-Stars*: encabezado en negrita centrado, cuerpo con líneas alternas para facilitar la lectura, bordes discretos, ancho ajustado al contenido y celdas centradas. Internamente es un envoltorio de `knitr::kable()`, seguido de `kableExtra::kable_styling()` y `kableExtra::row_spec()`, con los ajustes habituales del libro configurados como valores por defecto. De este modo, cada tabla en los *scripts* se reduce de un bloque de 12-18 líneas a una llamada compacta de 4-6 líneas.
+
+Los valores por defecto (fuente de 11 puntos, punto como separador decimal, encabezado en negrita, cuerpo centrado, sin notación científica, opciones bootstrap `striped + bordered + condensed`) resuelven la práctica totalidad de las tablas del libro. Cuando alguna tabla concreta requiere un ajuste, basta con sobrescribir el argumento correspondiente.
+
+### Sintaxis. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+kable_rstars(x,
+             caption   = NULL,
+             col.names = NULL,
+             digits    = getOption("digits"),
+             font_size = 11,
+             full_width = FALSE,
+             bootstrap_options = c("striped", "bordered", "condensed"),
+             align  = "c",
+             align_header = "c",
+             bold_header  = TRUE,
+             bold_body    = FALSE,
+             format.args  = list(decimal.mark = ".", scientific = FALSE),
+             ...)
+```
+
+### Argumentos. {-}
+
+- **`x`**: *data frame* o matriz con los datos a mostrar.
+- **`caption`**: título de la tabla. Por defecto `NULL` (sin título).
+- **`col.names`**: vector de caracteres con los nombres de columna a mostrar. Por defecto `NULL` (se usan los nombres del *data frame*).
+- **`digits`**: número de dígitos decimales. Puede ser un escalar (aplicado a todas las columnas numéricas) o un vector con un valor por columna (usar `NA` para columnas no numéricas).
+- **`font_size`**: tamaño de fuente en puntos. Por defecto `11`.
+- **`full_width`**: si `TRUE`, la tabla ocupa todo el ancho disponible. Por defecto `FALSE`.
+- **`bootstrap_options`**: vector de caracteres con opciones de estilo Bootstrap para `kable_styling()`. Por defecto `c("striped", "bordered", "condensed")`.
+- **`align`**: alineación de las celdas del cuerpo (`"l"`, `"c"` o `"r"`). Por defecto `"c"` (centrado).
+- **`align_header`**: alineación de las celdas del encabezado. Por defecto `"c"`.
+- **`bold_header`**: si `TRUE` (por defecto), el encabezado va en negrita.
+- **`bold_body`**: si `TRUE`, el cuerpo va en negrita. Por defecto `FALSE`.
+- **`format.args`**: lista con argumentos de formato numérico pasada a `knitr::kable()`. Por defecto, punto como separador decimal y notación científica desactivada.
+- **`...`**: argumentos adicionales pasados a `knitr::kable()`.
+
+### Valor devuelto. {-}
+
+Un objeto de clase `knitr_kable` con el estilo del libro aplicado, listo para su inclusión en un documento R Markdown con salida HTML.
+
+### Ejemplo. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+library(dplyr)
+library(MATrstars)
+
+# Tabla con los 5 primeros coches del dataset mtcars,
+# con caption, nombres de columna personalizados y 2 decimales.
+mtcars %>%
+  head(5) %>%
+  kable_rstars(caption   = "Primeros 5 coches del dataset mtcars",
+               col.names = c("mpg", "cil", "cc", "hp", "gr", "peso",
+                             "1/4 mi", "vs", "am", "marchas", "carbs"),
+               digits    = 2)
+```
+
+### Código fuente. {-}
+
+- [`R/kable_rstars.R`](https://github.com/teckel71/MATrstars/blob/main/R/kable_rstars.R)

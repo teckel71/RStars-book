@@ -10,8 +10,9 @@
 #     centrado debajo, donde X = nº de capítulo, Y = orden en el cap.
 #   - Las FIGURAS con "**Figura X.Y.** <descripción opcional>" igual.
 #   - Soporta:
-#       * Llamadas estáticas a kable / kbl / gt / gt_plt_summary /
-#         flextable / datatable (con o sin condicional html/docx/pdf).
+#       * Llamadas estáticas a kable / kbl / kable_rstars / gt /
+#         gt_plt_summary / flextable / datatable (con o sin condicional
+#         html/docx/pdf).
 #       * Imágenes markdown ![alt](ruta) (excluyendo iconos .hicon).
 #       * Llamadas a ggplot / vis_miss / ggpairs / grid.arrange /
 #         patchwork::wrap_plots / fviz_* / plot / barplot / hist.
@@ -108,6 +109,7 @@ procesar_rmd <- function(ruta_entrada,
   re_func_tabla <- paste(
     "\\bkable\\s*\\(",
     "\\bkbl\\s*\\(",
+    "\\bkable_rstars\\s*\\(",
     "\\bgt_plt_summary\\s*\\(",
     "\\bflextable\\s*\\(",
     "\\bdatatable\\s*\\(",
@@ -634,7 +636,7 @@ procesar_rmd <- function(ruta_entrada,
   #      kable/kbl del chunk para evitar la doble autonumeración bookdown
   # -------------------------------------------------------------------
   quitar_todos_captions <- function(buffer) {
-    re_kable_open <- "\\b(?:kable|kbl)\\s*\\("
+    re_kable_open <- "\\b(?:kable|kbl|kable_rstars)\\s*\\("
 
     # Ya no saltamos definiciones de función: queremos limpiar también
     # los captions de los kables que viven dentro del cuerpo de funciones

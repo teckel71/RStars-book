@@ -100,13 +100,13 @@
 </h1>
 <p>A lo largo del libro se utilizan de forma recurrente pequeñas <strong>funciones auxiliares</strong> que ayudan a organizar el código de los <em>scripts</em>: generación de composiciones de gráficos, tratamiento de tablas, presentación de resultados, etc. Con el fin de mantener los <em>scripts</em> de las prácticas centrados en el análisis estadístico y evitar el bloque repetitivo de “fontanería” al inicio de cada uno, todas esas funciones se han agrupado en un paquete propio del libro llamado <code>MATrstars</code>.</p>
 <p><code>MATrstars</code> no está disponible en CRAN. Se distribuye a través de un repositorio público de GitHub, desde el que se instala con una sola línea:</p>
-<div class="sourceCode" id="cb438"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb437"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")           # solo si no está instalado</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"teckel71/MATrstars"</span><span class="op">)</span></span></code></pre></div>
 <p>En los <em>scripts</em> del libro se ha incluido un bloque estándar que <strong>comprueba si el paquete ya está instalado</strong>; si no lo está, lo instala automáticamente desde GitHub, y en cualquier caso lo activa con <code><a href="https://github.com/teckel71/MATrstars">library(MATrstars)</a></code>. Por tanto, los alumnos no necesitan preocuparse por la instalación: la primera ejecución del <em>script</em> la resuelve.</p>
 <p>El repositorio con el código fuente completo del paquete se encuentra en:</p>
 <ul>
-<li><a href="https://github.com/teckel71/MATrstars" class="uri">https://github.com/teckel71/MATrstars</a></li>
+<li><a href="https://github.com/teckel71/MATrstars">https://github.com/teckel71/MATrstars</a></li>
 </ul>
 <p>En las secciones siguientes se describe cada una de las funciones que integran el paquete: qué hacen, cómo se invocan, qué argumentos aceptan, qué devuelven y cómo utilizarlas.</p>
 <div id="create_patchwork." class="section level2 unnumbered">
@@ -122,7 +122,7 @@
 <div id="sintaxis." class="section level3 unnumbered">
 <h3>Sintaxis.<a class="anchor" aria-label="anchor" href="#sintaxis."><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb439"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb438"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/create_patchwork.html">create_patchwork</a></span><span class="op">(</span><span class="va">plot_list</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="argumentos." class="section level3 unnumbered">
@@ -141,7 +141,7 @@
 <div id="ejemplo." class="section level3 unnumbered">
 <h3>Ejemplo.<a class="anchor" aria-label="anchor" href="#ejemplo."><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb440"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb439"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/teckel71/MATrstars">MATrstars</a></span><span class="op">)</span></span>
 <span></span>
@@ -172,6 +172,95 @@
 </ul>
 </div>
 </div>
+<div id="kable_rstars." class="section level2 unnumbered">
+<h2>
+<code>kable_rstars()</code>.<a class="anchor" aria-label="anchor" href="#kable_rstars."><i class="fas fa-link"></i></a>
+</h2>
+<div id="propósito.-1" class="section level3 unnumbered">
+<h3>Propósito.<a class="anchor" aria-label="anchor" href="#prop%C3%B3sito.-1"><i class="fas fa-link"></i></a>
+</h3>
+<p>Genera una tabla HTML con el estilo tipográfico utilizado sistemáticamente en el libro <em>R-Stars</em>: encabezado en negrita centrado, cuerpo con líneas alternas para facilitar la lectura, bordes discretos, ancho ajustado al contenido y celdas centradas. Internamente es un envoltorio de <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code>, seguido de <code><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kableExtra::kable_styling()</a></code> y <code><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">kableExtra::row_spec()</a></code>, con los ajustes habituales del libro configurados como valores por defecto. De este modo, cada tabla en los <em>scripts</em> se reduce de un bloque de 12-18 líneas a una llamada compacta de 4-6 líneas.</p>
+<p>Los valores por defecto (fuente de 11 puntos, punto como separador decimal, encabezado en negrita, cuerpo centrado, sin notación científica, opciones bootstrap <code>striped + bordered + condensed</code>) resuelven la práctica totalidad de las tablas del libro. Cuando alguna tabla concreta requiere un ajuste, basta con sobrescribir el argumento correspondiente.</p>
+</div>
+<div id="sintaxis.-1" class="section level3 unnumbered">
+<h3>Sintaxis.<a class="anchor" aria-label="anchor" href="#sintaxis.-1"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb440"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars</a></span><span class="op">(</span><span class="va">x</span>,</span>
+<span>             caption   <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>             col.names <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>             digits    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html">getOption</a></span><span class="op">(</span><span class="st">"digits"</span><span class="op">)</span>,</span>
+<span>             font_size <span class="op">=</span> <span class="fl">11</span>,</span>
+<span>             full_width <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>             bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"bordered"</span>, <span class="st">"condensed"</span><span class="op">)</span>,</span>
+<span>             align  <span class="op">=</span> <span class="st">"c"</span>,</span>
+<span>             align_header <span class="op">=</span> <span class="st">"c"</span>,</span>
+<span>             bold_header  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>             bold_body    <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>             format.args  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>decimal.mark <span class="op">=</span> <span class="st">"."</span>, scientific <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>             <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="argumentos.-1" class="section level3 unnumbered">
+<h3>Argumentos.<a class="anchor" aria-label="anchor" href="#argumentos.-1"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>
+<strong><code>x</code></strong>: <em>data frame</em> o matriz con los datos a mostrar.</li>
+<li>
+<strong><code>caption</code></strong>: título de la tabla. Por defecto <code>NULL</code> (sin título).</li>
+<li>
+<strong><code>col.names</code></strong>: vector de caracteres con los nombres de columna a mostrar. Por defecto <code>NULL</code> (se usan los nombres del <em>data frame</em>).</li>
+<li>
+<strong><code>digits</code></strong>: número de dígitos decimales. Puede ser un escalar (aplicado a todas las columnas numéricas) o un vector con un valor por columna (usar <code>NA</code> para columnas no numéricas).</li>
+<li>
+<strong><code>font_size</code></strong>: tamaño de fuente en puntos. Por defecto <code>11</code>.</li>
+<li>
+<strong><code>full_width</code></strong>: si <code>TRUE</code>, la tabla ocupa todo el ancho disponible. Por defecto <code>FALSE</code>.</li>
+<li>
+<strong><code>bootstrap_options</code></strong>: vector de caracteres con opciones de estilo Bootstrap para <code><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling()</a></code>. Por defecto <code>c("striped", "bordered", "condensed")</code>.</li>
+<li>
+<strong><code>align</code></strong>: alineación de las celdas del cuerpo (<code>"l"</code>, <code>"c"</code> o <code>"r"</code>). Por defecto <code>"c"</code> (centrado).</li>
+<li>
+<strong><code>align_header</code></strong>: alineación de las celdas del encabezado. Por defecto <code>"c"</code>.</li>
+<li>
+<strong><code>bold_header</code></strong>: si <code>TRUE</code> (por defecto), el encabezado va en negrita.</li>
+<li>
+<strong><code>bold_body</code></strong>: si <code>TRUE</code>, el cuerpo va en negrita. Por defecto <code>FALSE</code>.</li>
+<li>
+<strong><code>format.args</code></strong>: lista con argumentos de formato numérico pasada a <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code>. Por defecto, punto como separador decimal y notación científica desactivada.</li>
+<li>
+<strong><code>...</code></strong>: argumentos adicionales pasados a <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code>.</li>
+</ul>
+</div>
+<div id="valor-devuelto.-1" class="section level3 unnumbered">
+<h3>Valor devuelto.<a class="anchor" aria-label="anchor" href="#valor-devuelto.-1"><i class="fas fa-link"></i></a>
+</h3>
+<p>Un objeto de clase <code>knitr_kable</code> con el estilo del libro aplicado, listo para su inclusión en un documento R Markdown con salida HTML.</p>
+</div>
+<div id="ejemplo.-1" class="section level3 unnumbered">
+<h3>Ejemplo.<a class="anchor" aria-label="anchor" href="#ejemplo.-1"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb441"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/teckel71/MATrstars">MATrstars</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Tabla con los 5 primeros coches del dataset mtcars,</span></span>
+<span><span class="co"># con caption, nombres de columna personalizados y 2 decimales.</span></span>
+<span><span class="va">mtcars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars</a></span><span class="op">(</span>caption   <span class="op">=</span> <span class="st">"Primeros 5 coches del dataset mtcars"</span>,</span>
+<span>               col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"cil"</span>, <span class="st">"cc"</span>, <span class="st">"hp"</span>, <span class="st">"gr"</span>, <span class="st">"peso"</span>,</span>
+<span>                             <span class="st">"1/4 mi"</span>, <span class="st">"vs"</span>, <span class="st">"am"</span>, <span class="st">"marchas"</span>, <span class="st">"carbs"</span><span class="op">)</span>,</span>
+<span>               digits    <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="código-fuente.-1" class="section level3 unnumbered">
+<h3>Código fuente.<a class="anchor" aria-label="anchor" href="#c%C3%B3digo-fuente.-1"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li><a href="https://github.com/teckel71/MATrstars/blob/main/R/kable_rstars.R"><code>R/kable_rstars.R</code></a></li>
+</ul>
+</div>
+</div>
 </div>
   <div class="chapter-nav">
 <div class="prev"><a href="bibliograf%C3%ADa.html">Bibliografía</a></div>
@@ -190,6 +279,16 @@
 <li><a class="nav-link" href="#c%C3%B3digo-fuente.">Código fuente.</a></li>
 </ul>
 </li>
+<li>
+<a class="nav-link" href="#kable_rstars.">kable_rstars().</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#prop%C3%B3sito.-1">Propósito.</a></li>
+<li><a class="nav-link" href="#sintaxis.-1">Sintaxis.</a></li>
+<li><a class="nav-link" href="#argumentos.-1">Argumentos.</a></li>
+<li><a class="nav-link" href="#valor-devuelto.-1">Valor devuelto.</a></li>
+<li><a class="nav-link" href="#ejemplo.-1">Ejemplo.</a></li>
+<li><a class="nav-link" href="#c%C3%B3digo-fuente.-1">Código fuente.</a></li>
+</ul>
+</li>
 </ul>
 
       <div class="book-extra">
@@ -206,7 +305,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón Morán. It was last built on 2026-07-10.</p>
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón Morán. It was last built on 2026-07-11.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

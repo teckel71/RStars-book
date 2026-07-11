@@ -19,6 +19,15 @@ datos <- read_excel("astilleros_48.xlsx", sheet = "Datos")
 datos <- data.frame(datos, row.names = 1)
 summary(datos)
 
+# Paquete MATrstars: funciones auxiliares del libro R-Stars.
+# Contiene, entre otras, la función kable_rstars(), utilizada más adelante.
+# Si el paquete no está instalado, se instala desde GitHub (una sola vez).
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
+}
+library(MATrstars)
+
 
 # =============================================================================
 # EJEMPLO 1: ¿Influye el astillero en el rendimiento energético (IRE)?
@@ -60,25 +69,14 @@ muestra_so <- muestra %>%
 
 # --- Tabla de medias por astillero -------------------------------------------
 
-library(knitr)
-library(kableExtra)
-knitr.table.format = "html"
-
 tablamedias <- muestra_so %>%
                group_by(ASTILLERO) %>%
                summarise(observaciones = n(),
                          media         = round(mean(IRE), 3))
 
 tablamedias %>%
-  kable(format    = knitr.table.format,
-        caption   = "IRE. Medias por astillero.",
-        col.names = c("Astillero", "Observaciones", "IRE medio")) %>%
-  kable_styling(full_width        = F,
-                bootstrap_options = c("striped", "bordered", "condensed"),
-                position          = "center",
-                font_size         = 11) %>%
-  row_spec(0, bold = T, align = "c") %>%
-  row_spec(1:nrow(tablamedias), bold = F, align = "c")
+  kable_rstars(caption   = "IRE. Medias por astillero.",
+               col.names = c("Astillero", "Observaciones", "IRE medio"))
 
 # --- Gráficos exploratorios --------------------------------------------------
 
@@ -136,15 +134,8 @@ normalidad_ire <- muestra_so %>%
                           "NO-NORMALIDAD"))
 
 normalidad_ire %>%
-  kable(format    = knitr.table.format,
-        caption   = "Normalidad del IRE por astillero (Shapiro-Wilk)",
-        col.names = c("Astillero", "p-valor", "Conclusión")) %>%
-  kable_styling(full_width        = F,
-                bootstrap_options = c("striped", "bordered", "condensed"),
-                position          = "center",
-                font_size         = 11) %>%
-  row_spec(0, bold = T, align = "c") %>%
-  row_spec(1:nrow(normalidad_ire), bold = F, align = "c")
+  kable_rstars(caption   = "Normalidad del IRE por astillero (Shapiro-Wilk)",
+               col.names = c("Astillero", "p-valor", "Conclusión"))
 
 # Homogeneidad de varianzas — Bartlett
 
@@ -158,19 +149,12 @@ summary_aov <- summary(Datos.aov)
 aov_table <- as.data.frame(summary_aov[[1]])
 
 aov_table %>%
-  kable(format    = knitr.table.format,
-        caption   = "Resultados del ANOVA — IRE por astillero",
-        col.names = c("Grados de libertad",
-                      "Suma de cuadrados",
-                      "Media de cuadrados",
-                      "Estadístico F",
-                      "p-valor")) %>%
-  kable_styling(full_width        = F,
-                bootstrap_options = c("striped", "bordered", "condensed"),
-                position          = "center",
-                font_size         = 11) %>%
-  row_spec(0, bold = T, align = "c") %>%
-  row_spec(1:nrow(aov_table), bold = F, align = "c")
+  kable_rstars(caption   = "Resultados del ANOVA — IRE por astillero",
+               col.names = c("Grados de libertad",
+                             "Suma de cuadrados",
+                             "Media de cuadrados",
+                             "Estadístico F",
+                             "p-valor"))
 
 # --- COMPARACIONES MÚLTIPLES (HSD de Tukey) ----------------------------------
 
@@ -180,20 +164,13 @@ pares_ire  <- pairs(medias_ire)
 pares_ire_df <- as.data.frame(pares_ire)
 
 pares_ire_df %>%
-  kable(format    = knitr.table.format,
-        caption   = "Comparaciones múltiples — IRE (HSD de Tukey)",
-        col.names = c("Grupos",
-                      "Diferencia estimada",
-                      "Error típico",
-                      "Grados de libertad",
-                      "Estadístico t",
-                      "p-valor")) %>%
-  kable_styling(full_width        = F,
-                bootstrap_options = c("striped", "bordered", "condensed"),
-                position          = "center",
-                font_size         = 11) %>%
-  row_spec(0, bold = T, align = "c") %>%
-  row_spec(1:nrow(pares_ire_df), bold = F, align = "c")
+  kable_rstars(caption   = "Comparaciones múltiples — IRE (HSD de Tukey)",
+               col.names = c("Grupos",
+                             "Diferencia estimada",
+                             "Error típico",
+                             "Grados de libertad",
+                             "Estadístico t",
+                             "p-valor"))
 
 
 # =============================================================================
@@ -238,15 +215,8 @@ tablamedias2 <- muestra2_so %>%
                           media         = round(mean(IIG), 3))
 
 tablamedias2 %>%
-  kable(format    = knitr.table.format,
-        caption   = "IIG. Medias por astillero.",
-        col.names = c("Astillero", "Observaciones", "IIG medio")) %>%
-  kable_styling(full_width        = F,
-                bootstrap_options = c("striped", "bordered", "condensed"),
-                position          = "center",
-                font_size         = 11) %>%
-  row_spec(0, bold = T, align = "c") %>%
-  row_spec(1:nrow(tablamedias2), bold = F, align = "c")
+  kable_rstars(caption   = "IIG. Medias por astillero.",
+               col.names = c("Astillero", "Observaciones", "IIG medio"))
 
 # --- Gráficos exploratorios --------------------------------------------------
 
@@ -301,15 +271,8 @@ normalidad_iig <- muestra2_so %>%
                           "NO-NORMALIDAD"))
 
 normalidad_iig %>%
-  kable(format    = knitr.table.format,
-        caption   = "Normalidad del IIG por astillero (Shapiro-Wilk)",
-        col.names = c("Astillero", "p-valor", "Conclusión")) %>%
-  kable_styling(full_width        = F,
-                bootstrap_options = c("striped", "bordered", "condensed"),
-                position          = "center",
-                font_size         = 11) %>%
-  row_spec(0, bold = T, align = "c") %>%
-  row_spec(1:nrow(normalidad_iig), bold = F, align = "c")
+  kable_rstars(caption   = "Normalidad del IIG por astillero (Shapiro-Wilk)",
+               col.names = c("Astillero", "p-valor", "Conclusión"))
 
 # Homogeneidad de varianzas — Bartlett
 
@@ -323,19 +286,12 @@ summary_aov2 <- summary(Datos.aov2)
 aov_table2 <- as.data.frame(summary_aov2[[1]])
 
 aov_table2 %>%
-  kable(format    = knitr.table.format,
-        caption   = "Resultados del ANOVA — IIG por astillero (solo ilustrativo)",
-        col.names = c("Grados de libertad",
-                      "Suma de cuadrados",
-                      "Media de cuadrados",
-                      "Estadístico F",
-                      "p-valor")) %>%
-  kable_styling(full_width        = F,
-                bootstrap_options = c("striped", "bordered", "condensed"),
-                position          = "center",
-                font_size         = 11) %>%
-  row_spec(0, bold = T, align = "c") %>%
-  row_spec(1:nrow(aov_table2), bold = F, align = "c")
+  kable_rstars(caption   = "Resultados del ANOVA — IIG por astillero (solo ilustrativo)",
+               col.names = c("Grados de libertad",
+                             "Suma de cuadrados",
+                             "Media de cuadrados",
+                             "Estadístico F",
+                             "p-valor"))
 
 # --- TEST DE KRUSKAL-WALLIS --------------------------------------------------
 
@@ -351,16 +307,9 @@ Datos.kmc <- kruskalmc(muestra2_so$IIG ~ muestra2_so$ASTILLERO)
 Datos.kmc.df <- as.data.frame(Datos.kmc$dif.com)
 
 Datos.kmc.df %>%
-  kable(format    = knitr.table.format,
-        caption   = "Kruskal-Wallis. Comparaciones múltiples — IIG",
-        col.names = c("Diferencia de rangos medios",
-                      "Diferencia crítica",
-                      "Significativo")) %>%
-  kable_styling(full_width        = F,
-                bootstrap_options = c("striped", "bordered", "condensed"),
-                position          = "center",
-                font_size         = 11) %>%
-  row_spec(0, bold = T, align = "c") %>%
-  row_spec(1:nrow(Datos.kmc.df), bold = F, align = "c")
+  kable_rstars(caption   = "Kruskal-Wallis. Comparaciones múltiples — IIG",
+               col.names = c("Diferencia de rangos medios",
+                             "Diferencia crítica",
+                             "Significativo"))
 
 # Fin del script :)
