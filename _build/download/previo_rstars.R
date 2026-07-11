@@ -15,6 +15,16 @@ library (moments) # paquete necesario para calcular la curtosis.
 library (patchwork)
 library (GGally) # Cáculo de matriz de correlaciones.
 
+# Paquete MATrstars: funciones auxiliares del libro R-Stars.
+# Contiene, entre otras, la función kable_rstars(), que utilizaremos por
+# primera vez en este capítulo.
+# Si el paquete no está instalado, se instala desde GitHub (una sola vez).
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
+}
+library(MATrstars)
+
 ## DATOS
 
 # Importando datos desde Excel
@@ -121,6 +131,26 @@ conteo_intervalos_df %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:(nrow(conteo_intervalos_df)), bold= F, align = "c")
 
+# --- Nota: la misma tabla con kable_rstars() del paquete {MATrstars} ---------
+# La función kable_rstars() encapsula el patrón kable() + kable_styling() +
+# row_spec() con los ajustes habituales del libro (encabezado en negrita
+# centrado, filas rayadas, bordes, cuerpo centrado, fuente de 11 puntos, punto
+# como separador decimal, sin notación científica). El código de arriba (12
+# líneas) se reduce a 4-5 líneas y el resultado visual es idéntico:
+
+conteo_intervalos_df %>%
+  kable_rstars(caption   = "Distribución de frecuencias agrupadas en intervalos de Rentabilidad Económica",
+               col.names = c("Intervalo rentabilidad", "Frecuencia absoluta n(i)",
+                             "Frecuencia absoluta acum. N(i)", "Frecuencia relativa f(i)",
+                             "Frecuencia relativa acum. F(i)"),
+               digits    = c(NA, 0, 0, 2, 2))
+
+# A partir de aquí, y en los capítulos siguientes, las tablas se generarán
+# mayoritariamente con kable_rstars(). La ficha completa de la función
+# (argumentos, defaults, código fuente) se encuentra en el "Apéndice:
+# Funciones auxiliares del paquete MATrstars" al final del libro.
+# -----------------------------------------------------------------------------
+
 ## Descriptivos básicos
 
 # Gráficos básicos
@@ -189,18 +219,12 @@ estadisticos <- muestra_so %>% summarise( Media = mean(RENECO),
 
 # Mostrar estadisticos
 estadisticos %>%
-  kable(caption = "Principales Estadísticos de la Rentabilidad Económica",
-        col.names = c("Media", "Mediana",
-                      "Desviación Típica", "Valor mínimo",
-                      "Valor Máximo", "C. Asimetría Fisher",
-                      "C. Curtosis Fisher"),
-        digits    = c(2, 2, 2, 2, 2, 2, 2),
-        format.args = list(decimal.mark = ".", scientific = FALSE)) %>%
-  kable_styling(full_width = F, bootstrap_options = "striped",
-                "bordered", "condensed",
-                position = "center", font_size = 11) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(estadisticos)), bold= F, align = "c")
+  kable_rstars(caption   = "Principales Estadísticos de la Rentabilidad Económica",
+               col.names = c("Media", "Mediana",
+                             "Desviación Típica", "Valor mínimo",
+                             "Valor Máximo", "C. Asimetría Fisher",
+                             "C. Curtosis Fisher"),
+               digits    = c(2, 2, 2, 2, 2, 2, 2))
 
 ## Normalidad
 

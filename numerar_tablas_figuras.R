@@ -260,7 +260,7 @@ procesar_rmd <- function(ruta_entrada,
     # Acepta paréntesis de agrupación: (g1 | g2) / (g3 | g4)
     re_patchwork_inline <- "^[\\s()A-Za-z_.0-9+/|]+$"
     # Una línea "continúa" si termina con %>%, +, |, ,, o paréntesis abierto
-    re_continua      <- "(?:%>%|\\+|\\||,)\\s*$"
+    re_continua      <- "(?:%>%|\\+|\\||,|<-|=)\\s*$"
 
     # Helper: cuenta caracteres específicos en una cadena
     contar_ch <- function(txt, ch) {
