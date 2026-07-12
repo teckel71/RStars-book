@@ -11,13 +11,12 @@ library(gtExtras)
 library(visdat)
 library (cluster)
 library (ClusterR)
-library (knitr)
-library (kableExtra)
 library (patchwork)
 library (pgirmess)
 
 # Paquete MATrstars: funciones auxiliares del libro R-Stars.
-# Contiene, entre otras, la función create_patchwork(), utilizada más adelante.
+# Contiene, entre otras, las funciones create_patchwork() y kable_rstars(),
+# utilizadas más adelante.
 # Si el paquete no está instalado, se instala desde GitHub (una sola vez).
 if (!requireNamespace("MATrstars", quietly = TRUE)) {
   if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
@@ -151,26 +150,13 @@ ggplot(df_sil, aes(x = k, y = Silhouette)) +
               Idig = mean(IDIG))
   
   tablamedias %>%
-    kable(caption = "Método de k-medias. 7 grupos. Medias de variables",
-          col.names = c("Clúster",
-                        "Observaciones",
-                        "I. Diversif.",
-                        "I. Fidelizac.",
-                        "I. Digitalizac."),
-          digits = c(NA, 0, 3, 3, 3),
-          format.args = list(decimal.mark = ".",
-                             scientific = FALSE)) %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = "striped",
-                  "bordered",
-                  "condensed",
-                  position = "center",
-                  font_size = 11) %>%
-    row_spec(0, bold= T,
-             align = "c") %>%
-    row_spec(1:nrow(tablamedias),
-             bold= F,
-             align = "c")
+    kable_rstars(caption   = "Método de k-medias. 7 grupos. Medias de variables",
+                 col.names = c("Clúster",
+                               "Observaciones",
+                               "I. Diversif.",
+                               "I. Fidelizac.",
+                               "I. Digitalizac."),
+                 digits    = c(NA, 0, 3, 3, 3))
 
 # Gráficos de centroides
   
@@ -259,21 +245,11 @@ ggplot(df_sil, aes(x = k, y = Silhouette)) +
                                 data = seleccion_so)
               
          tabla <- datos_kmc$dif.com %>%
-         kable(caption = paste("k-medias. Diferencias de Centroides", variable),
-                               col.names = c("Diferencias centros",
+         kable_rstars(caption   = paste("k-medias. Diferencias de Centroides", variable),
+                      col.names = c("Diferencias centros",
                                     "Diferencias críticas",
                                     "Significación"),
-                         digits = c(3, 3, NA),
-                         format.args = list(decimal.mark = ".",
-                                         scientific = FALSE)) %>%
-         kable_styling(full_width = F,
-                       bootstrap_options = c("striped",
-                                             "bordered",
-                                             "condensed"),
-                       position = "center",
-                       font_size = 11) %>%
-         row_spec(0, bold = T, align = "c") %>%
-         row_spec(1:nrow(datos_kmc$dif.com), bold = F, align = "c")
+                      digits    = c(3, 3, NA))
               
        # Almacenar la tabla en la lista
               

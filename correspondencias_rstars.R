@@ -11,12 +11,20 @@
   library (ggplot2)
   library (gtExtras)
   library (visdat)
-  library (knitr)
   library (kableExtra)
   library (patchwork)
   library (vcd)         # Visualización tablas de contingencia
   library (FactoMineR)  # Cálculo del análisis de correspondencias
   library (factoextra)  # Visualización de resultados del A. de Corresp.
+
+# Paquete MATrstars: funciones auxiliares del libro R-Stars.
+# Contiene, entre otras, la función kable_rstars(), utilizada más adelante.
+# Si el paquete no está instalado, se instala desde GitHub (una sola vez).
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
+}
+library(MATrstars)
 
 ################################################################################
 
@@ -73,28 +81,16 @@
 
   tab.GA.FJ <- with(seleccion, table(GALAXIA, FJUR))
 
-  knitr.table.format = "html"
-
   addmargins(tab.GA.FJ) %>%
-    kable(format = knitr.table.format,
-          caption = "Empresas TMI: Galaxia y Forma Jurídica.") %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = "striped", "bordered", "condensed",
-                  position = "center",
-                  font_size = 12) %>%
+    kable_rstars(caption = "Empresas TMI: Galaxia y Forma Jurídica.") %>%
     add_header_above(c(GALAXIA = 1, FJUR = 3, " " = 1),
                      bold = T,
                      line = T) %>%
-    row_spec(0, bold = T, align = "c") %>%
     column_spec(1, bold = T)
 
 ################################################################################
 
 # ANALISIS DE CORRESPONDENCIAS SIMPLE
-
-  # Formato de las tablas de resultados
-
-    knitr.table.format <- "html"
 
   # Cálculo del análisis con la función CA() de {FactoMineR}
 
@@ -113,15 +109,8 @@
     EigenCA <- data.frame(EigenCA, row.names = ncol(EigenCA))
 
     TableEigenCA <- EigenCA %>%
-      kable(format = knitr.table.format,
-            caption = "Análisis de correspondencias: Galaxia vs Forma Jurídica.",
-            digits = 3,
-            align = rep("c", ncol(EigenCA))) %>%
-      kable_styling(full_width = F,
-                    bootstrap_options = "striped", "bordered", "condensed",
-                    position = "center",
-                    font_size = 12) %>%
-      row_spec(0, bold = T, align = "c")
+      kable_rstars(caption = "Análisis de correspondencias: Galaxia vs Forma Jurídica.",
+                   digits  = 3)
 
     SolucionCA[[1]] <- TableEigenCA
 
@@ -140,19 +129,12 @@
     rownames(rows_df) <- rownames(rows_data)
 
     TableRows <- rows_df %>%
-      kable(format = knitr.table.format,
-            caption = paste0("Análisis de correspondencias: ",
-                             names(dimnames(tab.GA.FJ))[1], "."),
-            col.names = c("Inercia",
-                          "Coordenadas Dim. 1", "Cos2 Dim. 1",
-                          "Coordenadas Dim. 2", "Cos2 Dim. 2"),
-            digits = 3,
-            align = c("c", "c", "c", "c", "c")) %>%
-      kable_styling(full_width = F,
-                    bootstrap_options = "striped", "bordered", "condensed",
-                    position = "center",
-                    font_size = 12) %>%
-      row_spec(0, bold = T, align = "c")
+      kable_rstars(caption   = paste0("Análisis de correspondencias: ",
+                                      names(dimnames(tab.GA.FJ))[1], "."),
+                   col.names = c("Inercia",
+                                 "Coordenadas Dim. 1", "Cos2 Dim. 1",
+                                 "Coordenadas Dim. 2", "Cos2 Dim. 2"),
+                   digits    = 3)
 
     SolucionCA[[2]] <- TableRows
 
@@ -171,19 +153,12 @@
     rownames(columns_df) <- rownames(columns_data)
 
     TableCols <- columns_df %>%
-      kable(format = knitr.table.format,
-            caption = paste0("Análisis de correspondencias: ",
-                             names(dimnames(tab.GA.FJ))[2], "."),
-            col.names = c("Inercia",
-                          "Coordenadas Dim. 1", "Cos2 Dim. 1",
-                          "Coordenadas Dim. 2", "Cos2 Dim. 2"),
-            digits = 3,
-            align = c("c", "c", "c", "c", "c")) %>%
-      kable_styling(full_width = F,
-                    bootstrap_options = "striped", "bordered", "condensed",
-                    position = "center",
-                    font_size = 12) %>%
-      row_spec(0, bold = T, align = "c")
+      kable_rstars(caption   = paste0("Análisis de correspondencias: ",
+                                      names(dimnames(tab.GA.FJ))[2], "."),
+                   col.names = c("Inercia",
+                                 "Coordenadas Dim. 1", "Cos2 Dim. 1",
+                                 "Coordenadas Dim. 2", "Cos2 Dim. 2"),
+                   digits    = 3)
 
     SolucionCA[[3]] <- TableCols
 

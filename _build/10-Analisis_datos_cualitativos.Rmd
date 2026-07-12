@@ -247,46 +247,40 @@ implicados. Cuando se trata de dos atributos, por tanto, `table()`
 construye una tabla de contingencia mediante la formulación de una tabla
 de doble entrada. En nuestro ejemplo, a la tabla de contingencia la
 hemos denominado, por ejemplo, "tab.GA.FJ". Luego, la hemos presentado
-con un formato de tabla elaborado con la función `kable()` del paquete
-`{knitr}`, y algunas funciones adicionales del paquete `{kableExtra}`:
+con un formato de tabla elaborado con la función `kable_rstars()` del paquete `{MATrstars}` presentado en el capítulo 5, complementada con `add_header_above()` y `column_spec()` de `{kableExtra}` para el encabezado agrupado y la negrita de la primera columna:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
 # TABLA DE CONTINGENCIA GALAXIA FJUR
 
  tab.GA.FJ <- with(seleccion, table(GALAXIA, FJUR))
 
- knitr.table.format = "html"
-
  addmargins(tab.GA.FJ) %>%
-  kable(format = knitr.table.format,
-        caption="Empresas TMI") %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped", "bordered", "condensed",
-                position = "center",
-                font_size = 12) %>%
+  kable_rstars(caption = "Empresas TMI") %>%
   add_header_above(c(GALAXIA = 1, FJUR = 3, " " = 1),
-                   bold=T,
-                   line=T) %>%
-  row_spec(0, bold= T, align = "c") %>%
+                   bold = T,
+                   line = T) %>%
   column_spec(1, bold = T)
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+# Paquete MATrstars: funciones auxiliares del libro R-Stars.
+# Si no está instalado, se instala desde GitHub (solo la primera vez).
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
+}
+library(MATrstars)
+library(kableExtra)
+
 # TABLA DE CONTINGENCIA GALAXIA FJUR
 
   tab.GA.FJ <- with(seleccion, table(GALAXIA, FJUR))
 
  addmargins(tab.GA.FJ) %>%
-  kable(format = "html",
-        ) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped", "bordered", "condensed",
-                position = "center",
-                font_size = 12) %>%
+  kable_rstars() %>%
   add_header_above(c(GALAXIA = 1, FJUR = 3, " " = 1),
-                   bold=T,
-                   line=T) %>%
-  row_spec(0, bold= T, align = "c") %>%
+                   bold = T,
+                   line = T) %>%
   column_spec(1, bold = T)
 ```
 
@@ -622,16 +616,10 @@ mostrando aquí los principales resultados.
   tab.FJ.EF <- with(seleccion, table(FJUR, EFLO))
 
  addmargins(tab.FJ.EF) %>%
-  kable(format = "html",
-        ) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped", "bordered", "condensed",
-                position = "center",
-                font_size = 12) %>%
+  kable_rstars() %>%
   add_header_above(c(FJUR = 1, EFLO = 3, " " = 1),
-                   bold=T,
-                   line=T) %>%
-  row_spec(0, bold= T, align = "c") %>%
+                   bold = T,
+                   line = T) %>%
   column_spec(1, bold = T)
 ```
 
@@ -1523,14 +1511,8 @@ zeros_report <- detect_zeros_any(tab0)
 if (is.null(zeros_report)) {
   message("No se han detectado celdas con frecuencia 0 en la tabla original.")
 } else {
-  knitr.table.format <- "html"
   zeros_report %>%
-    kable(format = knitr.table.format,
-          caption = "Combinaciones con 0 detectadas (antes de imputar)") %>%
-    kable_styling(full_width = FALSE,
-                  bootstrap_options = c("striped","bordered","condensed"),
-                  position = "center", font_size = 12) %>%
-    row_spec(0, bold = TRUE, align = "c")
+    kable_rstars(caption = "Combinaciones con 0 detectadas (antes de imputar)")
 }
 
 # Imputar 0 -> 1 (solo celdas con 0) y anotar nota + reporte como atributo
@@ -1541,12 +1523,7 @@ cat("\nNOTA IMPUTACIÓN: ", attr(tab_use, "nota_imputacion"), "\n")
 
 if (!is.null(attr(tab_use, "zeros_imputados"))) {
   attr(tab_use, "zeros_imputados") %>%
-    kable(format = "html",
-          caption = "Combinaciones imputadas (0 → 1) para estimar modelo") %>%
-    kable_styling(full_width = FALSE,
-                  bootstrap_options = c("striped","bordered","condensed"),
-                  position = "center", font_size = 12) %>%
-    row_spec(0, bold = TRUE, align = "c")
+    kable_rstars(caption = "Combinaciones imputadas (0 → 1) para estimar modelo")
 }
 ```
 
@@ -1561,13 +1538,7 @@ if (is.null(zeros_report)) {
   message("No se han detectado celdas con frecuencia 0 en la tabla original.")
 } else {
     zeros_report %>%
-      kable(format  = "html",
-            ) %>%
-      kable_styling(full_width = FALSE,
-                    bootstrap_options = c("striped","bordered","condensed"),
-                    position = "center",
-                    font_size = 12) %>%
-      row_spec(0, bold = TRUE, align = "c")
+      kable_rstars()
 }
 ```
 
@@ -1587,13 +1558,7 @@ if (!is.null(attr(tab_use, "zeros_imputados"))) {
   zeros_imputados <- attr(tab_use, "zeros_imputados")
   
     zeros_imputados %>%
-      kable(format  = "html",
-            ) %>%
-      kable_styling(full_width = FALSE,
-                    bootstrap_options = c("striped","bordered","condensed"),
-                    position = "center",
-                    font_size = 12) %>%
-      row_spec(0, bold = TRUE, align = "c")
+      kable_rstars()
 }
 ```
 
@@ -2539,19 +2504,11 @@ cual se aplicará el análisis:
 
   tab.GA.FJ <- with(seleccion, table(GALAXIA, FJUR))
 
-  knitr.table.format = "html"
-
   addmargins(tab.GA.FJ) %>%
-    kable(format = knitr.table.format,
-          caption = "Empresas TMI: Galaxia y Forma Jurídica.") %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = "striped", "bordered", "condensed",
-                  position = "center",
-                  font_size = 12) %>%
+    kable_rstars(caption = "Empresas TMI: Galaxia y Forma Jurídica.") %>%
     add_header_above(c(GALAXIA = 1, FJUR = 3, " " = 1),
                      bold = T,
                      line = T) %>%
-    row_spec(0, bold = T, align = "c") %>%
     column_spec(1, bold = T)
 ```
 
@@ -2561,16 +2518,10 @@ cual se aplicará el análisis:
   tab.GA.FJ <- with(seleccion, table(GALAXIA, FJUR))
 
  addmargins(tab.GA.FJ) %>%
-  kable(format = "html",
-        ) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped", "bordered", "condensed",
-                position = "center",
-                font_size = 12) %>%
+  kable_rstars() %>%
   add_header_above(c(GALAXIA = 1, FJUR = 3, " " = 1),
                    bold = T,
                    line = T) %>%
-  row_spec(0, bold = T, align = "c") %>%
   column_spec(1, bold = T)
 ```
 
@@ -2598,10 +2549,6 @@ desglosa la información de las **columnas** (categorías de FJUR):
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 # ANALISIS DE CORRESPONDENCIAS SIMPLE
-
-  # Formato de las tablas de resultados
-
-    knitr.table.format <- "html"
 
   # Cálculo del análisis con la función CA() de {FactoMineR}
 
@@ -2643,15 +2590,8 @@ El código para construir las tres tablas es:
   # Tabla 1: Inercia principal por dimensión
 
     TableEigenCA <- EigenCA %>%
-      kable(format = knitr.table.format,
-            
-            digits = 3,
-            align = rep("c", ncol(EigenCA))) %>%
-      kable_styling(full_width = F,
-                    bootstrap_options = "striped", "bordered", "condensed",
-                    position = "center",
-                    font_size = 12) %>%
-      row_spec(0, bold = T, align = "c")
+      kable_rstars(
+                   digits  = 3)
 
     SolucionCA[[1]] <- TableEigenCA
 
@@ -2670,19 +2610,12 @@ El código para construir las tres tablas es:
     rownames(rows_df) <- rownames(rows_data)
 
     TableRows <- rows_df %>%
-      kable(format = knitr.table.format,
-            
+      kable_rstars(
 
-            col.names = c("Inercia",
-                          "Coordenadas Dim. 1", "Cos2 Dim. 1",
-                          "Coordenadas Dim. 2", "Cos2 Dim. 2"),
-            digits = 3,
-            align = c("c", "c", "c", "c", "c")) %>%
-      kable_styling(full_width = F,
-                    bootstrap_options = "striped", "bordered", "condensed",
-                    position = "center",
-                    font_size = 12) %>%
-      row_spec(0, bold = T, align = "c")
+                   col.names = c("Inercia",
+                                 "Coordenadas Dim. 1", "Cos2 Dim. 1",
+                                 "Coordenadas Dim. 2", "Cos2 Dim. 2"),
+                   digits    = 3)
 
     SolucionCA[[2]] <- TableRows
 
@@ -2701,19 +2634,12 @@ El código para construir las tres tablas es:
     rownames(columns_df) <- rownames(columns_data)
 
     TableCols <- columns_df %>%
-      kable(format = knitr.table.format,
-            
+      kable_rstars(
 
-            col.names = c("Inercia",
-                          "Coordenadas Dim. 1", "Cos2 Dim. 1",
-                          "Coordenadas Dim. 2", "Cos2 Dim. 2"),
-            digits = 3,
-            align = c("c", "c", "c", "c", "c")) %>%
-      kable_styling(full_width = F,
-                    bootstrap_options = "striped", "bordered", "condensed",
-                    position = "center",
-                    font_size = 12) %>%
-      row_spec(0, bold = T, align = "c")
+                   col.names = c("Inercia",
+                                 "Coordenadas Dim. 1", "Cos2 Dim. 1",
+                                 "Coordenadas Dim. 2", "Cos2 Dim. 2"),
+                   digits    = 3)
 
     SolucionCA[[3]] <- TableCols
 ```
