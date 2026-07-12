@@ -398,7 +398,7 @@ En el código anterior:
 
 ### ![](figuras/pie-chart.svg) Caracterización de los grupos o conglomerados.
 
-Una vez incorporado el grupo de pertenencia de cada empresa al *data frame* "seleccion", se podrán calcular y almacenar las medias de cada grupo de las distintas variables originales, usando las funciones `by_group()` y `summarise()` de `{dplyr}`. Toda la información se asigna al *data frame* “tablamedias” para poder representarla en una tabla mediante las facilidades que ofrecen los paquetes `{knitr}` y `{kableExtra}`:
+Una vez incorporado el grupo de pertenencia de cada empresa al *data frame* "seleccion", se podrán calcular y almacenar las medias de cada grupo de las distintas variables originales, usando las funciones `by_group()` y `summarise()` de `{dplyr}`. Toda la información se asigna al *data frame* “tablamedias” para poder representarla en una tabla mediante `kable_rstars()` del paquete `{MATrstars}` presentado en el capítulo 5:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
 # Tabla con centroides de grupos.
@@ -410,30 +410,23 @@ tablamedias <- seleccion %>%
                                       Idig = mean(IDIG))
 
 tablamedias %>%
-  kable(caption = "Método de Ward. 5 grupos. Medias de variables",
-        col.names = c("Clúster",
-                      "Observaciones",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(0, 0, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped",
-                                    "bordered",
-                                    "condensed",
-                position = "center",
-                font_size = 11) %>%
-  row_spec(0, bold= T,
-           align = "c") %>%
-  row_spec(1:nrow(tablamedias),
-           bold= F,
-           align = "c")
+  kable_rstars(caption   = "Método de Ward. 5 grupos. Medias de variables",
+               col.names = c("Clúster",
+                             "Observaciones",
+                             "I. Diversif.",
+                             "I. Fidelizac.",
+                             "I. Digitalizac."),
+               digits    = c(0, 0, 3, 3, 3))
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
-# Tabla con centroides de grupos.
+# Paquete MATrstars: funciones auxiliares del libro R-Stars.
+# Si no está instalado, se instala desde GitHub (solo la primera vez).
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
+}
+library(MATrstars)
 
 # Tabla con centroides de grupos.
 tablamedias <- seleccion %>%
@@ -444,26 +437,13 @@ tablamedias <- seleccion %>%
                                       Idig = mean(IDIG))
 
 tablamedias %>%
-  kable(caption = "Método de Ward. 5 grupos. Medias de variables",
-        col.names = c("Clúster",
-                      "Observaciones",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(0, 0, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped",
-                                    "bordered",
-                                    "condensed",
-                position = "center",
-                font_size = 11) %>%
-  row_spec(0, bold= T,
-           align = "c") %>%
-  row_spec(1:nrow(tablamedias),
-           bold= F,
-           align = "c")
+  kable_rstars(caption   = "Método de Ward. 5 grupos. Medias de variables",
+               col.names = c("Clúster",
+                             "Observaciones",
+                             "I. Diversif.",
+                             "I. Fidelizac.",
+                             "I. Digitalizac."),
+               digits    = c(0, 0, 3, 3, 3))
 ```
 
 Obviamente, también se podrían comparar las medias de los grupos, para cada variable, con un simple gráfico de barras. A fin de crear un método que valga para cualquier número de variables, realizaremos la tarea con un bucle. El código es el siguiente:
@@ -530,20 +510,11 @@ Por otro lado, se pueden presentar en diferentes **tablas** las informaciones de
       tabla <- seleccion %>%
       filter(whatcluster_j == as.character(n)) %>%
       select(IDIVERSE, IFIDE, IDIG) %>%
-      kable(caption = paste("Método de Ward. Grupo ", n, "."),
-            col.names = c("I. Diversificación",
-                          "I. Fidelización",
-                          "I. Digitalización"),
-            digits = c(0, 3, 3, 3),
-            format.args = list(decimal.mark = ".",
-                               scientific = FALSE)) %>%
-      kable_styling(full_width = FALSE, 
-                    bootstrap_options = c("striped",
-                                          "bordered",
-                                          "condensed"),
-                    position = "center",
-                    font_size = 12) %>%
-      row_spec(0, bold = TRUE, align = "c")
+      kable_rstars(caption   = paste("Método de Ward. Grupo ", n, "."),
+                   col.names = c("I. Diversificación",
+                                 "I. Fidelización",
+                                 "I. Digitalización"),
+                   digits    = c(0, 3, 3, 3))
       tablascompo[[n]] <- tabla
   }
 
@@ -569,20 +540,11 @@ for (n in 1:numclusters){
       tabla <- seleccion %>%
       filter(whatcluster_j == as.character(n)) %>%
       select(IDIVERSE, IFIDE, IDIG) %>%
-      kable(caption = paste("Método de Ward. Grupo ", n, "."),
-            col.names = c("I. Diversificación",
-                          "I. Fidelización",
-                          "I. Digitalización"),
-            digits = c(0, 3, 3, 3),
-            format.args = list(decimal.mark = ".",
-                               scientific = FALSE)) %>%
-      kable_styling(full_width = FALSE, 
-                    bootstrap_options = c("striped",
-                                          "bordered",
-                                          "condensed"),
-                    position = "center",
-                    font_size = 12) %>%
-      row_spec(0, bold = TRUE, align = "c")
+      kable_rstars(caption   = paste("Método de Ward. Grupo ", n, "."),
+                   col.names = c("I. Diversificación",
+                                 "I. Fidelización",
+                                 "I. Digitalización"),
+                   digits    = c(0, 3, 3, 3))
       tablascompo[[n]] <- tabla
 }
   # Presentar las tablas
@@ -979,26 +941,13 @@ A continuación vamos a **caracterizar los grupos** formados en función de las 
               Idig = mean(IDIG))
   
   tablamedias %>%
-    kable(caption = "Método de k-medias. 7 grupos. Medias de variables",
-          col.names = c("Clúster",
-                        "Observaciones",
-                        "I. Diversif.",
-                        "I. Fidelizac.",
-                        "I. Digitalizac."),
-          digits = c(NA, 0, 3, 3, 3),
-          format.args = list(decimal.mark = ".",
-                             scientific = FALSE)) %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = "striped",
-                  "bordered",
-                  "condensed",
-                  position = "center",
-                  font_size = 11) %>%
-    row_spec(0, bold= T,
-             align = "c") %>%
-    row_spec(1:nrow(tablamedias),
-             bold= F,
-             align = "c")
+    kable_rstars(caption   = "Método de k-medias. 7 grupos. Medias de variables",
+                 col.names = c("Clúster",
+                               "Observaciones",
+                               "I. Diversif.",
+                               "I. Fidelizac.",
+                               "I. Digitalizac."),
+                 digits    = c(NA, 0, 3, 3, 3))
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
@@ -1013,26 +962,13 @@ A continuación vamos a **caracterizar los grupos** formados en función de las 
               Idig = mean(IDIG))
 
     tablamedias %>%
-    kable(caption = "Método de k-medias. 7 grupos. Medias de variables",
-          col.names = c("Clúster",
-                        "Observaciones",
-                        "I. Diversif.",
-                        "I. Fidelizac.",
-                        "I. Digitalizac."),
-          digits = c(NA, 0, 3, 3, 3),
-          format.args = list(decimal.mark = ".",
-                             scientific = FALSE)) %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = "striped",
-                  "bordered",
-                  "condensed",
-                  position = "center",
-                  font_size = 11) %>%
-    row_spec(0, bold= T,
-             align = "c") %>%
-    row_spec(1:nrow(tablamedias),
-             bold= F,
-             align = "c")
+    kable_rstars(caption   = "Método de k-medias. 7 grupos. Medias de variables",
+                 col.names = c("Clúster",
+                               "Observaciones",
+                               "I. Diversif.",
+                               "I. Fidelizac.",
+                               "I. Digitalizac."),
+                 digits    = c(NA, 0, 3, 3, 3))
 ```
 
 Obviamente, también se podrían comparar las medias de los grupos, para cada variable, con un gráfico de barras. El código es el siguiente:
@@ -1178,21 +1114,11 @@ En cuanto a la prueba de *comparaciones múltiples*, la función que se ocupa de
                                  data = seleccion_so)
               
          tabla <- datos_kmc$dif.com %>%
-         kable(caption = paste("k-medias. Diferencias de Centroides", variable),
-               col.names = c("Diferencias centros",
-                             "Diferencias críticas",
-                             "Significación"),
-               digits = c(3, 3, NA),
-               format.args = list(decimal.mark = ".",
-                                  scientific = FALSE)) %>%
-         kable_styling(full_width = F,
-                bootstrap_options = c("striped",
-                                      "bordered",
-                                      "condensed"),
-                position = "center",
-                font_size = 11) %>%
-         row_spec(0, bold = T, align = "c") %>%
-         row_spec(1:nrow(datos_kmc$dif.com), bold = F, align = "c")
+         kable_rstars(caption   = paste("k-medias. Diferencias de Centroides", variable),
+                      col.names = c("Diferencias centros",
+                                    "Diferencias críticas",
+                                    "Significación"),
+                      digits    = c(3, 3, NA))
 
     # Almacenar la tabla en la lista
       
@@ -1223,21 +1149,11 @@ A partir del código anterior se obtienen los siguientes resultados, concernient
               datos_kmc <- kruskalmc(as.formula(paste(variable, "~ whatcluster_k")),
                                      data = seleccion_so)
               tabla <- datos_kmc$dif.com %>%
-                kable(caption = paste("k-medias. Diferencias de Centroides", variable),
-                      col.names = c("Diferencias centros",
-                                    "Diferencias críticas",
-                                    "Significación"),
-              digits = c(3, 3, NA),
-              format.args = list(decimal.mark = ".",
-                                 scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = c("striped",
-                                      "bordered",
-                                      "condensed"),
-                position = "center",
-                font_size = 11) %>%
-  row_spec(0, bold = T, align = "c") %>%
-  row_spec(1:nrow(datos_kmc$dif.com), bold = F, align = "c")
+                kable_rstars(caption   = paste("k-medias. Diferencias de Centroides", variable),
+                             col.names = c("Diferencias centros",
+                                           "Diferencias críticas",
+                                           "Significación"),
+                             digits    = c(3, 3, NA))
    # Almacenar la tabla en la lista
      tablas_kw[[i]] <- tabla
   }
@@ -1774,26 +1690,13 @@ tablamedias <- seleccion %>%
             Idig = mean(IDIG))
 
 tablamedias %>%
-  kable(caption = "Método DBSCAN. Medias de variables (Grupo 0 = Ruido)",
-        col.names = c("Clúster",
-                      "Observaciones",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(NA, 0, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped",
-                "bordered",
-                "condensed",
-                position = "center",
-                font_size = 11) %>%
-  row_spec(0, bold= T,
-           align = "c") %>%
-  row_spec(1:nrow(tablamedias),
-           bold= F,
-           align = "c")
+  kable_rstars(caption   = "Método DBSCAN. Medias de variables (Grupo 0 = Ruido)",
+               col.names = c("Clúster",
+                             "Observaciones",
+                             "I. Diversif.",
+                             "I. Fidelizac.",
+                             "I. Digitalizac."),
+               digits    = c(NA, 0, 3, 3, 3))
 
 # Gráficos de centroides
 
@@ -1877,26 +1780,13 @@ tablamedias <- seleccion %>%
                                       Idig = mean(IDIG))
 
 tablamedias %>%
-  kable(caption = "Método DBSCAN. Medias de variables (Grupo 0 = Ruido)",
-        col.names = c("Clúster",
-                      "Observaciones",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(0, 0, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped",
-                                    "bordered",
-                                    "condensed",
-                position = "center",
-                font_size = 11) %>%
-  row_spec(0, bold= T,
-           align = "c") %>%
-  row_spec(1:nrow(tablamedias),
-           bold= F,
-           align = "c")
+  kable_rstars(caption   = "Método DBSCAN. Medias de variables (Grupo 0 = Ruido)",
+               col.names = c("Clúster",
+                             "Observaciones",
+                             "I. Diversif.",
+                             "I. Fidelizac.",
+                             "I. Digitalizac."),
+               digits    = c(0, 0, 3, 3, 3))
 ```
 
 Además, obtenemos los gráficos de las medias de los clústeres y de dispersión de las variables 2 a 2:
@@ -1994,28 +1884,15 @@ seleccion_out <- seleccion %>%
   select(whatcluster_dbs, MAHALANOBIS, IDIVERSE, IFIDE, IDIG)
 
 seleccion_out %>%
-  kable(caption = "¿Outliers son ruido? (Grupo 0 = Ruido)",
-        col.names = c("Caso",
-                      "Observaciones",
-                      "Grupo (0=ruido)",
-                      "D. Mahalanobis",
-                      "I. Diversificación",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(NA, 3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped",
-                "bordered",
-                "condensed",
-                position = "center",
-                font_size = 11) %>%
-  row_spec(0, bold= T,
-           align = "c") %>%
-  row_spec(1:nrow(seleccion_out),
-           bold= F,
-           align = "c")
+  kable_rstars(caption   = "¿Outliers son ruido? (Grupo 0 = Ruido)",
+               col.names = c("Caso",
+                             "Observaciones",
+                             "Grupo (0=ruido)",
+                             "D. Mahalanobis",
+                             "I. Diversificación",
+                             "I. Fidelizac.",
+                             "I. Digitalizac."),
+               digits    = c(NA, 3, 3, 3, 3))
 ```
 
 ```{r, eval=TRUE, echo=FALSE, fig.show='hide', message=FALSE, warning=FALSE, results='asis'}
@@ -2034,28 +1911,15 @@ seleccion_out <- seleccion %>%
   select(whatcluster_dbs, MAHALANOBIS, IDIVERSE, IFIDE, IDIG)
 
 seleccion_out %>%
-  kable(caption = "¿Outliers son ruido? (Grupo 0 = Ruido)",
-        col.names = c("Caso",
-                      "Observaciones",
-                      "Grupo (0=ruido)",
-                      "D. Mahalanobis",
-                      "I. Diversificación",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(NA, 0, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped",
-                "bordered",
-                "condensed",
-                position = "center",
-                font_size = 11) %>%
-  row_spec(0, bold= T,
-           align = "c") %>%
-  row_spec(1:nrow(seleccion_out),
-           bold= F,
-           align = "c")
+  kable_rstars(caption   = "¿Outliers son ruido? (Grupo 0 = Ruido)",
+               col.names = c("Caso",
+                             "Observaciones",
+                             "Grupo (0=ruido)",
+                             "D. Mahalanobis",
+                             "I. Diversificación",
+                             "I. Fidelizac.",
+                             "I. Digitalizac."),
+               digits    = c(NA, 0, 3, 3, 3))
 ```
 
 En efecto, todas las compañías que fueron identificadas como *outliers* han sido clasificadas como *ruido* (es decir, no pertenecen a ninguno de los clústeres identificados). De hecho, *DBSCAN* ha sido más exigente, y ha clasificado como *ruido* otras empresas que no fueron localizadas, por el método tradicional, como *outliers*.
