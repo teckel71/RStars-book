@@ -10,9 +10,17 @@ library(ggplot2)
 library(gtExtras)
 library(visdat)
 library (GGally)
-library (knitr)
 library (kableExtra)
 library (patchwork)
+
+# Paquete MATrstars: funciones auxiliares del libro R-Stars.
+# Contiene, entre otras, la función kable_rstars(), utilizada más adelante.
+# Si el paquete no está instalado, se instala desde GitHub (una sola vez).
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
+}
+library(MATrstars)
 
 ## DATOS
 
@@ -100,33 +108,21 @@ summary_df <- as.data.frame(temporal$importance)
 summary_df <- t(summary_df)  # Transponer para mejor visualización
 rm (temporal)
 
-# Crear la tabla con kable y personalizarla con kableExtra
+# Crear la tabla con kable_rstars, con column_spec para negrita en primera columna
 summary_df %>%
-  kable(caption = "Resumen de Componentes",
-        col.names = c("Componente", 
-                      "Desv. típica",
-                      "Proporción de varianza (comunalidad)",
-                      "Proporción de varianza (comunalidad) acumulada"),
-        digits = c(2, 2, 2),
-        format.args = list(decimal.mark = ".", scientific = FALSE)) %>%
-  kable_styling(bootstrap_options = c("striped", "bordered", "condensed"),
-                full_width = F, 
-                position = "center") %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(summary_df)), bold= F, align = "c") %>%
+  kable_rstars(caption   = "Resumen de Componentes",
+               col.names = c("Componente", 
+                             "Desv. típica",
+                             "Proporción de varianza (comunalidad)",
+                             "Proporción de varianza (comunalidad) acumulada"),
+               digits    = c(2, 2, 2)) %>%
   column_spec(1, bold = TRUE, extra_css = "text-align: center;")
 
 # Cargas de cada componente.
 cargas <- componentes$rotation
 cargas %>%
-  kable(caption = "Cargas de las componentes obtenidas",
-        digits = c(3, 3, 3),
-        format.args = list(decimal.mark = ".", scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = c("striped", "bordered", "condensed"),
-                position = "center") %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(cargas)), bold= F, align = "c") %>%
+  kable_rstars(caption = "Cargas de las componentes obtenidas",
+               digits  = c(3, 3, 3)) %>%
   column_spec(1, bold = TRUE, extra_css = "text-align: left;")
 
 # Determinacion Componentes a retener.
@@ -204,27 +200,14 @@ scores_top10 <- scores_df %>%
   slice(1:10)
 
 scores_top10 %>%
-  kable(caption = "Puntuaciones emporesas TMI (Top-10, sin outliers)",
-        col.names = c("Empresa",
-                      "Puntuación",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped",
-                "bordered",
-                "condensed",
-                position = "center",
-                font_size = 12) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(scores_top10)),
-           bold= F,
-           align = "c") %>%
-  column_spec(1, bold = TRUE,
-              extra_css = "text-align: left;")
+  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, sin outliers)",
+               col.names = c("Empresa",
+                             "Puntuación",
+                             "I. Diversif.",
+                             "I. Fidelizac.",
+                             "I. Digitalizac."),
+               digits    = c(3, 3, 3, 3)) %>%
+  column_spec(1, bold = TRUE, extra_css = "text-align: left;")
 
 # Scores puntuando outliers
 scores_all <- predict(componentes, newdata = seleccion)
@@ -236,27 +219,14 @@ scores_all_top10 <- scores_all_df %>%
   slice(1:10)
 
 scores_all_top10 %>%
-  kable(caption = "Puntuaciones emporesas TMI (Top-10, con outliers)",
-        col.names = c("Empresa",
-                      "Puntuación",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped",
-                "bordered",
-                "condensed",
-                position = "center",
-                font_size = 12) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(scores_all_top10)),
-           bold= F,
-           align = "c") %>%
-  column_spec(1, bold = TRUE,
-              extra_css = "text-align: left;")
+  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, con outliers)",
+               col.names = c("Empresa",
+                             "Puntuación",
+                             "I. Diversif.",
+                             "I. Fidelizac.",
+                             "I. Digitalizac."),
+               digits    = c(3, 3, 3, 3)) %>%
+  column_spec(1, bold = TRUE, extra_css = "text-align: left;")
 
 # --- Obtención de componentes (ROBPCA de Hubert) --------------------------
 # "seleccion" debe ser un data.frame/matriz numérica (obs x vars)
@@ -289,26 +259,13 @@ scores3_top10 <- scores3_df %>%
   slice(1:10)
 
 scores3_top10 %>%
-  kable(caption = "Puntuaciones emporesas TMI (Top-10, Hubert)",
-        col.names = c("Empresa",
-                      "Puntuación",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped",
-                "bordered",
-                "condensed",
-                position = "center",
-                font_size = 12) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(scores3_top10)),
-           bold= F,
-           align = "c") %>%
-  column_spec(1, bold = TRUE,
-              extra_css = "text-align: left;")
+  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, Hubert)",
+               col.names = c("Empresa",
+                             "Puntuación",
+                             "I. Diversif.",
+                             "I. Fidelizac.",
+                             "I. Digitalizac."),
+               digits    = c(3, 3, 3, 3)) %>%
+  column_spec(1, bold = TRUE, extra_css = "text-align: left;")
 
 # Fin del script :)

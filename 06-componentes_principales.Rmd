@@ -259,7 +259,7 @@ La “*Standard deviation*” es la raíz cuadrada de los autovalores asociados 
 
 En este caso, a partir de la tabla anterior podemos destacar que la primera componente recoge más del 71% de la varianza (*comunalidad*) o información puesta en juego globalmente por las tres variables originales. Las dos primeras componentes, en conjunto, aglutinan casi el 89% de la información de las tres variables ofrecen sobre el comportamiento de las empresas. Entre las tres componentes, lógicamente se recoge el 100% de la *comunalidad* o varianza global.
 
-Si el elemento "*importance*" del `summary()` o resumen "temporal" lo convertimos en un *data frame*, por ejemplo "summary_df", podremos presentar los resultados por medio de una tabla estéticamente más atractiva, a partir de la función `kable()` del paquete `{knitr}`, y las funciones complementarias del paquete `{kableExtra}`:
+Si el elemento "*importance*" del `summary()` o resumen "temporal" lo convertimos en un *data frame*, por ejemplo "summary_df", podremos presentar los resultados por medio de una tabla estéticamente más atractiva, a partir de la función `kable_rstars()` del paquete `{MATrstars}` presentado en el capítulo anterior. Combinaremos esta función con `column_spec()` del paquete `{kableExtra}` para poner en negrita la primera columna (la que contiene el nombre de las componentes):
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 # Convertir el resumen en un data frame
@@ -267,20 +267,14 @@ summary_df <- as.data.frame(temporal$importance)
 summary_df <- t(summary_df)  # Transponer para mejor visualización
 rm (temporal)
 
-# Crear la tabla con kable y personalizarla con kableExtra
+# Crear la tabla con kable_rstars, con column_spec para negrita en primera columna
 summary_df %>%
-  kable(caption = "Resumen de Componentes",
-        col.names = c("Componente", 
-                      "Desv. típica",
-                      "Proporción de varianza (comunalidad)",
-                      "Proporción de varianza (comunalidad) acumulada"),
-        digits = c(2, 2, 2),
-        format.args = list(decimal.mark = ".", scientific = FALSE)) %>%
-  kable_styling(bootstrap_options = c("striped", "bordered", "condensed"),
-                full_width = F, 
-                position = "center") %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(summary_df)), bold= F, align = "c") %>%
+  kable_rstars(caption   = "Resumen de Componentes",
+               col.names = c("Componente", 
+                             "Desv. típica",
+                             "Proporción de varianza (comunalidad)",
+                             "Proporción de varianza (comunalidad) acumulada"),
+               digits    = c(2, 2, 2)) %>%
   column_spec(1, bold = TRUE, extra_css = "text-align: center;")
 ```
 
@@ -290,39 +284,34 @@ summary_df <- as.data.frame(temporal$importance)
 summary_df <- t(summary_df)  # Transponer para mejor visualización
 rm (temporal)
 
-# Crear la tabla con kable y personalizarla con kableExtra
-library (knitr)
-library (kableExtra)
+# Paquete MATrstars: funciones auxiliares del libro R-Stars.
+# Si no está instalado, se instala desde GitHub (solo la primera vez).
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
+}
+library(MATrstars)
+library(kableExtra)
+
+# Crear la tabla con kable_rstars, con column_spec para negrita en primera columna
 summary_df %>%
-  kable(caption = "Resumen de Componentes",
-        col.names = c("Componente", 
-                      "Desv. típica",
-                      "Proporción de varianza (comunalidad)",
-                      "Proporción de varianza (comunalidad) acumulada"),
-        digits = c(2, 2, 2),
-        format.args = list(decimal.mark = ".", scientific = FALSE)) %>%
-  kable_styling(bootstrap_options = c("striped", "bordered", "condensed"),
-                full_width = F, 
-                position = "center") %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(summary_df)), bold= F, align = "c") %>%
+  kable_rstars(caption   = "Resumen de Componentes",
+               col.names = c("Componente", 
+                             "Desv. típica",
+                             "Proporción de varianza (comunalidad)",
+                             "Proporción de varianza (comunalidad) acumulada"),
+               digits    = c(2, 2, 2)) %>%
   column_spec(1, bold = TRUE, extra_css = "text-align: center;")
 ```
 
-Los coeficientes o **cargas** de cada componente se obtienen pidiendo a nuestro objeto “*componentes*” el elemento “*rotation*”. Estas cargas las vamos a guardar en un nuevo objeto que llamaremos, por ejemplo, “cargas”, que presentaremos mediante una pequeña tabla diseñada con la función `kable()` del paquete `{knitr}` y otras funciones del paquete `{kableExtra}`:
+Los coeficientes o **cargas** de cada componente se obtienen pidiendo a nuestro objeto “*componentes*” el elemento “*rotation*”. Estas cargas las vamos a guardar en un nuevo objeto que llamaremos, por ejemplo, “cargas”, que presentaremos mediante una pequeña tabla diseñada con `kable_rstars()` del paquete `{MATrstars}` combinada con `column_spec()` de `{kableExtra}` para destacar en negrita la primera columna:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 # Cargas de cada componente.
 cargas <- componentes$rotation
 cargas %>%
-  kable(caption = "Cargas de las componentes obtenidas",
-        digits = c(3, 3, 3),
-        format.args = list(decimal.mark = ".", scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = c("striped", "bordered", "condensed"),
-                position = "center") %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(cargas)), bold= F, align = "c") %>%
+  kable_rstars(caption = "Cargas de las componentes obtenidas",
+               digits  = c(3, 3, 3)) %>%
   column_spec(1, bold = TRUE, extra_css = "text-align: left;")
 ```
 
@@ -331,14 +320,8 @@ cargas %>%
 
 cargas <- componentes$rotation
 cargas %>%
-  kable(caption = "Cargas de las componentes obtenidas",
-        digits = c(3, 3, 3),
-        format.args = list(decimal.mark = ".", scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = c("striped", "bordered", "condensed"),
-                position = "center") %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(cargas)), bold= F, align = "c") %>%
+  kable_rstars(caption = "Cargas de las componentes obtenidas",
+               digits  = c(3, 3, 3)) %>%
   column_spec(1, bold = TRUE, extra_css = "text-align: left;")
 ```
 
@@ -460,27 +443,14 @@ scores_top10 <- scores_df %>%
   slice(1:10)
 
 scores_top10 %>%
-  kable(caption = "Puntuaciones emporesas TMI (Top-10, sin outliers)",
-        col.names = c("Empresa",
-                      "Puntuación",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped",
-                                    "bordered",
-                                    "condensed",
-                position = "center",
-                font_size = 12) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(scores_top10)),
-           bold= F,
-           align = "c") %>%
-  column_spec(1, bold = TRUE,
-              extra_css = "text-align: left;")
+  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, sin outliers)",
+               col.names = c("Empresa",
+                             "Puntuación",
+                             "I. Diversif.",
+                             "I. Fidelizac.",
+                             "I. Digitalizac."),
+               digits    = c(3, 3, 3, 3)) %>%
+  column_spec(1, bold = TRUE, extra_css = "text-align: left;")
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
@@ -493,27 +463,14 @@ scores_top10 <- scores_df %>%
   slice(1:10)
   
 scores_top10 %>%
-  kable(caption = "Puntuaciones emporesas TMI (Top-10, sin outliers)",
-        col.names = c("Empresa",
-                      "Puntuación",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped",
-                                    "bordered",
-                                    "condensed",
-                position = "center",
-                font_size = 12) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(scores_top10)),
-           bold= F,
-           align = "c") %>%
-  column_spec(1, bold = TRUE,
-              extra_css = "text-align: left;")
+  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, sin outliers)",
+               col.names = c("Empresa",
+                             "Puntuación",
+                             "I. Diversif.",
+                             "I. Fidelizac.",
+                             "I. Digitalizac."),
+               digits    = c(3, 3, 3, 3)) %>%
+  column_spec(1, bold = TRUE, extra_css = "text-align: left;")
 ```
 
 De la tabla y gráfico anteriores podemos concluir que las empresas más preparadas para afrontar el futuro, según nuestro indicador (primera componente del análisis PCA) son, por este orden, *Shuttlepod Movers*, *Kamino Movers* e *Ícarus Star Transport*.
@@ -533,27 +490,14 @@ scores_all_top10 <- scores_all_df %>%
   slice(1:10)
 
 scores_all_top10 %>%
-  kable(caption = "Puntuaciones emporesas TMI (Top-10, con outliers)",
-        col.names = c("Empresa",
-                      "Puntuación",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped",
-                "bordered",
-                "condensed",
-                position = "center",
-                font_size = 12) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(scores_all_top10)),
-           bold= F,
-           align = "c") %>%
-  column_spec(1, bold = TRUE,
-              extra_css = "text-align: left;")
+  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, con outliers)",
+               col.names = c("Empresa",
+                             "Puntuación",
+                             "I. Diversif.",
+                             "I. Fidelizac.",
+                             "I. Digitalizac."),
+               digits    = c(3, 3, 3, 3)) %>%
+  column_spec(1, bold = TRUE, extra_css = "text-align: left;")
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
@@ -567,27 +511,14 @@ scores_all_top10 <- scores_all_df %>%
   slice(1:10)
 
 scores_all_top10 %>%
-  kable(caption = "Puntuaciones emporesas TMI (Top-10, con outliers)",
-        col.names = c("Empresa",
-                      "Puntuación",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped",
-                "bordered",
-                "condensed",
-                position = "center",
-                font_size = 12) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(scores_all_top10)),
-           bold= F,
-           align = "c") %>%
-  column_spec(1, bold = TRUE,
-              extra_css = "text-align: left;")
+  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, con outliers)",
+               col.names = c("Empresa",
+                             "Puntuación",
+                             "I. Diversif.",
+                             "I. Fidelizac.",
+                             "I. Digitalizac."),
+               digits    = c(3, 3, 3, 3)) %>%
+  column_spec(1, bold = TRUE, extra_css = "text-align: left;")
 ```
 
 Vemos como el *ranking* cambia radicalmente, y pasa a estar encabezado por las compañías ***Arrakis Freight***, ***Chakotay Cargo Systems*** e ***Hyperdrive Express***. Si un análisis particularizado de estas empresas por parte del equipo encargado del estudio da como resultado que sus datos son correctos, serían, seguramente, las candidatas para ser adquiridas por el magnate *Arg-Us Korp*.
@@ -615,27 +546,14 @@ scores2_top10 <- scores2_df %>%
   slice(1:10)
 
 scores2_top10 %>%
-  kable(caption = "Puntuaciones emporesas TMI (Top-10, outliers en cálculo)",
-        col.names = c("Empresa",
-                      "Puntuación",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped",
-                "bordered",
-                "condensed",
-                position = "center",
-                font_size = 12) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(scores2_top10)),
-           bold= F,
-           align = "c") %>%
-  column_spec(1, bold = TRUE,
-              extra_css = "text-align: left;")
+  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, outliers en cálculo)",
+               col.names = c("Empresa",
+                             "Puntuación",
+                             "I. Diversif.",
+                             "I. Fidelizac.",
+                             "I. Digitalizac."),
+               digits    = c(3, 3, 3, 3)) %>%
+  column_spec(1, bold = TRUE, extra_css = "text-align: left;")
 ```
 
 Como puede repararse, los cambios, en este caso, no parecen ser relevantes. Solo a partir de la séptima posición se registran cambios en el orden de las empresas.
@@ -682,27 +600,14 @@ scores3_top10 <- scores3_df %>%
   slice(1:10)
 
 scores3_top10 %>%
-  kable(caption = "Puntuaciones emporesas TMI (Top-10, Hubert)",
-        col.names = c("Empresa",
-                      "Puntuación",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped",
-                "bordered",
-                "condensed",
-                position = "center",
-                font_size = 12) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(scores3_top10)),
-           bold= F,
-           align = "c") %>%
-  column_spec(1, bold = TRUE,
-              extra_css = "text-align: left;")
+  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, Hubert)",
+               col.names = c("Empresa",
+                             "Puntuación",
+                             "I. Diversif.",
+                             "I. Fidelizac.",
+                             "I. Digitalizac."),
+               digits    = c(3, 3, 3, 3)) %>%
+  column_spec(1, bold = TRUE, extra_css = "text-align: left;")
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
@@ -737,27 +642,14 @@ scores3_top10 <- scores3_df %>%
   slice(1:10)
 
 scores3_top10 %>%
-  kable(caption = "Puntuaciones emporesas TMI (Top-10, Hubert)",
-        col.names = c("Empresa",
-                      "Puntuación",
-                      "I. Diversif.",
-                      "I. Fidelizac.",
-                      "I. Digitalizac."),
-        digits = c(3, 3, 3, 3),
-        format.args = list(decimal.mark = ".",
-                           scientific = FALSE)) %>%
-  kable_styling(full_width = F,
-                bootstrap_options = "striped",
-                "bordered",
-                "condensed",
-                position = "center",
-                font_size = 12) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(scores3_top10)),
-           bold= F,
-           align = "c") %>%
-  column_spec(1, bold = TRUE,
-              extra_css = "text-align: left;")
+  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, Hubert)",
+               col.names = c("Empresa",
+                             "Puntuación",
+                             "I. Diversif.",
+                             "I. Fidelizac.",
+                             "I. Digitalizac."),
+               digits    = c(3, 3, 3, 3)) %>%
+  column_spec(1, bold = TRUE, extra_css = "text-align: left;")
 ```
 En la tabla se comprueba que existen leves variaciones con respecto a las clasificaciones anteriores. A destacar la inclusión en el *top-10* de *Ripley Interestellar Freight*, y la desparición de  *Kamino Movers*.
 
