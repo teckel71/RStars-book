@@ -135,3 +135,61 @@ mtcars %>%
 ### Código fuente. {-}
 
 - [`R/kable_rstars.R`](https://github.com/teckel71/MATrstars/blob/main/R/kable_rstars.R)
+
+## `presenta_modelo()`. {-}
+
+### Propósito. {-}
+
+Convierte el objeto devuelto por `stats::lm()` (u otros modelos compatibles con `broom::tidy()` y `broom::glance()`) en un conjunto de tres tablas formateadas con `kable_rstars()`, listas para su inclusión en un documento R Markdown con salida HTML. Las tres tablas son:
+
+1. **Coeficientes**: estimaciones, errores estándar, estadístico t, p-valor y niveles de significación (columna `stars`).
+2. **Estadísticos del modelo**: R², R² ajustado, sigma, estadístico F, p-valor global, AIC y número de observaciones.
+3. **Factor de inflación de la varianza (VIF)**: valores de VIF para cada variable explicativa.
+
+Internamente, cada una de las tres tablas se construye con `kable_rstars()`, por lo que heredan automáticamente el estilo tipográfico habitual del libro. Cualquier argumento adicional pasado a `presenta_modelo()` a través de `...` se reenvía a las tres llamadas internas de `kable_rstars()`, permitiendo ajustar de forma uniforme, por ejemplo, el tamaño de fuente o las opciones Bootstrap. Esta función se emplea en el capítulo 9 (regresión lineal múltiple) para presentar de manera homogénea los distintos modelos estimados a lo largo de la práctica.
+
+### Sintaxis. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+presenta_modelo(modelo,
+                captions = c("Modelo Lineal",
+                             "Estadísticos del modelo",
+                             "Factor de inflación de la varianza"),
+                ...)
+```
+
+### Argumentos. {-}
+
+- **`modelo`**: objeto de modelo lineal ajustado (habitualmente devuelto por `stats::lm()`). Debe ser compatible con `broom::tidy()`, `broom::glance()` y `car::vif()`. Este último requiere que el modelo tenga al menos dos variables explicativas.
+- **`captions`**: vector de caracteres de longitud 3 con los títulos de las tres tablas, en orden: coeficientes, estadísticos, VIF. Por defecto, `c("Modelo Lineal", "Estadísticos del modelo", "Factor de inflación de la varianza")`.
+- **`...`**: argumentos adicionales pasados a `kable_rstars()` (por ejemplo, `font_size` o `bootstrap_options`), aplicados por igual a las tres tablas.
+
+### Valor devuelto. {-}
+
+Una **lista de tres elementos**, cada uno un objeto `knitr_kable` con el estilo del libro aplicado. Los elementos están nombrados como `coef`, `stats` y `vif`, de forma que se puede acceder a ellos tanto por posición (`x[[1]]`) como por nombre (`x$coef`).
+
+### Ejemplo. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+library(MATrstars)
+
+# Ajustar un modelo lineal con varias variables explicativas
+modelo <- lm(mpg ~ wt + hp + disp, data = mtcars)
+
+# Aplicar presenta_modelo() y guardar la lista de tablas
+salida <- presenta_modelo(modelo)
+
+# Mostrar las tres tablas:
+salida[[1]]     # tabla de coeficientes
+salida[[2]]     # tabla de estadísticos
+salida[[3]]     # tabla de VIF
+
+# Personalizar títulos y tamaño de fuente:
+presenta_modelo(modelo,
+                captions  = c("Coeficientes", "Ajuste global", "VIF"),
+                font_size = 12)
+```
+
+### Código fuente. {-}
+
+- [`R/presenta_modelo.R`](https://github.com/teckel71/MATrstars/blob/main/R/presenta_modelo.R)

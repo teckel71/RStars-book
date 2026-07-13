@@ -167,14 +167,13 @@ library (visdat)
 library (knitr)
 library (kableExtra)
 library (patchwork)
-library (broom)
-library (car) # para obtener el vif
+library (broom) # para augment()
 library (lmtest)
 ```
 
 A continuación, se han integrado distintas funciones que serán operativamente útiles a la hora de obtener resultados. Estas funciones son:
 
--   **Función `presenta_modelo()`**: función que convierte el objeto "lista" con la solución del modelo de regresión en una presentación de los resultados detallada, compuesta de tres tablas que son almacenadas en una nueva list. Un elemento fundamental para realizar este cometido es el empleo de la función `tidy()` del paquete `{broom}`, que sirve para convertir los resultados de modelos estadísticos u objetos analíticos en un *data frame* organizado (*tidy data*), con columnas estandarizadas como estimaciones, errores estándar, estadísticos y p-values. Además, la función `glance()`, también del paquete `{broom}`, extrae las siguientes informaciones:
+-   **Función `presenta_modelo()`**: convierte el objeto "lista" con la solución del modelo de regresión en una presentación de los resultados detallada, compuesta de tres tablas que son almacenadas en una nueva lista. La función se importa del paquete `{MATrstars}`, ya presentado en el capítulo 5 (véase también el **Apéndice: Funciones auxiliares del paquete `MATrstars`** para su ficha completa). Un elemento fundamental de su funcionamiento interno es el empleo de la función `tidy()` del paquete `{broom}`, que sirve para convertir los resultados de modelos estadísticos u objetos analíticos en un *data frame* organizado (*tidy data*), con columnas estandarizadas como estimaciones, errores estándar, estadísticos y p-values. Además, la función `glance()`, también del paquete `{broom}`, extrae las siguientes informaciones:
 
 1.  **r.squared**: El coeficiente de determinación R², que indica el porcentaje de variación explicada por el modelo.
 
@@ -195,80 +194,6 @@ A continuación, se han integrado distintas funciones que serán operativamente 
 9.  **BIC**: El criterio de información bayesiano.
 
 10. **deviance**: La desviación del modelo.
-
-```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
-##### Definir la función de presentación de resultados:  presenta_modelo() #####
-
-presenta_modelo <- function(modelo) {
-  
-  # Lista de piezas
-  modelo_piezas <-list()
-  
-  # Aplicar la función tidy() al modelo
-  resultados <- tidy(modelo)
-  
-  # Seleccionar las columnas deseadas
-  resultados <- resultados[, c("term",
-                               "estimate",
-                               "std.error","statistic",
-                               "p.value")]
-  # Añadir la columna 'stars' según los valores de 'p.value'
-  resultados$stars <- cut(resultados$p.value,
-                          breaks = c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf),
-                          labels = c("***", "**", "*", "·", " "),
-                          right = FALSE)
-  # formatear los valores de la columna "estimate" a 5 decimales
-  resultados$estimate <- formatC(resultados$estimate,
-                                 format = "f",
-                                 digits = 5)
-  
-  # Crear la tabla con kable_rstars
-  tabla1 <- resultados %>%
-    kable_rstars(caption   = "Modelo Lineal",
-                 col.names = c("Variable", "Coeficiente", "Desv. Típica",
-                               "Estadístico t", "p-valor", "Sig."),
-                 digits    = 3)
-  
-  modelo_piezas[[1]] <- tabla1
-  
-  # Aplicar la función glance
-  estadisticos <- glance(modelo)
-  estadisticos <- estadisticos[,c("r.squared",
-                                  "adj.r.squared",
-                                  "sigma",
-                                  "statistic",
-                                  "p.value",
-                                  "AIC",
-                                  "nobs")]
-  # Crear la tabla con kable_rstars
-  tabla2 <- estadisticos %>%
-    kable_rstars(caption   = "Estadísticos del modelo",
-                 col.names = c("R2", "R2 ajustado", "Sigma", "Estadístico F",
-                               "p-valor", "AIC", "num. observaciones"),
-                 digits    = 3)
-  
-  modelo_piezas[[2]] <- tabla2  
-  
-  # Obtener VIF
-  vif_df <- as.data.frame(vif(modelo))
-  
-  # Añadir nombres de filas
-  library(tibble)
-  vif_df <- vif_df %>%
-    rownames_to_column(var = "Variable")
-  
-  # Crear tabla con kable_rstars
-  tabla3 <- vif_df[,1:2] %>%
-    kable_rstars(caption   = "Factor de inflación de la varianza",
-                 col.names = c("Variable","Valor VIF"),
-                 digits    = 3)
-  
-  modelo_piezas[[3]] <- tabla3
-  
-  return(modelo_piezas)
-}
-############################################################################
-```
 
 -   **Función `predict_from_excel_scenarios()`**: Función que facilita la lectura de escenarios de simulación / previsión detallados en un archivo de Microsoft® Excel®, incluyendo para las variables explicativas tanto valores como fórmulas de cálculo de R (devuelve tabla con resultados):
 
@@ -785,7 +710,7 @@ El signo positivo es coherente: flotas más modernas son más eficientes energé
 
 Hay otras informaciones importantes a la hora de valorar la especificación (inicial) del modelo que no se recogen en el `summary()` del mismo, y que hemos de extraer. Además, conviene presentar los resultados de un modo más elegante y coherente.
 
-Para poder hacer esto con este modelo inicial estimado, o con cualquier otra estimación, vamos a integrar el código correspondiente en una función de R. Llamaremos a esta función `presenta_modelo()`, y recibirá como input la estimación lineal de un modelo, ofreciendo como output tres tablas contenidas en una *lista*: la primera es una *versión* del `summary()`, la segunda es una tabla con otras informaciones adicionales, como el valor del *Criterio de Información de Akaike* (AIC), y la tercera contiene los valores del *factor de inflación de la varianza* (VIF) de las variables del modelo. Las tres tablas se generarán con la función `kable_rstars()` del paquete `{MATrstars}`, que ya hemos utilizado en apartados anteriores para aplicar de manera uniforme el estilo tipográfico habitual del libro. El código de la función `presenta_modelo()` es:
+Para poder hacer esto con este modelo inicial estimado, o con cualquier otra estimación, vamos a aplicar la función `presenta_modelo()` del paquete `{MATrstars}` (véase el **Apéndice: Funciones auxiliares del paquete `MATrstars`** para su ficha completa). Esta función recibe como input la estimación lineal de un modelo, y devuelve como output tres tablas contenidas en una *lista*: la primera es una *versión* del `summary()`, la segunda es una tabla con otras informaciones adicionales, como el valor del *Criterio de Información de Akaike* (AIC), y la tercera contiene los valores del *factor de inflación de la varianza* (VIF) de las variables del modelo. Las tres tablas se generan con la función `kable_rstars()`, que ya hemos utilizado en apartados anteriores para aplicar de manera uniforme el estilo tipográfico habitual del libro.
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
   # Paquete MATrstars: funciones auxiliares del libro R-Stars.
@@ -795,77 +720,6 @@ Para poder hacer esto con este modelo inicial estimado, o con cualquier otra est
     remotes::install_github("teckel71/MATrstars")
   }
   library(MATrstars)
-
-  # Definir la función de presentación de resultados:  presenta_modelo() #####
-
-    presenta_modelo <- function(modelo) {
-
-    # Lista de piezas
-      modelo_piezas <-list()
-  
-    # Aplicar la función tidy() al modelo
-      resultados <- tidy(modelo)
-  
-    # Seleccionar las columnas deseadas
-      resultados <- resultados[, c("term",
-                                   "estimate",
-                                   "std.error","statistic",
-                                   "p.value")]
-    # Añadir la columna 'stars' según los valores de 'p.value'
-      resultados$stars <- cut(resultados$p.value,
-                            breaks = c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf),
-                            labels = c("***", "**", "*", "·", " "),
-                            right = FALSE)
-    # formatear los valores de la columna "estimate" a 5 decimales
-      resultados$estimate <- formatC(resultados$estimate,
-                                     format = "f",
-                                     digits = 5)
-  
-    # Crear la tabla con kable_rstars
-
-      tabla1 <- resultados %>%
-        kable_rstars(
-                     col.names = c("Variable", "Coeficiente", "Desv. Típica",
-                                   "Estadístico t", "p-valor", "Sig."),
-                     digits    = 3)
-      modelo_piezas[[1]] <- tabla1
-  
-    # Aplicar la función glance
-      estadisticos <- glance(modelo)
-      estadisticos <- estadisticos[,c("r.squared",
-                                      "adj.r.squared",
-                                      "sigma",
-                                      "statistic",
-                                      "p.value",
-                                      "AIC",
-                                      "nobs")]
-    # Crear la tabla con kable_rstars
-      tabla2 <- estadisticos %>%
-        kable_rstars(
-                     col.names = c("R2", "R2 ajustado", "Sigma", "Estadístico F",
-                                   "p-valor", "AIC", "num. observaciones"),
-                     digits    = 3)
-      modelo_piezas[[2]] <- tabla2  
-
-    # Obtener VIF
-      vif_df <- as.data.frame(vif(modelo))
-
-    # Añadir nombres de filas
-      library(tibble)
-      vif_df <- vif_df %>%
-      rownames_to_column(var = "Variable")
-  
-    # Crear tabla con kable_rstars
-      tabla3 <- vif_df[,1:2] %>%
-        kable_rstars(
-                     col.names = c("Variable","Valor VIF"),
-                     digits    = 3)
-      modelo_piezas[[3]] <- tabla3
-  
-    return(modelo_piezas)
-  }
-############################################################################
-
 ```
 
 Después, basta con aplicar la función al modelo estimado inicial *(ecua_0)*, guardando las tres tablas generadas en la lista cuyo nombre determinaremos (en nuestro caso, *modelo_0*). Las tablas serán visualizadas:

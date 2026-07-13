@@ -10,12 +10,12 @@ library (ggplot2)
 library (gtExtras)
 library (visdat)
 library (patchwork)
-library (broom)
-library (car) # para obtener el vif
+library (broom) # para augment()
 library (lmtest)
 
 # Paquete MATrstars: funciones auxiliares del libro R-Stars.
-# Contiene, entre otras, la función kable_rstars(), utilizada más adelante.
+# Contiene, entre otras, las funciones kable_rstars() y presenta_modelo(),
+# utilizadas más adelante.
 # Si el paquete no está instalado, se instala desde GitHub (una sola vez).
 if (!requireNamespace("MATrstars", quietly = TRUE)) {
   if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
@@ -23,76 +23,6 @@ if (!requireNamespace("MATrstars", quietly = TRUE)) {
 }
 library(MATrstars)
 
-##### Definir la función de presentación de resultados:  presenta_modelo() #####
-
-presenta_modelo <- function(modelo) {
-  
-  # Lista de piezas
-  modelo_piezas <-list()
-  
-  # Aplicar la función tidy() al modelo
-  resultados <- tidy(modelo)
-  
-  # Seleccionar las columnas deseadas
-  resultados <- resultados[, c("term",
-                               "estimate",
-                               "std.error","statistic",
-                               "p.value")]
-  # Añadir la columna 'stars' según los valores de 'p.value'
-  resultados$stars <- cut(resultados$p.value,
-                          breaks = c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf),
-                          labels = c("***", "**", "*", "·", " "),
-                          right = FALSE)
-  # formatear los valores de la columna "estimate" a 5 decimales
-  resultados$estimate <- formatC(resultados$estimate,
-                                 format = "f",
-                                 digits = 5)
-  
-  # Crear la tabla con kable_rstars
-  tabla1 <- resultados %>%
-    kable_rstars(caption   = "Modelo Lineal",
-                 col.names = c("Variable", "Coeficiente", "Desv. Típica",
-                               "Estadístico t", "p-valor", "Sig."),
-                 digits    = 3)
-  
-  modelo_piezas[[1]] <- tabla1
-  
-  # Aplicar la función glance
-  estadisticos <- glance(modelo)
-  estadisticos <- estadisticos[,c("r.squared",
-                                  "adj.r.squared",
-                                  "sigma",
-                                  "statistic",
-                                  "p.value",
-                                  "AIC",
-                                  "nobs")]
-  # Crear la tabla con kable_rstars
-  tabla2 <- estadisticos %>%
-    kable_rstars(caption   = "Estadísticos del modelo",
-                 col.names = c("R2", "R2 ajustado", "Sigma", "Estadístico F",
-                               "p-valor", "AIC", "num. observaciones"),
-                 digits    = 3)
-  
-  modelo_piezas[[2]] <- tabla2  
-  
-  # Obtener VIF
-  vif_df <- as.data.frame(vif(modelo))
-  
-  # Añadir nombres de filas
-  library(tibble)
-  vif_df <- vif_df %>%
-    rownames_to_column(var = "Variable")
-  
-  # Crear tabla con kable_rstars
-  tabla3 <- vif_df[,1:2] %>%
-    kable_rstars(caption   = "Factor de inflación de la varianza",
-                 col.names = c("Variable","Valor VIF"),
-                 digits    = 3)
-  
-  modelo_piezas[[3]] <- tabla3
-  
-  return(modelo_piezas)
-}
 ############################################################################
 #### Predicción por escenarios (valores o fórmulas con df$var)  ############
 #### =========================================================  ############
