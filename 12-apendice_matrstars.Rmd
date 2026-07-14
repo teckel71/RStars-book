@@ -267,3 +267,194 @@ res$data     # data frame crudo con predicciones y metadatos
 ### Código fuente. {-}
 
 - [`R/predict_from_excel_scenarios.R`](https://github.com/teckel71/MATrstars/blob/main/R/predict_from_excel_scenarios.R)
+
+## `detect_zeros_any()`. {-}
+
+### Propósito. {-}
+
+Identifica de forma robusta todas las celdas con frecuencia cero en una tabla de contingencia de **cualquier número de dimensiones**. Es útil como paso previo a la estimación de un modelo log-lineal: la presencia de ceros estructurales o de muestreo puede causar fallos de estimación o inestabilidad numérica en los algoritmos, por lo que conviene localizarlos antes.
+
+Si la tabla tiene `dimnames`, la función mapea los índices numéricos a las etiquetas correspondientes de cada dimensión. Si no los tiene, devuelve los índices tal cual y crea nombres genéricos (`Var1`, `Var2`, etc.) para las columnas del *data frame* de salida. Se emplea en el capítulo 10, tanto como paso independiente en el flujo de análisis como internamente dentro de `impute_zeros_with_one()`.
+
+### Sintaxis. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+detect_zeros_any(tab)
+```
+
+### Argumentos. {-}
+
+- **`tab`**: tabla de contingencia (objeto `table`, `array` o `matrix`) de cualquier número de dimensiones.
+
+### Valor devuelto. {-}
+
+Un *data frame* con una fila por cada celda de frecuencia cero, con una columna por dimensión de la tabla y una columna adicional `Frecuencia_Original` con valor `0L`. Si no hay celdas con frecuencia cero, devuelve `NULL`.
+
+### Ejemplo. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+library(MATrstars)
+
+# Tabla de contingencia tridimensional
+tab <- xtabs(~ GALAXIA + FJUR + EFLO, data = seleccion)
+
+# Detectar celdas con frecuencia cero
+zeros <- detect_zeros_any(tab)
+if (is.null(zeros)) {
+  message("No hay celdas con frecuencia 0.")
+} else {
+  print(zeros)
+}
+```
+
+### Código fuente. {-}
+
+- [`R/detect_zeros_any.R`](https://github.com/teckel71/MATrstars/blob/main/R/detect_zeros_any.R)
+
+## `impute_zeros_with_one()`. {-}
+
+### Propósito. {-}
+
+Reemplaza en una tabla de contingencia los ceros por un valor mínimo (por defecto, `1L`), preservando el resto de las celdas (nunca modifica celdas con frecuencia positiva). El objetivo es preparar la tabla para la estimación de modelos log-lineales, cuyo procedimiento puede fallar o producir estimaciones inestables en presencia de ceros.
+
+La tabla devuelta lleva dos atributos que documentan la operación:
+
+- `zeros_imputados`: *data frame* idéntico al devuelto por `detect_zeros_any()`, con una columna adicional `Frecuencia_Imputada` que registra el valor con el que se ha sustituido cada cero. Vale `NULL` si no había ceros.
+- `nota_imputacion`: cadena de caracteres describiendo el número de celdas imputadas (o indicando que no había ceros).
+
+Utiliza internamente `detect_zeros_any()` para localizar las celdas afectadas. Se emplea en el capítulo 10 como paso previo a la estimación de los modelos log-lineales.
+
+### Sintaxis. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+impute_zeros_with_one(tab, value = 1L)
+```
+
+### Argumentos. {-}
+
+- **`tab`**: tabla de contingencia (objeto `table`, `array` o `matrix`) de cualquier número de dimensiones.
+- **`value`**: valor con el que sustituir las celdas con frecuencia cero. Por defecto, `1L`.
+
+### Valor devuelto. {-}
+
+Una tabla del mismo tipo y dimensiones que `tab`, con los ceros sustituidos por `value` y con los atributos `zeros_imputados` y `nota_imputacion` adjuntos.
+
+### Ejemplo. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+library(MATrstars)
+
+# Tabla de contingencia con ceros
+tab <- xtabs(~ GALAXIA + FJUR + EFLO, data = seleccion)
+
+# Imputar ceros con 1
+tab_use <- impute_zeros_with_one(tab, value = 1L)
+
+# Consultar la nota y el detalle de las celdas imputadas
+cat(attr(tab_use, "nota_imputacion"), "\n")
+attr(tab_use, "zeros_imputados")
+```
+
+### Código fuente. {-}
+
+- [`R/impute_zeros_with_one.R`](https://github.com/teckel71/MATrstars/blob/main/R/impute_zeros_with_one.R)
+
+## `extraer_coeficientes()`. {-}
+
+### Propósito. {-}
+
+Toma un modelo log-lineal ajustado (habitualmente devuelto por `MASS::loglm()`) y descompone sus parámetros (`modelo$param`) en un *data frame* plano con dos columnas: `Coefficient` (nombre) y `Value` (valor estimado). El nombre se construye combinando el término y los niveles asociados, separados por `":"`, para facilitar la lectura de modelos con múltiples interacciones.
+
+La función contempla los distintos casos que puede presentar `modelo$param`:
+
+- **Intercepto**: se etiqueta como `"T. Independiente"`.
+- **Efectos principales**: el nombre resulta de `variable:nivel`.
+- **Interacciones dobles (matrices)**: se recorren filas y columnas, etiquetando como `nivel_fila:nivel_columna`.
+- **Interacciones triples (arrays 3D)**: se recorren las tres dimensiones, etiquetando como `nivel1:nivel2:nivel3`.
+
+Se utiliza internamente en `generar_solucion()`, pero se expone como función pública del paquete para permitir su uso independiente si el usuario quiere construir su propia presentación de resultados.
+
+### Sintaxis. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+extraer_coeficientes(modelo)
+```
+
+### Argumentos. {-}
+
+- **`modelo`**: modelo log-lineal ajustado (habitualmente devuelto por `MASS::loglm()`).
+
+### Valor devuelto. {-}
+
+Un *data frame* con dos columnas:
+
+- **`Coefficient`**: nombre del coeficiente.
+- **`Value`**: valor estimado del coeficiente.
+
+### Ejemplo. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+library(MATrstars)
+
+modelo <- MASS::loglm(~ GALAXIA + FJUR + EFLO, data = tab_use)
+extraer_coeficientes(modelo)
+```
+
+### Código fuente. {-}
+
+- [`R/extraer_coeficientes.R`](https://github.com/teckel71/MATrstars/blob/main/R/extraer_coeficientes.R)
+
+## `generar_solucion()`. {-}
+
+### Propósito. {-}
+
+Automatiza la presentación de resultados de un modelo log-lineal ajustado (habitualmente devuelto por `MASS::loglm()`). A partir del modelo, la función:
+
+1. Extrae las pruebas de bondad de ajuste (**razón de verosimilitud** y **ji-cuadrado de Pearson**) y las presenta en una tabla formateada con `kable_rstars()`.
+2. Extrae los coeficientes del modelo mediante `extraer_coeficientes()` y los presenta en una segunda tabla formateada con `kable_rstars()`.
+3. Dibuja un **gráfico de mosaico** con los residuos del modelo (usando `vcd::mosaic()` con sombreado `vcd::shading_hcl()`) en el dispositivo gráfico activo.
+
+Las dos tablas se devuelven en una lista de dos elementos: `Informacion` y `Coeficientes`. El gráfico de mosaico es un efecto colateral del renderizado gráfico y no forma parte del valor de retorno.
+
+> **Nota**: la versión anterior de esta función (previa a su integración en `{MATrstars}`) asignaba la lista de resultado directamente en el Global Environment con un nombre derivado del argumento (`solucion_<nombre_del_modelo>`). La versión del paquete requiere que el usuario **capture explícitamente el valor devuelto**: `solucion <- generar_solucion(modelo)`. Este cambio hace más transparente el flujo de datos y respeta la disciplina funcional habitual en R.
+
+### Sintaxis. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+generar_solucion(modelo,
+                 captions    = c("Validación del modelo",
+                                 "Coeficientes del modelo"),
+                 mosaic_main = "Residuos del modelo",
+                 ...)
+```
+
+### Argumentos. {-}
+
+- **`modelo`**: objeto de modelo log-lineal ajustado (habitualmente devuelto por `MASS::loglm()`).
+- **`captions`**: vector de caracteres de longitud 2 con los títulos de las dos tablas, en orden: validación y coeficientes. Por defecto, `c("Validación del modelo", "Coeficientes del modelo")`.
+- **`mosaic_main`**: título del gráfico de mosaico. Por defecto, `"Residuos del modelo"`.
+- **`...`**: argumentos adicionales pasados a `kable_rstars()` (por ejemplo, `font_size` o `bootstrap_options`), aplicados por igual a las dos tablas. Si no se pasa `digits`, se aplica un valor por defecto de `3`.
+
+### Valor devuelto. {-}
+
+Una **lista con dos elementos**:
+
+- **`Informacion`**: objeto `knitr_kable` con la tabla de las pruebas de bondad de ajuste.
+- **`Coeficientes`**: objeto `knitr_kable` con la tabla de coeficientes del modelo.
+
+### Ejemplo. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+library(MATrstars)
+
+modelo_indep <- MASS::loglm(~ GALAXIA + FJUR + EFLO, data = tab_use)
+solucion <- generar_solucion(modelo_indep)
+
+solucion$Informacion    # tabla de validación
+solucion$Coeficientes   # tabla de coeficientes
+# (el mosaico se dibuja automáticamente al llamar a la función)
+```
+
+### Código fuente. {-}
+
+- [`R/generar_solucion.R`](https://github.com/teckel71/MATrstars/blob/main/R/generar_solucion.R)

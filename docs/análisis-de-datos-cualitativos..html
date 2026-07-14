@@ -1610,7 +1610,6 @@ ejecutar el código:</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://github.com/jthomasmock/gtExtras">gtExtras</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/visdat/">visdat</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://rapporter.github.io/pander/">pander</a></span><span class="op">)</span>     <span class="co"># Tablas multifactoriales compactas en Rmarkdown</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va">vcd</span><span class="op">)</span>        <span class="co"># Visualización tablas de contingencia</span></span>
@@ -1622,218 +1621,37 @@ posibles problemas de estimación</strong> y <strong>formatear los resultados</s
 forma clara, ordenada y útil para su interpretación. Estas funciones
 permiten automatizar los pasos clave del análisis: detección de celdas
 problemáticas, corrección de tablas para garantizar la estimabilidad del
-modelo, extracción de coeficientes y presentación final de resultados.</p>
-<p>La función <strong><code>detect_zeros_any()</code></strong> identifica de manera robusta todas
+modelo, extracción de coeficientes y presentación final de resultados.
+Todas ellas se importan del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a>, ya presentado en el
+capítulo 5 (véase también el <strong>Apéndice: Funciones auxiliares del
+paquete <code>MATrstars</code></strong> para sus fichas completas).</p>
+<p>La función <strong><code><a href="https://rdrr.io/pkg/MATrstars/man/detect_zeros_any.html">detect_zeros_any()</a></code></strong> identifica de manera robusta todas
 las celdas con frecuencia cero en una tabla de contingencia de
 <strong>cualquier número de dimensiones</strong>. Esto es importante porque los
 modelos log-lineales pueden fallar o producir estimaciones inestables
 cuando existen celdas sin observaciones, por lo que conocer su
 localización es esencial. Basándose en esta detección,
-<strong><code>impute_zeros_with_one()</code></strong> permite reemplazar únicamente los ceros
+<strong><code><a href="https://rdrr.io/pkg/MATrstars/man/impute_zeros_with_one.html">impute_zeros_with_one()</a></code></strong> permite reemplazar únicamente los ceros
 por un valor mínimo (por defecto, 1), generando una tabla ajustada apta
 para la estimación y dejando registrado qué celdas fueron imputadas y
 por qué. Este procedimiento no altera celdas con frecuencia positiva y
 asegura la viabilidad numérica del modelo.</p>
-<p>Por su parte, <strong><code>extraer_coeficientes()</code></strong> toma un modelo log-lineal
+<p>Por su parte, <strong><code><a href="https://rdrr.io/pkg/MATrstars/man/extraer_coeficientes.html">extraer_coeficientes()</a></code></strong> toma un modelo log-lineal
 ajustado y descompone sus parámetros en una tabla clara, nombrando cada
 coeficiente según las combinaciones de niveles que representa. Esto
 facilita enormemente la interpretación de modelos con múltiples
-interacciones y niveles. Finalmente, la función <strong><code>generar_solucion()</code></strong>
+interacciones y niveles. Finalmente, la función <strong><code><a href="https://rdrr.io/pkg/MATrstars/man/generar_solucion.html">generar_solucion()</a></code></strong>
 automatiza la fase de reporte: extrae las pruebas de bondad de ajuste,
-presenta los coeficientes en tablas bien formateadas con <em>kable</em>, y
-produce un mosaico de residuos del modelo para evaluar visualmente su
-adecuación. Toda esta información se organiza en una lista almacenada
-automáticamente, lo que permite revisar fácilmente los resultados de
-cada modelo estimado.</p>
+presenta los coeficientes en tablas bien formateadas con <code><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars()</a></code>,
+y produce un mosaico de residuos del modelo para evaluar visualmente su
+adecuación. Las dos tablas se devuelven en una lista de dos elementos
+(<code>Informacion</code> y <code>Coeficientes</code>) que el usuario captura explícitamente
+para poder revisarlas después.</p>
 <p>Estas funciones, en conjunto, proporcionan una infraestructura sólida y
 ordenada para trabajar con modelos log-lineales sobre tablas
 multidimensionales, reduciendo errores, mejorando la legibilidad de los
 resultados y facilitando el análisis de las dependencias entre los
 factores estudiados.</p>
-<div class="sourceCode" id="cb392"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># FUNCIONES</span></span>
-<span></span>
-<span><span class="co">#### Detección de celdas 0 (robusta a k dimensiones)############################</span></span>
-<span><span class="va">detect_zeros_any</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">tab</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="va">tab</span> <span class="op">==</span> <span class="fl">0</span>, arr.ind <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>  <span class="co"># Si no hay ceros, devuelve NULL</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">idx</span><span class="op">)</span> <span class="op">||</span></span>
-<span>     <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">is.matrix</a></span><span class="op">(</span><span class="va">idx</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">idx</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">||</span> </span>
-<span>     <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html">is.vector</a></span><span class="op">(</span><span class="va">idx</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">idx</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="cn">NULL</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span>  <span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">idx</span><span class="op">)</span></span>
-<span>  <span class="va">dn</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/dimnames.html">dimnames</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span></span>
-<span>  <span class="va">dn_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">dn</span><span class="op">)</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">dn_names</span><span class="op">)</span> <span class="op">||</span> <span class="fu"><a href="https://rdrr.io/r/base/any.html">any</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html">nchar</a></span><span class="op">(</span><span class="va">dn_names</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">dn_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Var"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">dn</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span>  <span class="co"># Mapear índices -&gt; etiquetas por dimensión (si hay dimnames)</span></span>
-<span>  <span class="va">out_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">dn</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">k</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">dn</span><span class="op">[[</span><span class="va">k</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="va">dn</span><span class="op">[[</span><span class="va">k</span><span class="op">]</span><span class="op">]</span><span class="op">[</span> <span class="va">idx</span><span class="op">[[</span><span class="va">k</span><span class="op">]</span><span class="op">]</span> <span class="op">]</span> <span class="kw">else</span> <span class="va">idx</span><span class="op">[[</span><span class="va">k</span><span class="op">]</span><span class="op">]</span></span>
-<span>  <span class="op">}</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">out_cols</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">dn_names</span></span>
-<span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">out_cols</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span>  <span class="va">out</span><span class="op">$</span><span class="va">Frecuencia_Original</span> <span class="op">&lt;-</span> <span class="fl">0L</span></span>
-<span>  <span class="va">out</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co">################################################################################</span></span>
-<span></span>
-<span><span class="co">#### Imputación 0-&gt;1 con reporte como atributo (no toca celdas &gt; 0) ############</span></span>
-<span><span class="va">impute_zeros_with_one</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">tab</span>, <span class="va">value</span> <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">zeros_df</span> <span class="op">&lt;-</span> <span class="fu">detect_zeros_any</span><span class="op">(</span><span class="va">tab</span><span class="op">)</span></span>
-<span>  <span class="va">tab_adj</span> <span class="op">&lt;-</span> <span class="va">tab</span></span>
-<span>  <span class="va">tab_adj</span><span class="op">[</span><span class="va">tab_adj</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span>  </span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">zeros_df</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">zeros_df</span><span class="op">$</span><span class="va">Frecuencia_Imputada</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">tab_adj</span>, <span class="st">"zeros_imputados"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">zeros_df</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">tab_adj</span>, <span class="st">"nota_imputacion"</span><span class="op">)</span> <span class="op">&lt;-</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span><span class="st">"Se imputaron %d celdas 0 con valor %d para poder preparar la estimación."</span>,</span>
-<span>              <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">zeros_df</span><span class="op">)</span>, <span class="va">value</span><span class="op">)</span></span>
-<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">tab_adj</span>, <span class="st">"zeros_imputados"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">tab_adj</span>, <span class="st">"nota_imputacion"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"No había celdas con frecuencia 0."</span></span>
-<span>  <span class="op">}</span></span>
-<span>  <span class="va">tab_adj</span></span>
-<span><span class="op">}</span></span>
-<span><span class="co">################################################################################      </span></span>
-<span></span>
-<span><span class="co">#### Función para extraer coeficientes y sus nombres de un modelo ##############</span></span>
-<span><span class="va">extraer_coeficientes</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">modelo</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="co"># Extraer los parámetros del modelo</span></span>
-<span>  <span class="va">parametros</span> <span class="op">&lt;-</span> <span class="va">modelo</span><span class="op">$</span><span class="va">param</span></span>
-<span>  </span>
-<span>  <span class="co"># Crear listas para almacenar nombres y valores de coeficientes</span></span>
-<span>  <span class="va">coef_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>  <span class="va">coef_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="co"># Función para generar nombres de coeficientes</span></span>
-<span>  <span class="va">generate_coef_name</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">levels</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">levels</span>, collapse <span class="op">=</span> <span class="st">":"</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span>  </span>
-<span>  <span class="co"># Recorrer los coeficientes y extraer los nombres y valores</span></span>
-<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">term</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">parametros</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">term</span> <span class="op">==</span> <span class="st">"(Intercept)"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="va">coef_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">coef_names</span>, <span class="st">"T. Independiente"</span><span class="op">)</span></span>
-<span>      <span class="va">coef_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">coef_values</span>, <span class="va">parametros</span><span class="op">[[</span><span class="va">term</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span>    <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">is.matrix</a></span><span class="op">(</span><span class="va">parametros</span><span class="op">[[</span><span class="va">term</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="co"># Si es una matriz, recorrer filas y columnas</span></span>
-<span>      <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">parametros</span><span class="op">[[</span><span class="va">term</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>        <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">parametros</span><span class="op">[[</span><span class="va">term</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>          <span class="va">coef_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">coef_names</span>,</span>
-<span>                          <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">parametros</span><span class="op">[[</span><span class="va">term</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
-<span>                                <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">parametros</span><span class="op">[[</span><span class="va">term</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="va">j</span><span class="op">]</span>,</span>
-<span>                                sep <span class="op">=</span> <span class="st">":"</span><span class="op">)</span><span class="op">)</span></span>
-<span>          <span class="va">coef_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">coef_values</span>, <span class="va">parametros</span><span class="op">[[</span><span class="va">term</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="va">i</span>, <span class="va">j</span><span class="op">]</span><span class="op">)</span></span>
-<span>        <span class="op">}</span></span>
-<span>      <span class="op">}</span></span>
-<span>    <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/array.html">is.array</a></span><span class="op">(</span><span class="va">parametros</span><span class="op">[[</span><span class="va">term</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="co"># Si es un array de más de dos dimensiones</span></span>
-<span>      <span class="va">dims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">parametros</span><span class="op">[[</span><span class="va">term</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span>      <span class="va">dimnames_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/dimnames.html">dimnames</a></span><span class="op">(</span><span class="va">parametros</span><span class="op">[[</span><span class="va">term</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span>      <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="va">dims</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>        <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="va">dims</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>          <span class="kw">for</span> <span class="op">(</span><span class="va">k</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="va">dims</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>            <span class="va">coef_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">dimnames_list</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
-<span>                               <span class="va">dimnames_list</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="va">j</span><span class="op">]</span>,</span>
-<span>                               <span class="va">dimnames_list</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="va">k</span><span class="op">]</span>,</span>
-<span>                               sep <span class="op">=</span> <span class="st">":"</span><span class="op">)</span></span>
-<span>            <span class="va">coef_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">coef_names</span>, <span class="va">coef_name</span><span class="op">)</span></span>
-<span>            <span class="va">coef_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">coef_values</span>,</span>
-<span>                             <span class="va">parametros</span><span class="op">[[</span><span class="va">term</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">]</span><span class="op">)</span></span>
-<span>          <span class="op">}</span></span>
-<span>        <span class="op">}</span></span>
-<span>      <span class="op">}</span></span>
-<span>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>      <span class="va">levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">parametros</span><span class="op">[[</span><span class="va">term</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span>      <span class="kw">for</span> <span class="op">(</span><span class="va">level</span> <span class="kw">in</span> <span class="va">levels</span><span class="op">)</span> <span class="op">{</span></span>
-<span>        <span class="va">coef_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">coef_names</span>,</span>
-<span>                        <span class="fu">generate_coef_name</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">term</span>, <span class="va">level</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>        <span class="va">coef_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">coef_values</span>,</span>
-<span>                         <span class="va">parametros</span><span class="op">[[</span><span class="va">term</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="va">level</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span>      <span class="op">}</span></span>
-<span>    <span class="op">}</span></span>
-<span>  <span class="op">}</span></span>
-<span>  </span>
-<span>  <span class="co"># Verificar la longitud de los vectores antes de crear el data frame</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">coef_names</span><span class="op">)</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">coef_values</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">tabla_coeficientes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Coefficient <span class="op">=</span> <span class="va">coef_names</span>,</span>
-<span>                                     Value <span class="op">=</span> <span class="va">coef_values</span>,</span>
-<span>                                     stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">tabla_coeficientes</span><span class="op">)</span></span>
-<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"Error: Las longitudes de coef_names y coef_values no coinciden."</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span><span class="op">}</span></span>
-<span><span class="co">################################################################################</span></span>
-<span></span>
-<span><span class="co">#### Función generar tablas y gráfico a partir de modelo log-lineal ############</span></span>
-<span></span>
-<span><span class="va">generar_solucion</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">modelo</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="co"># Extraer la información del modelo</span></span>
-<span>  <span class="va">summary_modelo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">modelo</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="co"># Crear una tabla con la información relevante de las pruebas de validez</span></span>
-<span>  <span class="va">tabla_informacion</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
-<span>    Statistic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Likelihood Ratio"</span>, <span class="st">"Pearson"</span><span class="op">)</span>,</span>
-<span>    X2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">summary_modelo</span><span class="op">$</span><span class="va">tests</span><span class="op">[</span><span class="fl">1</span>, <span class="st">"X^2"</span><span class="op">]</span>, <span class="va">summary_modelo</span><span class="op">$</span><span class="va">tests</span><span class="op">[</span><span class="fl">2</span>, <span class="st">"X^2"</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>    df <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">summary_modelo</span><span class="op">$</span><span class="va">tests</span><span class="op">[</span><span class="fl">1</span>, <span class="st">"df"</span><span class="op">]</span>, <span class="va">summary_modelo</span><span class="op">$</span><span class="va">tests</span><span class="op">[</span><span class="fl">2</span>, <span class="st">"df"</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>    P_value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">summary_modelo</span><span class="op">$</span><span class="va">tests</span><span class="op">[</span><span class="fl">1</span>, <span class="st">"P(&gt; X^2)"</span><span class="op">]</span>,</span>
-<span>                <span class="va">summary_modelo</span><span class="op">$</span><span class="va">tests</span><span class="op">[</span><span class="fl">2</span>, <span class="st">"P(&gt; X^2)"</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>    stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>  <span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="co"># Formatear la tabla usando kable</span></span>
-<span>  <span class="va">independencia_valida_tab</span> <span class="op">&lt;-</span> <span class="va">tabla_informacion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>caption <span class="op">=</span><span class="st">"Validación del modelo"</span>,</span>
-<span>          format <span class="op">=</span> <span class="st">"html"</span>,</span>
-<span>          col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Prueba"</span>, <span class="st">"Estadístico"</span>,</span>
-<span>                        <span class="st">"Grados Libertad"</span>,</span>
-<span>                        <span class="st">"P-valor"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
-<span>                  bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"bordered"</span>, <span class="st">"condensed"</span><span class="op">)</span>,</span>
-<span>                  position <span class="op">=</span> <span class="st">"center"</span>,</span>
-<span>                  font_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">0</span>, bold<span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="co"># Extraer los coeficientes del modelo</span></span>
-<span>  <span class="va">independencia_df</span> <span class="op">&lt;-</span> <span class="fu">extraer_coeficientes</span><span class="op">(</span><span class="va">modelo</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="co"># Formatear la tabla de coeficientes usando kable</span></span>
-<span>  <span class="va">independencia_coef_tab</span> <span class="op">&lt;-</span> <span class="va">independencia_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"html"</span>,</span>
-<span>          caption <span class="op">=</span><span class="st">"Coeficientes del modelo"</span>,</span>
-<span>          digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
-<span>                  bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"bordered"</span>, <span class="st">"condensed"</span><span class="op">)</span>,</span>
-<span>                  position <span class="op">=</span> <span class="st">"center"</span>,</span>
-<span>                  font_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">0</span>, bold<span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="co"># Crear el gráfico de mosaico con residuos y mostrarlo en pantalla</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">modelo</span>, panel <span class="op">=</span> <span class="va">mosaic</span>,</span>
-<span>       main<span class="op">=</span><span class="st">"Residuos del modelo"</span>,</span>
-<span>       residuals_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"deviance"</span><span class="op">)</span>,</span>
-<span>       gp <span class="op">=</span> <span class="va">shading_hcl</span>,</span>
-<span>       gp_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>interpolate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>       main_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">14</span><span class="op">)</span>,</span>
-<span>       sub_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">9</span><span class="op">)</span>,</span>
-<span>       labeling_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>rot_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">45</span><span class="op">)</span>,</span>
-<span>                            gp_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="co"># Guardar las tablas en una lista</span></span>
-<span>  <span class="va">solucion_nombre</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"solucion_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/deparse.html">deparse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substitute.html">substitute</a></span><span class="op">(</span><span class="va">modelo</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="va">solucion_lista</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
-<span>    Informacion <span class="op">=</span> <span class="va">independencia_valida_tab</span>,</span>
-<span>    Coeficientes <span class="op">=</span> <span class="va">independencia_coef_tab</span></span>
-<span>  <span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/assign.html">assign</a></span><span class="op">(</span><span class="va">solucion_nombre</span>, <span class="va">solucion_lista</span>, envir <span class="op">=</span> <span class="va">.GlobalEnv</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="co">################################################################################</span></span></code></pre></div>
 <p>En el siguiente bloque de código se procede a <strong>importar los datos
 originales y seleccionar las variables categóricas</strong> que serán
 analizadas mediante modelos log-lineales. Primero se utiliza
@@ -1850,7 +1668,7 @@ instrucción <code>gt_plt_summary(seleccion)</code> genera un resumen visual rá
 del contenido de estas variables, permitiendo comprobar de forma
 inmediata su estructura y distribución antes de continuar con el
 análisis:</p>
-<div class="sourceCode" id="cb393"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb392"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># DATOS</span></span>
 <span></span>
 <span><span class="co">## Importando datos</span></span>
@@ -2416,7 +2234,7 @@ asegurando que R trate correctamente a cada una como un atributo
 categórico. Este flujo prepara un conjunto de datos consistente,
 depurado y listo para construir la tabla de contingencia tridimensional
 y avanzar hacia el ajuste de los modelos log-lineales.</p>
-<div class="sourceCode" id="cb394"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb393"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Localizando missing values.</span></span>
 <span><span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -2429,11 +2247,11 @@ y avanzar hacia el ajuste de los modelos log-lineales.</p>
 <span>    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"TRUE"</span> <span class="op">=</span> <span class="st">"NA"</span>, <span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"Presente"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span></span>
 <span>    plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-365-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-363-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 10.9</strong></p>
 </div>
-<div class="sourceCode" id="cb395"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb394"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">GALAXIA</span><span class="op">)</span> <span class="op">|</span></span>
 <span>                       <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">FJUR</span><span class="op">)</span> <span class="op">|</span></span>
 <span>                       <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">EFLO</span><span class="op">)</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -2442,7 +2260,7 @@ y avanzar hacia el ajuste de los modelos log-lineales.</p>
 <span>                            <span class="va">EFLO</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] GALAXIA FJUR    EFLO   
 ## &lt;0 rows&gt; (o 0- extensión row.names)</code></pre>
-<div class="sourceCode" id="cb397"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb396"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">GALAXIA</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>         <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">FJUR</span><span class="op">)</span> <span class="op">&amp;</span></span>
@@ -2469,11 +2287,11 @@ factores.</p>
 contiene <strong>celdas con frecuencia cero</strong>, ya que los log-lineales pueden
 presentar problemas de convergencia o estimaciones inestables cuando
 algunas combinaciones de categorías no están representadas en la
-muestra. Por ello se aplica la función <code>detect_zeros_any()</code>, diseñada
+muestra. Por ello se aplica la función <code><a href="https://rdrr.io/pkg/MATrstars/man/detect_zeros_any.html">detect_zeros_any()</a></code>, diseñada
 para localizar ceros en tablas de cualquier dimensión. Si existen, se
 muestran en una tabla formateada con <em>kable</em> para documentar qué
 combinaciones están ausentes.</p>
-<p>El flujo continúa con la función <code>impute_zeros_with_one()</code>, que
+<p>El flujo continúa con la función <code><a href="https://rdrr.io/pkg/MATrstars/man/impute_zeros_with_one.html">impute_zeros_with_one()</a></code>, que
 reemplaza únicamente las celdas con frecuencia cero por un valor mínimo
 (1). Este ajuste no modifica las frecuencias positivas y garantiza que
 la tabla resultante sea <strong>estimable</strong> por los métodos log-lineales.
@@ -2483,12 +2301,12 @@ después para asegurar trazabilidad y transparencia en el análisis. Con
 esta tabla corregida —<code>tab_use</code>— queda listo el material de datos
 adecuado y consistente para estimar los modelos log-lineales que se
 estudiarán en las siguientes secciones.</p>
-<div class="sourceCode" id="cb398"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb397"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Construir tabla original</span></span>
 <span><span class="va">tab0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/xtabs.html">xtabs</a></span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">+</span> <span class="va">FJUR</span> <span class="op">+</span> <span class="va">EFLO</span>, data <span class="op">=</span> <span class="va">seleccion</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Reportar celdas 0 (si existen)</span></span>
-<span><span class="va">zeros_report</span> <span class="op">&lt;-</span> <span class="fu">detect_zeros_any</span><span class="op">(</span><span class="va">tab0</span><span class="op">)</span></span>
+<span><span class="va">zeros_report</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/detect_zeros_any.html">detect_zeros_any</a></span><span class="op">(</span><span class="va">tab0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">zeros_report</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html">message</a></span><span class="op">(</span><span class="st">"No se han detectado celdas con frecuencia 0 en la tabla original."</span><span class="op">)</span></span>
@@ -2498,7 +2316,7 @@ estudiarán en las siguientes secciones.</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># Imputar 0 -&gt; 1 (solo celdas con 0) y anotar nota + reporte como atributo</span></span>
-<span><span class="va">tab_use</span> <span class="op">&lt;-</span> <span class="fu">impute_zeros_with_one</span><span class="op">(</span><span class="va">tab0</span>, value <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span>
+<span><span class="va">tab_use</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/impute_zeros_with_one.html">impute_zeros_with_one</a></span><span class="op">(</span><span class="va">tab0</span>, value <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Mostrar nota de imputación y, si aplica, el detalle de celdas imputadas</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"\nNOTA IMPUTACIÓN: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">tab_use</span>, <span class="st">"nota_imputacion"</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
@@ -2613,12 +2431,12 @@ Los argumentos <code>main_gp</code> y <code>sub_gp</code> ajustan el tamaño de 
 principal y secundario, de modo que el gráfico sea claro y equilibrado.
 En conjunto, esta visualización facilita identificar relaciones
 estructurales antes de pasar al ajuste de los modelos log-lineales.</p>
-<div class="sourceCode" id="cb400"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb399"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Mostrar tabla</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/pander/man/pander.html">pander</a></span><span class="op">(</span><span class="st">"Tabla de contingencia GALAXIA × FJUR × EFLO"</span><span class="op">)</span></span></code></pre></div>
 <p>Tabla de contingencia GALAXIA × FJUR × EFLO</p>
-<div class="sourceCode" id="cb401"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb400"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/pander/man/pander.html">pander</a></span><span class="op">(</span><span class="va">tab0</span>, style<span class="op">=</span> <span class="st">"rmarkdown"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-sm"><tbody>
 <tr class="odd">
@@ -2761,10 +2579,10 @@ estructurales antes de pasar al ajuste de los modelos log-lineales.</p>
 <div style="text-align: center;">
 <p><strong>Tabla 10.7</strong></p>
 </div>
-<div class="sourceCode" id="cb402"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb401"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/pander/man/pander.html">pander</a></span><span class="op">(</span><span class="st">"Tabla de contingencia GALAXIA × FJUR × EFLO (imputación puntual 0→1)"</span><span class="op">)</span></span></code></pre></div>
 <p>Tabla de contingencia GALAXIA × FJUR × EFLO (imputación puntual 0→1)</p>
-<div class="sourceCode" id="cb403"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb402"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/pander/man/pander.html">pander</a></span><span class="op">(</span><span class="va">tab_use</span>, style<span class="op">=</span> <span class="st">"rmarkdown"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-sm"><tbody>
 <tr class="odd">
@@ -2907,7 +2725,7 @@ estructurales antes de pasar al ajuste de los modelos log-lineales.</p>
 <div style="text-align: center;">
 <p><strong>Tabla 10.8</strong></p>
 </div>
-<div class="sourceCode" id="cb404"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb403"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Representación gráfica de la tabla con mosaico</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/vcd/man/mosaic.html">mosaic</a></span><span class="op">(</span><span class="va">tab0</span>,</span>
 <span>       main <span class="op">=</span> <span class="st">"Galaxia, Forma Jurídica y Antigüedad media de la flota"</span>,</span>
@@ -2917,7 +2735,7 @@ estructurales antes de pasar al ajuste de los modelos log-lineales.</p>
 <span>                            gp_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>       main_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">16</span><span class="op">)</span>,</span>
 <span>       sub_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-372-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-370-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 10.10</strong></p>
 </div>
@@ -2975,20 +2793,21 @@ contiene mucha información: pruebas de ajuste <strong>(<em>deviance</em> y
 estimados, etc.</p>
 <p>Parte de esta información (en especial, los coeficientes) se almacena en
 estructuras internas algo complejas, especialmente cuando el modelo
-incluye varias interacciones. Para simplificar su uso, hemos definido
-dos funciones auxiliares, que se detallaron al comienzo del <em>script</em>:</p>
+incluye varias interacciones. Para simplificar su uso, se emplean dos
+funciones auxiliares del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a> (ya introducidas al
+comienzo del capítulo; su ficha completa está en el <strong>Apéndice</strong>):</p>
 <ul>
-<li><p>La función <strong><code>extraer_coeficientes()</code></strong> toma un objeto devuelto por
+<li><p>La función <strong><code><a href="https://rdrr.io/pkg/MATrstars/man/extraer_coeficientes.html">extraer_coeficientes()</a></code></strong> toma un objeto devuelto por
 <code><a href="https://rdrr.io/pkg/MASS/man/loglm.html">loglm()</a></code> y construye un <em>data frame</em> con el nombre de cada
 coeficiente y su valor estimado, independientemente de que el
 parámetro proceda de un efecto principal o de una interacción de
 orden superior.</p></li>
-<li><p>La función <strong><code>generar_solucion()</code></strong> automatiza la presentación de
+<li><p>La función <strong><code><a href="https://rdrr.io/pkg/MATrstars/man/generar_solucion.html">generar_solucion()</a></code></strong> automatiza la presentación de
 resultados: a partir de un modelo <em>log-lineal</em>, extrae las pruebas
 de ajuste (<em>ratio de verosimilitud</em> y <em>Pearson</em>), construye una
 tabla resumen con sus estadísticos, grados de libertad y p-valores,
 genera otra tabla con los coeficientes (llamando internamente a
-<code>extraer_coeficientes()</code>), y produce un <em>gráfico de mosaico de
+<code><a href="https://rdrr.io/pkg/MATrstars/man/extraer_coeficientes.html">extraer_coeficientes()</a></code>), y produce un <em>gráfico de mosaico de
 residuos</em> (frecuencias observadas frente a las estimadas por el
 modelo). Todo ello se devuelve en una lista de objetos listos para
 ser incluidos en el informe.</p></li>
@@ -2999,26 +2818,24 @@ independencia</strong>, que asume que la distribución conjunta de las
 frecuencias puede explicarse únicamente por los efectos propios de cada
 factor, sin interacción entre ellos (es decir, sin asociación entre
 GALAXIA, EFLO y FJUR). El siguiente código ajusta este modelo a la tabla
-<code>tab_use</code> y genera automáticamente las tablas y el mosaico de residuos
-correspondientes:</p>
-<div class="sourceCode" id="cb405"><pre class="downlit sourceCode r">
+<code>tab_use</code> y captura la lista devuelta por <code><a href="https://rdrr.io/pkg/MATrstars/man/generar_solucion.html">generar_solucion()</a></code> en el
+objeto <code>solucion_modelo_indep</code>, además de dibujar el mosaico de residuos
+correspondiente:</p>
+<div class="sourceCode" id="cb404"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Modelo de independencia (solo efectos principales, sin interacciones)</span></span>
 <span><span class="va">modelo_indep</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/loglm.html">loglm</a></span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">+</span> <span class="va">EFLO</span> <span class="op">+</span> <span class="va">FJUR</span>,</span>
 <span>                            data   <span class="op">=</span> <span class="va">tab_use</span>,</span>
 <span>                            fitted <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">generar_solucion</span><span class="op">(</span><span class="va">modelo_indep</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-373-1.png" alt="" width="672"></div>
-<div style="text-align: center;">
-<p><strong>Figura 10.11</strong></p>
-</div>
+<span><span class="va">solucion_modelo_indep</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/generar_solucion.html">generar_solucion</a></span><span class="op">(</span><span class="va">modelo_indep</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-371-1.png" alt="" width="672"></div>
 <p>A partir del modelo de independencia podemos evaluar si la hipótesis de
 <strong>no asociación global</strong> entre GALAXIA, FJUR y EFLO resulta razonable o
 si, por el contrario, los datos sugieren la presencia de dependencias
-entre los factores. Tras la estimación, la función <code>generar_solucion()</code>
-crea automáticamente la lista <code>solucion_modelo_indep</code>, que contiene
-tanto las tablas con las pruebas de ajuste y los coeficientes como el
-<strong>mosaico de residuos del modelo</strong>. Este gráfico constituye una
+entre los factores. Tras la estimación, la lista <code>solucion_modelo_indep</code>
+contiene tanto las tablas con las pruebas de ajuste y los coeficientes
+como acceso al <strong>mosaico de residuos del modelo</strong> (dibujado
+automáticamente durante la llamada a <code><a href="https://rdrr.io/pkg/MATrstars/man/generar_solucion.html">generar_solucion()</a></code>). Este gráfico constituye una
 herramienta visual clave para diagnosticar la adecuación del modelo, ya
 que compara las frecuencias observadas con las estimadas bajo la
 suposición de independencia.</p>
@@ -3046,9 +2863,12 @@ conjunta de la distribución de las empresas intergalácticas.</p>
 acceder al primer elemento de la lista solucion_modelo_indep, que
 contiene las pruebas de validez del modelo (ratio de verosimilitud y
 chi-cuadrado de Pearson), mediante:</p>
-<div class="sourceCode" id="cb406"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb405"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_indep</span><span class="op">$</span><span class="va">Informacion</span></span></code></pre></div>
-<div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+<div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-371">Table 10.1: </span><span id="tab:unnamed-chunk-371">Table 10.2: </span>Validación del modelo
+</caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
 Prueba
@@ -3065,31 +2885,31 @@ P-valor
 </tr></thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Likelihood Ratio
 </td>
-<td style="text-align:right;">
-41.66967
+<td style="text-align:right;text-align: center;">
+41.670
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 36
 </td>
-<td style="text-align:right;">
-0.2377067
+<td style="text-align:right;text-align: center;">
+0.238
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Pearson
 </td>
-<td style="text-align:right;">
-44.11617
+<td style="text-align:right;text-align: center;">
+44.116
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 36
 </td>
-<td style="text-align:right;">
-0.1659980
+<td style="text-align:right;text-align: center;">
+0.166
 </td>
 </tr>
 </tbody>
@@ -3115,9 +2935,12 @@ relevantes que justifican avanzar hacia modelos con interacciones.</strong></p>
 parámetros o <strong>coeficientes estimados</strong> del modelo, que en este caso
 corresponden solo a efectos directos o principales. Para obtener la
 tabla ejecutaremos:</p>
-<div class="sourceCode" id="cb407"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb406"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_indep</span><span class="op">$</span><span class="va">Coeficientes</span></span></code></pre></div>
-<div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+<div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-371">Table 10.1: </span><span id="tab:unnamed-chunk-371">Table 10.1: </span>Coeficientes del modelo
+</caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
 Coefficient
@@ -3128,98 +2951,98 @@ Value
 </tr></thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 T. Independiente
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 1.757
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GALAXIA:Andrómeda
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.393
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GALAXIA:GN Magallanes
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.087
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GALAXIA:PN Magallanes
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.512
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GALAXIA:Triángulo
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.188
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GALAXIA:Vía Láctea
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.393
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 FJUR:CG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.168
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 FJUR:SAG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.121
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 FJUR:SLG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.289
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 EFLO:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.450
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 EFLO:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.047
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 EFLO:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.404
 </td>
 </tr>
@@ -3430,24 +3253,24 @@ atributos y sus interacciones son los más importantes (modelo
 <em>redundante</em>).</p>
 <p>Para su estimación, simplemente se sustituyen los signos “+” del modelo
 anterior por los signos “*”. El modelo se denominará “modelo_sat”:</p>
-<div class="sourceCode" id="cb408"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb407"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Modelo Saturado.</span></span>
 <span></span>
 <span><span class="va">modelo_sat</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/loglm.html">loglm</a></span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">*</span> <span class="va">EFLO</span> <span class="op">*</span> <span class="va">FJUR</span>,</span>
 <span>                          data   <span class="op">=</span> <span class="va">tab_use</span>,</span>
 <span>                          fitted <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">generar_solucion</span><span class="op">(</span><span class="va">modelo_sat</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-376-1.png" alt="" width="672"></div>
-<div style="text-align: center;">
-<p><strong>Figura 10.12</strong></p>
-</div>
+<span><span class="va">solucion_modelo_sat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/generar_solucion.html">generar_solucion</a></span><span class="op">(</span><span class="va">modelo_sat</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-374-1.png" alt="" width="672"></div>
 <p>El gráfico de mosaico muestra que, obviamente, todos los residuos son 0,
 ya que coinciden las frecuencias observadas y las estimadas por el
 modelo. En cuanto a la tabla de validación:</p>
-<div class="sourceCode" id="cb409"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb408"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_sat</span><span class="op">$</span><span class="va">Informacion</span></span></code></pre></div>
-<div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+<div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-374">Table 10.3: </span><span id="tab:unnamed-chunk-374">Table 10.4: </span>Validación del modelo
+</caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
 Prueba
@@ -3464,30 +3287,30 @@ P-valor
 </tr></thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Likelihood Ratio
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 1
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Pearson
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 1
 </td>
 </tr>
@@ -3504,9 +3327,12 @@ punto de vista del <em>análisis estructural</em>, el modelo saturado no es muy
 los que son poco importantes. Por último, mostraremos la tabla con los
 coeficientes estimados, correspondientes tanto a los efectos principales
 o directos como a las interacciones:</p>
-<div class="sourceCode" id="cb410"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb409"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_sat</span><span class="op">$</span><span class="va">Coeficientes</span></span></code></pre></div>
-<div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+<div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-374">Table 10.3: </span><span id="tab:unnamed-chunk-374">Table 10.3: </span>Coeficientes del modelo
+</caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
 Coefficient
@@ -3517,770 +3343,770 @@ Value
 </tr></thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 T. Independiente
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 1.669
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GALAXIA:Andrómeda
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.438
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GALAXIA:GN Magallanes
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.032
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GALAXIA:PN Magallanes
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.696
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GALAXIA:Triángulo
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.146
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GALAXIA:Vía Láctea
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.372
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 FJUR:CG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.219
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 FJUR:SAG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.110
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 FJUR:SLG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.329
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 EFLO:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.385
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 EFLO:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.011
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 EFLO:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.396
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Andrómeda:CG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.007
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Andrómeda:SAG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.228
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Andrómeda:SLG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.235
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GN Magallanes:CG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.547
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GN Magallanes:SAG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.226
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GN Magallanes:SLG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.322
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 PN Magallanes:CG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.388
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 PN Magallanes:SAG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.169
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 PN Magallanes:SLG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.557
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Triángulo:CG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.306
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Triángulo:SAG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.279
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Triángulo:SLG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.027
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Vía Láctea:CG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.140
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Vía Láctea:SAG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.112
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Vía Láctea:SLG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.027
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Andrómeda:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.031
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Andrómeda:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.024
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Andrómeda:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.054
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GN Magallanes:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.252
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GN Magallanes:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.004
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GN Magallanes:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.256
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 PN Magallanes:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.096
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 PN Magallanes:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.076
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 PN Magallanes:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.020
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Triángulo:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.059
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Triángulo:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.113
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Triángulo:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.054
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Vía Láctea:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.377
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Vía Láctea:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.209
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Vía Láctea:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.168
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 CG:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.238
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 CG:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.217
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 CG:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.021
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 SAG:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.082
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 SAG:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.177
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 SAG:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.096
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 SLG:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.156
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 SLG:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.040
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 SLG:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.116
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Andrómeda:CG:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.126
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Andrómeda:CG:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.200
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Andrómeda:CG:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.326
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Andrómeda:SAG:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.237
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Andrómeda:SAG:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.316
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Andrómeda:SAG:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.079
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Andrómeda:SLG:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.363
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Andrómeda:SLG:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.115
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Andrómeda:SLG:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.248
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GN Magallanes:CG:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.021
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GN Magallanes:CG:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.308
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GN Magallanes:CG:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.287
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GN Magallanes:SAG:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.030
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GN Magallanes:SAG:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.191
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GN Magallanes:SAG:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.222
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GN Magallanes:SLG:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.051
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GN Magallanes:SLG:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.117
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GN Magallanes:SLG:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.065
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 PN Magallanes:CG:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.417
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 PN Magallanes:CG:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.429
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 PN Magallanes:CG:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.012
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 PN Magallanes:SAG:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.323
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 PN Magallanes:SAG:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.603
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 PN Magallanes:SAG:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.280
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 PN Magallanes:SLG:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.094
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 PN Magallanes:SLG:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.174
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 PN Magallanes:SLG:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.268
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Triángulo:CG:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.300
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Triángulo:CG:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.269
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Triángulo:CG:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.569
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Triángulo:SAG:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.019
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Triángulo:SAG:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.253
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Triángulo:SAG:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.272
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Triángulo:SLG:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.281
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Triángulo:SLG:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.017
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Triángulo:SLG:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.297
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Vía Láctea:CG:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.222
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Vía Láctea:CG:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.190
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Vía Láctea:CG:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.032
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Vía Láctea:SAG:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.097
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Vía Láctea:SAG:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.348
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Vía Láctea:SAG:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.251
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Vía Láctea:SLG:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.125
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Vía Láctea:SLG:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.159
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Vía Láctea:SLG:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.284
 </td>
 </tr>
@@ -4319,7 +4145,7 @@ evitarlo, implementamos manualmente el mismo algoritmo de selección
 <em>backward</em> por AIC (respetando la jerarquía de los términos), pero
 reajustando cada submodelo con una llamada directa y autocontenida a
 <code><a href="https://rdrr.io/pkg/MASS/man/loglm.html">MASS::loglm()</a></code>, sin depender de <code><a href="https://rdrr.io/r/stats/update.html">update()</a></code> ni de la pila de llamadas:</p>
-<div class="sourceCode" id="cb411"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb410"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Selección backward por AIC, robusta frente al contexto de ejecución</span></span>
 <span><span class="co"># (consola, knitr, bookdown, funciones envolventes, etc.).</span></span>
 <span></span>
@@ -4375,7 +4201,7 @@ reajustando cada submodelo con una llamada directa y autocontenida a
 óptima según el AIC, más simple que el modelo saturado pero
 suficientemente expresiva para captar los patrones esenciales de
 asociación entre los factores:</p>
-<div class="sourceCode" id="cb412"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb411"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Elección del modelo final.</span></span>
 <span></span>
 <span><span class="va">modelo_def</span> <span class="op">&lt;-</span> <span class="fu">step_loglm_backward</span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">*</span> <span class="va">EFLO</span> <span class="op">*</span> <span class="va">FJUR</span>,</span>
@@ -4422,12 +4248,9 @@ interacciones triples entre los tres factores.</p>
 <p>Luego, se pasa el modelo a la función <code>generar_solución()</code> para obtener
 los resultados (el gráfico de mosaico y las dos tablas). El gráfico
 obtenido es:</p>
-<div class="sourceCode" id="cb414"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span>    <span class="fu">generar_solucion</span><span class="op">(</span><span class="va">modelo_def</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-381-1.png" alt="" width="672"></div>
-<div style="text-align: center;">
-<p><strong>Figura 10.13</strong></p>
-</div>
+<div class="sourceCode" id="cb413"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="va">solucion_modelo_def</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/generar_solucion.html">generar_solucion</a></span><span class="op">(</span><span class="va">modelo_def</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-379-1.png" alt="" width="672"></div>
 <p>El gráfico de residuos del modelo seleccionado muestra un ajuste
 considerablemente mejor que el del modelo de independencia. La mayoría
 de los rectángulos presentan tonalidades suaves, señal de que las
@@ -4451,9 +4274,12 @@ modelo final proporciona una representación parsimoniosa y
 estadísticamente coherente de las dependencias esenciales entre los
 factores analizados.</p>
 <p>En cuanto a la tabla de validación:</p>
-<div class="sourceCode" id="cb415"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb414"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_def</span><span class="op">$</span><span class="va">Informacion</span></span></code></pre></div>
-<div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+<div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-379">Table 10.5: </span><span id="tab:unnamed-chunk-379">Table 10.6: </span>Validación del modelo
+</caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
 Prueba
@@ -4470,31 +4296,31 @@ P-valor
 </tr></thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Likelihood Ratio
 </td>
-<td style="text-align:right;">
-25.35935
+<td style="text-align:right;text-align: center;">
+25.359
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 28
 </td>
-<td style="text-align:right;">
-0.6082143
+<td style="text-align:right;text-align: center;">
+0.608
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Pearson
 </td>
-<td style="text-align:right;">
-25.57311
+<td style="text-align:right;text-align: center;">
+25.573
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 28
 </td>
-<td style="text-align:right;">
-0.5964967
+<td style="text-align:right;text-align: center;">
+0.596
 </td>
 </tr>
 </tbody>
@@ -4516,9 +4342,12 @@ concluimos que <strong>no es necesario añadir interacciones adicionales</strong
 que la especificación elegida representa correctamente la estructura de
 dependencias presente en la tabla de contingencia tridimensional.</p>
 <p>En lo que se refiere a los coeficientes estimados del modelo:</p>
-<div class="sourceCode" id="cb416"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb415"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_def</span><span class="op">$</span><span class="va">Coeficientes</span></span></code></pre></div>
-<div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+<div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:unnamed-chunk-379">Table 10.5: </span><span id="tab:unnamed-chunk-379">Table 10.5: </span>Coeficientes del modelo
+</caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
 Coefficient
@@ -4529,218 +4358,218 @@ Value
 </tr></thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 T. Independiente
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 1.711
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GALAXIA:Andrómeda
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.435
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GALAXIA:GN Magallanes
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.054
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GALAXIA:PN Magallanes
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.656
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GALAXIA:Triángulo
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.161
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GALAXIA:Vía Láctea
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.436
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 FJUR:CG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.219
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 FJUR:SAG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.127
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 FJUR:SLG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.346
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 EFLO:ANTIGUA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.450
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 EFLO:MADURA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.047
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 EFLO:RENOVADA
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.404
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Andrómeda:CG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.091
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Andrómeda:SAG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.188
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Andrómeda:SLG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.097
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GN Magallanes:CG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.537
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GN Magallanes:SAG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.206
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 GN Magallanes:SLG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.331
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 PN Magallanes:CG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.387
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 PN Magallanes:SAG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.143
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 PN Magallanes:SLG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.530
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Triángulo:CG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.189
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Triángulo:SAG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.250
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Triángulo:SLG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.061
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Vía Láctea:CG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 0.131
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Vía Láctea:SAG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.089
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;text-align: center;">
 Vía Láctea:SLG
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;text-align: center;">
 -0.042
 </td>
 </tr>
@@ -4898,7 +4727,7 @@ conocido de los apartados anteriores.</p></li>
 la primera parte del código está dedicada a la limpieza de la memoria
 (<em>Environment</em>). Además, se cargan los paquetes que harán falta para
 ejecutar el código:</p>
-<div class="sourceCode" id="cb417"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb416"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#### Análisis de Correspondencias Simple. Universo R-Stars ####################</span></span>
 <span><span class="co">################################################################################</span></span>
 <span></span>
@@ -4924,7 +4753,7 @@ categóricas</strong> que intervendrán en el análisis: GALAXIA y FJUR. Se
 comprueban los posibles <em>missing values</em> con <code><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss()</a></code>, y se
 recodifican los nombres de las galaxias para facilitar la lectura de
 los gráficos:</p>
-<div class="sourceCode" id="cb418"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb417"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># DATOS</span></span>
 <span></span>
 <span>  <span class="co"># Importando datos</span></span>
@@ -5448,7 +5277,7 @@ SLG, SAG and CG
 las dos variables categóricas necesarias para el análisis de
 correspondencias simple: <strong>GALAXIA</strong> (5 categorías) y <strong>FJUR</strong> (3
 categorías). Ambas aparecen completas, sin valores perdidos:</p>
-<div class="sourceCode" id="cb419"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb418"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Localizando (posibles) missing values</span></span>
 <span></span>
 <span>    <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -5462,18 +5291,18 @@ categorías). Ambas aparecen completas, sin valores perdidos:</p>
 <span>        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"TRUE"</span> <span class="op">=</span> <span class="st">"NA"</span>, <span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"Presente"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span></span>
 <span>        plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-386-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-384-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
-<p><strong>Figura 10.14</strong></p>
+<p><strong>Figura 10.11</strong></p>
 </div>
-<div class="sourceCode" id="cb420"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb419"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">GALAXIA</span><span class="op">)</span> <span class="op">|</span></span>
 <span>                         <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">FJUR</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>                  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">GALAXIA</span>,</span>
 <span>                                <span class="va">FJUR</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] GALAXIA FJUR   
 ## &lt;0 rows&gt; (o 0- extensión row.names)</code></pre>
-<div class="sourceCode" id="cb422"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb421"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Eliminando (si procede) filas con NA, y renombrando los niveles de GALAXIA</span></span>
 <span></span>
 <span>    <span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -5489,7 +5318,7 @@ categorías). Ambas aparecen completas, sin valores perdidos:</p>
 <p>Confirmado que no hay valores perdidos y renombradas las categorías de
 GALAXIA, construimos la <strong>tabla de contingencia</strong> de partida, sobre la
 cual se aplicará el análisis:</p>
-<div class="sourceCode" id="cb423"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb422"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># TABLA DE CONTINGENCIA (GALAXIA X FJUR)</span></span>
 <span></span>
 <span>  <span class="va">tab.GA.FJ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">seleccion</span>, <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">GALAXIA</span>, <span class="va">FJUR</span><span class="op">)</span><span class="op">)</span></span>
@@ -5656,7 +5485,7 @@ recoge la información de las <strong>dimensiones</strong> (autovalores, porcent
 de inercia principal y porcentaje acumulado), la segunda desglosa la
 información de las <strong>filas</strong> (categorías de GALAXIA) y la tercera
 desglosa la información de las <strong>columnas</strong> (categorías de FJUR):</p>
-<div class="sourceCode" id="cb424"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb423"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ANALISIS DE CORRESPONDENCIAS SIMPLE</span></span>
 <span></span>
 <span>  <span class="co"># Cálculo del análisis con la función CA() de {FactoMineR}</span></span>
@@ -5690,7 +5519,7 @@ esa dimensión; valores bajos indican una representación pobre. La
 suma del coseno cuadrado en todas las dimensiones no triviales es 1.</p></li>
 </ul>
 <p>El código para construir las tres tablas es:</p>
-<div class="sourceCode" id="cb425"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb424"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Tabla 1: Inercia principal por dimensión</span></span>
 <span></span>
 <span>    <span class="va">TableEigenCA</span> <span class="op">&lt;-</span> <span class="va">EigenCA</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -5748,7 +5577,7 @@ suma del coseno cuadrado en todas las dimensiones no triviales es 1.</p></li>
 <span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">TableCols</span></span></code></pre></div>
 <p>La primera tabla resume la <strong>descomposición de la inercia</strong> entre las
 dimensiones extraídas:</p>
-<div class="sourceCode" id="cb426"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb425"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -5822,7 +5651,7 @@ respecto a sus asociaciones.</p>
 <p>La segunda tabla, correspondiente al factor GALAXIA, permite
 identificar qué categorías contribuyen más a la inercia y qué tan bien
 están representadas en cada dimensión:</p>
-<div class="sourceCode" id="cb427"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb426"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -5964,7 +5793,7 @@ respectivamente), mientras que <strong>Andrómeda</strong>, <strong>Triángulo</
 Láctea</strong> encuentran mejor representación en la <strong>Dimensión 2</strong> (cos²
 entre 0.68 y 0.86 en el segundo eje).</p>
 <p>La tercera tabla recoge la información análoga para el factor FJUR:</p>
-<div class="sourceCode" id="cb428"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb427"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -6078,7 +5907,7 @@ grado extremo), habría que ponderar con especial atención la posición
 de las categorías en la primera dimensión a la hora de establecer
 conclusiones. Para crear este gráfico de contribuciones puede
 recurrirse a la función <code><a href="https://rdrr.io/pkg/factoextra/man/eigenvalue.html">fviz_screeplot()</a></code> del paquete <a href="https://github.com/kassambara/factoextra">factoextra</a>:</p>
-<div class="sourceCode" id="cb429"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb428"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># GRÁFICOS DEL ANÁLISIS DE CORRESPONDENCIAS</span></span>
 <span></span>
 <span>  <span class="co"># Gráfico de contribuciones de las dimensiones a la Inercia Total</span></span>
@@ -6095,9 +5924,9 @@ recurrirse a la función <code><a href="https://rdrr.io/pkg/factoextra/man/eigen
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">gcontrib</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-395-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-393-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
-<p><strong>Figura 10.15</strong></p>
+<p><strong>Figura 10.12</strong></p>
 </div>
 <p>El gráfico confirma visualmente lo que ya sabíamos por la primera
 tabla: la primera dimensión asume aproximadamente tres cuartas partes
@@ -6113,7 +5942,7 @@ uniformidad; las barras que la superan corresponden a las categorías
 que “explican” más ese eje. A continuación se construyen los cuatro
 gráficos (filas y columnas × dimensiones 1 y 2) y se disponen
 conjuntamente con <a href="https://patchwork.data-imaginist.com">patchwork</a>:</p>
-<div class="sourceCode" id="cb430"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb429"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Contribución de las categorías (filas y columnas) a las dimensiones</span></span>
 <span></span>
 <span>    <span class="va">grow_dim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_contrib.html">fviz_contrib</a></span><span class="op">(</span><span class="va">acinterestelar</span>,</span>
@@ -6152,9 +5981,9 @@ conjuntamente con <a href="https://patchwork.data-imaginist.com">patchwork</a>:<
 <span>                                    plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">gcontribs</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-396-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-394-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
-<p><strong>Figura 10.16</strong></p>
+<p><strong>Figura 10.13</strong></p>
 </div>
 <p>En la fila superior se observa que la <strong>Dimensión 1</strong> viene explicada,
 sobre todo, por <strong>GN Magallanes</strong> y <strong>PN Magallanes</strong>, mientras que
@@ -6185,7 +6014,7 @@ tamaño del texto en el gráfico.</p></li>
 <p>Es especialmente relevante la elección de <code>map = "symmetric"</code>, ya que
 permite interpretar las cercanías entre categorías de uno y otro factor
 de forma coherente:</p>
-<div class="sourceCode" id="cb431"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb430"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Gráfico bidimensional (biplot simétrico) de categorías</span></span>
 <span></span>
 <span>    <span class="va">gbiplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_ca.html">fviz_ca_biplot</a></span><span class="op">(</span><span class="va">acinterestelar</span>,</span>
@@ -6200,9 +6029,9 @@ de forma coherente:</p>
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">gbiplot</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-397-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-395-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
-<p><strong>Figura 10.17</strong></p>
+<p><strong>Figura 10.14</strong></p>
 </div>
 <p>En el mapa bidimensional se aprecia con claridad la <strong>estructura de
 asociación</strong> entre galaxias y formas jurídicas. En el extremo derecho
@@ -6232,7 +6061,7 @@ prueba ji-cuadrado.</p>
 <p>Para una presentación más compacta que combine el gráfico de
 contribuciones y el biplot, puede recurrirse nuevamente al paquete
 <a href="https://patchwork.data-imaginist.com">patchwork</a>:</p>
-<div class="sourceCode" id="cb432"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb431"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Presentación compacta: contribuciones + biplot</span></span>
 <span></span>
 <span>    <span class="va">gcombinado</span> <span class="op">&lt;-</span> <span class="va">gcontrib</span> <span class="op">/</span> <span class="va">gbiplot</span></span>
@@ -6245,9 +6074,9 @@ contribuciones y el biplot, puede recurrirse nuevamente al paquete
 <span>                                    plot.caption <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">gcombinado</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-398-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-396-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
-<p><strong>Figura 10.18</strong></p>
+<p><strong>Figura 10.15</strong></p>
 </div>
 <p>El gráfico combinado ofrece una vista de conjunto muy útil para
 comunicar los resultados: la parte superior informa de la calidad de
@@ -6321,7 +6150,7 @@ aquí</a>)</p></li>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón Morán. It was last built on 2026-07-13.</p>
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón Morán. It was last built on 2026-07-14.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

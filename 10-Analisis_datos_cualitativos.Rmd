@@ -879,7 +879,6 @@ library (dplyr)
 library (ggplot2)
 library (gtExtras)
 library (visdat)
-library (knitr)
 library (kableExtra)
 library (pander)     # Tablas multifactoriales compactas en Rmarkdown
 library (vcd)        # Visualización tablas de contingencia
@@ -894,6 +893,9 @@ forma clara, ordenada y útil para su interpretación. Estas funciones
 permiten automatizar los pasos clave del análisis: detección de celdas
 problemáticas, corrección de tablas para garantizar la estimabilidad del
 modelo, extracción de coeficientes y presentación final de resultados.
+Todas ellas se importan del paquete `{MATrstars}`, ya presentado en el
+capítulo 5 (véase también el **Apéndice: Funciones auxiliares del
+paquete `MATrstars`** para sus fichas completas).
 
 La función **`detect_zeros_any()`** identifica de manera robusta todas
 las celdas con frecuencia cero en una tabla de contingencia de
@@ -913,392 +915,17 @@ coeficiente según las combinaciones de niveles que representa. Esto
 facilita enormemente la interpretación de modelos con múltiples
 interacciones y niveles. Finalmente, la función **`generar_solucion()`**
 automatiza la fase de reporte: extrae las pruebas de bondad de ajuste,
-presenta los coeficientes en tablas bien formateadas con *kable*, y
-produce un mosaico de residuos del modelo para evaluar visualmente su
-adecuación. Toda esta información se organiza en una lista almacenada
-automáticamente, lo que permite revisar fácilmente los resultados de
-cada modelo estimado.
+presenta los coeficientes en tablas bien formateadas con `kable_rstars()`,
+y produce un mosaico de residuos del modelo para evaluar visualmente su
+adecuación. Las dos tablas se devuelven en una lista de dos elementos
+(`Informacion` y `Coeficientes`) que el usuario captura explícitamente
+para poder revisarlas después.
 
 Estas funciones, en conjunto, proporcionan una infraestructura sólida y
 ordenada para trabajar con modelos log-lineales sobre tablas
 multidimensionales, reduciendo errores, mejorando la legibilidad de los
 resultados y facilitando el análisis de las dependencias entre los
 factores estudiados.
-
-```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
-# FUNCIONES
-
-#### Detección de celdas 0 (robusta a k dimensiones)############################
-detect_zeros_any <- function(tab) {
-  idx <- which(tab == 0, arr.ind = TRUE)
-  # Si no hay ceros, devuelve NULL
-  if (is.null(idx) ||
-     (is.matrix(idx) && nrow(idx) == 0) || 
-     (is.vector(idx) && length(idx) == 0)) {
-    return(NULL)
-  }
-  idx <- as.data.frame(idx)
-  dn  <- dimnames(tab)
-  dn_names <- names(dn)
-  if (is.null(dn_names) || any(nchar(dn_names) == 0)) {
-    dn_names <- paste0("Var", seq_along(dn))
-  }
-  # Mapear índices -> etiquetas por dimensión (si hay dimnames)
-  out_cols <- lapply(seq_along(dn), function(k) {
-    if (!is.null(dn[[k]])) dn[[k]][ idx[[k]] ] else idx[[k]]
-  })
-  names(out_cols) <- dn_names
-  out <- as.data.frame(out_cols, stringsAsFactors = FALSE)
-  out$Frecuencia_Original <- 0L
-  out
-}
-
-################################################################################
-
-#### Imputación 0->1 con reporte como atributo (no toca celdas > 0) ############
-impute_zeros_with_one <- function(tab, value = 1L) {
-  zeros_df <- detect_zeros_any(tab)
-  tab_adj <- tab
-  tab_adj[tab_adj == 0] <- value
-  
-  if (!is.null(zeros_df)) {
-    zeros_df$Frecuencia_Imputada <- value
-    attr(tab_adj, "zeros_imputados") <- zeros_df
-    attr(tab_adj, "nota_imputacion") <-
-      sprintf("Se imputaron %d celdas 0 con valor %d para poder preparar la estimación.",
-              nrow(zeros_df), value)
-  } else {
-    attr(tab_adj, "zeros_imputados") <- NULL
-    attr(tab_adj, "nota_imputacion") <- "No había celdas con frecuencia 0."
-  }
-  tab_adj
-}
-################################################################################      
-
-#### Función para extraer coeficientes y sus nombres de un modelo ##############
-extraer_coeficientes <- function(modelo) {
-  # Extraer los parámetros del modelo
-  parametros <- modelo$param
-  
-  # Crear listas para almacenar nombres y valores de coeficientes
-  coef_names <- c()
-  coef_values <- c()
-  
-  # Función para generar nombres de coeficientes
-  generate_coef_name <- function(levels) {
-    return(paste(levels, collapse = ":"))
-  }
-  
-  # Recorrer los coeficientes y extraer los nombres y valores
-  for (term in names(parametros)) {
-    if (term == "(Intercept)") {
-      coef_names <- c(coef_names, "T. Independiente")
-      coef_values <- c(coef_values, parametros[[term]])
-    } else if (is.matrix(parametros[[term]])) {
-      # Si es una matriz, recorrer filas y columnas
-      for (i in 1:nrow(parametros[[term]])) {
-        for (j in 1:ncol(parametros[[term]])) {
-          coef_names <- c(coef_names,
-                          paste(rownames(parametros[[term]])[i],
-                                colnames(parametros[[term]])[j],
-                                sep = ":"))
-          coef_values <- c(coef_values, parametros[[term]][i, j])
-        }
-      }
-    } else if (is.array(parametros[[term]])) {
-      # Si es un array de más de dos dimensiones
-      dims <- dim(parametros[[term]])
-      dimnames_list <- dimnames(parametros[[term]])
-      for (i in seq_len(dims[1])) {
-        for (j in seq_len(dims[2])) {
-          for (k in seq_len(dims[3])) {
-            coef_name <- paste(dimnames_list[[1]][i],
-                               dimnames_list[[2]][j],
-                               dimnames_list[[3]][k],
-                               sep = ":")
-            coef_names <- c(coef_names, coef_name)
-            coef_values <- c(coef_values,
-                             parametros[[term]][i, j, k])
-          }
-        }
-      }
-    } else {
-      levels <- names(parametros[[term]])
-      for (level in levels) {
-        coef_names <- c(coef_names,
-                        generate_coef_name(c(term, level)))
-        coef_values <- c(coef_values,
-                         parametros[[term]][[level]])
-      }
-    }
-  }
-  
-  # Verificar la longitud de los vectores antes de crear el data frame
-  if (length(coef_names) == length(coef_values)) {
-    tabla_coeficientes <- data.frame(Coefficient = coef_names,
-                                     Value = coef_values,
-                                     stringsAsFactors = FALSE)
-    return(tabla_coeficientes)
-  } else {
-    stop("Error: Las longitudes de coef_names y coef_values no coinciden.")
-  }
-}
-################################################################################
-
-#### Función generar tablas y gráfico a partir de modelo log-lineal ############
-
-generar_solucion <- function(modelo) {
-  # Extraer la información del modelo
-  summary_modelo <- summary(modelo)
-  
-  # Crear una tabla con la información relevante de las pruebas de validez
-  tabla_informacion <- data.frame(
-    Statistic = c("Likelihood Ratio", "Pearson"),
-    X2 = c(summary_modelo$tests[1, "X^2"], summary_modelo$tests[2, "X^2"]),
-    df = c(summary_modelo$tests[1, "df"], summary_modelo$tests[2, "df"]),
-    P_value = c(summary_modelo$tests[1, "P(> X^2)"],
-                summary_modelo$tests[2, "P(> X^2)"]),
-    stringsAsFactors = FALSE
-  )
-  
-  # Formatear la tabla usando kable
-  independencia_valida_tab <- tabla_informacion %>%
-    kable(caption ="Validación del modelo",
-          format = "html",
-          col.names = c("Prueba", "Estadístico",
-                        "Grados Libertad",
-                        "P-valor")) %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = c("striped", "bordered", "condensed"),
-                  position = "center",
-                  font_size = 12) %>%
-    row_spec(0, bold= T, align = "c")
-  
-  # Extraer los coeficientes del modelo
-  independencia_df <- extraer_coeficientes(modelo)
-  
-  # Formatear la tabla de coeficientes usando kable
-  independencia_coef_tab <- independencia_df %>%
-    kable(format = "html",
-          caption ="Coeficientes del modelo",
-          digits = 3) %>%
-    kable_styling(full_width = F,
-                  bootstrap_options = c("striped", "bordered", "condensed"),
-                  position = "center",
-                  font_size = 12) %>%
-    row_spec(0, bold= T, align = "c")
-  
-  # Crear el gráfico de mosaico con residuos y mostrarlo en pantalla
-  plot(modelo, panel = mosaic,
-       main="Residuos del modelo",
-       residuals_type = c("deviance"),
-       gp = shading_hcl,
-       gp_args = list(interpolate = c(0, 1)),
-       main_gp = gpar(fontsize = 14),
-       sub_gp = gpar(fontsize = 9),
-       labeling_args = list(rot_labels = c(0, 45),
-                            gp_labels = gpar(fontsize = 8)))
-  
-  # Guardar las tablas en una lista
-  solucion_nombre <- paste0("solucion_", deparse(substitute(modelo)))
-  solucion_lista <- list(
-    Informacion = independencia_valida_tab,
-    Coeficientes = independencia_coef_tab
-  )
-  
-  assign(solucion_nombre, solucion_lista, envir = .GlobalEnv)
-}
-################################################################################
-
-```
-
-```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
-# FUNCIONES
-
-#### Detección de celdas 0 (robusta a k dimensiones)############################
-detect_zeros_any <- function(tab) {
-  idx <- which(tab == 0, arr.ind = TRUE)
-  # Si no hay ceros, devuelve NULL
-  if (is.null(idx) ||
-     (is.matrix(idx) && nrow(idx) == 0) || 
-     (is.vector(idx) && length(idx) == 0)) {
-    return(NULL)
-  }
-  idx <- as.data.frame(idx)
-  dn  <- dimnames(tab)
-  dn_names <- names(dn)
-  if (is.null(dn_names) || any(nchar(dn_names) == 0)) {
-    dn_names <- paste0("Var", seq_along(dn))
-  }
-  # Mapear índices -> etiquetas por dimensión (si hay dimnames)
-  out_cols <- lapply(seq_along(dn), function(k) {
-    if (!is.null(dn[[k]])) dn[[k]][ idx[[k]] ] else idx[[k]]
-  })
-  names(out_cols) <- dn_names
-  out <- as.data.frame(out_cols, stringsAsFactors = FALSE)
-  out$Frecuencia_Original <- 0L
-  out
-}
-
-################################################################################
-
-#### Imputación 0->1 con reporte como atributo (no toca celdas > 0) ############
-impute_zeros_with_one <- function(tab, value = 1L) {
-  zeros_df <- detect_zeros_any(tab)
-  tab_adj <- tab
-  tab_adj[tab_adj == 0] <- value
-  
-  if (!is.null(zeros_df)) {
-    zeros_df$Frecuencia_Imputada <- value
-    attr(tab_adj, "zeros_imputados") <- zeros_df
-    attr(tab_adj, "nota_imputacion") <-
-      sprintf("Se imputaron %d celdas 0 con valor %d para poder preparar la estimación.",
-              nrow(zeros_df), value)
-  } else {
-    attr(tab_adj, "zeros_imputados") <- NULL
-    attr(tab_adj, "nota_imputacion") <- "No había celdas con frecuencia 0."
-  }
-  tab_adj
-}
-################################################################################      
-
-#### Función para extraer coeficientes y sus nombres de un modelo ##############
-extraer_coeficientes <- function(modelo) {
-  # Extraer los parámetros del modelo
-  parametros <- modelo$param
-  
-  # Crear listas para almacenar nombres y valores de coeficientes
-  coef_names <- c()
-  coef_values <- c()
-  
-  # Función para generar nombres de coeficientes
-  generate_coef_name <- function(levels) {
-    return(paste(levels, collapse = ":"))
-  }
-  
-  # Recorrer los coeficientes y extraer los nombres y valores
-  for (term in names(parametros)) {
-    if (term == "(Intercept)") {
-      coef_names <- c(coef_names, "T. Independiente")
-      coef_values <- c(coef_values, parametros[[term]])
-    } else if (is.matrix(parametros[[term]])) {
-      # Si es una matriz, recorrer filas y columnas
-      for (i in 1:nrow(parametros[[term]])) {
-        for (j in 1:ncol(parametros[[term]])) {
-          coef_names <- c(coef_names,
-                          paste(rownames(parametros[[term]])[i],
-                                colnames(parametros[[term]])[j],
-                                sep = ":"))
-          coef_values <- c(coef_values, parametros[[term]][i, j])
-        }
-      }
-    } else if (is.array(parametros[[term]])) {
-      # Si es un array de más de dos dimensiones
-      dims <- dim(parametros[[term]])
-      dimnames_list <- dimnames(parametros[[term]])
-      for (i in seq_len(dims[1])) {
-        for (j in seq_len(dims[2])) {
-          for (k in seq_len(dims[3])) {
-            coef_name <- paste(dimnames_list[[1]][i],
-                               dimnames_list[[2]][j],
-                               dimnames_list[[3]][k],
-                               sep = ":")
-            coef_names <- c(coef_names, coef_name)
-            coef_values <- c(coef_values,
-                             parametros[[term]][i, j, k])
-          }
-        }
-      }
-    } else {
-      levels <- names(parametros[[term]])
-      for (level in levels) {
-        coef_names <- c(coef_names,
-                        generate_coef_name(c(term, level)))
-        coef_values <- c(coef_values,
-                         parametros[[term]][[level]])
-      }
-    }
-  }
-  
-  # Verificar la longitud de los vectores antes de crear el data frame
-  if (length(coef_names) == length(coef_values)) {
-    tabla_coeficientes <- data.frame(Coefficient = coef_names,
-                                     Value = coef_values,
-                                     stringsAsFactors = FALSE)
-    return(tabla_coeficientes)
-  } else {
-    stop("Error: Las longitudes de coef_names y coef_values no coinciden.")
-  }
-}
-################################################################################
-
-#### Función generar tablas y gráfico a partir de modelo log-lineal ############
-
-generar_solucion <- function(modelo) {
-  
-  # Extraer la información del modelo
-  summary_modelo <- summary(modelo)
-  
-  # Crear una tabla con la información relevante de las pruebas de validez
-  tabla_informacion <- data.frame(
-    Statistic = c("Likelihood Ratio", "Pearson"),
-    X2        = c(summary_modelo$tests[1, "X^2"],
-                  summary_modelo$tests[2, "X^2"]),
-    df        = c(summary_modelo$tests[1, "df"],
-                  summary_modelo$tests[2, "df"]),
-    P_value   = c(summary_modelo$tests[1, "P(> X^2)"],
-                  summary_modelo$tests[2, "P(> X^2)"]),
-    stringsAsFactors = FALSE
-  )
-  
-  # Formatear la tabla de validación usando kable
-    independencia_valida_tab <- tabla_informacion %>%
-      kable(caption   = "Validación del modelo",
-            format    = "html",
-            col.names = c("Prueba", "Estadístico",
-                          "Grados Libertad", "P-valor")) %>%
-      kable_styling(full_width = FALSE,
-                    bootstrap_options = c("striped", "bordered", "condensed"),
-                    position = "center",
-                    font_size = 12) %>%
-      row_spec(0, bold = TRUE, align = "c")
-  
-  # Extraer los coeficientes del modelo
-  independencia_df <- extraer_coeficientes(modelo)
-  
-  # Formatear la tabla de coeficientes usando kable
-    independencia_coef_tab <- independencia_df %>%
-      kable(format   = "html",
-            caption  = "Coeficientes del modelo",
-            digits   = 3) %>%
-      kable_styling(full_width = FALSE,
-                    bootstrap_options = c("striped", "bordered", "condensed"),
-                    position = "center",
-                    font_size = 12) %>%
-      row_spec(0, bold = TRUE, align = "c")
-  
-  # Crear el gráfico de mosaico con residuos y mostrarlo en pantalla
-  plot(modelo, panel = mosaic,
-       main  = "Residuos del modelo",
-       residuals_type = "deviance",
-       gp    = shading_hcl,
-       gp_args = list(interpolate = c(0, 1)),
-       main_gp = gpar(fontsize = 14),
-       sub_gp  = gpar(fontsize = 9),
-       labeling_args = list(rot_labels = c(0, 45),
-                            gp_labels  = gpar(fontsize = 8)))
-  
-  # Guardar las tablas en una lista
-  solucion_nombre <- paste0("solucion_", deparse(substitute(modelo)))
-  solucion_lista  <- list(
-    Informacion  = independencia_valida_tab,
-    Coeficientes = independencia_coef_tab
-  )
-  
-  assign(solucion_nombre, solucion_lista, envir = .GlobalEnv)
-}
-################################################################################
-```
 
 En el siguiente bloque de código se procede a **importar los datos
 originales y seleccionar las variables categóricas** que serán
@@ -1603,8 +1230,9 @@ estimados, etc.
 
 Parte de esta información (en especial, los coeficientes) se almacena en
 estructuras internas algo complejas, especialmente cuando el modelo
-incluye varias interacciones. Para simplificar su uso, hemos definido
-dos funciones auxiliares, que se detallaron al comienzo del *script*:
+incluye varias interacciones. Para simplificar su uso, se emplean dos
+funciones auxiliares del paquete `{MATrstars}` (ya introducidas al
+comienzo del capítulo; su ficha completa está en el **Apéndice**):
 
 -   La función **`extraer_coeficientes()`** toma un objeto devuelto por
     `loglm()` y construye un *data frame* con el nombre de cada
@@ -1628,8 +1256,9 @@ independencia**, que asume que la distribución conjunta de las
 frecuencias puede explicarse únicamente por los efectos propios de cada
 factor, sin interacción entre ellos (es decir, sin asociación entre
 GALAXIA, EFLO y FJUR). El siguiente código ajusta este modelo a la tabla
-`tab_use` y genera automáticamente las tablas y el mosaico de residuos
-correspondientes:
+`tab_use` y captura la lista devuelta por `generar_solucion()` en el
+objeto `solucion_modelo_indep`, además de dibujar el mosaico de residuos
+correspondiente:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 # Modelo de independencia (solo efectos principales, sin interacciones)
@@ -1637,16 +1266,16 @@ modelo_indep <- MASS::loglm(~ GALAXIA + EFLO + FJUR,
                             data   = tab_use,
                             fitted = TRUE)
 
-generar_solucion(modelo_indep)
+solucion_modelo_indep <- generar_solucion(modelo_indep)
 ```
 
 A partir del modelo de independencia podemos evaluar si la hipótesis de
 **no asociación global** entre GALAXIA, FJUR y EFLO resulta razonable o
 si, por el contrario, los datos sugieren la presencia de dependencias
-entre los factores. Tras la estimación, la función `generar_solucion()`
-crea automáticamente la lista `solucion_modelo_indep`, que contiene
-tanto las tablas con las pruebas de ajuste y los coeficientes como el
-**mosaico de residuos del modelo**. Este gráfico constituye una
+entre los factores. Tras la estimación, la lista `solucion_modelo_indep`
+contiene tanto las tablas con las pruebas de ajuste y los coeficientes
+como acceso al **mosaico de residuos del modelo** (dibujado
+automáticamente durante la llamada a `generar_solucion()`). Este gráfico constituye una
 herramienta visual clave para diagnosticar la adecuación del modelo, ya
 que compara las frecuencias observadas con las estimadas bajo la
 suposición de independencia.
@@ -1900,7 +1529,7 @@ modelo_sat <- MASS::loglm(~ GALAXIA * EFLO * FJUR,
                           data   = tab_use,
                           fitted = TRUE)
 
-generar_solucion(modelo_sat)
+solucion_modelo_sat <- generar_solucion(modelo_sat)
 ```
 
 El gráfico de mosaico muestra que, obviamente, todos los residuos son 0,
@@ -2038,7 +1667,7 @@ los resultados (el gráfico de mosaico y las dos tablas). El gráfico
 obtenido es:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-    generar_solucion(modelo_def)
+    solucion_modelo_def <- generar_solucion(modelo_def)
 ```
 
 El gráfico de residuos del modelo seleccionado muestra un ajuste
