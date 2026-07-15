@@ -1627,15 +1627,19 @@ capítulo 5 (véase también el <strong>Apéndice: Funciones auxiliares del
 paquete <code>MATrstars</code></strong> para sus fichas completas).</p>
 <p>La función <strong><code><a href="https://rdrr.io/pkg/MATrstars/man/detect_zeros_any.html">detect_zeros_any()</a></code></strong> identifica de manera robusta todas
 las celdas con frecuencia cero en una tabla de contingencia de
-<strong>cualquier número de dimensiones</strong>. Esto es importante porque los
-modelos log-lineales pueden fallar o producir estimaciones inestables
-cuando existen celdas sin observaciones, por lo que conocer su
-localización es esencial. Basándose en esta detección,
+<strong>cualquier número de dimensiones</strong>. Es una herramienta diagnóstica
+útil como paso previo al ajuste de modelos log-lineales, ya que
+localizar los ceros muestrales permite anticipar peculiaridades en la
+estimación (véase más adelante). Como complemento,
 <strong><code><a href="https://rdrr.io/pkg/MATrstars/man/impute_zeros_with_one.html">impute_zeros_with_one()</a></code></strong> permite reemplazar únicamente los ceros
-por un valor mínimo (por defecto, 1), generando una tabla ajustada apta
-para la estimación y dejando registrado qué celdas fueron imputadas y
-por qué. Este procedimiento no altera celdas con frecuencia positiva y
-asegura la viabilidad numérica del modelo.</p>
+por un valor mínimo (por defecto, 1), preservando el resto de las
+celdas. <strong>La imputación no es un paso estándar del análisis
+log-lineal</strong>, y en este capítulo <strong>no se aplica por defecto</strong>: se
+expone en el paquete como herramienta disponible por si el usuario, en
+algún contexto particular, desea manipular los ceros de la tabla; pero
+el flujo pedagógico principal trabaja directamente sobre la tabla
+original. La justificación de esta decisión se detalla en la sección
+correspondiente.</p>
 <p>Por su parte, <strong><code><a href="https://rdrr.io/pkg/MATrstars/man/extraer_coeficientes.html">extraer_coeficientes()</a></code></strong> toma un modelo log-lineal
 ajustado y descompone sus parámetros en una tabla clara, nombrando cada
 coeficiente según las combinaciones de niveles que representa. Esto
@@ -2283,47 +2287,35 @@ que permite crear la tabla combinando simultáneamente los niveles de
 frecuencias conjuntas del sistema y constituye el “objeto” que los
 modelos analizarán para identificar patrones de dependencia entre los
 factores.</p>
-<p>Antes de estimar cualquier modelo, es fundamental comprobar si la tabla
-contiene <strong>celdas con frecuencia cero</strong>, ya que los log-lineales pueden
-presentar problemas de convergencia o estimaciones inestables cuando
-algunas combinaciones de categorías no están representadas en la
-muestra. Por ello se aplica la función <code><a href="https://rdrr.io/pkg/MATrstars/man/detect_zeros_any.html">detect_zeros_any()</a></code>, diseñada
-para localizar ceros en tablas de cualquier dimensión. Si existen, se
-muestran en una tabla formateada con <em>kable</em> para documentar qué
-combinaciones están ausentes.</p>
-<p>El flujo continúa con la función <code><a href="https://rdrr.io/pkg/MATrstars/man/impute_zeros_with_one.html">impute_zeros_with_one()</a></code>, que
-reemplaza únicamente las celdas con frecuencia cero por un valor mínimo
-(1). Este ajuste no modifica las frecuencias positivas y garantiza que
-la tabla resultante sea <strong>estimable</strong> por los métodos log-lineales.
-Además, la función añade como atributos una <strong>nota de imputación</strong> y un
-registro detallado de las celdas modificadas, los cuales se imprimen
-después para asegurar trazabilidad y transparencia en el análisis. Con
-esta tabla corregida —<code>tab_use</code>— queda listo el material de datos
-adecuado y consistente para estimar los modelos log-lineales que se
-estudiarán en las siguientes secciones.</p>
+<p>Antes de estimar cualquier modelo, es prudente comprobar si la tabla
+contiene <strong>celdas con frecuencia cero</strong>. La presencia de ceros
+muestrales no impide la estimación en sí, pero da lugar a un fenómeno
+importante que se explicará más adelante: el estimador de máxima
+verosimilitud del <strong>modelo saturado</strong> no existe en sentido estricto
+cuando alguna celda observada es cero, lo que se traduce en
+coeficientes <code>-Inf</code>, <code>Inf</code> o <code>NaN</code> en su tabla de coeficientes. Por
+ello se aplica la función <code><a href="https://rdrr.io/pkg/MATrstars/man/detect_zeros_any.html">detect_zeros_any()</a></code>, diseñada para localizar
+ceros en tablas de cualquier dimensión. Si existen, se muestran en una
+tabla formateada para documentar qué combinaciones están ausentes.</p>
+<p><strong>No se aplica ninguna imputación</strong>: se trabaja directamente sobre la
+tabla original <code>tab0</code>. Las razones se detallarán en la sección del
+modelo saturado; adelantemos aquí solo la conclusión operativa: el
+procedimiento <code><a href="https://rdrr.io/r/stats/step.html">step()</a></code> funciona correctamente sobre el modelo saturado
+aunque sus coeficientes contengan valores no finitos, porque opera
+sobre la <strong>desvianza</strong> (que es 0 por construcción para el saturado, un
+valor perfectamente finito) y no sobre los coeficientes.</p>
 <div class="sourceCode" id="cb397"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Construir tabla original</span></span>
 <span><span class="va">tab0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/xtabs.html">xtabs</a></span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">+</span> <span class="va">FJUR</span> <span class="op">+</span> <span class="va">EFLO</span>, data <span class="op">=</span> <span class="va">seleccion</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Reportar celdas 0 (si existen)</span></span>
+<span><span class="co"># Reportar celdas 0 (si existen) — es puramente informativo.</span></span>
 <span><span class="va">zeros_report</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/detect_zeros_any.html">detect_zeros_any</a></span><span class="op">(</span><span class="va">tab0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">zeros_report</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html">message</a></span><span class="op">(</span><span class="st">"No se han detectado celdas con frecuencia 0 en la tabla original."</span><span class="op">)</span></span>
 <span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
 <span>  <span class="va">zeros_report</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Combinaciones con 0 detectadas (antes de imputar)"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co"># Imputar 0 -&gt; 1 (solo celdas con 0) y anotar nota + reporte como atributo</span></span>
-<span><span class="va">tab_use</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/impute_zeros_with_one.html">impute_zeros_with_one</a></span><span class="op">(</span><span class="va">tab0</span>, value <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Mostrar nota de imputación y, si aplica, el detalle de celdas imputadas</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"\nNOTA IMPUTACIÓN: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">tab_use</span>, <span class="st">"nota_imputacion"</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">tab_use</span>, <span class="st">"zeros_imputados"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">tab_use</span>, <span class="st">"zeros_imputados"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Combinaciones imputadas (0 → 1) para estimar modelo"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Combinaciones con frecuencia 0 detectadas"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -2356,57 +2348,12 @@ RENOVADA
 </tr></tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 10.5.</strong> Combinaciones con 0 detectadas (antes de imputar)</p>
+<p><strong>Tabla 10.5.</strong> Combinaciones con frecuencia 0 detectadas</p>
 </div>
-<pre><code>## 
-## NOTA IMPUTACIÓN:  Se imputaron 1 celdas 0 con valor 1 para poder preparar la estimación.</code></pre>
-<div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
-<thead><tr>
-<th style="text-align:left;font-weight: bold;text-align: center;">
-GALAXIA
-</th>
-<th style="text-align:left;font-weight: bold;text-align: center;">
-FJUR
-</th>
-<th style="text-align:left;font-weight: bold;text-align: center;">
-EFLO
-</th>
-<th style="text-align:right;font-weight: bold;text-align: center;">
-Frecuencia_Original
-</th>
-<th style="text-align:right;font-weight: bold;text-align: center;">
-Frecuencia_Imputada
-</th>
-</tr></thead>
-<tbody><tr>
-<td style="text-align:left;text-align: center;">
-PN Magallanes
-</td>
-<td style="text-align:left;text-align: center;">
-CG
-</td>
-<td style="text-align:left;text-align: center;">
-RENOVADA
-</td>
-<td style="text-align:right;text-align: center;">
-0
-</td>
-<td style="text-align:right;text-align: center;">
-1
-</td>
-</tr></tbody>
-</table></div>
-<div style="text-align: center;">
-<p><strong>Tabla 10.6.</strong> Combinaciones imputadas (0 → 1) para estimar modelo</p>
-</div>
-<p>En nuestro caso, solo se ha detectado una combinación de categorías o
-niveles de los factores con 0 observaciones; la correspondiente a
-GALAXIA = “Pequeña Nube de Magallanes”, FJUR = “CG” (cooperativa) y EFLO
-= “RENOVADA”. A esta combinación se le imputa una frecuencia “ficticia”
-con el fin de que el modelo sea estimable, que es la única diferencia
-que tendrá la tabla “tab_use” con respecto a la tabla original, “tab0”.
-Huelga decir que en la estimación será “tab_use” la tabla utilizada como
-base.</p>
+<p>En nuestro caso, se detecta una única combinación con 0 observaciones:
+GALAXIA = “Pequeña Nube de Magallanes”, FJUR = “CG” (cooperativa) y
+EFLO = “RENOVADA”. Se toma nota de esta particularidad y se continúa
+el análisis directamente sobre <code>tab0</code>.</p>
 <p>Para inspeccionar la estructura de la tabla de contingencia, se utiliza
 <code><a href="https://rdrr.io/pkg/pander/man/pander.html">pander()</a></code>, ya que permite mostrar tablas multidimensionales en un
 formato <strong>compacto y legible</strong>, similar a <code><a href="https://rdrr.io/r/stats/ftable.html">ftable()</a></code> pero con un acabado
@@ -2431,12 +2378,12 @@ Los argumentos <code>main_gp</code> y <code>sub_gp</code> ajustan el tamaño de 
 principal y secundario, de modo que el gráfico sea claro y equilibrado.
 En conjunto, esta visualización facilita identificar relaciones
 estructurales antes de pasar al ajuste de los modelos log-lineales.</p>
-<div class="sourceCode" id="cb399"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb398"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Mostrar tabla</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/pander/man/pander.html">pander</a></span><span class="op">(</span><span class="st">"Tabla de contingencia GALAXIA × FJUR × EFLO"</span><span class="op">)</span></span></code></pre></div>
 <p>Tabla de contingencia GALAXIA × FJUR × EFLO</p>
-<div class="sourceCode" id="cb400"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb399"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/pander/man/pander.html">pander</a></span><span class="op">(</span><span class="va">tab0</span>, style<span class="op">=</span> <span class="st">"rmarkdown"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-sm"><tbody>
 <tr class="odd">
@@ -2577,155 +2524,9 @@ estructurales antes de pasar al ajuste de los modelos log-lineales.</p>
 </tr>
 </tbody></table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 10.7</strong></p>
+<p><strong>Tabla 10.6</strong></p>
 </div>
-<div class="sourceCode" id="cb401"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/pander/man/pander.html">pander</a></span><span class="op">(</span><span class="st">"Tabla de contingencia GALAXIA × FJUR × EFLO (imputación puntual 0→1)"</span><span class="op">)</span></span></code></pre></div>
-<p>Tabla de contingencia GALAXIA × FJUR × EFLO (imputación puntual 0→1)</p>
-<div class="sourceCode" id="cb402"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/pander/man/pander.html">pander</a></span><span class="op">(</span><span class="va">tab_use</span>, style<span class="op">=</span> <span class="st">"rmarkdown"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-table"><table class="table table-sm"><tbody>
-<tr class="odd">
-<td align="center"></td>
-<td align="center"></td>
-<td align="center">EFLO</td>
-<td align="center">ANTIGUA</td>
-<td align="center">MADURA</td>
-<td align="center">RENOVADA</td>
-</tr>
-<tr class="even">
-<td align="center">GALAXIA</td>
-<td align="center">FJUR</td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr class="odd">
-<td align="center">Andrómeda</td>
-<td align="center">CG</td>
-<td align="center"></td>
-<td align="center">7</td>
-<td align="center">7</td>
-<td align="center">6</td>
-</tr>
-<tr class="even">
-<td align="center"></td>
-<td align="center">SAG</td>
-<td align="center"></td>
-<td align="center">12</td>
-<td align="center">11</td>
-<td align="center">6</td>
-</tr>
-<tr class="odd">
-<td align="center"></td>
-<td align="center">SLG</td>
-<td align="center"></td>
-<td align="center">23</td>
-<td align="center">8</td>
-<td align="center">4</td>
-</tr>
-<tr class="even">
-<td align="center">GN Magallanes</td>
-<td align="center">CG</td>
-<td align="center"></td>
-<td align="center">7</td>
-<td align="center">7</td>
-<td align="center">9</td>
-</tr>
-<tr class="odd">
-<td align="center"></td>
-<td align="center">SAG</td>
-<td align="center"></td>
-<td align="center">5</td>
-<td align="center">4</td>
-<td align="center">3</td>
-</tr>
-<tr class="even">
-<td align="center"></td>
-<td align="center">SLG</td>
-<td align="center"></td>
-<td align="center">7</td>
-<td align="center">6</td>
-<td align="center">4</td>
-</tr>
-<tr class="odd">
-<td align="center">PN Magallanes</td>
-<td align="center">CG</td>
-<td align="center"></td>
-<td align="center">1</td>
-<td align="center">3</td>
-<td align="center">1</td>
-</tr>
-<tr class="even">
-<td align="center"></td>
-<td align="center">SAG</td>
-<td align="center"></td>
-<td align="center">4</td>
-<td align="center">1</td>
-<td align="center">2</td>
-</tr>
-<tr class="odd">
-<td align="center"></td>
-<td align="center">SLG</td>
-<td align="center"></td>
-<td align="center">11</td>
-<td align="center">8</td>
-<td align="center">3</td>
-</tr>
-<tr class="even">
-<td align="center">Triángulo</td>
-<td align="center">CG</td>
-<td align="center"></td>
-<td align="center">4</td>
-<td align="center">5</td>
-<td align="center">1</td>
-</tr>
-<tr class="odd">
-<td align="center"></td>
-<td align="center">SAG</td>
-<td align="center"></td>
-<td align="center">8</td>
-<td align="center">4</td>
-<td align="center">5</td>
-</tr>
-<tr class="even">
-<td align="center"></td>
-<td align="center">SLG</td>
-<td align="center"></td>
-<td align="center">8</td>
-<td align="center">7</td>
-<td align="center">5</td>
-</tr>
-<tr class="odd">
-<td align="center">Vía Láctea</td>
-<td align="center">CG</td>
-<td align="center"></td>
-<td align="center">15</td>
-<td align="center">6</td>
-<td align="center">4</td>
-</tr>
-<tr class="even">
-<td align="center"></td>
-<td align="center">SAG</td>
-<td align="center"></td>
-<td align="center">13</td>
-<td align="center">6</td>
-<td align="center">3</td>
-</tr>
-<tr class="odd">
-<td align="center"></td>
-<td align="center">SLG</td>
-<td align="center"></td>
-<td align="center">23</td>
-<td align="center">7</td>
-<td align="center">7</td>
-</tr>
-</tbody></table></div>
-<div style="text-align: center;">
-<p><strong>Tabla 10.8</strong></p>
-</div>
-<div class="sourceCode" id="cb403"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb400"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Representación gráfica de la tabla con mosaico</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/vcd/man/mosaic.html">mosaic</a></span><span class="op">(</span><span class="va">tab0</span>,</span>
 <span>       main <span class="op">=</span> <span class="st">"Galaxia, Forma Jurídica y Antigüedad media de la flota"</span>,</span>
@@ -2735,22 +2536,16 @@ estructurales antes de pasar al ajuste de los modelos log-lineales.</p>
 <span>                            gp_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>       main_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">16</span><span class="op">)</span>,</span>
 <span>       sub_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-370-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-368-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 10.10</strong></p>
 </div>
 <p>La tabla <code>tab0</code> muestra la distribución tridimensional original de las
 empresas según <strong>galaxia</strong>, <strong>forma jurídica</strong> y <strong>antigüedad media de
 la flota</strong>. En ella se aprecia que algunas combinaciones presentan
-frecuencias muy bajas, e incluso una con frecuencia cero (PN Mag. – CG –
-Renovada), lo que impide ajustar correctamente un modelo log-lineal
-saturado o con interacciones relevantes. Para solventarlo, la tabla
-<code>tab_use</code> sustituye únicamente los ceros por 1, garantizando que todas
-las combinaciones estén representadas y que la estimación sea
-numéricamente estable sin alterar la estructura general de la tabla. La
-diferencia entre ambas tablas es mínima y localizada: todas las celdas
-con valores positivos permanecen iguales, y únicamente las combinaciones
-ausentes reciben este ajuste puntual.</p>
+frecuencias muy bajas, e incluso una con frecuencia cero (PN Mag. – CG
+– Renovada). Como se ha comentado, se trabaja directamente sobre esta
+tabla, sin imputar valor alguno a la celda vacía.</p>
 <p>El mosaico asociado a <code>tab0</code> refuerza visualmente la interpretación de
 la tabla. En él se observa que la variable <strong>EFLO</strong> genera las mayores
 diferencias en tamaño de los rectángulos, reflejando que las flotas
@@ -2772,7 +2567,7 @@ otros paquetes (por ejemplo, <code><a href="https://dplyr.tidyverse.org/referenc
 siempre a la función como <code><a href="https://rdrr.io/pkg/MASS/man/loglm.html">MASS::loglm()</a></code>. La estructura básica es
 <code>loglm(formula, data = tabla)</code>, donde <code>formula</code> describe el patrón de
 dependencias que queremos imponer y <code>data</code> es la tabla de contingencia
-multidimensional (en nuestro caso, <code>tab_use</code>).</p>
+multidimensional (en nuestro caso, <code>tab0</code>).</p>
 <p>En la fórmula, los nombres de las variables (<code>GALAXIA</code>, <code>EFLO</code>, <code>FJUR</code>)
 representan <strong>efectos principales</strong>, y los símbolos <code>:</code> y <code>*</code> se
 utilizan para las interacciones. Así, el <strong>modelo de independencia
@@ -2818,17 +2613,20 @@ independencia</strong>, que asume que la distribución conjunta de las
 frecuencias puede explicarse únicamente por los efectos propios de cada
 factor, sin interacción entre ellos (es decir, sin asociación entre
 GALAXIA, EFLO y FJUR). El siguiente código ajusta este modelo a la tabla
-<code>tab_use</code> y captura la lista devuelta por <code><a href="https://rdrr.io/pkg/MATrstars/man/generar_solucion.html">generar_solucion()</a></code> en el
+<code>tab0</code> y captura la lista devuelta por <code><a href="https://rdrr.io/pkg/MATrstars/man/generar_solucion.html">generar_solucion()</a></code> en el
 objeto <code>solucion_modelo_indep</code>, además de dibujar el mosaico de residuos
 correspondiente:</p>
-<div class="sourceCode" id="cb404"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb401"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Modelo de independencia (solo efectos principales, sin interacciones)</span></span>
 <span><span class="va">modelo_indep</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/loglm.html">loglm</a></span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">+</span> <span class="va">EFLO</span> <span class="op">+</span> <span class="va">FJUR</span>,</span>
-<span>                            data   <span class="op">=</span> <span class="va">tab_use</span>,</span>
+<span>                            data   <span class="op">=</span> <span class="va">tab0</span>,</span>
 <span>                            fitted <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">solucion_modelo_indep</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/generar_solucion.html">generar_solucion</a></span><span class="op">(</span><span class="va">modelo_indep</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-371-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-369-1.png" alt="" width="672"></div>
+<div style="text-align: center;">
+<p><strong>Figura 10.11</strong></p>
+</div>
 <p>A partir del modelo de independencia podemos evaluar si la hipótesis de
 <strong>no asociación global</strong> entre GALAXIA, FJUR y EFLO resulta razonable o
 si, por el contrario, los datos sugieren la presencia de dependencias
@@ -2863,12 +2661,9 @@ conjunta de la distribución de las empresas intergalácticas.</p>
 acceder al primer elemento de la lista solucion_modelo_indep, que
 contiene las pruebas de validez del modelo (ratio de verosimilitud y
 chi-cuadrado de Pearson), mediante:</p>
-<div class="sourceCode" id="cb405"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb402"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_indep</span><span class="op">$</span><span class="va">Informacion</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
-<caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-371">Table 10.1: </span><span id="tab:unnamed-chunk-371">Table 10.2: </span>Validación del modelo
-</caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
 Prueba
@@ -2889,13 +2684,13 @@ P-valor
 Likelihood Ratio
 </td>
 <td style="text-align:right;text-align: center;">
-41.670
+44.967
 </td>
 <td style="text-align:right;text-align: center;">
 36
 </td>
 <td style="text-align:right;text-align: center;">
-0.238
+0.145
 </td>
 </tr>
 <tr>
@@ -2903,19 +2698,19 @@ Likelihood Ratio
 Pearson
 </td>
 <td style="text-align:right;text-align: center;">
-44.116
+46.201
 </td>
 <td style="text-align:right;text-align: center;">
 36
 </td>
 <td style="text-align:right;text-align: center;">
-0.166
+0.119
 </td>
 </tr>
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 10.9</strong></p>
+<p><strong>Tabla 10.7.</strong> Validación del modelo</p>
 </div>
 <p>La tabla resultante resume el <strong>contraste</strong> entre las frecuencias
 observadas y las que predice el modelo bajo la hipótesis de
@@ -2935,12 +2730,9 @@ relevantes que justifican avanzar hacia modelos con interacciones.</strong></p>
 parámetros o <strong>coeficientes estimados</strong> del modelo, que en este caso
 corresponden solo a efectos directos o principales. Para obtener la
 tabla ejecutaremos:</p>
-<div class="sourceCode" id="cb406"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb403"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_indep</span><span class="op">$</span><span class="va">Coeficientes</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
-<caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-371">Table 10.1: </span><span id="tab:unnamed-chunk-371">Table 10.1: </span>Coeficientes del modelo
-</caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
 Coefficient
@@ -2955,7 +2747,7 @@ Value
 T. Independiente
 </td>
 <td style="text-align:right;text-align: center;">
-1.757
+1.748
 </td>
 </tr>
 <tr>
@@ -2963,7 +2755,7 @@ T. Independiente
 GALAXIA:Andrómeda
 </td>
 <td style="text-align:right;text-align: center;">
-0.393
+0.399
 </td>
 </tr>
 <tr>
@@ -2971,7 +2763,7 @@ GALAXIA:Andrómeda
 GALAXIA:GN Magallanes
 </td>
 <td style="text-align:right;text-align: center;">
--0.087
+-0.081
 </td>
 </tr>
 <tr>
@@ -2979,7 +2771,7 @@ GALAXIA:GN Magallanes
 GALAXIA:PN Magallanes
 </td>
 <td style="text-align:right;text-align: center;">
--0.512
+-0.535
 </td>
 </tr>
 <tr>
@@ -2987,7 +2779,7 @@ GALAXIA:PN Magallanes
 GALAXIA:Triángulo
 </td>
 <td style="text-align:right;text-align: center;">
--0.188
+-0.182
 </td>
 </tr>
 <tr>
@@ -2995,7 +2787,7 @@ GALAXIA:Triángulo
 GALAXIA:Vía Láctea
 </td>
 <td style="text-align:right;text-align: center;">
-0.393
+0.399
 </td>
 </tr>
 <tr>
@@ -3003,7 +2795,7 @@ GALAXIA:Vía Láctea
 FJUR:CG
 </td>
 <td style="text-align:right;text-align: center;">
--0.168
+-0.176
 </td>
 </tr>
 <tr>
@@ -3011,7 +2803,7 @@ FJUR:CG
 FJUR:SAG
 </td>
 <td style="text-align:right;text-align: center;">
--0.121
+-0.117
 </td>
 </tr>
 <tr>
@@ -3019,7 +2811,7 @@ FJUR:SAG
 FJUR:SLG
 </td>
 <td style="text-align:right;text-align: center;">
-0.289
+0.293
 </td>
 </tr>
 <tr>
@@ -3027,7 +2819,7 @@ FJUR:SLG
 EFLO:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
-0.450
+0.456
 </td>
 </tr>
 <tr>
@@ -3035,7 +2827,7 @@ EFLO:ANTIGUA
 EFLO:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
--0.047
+-0.042
 </td>
 </tr>
 <tr>
@@ -3043,13 +2835,13 @@ EFLO:MADURA
 EFLO:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
--0.404
+-0.414
 </td>
 </tr>
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 10.10</strong></p>
+<p><strong>Tabla 10.8.</strong> Coeficientes del modelo</p>
 </div>
 <p>La tabla de coeficientes estimados por el modelo de independencia
 muestra un parámetro o coeficiente para cada nivel de cada factor, ya
@@ -3129,10 +2921,10 @@ son:</p>
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 10.11</strong></p>
+<p><strong>Tabla 10.9</strong></p>
 </div>
 <p><strong>1. Celda con residuo pequeño: (Triángulo, SAG, MADURA):</strong></p>
-<p>Según la tabla <code>tab_use</code>, la frecuencia observada es:</p>
+<p>Según la tabla <code>tab0</code>, la frecuencia observada es:</p>
 <p><span class="math display">\[
 n_{ijk} = 4
 \]</span></p>
@@ -3170,7 +2962,7 @@ r^{(P)} = \frac{n - \hat{n}}{\sqrt{\hat{n}}}
 = -0.03
 \]</span></p>
 <p><strong>2. Celda con residuo grande: (PN Mag., SLG, ANTIGUA):</strong></p>
-<p>En la tabla <code>tab_use</code> la frecuencia observada es:</p>
+<p>En la tabla <code>tab0</code> la frecuencia observada es:</p>
 <p><span class="math display">\[
 n_{ijk} = 11
 \]</span>
@@ -3253,24 +3045,24 @@ atributos y sus interacciones son los más importantes (modelo
 <em>redundante</em>).</p>
 <p>Para su estimación, simplemente se sustituyen los signos “+” del modelo
 anterior por los signos “*”. El modelo se denominará “modelo_sat”:</p>
-<div class="sourceCode" id="cb407"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb404"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Modelo Saturado.</span></span>
 <span></span>
 <span><span class="va">modelo_sat</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/loglm.html">loglm</a></span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">*</span> <span class="va">EFLO</span> <span class="op">*</span> <span class="va">FJUR</span>,</span>
-<span>                          data   <span class="op">=</span> <span class="va">tab_use</span>,</span>
+<span>                          data   <span class="op">=</span> <span class="va">tab0</span>,</span>
 <span>                          fitted <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">solucion_modelo_sat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/generar_solucion.html">generar_solucion</a></span><span class="op">(</span><span class="va">modelo_sat</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-374-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-372-1.png" alt="" width="672"></div>
+<div style="text-align: center;">
+<p><strong>Figura 10.12</strong></p>
+</div>
 <p>El gráfico de mosaico muestra que, obviamente, todos los residuos son 0,
 ya que coinciden las frecuencias observadas y las estimadas por el
 modelo. En cuanto a la tabla de validación:</p>
-<div class="sourceCode" id="cb408"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb405"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_sat</span><span class="op">$</span><span class="va">Informacion</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
-<caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-374">Table 10.3: </span><span id="tab:unnamed-chunk-374">Table 10.4: </span>Validación del modelo
-</caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
 Prueba
@@ -3305,7 +3097,7 @@ Likelihood Ratio
 Pearson
 </td>
 <td style="text-align:right;text-align: center;">
-0
+NaN
 </td>
 <td style="text-align:right;text-align: center;">
 0
@@ -3317,7 +3109,7 @@ Pearson
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 10.12</strong></p>
+<p><strong>Tabla 10.10.</strong> Validación del modelo</p>
 </div>
 <p>En ambas pruebas el <em>p-valor</em> es 1, dado que <strong>no se rechaza la
 hipótesis de que el modelo representa adecuadamente la realidad</strong> (de
@@ -3327,12 +3119,9 @@ punto de vista del <em>análisis estructural</em>, el modelo saturado no es muy
 los que son poco importantes. Por último, mostraremos la tabla con los
 coeficientes estimados, correspondientes tanto a los efectos principales
 o directos como a las interacciones:</p>
-<div class="sourceCode" id="cb409"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb406"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_sat</span><span class="op">$</span><span class="va">Coeficientes</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
-<caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-374">Table 10.3: </span><span id="tab:unnamed-chunk-374">Table 10.3: </span>Coeficientes del modelo
-</caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
 Coefficient
@@ -3347,7 +3136,7 @@ Value
 T. Independiente
 </td>
 <td style="text-align:right;text-align: center;">
-1.669
+-Inf
 </td>
 </tr>
 <tr>
@@ -3355,7 +3144,7 @@ T. Independiente
 GALAXIA:Andrómeda
 </td>
 <td style="text-align:right;text-align: center;">
-0.438
+Inf
 </td>
 </tr>
 <tr>
@@ -3363,7 +3152,7 @@ GALAXIA:Andrómeda
 GALAXIA:GN Magallanes
 </td>
 <td style="text-align:right;text-align: center;">
-0.032
+Inf
 </td>
 </tr>
 <tr>
@@ -3371,7 +3160,7 @@ GALAXIA:GN Magallanes
 GALAXIA:PN Magallanes
 </td>
 <td style="text-align:right;text-align: center;">
--0.696
+NaN
 </td>
 </tr>
 <tr>
@@ -3379,7 +3168,7 @@ GALAXIA:PN Magallanes
 GALAXIA:Triángulo
 </td>
 <td style="text-align:right;text-align: center;">
--0.146
+Inf
 </td>
 </tr>
 <tr>
@@ -3387,7 +3176,7 @@ GALAXIA:Triángulo
 GALAXIA:Vía Láctea
 </td>
 <td style="text-align:right;text-align: center;">
-0.372
+Inf
 </td>
 </tr>
 <tr>
@@ -3395,7 +3184,7 @@ GALAXIA:Vía Láctea
 FJUR:CG
 </td>
 <td style="text-align:right;text-align: center;">
--0.219
+NaN
 </td>
 </tr>
 <tr>
@@ -3403,7 +3192,7 @@ FJUR:CG
 FJUR:SAG
 </td>
 <td style="text-align:right;text-align: center;">
--0.110
+NaN
 </td>
 </tr>
 <tr>
@@ -3411,7 +3200,7 @@ FJUR:SAG
 FJUR:SLG
 </td>
 <td style="text-align:right;text-align: center;">
-0.329
+NaN
 </td>
 </tr>
 <tr>
@@ -3419,7 +3208,7 @@ FJUR:SLG
 EFLO:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
-0.385
+NaN
 </td>
 </tr>
 <tr>
@@ -3427,7 +3216,7 @@ EFLO:ANTIGUA
 EFLO:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
-0.011
+NaN
 </td>
 </tr>
 <tr>
@@ -3435,7 +3224,7 @@ EFLO:MADURA
 EFLO:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
--0.396
+NaN
 </td>
 </tr>
 <tr>
@@ -3443,7 +3232,7 @@ EFLO:RENOVADA
 Andrómeda:CG
 </td>
 <td style="text-align:right;text-align: center;">
-0.007
+NaN
 </td>
 </tr>
 <tr>
@@ -3451,7 +3240,7 @@ Andrómeda:CG
 Andrómeda:SAG
 </td>
 <td style="text-align:right;text-align: center;">
-0.228
+NaN
 </td>
 </tr>
 <tr>
@@ -3459,7 +3248,7 @@ Andrómeda:SAG
 Andrómeda:SLG
 </td>
 <td style="text-align:right;text-align: center;">
--0.235
+NaN
 </td>
 </tr>
 <tr>
@@ -3467,7 +3256,7 @@ Andrómeda:SLG
 GN Magallanes:CG
 </td>
 <td style="text-align:right;text-align: center;">
-0.547
+NaN
 </td>
 </tr>
 <tr>
@@ -3475,7 +3264,7 @@ GN Magallanes:CG
 GN Magallanes:SAG
 </td>
 <td style="text-align:right;text-align: center;">
--0.226
+NaN
 </td>
 </tr>
 <tr>
@@ -3483,7 +3272,7 @@ GN Magallanes:SAG
 GN Magallanes:SLG
 </td>
 <td style="text-align:right;text-align: center;">
--0.322
+NaN
 </td>
 </tr>
 <tr>
@@ -3491,7 +3280,7 @@ GN Magallanes:SLG
 PN Magallanes:CG
 </td>
 <td style="text-align:right;text-align: center;">
--0.388
+NaN
 </td>
 </tr>
 <tr>
@@ -3499,7 +3288,7 @@ PN Magallanes:CG
 PN Magallanes:SAG
 </td>
 <td style="text-align:right;text-align: center;">
--0.169
+NaN
 </td>
 </tr>
 <tr>
@@ -3507,7 +3296,7 @@ PN Magallanes:SAG
 PN Magallanes:SLG
 </td>
 <td style="text-align:right;text-align: center;">
-0.557
+NaN
 </td>
 </tr>
 <tr>
@@ -3515,7 +3304,7 @@ PN Magallanes:SLG
 Triángulo:CG
 </td>
 <td style="text-align:right;text-align: center;">
--0.306
+NaN
 </td>
 </tr>
 <tr>
@@ -3523,7 +3312,7 @@ Triángulo:CG
 Triángulo:SAG
 </td>
 <td style="text-align:right;text-align: center;">
-0.279
+NaN
 </td>
 </tr>
 <tr>
@@ -3531,7 +3320,7 @@ Triángulo:SAG
 Triángulo:SLG
 </td>
 <td style="text-align:right;text-align: center;">
-0.027
+NaN
 </td>
 </tr>
 <tr>
@@ -3539,7 +3328,7 @@ Triángulo:SLG
 Vía Láctea:CG
 </td>
 <td style="text-align:right;text-align: center;">
-0.140
+NaN
 </td>
 </tr>
 <tr>
@@ -3547,7 +3336,7 @@ Vía Láctea:CG
 Vía Láctea:SAG
 </td>
 <td style="text-align:right;text-align: center;">
--0.112
+NaN
 </td>
 </tr>
 <tr>
@@ -3555,7 +3344,7 @@ Vía Láctea:SAG
 Vía Láctea:SLG
 </td>
 <td style="text-align:right;text-align: center;">
--0.027
+NaN
 </td>
 </tr>
 <tr>
@@ -3563,7 +3352,7 @@ Vía Láctea:SLG
 Andrómeda:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
-0.031
+NaN
 </td>
 </tr>
 <tr>
@@ -3571,7 +3360,7 @@ Andrómeda:ANTIGUA
 Andrómeda:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
-0.024
+NaN
 </td>
 </tr>
 <tr>
@@ -3579,7 +3368,7 @@ Andrómeda:MADURA
 Andrómeda:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
--0.054
+NaN
 </td>
 </tr>
 <tr>
@@ -3587,7 +3376,7 @@ Andrómeda:RENOVADA
 GN Magallanes:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
--0.252
+NaN
 </td>
 </tr>
 <tr>
@@ -3595,7 +3384,7 @@ GN Magallanes:ANTIGUA
 GN Magallanes:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
--0.004
+NaN
 </td>
 </tr>
 <tr>
@@ -3603,7 +3392,7 @@ GN Magallanes:MADURA
 GN Magallanes:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
-0.256
+NaN
 </td>
 </tr>
 <tr>
@@ -3611,7 +3400,7 @@ GN Magallanes:RENOVADA
 PN Magallanes:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
--0.096
+NaN
 </td>
 </tr>
 <tr>
@@ -3619,7 +3408,7 @@ PN Magallanes:ANTIGUA
 PN Magallanes:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
-0.076
+NaN
 </td>
 </tr>
 <tr>
@@ -3627,7 +3416,7 @@ PN Magallanes:MADURA
 PN Magallanes:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
-0.020
+NaN
 </td>
 </tr>
 <tr>
@@ -3635,7 +3424,7 @@ PN Magallanes:RENOVADA
 Triángulo:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
--0.059
+NaN
 </td>
 </tr>
 <tr>
@@ -3643,7 +3432,7 @@ Triángulo:ANTIGUA
 Triángulo:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
-0.113
+NaN
 </td>
 </tr>
 <tr>
@@ -3651,7 +3440,7 @@ Triángulo:MADURA
 Triángulo:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
--0.054
+NaN
 </td>
 </tr>
 <tr>
@@ -3659,7 +3448,7 @@ Triángulo:RENOVADA
 Vía Láctea:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
-0.377
+NaN
 </td>
 </tr>
 <tr>
@@ -3667,7 +3456,7 @@ Vía Láctea:ANTIGUA
 Vía Láctea:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
--0.209
+NaN
 </td>
 </tr>
 <tr>
@@ -3675,7 +3464,7 @@ Vía Láctea:MADURA
 Vía Láctea:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
--0.168
+NaN
 </td>
 </tr>
 <tr>
@@ -3683,7 +3472,7 @@ Vía Láctea:RENOVADA
 CG:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
--0.238
+NaN
 </td>
 </tr>
 <tr>
@@ -3691,7 +3480,7 @@ CG:ANTIGUA
 CG:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
-0.217
+NaN
 </td>
 </tr>
 <tr>
@@ -3699,7 +3488,7 @@ CG:MADURA
 CG:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
-0.021
+NaN
 </td>
 </tr>
 <tr>
@@ -3707,7 +3496,7 @@ CG:RENOVADA
 SAG:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
-0.082
+NaN
 </td>
 </tr>
 <tr>
@@ -3715,7 +3504,7 @@ SAG:ANTIGUA
 SAG:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
--0.177
+NaN
 </td>
 </tr>
 <tr>
@@ -3723,7 +3512,7 @@ SAG:MADURA
 SAG:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
-0.096
+NaN
 </td>
 </tr>
 <tr>
@@ -3731,7 +3520,7 @@ SAG:RENOVADA
 SLG:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
-0.156
+NaN
 </td>
 </tr>
 <tr>
@@ -3739,7 +3528,7 @@ SLG:ANTIGUA
 SLG:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
--0.040
+NaN
 </td>
 </tr>
 <tr>
@@ -3747,7 +3536,7 @@ SLG:MADURA
 SLG:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
--0.116
+NaN
 </td>
 </tr>
 <tr>
@@ -3755,7 +3544,7 @@ SLG:RENOVADA
 Andrómeda:CG:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
--0.126
+NaN
 </td>
 </tr>
 <tr>
@@ -3763,7 +3552,7 @@ Andrómeda:CG:ANTIGUA
 Andrómeda:CG:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
--0.200
+NaN
 </td>
 </tr>
 <tr>
@@ -3771,7 +3560,7 @@ Andrómeda:CG:MADURA
 Andrómeda:CG:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
-0.326
+NaN
 </td>
 </tr>
 <tr>
@@ -3779,7 +3568,7 @@ Andrómeda:CG:RENOVADA
 Andrómeda:SAG:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
--0.237
+NaN
 </td>
 </tr>
 <tr>
@@ -3787,7 +3576,7 @@ Andrómeda:SAG:ANTIGUA
 Andrómeda:SAG:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
-0.316
+NaN
 </td>
 </tr>
 <tr>
@@ -3795,7 +3584,7 @@ Andrómeda:SAG:MADURA
 Andrómeda:SAG:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
--0.079
+NaN
 </td>
 </tr>
 <tr>
@@ -3803,7 +3592,7 @@ Andrómeda:SAG:RENOVADA
 Andrómeda:SLG:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
-0.363
+NaN
 </td>
 </tr>
 <tr>
@@ -3811,7 +3600,7 @@ Andrómeda:SLG:ANTIGUA
 Andrómeda:SLG:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
--0.115
+NaN
 </td>
 </tr>
 <tr>
@@ -3819,7 +3608,7 @@ Andrómeda:SLG:MADURA
 Andrómeda:SLG:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
--0.248
+NaN
 </td>
 </tr>
 <tr>
@@ -3827,7 +3616,7 @@ Andrómeda:SLG:RENOVADA
 GN Magallanes:CG:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
-0.021
+NaN
 </td>
 </tr>
 <tr>
@@ -3835,7 +3624,7 @@ GN Magallanes:CG:ANTIGUA
 GN Magallanes:CG:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
--0.308
+NaN
 </td>
 </tr>
 <tr>
@@ -3843,7 +3632,7 @@ GN Magallanes:CG:MADURA
 GN Magallanes:CG:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
-0.287
+NaN
 </td>
 </tr>
 <tr>
@@ -3851,7 +3640,7 @@ GN Magallanes:CG:RENOVADA
 GN Magallanes:SAG:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
-0.030
+NaN
 </td>
 </tr>
 <tr>
@@ -3859,7 +3648,7 @@ GN Magallanes:SAG:ANTIGUA
 GN Magallanes:SAG:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
-0.191
+NaN
 </td>
 </tr>
 <tr>
@@ -3867,7 +3656,7 @@ GN Magallanes:SAG:MADURA
 GN Magallanes:SAG:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
--0.222
+NaN
 </td>
 </tr>
 <tr>
@@ -3875,7 +3664,7 @@ GN Magallanes:SAG:RENOVADA
 GN Magallanes:SLG:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
--0.051
+NaN
 </td>
 </tr>
 <tr>
@@ -3883,7 +3672,7 @@ GN Magallanes:SLG:ANTIGUA
 GN Magallanes:SLG:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
-0.117
+NaN
 </td>
 </tr>
 <tr>
@@ -3891,7 +3680,7 @@ GN Magallanes:SLG:MADURA
 GN Magallanes:SLG:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
--0.065
+NaN
 </td>
 </tr>
 <tr>
@@ -3899,7 +3688,7 @@ GN Magallanes:SLG:RENOVADA
 PN Magallanes:CG:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
--0.417
+NaN
 </td>
 </tr>
 <tr>
@@ -3907,7 +3696,7 @@ PN Magallanes:CG:ANTIGUA
 PN Magallanes:CG:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
-0.429
+NaN
 </td>
 </tr>
 <tr>
@@ -3915,7 +3704,7 @@ PN Magallanes:CG:MADURA
 PN Magallanes:CG:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
--0.012
+NaN
 </td>
 </tr>
 <tr>
@@ -3923,7 +3712,7 @@ PN Magallanes:CG:RENOVADA
 PN Magallanes:SAG:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
-0.323
+NaN
 </td>
 </tr>
 <tr>
@@ -3931,7 +3720,7 @@ PN Magallanes:SAG:ANTIGUA
 PN Magallanes:SAG:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
--0.603
+NaN
 </td>
 </tr>
 <tr>
@@ -3939,7 +3728,7 @@ PN Magallanes:SAG:MADURA
 PN Magallanes:SAG:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
-0.280
+NaN
 </td>
 </tr>
 <tr>
@@ -3947,7 +3736,7 @@ PN Magallanes:SAG:RENOVADA
 PN Magallanes:SLG:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
-0.094
+NaN
 </td>
 </tr>
 <tr>
@@ -3955,7 +3744,7 @@ PN Magallanes:SLG:ANTIGUA
 PN Magallanes:SLG:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
-0.174
+NaN
 </td>
 </tr>
 <tr>
@@ -3963,7 +3752,7 @@ PN Magallanes:SLG:MADURA
 PN Magallanes:SLG:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
--0.268
+NaN
 </td>
 </tr>
 <tr>
@@ -3971,7 +3760,7 @@ PN Magallanes:SLG:RENOVADA
 Triángulo:CG:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
-0.300
+NaN
 </td>
 </tr>
 <tr>
@@ -3979,7 +3768,7 @@ Triángulo:CG:ANTIGUA
 Triángulo:CG:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
-0.269
+NaN
 </td>
 </tr>
 <tr>
@@ -3987,7 +3776,7 @@ Triángulo:CG:MADURA
 Triángulo:CG:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
--0.569
+NaN
 </td>
 </tr>
 <tr>
@@ -3995,7 +3784,7 @@ Triángulo:CG:RENOVADA
 Triángulo:SAG:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
--0.019
+NaN
 </td>
 </tr>
 <tr>
@@ -4003,7 +3792,7 @@ Triángulo:SAG:ANTIGUA
 Triángulo:SAG:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
--0.253
+NaN
 </td>
 </tr>
 <tr>
@@ -4011,7 +3800,7 @@ Triángulo:SAG:MADURA
 Triángulo:SAG:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
-0.272
+NaN
 </td>
 </tr>
 <tr>
@@ -4019,7 +3808,7 @@ Triángulo:SAG:RENOVADA
 Triángulo:SLG:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
--0.281
+NaN
 </td>
 </tr>
 <tr>
@@ -4027,7 +3816,7 @@ Triángulo:SLG:ANTIGUA
 Triángulo:SLG:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
--0.017
+NaN
 </td>
 </tr>
 <tr>
@@ -4035,7 +3824,7 @@ Triángulo:SLG:MADURA
 Triángulo:SLG:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
-0.297
+NaN
 </td>
 </tr>
 <tr>
@@ -4043,7 +3832,7 @@ Triángulo:SLG:RENOVADA
 Vía Láctea:CG:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
-0.222
+NaN
 </td>
 </tr>
 <tr>
@@ -4051,7 +3840,7 @@ Vía Láctea:CG:ANTIGUA
 Vía Láctea:CG:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
--0.190
+NaN
 </td>
 </tr>
 <tr>
@@ -4059,7 +3848,7 @@ Vía Láctea:CG:MADURA
 Vía Láctea:CG:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
--0.032
+NaN
 </td>
 </tr>
 <tr>
@@ -4067,7 +3856,7 @@ Vía Láctea:CG:RENOVADA
 Vía Láctea:SAG:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
--0.097
+NaN
 </td>
 </tr>
 <tr>
@@ -4075,7 +3864,7 @@ Vía Láctea:SAG:ANTIGUA
 Vía Láctea:SAG:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
-0.348
+NaN
 </td>
 </tr>
 <tr>
@@ -4083,7 +3872,7 @@ Vía Láctea:SAG:MADURA
 Vía Láctea:SAG:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
--0.251
+NaN
 </td>
 </tr>
 <tr>
@@ -4091,7 +3880,7 @@ Vía Láctea:SAG:RENOVADA
 Vía Láctea:SLG:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
--0.125
+NaN
 </td>
 </tr>
 <tr>
@@ -4099,7 +3888,7 @@ Vía Láctea:SLG:ANTIGUA
 Vía Láctea:SLG:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
--0.159
+NaN
 </td>
 </tr>
 <tr>
@@ -4107,137 +3896,125 @@ Vía Láctea:SLG:MADURA
 Vía Láctea:SLG:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
-0.284
+NaN
 </td>
 </tr>
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 10.13</strong></p>
+<p><strong>Tabla 10.11.</strong> Coeficientes del modelo</p>
 </div>
+<p>En esta tabla se observa un fenómeno llamativo: <strong>todos los
+coeficientes toman valores <code>Inf</code>, <code>-Inf</code> o <code>NaN</code></strong>. No se trata de un
+error de estimación ni de un fallo del paquete <code>MASS</code>, sino de una
+consecuencia matemática esperada. En un modelo log-lineal, cada
+coeficiente es una combinación lineal de los <span class="math inline">\(\log(\hat m_{ijk})\)</span>,
+donde <span class="math inline">\(\hat m_{ijk}\)</span> son las frecuencias ajustadas. En el modelo
+saturado, por definición, <span class="math inline">\(\hat m_{ijk} = n_{ijk}\)</span> para toda celda —el
+ajuste es perfecto—, de modo que las celdas con frecuencia observada 0
+producen <span class="math inline">\(\log(0) = -\infty\)</span>. Cuando estos términos se combinan
+linealmente, aparecen sumas y restas de infinitos que dan <code>-Inf</code>,
+<code>Inf</code> o formas indeterminadas del tipo <span class="math inline">\(\infty - \infty\)</span>, que R
+representa como <code>NaN</code>. En términos técnicos, se dice que <strong>el estimador
+de máxima verosimilitud del modelo saturado no existe en sentido
+estricto</strong>: los parámetros “se escapan al infinito” en el borde del
+espacio paramétrico. Este es un fenómeno bien conocido en la teoría de
+modelos log-lineales, tratado con detalle en <span class="citation">Agresti (<a href="bibliograf%C3%ADa.html#ref-agresti2013">2013</a>)</span> (capítulo 9)
+y <span class="citation">Fienberg (<a href="bibliograf%C3%ADa.html#ref-fienberg2007">2007</a>)</span> (capítulo 5).</p>
+<p>Sin embargo, esta anomalía <strong>no invalida al modelo como punto de
+partida para procedimientos de selección</strong>. La razón es que la
+<strong>desvianza</strong> del modelo saturado es 0 por construcción (ajuste
+perfecto), un valor finito perfectamente utilizable. Los algoritmos
+como <code><a href="https://rdrr.io/r/stats/step.html">step()</a></code> que trabajan por AIC —definido como <code>desvianza + 2·k</code>—
+solo necesitan la desvianza y el número de parámetros, no los
+coeficientes en sí. Los submodelos que se van considerando durante la
+búsqueda backward suelen tener <span class="math inline">\(\hat m_{ijk} &gt; 0\)</span> en todas las celdas
+(al eliminar interacciones de orden alto, el ajuste “se suaviza” y las
+celdas originalmente en 0 pasan a tener frecuencias ajustadas
+positivas), por lo que sus coeficientes son finitos e interpretables.
+Así, aunque el modelo saturado no admita lectura directa de sus
+coeficientes cuando hay ceros muestrales, <strong>sí es válido como base
+inicial</strong> para la exploración de modelos alternativos, y el modelo
+final <code>modelo_def</code> que resulta de esa exploración tendrá coeficientes
+finitos y significativos.</p>
+<p>La función <code><a href="https://rdrr.io/pkg/MATrstars/man/generar_solucion.html">generar_solucion()</a></code> detecta automáticamente esta situación
+y emite un <code><a href="https://rdrr.io/r/base/message.html">message()</a></code> informativo cuando encuentra coeficientes no
+finitos entre los del modelo, para que el lector no confunda el
+fenómeno con un error.</p>
 <p>La estimación del modelo saturado permite aplicar algoritmos para la
 obtención de la especificación de un modelo que, sin llegar a ser el
-saturado, <strong>asegure una representación valida de la realidad obviando
+saturado, <strong>asegure una representación válida de la realidad obviando
 los efectos e interacciones que no sean estadísticamente relevantes</strong>.
-Por ejemplo, la función <code><a href="https://rdrr.io/r/stats/step.html">step()</a></code> aplica el procedimiento automático de
-selección de modelos basado en el <strong>criterio de información de Akaike
-(AIC)</strong>, buscando especificaciones que mantengan un buen ajuste con la
-mayor parsimonia posible. En este caso, partimos del <strong>modelo saturado</strong>
-(<code>modelo_sat</code>) y, con <code>direction = "backward"</code>, el algoritmo va
-eliminando iterativamente los términos (interacciones o efectos) que
-produzcan una mayor reducción del AIC, lo que indica un equilibrio más
-eficiente entre ajuste y complejidad.</p>
-<p>El argumento <code>scale = 0</code> es el adecuado para modelos log-lineales (asume
-dispersión fija), <code>trace = 1</code> muestra en pantalla cada paso del proceso
-para monitorizar cómo evoluciona el AIC y qué términos se eliminan, y
-<code>steps = 1000</code> garantiza que no haya limitaciones en el número máximo de
-iteraciones, permitiendo explorar completamente el espacio de modelos.</p>
-<p><strong>Nota técnica:</strong> la función genérica <code><a href="https://rdrr.io/r/stats/step.html">step()</a></code> localiza, para cada
-submodelo que prueba, la tabla de datos original contando internamente
-cuántas llamadas hay por encima en la pila de ejecución
-(<code><a href="https://rdrr.io/r/base/eval.html">eval.parent()</a></code>). Esto funciona sin problema en una sesión interactiva,
-pero es <strong>frágil cuando el documento se compila a través de varias capas
-de funciones</strong> (por ejemplo, al llamar a <code><a href="https://pkgs.rstudio.com/bookdown/reference/render_book.html">bookdown::render_book()</a></code> desde
-dentro de una función como <code>build_book()</code>), ya que entonces cambia el
-número de llamadas apiladas y <code><a href="https://rdrr.io/r/stats/step.html">step()</a></code> deja de encontrar correctamente
-los datos, provocando un error solo al renderizar el libro. Para
-evitarlo, implementamos manualmente el mismo algoritmo de selección
-<em>backward</em> por AIC (respetando la jerarquía de los términos), pero
-reajustando cada submodelo con una llamada directa y autocontenida a
-<code><a href="https://rdrr.io/pkg/MASS/man/loglm.html">MASS::loglm()</a></code>, sin depender de <code><a href="https://rdrr.io/r/stats/update.html">update()</a></code> ni de la pila de llamadas:</p>
-<div class="sourceCode" id="cb410"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Selección backward por AIC, robusta frente al contexto de ejecución</span></span>
-<span><span class="co"># (consola, knitr, bookdown, funciones envolventes, etc.).</span></span>
-<span></span>
-<span><span class="va">step_loglm_backward</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span>, <span class="va">trace</span> <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">steps</span> <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span> <span class="op">{</span></span>
-<span></span>
-<span>  <span class="va">ajustar</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">form</span><span class="op">)</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/loglm.html">loglm</a></span><span class="op">(</span><span class="va">form</span>, data <span class="op">=</span> <span class="va">data</span>, fitted <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span>  <span class="va">aic_de</span>  <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/extractAIC.html">extractAIC</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
-<span></span>
-<span>  <span class="va">formula_actual</span> <span class="op">&lt;-</span> <span class="va">formula</span></span>
-<span>  <span class="va">ajuste_actual</span>  <span class="op">&lt;-</span> <span class="fu">ajustar</span><span class="op">(</span><span class="va">formula_actual</span><span class="op">)</span></span>
-<span>  <span class="va">aic_actual</span>     <span class="op">&lt;-</span> <span class="fu">aic_de</span><span class="op">(</span><span class="va">ajuste_actual</span><span class="op">)</span></span>
-<span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">trace</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"Start:  AIC="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">aic_actual</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span>,</span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/base/deparse.html">deparse</a></span><span class="op">(</span><span class="va">formula_actual</span><span class="op">)</span>, <span class="st">"\n\n"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span></span>
-<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="va">steps</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span></span>
-<span>    <span class="va">terminos</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/factor.scope.html">drop.scope</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/terms.html">terms</a></span><span class="op">(</span><span class="va">formula_actual</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">terminos</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="kw">break</span></span>
-<span></span>
-<span>    <span class="va">aics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span><span class="op">(</span><span class="va">terminos</span>, <span class="kw">function</span><span class="op">(</span><span class="va">term</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="va">nueva_formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.formula.html">update.formula</a></span><span class="op">(</span><span class="va">formula_actual</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"~ . -"</span>, <span class="va">term</span><span class="op">)</span><span class="op">)</span></span>
-<span>      <span class="va">ajuste</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html">tryCatch</a></span><span class="op">(</span><span class="fu">ajustar</span><span class="op">(</span><span class="va">nueva_formula</span><span class="op">)</span>, error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="cn">NULL</span><span class="op">)</span></span>
-<span>      <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">ajuste</span><span class="op">)</span><span class="op">)</span> <span class="cn">Inf</span> <span class="kw">else</span> <span class="fu">aic_de</span><span class="op">(</span><span class="va">ajuste</span><span class="op">)</span></span>
-<span>    <span class="op">}</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">trace</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"Step"</span>, <span class="va">i</span>, <span class="st">":\n"</span><span class="op">)</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"&lt;none&gt;"</span>, <span class="va">terminos</span><span class="op">)</span>,</span>
-<span>                        AIC  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">aic_actual</span>, <span class="va">aics</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>            row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"\n"</span><span class="op">)</span></span>
-<span>    <span class="op">}</span></span>
-<span></span>
-<span>    <span class="va">mejor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.min</a></span><span class="op">(</span><span class="va">aics</span><span class="op">)</span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">aics</span><span class="op">[</span><span class="va">mejor</span><span class="op">]</span> <span class="op">&gt;=</span> <span class="va">aic_actual</span><span class="op">)</span> <span class="kw">break</span></span>
-<span></span>
-<span>    <span class="va">formula_actual</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.formula.html">update.formula</a></span><span class="op">(</span><span class="va">formula_actual</span>,</span>
-<span>                                      <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"~ . -"</span>, <span class="va">terminos</span><span class="op">[</span><span class="va">mejor</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="va">aic_actual</span> <span class="op">&lt;-</span> <span class="va">aics</span><span class="op">[</span><span class="va">mejor</span><span class="op">]</span></span>
-<span>  <span class="op">}</span></span>
-<span></span>
-<span>  <span class="va">ajuste_final</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/loglm.html">loglm</a></span><span class="op">(</span><span class="va">formula_actual</span>, data <span class="op">=</span> <span class="va">data</span>, fitted <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">trace</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"\nFormula final:\n"</span>, <span class="fu"><a href="https://rdrr.io/r/base/deparse.html">deparse</a></span><span class="op">(</span><span class="va">formula_actual</span><span class="op">)</span>, <span class="st">"\n"</span>,</span>
-<span>        <span class="st">"AIC final = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu">aic_de</span><span class="op">(</span><span class="va">ajuste_final</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span>  <span class="va">ajuste_final</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+El procedimiento clásico para esta tarea es el algoritmo <em>backward</em> por
+AIC, que parte de un modelo amplio (el saturado) y va eliminando
+iterativamente los términos (interacciones o efectos) cuya supresión
+más reduce el <strong>criterio de información de Akaike (AIC)</strong>, buscando así
+un equilibrio eficiente entre bondad de ajuste y parsimonia.</p>
+<p>En R, la función genérica <code><a href="https://rdrr.io/r/stats/step.html">step()</a></code> implementa este procedimiento para
+la mayoría de familias de modelos. Sin embargo, en el caso concreto de
+los modelos log-lineales ajustados con <code><a href="https://rdrr.io/pkg/MASS/man/loglm.html">MASS::loglm()</a></code>, <code><a href="https://rdrr.io/r/stats/step.html">step()</a></code>
+presenta una limitación técnica: localiza la tabla de datos de cada
+submodelo mediante <code><a href="https://rdrr.io/r/base/eval.html">eval.parent()</a></code>, que sube por la pila de llamadas
+hasta encontrarla por su nombre. Esto funciona sin problema en una
+sesión interactiva, pero es <strong>frágil cuando el documento se compila a
+través de varias capas de funciones</strong> (por ejemplo, al llamar a
+<code><a href="https://pkgs.rstudio.com/bookdown/reference/render_book.html">bookdown::render_book()</a></code> desde dentro de una función como
+<code>build_book()</code>), ya que entonces cambia el número de llamadas apiladas
+y <code><a href="https://rdrr.io/r/stats/step.html">step()</a></code> deja de encontrar correctamente los datos, provocando un
+error solo al renderizar el libro.</p>
+<p>Para evitar esta fragilidad, se usa aquí la función
+<code><a href="https://rdrr.io/pkg/MATrstars/man/step_loglm_backward.html">step_loglm_backward()</a></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a> (véase su ficha
+completa en el <strong>Apéndice</strong>), que implementa el mismo algoritmo
+<em>backward</em> por AIC pero recibiendo la tabla de datos como argumento
+explícito y capturándola en el <em>closure</em> de sus funciones internas.
+Este pequeño cambio técnico hace que el procedimiento sea <strong>robusto en
+cualquier contexto de ejecución</strong> (consola, <code>knitr</code>, <code>bookdown</code>,
+<code>pkgdown</code>, funciones envolventes, etc.) manteniendo exactamente la
+misma lógica algorítmica que <code><a href="https://rdrr.io/r/stats/step.html">step()</a></code>. Los argumentos principales son
+la fórmula del modelo saturado, la tabla de contingencia (<code>data</code>), el
+control de la traza (<code>trace = TRUE</code> para imprimir cada paso) y el
+número máximo de iteraciones (<code>steps</code>, con valor por defecto <code>1000</code>).</p>
 <p>El resultado final, almacenado como <code>modelo_def</code>, es la especificación
 óptima según el AIC, más simple que el modelo saturado pero
 suficientemente expresiva para captar los patrones esenciales de
 asociación entre los factores:</p>
-<div class="sourceCode" id="cb411"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb407"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Elección del modelo final.</span></span>
 <span></span>
-<span><span class="va">modelo_def</span> <span class="op">&lt;-</span> <span class="fu">step_loglm_backward</span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">*</span> <span class="va">EFLO</span> <span class="op">*</span> <span class="va">FJUR</span>,</span>
-<span>                                   data  <span class="op">=</span> <span class="va">tab_use</span>,</span>
+<span><span class="va">modelo_def</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/step_loglm_backward.html">step_loglm_backward</a></span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">*</span> <span class="va">EFLO</span> <span class="op">*</span> <span class="va">FJUR</span>,</span>
+<span>                                   data  <span class="op">=</span> <span class="va">tab0</span>,</span>
 <span>                                   trace <span class="op">=</span> <span class="cn">TRUE</span>, steps <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Start:  AIC=90
 ## ~GALAXIA * EFLO * FJUR
 ## 
 ## Step 1 :
-##               Term  AIC
-##             &lt;none&gt; 90.0
-##  GALAXIA:EFLO:FJUR 69.5
+##               Term   AIC
+##             &lt;none&gt; 90.00
+##  GALAXIA:EFLO:FJUR 71.25
 ## 
 ## Step 2 :
 ##          Term   AIC
-##        &lt;none&gt; 69.50
-##  GALAXIA:EFLO 63.13
-##  GALAXIA:FJUR 69.28
-##     EFLO:FJUR 65.20
+##        &lt;none&gt; 71.25
+##  GALAXIA:EFLO 65.34
+##  GALAXIA:FJUR 72.45
+##     EFLO:FJUR 66.59
 ## 
 ## Step 3 :
 ##          Term   AIC
-##        &lt;none&gt; 63.13
-##  GALAXIA:FJUR 63.44
-##     EFLO:FJUR 59.36
+##        &lt;none&gt; 65.34
+##  GALAXIA:FJUR 67.09
+##     EFLO:FJUR 61.22
 ## 
 ## Step 4 :
 ##          Term   AIC
-##        &lt;none&gt; 59.36
-##          EFLO 92.22
-##  GALAXIA:FJUR 59.67
+##        &lt;none&gt; 61.22
+##          EFLO 95.03
+##  GALAXIA:FJUR 62.97
 ## 
 ## 
 ## Formula final:
 ## ~GALAXIA + EFLO + FJUR + GALAXIA:FJUR
-## AIC final = 59.36</code></pre>
+## AIC final = 61.22</code></pre>
 <p>En nuestro ejemplo, la especificación del modelo definitivo incluye los
 tres efectos directos o principales de los factores o atributos, y la
 interacción entre los factores de la forma jurídica (FJUR) y la Galaxia
@@ -4248,9 +4025,12 @@ interacciones triples entre los tres factores.</p>
 <p>Luego, se pasa el modelo a la función <code>generar_solución()</code> para obtener
 los resultados (el gráfico de mosaico y las dos tablas). El gráfico
 obtenido es:</p>
-<div class="sourceCode" id="cb413"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb409"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_def</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/generar_solucion.html">generar_solucion</a></span><span class="op">(</span><span class="va">modelo_def</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-379-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-376-1.png" alt="" width="672"></div>
+<div style="text-align: center;">
+<p><strong>Figura 10.13</strong></p>
+</div>
 <p>El gráfico de residuos del modelo seleccionado muestra un ajuste
 considerablemente mejor que el del modelo de independencia. La mayoría
 de los rectángulos presentan tonalidades suaves, señal de que las
@@ -4274,12 +4054,9 @@ modelo final proporciona una representación parsimoniosa y
 estadísticamente coherente de las dependencias esenciales entre los
 factores analizados.</p>
 <p>En cuanto a la tabla de validación:</p>
-<div class="sourceCode" id="cb414"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb410"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_def</span><span class="op">$</span><span class="va">Informacion</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
-<caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-379">Table 10.5: </span><span id="tab:unnamed-chunk-379">Table 10.6: </span>Validación del modelo
-</caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
 Prueba
@@ -4300,13 +4077,13 @@ P-valor
 Likelihood Ratio
 </td>
 <td style="text-align:right;text-align: center;">
-25.359
+27.223
 </td>
 <td style="text-align:right;text-align: center;">
 28
 </td>
 <td style="text-align:right;text-align: center;">
-0.608
+0.506
 </td>
 </tr>
 <tr>
@@ -4314,19 +4091,19 @@ Likelihood Ratio
 Pearson
 </td>
 <td style="text-align:right;text-align: center;">
-25.573
+27.280
 </td>
 <td style="text-align:right;text-align: center;">
 28
 </td>
 <td style="text-align:right;text-align: center;">
-0.596
+0.503
 </td>
 </tr>
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 10.14</strong></p>
+<p><strong>Tabla 10.12.</strong> Validación del modelo</p>
 </div>
 <p>Los resultados de la tabla de validación muestran que <strong>ambas pruebas de
 ajuste global</strong> —la razón de verosimilitud (<em>Likelihood Ratio</em>) y la
@@ -4342,12 +4119,9 @@ concluimos que <strong>no es necesario añadir interacciones adicionales</strong
 que la especificación elegida representa correctamente la estructura de
 dependencias presente en la tabla de contingencia tridimensional.</p>
 <p>En lo que se refiere a los coeficientes estimados del modelo:</p>
-<div class="sourceCode" id="cb415"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb411"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_def</span><span class="op">$</span><span class="va">Coeficientes</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
-<caption style="font-size: initial !important;">
-<span id="tab:unnamed-chunk-379">Table 10.5: </span><span id="tab:unnamed-chunk-379">Table 10.5: </span>Coeficientes del modelo
-</caption>
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
 Coefficient
@@ -4362,7 +4136,7 @@ Value
 T. Independiente
 </td>
 <td style="text-align:right;text-align: center;">
-1.711
+1.694
 </td>
 </tr>
 <tr>
@@ -4370,7 +4144,7 @@ T. Independiente
 GALAXIA:Andrómeda
 </td>
 <td style="text-align:right;text-align: center;">
-0.435
+0.450
 </td>
 </tr>
 <tr>
@@ -4378,7 +4152,7 @@ GALAXIA:Andrómeda
 GALAXIA:GN Magallanes
 </td>
 <td style="text-align:right;text-align: center;">
--0.054
+-0.039
 </td>
 </tr>
 <tr>
@@ -4386,7 +4160,7 @@ GALAXIA:GN Magallanes
 GALAXIA:PN Magallanes
 </td>
 <td style="text-align:right;text-align: center;">
--0.656
+-0.715
 </td>
 </tr>
 <tr>
@@ -4394,7 +4168,7 @@ GALAXIA:PN Magallanes
 GALAXIA:Triángulo
 </td>
 <td style="text-align:right;text-align: center;">
--0.161
+-0.146
 </td>
 </tr>
 <tr>
@@ -4402,7 +4176,7 @@ GALAXIA:Triángulo
 GALAXIA:Vía Láctea
 </td>
 <td style="text-align:right;text-align: center;">
-0.436
+0.450
 </td>
 </tr>
 <tr>
@@ -4410,7 +4184,7 @@ GALAXIA:Vía Láctea
 FJUR:CG
 </td>
 <td style="text-align:right;text-align: center;">
--0.219
+-0.249
 </td>
 </tr>
 <tr>
@@ -4418,7 +4192,7 @@ FJUR:CG
 FJUR:SAG
 </td>
 <td style="text-align:right;text-align: center;">
--0.127
+-0.112
 </td>
 </tr>
 <tr>
@@ -4426,7 +4200,7 @@ FJUR:SAG
 FJUR:SLG
 </td>
 <td style="text-align:right;text-align: center;">
-0.346
+0.361
 </td>
 </tr>
 <tr>
@@ -4434,7 +4208,7 @@ FJUR:SLG
 EFLO:ANTIGUA
 </td>
 <td style="text-align:right;text-align: center;">
-0.450
+0.456
 </td>
 </tr>
 <tr>
@@ -4442,7 +4216,7 @@ EFLO:ANTIGUA
 EFLO:MADURA
 </td>
 <td style="text-align:right;text-align: center;">
--0.047
+-0.042
 </td>
 </tr>
 <tr>
@@ -4450,7 +4224,7 @@ EFLO:MADURA
 EFLO:RENOVADA
 </td>
 <td style="text-align:right;text-align: center;">
--0.404
+-0.414
 </td>
 </tr>
 <tr>
@@ -4458,7 +4232,7 @@ EFLO:RENOVADA
 Andrómeda:CG
 </td>
 <td style="text-align:right;text-align: center;">
--0.091
+-0.062
 </td>
 </tr>
 <tr>
@@ -4466,7 +4240,7 @@ Andrómeda:CG
 Andrómeda:SAG
 </td>
 <td style="text-align:right;text-align: center;">
-0.188
+0.173
 </td>
 </tr>
 <tr>
@@ -4474,7 +4248,7 @@ Andrómeda:SAG
 Andrómeda:SLG
 </td>
 <td style="text-align:right;text-align: center;">
--0.097
+-0.112
 </td>
 </tr>
 <tr>
@@ -4482,7 +4256,7 @@ Andrómeda:SLG
 GN Magallanes:CG
 </td>
 <td style="text-align:right;text-align: center;">
-0.537
+0.566
 </td>
 </tr>
 <tr>
@@ -4490,7 +4264,7 @@ GN Magallanes:CG
 GN Magallanes:SAG
 </td>
 <td style="text-align:right;text-align: center;">
--0.206
+-0.221
 </td>
 </tr>
 <tr>
@@ -4498,7 +4272,7 @@ GN Magallanes:SAG
 GN Magallanes:SLG
 </td>
 <td style="text-align:right;text-align: center;">
--0.331
+-0.345
 </td>
 </tr>
 <tr>
@@ -4506,7 +4280,7 @@ GN Magallanes:SLG
 PN Magallanes:CG
 </td>
 <td style="text-align:right;text-align: center;">
--0.387
+-0.506
 </td>
 </tr>
 <tr>
@@ -4514,7 +4288,7 @@ PN Magallanes:CG
 PN Magallanes:SAG
 </td>
 <td style="text-align:right;text-align: center;">
--0.143
+-0.083
 </td>
 </tr>
 <tr>
@@ -4522,7 +4296,7 @@ PN Magallanes:SAG
 PN Magallanes:SLG
 </td>
 <td style="text-align:right;text-align: center;">
-0.530
+0.589
 </td>
 </tr>
 <tr>
@@ -4530,7 +4304,7 @@ PN Magallanes:SLG
 Triángulo:CG
 </td>
 <td style="text-align:right;text-align: center;">
--0.189
+-0.159
 </td>
 </tr>
 <tr>
@@ -4538,7 +4312,7 @@ Triángulo:CG
 Triángulo:SAG
 </td>
 <td style="text-align:right;text-align: center;">
-0.250
+0.235
 </td>
 </tr>
 <tr>
@@ -4546,7 +4320,7 @@ Triángulo:SAG
 Triángulo:SLG
 </td>
 <td style="text-align:right;text-align: center;">
--0.061
+-0.076
 </td>
 </tr>
 <tr>
@@ -4554,7 +4328,7 @@ Triángulo:SLG
 Vía Láctea:CG
 </td>
 <td style="text-align:right;text-align: center;">
-0.131
+0.161
 </td>
 </tr>
 <tr>
@@ -4562,7 +4336,7 @@ Vía Láctea:CG
 Vía Láctea:SAG
 </td>
 <td style="text-align:right;text-align: center;">
--0.089
+-0.104
 </td>
 </tr>
 <tr>
@@ -4570,13 +4344,13 @@ Vía Láctea:SAG
 Vía Láctea:SLG
 </td>
 <td style="text-align:right;text-align: center;">
--0.042
+-0.057
 </td>
 </tr>
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 10.15</strong></p>
+<p><strong>Tabla 10.13.</strong> Coeficientes del modelo</p>
 </div>
 <p>La tabla de coeficientes del modelo final refleja, en primer lugar, los
 <strong>efectos directos</strong> de cada factor. Entre las galaxias, <em>Andrómeda</em> y
@@ -4727,7 +4501,7 @@ conocido de los apartados anteriores.</p></li>
 la primera parte del código está dedicada a la limpieza de la memoria
 (<em>Environment</em>). Además, se cargan los paquetes que harán falta para
 ejecutar el código:</p>
-<div class="sourceCode" id="cb416"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb412"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#### Análisis de Correspondencias Simple. Universo R-Stars ####################</span></span>
 <span><span class="co">################################################################################</span></span>
 <span></span>
@@ -4753,7 +4527,7 @@ categóricas</strong> que intervendrán en el análisis: GALAXIA y FJUR. Se
 comprueban los posibles <em>missing values</em> con <code><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss()</a></code>, y se
 recodifican los nombres de las galaxias para facilitar la lectura de
 los gráficos:</p>
-<div class="sourceCode" id="cb417"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb413"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># DATOS</span></span>
 <span></span>
 <span>  <span class="co"># Importando datos</span></span>
@@ -5271,13 +5045,13 @@ SLG, SAG and CG
 </table></div>
 </div>
 <div style="text-align: center;">
-<p><strong>Tabla 10.16</strong></p>
+<p><strong>Tabla 10.14</strong></p>
 </div>
 <p>El resumen visual confirma que el <em>data frame</em> <code>seleccion</code> contiene
 las dos variables categóricas necesarias para el análisis de
 correspondencias simple: <strong>GALAXIA</strong> (5 categorías) y <strong>FJUR</strong> (3
 categorías). Ambas aparecen completas, sin valores perdidos:</p>
-<div class="sourceCode" id="cb418"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb414"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Localizando (posibles) missing values</span></span>
 <span></span>
 <span>    <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -5291,18 +5065,18 @@ categorías). Ambas aparecen completas, sin valores perdidos:</p>
 <span>        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"TRUE"</span> <span class="op">=</span> <span class="st">"NA"</span>, <span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"Presente"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span></span>
 <span>        plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-384-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-381-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
-<p><strong>Figura 10.11</strong></p>
+<p><strong>Figura 10.14</strong></p>
 </div>
-<div class="sourceCode" id="cb419"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb415"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">GALAXIA</span><span class="op">)</span> <span class="op">|</span></span>
 <span>                         <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">FJUR</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>                  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">GALAXIA</span>,</span>
 <span>                                <span class="va">FJUR</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] GALAXIA FJUR   
 ## &lt;0 rows&gt; (o 0- extensión row.names)</code></pre>
-<div class="sourceCode" id="cb421"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb417"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Eliminando (si procede) filas con NA, y renombrando los niveles de GALAXIA</span></span>
 <span></span>
 <span>    <span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -5318,7 +5092,7 @@ categorías). Ambas aparecen completas, sin valores perdidos:</p>
 <p>Confirmado que no hay valores perdidos y renombradas las categorías de
 GALAXIA, construimos la <strong>tabla de contingencia</strong> de partida, sobre la
 cual se aplicará el análisis:</p>
-<div class="sourceCode" id="cb422"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb418"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># TABLA DE CONTINGENCIA (GALAXIA X FJUR)</span></span>
 <span></span>
 <span>  <span class="va">tab.GA.FJ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">seleccion</span>, <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">GALAXIA</span>, <span class="va">FJUR</span><span class="op">)</span><span class="op">)</span></span>
@@ -5468,7 +5242,7 @@ Sum
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 10.17.</strong> Empresas TMI: Galaxia y Forma Jurídica.</p>
+<p><strong>Tabla 10.15.</strong> Empresas TMI: Galaxia y Forma Jurídica.</p>
 </div>
 <p>Ya disponemos de la tabla sobre la que se aplicará el análisis. Se
 trata de una tabla <span class="math inline">\(5 \times 3\)</span>, por lo que el número máximo de
@@ -5485,7 +5259,7 @@ recoge la información de las <strong>dimensiones</strong> (autovalores, porcent
 de inercia principal y porcentaje acumulado), la segunda desglosa la
 información de las <strong>filas</strong> (categorías de GALAXIA) y la tercera
 desglosa la información de las <strong>columnas</strong> (categorías de FJUR):</p>
-<div class="sourceCode" id="cb423"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb419"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ANALISIS DE CORRESPONDENCIAS SIMPLE</span></span>
 <span></span>
 <span>  <span class="co"># Cálculo del análisis con la función CA() de {FactoMineR}</span></span>
@@ -5519,7 +5293,7 @@ esa dimensión; valores bajos indican una representación pobre. La
 suma del coseno cuadrado en todas las dimensiones no triviales es 1.</p></li>
 </ul>
 <p>El código para construir las tres tablas es:</p>
-<div class="sourceCode" id="cb424"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb420"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Tabla 1: Inercia principal por dimensión</span></span>
 <span></span>
 <span>    <span class="va">TableEigenCA</span> <span class="op">&lt;-</span> <span class="va">EigenCA</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -5577,7 +5351,7 @@ suma del coseno cuadrado en todas las dimensiones no triviales es 1.</p></li>
 <span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">TableCols</span></span></code></pre></div>
 <p>La primera tabla resume la <strong>descomposición de la inercia</strong> entre las
 dimensiones extraídas:</p>
-<div class="sourceCode" id="cb425"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb421"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -5627,7 +5401,7 @@ Acumulada
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 10.18</strong></p>
+<p><strong>Tabla 10.16</strong></p>
 </div>
 <p>Como se aprecia, la <strong>primera dimensión</strong> recoge el <strong>75.4%</strong> de la
 inercia total (varianza o comportamiento asociativo de las categorías),
@@ -5651,7 +5425,7 @@ respecto a sus asociaciones.</p>
 <p>La segunda tabla, correspondiente al factor GALAXIA, permite
 identificar qué categorías contribuyen más a la inercia y qué tan bien
 están representadas en cada dimensión:</p>
-<div class="sourceCode" id="cb426"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb422"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -5777,7 +5551,7 @@ Vía Láctea
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 10.19</strong></p>
+<p><strong>Tabla 10.17</strong></p>
 </div>
 <p>Se observa que las categorías con <strong>mayor inercia</strong> son la <strong>Gran Nube
 de Magallanes</strong> y la <strong>Pequeña Nube de Magallanes</strong>, es decir, son las
@@ -5793,7 +5567,7 @@ respectivamente), mientras que <strong>Andrómeda</strong>, <strong>Triángulo</
 Láctea</strong> encuentran mejor representación en la <strong>Dimensión 2</strong> (cos²
 entre 0.68 y 0.86 en el segundo eje).</p>
 <p>La tercera tabla recoge la información análoga para el factor FJUR:</p>
-<div class="sourceCode" id="cb427"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb423"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -5879,7 +5653,7 @@ SLG
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 10.20</strong></p>
+<p><strong>Tabla 10.18</strong></p>
 </div>
 <p>La categoría de forma jurídica con <strong>mayor inercia</strong> es <strong>CG</strong>,
 seguida de <strong>SLG</strong> y, a distancia, <strong>SAG</strong>. Esto indica que las
@@ -5907,7 +5681,7 @@ grado extremo), habría que ponderar con especial atención la posición
 de las categorías en la primera dimensión a la hora de establecer
 conclusiones. Para crear este gráfico de contribuciones puede
 recurrirse a la función <code><a href="https://rdrr.io/pkg/factoextra/man/eigenvalue.html">fviz_screeplot()</a></code> del paquete <a href="https://github.com/kassambara/factoextra">factoextra</a>:</p>
-<div class="sourceCode" id="cb428"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb424"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># GRÁFICOS DEL ANÁLISIS DE CORRESPONDENCIAS</span></span>
 <span></span>
 <span>  <span class="co"># Gráfico de contribuciones de las dimensiones a la Inercia Total</span></span>
@@ -5924,9 +5698,9 @@ recurrirse a la función <code><a href="https://rdrr.io/pkg/factoextra/man/eigen
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">gcontrib</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-393-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-390-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
-<p><strong>Figura 10.12</strong></p>
+<p><strong>Figura 10.15</strong></p>
 </div>
 <p>El gráfico confirma visualmente lo que ya sabíamos por la primera
 tabla: la primera dimensión asume aproximadamente tres cuartas partes
@@ -5942,7 +5716,7 @@ uniformidad; las barras que la superan corresponden a las categorías
 que “explican” más ese eje. A continuación se construyen los cuatro
 gráficos (filas y columnas × dimensiones 1 y 2) y se disponen
 conjuntamente con <a href="https://patchwork.data-imaginist.com">patchwork</a>:</p>
-<div class="sourceCode" id="cb429"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb425"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Contribución de las categorías (filas y columnas) a las dimensiones</span></span>
 <span></span>
 <span>    <span class="va">grow_dim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_contrib.html">fviz_contrib</a></span><span class="op">(</span><span class="va">acinterestelar</span>,</span>
@@ -5981,9 +5755,9 @@ conjuntamente con <a href="https://patchwork.data-imaginist.com">patchwork</a>:<
 <span>                                    plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">gcontribs</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-394-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-391-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
-<p><strong>Figura 10.13</strong></p>
+<p><strong>Figura 10.16</strong></p>
 </div>
 <p>En la fila superior se observa que la <strong>Dimensión 1</strong> viene explicada,
 sobre todo, por <strong>GN Magallanes</strong> y <strong>PN Magallanes</strong>, mientras que
@@ -6014,7 +5788,7 @@ tamaño del texto en el gráfico.</p></li>
 <p>Es especialmente relevante la elección de <code>map = "symmetric"</code>, ya que
 permite interpretar las cercanías entre categorías de uno y otro factor
 de forma coherente:</p>
-<div class="sourceCode" id="cb430"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb426"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Gráfico bidimensional (biplot simétrico) de categorías</span></span>
 <span></span>
 <span>    <span class="va">gbiplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_ca.html">fviz_ca_biplot</a></span><span class="op">(</span><span class="va">acinterestelar</span>,</span>
@@ -6029,9 +5803,9 @@ de forma coherente:</p>
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">gbiplot</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-395-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-392-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
-<p><strong>Figura 10.14</strong></p>
+<p><strong>Figura 10.17</strong></p>
 </div>
 <p>En el mapa bidimensional se aprecia con claridad la <strong>estructura de
 asociación</strong> entre galaxias y formas jurídicas. En el extremo derecho
@@ -6061,7 +5835,7 @@ prueba ji-cuadrado.</p>
 <p>Para una presentación más compacta que combine el gráfico de
 contribuciones y el biplot, puede recurrirse nuevamente al paquete
 <a href="https://patchwork.data-imaginist.com">patchwork</a>:</p>
-<div class="sourceCode" id="cb431"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb427"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Presentación compacta: contribuciones + biplot</span></span>
 <span></span>
 <span>    <span class="va">gcombinado</span> <span class="op">&lt;-</span> <span class="va">gcontrib</span> <span class="op">/</span> <span class="va">gbiplot</span></span>
@@ -6074,9 +5848,9 @@ contribuciones y el biplot, puede recurrirse nuevamente al paquete
 <span>                                    plot.caption <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">gcombinado</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-396-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-393-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
-<p><strong>Figura 10.15</strong></p>
+<p><strong>Figura 10.18</strong></p>
 </div>
 <p>El gráfico combinado ofrece una vista de conjunto muy útil para
 comunicar los resultados: la parte superior informa de la calidad de
@@ -6150,7 +5924,7 @@ aquí</a>)</p></li>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón Morán. It was last built on 2026-07-14.</p>
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón Morán. It was last built on 2026-07-15.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

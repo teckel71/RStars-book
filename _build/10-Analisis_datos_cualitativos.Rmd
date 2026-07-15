@@ -1,3 +1,7 @@
+```{r matrstars-numerado-setup-cap10, include=FALSE}
+options(matrstars.suppress_caption = TRUE)
+```
+
 # Análisis de Datos Cualitativos.
 
 ![](figuras/10%20galaxias.jpg){width="100%"}
@@ -955,15 +959,19 @@ paquete `MATrstars`** para sus fichas completas).
 
 La función **`detect_zeros_any()`** identifica de manera robusta todas
 las celdas con frecuencia cero en una tabla de contingencia de
-**cualquier número de dimensiones**. Esto es importante porque los
-modelos log-lineales pueden fallar o producir estimaciones inestables
-cuando existen celdas sin observaciones, por lo que conocer su
-localización es esencial. Basándose en esta detección,
+**cualquier número de dimensiones**. Es una herramienta diagnóstica
+útil como paso previo al ajuste de modelos log-lineales, ya que
+localizar los ceros muestrales permite anticipar peculiaridades en la
+estimación (véase más adelante). Como complemento,
 **`impute_zeros_with_one()`** permite reemplazar únicamente los ceros
-por un valor mínimo (por defecto, 1), generando una tabla ajustada apta
-para la estimación y dejando registrado qué celdas fueron imputadas y
-por qué. Este procedimiento no altera celdas con frecuencia positiva y
-asegura la viabilidad numérica del modelo.
+por un valor mínimo (por defecto, 1), preservando el resto de las
+celdas. **La imputación no es un paso estándar del análisis
+log-lineal**, y en este capítulo **no se aplica por defecto**: se
+expone en el paquete como herramienta disponible por si el usuario, en
+algún contexto particular, desea manipular los ceros de la tabla; pero
+el flujo pedagógico principal trabaja directamente sobre la tabla
+original. La justificación de esta decisión se detalla en la sección
+correspondiente.
 
 Por su parte, **`extraer_coeficientes()`** toma un modelo log-lineal
 ajustado y descompone sus parámetros en una tabla clara, nombrando cada
@@ -1108,49 +1116,37 @@ frecuencias conjuntas del sistema y constituye el “objeto” que los
 modelos analizarán para identificar patrones de dependencia entre los
 factores.
 
-Antes de estimar cualquier modelo, es fundamental comprobar si la tabla
-contiene **celdas con frecuencia cero**, ya que los log-lineales pueden
-presentar problemas de convergencia o estimaciones inestables cuando
-algunas combinaciones de categorías no están representadas en la
-muestra. Por ello se aplica la función `detect_zeros_any()`, diseñada
-para localizar ceros en tablas de cualquier dimensión. Si existen, se
-muestran en una tabla formateada con *kable* para documentar qué
-combinaciones están ausentes.
+Antes de estimar cualquier modelo, es prudente comprobar si la tabla
+contiene **celdas con frecuencia cero**. La presencia de ceros
+muestrales no impide la estimación en sí, pero da lugar a un fenómeno
+importante que se explicará más adelante: el estimador de máxima
+verosimilitud del **modelo saturado** no existe en sentido estricto
+cuando alguna celda observada es cero, lo que se traduce en
+coeficientes `-Inf`, `Inf` o `NaN` en su tabla de coeficientes. Por
+ello se aplica la función `detect_zeros_any()`, diseñada para localizar
+ceros en tablas de cualquier dimensión. Si existen, se muestran en una
+tabla formateada para documentar qué combinaciones están ausentes.
 
-El flujo continúa con la función `impute_zeros_with_one()`, que
-reemplaza únicamente las celdas con frecuencia cero por un valor mínimo
-(1). Este ajuste no modifica las frecuencias positivas y garantiza que
-la tabla resultante sea **estimable** por los métodos log-lineales.
-Además, la función añade como atributos una **nota de imputación** y un
-registro detallado de las celdas modificadas, los cuales se imprimen
-después para asegurar trazabilidad y transparencia en el análisis. Con
-esta tabla corregida —`tab_use`— queda listo el material de datos
-adecuado y consistente para estimar los modelos log-lineales que se
-estudiarán en las siguientes secciones.
+**No se aplica ninguna imputación**: se trabaja directamente sobre la
+tabla original `tab0`. Las razones se detallarán en la sección del
+modelo saturado; adelantemos aquí solo la conclusión operativa: el
+procedimiento `step()` funciona correctamente sobre el modelo saturado
+aunque sus coeficientes contengan valores no finitos, porque opera
+sobre la **desvianza** (que es 0 por construcción para el saturado, un
+valor perfectamente finito) y no sobre los coeficientes.
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
 # Construir tabla original
 tab0 <- xtabs(~ GALAXIA + FJUR + EFLO, data = seleccion)
 
-# Reportar celdas 0 (si existen)
+# Reportar celdas 0 (si existen) — es puramente informativo.
 zeros_report <- detect_zeros_any(tab0)
 
 if (is.null(zeros_report)) {
   message("No se han detectado celdas con frecuencia 0 en la tabla original.")
 } else {
   zeros_report %>%
-    kable_rstars(caption = "Combinaciones con 0 detectadas (antes de imputar)")
-}
-
-# Imputar 0 -> 1 (solo celdas con 0) y anotar nota + reporte como atributo
-tab_use <- impute_zeros_with_one(tab0, value = 1L)
-
-# Mostrar nota de imputación y, si aplica, el detalle de celdas imputadas
-cat("\nNOTA IMPUTACIÓN: ", attr(tab_use, "nota_imputacion"), "\n")
-
-if (!is.null(attr(tab_use, "zeros_imputados"))) {
-  attr(tab_use, "zeros_imputados") %>%
-    kable_rstars(caption = "Combinaciones imputadas (0 → 1) para estimar modelo")
+    kable_rstars(caption = "Combinaciones con frecuencia 0 detectadas")
 }
 ```
 
@@ -1158,7 +1154,7 @@ if (!is.null(attr(tab_use, "zeros_imputados"))) {
 # Construir tabla original
 tab0 <- xtabs(~ GALAXIA + FJUR + EFLO, data = seleccion)
 
-# Reportar celdas 0 (si existen)
+# Reportar celdas 0 (si existen) — es puramente informativo.
 zeros_report <- detect_zeros_any(tab0)
 
 if (is.null(zeros_report)) {
@@ -1170,38 +1166,14 @@ if (is.null(zeros_report)) {
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.5.** Combinaciones con 0 detectadas (antes de imputar)
-:::
-
-```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
-# Imputar 0 -> 1 (solo celdas con 0) y anotar nota + reporte como atributo
-tab_use <- impute_zeros_with_one(tab0, value = 1L)
-
-# Mostrar nota de imputación
-cat("\nNOTA IMPUTACIÓN: ", attr(tab_use, "nota_imputacion"), "\n")
-
-# Mostrar detalle de celdas imputadas (si aplica)
-if (!is.null(attr(tab_use, "zeros_imputados"))) {
-  zeros_imputados <- attr(tab_use, "zeros_imputados")
-  
-    zeros_imputados %>%
-      kable_rstars()
-}
-```
-
-::: {style="text-align: center;"}
-**Tabla 10.6.** Combinaciones imputadas (0 → 1) para estimar modelo
+**Tabla 10.5.** Combinaciones con frecuencia 0 detectadas
 :::
 
 
-En nuestro caso, solo se ha detectado una combinación de categorías o
-niveles de los factores con 0 observaciones; la correspondiente a
-GALAXIA = "Pequeña Nube de Magallanes", FJUR = "CG" (cooperativa) y EFLO
-= "RENOVADA". A esta combinación se le imputa una frecuencia "ficticia"
-con el fin de que el modelo sea estimable, que es la única diferencia
-que tendrá la tabla "tab_use" con respecto a la tabla original, "tab0".
-Huelga decir que en la estimación será "tab_use" la tabla utilizada como
-base.
+En nuestro caso, se detecta una única combinación con 0 observaciones:
+GALAXIA = "Pequeña Nube de Magallanes", FJUR = "CG" (cooperativa) y
+EFLO = "RENOVADA". Se toma nota de esta particularidad y se continúa
+el análisis directamente sobre `tab0`.
 
 Para inspeccionar la estructura de la tabla de contingencia, se utiliza
 `pander()`, ya que permite mostrar tablas multidimensionales en un
@@ -1237,16 +1209,7 @@ pander(tab0, style= "rmarkdown")
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.7**
-:::
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-pander("Tabla de contingencia GALAXIA × FJUR × EFLO (imputación puntual 0→1)")
-pander(tab_use, style= "rmarkdown")
-```
-
-::: {style="text-align: center;"}
-**Tabla 10.8**
+**Tabla 10.6**
 :::
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
@@ -1269,15 +1232,9 @@ mosaic(tab0,
 La tabla `tab0` muestra la distribución tridimensional original de las
 empresas según **galaxia**, **forma jurídica** y **antigüedad media de
 la flota**. En ella se aprecia que algunas combinaciones presentan
-frecuencias muy bajas, e incluso una con frecuencia cero (PN Mag. – CG –
-Renovada), lo que impide ajustar correctamente un modelo log-lineal
-saturado o con interacciones relevantes. Para solventarlo, la tabla
-`tab_use` sustituye únicamente los ceros por 1, garantizando que todas
-las combinaciones estén representadas y que la estimación sea
-numéricamente estable sin alterar la estructura general de la tabla. La
-diferencia entre ambas tablas es mínima y localizada: todas las celdas
-con valores positivos permanecen iguales, y únicamente las combinaciones
-ausentes reciben este ajuste puntual.
+frecuencias muy bajas, e incluso una con frecuencia cero (PN Mag. – CG
+– Renovada). Como se ha comentado, se trabaja directamente sobre esta
+tabla, sin imputar valor alguno a la celda vacía.
 
 El mosaico asociado a `tab0` refuerza visualmente la interpretación de
 la tabla. En él se observa que la variable **EFLO** genera las mayores
@@ -1301,7 +1258,7 @@ otros paquetes (por ejemplo, `select()` de `{dplyr}`), llamaremos
 siempre a la función como `MASS::loglm()`. La estructura básica es
 `loglm(formula, data = tabla)`, donde `formula` describe el patrón de
 dependencias que queremos imponer y `data` es la tabla de contingencia
-multidimensional (en nuestro caso, `tab_use`).
+multidimensional (en nuestro caso, `tab0`).
 
 En la fórmula, los nombres de las variables (`GALAXIA`, `EFLO`, `FJUR`)
 representan **efectos principales**, y los símbolos `:` y `*` se
@@ -1351,18 +1308,23 @@ independencia**, que asume que la distribución conjunta de las
 frecuencias puede explicarse únicamente por los efectos propios de cada
 factor, sin interacción entre ellos (es decir, sin asociación entre
 GALAXIA, EFLO y FJUR). El siguiente código ajusta este modelo a la tabla
-`tab_use` y captura la lista devuelta por `generar_solucion()` en el
+`tab0` y captura la lista devuelta por `generar_solucion()` en el
 objeto `solucion_modelo_indep`, además de dibujar el mosaico de residuos
 correspondiente:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 # Modelo de independencia (solo efectos principales, sin interacciones)
 modelo_indep <- MASS::loglm(~ GALAXIA + EFLO + FJUR,
-                            data   = tab_use,
+                            data   = tab0,
                             fitted = TRUE)
 
 solucion_modelo_indep <- generar_solucion(modelo_indep)
 ```
+
+::: {style="text-align: center;"}
+**Figura 10.11**
+:::
+
 
 A partir del modelo de independencia podemos evaluar si la hipótesis de
 **no asociación global** entre GALAXIA, FJUR y EFLO resulta razonable o
@@ -1407,7 +1369,7 @@ chi-cuadrado de Pearson), mediante:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.9**
+**Tabla 10.7.** Validación del modelo
 :::
 
 
@@ -1437,7 +1399,7 @@ tabla ejecutaremos:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.10**
+**Tabla 10.8.** Coeficientes del modelo
 :::
 
 
@@ -1483,13 +1445,13 @@ son:
 | Uso típico en log-lineales | Diagnóstico básico y comparaciones rápidas | Residuo por defecto en mosaicos y diagnósticos detallados de ajuste del modelo |
 
 ::: {style="text-align: center;"}
-**Tabla 10.11**
+**Tabla 10.9**
 :::
 
 
 **1. Celda con residuo pequeño: (Triángulo, SAG, MADURA):**
 
-Según la tabla `tab_use`, la frecuencia observada es:
+Según la tabla `tab0`, la frecuencia observada es:
 
 $$
 n_{ijk} = 4
@@ -1536,7 +1498,7 @@ $$
 
 **2. Celda con residuo grande: (PN Mag., SLG, ANTIGUA):**
 
-En la tabla `tab_use` la frecuencia observada es:
+En la tabla `tab0` la frecuencia observada es:
 
 $$
 n_{ijk} = 11
@@ -1636,11 +1598,16 @@ anterior por los signos “\*”. El modelo se denominará "modelo_sat":
 # Modelo Saturado.
 
 modelo_sat <- MASS::loglm(~ GALAXIA * EFLO * FJUR,
-                          data   = tab_use,
+                          data   = tab0,
                           fitted = TRUE)
 
 solucion_modelo_sat <- generar_solucion(modelo_sat)
 ```
+
+::: {style="text-align: center;"}
+**Figura 10.12**
+:::
+
 
 El gráfico de mosaico muestra que, obviamente, todos los residuos son 0,
 ya que coinciden las frecuencias observadas y las estimadas por el
@@ -1651,7 +1618,7 @@ modelo. En cuanto a la tabla de validación:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.12**
+**Tabla 10.10.** Validación del modelo
 :::
 
 
@@ -1669,97 +1636,85 @@ o directos como a las interacciones:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.13**
+**Tabla 10.11.** Coeficientes del modelo
 :::
 
 
+En esta tabla se observa un fenómeno llamativo: **todos los
+coeficientes toman valores `Inf`, `-Inf` o `NaN`**. No se trata de un
+error de estimación ni de un fallo del paquete `MASS`, sino de una
+consecuencia matemática esperada. En un modelo log-lineal, cada
+coeficiente es una combinación lineal de los $\log(\hat m_{ijk})$,
+donde $\hat m_{ijk}$ son las frecuencias ajustadas. En el modelo
+saturado, por definición, $\hat m_{ijk} = n_{ijk}$ para toda celda —el
+ajuste es perfecto—, de modo que las celdas con frecuencia observada 0
+producen $\log(0) = -\infty$. Cuando estos términos se combinan
+linealmente, aparecen sumas y restas de infinitos que dan `-Inf`,
+`Inf` o formas indeterminadas del tipo $\infty - \infty$, que R
+representa como `NaN`. En términos técnicos, se dice que **el estimador
+de máxima verosimilitud del modelo saturado no existe en sentido
+estricto**: los parámetros "se escapan al infinito" en el borde del
+espacio paramétrico. Este es un fenómeno bien conocido en la teoría de
+modelos log-lineales, tratado con detalle en @agresti2013 (capítulo 9)
+y @fienberg2007 (capítulo 5).
+
+Sin embargo, esta anomalía **no invalida al modelo como punto de
+partida para procedimientos de selección**. La razón es que la
+**desvianza** del modelo saturado es 0 por construcción (ajuste
+perfecto), un valor finito perfectamente utilizable. Los algoritmos
+como `step()` que trabajan por AIC —definido como `desvianza + 2·k`—
+solo necesitan la desvianza y el número de parámetros, no los
+coeficientes en sí. Los submodelos que se van considerando durante la
+búsqueda backward suelen tener $\hat m_{ijk} > 0$ en todas las celdas
+(al eliminar interacciones de orden alto, el ajuste "se suaviza" y las
+celdas originalmente en 0 pasan a tener frecuencias ajustadas
+positivas), por lo que sus coeficientes son finitos e interpretables.
+Así, aunque el modelo saturado no admita lectura directa de sus
+coeficientes cuando hay ceros muestrales, **sí es válido como base
+inicial** para la exploración de modelos alternativos, y el modelo
+final `modelo_def` que resulta de esa exploración tendrá coeficientes
+finitos y significativos.
+
+La función `generar_solucion()` detecta automáticamente esta situación
+y emite un `message()` informativo cuando encuentra coeficientes no
+finitos entre los del modelo, para que el lector no confunda el
+fenómeno con un error.
 
 La estimación del modelo saturado permite aplicar algoritmos para la
 obtención de la especificación de un modelo que, sin llegar a ser el
-saturado, **asegure una representación valida de la realidad obviando
+saturado, **asegure una representación válida de la realidad obviando
 los efectos e interacciones que no sean estadísticamente relevantes**.
-Por ejemplo, la función `step()` aplica el procedimiento automático de
-selección de modelos basado en el **criterio de información de Akaike
-(AIC)**, buscando especificaciones que mantengan un buen ajuste con la
-mayor parsimonia posible. En este caso, partimos del **modelo saturado**
-(`modelo_sat`) y, con `direction = "backward"`, el algoritmo va
-eliminando iterativamente los términos (interacciones o efectos) que
-produzcan una mayor reducción del AIC, lo que indica un equilibrio más
-eficiente entre ajuste y complejidad.
+El procedimiento clásico para esta tarea es el algoritmo *backward* por
+AIC, que parte de un modelo amplio (el saturado) y va eliminando
+iterativamente los términos (interacciones o efectos) cuya supresión
+más reduce el **criterio de información de Akaike (AIC)**, buscando así
+un equilibrio eficiente entre bondad de ajuste y parsimonia.
 
-El argumento `scale = 0` es el adecuado para modelos log-lineales (asume
-dispersión fija), `trace = 1` muestra en pantalla cada paso del proceso
-para monitorizar cómo evoluciona el AIC y qué términos se eliminan, y
-`steps = 1000` garantiza que no haya limitaciones en el número máximo de
-iteraciones, permitiendo explorar completamente el espacio de modelos.
+En R, la función genérica `step()` implementa este procedimiento para
+la mayoría de familias de modelos. Sin embargo, en el caso concreto de
+los modelos log-lineales ajustados con `MASS::loglm()`, `step()`
+presenta una limitación técnica: localiza la tabla de datos de cada
+submodelo mediante `eval.parent()`, que sube por la pila de llamadas
+hasta encontrarla por su nombre. Esto funciona sin problema en una
+sesión interactiva, pero es **frágil cuando el documento se compila a
+través de varias capas de funciones** (por ejemplo, al llamar a
+`bookdown::render_book()` desde dentro de una función como
+`build_book()`), ya que entonces cambia el número de llamadas apiladas
+y `step()` deja de encontrar correctamente los datos, provocando un
+error solo al renderizar el libro.
 
-**Nota técnica:** la función genérica `step()` localiza, para cada
-submodelo que prueba, la tabla de datos original contando internamente
-cuántas llamadas hay por encima en la pila de ejecución
-(`eval.parent()`). Esto funciona sin problema en una sesión interactiva,
-pero es **frágil cuando el documento se compila a través de varias capas
-de funciones** (por ejemplo, al llamar a `bookdown::render_book()` desde
-dentro de una función como `build_book()`), ya que entonces cambia el
-número de llamadas apiladas y `step()` deja de encontrar correctamente
-los datos, provocando un error solo al renderizar el libro. Para
-evitarlo, implementamos manualmente el mismo algoritmo de selección
-*backward* por AIC (respetando la jerarquía de los términos), pero
-reajustando cada submodelo con una llamada directa y autocontenida a
-`MASS::loglm()`, sin depender de `update()` ni de la pila de llamadas:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-# Selección backward por AIC, robusta frente al contexto de ejecución
-# (consola, knitr, bookdown, funciones envolventes, etc.).
-
-step_loglm_backward <- function(formula, data, trace = TRUE, steps = 1000) {
-
-  ajustar <- function(form) MASS::loglm(form, data = data, fitted = FALSE)
-  aic_de  <- function(fit) stats::extractAIC(fit)[2]
-
-  formula_actual <- formula
-  ajuste_actual  <- ajustar(formula_actual)
-  aic_actual     <- aic_de(ajuste_actual)
-
-  if (trace) {
-    cat("Start:  AIC=", round(aic_actual, 2), "\n",
-        deparse(formula_actual), "\n\n", sep = "")
-  }
-
-  for (i in seq_len(steps)) {
-
-    terminos <- stats::drop.scope(stats::terms(formula_actual))
-    if (length(terminos) == 0) break
-
-    aics <- vapply(terminos, function(term) {
-      nueva_formula <- update.formula(formula_actual, paste("~ . -", term))
-      ajuste <- tryCatch(ajustar(nueva_formula), error = function(e) NULL)
-      if (is.null(ajuste)) Inf else aic_de(ajuste)
-    }, numeric(1))
-
-    if (trace) {
-      cat("Step", i, ":\n")
-      print(data.frame(Term = c("<none>", terminos),
-                        AIC  = round(c(aic_actual, aics), 2)),
-            row.names = FALSE)
-      cat("\n")
-    }
-
-    mejor <- which.min(aics)
-    if (aics[mejor] >= aic_actual) break
-
-    formula_actual <- update.formula(formula_actual,
-                                      paste("~ . -", terminos[mejor]))
-    aic_actual <- aics[mejor]
-  }
-
-  ajuste_final <- MASS::loglm(formula_actual, data = data, fitted = TRUE)
-  if (trace) {
-    cat("\nFormula final:\n", deparse(formula_actual), "\n",
-        "AIC final = ", round(aic_de(ajuste_final), 2), "\n", sep = "")
-  }
-  ajuste_final
-}
-```
+Para evitar esta fragilidad, se usa aquí la función
+`step_loglm_backward()` del paquete `{MATrstars}` (véase su ficha
+completa en el **Apéndice**), que implementa el mismo algoritmo
+*backward* por AIC pero recibiendo la tabla de datos como argumento
+explícito y capturándola en el *closure* de sus funciones internas.
+Este pequeño cambio técnico hace que el procedimiento sea **robusto en
+cualquier contexto de ejecución** (consola, `knitr`, `bookdown`,
+`pkgdown`, funciones envolventes, etc.) manteniendo exactamente la
+misma lógica algorítmica que `step()`. Los argumentos principales son
+la fórmula del modelo saturado, la tabla de contingencia (`data`), el
+control de la traza (`trace = TRUE` para imprimir cada paso) y el
+número máximo de iteraciones (`steps`, con valor por defecto `1000`).
 
 El resultado final, almacenado como `modelo_def`, es la especificación
 óptima según el AIC, más simple que el modelo saturado pero
@@ -1770,7 +1725,7 @@ asociación entre los factores:
 # Elección del modelo final.
 
 modelo_def <- step_loglm_backward(~ GALAXIA * EFLO * FJUR,
-                                   data  = tab_use,
+                                   data  = tab0,
                                    trace = TRUE, steps = 1000)
 ```
 
@@ -1789,6 +1744,11 @@ obtenido es:
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
     solucion_modelo_def <- generar_solucion(modelo_def)
 ```
+
+::: {style="text-align: center;"}
+**Figura 10.13**
+:::
+
 
 El gráfico de residuos del modelo seleccionado muestra un ajuste
 considerablemente mejor que el del modelo de independencia. La mayoría
@@ -1821,7 +1781,7 @@ En cuanto a la tabla de validación:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.14**
+**Tabla 10.12.** Validación del modelo
 :::
 
 
@@ -1846,7 +1806,7 @@ En lo que se refiere a los coeficientes estimados del modelo:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.15**
+**Tabla 10.13.** Coeficientes del modelo
 :::
 
 
@@ -2060,7 +2020,7 @@ los gráficos:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.16**
+**Tabla 10.14**
 :::
 
 
@@ -2086,7 +2046,7 @@ categorías). Ambas aparecen completas, sin valores perdidos:
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.11**
+**Figura 10.14**
 :::
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
@@ -2140,7 +2100,7 @@ cual se aplicará el análisis:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.17.** Empresas TMI: Galaxia y Forma Jurídica.
+**Tabla 10.15.** Empresas TMI: Galaxia y Forma Jurídica.
 :::
 
 
@@ -2266,7 +2226,7 @@ dimensiones extraídas:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.18**
+**Tabla 10.16**
 :::
 
 
@@ -2300,7 +2260,7 @@ están representadas en cada dimensión:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.19**
+**Tabla 10.17**
 :::
 
 
@@ -2325,7 +2285,7 @@ La tercera tabla recoge la información análoga para el factor FJUR:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.20**
+**Tabla 10.18**
 :::
 
 
@@ -2378,7 +2338,7 @@ recurrirse a la función `fviz_screeplot()` del paquete `{factoextra}`:
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.12**
+**Figura 10.15**
 :::
 
 
@@ -2440,7 +2400,7 @@ conjuntamente con `{patchwork}`:
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.13**
+**Figura 10.16**
 :::
 
 
@@ -2498,7 +2458,7 @@ de forma coherente:
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.14**
+**Figura 10.17**
 :::
 
 
@@ -2549,7 +2509,7 @@ contribuciones y el biplot, puede recurrirse nuevamente al paquete
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.15**
+**Figura 10.18**
 :::
 
 

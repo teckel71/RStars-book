@@ -272,7 +272,7 @@ res$data     # data frame crudo con predicciones y metadatos
 
 ### Propósito. {-}
 
-Identifica de forma robusta todas las celdas con frecuencia cero en una tabla de contingencia de **cualquier número de dimensiones**. Es útil como paso previo a la estimación de un modelo log-lineal: la presencia de ceros estructurales o de muestreo puede causar fallos de estimación o inestabilidad numérica en los algoritmos, por lo que conviene localizarlos antes.
+Identifica de forma robusta todas las celdas con frecuencia cero en una tabla de contingencia de **cualquier número de dimensiones**. Es una herramienta diagnóstica útil como paso previo al ajuste de modelos log-lineales: localizar los ceros muestrales permite anticipar peculiaridades en la estimación del modelo saturado (los coeficientes de un saturado ajustado sobre una tabla con ceros muestrales serán `Inf`, `-Inf` o `NaN` — véase capítulo 10, y la ficha de `generar_solucion()` en este apéndice).
 
 Si la tabla tiene `dimnames`, la función mapea los índices numéricos a las etiquetas correspondientes de cada dimensión. Si no los tiene, devuelve los índices tal cual y crea nombres genéricos (`Var1`, `Var2`, etc.) para las columnas del *data frame* de salida. Se emplea en el capítulo 10, tanto como paso independiente en el flujo de análisis como internamente dentro de `impute_zeros_with_one()`.
 
@@ -315,14 +315,16 @@ if (is.null(zeros)) {
 
 ### Propósito. {-}
 
-Reemplaza en una tabla de contingencia los ceros por un valor mínimo (por defecto, `1L`), preservando el resto de las celdas (nunca modifica celdas con frecuencia positiva). El objetivo es preparar la tabla para la estimación de modelos log-lineales, cuyo procedimiento puede fallar o producir estimaciones inestables en presencia de ceros.
+Reemplaza en una tabla de contingencia los ceros por un valor mínimo (por defecto, `1L`), preservando el resto de las celdas (nunca modifica celdas con frecuencia positiva).
+
+> **Es una herramienta opcional, no un paso estándar del análisis log-lineal.** Los ceros muestrales no impiden la estimación de modelos log-lineales (ni la de independencia, ni la del saturado). Sí producen coeficientes no finitos en el modelo saturado (véase la ficha de `generar_solucion()`), pero esto es un fenómeno matemático esperable —no un error— y no impide que `step()` funcione correctamente sobre el saturado para seleccionar un modelo definitivo con coeficientes finitos. En el flujo por defecto del **capítulo 10 no se aplica ninguna imputación**. La función se expone en el paquete por si el usuario, en algún contexto particular (comparación visual, sensibilidad a la asignación de ceros estructurales, etc.), desea manipular las celdas nulas.
 
 La tabla devuelta lleva dos atributos que documentan la operación:
 
 - `zeros_imputados`: *data frame* idéntico al devuelto por `detect_zeros_any()`, con una columna adicional `Frecuencia_Imputada` que registra el valor con el que se ha sustituido cada cero. Vale `NULL` si no había ceros.
 - `nota_imputacion`: cadena de caracteres describiendo el número de celdas imputadas (o indicando que no había ceros).
 
-Utiliza internamente `detect_zeros_any()` para localizar las celdas afectadas. Se emplea en el capítulo 10 como paso previo a la estimación de los modelos log-lineales.
+Utiliza internamente `detect_zeros_any()` para localizar las celdas afectadas.
 
 ### Sintaxis. {-}
 
@@ -416,6 +418,8 @@ Automatiza la presentación de resultados de un modelo log-lineal ajustado (habi
 
 Las dos tablas se devuelven en una lista de dos elementos: `Informacion` y `Coeficientes`. El gráfico de mosaico es un efecto colateral del renderizado gráfico y no forma parte del valor de retorno.
 
+> **Coeficientes no finitos.** Cuando la tabla de contingencia de entrada contiene celdas de frecuencia 0, algunos coeficientes del modelo pueden resultar `Inf`, `-Inf` o `NaN`. Esto no es un error: es un fenómeno esperable derivado de que el estimador de máxima verosimilitud del modelo saturado no existe en sentido estricto sobre tablas con ceros muestrales (los parámetros "se escapan al infinito" en el borde del espacio paramétrico). La función detecta esta situación y emite un `message()` informativo, pero no aborta ni imputa. El modelo sigue siendo utilizable como punto de partida para `step()`, que opera sobre la desvianza (finita, valor 0 para el saturado) y no sobre los coeficientes patológicos. Véase capítulo 10 y las referencias @agresti2013 (capítulo 9) y @fienberg2007 (capítulo 5).
+
 > **Nota**: la versión anterior de esta función (previa a su integración en `{MATrstars}`) asignaba la lista de resultado directamente en el Global Environment con un nombre derivado del argumento (`solucion_<nombre_del_modelo>`). La versión del paquete requiere que el usuario **capture explícitamente el valor devuelto**: `solucion <- generar_solucion(modelo)`. Este cambio hace más transparente el flujo de datos y respeta la disciplina funcional habitual en R.
 
 ### Sintaxis. {-}
@@ -458,3 +462,58 @@ solucion$Coeficientes   # tabla de coeficientes
 ### Código fuente. {-}
 
 - [`R/generar_solucion.R`](https://github.com/teckel71/MATrstars/blob/main/R/generar_solucion.R)
+
+## `step_loglm_backward()`. {-}
+
+### Propósito. {-}
+
+Implementa un procedimiento de selección de modelos log-lineales por eliminación progresiva de términos (*backward*) usando el criterio de información de Akaike (AIC). Es una alternativa a `stats::step()` pensada específicamente para modelos ajustados con `MASS::loglm()`.
+
+La motivación para no usar `stats::step()` es puramente técnica: `step()` localiza la tabla de datos de cada submodelo mediante `eval.parent()`, que sube por la pila de llamadas hasta encontrarla por su nombre. Este mecanismo funciona en una sesión interactiva, pero es **frágil cuando el código se ejecuta a través de varias capas de funciones envolventes** (por ejemplo, al compilar un libro con `bookdown::render_book()` desde una función como `build_book()`), porque el número de saltos en la pila cambia y `step()` deja de localizar la tabla, produciendo un error difícil de diagnosticar.
+
+`step_loglm_backward()` reimplementa el algoritmo *backward* por AIC sin depender de `eval.parent()`: la tabla de datos se pasa como argumento explícito y queda capturada en el *closure* de una función auxiliar interna, resolviéndose por alcance léxico (no dinámico). El resultado es equivalente al de `step()` en sesión interactiva, pero es robusto en cualquier contexto de ejecución (consola, `knitr`, `bookdown`, `pkgdown`, funciones envolventes, etc.).
+
+Internamente, en cada iteración:
+
+1. Se identifican los términos candidatos a eliminar mediante `stats::drop.scope()` aplicado a los términos de la fórmula actual (esto respeta la jerarquía: no se elimina un efecto principal si está implicado en una interacción todavía presente en el modelo).
+2. Se ajusta un submodelo por cada término candidato y se calcula su AIC mediante `stats::extractAIC()`.
+3. Se selecciona el término cuya eliminación produce el menor AIC. Si el AIC mínimo no mejora el actual, el algoritmo termina y devuelve el modelo actual.
+
+### Sintaxis. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+step_loglm_backward(formula, data, trace = TRUE, steps = 1000)
+```
+
+### Argumentos. {-}
+
+- **`formula`**: fórmula del modelo inicial (habitualmente el modelo saturado, como `~ A * B * C`).
+- **`data`**: tabla de contingencia sobre la que se ajusta el modelo (objeto `table`, `array` o `matrix` de cualquier número de dimensiones, compatible con `MASS::loglm()`).
+- **`trace`**: si `TRUE` (por defecto), imprime en la consola cada paso del algoritmo con el AIC actual, los términos candidatos y sus respectivos AIC.
+- **`steps`**: número máximo de iteraciones. Por defecto, `1000`. En la práctica, la selección termina mucho antes al no encontrar más términos que mejoren el AIC.
+
+### Valor devuelto. {-}
+
+Objeto de clase `loglm` correspondiente al modelo final seleccionado, ajustado con `fitted = TRUE` (por lo que incluye las frecuencias ajustadas necesarias para diagnóstico posterior).
+
+### Ejemplo. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+library(MATrstars)
+
+# Partiendo del modelo saturado sobre una tabla de contingencia:
+tab0 <- xtabs(~ GALAXIA + FJUR + EFLO, data = seleccion)
+
+modelo_def <- step_loglm_backward(~ GALAXIA * EFLO * FJUR,
+                                  data  = tab0,
+                                  trace = TRUE,
+                                  steps = 1000)
+
+# El resultado es un objeto loglm equivalente al de step()
+# pero robusto en contextos de compilación:
+generar_solucion(modelo_def)
+```
+
+### Código fuente. {-}
+
+- [`R/step_loglm_backward.R`](https://github.com/teckel71/MATrstars/blob/main/R/step_loglm_backward.R)

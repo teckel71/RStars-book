@@ -162,6 +162,58 @@ procesar_rmd <- function(ruta_entrada,
   re_tabla_md_row <- "^\\|.*\\|[[:space:]]*$"
 
   # ===================================================================
+  # 2b. Conocimiento hardcoded sobre funciones del paquete MATrstars
+  # ===================================================================
+  # Estas funciones producen internamente tablas con caption fijo cuando
+  # se llaman con sus argumentos por defecto. El preprocesador se ejecuta
+  # antes del knit y no puede "ver" el runtime del paquete, así que para
+  # preservar el texto descriptivo bajo las etiquetas manuales
+  # ("**Tabla X.Y. <descripción>**") es necesario tener aquí las captions
+  # que las funciones emiten por defecto.
+  #
+  # Si el usuario invoca alguna de estas funciones sobrescribiendo el
+  # argumento `captions` (o su equivalente), estas etiquetas seguirán
+  # apareciendo con los textos por defecto — mejor eso que dejarlas
+  # vacías. Para captions dinámicas (predict_from_excel_scenarios), se
+  # usa el texto base sin la decoración runtime.
+  FUNCIONES_PAQUETE_MATRSTARS <- list(
+    generar_solucion = list(
+      figures = 1L,
+      captions_by_field = c(
+        Informacion  = "Validaci\u00f3n del modelo",
+        Coeficientes = "Coeficientes del modelo"
+      ),
+      captions_by_index = c(
+        "Validaci\u00f3n del modelo",
+        "Coeficientes del modelo"
+      )
+    ),
+    presenta_modelo = list(
+      figures = 0L,
+      captions_by_field = c(
+        coef  = "Modelo Lineal",
+        stats = "Estad\u00edsticos del modelo",
+        vif   = "Factor de inflaci\u00f3n de la varianza"
+      ),
+      captions_by_index = c(
+        "Modelo Lineal",
+        "Estad\u00edsticos del modelo",
+        "Factor de inflaci\u00f3n de la varianza"
+      )
+    ),
+    predict_from_excel_scenarios = list(
+      figures = 0L,
+      captions_by_field = c(
+        table = "Predicciones por escenario"
+      ),
+      captions_by_index = c(
+        NA_character_,
+        "Predicciones por escenario"
+      )
+    )
+  )
+
+  # ===================================================================
   # 3. Helpers
   # ===================================================================
   bloque_numeracion <- function(tipo, n_cap, n, descripcion = NULL) {
@@ -194,7 +246,8 @@ procesar_rmd <- function(ruta_entrada,
   # otro posterior.
   analizar_chunk <- function(buffer,
                              contenedores_iniciales = list(),
-                             diferidos_tentativos_iniciales = list()) {
+                             diferidos_tentativos_iniciales = list(),
+                             capciones_iniciales = list()) {
     en_def         <- FALSE
     cuerpo_abierto <- FALSE
     nivel_llaves   <- 0L
@@ -207,6 +260,11 @@ procesar_rmd <- function(ruta_entrada,
     diferidos    <- list()        # tipo conocido (kable, ggplot, etc.)
     diferidos_tentativos <- diferidos_tentativos_iniciales
     contenedores <- contenedores_iniciales
+    # Paralelo a `contenedores`: para variables cuyo contenido conocemos
+    # (porque provienen de una función del paquete MATrstars que
+    # figura en `FUNCIONES_PAQUETE_MATRSTARS`), almacenamos aquí las
+    # captions esperables por campo/índice.
+    capciones_conocidas <- capciones_iniciales
 
     en_kable <- FALSE
 
@@ -332,6 +390,16 @@ procesar_rmd <- function(ruta_entrada,
           if (is.null(diferidos[[asig_multi_var]]) &&
               !es_funcion_lista_negra(asig_multi_primera_func)) {
             diferidos_tentativos[[asig_multi_var]] <- "tabla"
+            # Si la función RHS es una función conocida del paquete
+            # MATrstars, anotamos también las captions esperables por
+            # campo/índice, para que al consumir después
+            # `LHS$campo` o `LHS[[n]]` la etiqueta manual incluya la
+            # descripción original de la tabla.
+            info_pkg <- FUNCIONES_PAQUETE_MATRSTARS[[
+              asig_multi_primera_func]]
+            if (!is.null(info_pkg)) {
+              capciones_conocidas[[asig_multi_var]] <- info_pkg
+            }
           }
           asig_multi_var   <- NA_character_
           asig_multi_paren <- 0L
@@ -359,20 +427,37 @@ procesar_rmd <- function(ruta_entrada,
       r_solo_l <- regmatches(linea, m_solo_l)[[1]]
       if (length(r_solo_l) >= 2 && !tiene_terminal) {
         var_name <- r_solo_l[2]
+        # Extraer índice numérico si es literal (para lookup de captions)
+        m_idx <- regexec(
+          "^\\s*[A-Za-z_.][A-Za-z_.0-9]*\\s*\\[\\[\\s*([0-9]+)\\s*\\]\\]\\s*$",
+          linea, perl = TRUE)
+        r_idx <- regmatches(linea, m_idx)[[1]]
+        idx_num <- if (length(r_idx) >= 2) as.integer(r_idx[2]) else NA_integer_
+        # Función auxiliar: obtener caption conocida por índice
+        cap_por_idx <- function(var_name, idx_num) {
+          if (is.na(idx_num)) return(NA_character_)
+          km <- capciones_conocidas[[var_name]]
+          if (is.null(km) || is.null(km$captions_by_index)) return(NA_character_)
+          if (idx_num < 1L || idx_num > length(km$captions_by_index)) {
+            return(NA_character_)
+          }
+          val <- km$captions_by_index[idx_num]
+          if (is.na(val)) NA_character_ else val
+        }
         if (!is.null(contenedores[[var_name]])) {
           seq_tipo     <- c(seq_tipo, contenedores[[var_name]])
-          seq_cap      <- c(seq_cap,  NA_character_)
+          seq_cap      <- c(seq_cap,  cap_por_idx(var_name, idx_num))
           seq_posicion <- c(seq_posicion, i)
           next
         } else if (!is.null(diferidos[[var_name]])) {
           seq_tipo     <- c(seq_tipo, diferidos[[var_name]])
-          seq_cap      <- c(seq_cap,  NA_character_)
+          seq_cap      <- c(seq_cap,  cap_por_idx(var_name, idx_num))
           seq_posicion <- c(seq_posicion, i)
           contenedores[[var_name]] <- diferidos[[var_name]]
           next
         } else if (!is.null(diferidos_tentativos[[var_name]])) {
           seq_tipo     <- c(seq_tipo, diferidos_tentativos[[var_name]])
-          seq_cap      <- c(seq_cap,  NA_character_)
+          seq_cap      <- c(seq_cap,  cap_por_idx(var_name, idx_num))
           seq_posicion <- c(seq_posicion, i)
           contenedores[[var_name]] <- diferidos_tentativos[[var_name]]
           next
@@ -384,31 +469,43 @@ procesar_rmd <- function(ruta_entrada,
       m_solo_d <- regexec(re_solo_dollar, linea, perl = TRUE)
       r_solo_d <- regmatches(linea, m_solo_d)[[1]]
       if (length(r_solo_d) >= 3 && !tiene_terminal) {
-        var_name <- r_solo_d[2]
+        var_name   <- r_solo_d[2]
+        field_name <- r_solo_d[3]
+        # Función auxiliar: obtener caption conocida por campo
+        cap_por_field <- function(var_name, field_name) {
+          km <- capciones_conocidas[[var_name]]
+          if (is.null(km) || is.null(km$captions_by_field)) return(NA_character_)
+          if (!(field_name %in% names(km$captions_by_field))) {
+            return(NA_character_)
+          }
+          val <- km$captions_by_field[[field_name]]
+          if (is.na(val)) NA_character_ else val
+        }
         if (!is.null(contenedores[[var_name]])) {
           seq_tipo     <- c(seq_tipo, contenedores[[var_name]])
-          seq_cap      <- c(seq_cap,  NA_character_)
+          seq_cap      <- c(seq_cap,  cap_por_field(var_name, field_name))
           seq_posicion <- c(seq_posicion, i)
         } else if (!is.null(diferidos[[var_name]])) {
           seq_tipo     <- c(seq_tipo, diferidos[[var_name]])
-          seq_cap      <- c(seq_cap,  NA_character_)
+          seq_cap      <- c(seq_cap,  cap_por_field(var_name, field_name))
           seq_posicion <- c(seq_posicion, i)
           contenedores[[var_name]] <- diferidos[[var_name]]
         } else if (!is.null(diferidos_tentativos[[var_name]])) {
           seq_tipo     <- c(seq_tipo, diferidos_tentativos[[var_name]])
-          seq_cap      <- c(seq_cap,  NA_character_)
+          seq_cap      <- c(seq_cap,  cap_por_field(var_name, field_name))
           seq_posicion <- c(seq_posicion, i)
           contenedores[[var_name]] <- diferidos_tentativos[[var_name]]
         }
         next
       }
 
-      # 2c) Patrón especial: `generar_solucion(ARG)` solita.
-      #     Esta función custom del libro produce 1 figura como side
-      #     effect (un mosaico) y crea una lista global `solucion_<ARG>`
-      #     con tablas accesibles via `$Informacion` y `$Coeficientes`.
-      #     Registramos la figura aquí y dejamos un contenedor para los
-      #     usos posteriores de `solucion_<ARG>$X`.
+      # 2c) Patrón especial (compatibilidad histórica): `generar_solucion(ARG)`
+      #     solita, tal como se llamaba antes de la migración de la función al
+      #     paquete MATrstars, cuando la lista de resultado se asignaba
+      #     directamente al Global Environment como `solucion_<ARG>` mediante
+      #     `assign(..., envir = .GlobalEnv)`. Produce 1 figura como side
+      #     effect (un mosaico) y deja un contenedor `solucion_<ARG>` para
+      #     los usos posteriores de `solucion_<ARG>$X`.
       re_generar_sol <- paste0(
         "^\\s*generar_solucion\\s*\\(\\s*",
         "([A-Za-z_.][A-Za-z_.0-9]*)\\s*\\)\\s*$")
@@ -419,8 +516,51 @@ procesar_rmd <- function(ruta_entrada,
         seq_tipo     <- c(seq_tipo, "figura")
         seq_cap      <- c(seq_cap,  NA_character_)
         seq_posicion <- c(seq_posicion, i)
-        contenedores[[paste0("solucion_", arg_name)]] <- "tabla"
+        contenedor_nm <- paste0("solucion_", arg_name)
+        contenedores[[contenedor_nm]] <- "tabla"
+        info_pkg <- FUNCIONES_PAQUETE_MATRSTARS[["generar_solucion"]]
+        if (!is.null(info_pkg)) {
+          capciones_conocidas[[contenedor_nm]] <- info_pkg
+        }
         next
+      }
+
+      # 2c') Patrón especial (post-migración a MATrstars):
+      #      `LHS <- FUNC(ARG)` para funciones de MATrstars listadas en
+      #      FUNCIONES_PAQUETE_MATRSTARS. Registra las figuras que la
+      #      función produce como side effect, crea un contenedor LHS
+      #      con tipo "tabla" y anota las captions esperables por
+      #      campo/índice, para que las etiquetas manuales incluyan la
+      #      descripción original.
+      re_asig_func_paquete <- paste0(
+        "^\\s*([A-Za-z_.][A-Za-z_.0-9]*)\\s*(?:<-|=)\\s*",
+        "([A-Za-z_.][A-Za-z_.0-9]*)\\s*\\(")
+      m_afp <- regexec(re_asig_func_paquete, linea, perl = TRUE)
+      r_afp <- regmatches(linea, m_afp)[[1]]
+      if (length(r_afp) >= 3) {
+        var_lhs  <- r_afp[2]
+        func_rhs <- r_afp[3]
+        info_pkg <- FUNCIONES_PAQUETE_MATRSTARS[[func_rhs]]
+        # Solo procedemos si la línea entera es
+        # `LHS <- FUNC(ARG)` en una sola línea (para no interferir con
+        # llamadas multilínea que se manejan por otro camino).
+        re_asig_func_1arg <- paste0(
+          "^\\s*[A-Za-z_.][A-Za-z_.0-9]*\\s*(?:<-|=)\\s*",
+          "[A-Za-z_.][A-Za-z_.0-9]*\\s*\\(\\s*",
+          "[A-Za-z_.][A-Za-z_.0-9]*\\s*\\)\\s*$")
+        if (!is.null(info_pkg) &&
+            grepl(re_asig_func_1arg, linea, perl = TRUE)) {
+          if (info_pkg$figures > 0L) {
+            for (k in seq_len(info_pkg$figures)) {
+              seq_tipo     <- c(seq_tipo, "figura")
+              seq_cap      <- c(seq_cap,  NA_character_)
+              seq_posicion <- c(seq_posicion, i)
+            }
+          }
+          contenedores[[var_lhs]] <- "tabla"
+          capciones_conocidas[[var_lhs]] <- info_pkg
+          next
+        }
       }
 
       # 2d) Línea con patchwork inline tipo `g1 / g2`, `g1 + g2 + g3`
@@ -557,6 +697,12 @@ procesar_rmd <- function(ruta_entrada,
             # tentativo: solo contará si después vemos var[[expr]] o
             # var$nombre.
             diferidos_tentativos[[var_name]] <- "tabla"
+            # Si la función es una conocida del paquete MATrstars,
+            # anotar las captions esperables por campo/índice.
+            info_pkg <- FUNCIONES_PAQUETE_MATRSTARS[[primera_func]]
+            if (!is.null(info_pkg)) {
+              capciones_conocidas[[var_name]] <- info_pkg
+            }
           }
         }
       } else {
@@ -627,7 +773,8 @@ procesar_rmd <- function(ruta_entrada,
       posiciones           = seq_posicion,
       tiene_bucle          = tiene_bucle,
       contenedores         = contenedores,
-      diferidos_tentativos = diferidos_tentativos
+      diferidos_tentativos = diferidos_tentativos,
+      capciones_conocidas  = capciones_conocidas
     )
   }
 
@@ -948,8 +1095,32 @@ procesar_rmd <- function(ruta_entrada,
   # chunk N+1).
   contenedores_globales <- list()
   tentativos_globales   <- list()
+  capciones_globales    <- list()
 
   push <- function(...) salida <<- c(salida, ...)
+
+  # ------------------------------------------------------------------
+  # Inyección de chunk de setup: activa la opción global que hace que
+  # las llamadas internas a kable_rstars() desde funciones del paquete
+  # MATrstars (presenta_modelo, generar_solucion,
+  # predict_from_excel_scenarios, ...) no emitan el argumento `caption`
+  # al kable subyacente. Sin esta opción, bookdown auto-numeraría dos
+  # veces cada tabla generada dentro del paquete, produciendo prefijos
+  # dobles del tipo "Table 10.1: Table 10.2: <caption>". Con la opción
+  # activa, las tablas quedan sin auto-caption y la numeración manual
+  # de este script (bloque "**Tabla X.Y**") funciona como para las
+  # tablas normales del .Rmd.
+  # Requiere MATrstars >= 0.0.0.9006 (donde kable_rstars honra
+  # `getOption('matrstars.suppress_caption', FALSE)`).
+  # NOTA: el label del chunk incluye el número de capítulo para evitar
+  # colisiones al fusionar los .Rmd de todos los capítulos en un único
+  # RStarS.Rmd durante el render final (bookdown detecta labels
+  # duplicados y aborta).
+  push(sprintf("```{r matrstars-numerado-setup-cap%d, include=FALSE}",
+               num_capitulo))
+  push("options(matrstars.suppress_caption = TRUE)")
+  push("```")
+  push("")
 
   i <- 1L
   n_lineas <- length(lineas)
@@ -999,7 +1170,8 @@ procesar_rmd <- function(ruta_entrada,
         skip <- es_eval_false(chunk_header)
         info <- analizar_chunk(chunk_buffer,
                               contenedores_iniciales = contenedores_globales,
-                              diferidos_tentativos_iniciales = tentativos_globales)
+                              diferidos_tentativos_iniciales = tentativos_globales,
+                              capciones_iniciales = capciones_globales)
         # Fusionar estado global con lo devuelto (no sobrescribir).
         # Así los tentativos/contenedores creados en chunks previos
         # persisten para los chunks siguientes.
@@ -1010,6 +1182,10 @@ procesar_rmd <- function(ruta_entrada,
         if (!skip && !is.null(info$diferidos_tentativos)) {
           tentativos_globales <- modifyList(tentativos_globales,
                                             info$diferidos_tentativos)
+        }
+        if (!skip && !is.null(info$capciones_conocidas)) {
+          capciones_globales <- modifyList(capciones_globales,
+                                           info$capciones_conocidas)
         }
         # Si un tentativo ha sido promovido a contenedor en este chunk,
         # ya no necesita estar en tentativos.

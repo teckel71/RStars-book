@@ -17,8 +17,8 @@ library (MASS)       # Estimación log-lineales
 
 # Paquete MATrstars: funciones auxiliares del libro R-Stars. Contiene, entre
 # otras, las funciones kable_rstars(), detect_zeros_any(), impute_zeros_with_one(),
-# extraer_coeficientes() y generar_solucion(), utilizadas más adelante en el
-# flujo principal.
+# extraer_coeficientes(), generar_solucion() y step_loglm_backward(), utilizadas
+# más adelante en el flujo principal.
 # Si el paquete no está instalado, se instala desde GitHub (una sola vez).
 if (!requireNamespace("MATrstars", quietly = TRUE)) {
   if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
@@ -79,34 +79,26 @@ seleccion <- seleccion %>% mutate(across(everything(), as.factor))
 # Construir tabla original
 tab0 <- xtabs(~ GALAXIA + FJUR + EFLO, data = seleccion)
 
-# Reportar celdas 0 (si existen)
+# Reportar celdas 0 (si existen) — es puramente informativo.
+# NO se imputa por defecto: los ceros muestrales llevan a que el MLE del
+# modelo saturado no exista en sentido estricto (coeficientes Inf/-Inf/NaN),
+# pero step() opera correctamente sin necesidad de imputar. Véase Agresti
+# (2013), cap. 9. Las funciones detect_zeros_any() e impute_zeros_with_one()
+# quedan disponibles en MATrstars por si el usuario desea inspeccionar o
+# manipular las celdas nulas en otros contextos.
 zeros_report <- detect_zeros_any(tab0)
 
 if (is.null(zeros_report)) {
   message("No se han detectado celdas con frecuencia 0 en la tabla original.")
 } else {
   zeros_report %>%
-    kable_rstars(caption = "Combinaciones con 0 detectadas (antes de imputar)")
-}
-
-# Imputar 0 -> 1 (solo celdas con 0) y anotar nota + reporte como atributo
-tab_use <- impute_zeros_with_one(tab0, value = 1L)
-
-# Mostrar nota de imputación y, si aplica, el detalle de celdas imputadas
-cat("\nNOTA IMPUTACIÓN: ", attr(tab_use, "nota_imputacion"), "\n")
-
-if (!is.null(attr(tab_use, "zeros_imputados"))) {
-  attr(tab_use, "zeros_imputados") %>%
-    kable_rstars(caption = "Combinaciones imputadas (0 → 1) para estimar modelo")
+    kable_rstars(caption = "Combinaciones con frecuencia 0 detectadas")
 }
 
 # Mostrar tabla
 
 pander("Tabla de contingencia GALAXIA × FJUR × EFLO")
 pander(tab0, style= "rmarkdown")
-
-pander("Tabla de contingencia GALAXIA × FJUR × EFLO (imputación puntual 0→1)")
-pander(tab_use, style= "rmarkdown")
 
 # Representación gráfica de la tabla con mosaico
 mosaic(tab0,
@@ -123,7 +115,7 @@ mosaic(tab0,
 # Modelo Independencia.
 
 modelo_indep <- MASS::loglm(~ GALAXIA + EFLO + FJUR,
-                            data= tab_use)
+                            data= tab0)
 
 solucion_modelo_indep <- generar_solucion(modelo_indep)
 
@@ -133,7 +125,7 @@ solucion_modelo_indep$Coeficientes
 # Modelo Saturado.
 
 modelo_sat <- MASS::loglm(~ GALAXIA * EFLO * FJUR,
-                          data= tab_use)
+                          data= tab0)
 
 solucion_modelo_sat <- generar_solucion(modelo_sat)
 solucion_modelo_sat$Informacion
@@ -141,9 +133,9 @@ solucion_modelo_sat$Coeficientes
 
 # Elección del modelo final.
 
-modelo_def <- step(modelo_sat, scale = 0,
-                   direction = c("backward"),
-                   trace = 1, steps = 1000)
+modelo_def <- step_loglm_backward(~ GALAXIA * EFLO * FJUR,
+                                  data  = tab0,
+                                  trace = TRUE, steps = 1000)
 
 solucion_modelo_def <- generar_solucion(modelo_def)
 
