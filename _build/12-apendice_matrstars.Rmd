@@ -140,6 +140,92 @@ mtcars %>%
 
 - [`R/kable_rstars.R`](https://github.com/teckel71/MATrstars/blob/main/R/kable_rstars.R)
 
+## `explora_na()`. {-}
+
+### Propósito. {-}
+
+Diagnostica los valores ausentes (`NA`) de un *data frame* sobre un conjunto de variables. Genera un gráfico `vis_miss()` del paquete `{visdat}` con el estilo tipográfico habitual del libro y, si se detectan `NA`s, una tabla con los casos afectados formateada con `kable_rstars()`. Si no se detecta ningún `NA`, la función se limita a emitir un mensaje informativo por la consola. Opcionalmente, elimina del *data frame* los casos con algún `NA` en las variables analizadas.
+
+Además, corrige un pequeño problema estético del gráfico `vis_miss()`: cuando el número de variables analizadas es reducido (hasta 4), las etiquetas del eje x superior aparecen, por defecto, muy separadas del panel. La función coloca esas etiquetas en horizontal, centradas y pegadas al gráfico. Para más de 4 variables, mantiene el ángulo de 45 grados habitual.
+
+La selección de variables sigue el estilo *tidy-select* del *tidyverse*: se pueden pasar los nombres sin comillas, con `c()`, o con los *helpers* de `dplyr::select()` (por ejemplo, `starts_with("I")`). Si no se especifica ninguna variable, se analizan todas las columnas del *data frame*.
+
+Esta función sustituye, a partir del capítulo 5, al bloque manual formado por `vis_miss()` + `labs()` + `scale_fill_manual()` + `theme()`, seguido de un `filter(is.na(...))` para listar los casos afectados y, en su caso, un `filter(!is.na(...))` para eliminarlos. Aparece en los capítulos 5 a 10, siempre en la fase de preparación previa de datos.
+
+### Sintaxis. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+explora_na(datos,
+           variables  = NULL,
+           accion     = c("documentar", "eliminar"),
+           titulo     = "Valores ausentes",
+           subtitulo  = NULL,
+           etiqueta_y = "Observación",
+           caption    = NULL,
+           ...)
+```
+
+### Argumentos. {-}
+
+- **`datos`**: *data frame* de entrada.
+- **`variables`**: variables a analizar, en sintaxis *tidy-select* (nombres sin comillas, `c(...)` o *helpers* de `dplyr::select()`). Si se omite, se analizan todas las columnas de `datos`.
+- **`accion`**: `"documentar"` (por defecto) solo diagnostica. `"eliminar"` además filtra los casos con algún `NA` en las variables analizadas.
+- **`titulo`**: título del gráfico. Por defecto, `"Valores ausentes"`.
+- **`subtitulo`**: subtítulo del gráfico. Por defecto, `NULL`.
+- **`etiqueta_y`**: etiqueta del eje Y. Por defecto, `"Observación"`.
+- **`caption`**: título de la tabla `kable_rstars()` con los casos con `NA`. Si es `NULL` (por defecto), se genera automáticamente indicando el número de casos afectados y las variables analizadas.
+- **`...`**: argumentos adicionales reenviados a `kable_rstars()` (por ejemplo, `digits`, `font_size` o `bootstrap_options`).
+
+### Valor devuelto. {-}
+
+El *data frame* (invisible): sin cambios si `accion = "documentar"`, o filtrado (solo casos completos en las variables analizadas) si `accion = "eliminar"`. Esto permite tanto sobrescribir el *data frame* de trabajo (`df <- explora_na(df, ..., accion = "eliminar")`) como utilizar la función solo con fines diagnósticos, sin alterar el objeto original.
+
+Como efectos colaterales, la función imprime el gráfico `vis_miss()` y la tabla `kable_rstars()` con los casos afectados (si los hay), o un mensaje informativo por la consola (si no los hay).
+
+### Ejemplo. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+library(MATrstars)
+
+# 1. Una sola variable (sin comillas):
+muestra <- explora_na(
+  muestra,
+  variables = RENECO,
+  accion    = "eliminar",
+  titulo    = "Rentabilidad Económica: valores ausentes",
+  subtitulo = "Transporte de mercancías interestelar"
+)
+
+# 2. Varias variables (sin comillas):
+muestra2 <- explora_na(
+  muestra2,
+  variables = c(RENECO, ACTIVO, MARGEN, RES),
+  accion    = "eliminar",
+  titulo    = "Variables económico-financieras: valores ausentes",
+  subtitulo = "Transporte de mercancías interestelar"
+)
+
+# 3. Todo el data frame (sin argumento `variables`):
+seleccion <- explora_na(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "Indicadores: Diversificación, Fidelidad, Digitalización",
+  subtitulo = "Transporte de mercancías interestelar"
+)
+
+# 4. Personalizando la tabla (los argumentos extra van a kable_rstars):
+seleccion <- explora_na(
+  seleccion,
+  accion    = "eliminar",
+  digits    = 3,
+  font_size = 12
+)
+```
+
+### Código fuente. {-}
+
+- [`R/explora_na.R`](https://github.com/teckel71/MATrstars/blob/main/R/explora_na.R)
+
 ## `presenta_modelo()`. {-}
 
 ### Propósito. {-}

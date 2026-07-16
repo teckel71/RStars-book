@@ -213,6 +213,41 @@ procesar_rmd <- function(ruta_entrada,
     )
   )
 
+  # -------------------------------------------------------------------
+  # 2c. Funciones "side-effect" del paquete MATrstars
+  # -------------------------------------------------------------------
+  # Estas funciones, al ejecutarse en un chunk, emiten internamente una
+  # secuencia FIJA de figuras y tablas via print()/cat(). El
+  # preprocesador tiene que garantizar el patron:
+  #
+  #     [figura]
+  #     **Figura X.Y**
+  #     [tabla]
+  #     **Tabla X.Z**
+  #
+  # que es el patron estandar del libro. Como el gráfico y la tabla se
+  # emiten desde dentro de la funcion (en la misma linea de codigo), no
+  # es posible dividir el chunk para intercalar las etiquetas. La
+  # solucion es que la propia funcion emita las etiquetas justo debajo
+  # de cada elemento, leyendo el numero X.Y que le corresponde de una
+  # opcion de sesion (`matrstars.<tipo>_num`) que este preprocesador
+  # inyecta al principio del chunk.
+  #
+  # Cada entrada declara la secuencia de tipos ("figura", "tabla") que
+  # produce la funcion en el orden en que los emite. Los tipos "figura"
+  # incrementan el contador de figuras del capitulo, y los tipos
+  # "tabla" el de tablas; los numeros correspondientes se inyectan como
+  # opciones. Los chunks con estas funciones NO reciben etiquetas al
+  # final: las emite la propia funcion en su lugar exacto.
+  FUNCIONES_PAQUETE_MATRSTARS_SIDEEFFECT <- list(
+    explora_na = c("figura", "tabla")
+  )
+  re_sideeffect <- paste0(
+    "\\b(?:",
+    paste(names(FUNCIONES_PAQUETE_MATRSTARS_SIDEEFFECT), collapse = "|"),
+    ")\\s*\\("
+  )
+
   # ===================================================================
   # 3. Helpers
   # ===================================================================
@@ -256,6 +291,14 @@ procesar_rmd <- function(ruta_entrada,
     seq_tipo      <- character(0)
     seq_cap       <- character(0)
     seq_posicion  <- integer(0)
+
+    # Secuencia de tipos ("figura"/"tabla") producidos por llamadas a
+    # funciones "side-effect" del paquete MATrstars detectadas en el
+    # chunk. Se acumula APARTE de `seq_tipo` porque estos elementos NO
+    # se etiquetan al final del chunk; sus etiquetas las emite la
+    # propia funcion en la posicion correcta, usando los numeros que
+    # este preprocesador le inyecta como opciones.
+    sideeffect_seq <- character(0)
 
     diferidos    <- list()        # tipo conocido (kable, ggplot, etc.)
     diferidos_tentativos <- diferidos_tentativos_iniciales
@@ -366,8 +409,55 @@ procesar_rmd <- function(ruta_entrada,
 
       tiene_terminal <- grepl(re_terminal, linea, perl = TRUE)
 
+      # --- Deteccion de funciones "side-effect" del paquete MATrstars ---
+      # Estas funciones emiten internamente una secuencia fija de
+      # figuras/tablas. Se acumulan en `sideeffect_seq` (aparte de
+      # `seq_tipo`) para que el bucle principal las trate de forma
+      # especial: inyectar opciones al inicio del chunk y NO emitir
+      # etiquetas al final.
+      if (grepl(re_sideeffect, linea, perl = TRUE)) {
+        m_se <- regmatches(linea,
+                           regexpr(re_sideeffect, linea, perl = TRUE))
+        fname_se <- sub("\\s*\\(\\s*$", "", m_se)
+        elementos <- FUNCIONES_PAQUETE_MATRSTARS_SIDEEFFECT[[fname_se]]
+        if (!is.null(elementos)) {
+          sideeffect_seq <- c(sideeffect_seq, elementos)
+          # Si esta llamada es RHS de una asignacion multi-linea,
+          # marcar la variable como "ya procesada" para que al cerrar
+          # los parentesis no se anada como diferido tentativo.
+          m_asig_se <- regexec(re_asig_inicio, linea, perl = TRUE)
+          r_asig_se <- regmatches(linea, m_asig_se)[[1]]
+          if (length(r_asig_se) >= 2) {
+            n_p_abre  <- contar_ch(linea, "(")
+            n_p_cierr <- contar_ch(linea, ")")
+            if (grepl(re_continua, linea, perl = TRUE) ||
+                n_p_abre > n_p_cierr) {
+              asig_multi_var          <- r_asig_se[2]
+              asig_multi_paren        <- n_p_abre - n_p_cierr
+              asig_multi_primera_func <- "__SIDEEFFECT_CONSUMED__"
+            }
+          }
+          next
+        }
+      }
+
       # --- Verificar si seguimos en asignación multi-línea ---
       if (!is.na(asig_multi_var)) {
+        # Caso especial: la asignacion fue iniciada por una funcion
+        # side-effect ya consumida. Solo actualizamos el balance de
+        # parentesis y esperamos el cierre, sin anadir nada mas.
+        if (identical(asig_multi_primera_func,
+                      "__SIDEEFFECT_CONSUMED__")) {
+          asig_multi_paren <- asig_multi_paren +
+                              contar_ch(linea, "(") - contar_ch(linea, ")")
+          if (asig_multi_paren <= 0L &&
+              !grepl(re_continua, linea, perl = TRUE)) {
+            asig_multi_var          <- NA_character_
+            asig_multi_paren        <- 0L
+            asig_multi_primera_func <- NA_character_
+          }
+          next
+        }
         # Asociar kable/ggplot/terminal en esta línea a asig_multi_var
         if (grepl(re_func_tabla, linea, perl = TRUE)) {
           diferidos[[asig_multi_var]] <- "tabla"
@@ -774,7 +864,8 @@ procesar_rmd <- function(ruta_entrada,
       tiene_bucle          = tiene_bucle,
       contenedores         = contenedores,
       diferidos_tentativos = diferidos_tentativos,
-      capciones_conocidas  = capciones_conocidas
+      capciones_conocidas  = capciones_conocidas,
+      sideeffect_seq       = sideeffect_seq
     )
   }
 
@@ -1194,6 +1285,74 @@ procesar_rmd <- function(ruta_entrada,
           for (k in names(contenedores_globales)) {
             tentativos_globales[[k]] <- NULL
           }
+        }
+
+        # ¿El chunk tiene llamadas side-effect (explora_na, etc.)?
+        # Si es asi, se procesa distinto: se emite un chunk previo
+        # oculto (`include=FALSE`) con `options(matrstars.<tipo>_num =
+        # "X.Y", ...)` y a continuacion el chunk original tal cual.
+        # NO se emiten etiquetas al final del chunk: la propia funcion
+        # las emitira en su lugar exacto (leyendo las opciones).
+        # El motivo de usar un chunk previo oculto y no inyectar la
+        # linea options() dentro del chunk original es que el chunk
+        # original suele tener `echo=TRUE`, y la linea options() se
+        # mostraria al lector como codigo fuente.
+        tiene_sideeffect <- !skip && length(info$sideeffect_seq) > 0L
+
+        if (tiene_sideeffect) {
+          # Calcular los numeros X.Y por tipo, en el orden en que
+          # aparecen en sideeffect_seq. Cada "figura" incrementa el
+          # contador de figuras del capitulo; cada "tabla", el de
+          # tablas.
+          opciones_pairs <- character(0)
+          for (elem in info$sideeffect_seq) {
+            if (elem == "figura") {
+              cont_figura <- cont_figura + 1L
+              opciones_pairs <- c(
+                opciones_pairs,
+                sprintf('matrstars.figura_num = "%d.%d"',
+                        num_capitulo, cont_figura)
+              )
+              registro <- c(registro, sprintf(
+                "  Figura %d.%d  (side-effect, chunk linea %d)",
+                num_capitulo, cont_figura,
+                i - length(chunk_buffer) - 1L))
+            } else if (elem == "tabla") {
+              cont_tabla <- cont_tabla + 1L
+              opciones_pairs <- c(
+                opciones_pairs,
+                sprintf('matrstars.tabla_num = "%d.%d"',
+                        num_capitulo, cont_tabla)
+              )
+              registro <- c(registro, sprintf(
+                "  Tabla  %d.%d  (side-effect, chunk linea %d)",
+                num_capitulo, cont_tabla,
+                i - length(chunk_buffer) - 1L))
+            }
+          }
+          opciones_linea <- paste0(
+            "options(",
+            paste(opciones_pairs, collapse = ", "),
+            ")"
+          )
+
+          # 1) Chunk previo OCULTO con options()
+          push("```{r include=FALSE}")
+          push(opciones_linea)
+          push("```")
+          push("")  # linea en blanco de separacion
+
+          # 2) Chunk original tal cual (con captions limpiados)
+          chunk_limpio <- quitar_todos_captions(chunk_buffer)
+          push(chunk_header)
+          push(chunk_limpio)
+          push(linea)  # cierre del chunk
+
+          estado <- "texto"
+          chunk_header <- ""
+          chunk_buffer <- character(0)
+          i <- i + 1L
+          next
         }
 
         if (skip) {

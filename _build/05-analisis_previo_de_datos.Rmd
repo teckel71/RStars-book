@@ -58,6 +58,24 @@ library (patchwork)
 library (GGally)
 ```
 
+```{r include=FALSE}
+# Carga silenciosa del paquete {MATrstars} para que las funciones auxiliares
+# (explora_na, kable_rstars, etc.) esten disponibles desde el inicio del
+# capitulo. La presentacion pedagogica del paquete se realiza mas adelante,
+# donde aparece por primera vez kable_rstars(). En el script .R equivalente,
+# la carga se hace ya al principio junto al resto de librerias.
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
+}
+library(MATrstars)
+```
+
+::: {style="text-align: center;"}
+**Tabla 5.1**
+:::
+
+
 Para importar los datos que hay en la hoja "Datos" del archivo de Microsoft® Excel® y hacer una primera inspección de las variables que contiene, ejecutaremos el código:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
@@ -95,7 +113,7 @@ datos_df_graph
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 5.1**
+**Tabla 5.2**
 :::
 
 
@@ -195,6 +213,52 @@ El operador **`!`** significa "no".
 
 Podemos comprobar cómo en el *Global Environment* aparece el *data frame* "muestra" con un caso menos (103).
 
+Como se puede apreciar, el procedimiento de detección y eliminación de *missing values* requiere una **secuencia recurrente** de instrucciones: una llamada a `vis_miss()` con `labs()`, `scale_fill_manual()` y `theme()` para el gráfico; un `filter(is.na(...))` para listar los casos afectados; y un `filter(!is.na(...))` para eliminarlos. Ese mismo bloque —con muy ligeras variaciones— se repite cada vez que se aborda esta tarea, tanto en el resto de este capítulo como en los capítulos siguientes. Además, el gráfico de `vis_miss()` presenta un pequeño problema estético cuando el número de variables analizadas es reducido: los nombres de las variables aparecen, por defecto, muy alejados del panel superior. Para aligerar los *scripts* del libro sin renunciar a la uniformidad de la presentación —y de paso corregir ese detalle estético—, el paquete `{MATrstars}` incorpora la función auxiliar `explora_na()`. Esta función encapsula todo el bloque anterior (gráfico + listado de NAs + eliminación opcional), coloca correctamente los nombres de variable en el gráfico y presenta la tabla de casos afectados con el estilo tipográfico habitual del libro (mediante `kable_rstars()`, internamente).
+
+De este modo, todo el bloque de código anterior podría haberse escrito de forma mucho más compacta como:
+
+```{r eval=FALSE, echo=TRUE, message=FALSE}
+muestra <- explora_na(
+  muestra,
+  variables = RENECO,
+  accion    = "eliminar",
+  titulo    = "Rentabilidad Económica: valores ausentes",
+  subtitulo = "Transporte de mercancías interestelar"
+)
+```
+
+Como en este punto ya hemos eliminado el caso con NA de "muestra", vamos a comprobar el funcionamiento de la función sobre una **copia limpia** del *data frame* original que contenga únicamente la variable RENECO (a esa copia auxiliar la llamaremos "muestra_demo"). El resultado será el mismo que se obtuvo con el bloque manual, pero presentado con las mejoras estéticas comentadas:
+
+```{r eval=FALSE, echo=TRUE, message=FALSE}
+muestra_demo <- select(interestelar_100, RENECO)
+muestra_demo <- explora_na(
+  muestra_demo,
+  variables = RENECO,
+  accion    = "eliminar",
+  titulo    = "Rentabilidad Económica: valores ausentes",
+  subtitulo = "Transporte de mercancías interestelar"
+)
+rm(muestra_demo)
+```
+
+```{r include=FALSE}
+options(matrstars.figura_num = "5.3", matrstars.tabla_num = "5.3")
+```
+
+```{r eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+muestra_demo <- select(interestelar_100, RENECO)
+muestra_demo <- explora_na(
+  muestra_demo,
+  variables = RENECO,
+  accion    = "eliminar",
+  titulo    = "Rentabilidad Económica: valores ausentes",
+  subtitulo = "Transporte de mercancías interestelar"
+)
+rm(muestra_demo)
+```
+
+**A partir de aquí, y en los capítulos siguientes, el tratamiento de *missing values* se realizará con `explora_na()`**. La ficha completa de la función —argumentos, valores por defecto, ejemplos de uso y enlace al código fuente en GitHub— puede consultarse en el **Apéndice: Funciones auxiliares del paquete `{MATrstars}`** al final del libro.
+
 Una vez tratados los casos con valores perdidos o *missing values*, **conviene detectar la posible presencia en la muestra de *outliers*** o casos atípicos, que pudieran desvirtuar los resultados derivados de ciertos análisis. Al trabajar con una sola variable métrica (la rentabilidad económica, RENECO), podemos realizar esta tarea representando gráficamente la variable mediante un ***boxplot*** o *gráfico de caja*. Aplicaremos, por ejemplo, el código siguiente, que utiliza la gramática del paquete `{ggplot2}`:
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE}
@@ -220,7 +284,7 @@ ggplot(data = muestra, map = (aes(y = RENECO))) +
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.3**
+**Figura 5.4**
 :::
 
 
@@ -371,7 +435,7 @@ conteo_intervalos_df %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 5.2.** Distribución de frecuencias agrupadas en intervalos de Rentabilidad Económica
+**Tabla 5.4.** Distribución de frecuencias agrupadas en intervalos de Rentabilidad Económica
 :::
 
 
@@ -410,7 +474,7 @@ conteo_intervalos_df %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 5.3.** Distribución de frecuencias agrupadas en intervalos de Rentabilidad Económica
+**Tabla 5.5.** Distribución de frecuencias agrupadas en intervalos de Rentabilidad Económica
 :::
 
 
@@ -444,7 +508,7 @@ g1
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.4**
+**Figura 5.5**
 :::
 
 
@@ -476,7 +540,7 @@ g2
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.5**
+**Figura 5.6**
 :::
 
 
@@ -505,7 +569,7 @@ g3
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.6**
+**Figura 5.7**
 :::
 
 
@@ -548,7 +612,7 @@ estadisticos %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 5.4.** Principales Estadísticos de la Rentabilidad Económica
+**Tabla 5.6.** Principales Estadísticos de la Rentabilidad Económica
 :::
 
 
@@ -601,7 +665,7 @@ g4
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.7**
+**Figura 5.8**
 :::
 
 
@@ -651,7 +715,7 @@ resumen
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.8**
+**Figura 5.9**
 :::
 
 
@@ -671,52 +735,26 @@ Para trabajar con múltiples variables, en primer lugar es preciso localizar los
 
 Vamos a imaginar que queremos realizar un análisis en el que tendremos en cuenta las variables RENECO (rentabilidad económica), ACTIVO (volumen de activos de la empresa), MARGEN (margen de beneficio) y RES (resultado del ejercicio).
 
-En primer lugar, generaremos una copia del *data frame* original, "interestelar_100", para preservar su integridad. A esa copia la hemos llamado "muestra2". Ya vimos cómo el siguiente código nos aporta gráficamente una idea de la posible existencia de valores faltantes:
+En primer lugar, generaremos una copia del *data frame* original, "interestelar_100", para preservar su integridad. A esa copia la hemos llamado "muestra2". Aplicamos entonces la función `explora_na()` del paquete `{MATrstars}`, indicando en el argumento `variables` las cuatro variables del análisis (RENECO, ACTIVO, MARGEN y RES) y `accion = "eliminar"` para que, además de mostrar el gráfico y la tabla con los casos afectados, se descarten esos casos del *data frame*:
 
-```{r echo=TRUE, message=FALSE, warning=FALSE, message=FALSE}
+```{r include=FALSE}
+options(matrstars.figura_num = "5.10", matrstars.tabla_num = "5.7")
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
 ## Trabajando con multiples variables.
 
 # Copia de df original.
-muestra2<- select(interestelar_100, everything())
+muestra2 <- select(interestelar_100, everything())
 
-# Localizando missing values.
-muestra2 %>%
-  select (RENECO, ACTIVO, MARGEN, RES) %>%
-  vis_miss() +
-    labs(title = "Rentabilidad Económica: valores ausentes",
-      subtitle = "Transporte de mercancías interestelar",
-      y = "Observación",
-      fill = NULL) +
-    scale_fill_manual(
-      values = c("TRUE" = "red", "FALSE" = "grey"),
-      labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
-  theme(
-    plot.title = element_text(face = "bold", size = 14))
-```
-
-::: {style="text-align: center;"}
-**Figura 5.9**
-:::
-
-
-Podemos apreciar cómo existen varios casos con *missing values* en las variables objeto de estudio.
-
-Para localizar los casos concretos con *missing values*, podemos recurrir al siguiente código. En él, hemos sometido a "muestra2" a un *filtro* para detectar los casos en los que no hay valor para alguna (o varias) de las variables analizadas. El operador **`|`** significa "o". Posteriormente, hemos decidido eliminar esos casos (podría optarse por otro tipo de tratamiento, como la estimación de valores). Para ello asignamos a "muestra2" el resultado de pasar un filtro en el que se eligen los casos que no tienen valores faltantes en ninguna de las variables. El operador **`&`** significa "y":
-
-```{r eval=TRUE, echo=TRUE, message=FALSE}
-## Trabajando con multiples variables.
-
-# Localizando y descartando casos con missing values.
-muestra2 %>% filter(is.na(RENECO) |
-                      is.na(ACTIVO) |
-                      is.na(MARGEN) |
-                      is.na(RES))%>%
-             select(RENECO, ACTIVO, MARGEN, RES)
-muestra2 <- muestra2 %>%
-            filter(! is.na(RENECO) &
-                     ! is.na(ACTIVO) &
-                     ! is.na(MARGEN) &
-                     ! is.na(RES))
+# Diagnóstico y filtrado de missing values.
+muestra2 <- explora_na(
+  muestra2,
+  variables = c(RENECO, ACTIVO, MARGEN, RES),
+  accion    = "eliminar",
+  titulo    = "Variables económico-financieras: valores ausentes",
+  subtitulo = "Transporte de mercancías interestelar"
+)
 ```
 
 El *data frame* "muestra2" contiene los mismos datos que "interestelar_100", salvo los 3 casos con *missing values* que han sido eliminados (101): *Vega Transport*, *Photon Pack Freight* y *Poe Dameron Cargo*.
@@ -778,7 +816,7 @@ ggplot(data = muestra2, map = (aes(y = MAHALANOBIS))) +
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.10**
+**Figura 5.11**
 :::
 
 
@@ -846,7 +884,7 @@ corr_plot_so
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.11**
+**Figura 5.12**
 :::
 
 
@@ -893,7 +931,7 @@ grid.arrange(corr_plot_so_gg, corr_plot_co_gg, ncol = 2, top = "CORRELACIONES")
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.12**
+**Figura 5.13**
 :::
 
 

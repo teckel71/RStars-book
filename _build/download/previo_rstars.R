@@ -63,6 +63,30 @@ muestra %>% filter(is.na(RENECO)) %>% select(RENECO)
 muestra <- muestra %>%
              filter(! is.na(RENECO)) %>% select(RENECO)
 
+# --- Nota: el mismo procedimiento con explora_na() del paquete {MATrstars} ---
+# La función explora_na() encapsula el patrón vis_miss() + labs() +
+# scale_fill_manual() + theme() (con la corrección estética del posicionamiento
+# de los nombres de variable cuando son pocas) + filter(is.na(...)) para listar
+# los casos afectados + filter(!is.na(...)) para eliminarlos. Todo ese bloque
+# se reduce a una única llamada. Como demostración, la aplicamos a una copia
+# limpia del df original con solo la variable RENECO:
+
+muestra_demo <- select(interestelar_100, RENECO)
+muestra_demo <- explora_na(
+  muestra_demo,
+  variables = RENECO,
+  accion    = "eliminar",
+  titulo    = "Rentabilidad Económica: valores ausentes",
+  subtitulo = "Transporte de mercancías interestelar"
+)
+rm(muestra_demo)
+
+# A partir de aquí, y en los capítulos siguientes, el tratamiento de missing
+# values se realizará con explora_na(). La ficha completa de la función
+# (argumentos, defaults, código fuente) se encuentra en el "Apéndice:
+# Funciones auxiliares del paquete MATrstars" al final del libro.
+# -----------------------------------------------------------------------------
+
 ## Localizando outliers
 ggplot(data = muestra, map = (aes(y = RENECO))) +
     geom_boxplot(fill = "orange") +
@@ -266,30 +290,14 @@ resumen
 # Copia de df original.
 muestra2<- select(interestelar_100, everything())
 
-# Localizando missing values.
-muestra2 %>%
-  select (RENECO, ACTIVO, MARGEN, RES) %>%
-  vis_miss() +
-  labs(title = "Rentabilidad Económica: valores ausentes",
-       subtitle = "Transporte de mercancías interestelar",
-       y = "Observación",
-       fill = NULL) +
-  scale_fill_manual(
-    values = c("TRUE" = "red", "FALSE" = "grey"),
-    labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
-  theme(
-    plot.title = element_text(face = "bold", size = 14))
-
-muestra2 %>% filter(is.na(RENECO) |
-                      is.na(ACTIVO) |
-                      is.na(MARGEN) |
-                      is.na(RES))%>%
-             select(RENECO, ACTIVO, MARGEN, RES)
-muestra2 <- muestra2 %>%
-            filter(! is.na(RENECO) &
-                     ! is.na(ACTIVO) &
-                     ! is.na(MARGEN) &
-                     ! is.na(RES))
+# Diagnóstico y filtrado de missing values con explora_na().
+muestra2 <- explora_na(
+  muestra2,
+  variables = c(RENECO, ACTIVO, MARGEN, RES),
+  accion    = "eliminar",
+  titulo    = "Variables económico-financieras: valores ausentes",
+  subtitulo = "Transporte de mercancías interestelar"
+)
 
 # Identificando y descartando outliers con distancia de Mahalanobis.
 muestra2 <- muestra2 %>%
