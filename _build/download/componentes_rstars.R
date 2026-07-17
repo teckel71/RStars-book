@@ -44,34 +44,15 @@ seleccion <- explora_na(
   subtitulo = "Transporte de mercancías interestelar"
 )
 
-# Identificando y descartando outliers con distancia de Mahalanobis.
-seleccion <- seleccion %>%
-  mutate(MAHALANOBIS = mahalanobis(as.matrix(.),
-                                   center = colMeans(.),
-                                   cov    = cov(.)))
-
-ggplot(data = seleccion, map = (aes(y = MAHALANOBIS))) +
-  geom_boxplot(fill = "orange") +
-  ggtitle("DISTANCIA DE MAHALANOBIS",
-          subtitle = "IDIVERSE, IFIDE, IDIG. Empresas TMI.") +
-  ylab("MAHALANOBIS")
-
-Q1M <- quantile (seleccion$MAHALANOBIS, c(0.25))
-Q3M <- quantile (seleccion$MAHALANOBIS, c(0.75))
-
-seleccion %>%
-  filter(MAHALANOBIS > Q3M + 1.5*IQR(MAHALANOBIS) |
-           MAHALANOBIS < Q1M - 1.5*IQR(MAHALANOBIS))%>%
-  select(MAHALANOBIS, IDIVERSE, IFIDE, IDIG) 
-
-# Creando nuevo df sin outliers.
-seleccion_so <- seleccion %>%
-  filter(MAHALANOBIS <= Q3M + 1.5*IQR(MAHALANOBIS) &
-           MAHALANOBIS >= Q1M - 1.5*IQR(MAHALANOBIS))  
-
-# Eliminando variable MAHALANOBIS de los df
-seleccion    <- seleccion    %>% select(-MAHALANOBIS)
-seleccion_so <- seleccion_so %>% select(-MAHALANOBIS)
+# Diagnóstico y filtrado de outliers con explora_outliers().
+# Al pasar varias variables, la función calcula internamente la distancia
+# de Mahalanobis y aplica la regla 1.5 x IQR sobre ella.
+seleccion_so <- explora_outliers(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "IDIVERSE, IFIDE, IDIG. Empresas TMI."
+)
 
 ## COMPONENTES
 

@@ -227,7 +227,7 @@ y=X\beta+u
 <li><p>El script con el código que vamos a ir ejecutando se llama “regresion_rstars.R”.</p></li>
 </ul>
 <p>Una vez abierto el <em>script</em> en el editor de RStudio , comprobaremos que la primera parte del código está dedicada a la limpieza de la memoria (<em>Environment</em>). Además, se cargan los paquetes que harán falta para ejecutar el código:</p>
-<div class="sourceCode" id="cb329"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb325"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### REGRESIÓN MÚLTIPLE. Empresas TMI. ###</span></span>
 <span></span>
 <span><span class="co"># Limpiando el Global Environment</span></span>
@@ -266,7 +266,7 @@ y=X\beta+u
 <strong>Función <code><a href="https://rdrr.io/pkg/MATrstars/man/predict_from_excel_scenarios.html">predict_from_excel_scenarios()</a></code></strong>: facilita la lectura de escenarios de simulación / previsión detallados en un archivo de Microsoft® Excel®, incluyendo para las variables explicativas tanto valores concretos como fórmulas de cálculo en R. Devuelve las predicciones del modelo para cada escenario y, opcionalmente, una tabla con los resultados. La función se importa del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a>, ya presentado en el capítulo 5 (véase también el <strong>Apéndice: Funciones auxiliares del paquete <code>MATrstars</code></strong> para su ficha completa).</li>
 </ul>
 <p>Posteriormente, como es habitual, se importan los datos, en nuestro caso desde el archivo correspondiente de Microsoft® Excel®. Para ello, utilizamos la función <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> del paquete <a href="https://readxl.tidyverse.org">readxl</a>, indicando en los argumentos el archivo a explorar, y la <em>hoja</em> en la cual se encuentran los datos (hoja “Datos”). También hemos de prestar atención a la cuestión de si existen en la hoja de <em>Excel</em> anotaciones en las celdas donde no haya dato, para completar adecuadamente el argumento <code>na=</code> . Los datos se almacenarán en el <em>data frame</em> “interestelar_300”. En este <em>data frame</em>, la primera columna no es una verdadera variable, sino que se compone de los nombres de los casos o empresas. Con una línea de código adicional transformaremos esa primera columna en el <em>nombre de las filas</em>, de modo que tal columna abandona su <em>rol</em> de variable. En definitiva, el código para importar los datos es:</p>
-<div class="sourceCode" id="cb330"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb326"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## DATOS</span></span>
 <span></span>
 <span><span class="co"># Importando datos desde Excel</span></span>
@@ -275,7 +275,7 @@ y=X\beta+u
 <span>                               na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"n.d."</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">interestelar_300</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">interestelar_300</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p>Tras la importación, se seleccionan las variables que se usarán en el análisis y se procederá a localizar los (posibles) casos con <em>missing values</em>. Si existen casos con datos faltantes, se eliminarán:</p>
-<div class="sourceCode" id="cb331"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb327"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Seleccionando variables para el analisis.</span></span>
 <span><span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="va">interestelar_300</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">BMAL</span>,</span>
@@ -832,7 +832,7 @@ ANTIGUA, MADURA and RENOVADA
 <p><strong>Tabla 9.1</strong></p>
 </div>
 <p>Para el diagnóstico y, en su caso, filtrado de los <em>missing values</em>, aplicamos la función auxiliar <code><a href="https://rdrr.io/pkg/MATrstars/man/explora_na.html">explora_na()</a></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a> que ya se presentó en el capítulo 5. Como el <em>data frame</em> “seleccion” contiene únicamente las seis variables del análisis, no es necesario especificar el argumento <code>variables</code>:</p>
-<div class="sourceCode" id="cb332"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb328"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Diagnóstico y filtrado de missing values.</span></span>
 <span><span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/explora_na.html">explora_na</a></span><span class="op">(</span></span>
 <span>  <span class="va">seleccion</span>,</span>
@@ -842,7 +842,7 @@ ANTIGUA, MADURA and RENOVADA
 <span><span class="op">)</span></span></code></pre></div>
 <p>No se ha localizado ninguna observación con <em>missing values</em>, luego no se ha de realizar ningún tipo de tratamiento.</p>
 <p>El siguiente paso es la <strong>identificación de <em>outliers</em>.</strong> Para realizar este proceso, y dado que en nuestro análisis contamos con 3 variables, primero “resumiremos” el valor que toman dichas variables para cada caso, mediante el cálculo de la <em>distancia de Mahalanobis</em>. De hecho, las distancias de los diferentes casos se almacenarán en una nueva variable, a la que llamaremos MAHALANOBIS, que se incorporará al <em>data frame</em> “originales” por medio de la función <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>, y la función <code><a href="https://rdrr.io/r/stats/mahalanobis.html">mahalanobis()</a></code>. Recordemos que, en los diferentes argumentos de esta función, el punto “.” hace referencia al <em>data frame</em> que está delante del operador pipe (%&gt;%).</p>
-<div class="sourceCode" id="cb333"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb329"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Identificando outliers con distancia de Mahalanobis.</span></span>
 <span><span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
@@ -858,11 +858,11 @@ ANTIGUA, MADURA and RENOVADA
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"DISTANCIA DE MAHALANOBIS"</span>,</span>
 <span>          subtitle <span class="op">=</span> <span class="st">"BMAL, DIST, IDIVERSE, ACTIVO, LIQUIDEZ. Empresas TMI."</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"MAHALANOBIS"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-326-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-323-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 9.3</strong></p>
 </div>
-<div class="sourceCode" id="cb334"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb330"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Q1M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">seleccion</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">Q3M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span> <span class="op">(</span><span class="va">seleccion</span><span class="op">$</span><span class="va">MAHALANOBIS</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.75</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -900,7 +900,7 @@ ANTIGUA, MADURA and RENOVADA
 ## miller cargo systems          70.814977    184.59699  121.5079412 29.3649259   39.44 3.1175000
 ## ripley interstellar freight   19.081559     39.96811  379.0522255 71.3507415   37.07 0.8586790</code></pre>
 <p>Puede comprobarse que son 28 casos. Vamos a optar por eliminar estas observaciones, ya que el análisis de regresión lineal es muy sensible a la presencia de <em>casos atípicos</em>. Para eliminar los <em>outliers</em>, y la propia variable MAHALANOBIS una vez ha desempeñado su cometido, ejecutaremos:</p>
-<div class="sourceCode" id="cb336"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb332"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Eliminando outliers.</span></span>
 <span><span class="va">seleccion_so</span> <span class="op">&lt;-</span><span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span> <span class="op">&lt;=</span> <span class="va">Q3M</span> <span class="op">+</span> <span class="fl">1.5</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html">IQR</a></span><span class="op">(</span><span class="va">MAHALANOBIS</span><span class="op">)</span> <span class="op">&amp;</span></span>
@@ -910,7 +910,7 @@ ANTIGUA, MADURA and RENOVADA
 <span><span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">MAHALANOBIS</span><span class="op">)</span></span>
 <span><span class="va">seleccion_so</span> <span class="op">&lt;-</span> <span class="va">seleccion_so</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">MAHALANOBIS</span><span class="op">)</span></span></code></pre></div>
 <p>Antes de pasar a la especificación y estimación inicial del modelo, queda un detalle: es necesario, si existen variables explicativas categóricas, definirlas como <strong>factores</strong>, a fin de que puedan ser debidamente integradas en el modelo. Tal es el caso de la variable EFLO:</p>
-<div class="sourceCode" id="cb337"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb333"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Convertir variable EFLO en Factor.</span></span>
 <span></span>
 <span><span class="va">seleccion_so</span><span class="op">$</span><span class="va">EFLO</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">seleccion_so</span><span class="op">$</span><span class="va">EFLO</span><span class="op">)</span></span>
@@ -923,7 +923,7 @@ ANTIGUA, MADURA and RENOVADA
 <span class="header-section-number">9.2.4</span> <img src="figuras/pie-chart.svg"> Especificación y estimación inicial del modelo.<a class="anchor" aria-label="anchor" href="#especificaci%C3%B3n-y-estimaci%C3%B3n-inicial-del-modelo."><i class="fas fa-link"></i></a>
 </h3>
 <p>El modelo básico de regresión lineal, estimado mediante el método de mínimos cuadrados ordinarios (MCO), se obtendrá mediante la función <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>. Los resultados los guardaremos en un objeto de nombre, por ejemplo, “ecua0”. Luego, se realizará un <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> para ver dicha estimación.</p>
-<div class="sourceCode" id="cb339"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb335"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## ESPECIFICACION Y ESTIMACION</span></span>
 <span></span>
 <span><span class="co"># Especificar el modelo de regresión lineal</span></span>
@@ -988,7 +988,7 @@ ANTIGUA, MADURA and RENOVADA
 <p>Hay otras informaciones importantes a la hora de valorar la especificación (inicial) del modelo que no se recogen en el <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> del mismo, y que hemos de extraer. Además, conviene presentar los resultados de un modo más elegante y coherente.</p>
 <p>Para poder hacer esto con este modelo inicial estimado, o con cualquier otra estimación, vamos a aplicar la función <code><a href="https://rdrr.io/pkg/MATrstars/man/presenta_modelo.html">presenta_modelo()</a></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a> (véase el <strong>Apéndice: Funciones auxiliares del paquete <code>MATrstars</code></strong> para su ficha completa). Esta función recibe como input la estimación lineal de un modelo, y devuelve como output tres tablas contenidas en una <em>lista</em>: la primera es una <em>versión</em> del <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>, la segunda es una tabla con otras informaciones adicionales, como el valor del <em>Criterio de Información de Akaike</em> (AIC), y la tercera contiene los valores del <em>factor de inflación de la varianza</em> (VIF) de las variables del modelo. Las tres tablas se generan con la función <code><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars()</a></code>, que ya hemos utilizado en apartados anteriores para aplicar de manera uniforme el estilo tipográfico habitual del libro.</p>
 <p>Después, basta con aplicar la función al modelo estimado inicial <em>(ecua_0)</em>, guardando las tres tablas generadas en la lista cuyo nombre determinaremos (en nuestro caso, <em>modelo_0</em>). Las tablas serán visualizadas:</p>
-<div class="sourceCode" id="cb341"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb337"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">modelo_0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/presenta_modelo.html">presenta_modelo</a></span><span class="op">(</span><span class="va">ecua0</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="va">modelo_0</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
@@ -1157,7 +1157,7 @@ EFLORENOVADA
 <div style="text-align: center;">
 <p><strong>Tabla 9.2.</strong> Modelo Lineal</p>
 </div>
-<div class="sourceCode" id="cb342"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb338"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">modelo_0</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -1210,7 +1210,7 @@ num. observaciones
 <div style="text-align: center;">
 <p><strong>Tabla 9.3.</strong> Estadísticos del modelo</p>
 </div>
-<div class="sourceCode" id="cb343"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb339"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">modelo_0</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -1272,7 +1272,7 @@ EFLO
 <p>La búsqueda de una especificación alternativa que sea más adecuada puede atender a múltiples estrategias del analista, y del propio propósito para el que se quiere utilizar el modelo. En todo caso, implica una <strong>gran carga de subjetividad</strong>. Por ejemplo, si se quiere emplear el modelo a efectos predictivos, no sería relevante la presencia de multicolinealidad, siempre que el modelo realice buenas previsiones. En cambio, si el objetivo guarda relación con el análisis estructural (análisis del papel que juegan las diferentes variables explicativas en el comportamiento de la variable dependiente), la multicolinealidad puede distorsionar este análisis (influyendo incluso en el signo de los parámetros estimados).</p>
 <p>En este ejemplo, y puesto que nuestro objetivo tiene que ver con el efecto de la renovación tecnológica de la flota (medido a través del factor EFLO) sobre el rendimiento (medido mediante BMAL), vamos a eliminar la variable ACTIVO, para intentar mitigar los posibles efectos adversos de una probable multicolinealidad sobre el análisis estructural de nuestro estudio.</p>
 <p>Así pues, plantearemos una nueva especificación (modelo “ecua1”) sin la inclusión del ACTIVO:</p>
-<div class="sourceCode" id="cb344"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb340"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">ecua1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">seleccion_so</span>,</span>
 <span>                <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">BMAL</span><span class="op">)</span> <span class="op">~</span> </span>
 <span>                  <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">DIST</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1304,7 +1304,7 @@ EFLO
 ## Residual standard error: 0.2653 on 266 degrees of freedom
 ## Multiple R-squared:  0.9677, Adjusted R-squared:  0.967 
 ## F-statistic:  1592 on 5 and 266 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb346"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb342"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">modelo_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/presenta_modelo.html">presenta_modelo</a></span><span class="op">(</span><span class="va">ecua1</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="va">modelo_1</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
@@ -1454,7 +1454,7 @@ EFLORENOVADA
 <div style="text-align: center;">
 <p><strong>Tabla 9.5.</strong> Modelo Lineal</p>
 </div>
-<div class="sourceCode" id="cb347"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb343"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">modelo_1</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -1507,7 +1507,7 @@ num. observaciones
 <div style="text-align: center;">
 <p><strong>Tabla 9.6.</strong> Estadísticos del modelo</p>
 </div>
-<div class="sourceCode" id="cb348"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb344"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">modelo_1</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -1562,7 +1562,7 @@ EFLO
 <p>Al eliminar log(ACTIVO) para mejorar la estabilidad del modelo y aislar el impacto tecnológico de la flota (<em>ecua1</em>), la multicolinealidad desaparece y los VIF pasan a ser muy bajos. Como consecuencia, EFLO se convierte en un predictor altamente significativo, con coeficientes positivos y de gran magnitud, lo que refuerza la interpretación económica de que flotas más modernas (categorías MADURA y RENOVADA) generan un rendimiento operativo sustancialmente mayor. El R² ajustado se reduce ligeramente al 96,7 %, pero sigue siendo muy elevado para un modelo aplicado a datos empresariales. Además, el signo y la significación del resto de variables se mantienen coherentes: la distancia recorrida continúa siendo un determinante negativo y significativo del rendimiento; IDIVERSE gana significación estadística al eliminarse la colinealidad; y LIQUIDEZ mantiene un coeficiente negativo no significativo, lo cual sugiere que su efecto sobre BMAL es poco concluyente.</p>
 <p>En conjunto, aunque el modelo con ACTIVO ofrece un ajuste matemático ligeramente superior, el modelo sin ACTIVO proporciona mayor claridad interpretativa, evita problemas de multicolinealidad y permite identificar con nitidez el efecto tecnológico de la flota sobre el rendimiento</p>
 <p>Una vez eliminado el riesgo de que el modelo adolezca de problemas derivados de la presencia de multicolinealidad, queda plantearse si todavía puede ser mejorada la especificación. Si se busca obtener una estructura más sencilla sin una pérdida grande de bondad de la regresión (<em>Principio de Parsimonia</em>), puede recurrirse a la aplicación de algún método automatizado, como el <em>step / backward</em> que, en función del <em>Criterio de Información de Akaike (AIC)</em>, irá probando a estimar especificaciones más simples que disminuyan el AIC (lo que implica una mejor especificación). En nuestro caso, se aplicará con el código:</p>
-<div class="sourceCode" id="cb349"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb345"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">ecuaDEF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/step.html">step</a></span><span class="op">(</span><span class="va">ecua1</span>, scale <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>                  direction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"backward"</span><span class="op">)</span>,</span>
 <span>                  trace <span class="op">=</span> <span class="fl">1</span>, steps <span class="op">=</span> <span class="fl">1000</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
@@ -1584,7 +1584,7 @@ EFLO
 ## - log(IDIVERSE)  1     0.291  19.132 -714.00
 ## - EFLO           2   202.012 220.854  -50.66
 ## - log(DIST)      1   292.145 310.987   44.43</code></pre>
-<div class="sourceCode" id="cb351"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb347"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span> <span class="op">(</span><span class="va">ecuaDEF</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## 
 ## Call:
@@ -1608,7 +1608,7 @@ EFLO
 ## Multiple R-squared:  0.9674, Adjusted R-squared:  0.967 
 ## F-statistic:  1983 on 4 and 267 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>El resultado del algoritmo es una especificación del modelo, cuya estimación se almacena en memoria con el nombre, por ejemplo, <em>ecuaDEF</em>. Se ha mostrado el <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> del modelo. También se puede aplicar la función <code><a href="https://rdrr.io/pkg/MATrstars/man/presenta_modelo.html">presenta_modelo()</a></code>, para obtener un <em>output</em> de la estimación más detallado:</p>
-<div class="sourceCode" id="cb353"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb349"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">modelo_DEF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/presenta_modelo.html">presenta_modelo</a></span><span class="op">(</span><span class="va">ecuaDEF</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="va">modelo_DEF</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
@@ -1739,7 +1739,7 @@ EFLORENOVADA
 <div style="text-align: center;">
 <p><strong>Tabla 9.8.</strong> Modelo Lineal</p>
 </div>
-<div class="sourceCode" id="cb354"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb350"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">modelo_DEF</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -1792,7 +1792,7 @@ num. observaciones
 <div style="text-align: center;">
 <p><strong>Tabla 9.9.</strong> Estadísticos del modelo</p>
 </div>
-<div class="sourceCode" id="cb355"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb351"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">modelo_DEF</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -1845,7 +1845,7 @@ EFLO
 </h2>
 <p>Antes de pasar a aplicar las pruebas específicas para evaluar el grado de las hipótesis que sustentan al modelo básico de regresión lineal, es conveniente generar varios gráficos de gran utilidad.</p>
 <p>Para facilitar esta tarea, recurriremos a la función <code><a href="https://generics.r-lib.org/reference/augment.html">augment()</a></code> del paquete <a href="https://broom.tidymodels.org/">broom</a>. Esta función, aplicada a un modelo, genera algunas series de datos fundamentales relacionadas con el mismo, y las almacena junto a las variables del modelo especificado en un <em>data frame</em>. En nuestro caso, hemos llamado al <em>data frame</em> “series_ecuaDEF”, y hemos cambiado el nombre a las series que vamos a utilizar posteriormente: los valores ajustados de la variable dependiente (logBMAL.est), los residuos (residuos), y los valores de la distancia de Cook (cooksd). Además, hemos creado una variable llamada ORDEN para asignar un valor correlativo a cada observación o caso de la muestra:</p>
-<div class="sourceCode" id="cb356"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb352"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># MODELO FINAL: CONTRASTACIÓN.</span></span>
 <span></span>
 <span>  <span class="co"># Generar series útiles.</span></span>
@@ -1904,7 +1904,7 @@ EFLO
 <li><p>El cuarto representa, para cada caso, el <em>valor de la distancia de Cook</em>. Los valores altos de la distancia de Cook en un modelo de regresión indican observaciones que tienen una influencia significativa en los coeficientes estimados del modelo. Son considerados “altos” los valores que superan <em>el valor inverso de 4 por el número de observaciones muestrales</em>.</p></li>
 </ul>
 <p>Los 4 gráficos se agrupan mediante la gramática del paquete {patchwork}. Finalmente, se genera una tabla a partir de un filtro para identificar los casos concretos que tienen valores “altos” de la distancia de Cook. En definitiva, el código es:</p>
-<div class="sourceCode" id="cb358"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb354"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Gráficos.</span></span>
 <span>  </span>
 <span><span class="va">g_real_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">series_ecuaDEF</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1959,7 +1959,7 @@ EFLO
 <span></span>
 <span>    <span class="va">tablaCook</span></span></code></pre></div>
 <p>Los gráficos obtenidos son:</p>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-347-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-344-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 9.4</strong></p>
 </div>
@@ -2092,7 +2092,7 @@ pike freight co.
 <p><strong>Tabla 9.11</strong></p>
 </div>
 <p>Tras estudiar los gráficos, vamos a pasar a <strong>contrastar las hipótesis básicas del modelo básico de regresión lineal</strong> referidas a la <em>forma funcional</em>, y la <em>normalidad</em> y <em>comportamiento homoscedástico</em> de la perturbación aleatoria. Para ello se aplicarán las pruebas de <em>Ramsey-Reset</em>, <em>Shapiro-Wilk</em> y <em>Breusch-Pagan</em>, respectivamente. Los resultados de las tres pruebas se presentarán condensados en una tabla, en la que, además, se incluirá la conclusión del contraste, para una significación de 0,05. Para crear la tabla, primero se generará un <em>data frame</em> con sus elementos, denominado, por ejemplo, “check_hipotesis”. El código es:</p>
-<div class="sourceCode" id="cb359"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb355"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Hipótesis básicas MBR.</span></span>
 <span></span>
 <span>    <span class="va">reset_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/resettest.html">resettest</a></span><span class="op">(</span><span class="va">ecuaDEF</span>, data<span class="op">=</span> <span class="va">originales_so</span><span class="op">)</span> <span class="co"># F. Funcional</span></span>
@@ -2271,7 +2271,7 @@ Heteroscedasticidad
 <p>D: 1,05 × mediana de DIST con outliers.</p>
 <p>El ejercicio permite comparar cómo cambian las predicciones cuando DIST se fija atendiendo a una medida de posición central diferente (media o mediana), y cómo influyen los <em>outliers</em> según formen o no parte del cálculo.</p>
 <p>Para obtener el resultado, se aplicará el código:</p>
-<div class="sourceCode" id="cb360"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb356"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># SIMULACIÓN</span></span>
 <span>    </span>
 <span>    <span class="va">res_Simula1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/predict_from_excel_scenarios.html">predict_from_excel_scenarios</a></span><span class="op">(</span></span>
@@ -2290,7 +2290,7 @@ Heteroscedasticidad
 <span>      return_kable   <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>    <span class="op">)</span></span></code></pre></div>
 <p>Y el resultado será:</p>
-<div class="sourceCode" id="cb361"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb357"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">res_Simula1</span><span class="op">[[</span><span class="st">"table"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -2482,7 +2482,7 @@ TRUE
 </div>
 <p>Como se ve, el segundo ejercicio plantea tres escenarios de renovación tecnológica de la flota —Antigua, Madura y Renovada— manteniendo constantes las demás variables en valores representativos de una empresa media del sector. Este planteamiento es esencial para los objetivos del estudio porque permite <strong>aislar el efecto puro de la modernización de la flota (EFLO) sobre el rendimiento económico BMAL, cuantificando el beneficio esperado de invertir en tecnología avanzada</strong>. Mediante esta simulación, <em>Data-Evidence</em> puede ofrecer a <em>Dixitaliza</em> una estimación sólida y basada en datos del impacto económico atribuible únicamente al grado de renovación, lo que constituye una herramienta clave para justificar decisiones estratégicas, diseñar propuestas comerciales y demostrar, con evidencia empírica, la conveniencia de adoptar soluciones tecnológicas de última generación en el transporte interestelar de mercancías.</p>
 <p>En esta ocasión, se aplicará el código:</p>
-<div class="sourceCode" id="cb362"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb358"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># SIMULACIÓN</span></span>
 <span>    </span>
 <span>    <span class="va">res_Simula2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/predict_from_excel_scenarios.html">predict_from_excel_scenarios</a></span><span class="op">(</span></span>
@@ -2501,7 +2501,7 @@ TRUE
 <span>      return_kable   <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>    <span class="op">)</span></span></code></pre></div>
 <p>Y el resultado será:</p>
-<div class="sourceCode" id="cb363"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb359"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">res_Simula2</span><span class="op">[[</span><span class="st">"table"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>

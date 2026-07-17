@@ -194,60 +194,22 @@ Por otro lado, la técnica de componentes principales **es muy sensible a la exi
 
 - **Modificación de la varianza explicada:** pueden *inflar* la varianza total de los datos, lo que puede afectar a la proporción de varianza explicada por cada componente principal. Esto puede ocasionar una selección incorrecta del número de componentes a retener.
 
-En consecuencia, deberán ser identificados y, en su caso, eliminados. Para realizar este proceso, y dado que en nuestro análisis contamos con 4 variables, primero “resumiremos” el valor que toman dichas variables para cada observación (empresa), mediante el cálculo de la *distancia de Mahalanobis*. De hecho, las distancias de los diferentes casos se almacenarán en una nueva columna o variable de nuestro *data frame,* a la que llamaremos MAHALANOBIS:
+En consecuencia, deberán ser identificados y, en su caso, eliminados. Para realizar este proceso, y dado que en nuestro análisis contamos con tres variables métricas, "resumiremos" el valor que toma cada empresa en el conjunto de las variables mediante el cálculo de la ***distancia de Mahalanobis***, sobre la que aplicaremos posteriormente la regla clásica de 1.5 veces el rango intercuartílico para identificar los casos atípicos.
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
-# Identificando y descartando outliers con distancia de Mahalanobis.
-seleccion <- seleccion %>%
-  mutate(MAHALANOBIS = mahalanobis(as.matrix(.),
-                                   center = colMeans(.),
-                                   cov    = cov(.)))
+Todo este flujo (cálculo de Mahalanobis, construcción del *boxplot*, identificación de los *outliers* y creación de un nuevo *data frame* sin ellos) se realiza en una sola llamada mediante la función auxiliar `explora_outliers()` del paquete `{MATrstars}` que ya se presentó en el capítulo anterior. Cuando se le pasa un *data frame* con varias variables métricas —como es aquí el caso—, la función detecta el caso multivariante y calcula internamente la distancia de Mahalanobis. Como en "seleccion" solo hay ya las tres variables del análisis, no es necesario especificar el argumento `variables`. El resultado del filtrado se almacena en un nuevo *data frame* llamado "seleccion_so":
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
+options(matrstars.figura_num = "6.5", matrstars.tabla_num = "6.3")
+# Diagnóstico y filtrado de outliers.
+seleccion_so <- explora_outliers(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "IDIVERSE, IFIDE, IDIG. Empresas TMI."
+)
 ```
 
-Dentro de los argumentos de la función `mahalanobis()` incluida en la función `mutate()` hay unos puntos entre paréntesis. Recordemos que estos puntos deben ser añadidos cuando una función no es la primera del operador "*pipe*" (`%>%`), para indicar que las variables de los paréntesis hacen referencia al *data frame* "seleccion" (o, en general, el objeto que fluye a través del "*pipe*").
-
-A continuación, hemos construido un *box-plot* o diagrama de caja de la variable MAHALANOBIS, como si fuera cualquier otra variable, a partir de la función `ggplot()` del paquete `{ggplot2}`:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
-
-ggplot(data = seleccion, map = (aes(y = MAHALANOBIS))) +
-  geom_boxplot(fill = "orange") +
-  ggtitle("DISTANCIA DE MAHALANOBIS",
-          subtitle = "IDIVERSE, IFIDE, IDIG. Empresas TMI.") +
-  ylab("MAHALANOBIS")
-```
-
-::: {style="text-align: center;"}
-**Figura 6.5**
-:::
-
-
-En el gráfico se aprecia que existen, por encima de la caja, varios *outliers*. Para identificarlos de modo concreto, hemos de calcular los cuartiles primero y tercero de la variable MAHALANOBIS y pasar el correspondiente filtro:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
-Q1M <- quantile (seleccion$MAHALANOBIS, c(0.25))
-Q3M <- quantile (seleccion$MAHALANOBIS, c(0.75))
-
-seleccion %>%
-  filter(MAHALANOBIS > Q3M + 1.5*IQR(MAHALANOBIS) |
-           MAHALANOBIS < Q1M - 1.5*IQR(MAHALANOBIS))%>%
-  select(MAHALANOBIS, IDIVERSE, IFIDE, IDIG) 
-```
-
-Las compañías que se comportan como *outliers*, considerando conjuntamente las tres variables (a través de la distancia de Mahalanobis), son 13. La eliminación de estos casos puede realizarse fácilmente con el código:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
-# Creando nuevo df sin outliers.
-seleccion_so <- seleccion %>%
-  filter(MAHALANOBIS <= Q3M + 1.5*IQR(MAHALANOBIS) &
-           MAHALANOBIS >= Q1M - 1.5*IQR(MAHALANOBIS))  
-
-# Eliminando variable MAHALANOBIS de los df
-seleccion    <- seleccion    %>% select(-MAHALANOBIS)
-seleccion_so <- seleccion_so %>% select(-MAHALANOBIS)
-```
-
-Se ha creado un nuevo *data frame* llamado "seleccion_so” con los casos (89) que **no** son *outliers* (y que no contienen *missing values*), y se ha eliminado la variable MAHALANOBIS, puesto que su única utilidad era la de localizar y filtrar los *outliers*. Con este *data frame* “seleccion_so” es con el que se procederá al cálculo de las componentes.
+El gráfico y la tabla anteriores confirman que hay 13 empresas que se comportan como *outliers*, considerando conjuntamente las tres variables del análisis. El *data frame* "seleccion_so" contiene los 89 casos restantes (los que **no** son *outliers* y no contenían *missing values*). Con él es con el que se procederá al cálculo de las componentes.
 
 ## ![](figuras/pie-chart.svg){.hicon} Cálculo de componentes.
 
@@ -330,7 +292,7 @@ summary_df %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 6.3.** Resumen de Componentes
+**Tabla 6.4.** Resumen de Componentes
 :::
 
 
@@ -356,7 +318,7 @@ cargas %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 6.4.** Cargas de las componentes obtenidas
+**Tabla 6.5.** Cargas de las componentes obtenidas
 :::
 
 
@@ -524,7 +486,7 @@ scores_top10 %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 6.5.** Puntuaciones emporesas TMI (Top-10, sin outliers)
+**Tabla 6.6.** Puntuaciones emporesas TMI (Top-10, sin outliers)
 :::
 
 
@@ -577,7 +539,7 @@ scores_all_top10 %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 6.6.** Puntuaciones emporesas TMI (Top-10, con outliers)
+**Tabla 6.7.** Puntuaciones emporesas TMI (Top-10, con outliers)
 :::
 
 
@@ -617,7 +579,7 @@ scores2_top10 %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 6.7.** Puntuaciones emporesas TMI (Top-10, outliers en cálculo)
+**Tabla 6.8.** Puntuaciones emporesas TMI (Top-10, outliers en cálculo)
 :::
 
 
@@ -718,7 +680,7 @@ scores3_top10 %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 6.8.** Puntuaciones emporesas TMI (Top-10, Hubert)
+**Tabla 6.9.** Puntuaciones emporesas TMI (Top-10, Hubert)
 :::
 
 En la tabla se comprueba que existen leves variaciones con respecto a las clasificaciones anteriores. A destacar la inclusión en el *top-10* de *Ripley Interestellar Freight*, y la desparición de  *Kamino Movers*.
