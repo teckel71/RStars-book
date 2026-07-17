@@ -81,19 +81,35 @@ Comencemos con la primera pregunta de la AITM: **¿hay diferencias significativa
 
 Antes de proceder al *análisis de la varianza* propiamente dicho, hemos de preparar nuestros datos mediante la localización de *missing values* y *outliers*. Los *outliers*, en el ANOVA, pueden tener una gran influencia (ya que se trabaja en *términos medios*) sobre los resultados, por lo que deben ser tratados convenientemente.
 
-Para localizar los casos concretos de ***missing values***, puede recurrirse a utilizar las herramientas de manejo de *data frames* del paquete `{dplyr}`. Previamente, realizaremos una **copia** del *data frame* original, "datos", a la que llamaremos "muestra", que es con la que trabajaremos (para mantener la integridad del primer *data frame*). Con la función `vis_miss()` del paquete `{visdat}` podemos tener una visión gráfica general de los valores faltantes, en especial en el caso de la variable IRE y el factor ASTILLERO. Si hay casos faltantes en una de estas variables, los identificaremos filtrando el *data frame* con la función `filter()` de `{dplyr}`. En este ejemplo, los datos están completos, por lo que el filtro no eliminará ningún caso, pero se incluye en el código para mantener el procedimiento general:
+Para localizar los casos concretos de ***missing values***, aplicaremos la función auxiliar `explora_na()` del paquete `{MATrstars}`, que ya introdujimos en el capítulo 5. Al pasarle el *data frame* "datos" y las variables de interés para este primer estudio (IRE y ASTILLERO), la función diagnostica gráficamente los *missing values*, lista los casos afectados y, con `accion = "eliminar"`, devuelve el *data frame* filtrado. Guardamos el resultado en una **copia** llamada "muestra", con la que trabajaremos en adelante (para mantener la integridad del *data frame* original). En este ejemplo, los datos están completos, por lo que la función no eliminará ningún caso, pero se incluye en el código para mantener el procedimiento general:
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+```{r, eval=FALSE, echo=TRUE}
   # Missing values
 
   library (dplyr)
-  library(visdat)
-  vis_miss(datos)
+  muestra <- explora_na(
+    datos,
+    variables = c(IRE, ASTILLERO),
+    accion    = "eliminar",
+    titulo    = "Astilleros: valores ausentes",
+    subtitulo = "48 naves cargueras interestelares"
+  )
+```
 
-  datos %>% filter(is.na(IRE) | is.na(ASTILLERO)) %>%
-            select(IRE, ASTILLERO)
-  muestra <- datos %>%
-             filter(! is.na(IRE) & ! is.na(ASTILLERO))
+```{r include=FALSE}
+# Ejecucion silenciosa de explora_na(). Se sabe de antemano que las 48
+# naves no contienen NAs en IRE ni en ASTILLERO, por lo que la funcion
+# no emitira grafico ni tabla, solo un mensaje. Usamos include=FALSE
+# para que el preprocesador de numeracion no reserve Figura ni Tabla en
+# este chunk.
+library(dplyr)
+muestra <- explora_na(
+  datos,
+  variables = c(IRE, ASTILLERO),
+  accion    = "eliminar",
+  titulo    = "Astilleros: valores ausentes",
+  subtitulo = "48 naves cargueras interestelares"
+)
 ```
 
 Una vez tratados los casos con valores perdidos o *missing values*, **es necesario detectar la presencia de *outliers*** o casos atípicos en la muestra, que pudieran desvirtuar los resultados derivados del ANOVA. Para ello, realizaremos un ***boxplot*** o gráfico de caja. Aplicaremos, por ejemplo, el código siguiente, que utiliza la gramática del paquete `{ggplot2}`:
@@ -378,11 +394,35 @@ En el ejemplo anterior, todas las hipótesis necesarias para confiar en los resu
 
 La variable que mide la fiabilidad de cada nave es el **Índice de Incidencias Graves (IIG)**, que recoge el número de averías mayores que la nave ha registrado a lo largo de su vida operativa. La hipótesis nula del contraste afirma que el IIG medio es el mismo en los tres astilleros; la alternativa, que existe al menos una diferencia significativa.
 
-El procedimiento es el mismo del ejemplo anterior. Comenzamos por la detección de *missing values* y *outliers* en la variable IIG. No hay valores perdidos en IIG ni en ASTILLERO. En cuanto a los *outliers*, el boxplot global revela su presencia:
+El procedimiento es el mismo del ejemplo anterior. Comenzamos por la detección de *missing values* y *outliers* en la variable IIG. Aplicamos de nuevo `explora_na()`, ahora sobre las variables IIG y ASTILLERO, y guardamos el resultado en el *data frame* "muestra2". Tampoco hay valores perdidos en IIG ni en ASTILLERO. En cuanto a los *outliers*, el boxplot global revela su presencia:
+
+```{r, eval=FALSE, echo=TRUE}
+  # Missing values
+
+  muestra2 <- explora_na(
+    datos,
+    variables = c(IIG, ASTILLERO),
+    accion    = "eliminar",
+    titulo    = "Astilleros: valores ausentes en IIG",
+    subtitulo = "48 naves cargueras interestelares"
+  )
+```
+
+```{r include=FALSE}
+# Ejecucion silenciosa de explora_na(): tampoco hay NAs en IIG ni
+# ASTILLERO, la funcion solo emite mensaje. Con include=FALSE el
+# preprocesador no reserva Figura ni Tabla en este chunk.
+muestra2 <- explora_na(
+  datos,
+  variables = c(IIG, ASTILLERO),
+  accion    = "eliminar",
+  titulo    = "Astilleros: valores ausentes en IIG",
+  subtitulo = "48 naves cargueras interestelares"
+)
+```
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-  muestra2 <- datos %>%
-              filter(! is.na(IIG) & ! is.na(ASTILLERO))
+  # Outliers
 
   ggplot(data = muestra2,
          map = (aes(y = IIG))) +

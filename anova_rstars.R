@@ -36,14 +36,14 @@ library(MATrstars)
 # --- Missing values -----------------------------------------------------------
 
 library(dplyr)
-library(visdat)
-vis_miss(datos)
 
-datos %>% filter(is.na(IRE) | is.na(ASTILLERO)) %>%
-          select(IRE, ASTILLERO)
-
-muestra <- datos %>%
-           filter(!is.na(IRE) & !is.na(ASTILLERO))
+muestra <- explora_na(
+  datos,
+  variables = c(IRE, ASTILLERO),
+  accion    = "eliminar",
+  titulo    = "Astilleros: valores ausentes",
+  subtitulo = "48 naves cargueras interestelares"
+)
 
 # --- Outliers -----------------------------------------------------------------
 
@@ -180,11 +180,13 @@ pares_ire_df %>%
 
 # --- Missing values -----------------------------------------------------------
 
-datos %>% filter(is.na(IIG) | is.na(ASTILLERO)) %>%
-          select(IIG, ASTILLERO)
-
-muestra2 <- datos %>%
-            filter(!is.na(IIG) & !is.na(ASTILLERO))
+muestra2 <- explora_na(
+  datos,
+  variables = c(IIG, ASTILLERO),
+  accion    = "eliminar",
+  titulo    = "Astilleros: valores ausentes en IIG",
+  subtitulo = "48 naves cargueras interestelares"
+)
 
 # --- Outliers -----------------------------------------------------------------
 
