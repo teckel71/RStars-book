@@ -112,28 +112,32 @@ seleccion <- interestelar_25 %>%
   select(IDIVERSE, IFIDE, IDIG)
 seleccion_df_graph <- gt_plt_summary(seleccion)
 seleccion_df_graph
+```
 
-# Localizando missing values.
-seleccion %>%
-  vis_miss() +
-  labs(title = "Indicadores: Diversificación, Fidelidad, Digitalización",
-       subtitle = "Transporte de mercancías interestelar",
-       y = "Observación",
-       fill = NULL) +
-  scale_fill_manual(
-    values = c("TRUE" = "red", "FALSE" = "grey"),
-    labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
-  theme(
-    plot.title = element_text(face = "bold", size = 14))
+Para el diagnóstico y, en su caso, filtrado de los *missing values* aplicamos la función auxiliar `explora_na()` del paquete `{MATrstars}` que ya se presentó en el capítulo 5:
 
-seleccion %>% filter(is.na(IDIVERSE) |
-                       is.na(IFIDE) |
-                       is.na(IDIG)) %>%
-  select(IDIVERSE, IFIDE, IDIG)
-seleccion <- seleccion %>%
-  filter(! is.na(IDIVERSE) &
-           ! is.na(IFIDE) &
-           ! is.na(IDIG)) 
+```{r, eval=FALSE, echo=TRUE}
+# Diagnóstico y filtrado de missing values.
+seleccion <- explora_na(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "Indicadores: Diversificación, Fidelidad, Digitalización",
+  subtitulo = "Transporte de mercancías interestelar"
+)
+```
+
+```{r include=FALSE}
+# Ejecucion silenciosa de explora_na(). Se sabe de antemano que las 25
+# empresas no contienen NAs en las tres variables del analisis, por lo
+# que la funcion no emitira grafico ni tabla, solo un mensaje. Usamos
+# include=FALSE para que el preprocesador de numeracion no reserve
+# Figura ni Tabla en este chunk.
+seleccion <- explora_na(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "Indicadores: Diversificación, Fidelidad, Digitalización",
+  subtitulo = "Transporte de mercancías interestelar"
+)
 ```
 
 No se ha localizado ninguna observación con *missing values*, luego no se ha de realizar ningún tipo de tratamiento.
@@ -739,31 +743,35 @@ seleccion <- interestelar_300 %>%
   select(IDIVERSE, IFIDE, IDIG)
 seleccion_df_graph <- gt_plt_summary(seleccion)
 seleccion_df_graph
-
-# Localizando missing values.
-seleccion %>%
-  vis_miss() +
-  labs(title = "Indicadores: Diversificación, Fidelidad, Digitalización",
-       subtitle = "Transporte de mercancías interestelar",
-       y = "Observación",
-       fill = NULL) +
-  scale_fill_manual(
-    values = c("TRUE" = "red", "FALSE" = "grey"),
-    labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
-  theme(
-    plot.title = element_text(face = "bold", size = 14))
-
-seleccion %>% filter(is.na(IDIVERSE) |
-                       is.na(IFIDE) |
-                       is.na(IDIG)) %>%
-  select(IDIVERSE, IFIDE, IDIG)
-seleccion <- seleccion %>%
-  filter(! is.na(IDIVERSE) &
-           ! is.na(IFIDE) &
-           ! is.na(IDIG)) 
 ```
 
-Aunque se ha incluido el código para identificar y eliminar los casos con ***missing values***, el gráfico generado con la función `vis_miss()` ya informó de que no había ningún dato ausente en las tres variables de interés, almacenadas en el *data frame* "seleccion", luego se siguen manteniendo los 300 casos.
+Para el diagnóstico y, en su caso, filtrado de los *missing values*, aplicamos de nuevo la función auxiliar `explora_na()` del paquete `{MATrstars}`:
+
+```{r, eval=FALSE, echo=TRUE}
+# Diagnóstico y filtrado de missing values.
+seleccion <- explora_na(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "Indicadores: Diversificación, Fidelidad, Digitalización",
+  subtitulo = "Transporte de mercancías interestelar"
+)
+```
+
+```{r include=FALSE}
+# Ejecucion silenciosa de explora_na(). Se sabe de antemano que las 300
+# empresas no contienen NAs en las tres variables del analisis, por lo
+# que la funcion no emitira grafico ni tabla, solo un mensaje. Usamos
+# include=FALSE para que el preprocesador de numeracion no reserve
+# Figura ni Tabla en este chunk.
+seleccion <- explora_na(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "Indicadores: Diversificación, Fidelidad, Digitalización",
+  subtitulo = "Transporte de mercancías interestelar"
+)
+```
+
+Aunque se ha incluido el código para identificar y eliminar los casos con ***missing values***, en las 300 empresas no hay ningún dato ausente en las tres variables de interés, almacenadas en el *data frame* "seleccion", luego se siguen manteniendo los 300 casos.
 
 Para la detección de ***outliers***, se ha utilizado también el mismo código que en el análisis clúster jerárquico: obtención de las distancias de *Mahalanobis*, y aplicación de diagrama de caja o *boxplot*:
 
@@ -1319,27 +1327,13 @@ seleccion <- interestelar_300 %>%
 seleccion_df_graph <- gt_plt_summary(seleccion)
 seleccion_df_graph
 
-# Localizando missing values.
-seleccion %>%
-  vis_miss() +
-  labs(title = "Indicadores: Diversificación, Fidelidad, Digitalización",
-       subtitle = "Transporte de mercancías interestelar",
-       y = "Observación",
-       fill = NULL) +
-  scale_fill_manual(
-    values = c("TRUE" = "red", "FALSE" = "grey"),
-    labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
-  theme(
-    plot.title = element_text(face = "bold", size = 14))
-
-seleccion %>% filter(is.na(IDIVERSE) |
-                       is.na(IFIDE) |
-                       is.na(IDIG)) %>%
-  select(IDIVERSE, IFIDE, IDIG)
-seleccion <- seleccion %>%
-  filter(! is.na(IDIVERSE) &
-           ! is.na(IFIDE) &
-           ! is.na(IDIG)) 
+# Diagnóstico y filtrado de missing values con explora_na().
+seleccion <- explora_na(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "Indicadores: Diversificación, Fidelidad, Digitalización",
+  subtitulo = "Transporte de mercancías interestelar"
+)
 
 # Identificando outliers con distancia de Mahalanobis.
 seleccion <- seleccion %>%
@@ -1365,9 +1359,9 @@ seleccion %>%
 seleccion <- seleccion %>% select(-MAHALANOBIS)
 ```
 
-Aunque el *script* incluye el código para detectar y eliminar posibles *missing values*, el gráfico generado por `vis_miss()` confirma que no existen datos ausentes en las tres variables de interés. Por tanto, el *data frame* "seleccion" mantiene los 300 casos originales:
+Aunque el *script* incluye la llamada a `explora_na()` para detectar y eliminar posibles *missing values*, la función ha verificado que no existen datos ausentes en las tres variables de interés (por eso no ha generado gráfico ni tabla). Por tanto, el *data frame* "seleccion" mantiene los 300 casos originales:
 
-```{r, eval=TRUE, echo=FALSE, results='hide', fig.show='hide', message=FALSE, warning=FALSE}
+```{r include=FALSE}
 ### CLUSTER por algoritmo DBScan empresas TMI. ###
 
 # Limpiando el Global Environment
@@ -1384,8 +1378,7 @@ library (knitr)
 library (kableExtra)
 library (patchwork)
 
-# Paquete MATrstars: funciones auxiliares del libro R-Stars.
-# Si no está instalado, se instala desde GitHub (solo la primera vez).
+# Paquete MATrstars
 if (!requireNamespace("MATrstars", quietly = TRUE)) {
   if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
   remotes::install_github("teckel71/MATrstars")
@@ -1403,36 +1396,16 @@ interestelar_300 <- data.frame(interestelar_300, row.names = 1)
 # Seleccionando variables metricas para el analisis.
 seleccion <- interestelar_300 %>%
   select(IDIVERSE, IFIDE, IDIG)
-seleccion_df_graph <- gt_plt_summary(seleccion)
-seleccion_df_graph
-```
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-# Localizando missing values.
-seleccion %>%
-  vis_miss() +
-  labs(title = "Indicadores: Diversificación, Fidelidad, Digitalización",
-       subtitle = "Transporte de mercancías interestelar",
-       y = "Observación",
-       fill = NULL) +
-  scale_fill_manual(
-    values = c("TRUE" = "red", "FALSE" = "grey"),
-    labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
-  theme(
-    plot.title = element_text(face = "bold", size = 14))
-```
-
-En la detección de *outliers*, se calcularon las *distancias de Mahalanobis* y se representaron mediante un *boxplot*. El gráfico evidenció la presencia de casos atípicos, que fueron identificados mediante el filtro habitual (26 observaciones):
-
-```{r, eval=TRUE, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
-seleccion %>% filter(is.na(IDIVERSE) |
-                       is.na(IFIDE) |
-                       is.na(IDIG)) %>%
-  select(IDIVERSE, IFIDE, IDIG)
-seleccion <- seleccion %>%
-  filter(! is.na(IDIVERSE) &
-           ! is.na(IFIDE) &
-           ! is.na(IDIG)) 
+# Ejecucion silenciosa de explora_na(): en 300 empresas no hay NAs, la
+# funcion solo emite un mensaje. Con include=FALSE el preprocesador no
+# reserva Figura ni Tabla para este chunk.
+seleccion <- explora_na(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "Indicadores: Diversificación, Fidelidad, Digitalización",
+  subtitulo = "Transporte de mercancías interestelar"
+)
 
 # Identificando outliers con distancia de Mahalanobis.
 seleccion <- seleccion %>%
@@ -1440,6 +1413,8 @@ seleccion <- seleccion %>%
                                    center = colMeans(.),
                                    cov    = cov(.)))
 ```
+
+En la detección de *outliers*, se calcularon las *distancias de Mahalanobis* y se representaron mediante un *boxplot*. El gráfico evidenció la presencia de casos atípicos, que fueron identificados mediante el filtro habitual (26 observaciones):
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ggplot(data = seleccion, map = (aes(y = MAHALANOBIS))) +

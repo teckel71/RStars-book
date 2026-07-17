@@ -268,6 +268,7 @@ procesar_rmd <- function(ruta_entrada,
   es_chunk_inicio <- function(linea) grepl(re_chunk_inicio, linea, perl = TRUE)
   es_chunk_fin    <- function(linea) grepl(re_chunk_fin,    linea, perl = TRUE)
   es_eval_false   <- function(h) grepl("eval\\s*=\\s*F(ALSE)?\\b", h, perl = TRUE)
+  es_include_false <- function(h) grepl("include\\s*=\\s*F(ALSE)?\\b", h, perl = TRUE)
   es_titular      <- function(l) grepl(re_heading, l, perl = TRUE)
 
   # -------------------------------------------------------------------
@@ -1288,16 +1289,22 @@ procesar_rmd <- function(ruta_entrada,
         }
 
         # ¿El chunk tiene llamadas side-effect (explora_na, etc.)?
-        # Si es asi, se procesa distinto: se emite un chunk previo
-        # oculto (`include=FALSE`) con `options(matrstars.<tipo>_num =
-        # "X.Y", ...)` y a continuacion el chunk original tal cual.
-        # NO se emiten etiquetas al final del chunk: la propia funcion
-        # las emitira en su lugar exacto (leyendo las opciones).
-        # El motivo de usar un chunk previo oculto y no inyectar la
-        # linea options() dentro del chunk original es que el chunk
-        # original suele tener `echo=TRUE`, y la linea options() se
-        # mostraria al lector como codigo fuente.
-        tiene_sideeffect <- !skip && length(info$sideeffect_seq) > 0L
+        # Si es asi, se procesa distinto: se inyecta al inicio del
+        # chunk una linea `options(matrstars.<tipo>_num = "X.Y", ...)`
+        # con los numeros que le corresponden a cada elemento, y NO se
+        # emiten etiquetas al final del chunk (la propia funcion las
+        # emitira en su lugar exacto).
+        #
+        # Excepciones (NO reservar side-effect):
+        #  - Chunks con `eval=FALSE` (skip): no se ejecutan.
+        #  - Chunks con `include=FALSE`: se ejecutan pero nada de su
+        #    output aparece en el HTML. Util cuando el autor sabe de
+        #    antemano que la funcion no va a emitir grafico ni tabla
+        #    (por ejemplo, cuando ya sabe que el df de entrada no tiene
+        #    NAs). Asi la numeracion del capitulo no se desplaza.
+        include_false <- es_include_false(chunk_header)
+        tiene_sideeffect <- !skip && !include_false &&
+                            length(info$sideeffect_seq) > 0L
 
         if (tiene_sideeffect) {
           # Calcular los numeros X.Y por tipo, en el orden en que
@@ -1335,16 +1342,9 @@ procesar_rmd <- function(ruta_entrada,
             paste(opciones_pairs, collapse = ", "),
             ")"
           )
-
-          # 1) Chunk previo OCULTO con options()
-          push("```{r include=FALSE}")
-          push(opciones_linea)
-          push("```")
-          push("")  # linea en blanco de separacion
-
-          # 2) Chunk original tal cual (con captions limpiados)
           chunk_limpio <- quitar_todos_captions(chunk_buffer)
           push(chunk_header)
+          push(opciones_linea)
           push(chunk_limpio)
           push(linea)  # cierre del chunk
 

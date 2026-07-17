@@ -36,27 +36,13 @@ seleccion <- interestelar_25 %>%
 seleccion_df_graph <- gt_plt_summary(seleccion)
 seleccion_df_graph
 
-# Localizando missing values.
-seleccion %>%
-  vis_miss() +
-  labs(title = "Indicadores: Diversificación, Fidelidad, Digitalización",
-       subtitle = "Transporte de mercancías interestelar",
-       y = "Observación",
-       fill = NULL) +
-  scale_fill_manual(
-    values = c("TRUE" = "red", "FALSE" = "grey"),
-    labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
-  theme(
-    plot.title = element_text(face = "bold", size = 14))
-
-seleccion %>% filter(is.na(IDIVERSE) |
-                       is.na(IFIDE) |
-                       is.na(IDIG)) %>%
-  select(IDIVERSE, IFIDE, IDIG)
-seleccion <- seleccion %>%
-  filter(! is.na(IDIVERSE) &
-           ! is.na(IFIDE) &
-           ! is.na(IDIG)) 
+# Diagnóstico y filtrado de missing values con explora_na().
+seleccion <- explora_na(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "Indicadores: Diversificación, Fidelidad, Digitalización",
+  subtitulo = "Transporte de mercancías interestelar"
+)
 
 # Identificando outliers con distancia de Mahalanobis.
 seleccion <- seleccion %>%
