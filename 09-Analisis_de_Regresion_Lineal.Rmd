@@ -212,39 +212,32 @@ seleccion <- interestelar_300 %>%
          EFLO)
 seleccion_df_graph <- gt_plt_summary(seleccion)
 seleccion_df_graph
+```
 
-# Localizando missing values.
-seleccion %>%
-  vis_miss() +
-  labs(title = "Modelo de regresión: Beneficio por mil años luz recorridos (BMAL).",
-       subtitle = "Transporte de mercancías interestelar",
-       y = "Observación",
-       fill = NULL) +
-  scale_fill_manual(
-    values = c("TRUE" = "red", "FALSE" = "grey"),
-    labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
-  theme(
-    plot.title = element_text(face = "bold", size = 14))
+Para el diagnóstico y, en su caso, filtrado de los *missing values*, aplicamos la función auxiliar `explora_na()` del paquete `{MATrstars}` que ya se presentó en el capítulo 5. Como el *data frame* "seleccion" contiene únicamente las seis variables del análisis, no es necesario especificar el argumento `variables`:
 
-seleccion %>% filter(is.na(BMAL) |
-                     is.na(DIST) |
-                     is.na(IDIVERSE) |
-                     is.na(ACTIVO) |
-                     is.na(LIQUIDEZ) |
-                     is.na(EFLO))%>%
-               select(BMAL,
-                      DIST,
-                      IDIVERSE,
-                      ACTIVO,
-                      LIQUIDEZ,
-                      EFLO)
-seleccion <- seleccion %>%
-  filter(! is.na(BMAL) &
-         ! is.na(DIST) &
-         ! is.na(IDIVERSE) &
-         ! is.na(ACTIVO) &
-         ! is.na(LIQUIDEZ) &
-         ! is.na(EFLO)) 
+```{r, eval=FALSE, echo=TRUE}
+# Diagnóstico y filtrado de missing values.
+seleccion <- explora_na(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "Modelo de regresión: Beneficio por mil años luz recorridos (BMAL).",
+  subtitulo = "Transporte de mercancías interestelar"
+)
+```
+
+```{r include=FALSE}
+# Ejecucion silenciosa de explora_na(). Se sabe de antemano que las 300
+# empresas no contienen NAs en las seis variables del analisis, por lo
+# que la funcion no emitira grafico ni tabla, solo un mensaje. Usamos
+# include=FALSE para que el preprocesador de numeracion no reserve
+# Figura ni Tabla en este chunk.
+seleccion <- explora_na(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "Modelo de regresión: Beneficio por mil años luz recorridos (BMAL).",
+  subtitulo = "Transporte de mercancías interestelar"
+)
 ```
 
 No se ha localizado ninguna observación con *missing values*, luego no se ha de realizar ningún tipo de tratamiento.

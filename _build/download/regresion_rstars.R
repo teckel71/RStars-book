@@ -42,38 +42,13 @@ seleccion <- interestelar_300 %>%
 seleccion_df_graph <- gt_plt_summary(seleccion)
 seleccion_df_graph
 
-# Localizando missing values.
-seleccion %>%
-  vis_miss() +
-  labs(title = "Modelo de regresión: Beneficio por mil años luz recorridos (BMAL).",
-       subtitle = "Transporte de mercancías interestelar",
-       y = "Observación",
-       fill = NULL) +
-  scale_fill_manual(
-    values = c("TRUE" = "red", "FALSE" = "grey"),
-    labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
-  theme(
-    plot.title = element_text(face = "bold", size = 14))
-
-seleccion %>% filter(is.na(BMAL) |
-                     is.na(DIST) |
-                     is.na(IDIVERSE) |
-                     is.na(ACTIVO) |
-                     is.na(LIQUIDEZ) |
-                     is.na(EFLO))%>%
-               select(BMAL,
-                      DIST,
-                      IDIVERSE,
-                      ACTIVO,
-                      LIQUIDEZ,
-                      EFLO)
-seleccion <- seleccion %>%
-  filter(! is.na(BMAL) &
-         ! is.na(DIST) &
-         ! is.na(IDIVERSE) &
-         ! is.na(ACTIVO) &
-         ! is.na(LIQUIDEZ) &
-         ! is.na(EFLO)) 
+# Diagnóstico y filtrado de missing values con explora_na().
+seleccion <- explora_na(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "Modelo de regresión: Beneficio por mil años luz recorridos (BMAL).",
+  subtitulo = "Transporte de mercancías interestelar"
+)
 
 # Identificando outliers con distancia de Mahalanobis.
 seleccion <- seleccion %>%

@@ -43,30 +43,18 @@ library(MATrstars)
     seleccion_df_graph <- gt_plt_summary(seleccion)
     seleccion_df_graph
 
-  # Localizando (posibles) missing values
+  # Diagnóstico y filtrado de missing values con explora_na().
 
-    seleccion %>%
-      vis_miss() +
-      labs(title = "Análisis de correspondencias.",
-           subtitle = "Transporte de mercancías interestelar",
-           y = "Observación",
-           fill = NULL) +
-      scale_fill_manual(
-        values = c("TRUE" = "red", "FALSE" = "grey"),
-        labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
-      theme(
-        plot.title = element_text(face = "bold", size = 14))
+    seleccion <- explora_na(
+      seleccion,
+      accion    = "eliminar",
+      titulo    = "Análisis de correspondencias.",
+      subtitulo = "Transporte de mercancías interestelar"
+    )
 
-    seleccion %>% filter(is.na(GALAXIA) |
-                         is.na(FJUR)) %>%
-                  dplyr::select(GALAXIA,
-                                FJUR)
-
-  # Eliminando (si procede) filas con NA, y renombrando los niveles de GALAXIA
+  # Renombrando los niveles de GALAXIA (nombres originales muy extensos).
 
     seleccion <- seleccion %>%
-      filter(!is.na(GALAXIA) &
-             !is.na(FJUR)) %>%
       mutate(GALAXIA = case_match(GALAXIA,
         "Gran Nube de Magallanes"    ~ "GN Magallanes",
         "Pequeña Nube de Magallanes" ~ "PN Magallanes",

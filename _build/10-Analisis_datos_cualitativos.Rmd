@@ -172,37 +172,44 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:
 **Tabla 10.1**
 :::
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-    # Localizando missing values.
-    seleccion %>%
-      vis_miss() +
-      labs(title = "Tablas de contingencia.",
-           subtitle = "Transporte de mercancías interestelar",
-           y = "Observación",
-           fill = NULL) +
-      scale_fill_manual(
-        values = c("TRUE" = "red", "FALSE" = "grey"),
-        labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
-      theme(
-        plot.title = element_text(face = "bold", size = 14))
+
+Para el diagnóstico y, en su caso, filtrado de los *missing values*, aplicamos la función auxiliar `explora_na()` del paquete `{MATrstars}` que ya se presentó en el capítulo 5. Como el *data frame* "seleccion" contiene únicamente las tres variables del análisis, no es necesario especificar el argumento `variables`. A continuación, con `mutate()` y `case_match()` se recodifican los niveles de GALAXIA:
+
+```{r, eval=FALSE, echo=TRUE}
+    # Diagnóstico y filtrado de missing values.
+    seleccion <- explora_na(
+      seleccion,
+      accion    = "eliminar",
+      titulo    = "Tablas de contingencia.",
+      subtitulo = "Transporte de mercancías interestelar"
+    )
+
+    # Renombrando los niveles de GALAXIA.
+    seleccion <- seleccion %>%
+      mutate(GALAXIA = case_match(GALAXIA,
+        "Gran Nube de Magallanes"  ~ "GN Magallanes",
+        "Pequeña Nube de Magallanes" ~ "PN Magallanes",
+        "Galaxia de Andrómeda"     ~ "Andrómeda",
+        "Galaxia del Triángulo"    ~ "Triángulo",
+        "Vía Láctea"               ~ "Vía Láctea",
+        .default = GALAXIA))
 ```
 
-::: {style="text-align: center;"}
-**Figura 10.2**
-:::
+```{r include=FALSE}
+# Ejecucion silenciosa de explora_na(). Se sabe de antemano que las 300
+# empresas no contienen NAs en las tres variables, por lo que la funcion
+# no emitira grafico ni tabla, solo un mensaje. Usamos include=FALSE
+# para que el preprocesador de numeracion no reserve Figura ni Tabla en
+# este chunk.
+seleccion <- explora_na(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "Tablas de contingencia.",
+  subtitulo = "Transporte de mercancías interestelar"
+)
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-    seleccion %>% filter(is.na(GALAXIA) |
-                           is.na(FJUR) |
-                           is.na(EFLO))%>%
-      select(GALAXIA,
-             FJUR,
-             EFLO)
-
+# Recodificacion real de GALAXIA (esta si necesitamos ejecutarla).
 seleccion <- seleccion %>%
-  filter(!is.na(GALAXIA) &
-         !is.na(FJUR) &
-         !is.na(EFLO)) %>%
   mutate(GALAXIA = case_match(GALAXIA,
     "Gran Nube de Magallanes"  ~ "GN Magallanes",
     "Pequeña Nube de Magallanes" ~ "PN Magallanes",
@@ -368,7 +375,7 @@ En nuestro caso, el resultado es:
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.3**
+**Figura 10.2**
 :::
 
 
@@ -423,7 +430,7 @@ variables:
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.4**
+**Figura 10.3**
 :::
 
 
@@ -553,7 +560,7 @@ assoc(tab.GA.FJ,
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.5**
+**Figura 10.4**
 :::
 
 
@@ -660,7 +667,7 @@ la flota no depende de la forma jurídica, anticipando un escenario de
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.6**
+**Figura 10.5**
 :::
 
 
@@ -697,7 +704,7 @@ anticipando un escenario de independencia entre ambas variables.
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.7**
+**Figura 10.6**
 :::
 
 
@@ -754,7 +761,7 @@ proporción que otros.
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.8**
+**Figura 10.7**
 :::
 
 
@@ -1043,58 +1050,34 @@ la estimación de los modelos.
 
 A continuación, se verifica la calidad de los datos seleccionados y se
 preparan las variables categóricas para la construcción de la tabla
-multidimensional. En primer lugar, el bloque comienza con una
-**inspección visual de valores perdidos** mediante `vis_miss()`, que
-genera un gráfico claro y directo sobre la presencia o ausencia de
-observaciones en cada variable. Dado que los modelos log-lineales
-requieren tablas completas, esta comprobación es esencial para
-asegurarse de que ninguna celda quedará afectada por *missing values*.
-Acto seguido, se incluye un filtro que permite **localizar
-explícitamente las filas con NA**, lo que facilita revisar posibles
-problemas en los datos originales antes de proceder.
+multidimensional. En primer lugar, se aplica la función auxiliar
+`explora_na()` del paquete `{MATrstars}` para el **diagnóstico y, en su
+caso, filtrado de los valores perdidos**. Dado que los modelos
+log-lineales requieren tablas completas, esta comprobación es esencial
+para asegurarse de que ninguna celda quedará afectada por *missing
+values*.
 
-Una vez identificados los valores ausentes, se depura el *data frame*
-conservando únicamente las filas completas. En el mismo paso, se
-**recodifican los nombres de las categorías de GALAXIA** para
-abreviarlos y facilitar tanto la visualización de las tablas como la
-interpretación de resultados en gráficos y salidas de modelos.
-Finalmente, se convierten todas las variables a **formato factor**,
-asegurando que R trate correctamente a cada una como un atributo
-categórico. Este flujo prepara un conjunto de datos consistente,
-depurado y listo para construir la tabla de contingencia tridimensional
-y avanzar hacia el ajuste de los modelos log-lineales.
+Una vez depurado el *data frame*, se **recodifican los nombres de las
+categorías de GALAXIA** para abreviarlos y facilitar tanto la
+visualización de las tablas como la interpretación de resultados en
+gráficos y salidas de modelos. Finalmente, se convierten todas las
+variables a **formato factor**, asegurando que R trate correctamente a
+cada una como un atributo categórico. Este flujo prepara un conjunto de
+datos consistente, depurado y listo para construir la tabla de
+contingencia tridimensional y avanzar hacia el ajuste de los modelos
+log-lineales.
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-# Localizando missing values.
-seleccion %>%
-  vis_miss() +
-  labs(title = "Tablas de contingencia.",
-       subtitle = "Transporte de mercancías interestelar",
-       y = "Observación",
-       fill = NULL) +
-  scale_fill_manual(
-    values = c("TRUE" = "red", "FALSE" = "grey"),
-    labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
-  theme(
-    plot.title = element_text(face = "bold", size = 14))
-```
+```{r, eval=FALSE, echo=TRUE}
+# Diagnóstico y filtrado de missing values.
+seleccion <- explora_na(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "Modelos log-lineales.",
+  subtitulo = "Transporte de mercancías interestelar"
+)
 
-::: {style="text-align: center;"}
-**Figura 10.9**
-:::
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-seleccion %>% filter(is.na(GALAXIA) |
-                       is.na(FJUR) |
-                       is.na(EFLO))%>%
-              dplyr::select(GALAXIA,
-                            FJUR,
-                            EFLO)
-
+# Renombrando los niveles de GALAXIA.
 seleccion <- seleccion %>%
-  filter(!is.na(GALAXIA) &
-         !is.na(FJUR) &
-         !is.na(EFLO)) %>%
   mutate(GALAXIA = case_match(GALAXIA,
     "Gran Nube de Magallanes"  ~ "GN Magallanes",
     "Pequeña Nube de Magallanes" ~ "PN Magallanes",
@@ -1104,6 +1087,30 @@ seleccion <- seleccion %>%
     .default = GALAXIA))
 
 # Pasar variables categóricas a factores
+seleccion <- seleccion %>% mutate(across(everything(), as.factor))
+```
+
+```{r include=FALSE}
+# Ejecucion silenciosa de explora_na(). Se sabe de antemano que las 300
+# empresas no contienen NAs. Usamos include=FALSE para que el
+# preprocesador no reserve Figura ni Tabla.
+seleccion <- explora_na(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "Modelos log-lineales.",
+  subtitulo = "Transporte de mercancías interestelar"
+)
+
+# Recodificacion y conversion a factores (esta si necesitamos ejecutarla).
+seleccion <- seleccion %>%
+  mutate(GALAXIA = case_match(GALAXIA,
+    "Gran Nube de Magallanes"  ~ "GN Magallanes",
+    "Pequeña Nube de Magallanes" ~ "PN Magallanes",
+    "Galaxia de Andrómeda"     ~ "Andrómeda",
+    "Galaxia del Triángulo"    ~ "Triángulo",
+    "Vía Láctea"               ~ "Vía Láctea",
+    .default = GALAXIA))
+
 seleccion <- seleccion %>% mutate(across(everything(), as.factor))
 ```
 
@@ -1225,7 +1232,7 @@ mosaic(tab0,
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.10**
+**Figura 10.8**
 :::
 
 
@@ -1322,7 +1329,7 @@ solucion_modelo_indep <- generar_solucion(modelo_indep)
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.11**
+**Figura 10.9**
 :::
 
 
@@ -1605,7 +1612,7 @@ solucion_modelo_sat <- generar_solucion(modelo_sat)
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.12**
+**Figura 10.10**
 :::
 
 
@@ -1746,7 +1753,7 @@ obtenido es:
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.13**
+**Figura 10.11**
 :::
 
 
@@ -2029,37 +2036,19 @@ las dos variables categóricas necesarias para el análisis de
 correspondencias simple: **GALAXIA** (5 categorías) y **FJUR** (3
 categorías). Ambas aparecen completas, sin valores perdidos:
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-  # Localizando (posibles) missing values
+```{r, eval=FALSE, echo=TRUE}
+  # Diagnóstico y filtrado de missing values.
 
-    seleccion %>%
-      vis_miss() +
-      labs(title = "Análisis de correspondencias.",
-           subtitle = "Transporte de mercancías interestelar",
-           y = "Observación",
-           fill = NULL) +
-      scale_fill_manual(
-        values = c("TRUE" = "red", "FALSE" = "grey"),
-        labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
-      theme(
-        plot.title = element_text(face = "bold", size = 14))
-```
+    seleccion <- explora_na(
+      seleccion,
+      accion    = "eliminar",
+      titulo    = "Análisis de correspondencias.",
+      subtitulo = "Transporte de mercancías interestelar"
+    )
 
-::: {style="text-align: center;"}
-**Figura 10.14**
-:::
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-    seleccion %>% filter(is.na(GALAXIA) |
-                         is.na(FJUR)) %>%
-                  dplyr::select(GALAXIA,
-                                FJUR)
-
-  # Eliminando (si procede) filas con NA, y renombrando los niveles de GALAXIA
+  # Renombrando los niveles de GALAXIA.
 
     seleccion <- seleccion %>%
-      filter(!is.na(GALAXIA) &
-             !is.na(FJUR)) %>%
       mutate(GALAXIA = case_match(GALAXIA,
         "Gran Nube de Magallanes"    ~ "GN Magallanes",
         "Pequeña Nube de Magallanes" ~ "PN Magallanes",
@@ -2067,6 +2056,27 @@ categorías). Ambas aparecen completas, sin valores perdidos:
         "Galaxia del Triángulo"      ~ "Triángulo",
         "Vía Láctea"                 ~ "Vía Láctea",
         .default = GALAXIA))
+```
+
+```{r include=FALSE}
+# Ejecucion silenciosa de explora_na(). No hay NAs. Usamos include=FALSE
+# para que el preprocesador no reserve Figura ni Tabla.
+seleccion <- explora_na(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "Análisis de correspondencias.",
+  subtitulo = "Transporte de mercancías interestelar"
+)
+
+# Recodificacion real de GALAXIA (esta si necesitamos ejecutarla).
+seleccion <- seleccion %>%
+  mutate(GALAXIA = case_match(GALAXIA,
+    "Gran Nube de Magallanes"    ~ "GN Magallanes",
+    "Pequeña Nube de Magallanes" ~ "PN Magallanes",
+    "Galaxia de Andrómeda"       ~ "Andrómeda",
+    "Galaxia del Triángulo"      ~ "Triángulo",
+    "Vía Láctea"                 ~ "Vía Láctea",
+    .default = GALAXIA))
 ```
 
 Confirmado que no hay valores perdidos y renombradas las categorías de
@@ -2338,7 +2348,7 @@ recurrirse a la función `fviz_screeplot()` del paquete `{factoextra}`:
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.15**
+**Figura 10.12**
 :::
 
 
@@ -2400,7 +2410,7 @@ conjuntamente con `{patchwork}`:
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.16**
+**Figura 10.13**
 :::
 
 
@@ -2458,7 +2468,7 @@ de forma coherente:
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.17**
+**Figura 10.14**
 :::
 
 
@@ -2509,7 +2519,7 @@ contribuciones y el biplot, puede recurrirse nuevamente al paquete
 ```
 
 ::: {style="text-align: center;"}
-**Figura 10.18**
+**Figura 10.15**
 :::
 
 

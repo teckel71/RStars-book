@@ -50,30 +50,16 @@ custom_shading <- function(residuals, cutoff = 1.96) {
     seleccion_df_graph <- gt_plt_summary(seleccion)
     seleccion_df_graph
     
-    # Localizando missing values.
-    seleccion %>%
-      vis_miss() +
-      labs(title = "Tablas de contingencia.",
-           subtitle = "Transporte de mercancías interestelar",
-           y = "Observación",
-           fill = NULL) +
-      scale_fill_manual(
-        values = c("TRUE" = "red", "FALSE" = "grey"),
-        labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
-      theme(
-        plot.title = element_text(face = "bold", size = 14))
-    
-    seleccion %>% filter(is.na(GALAXIA) |
-                           is.na(FJUR) |
-                           is.na(EFLO))%>%
-      select(GALAXIA,
-             FJUR,
-             EFLO)
-    
+    # Diagnóstico y filtrado de missing values con explora_na().
+    seleccion <- explora_na(
+      seleccion,
+      accion    = "eliminar",
+      titulo    = "Tablas de contingencia.",
+      subtitulo = "Transporte de mercancías interestelar"
+    )
+
+    # Renombrando los niveles de GALAXIA (nombres originales muy extensos).
     seleccion <- seleccion %>%
-      filter(!is.na(GALAXIA) &
-               !is.na(FJUR) &
-               !is.na(EFLO)) %>%
       mutate(GALAXIA = case_match(GALAXIA,
                                   "Gran Nube de Magallanes"  ~ "GN Magallanes",
                                   "Pequeña Nube de Magallanes" ~ "PN Magallanes",
