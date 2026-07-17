@@ -154,51 +154,40 @@ seleccion_df_graph
 :::
 
 
+```{r include=FALSE}
+# Carga silenciosa del paquete {MATrstars} (funciones auxiliares del libro
+# R-Stars, presentado en el capitulo 5). La carga se hace en un chunk oculto
+# para no romper la exposicion pedagogica del script visible, que ya no
+# necesita presentarlo. En el .R equivalente, la carga se hace al principio
+# junto al resto de librerias.
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
+}
+library(MATrstars)
+```
+
 Básicamente, en el código anterior se han almacenado los datos de la hoja de cálculo en el *data frame* "interestelar_100". Luego, se ha creado un nuevo *data frame* más reducido con las únicas variables del análisis que vamos a realizar (IDIVERSE, IFIDE e IDIG), al que hemos llamado "seleccion". Estas tres variables han sido exploradas a traves de una tabla gráfica a partir de la función `gt_plt_summary()` del paquete `{gtExtras}`.
 
-El siguiente consistirá en localizar los posibles ***missing values***, ya que para obtener componentes principales es necesario que todos los casos posean dato en todas las variables del análisis. Para tener una idea general, se puede utilizar la función `vis_miss()` del paquete `{visdat}`, que localizará gráficamente los *missing values* de las diferentes variables, y calculará el porcentaje de casos que supone, con respecto al total de observaciones:
+El siguiente paso consistirá en localizar los posibles ***missing values***, ya que para obtener componentes principales es necesario que todos los casos posean dato en todas las variables del análisis. Ante la existencia de *missing values*, se puede actuar de varios modos. Por ejemplo, **se puede intentar obtener el conjunto de valores que no están disponibles por otro canal de información,** o recurrir **a alguna estimación**. En caso de que esto sea difícil, se puede optar, simplemente, por **eliminar** estos casos, en especial cuando representan un porcentaje muy reducido respecto al total de observaciones. En nuestro ejemplo supondremos que hemos optado por esta última vía.
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
-# Localizando missing values.
-seleccion %>%
-  vis_miss() +
-  labs(title = "Indicadores: Diversificación, Fidelidad, Digitalización",
-       subtitle = "Transporte de mercancías interestelar",
-       y = "Observación",
-       fill = NULL) +
-  scale_fill_manual(
-    values = c("TRUE" = "red", "FALSE" = "grey"),
-    labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
-  theme(
-    plot.title = element_text(face = "bold", size = 14))
+Para diagnosticarlos y eliminarlos en un solo paso, recurrimos a la función auxiliar `explora_na()` del paquete `{MATrstars}`, presentada en el capítulo anterior. Aplicada al *data frame* "seleccion" —que contiene únicamente las tres variables del análisis— y con `accion = "eliminar"`, la función localiza gráficamente los *missing values*, muestra la tabla de casos afectados y devuelve el *data frame* filtrado. Como en "seleccion" solo hay ya las variables del análisis, no es necesario especificar el argumento `variables`:
+
+```{r include=FALSE}
+options(matrstars.figura_num = "6.4", matrstars.tabla_num = "6.2")
 ```
 
-::: {style="text-align: center;"}
-**Figura 6.4**
-:::
-
-
-Del gráfico anterior se desprende que existen 2 *missing values* repartidos en 2 de las 3 variables del estudio. Para localizarlos, podemos filtrar nuestro *data frame* con las herramientas de `{dplyr}`:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
-seleccion %>% filter(is.na(IDIVERSE) |
-                     is.na(IFIDE) |
-                     is.na(IDIG)) %>%
-              select(IDIVERSE, IFIDE, IDIG)
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
+# Diagnóstico y filtrado de missing values.
+seleccion <- explora_na(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "Indicadores: Diversificación, Fidelidad, Digitalización",
+  subtitulo = "Transporte de mercancías interestelar"
+)
 ```
 
-Los casos con datos faltantes son las empresas *Ezra Bridger Haulage* y *Alderaan Freight*.
-
-Ante la existencia de *missing values*, se puede actuar de varios modos. Por ejemplo, **se puede intentar obtener el conjunto de valores que no están disponibles por otro canal de información,** o recurrir **a alguna estimación**. En caso de que esto sea difícil, se puede optar, simplemente, por **eliminar** estos casos, en especial cuando representan un porcentaje muy reducido respecto al total de observaciones. En nuestro ejemplo, supondremos que hemos optado por esta última vía, y eliminaremos estos casos con el código:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
-seleccion <- seleccion %>%
-             filter(! is.na(IDIVERSE) &
-                    ! is.na(IFIDE) &
-                    ! is.na(IDIG))
-```
-
-Verificamos en el *Global Environment* que el *data frame* “seleccion” ha pasado a tener 102 casos.
+Del gráfico y de la tabla anteriores se desprende que existen 2 *missing values* repartidos en 2 de las 3 variables del estudio, correspondientes a las empresas *Ezra Bridger Haulage* y *Alderaan Freight*, que quedan eliminadas. Podemos verificar en el *Global Environment* que el *data frame* "seleccion" ha pasado a tener 102 casos.
 
 Por otro lado, la técnica de componentes principales **es muy sensible a la existencia de *outliers***. En concreto, las observaciones atípicas pueden afectar a los resultados a través de tres vías:
 
@@ -344,7 +333,7 @@ summary_df %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 6.2.** Resumen de Componentes
+**Tabla 6.3.** Resumen de Componentes
 :::
 
 
@@ -370,7 +359,7 @@ cargas %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 6.3.** Cargas de las componentes obtenidas
+**Tabla 6.4.** Cargas de las componentes obtenidas
 :::
 
 
@@ -538,7 +527,7 @@ scores_top10 %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 6.4.** Puntuaciones emporesas TMI (Top-10, sin outliers)
+**Tabla 6.5.** Puntuaciones emporesas TMI (Top-10, sin outliers)
 :::
 
 
@@ -591,7 +580,7 @@ scores_all_top10 %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 6.5.** Puntuaciones emporesas TMI (Top-10, con outliers)
+**Tabla 6.6.** Puntuaciones emporesas TMI (Top-10, con outliers)
 :::
 
 
@@ -631,7 +620,7 @@ scores2_top10 %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 6.6.** Puntuaciones emporesas TMI (Top-10, outliers en cálculo)
+**Tabla 6.7.** Puntuaciones emporesas TMI (Top-10, outliers en cálculo)
 :::
 
 
@@ -732,7 +721,7 @@ scores3_top10 %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 6.7.** Puntuaciones emporesas TMI (Top-10, Hubert)
+**Tabla 6.8.** Puntuaciones emporesas TMI (Top-10, Hubert)
 :::
 
 En la tabla se comprueba que existen leves variaciones con respecto a las clasificaciones anteriores. A destacar la inclusión en el *top-10* de *Ripley Interestellar Freight*, y la desparición de  *Kamino Movers*.
