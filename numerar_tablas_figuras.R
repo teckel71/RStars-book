@@ -240,7 +240,8 @@ procesar_rmd <- function(ruta_entrada,
   # opciones. Los chunks con estas funciones NO reciben etiquetas al
   # final: las emite la propia funcion en su lugar exacto.
   FUNCIONES_PAQUETE_MATRSTARS_SIDEEFFECT <- list(
-    explora_na = c("figura", "tabla")
+    explora_na       = c("figura", "tabla"),
+    explora_outliers = c("figura", "tabla")
   )
   re_sideeffect <- paste0(
     "\\b(?:",

@@ -109,6 +109,24 @@ muestra_so <- muestra %>%
               filter(RENECO <= Q3 + 1.5*IQR(RENECO) &
                      RENECO >= Q1 - 1.5*IQR(RENECO))
 
+# --- Nota: el mismo procedimiento con explora_outliers() del paquete {MATrstars}
+# La función explora_outliers() encapsula el patrón boxplot + calculo de Q1/Q3
+# + filter(...) para listar los outliers + filter(...) para eliminarlos. Todo el
+# bloque anterior se reduce a una única llamada. Como demostración, la aplicamos
+# a una copia limpia del df original con solo la variable RENECO (sin NAs):
+
+muestra_demo <- select(interestelar_100, RENECO)
+muestra_demo <- explora_na(muestra_demo, RENECO, accion = "eliminar")
+muestra_demo <- explora_outliers(
+  muestra_demo,
+  variables = RENECO,
+  accion    = "eliminar",
+  titulo    = "Rentabilidad Económica",
+  subtitulo = "Empresas de transporte interestelar"
+)
+rm(muestra_demo)
+# ------------------------------------------------------------------------------
+
 
 # Tabla de datos (distribución de frecuencias agrupadas en intervalos)
 # Colocando casos
@@ -327,6 +345,31 @@ muestra2 %>%
 muestra2_so <- muestra2 %>%
   filter(MAHALANOBIS <= Q3M + 1.5*IQR(MAHALANOBIS) &
            MAHALANOBIS >= Q1M - 1.5*IQR(MAHALANOBIS))  
+
+# --- Nota: el mismo procedimiento con explora_outliers() del paquete {MATrstars}
+# En el caso multivariante, explora_outliers() detecta automáticamente que hay
+# varias variables y calcula internamente la distancia de Mahalanobis, sobre la
+# que aplica la regla 1.5·IQR. Así, el bloque de arriba (mutate MAHALANOBIS +
+# boxplot + calculo Q1M/Q3M + filter para listar + filter para eliminar) se
+# reduce también a una única llamada. Como demostración, la aplicamos a una
+# copia limpia del df original con solo las variables de interés:
+
+muestra2_demo <- select(interestelar_100, RENECO, ACTIVO, MARGEN, RES)
+muestra2_demo <- explora_na(muestra2_demo, accion = "eliminar")
+muestra2_demo <- explora_outliers(
+  muestra2_demo,
+  variables = c(RENECO, ACTIVO, MARGEN, RES),
+  accion    = "eliminar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "RENECO, ACTIVO, MARGEN, RES. Empresas TMI."
+)
+rm(muestra2_demo)
+
+# A partir de aquí, y en los capítulos siguientes, la detección y eliminación
+# de outliers se realizará con explora_outliers(). La ficha completa de la
+# función (argumentos, defaults, código fuente) se encuentra en el "Apéndice:
+# Funciones auxiliares del paquete MATrstars" al final del libro.
+# ------------------------------------------------------------------------------
 
 ## Correlaciones entre variables.
 

@@ -328,6 +328,61 @@ muestra_so <- muestra %>%
 
 Es importante observar que, en el código de la función `filter()`, las desigualdades deben cambiar, así como el operador "**\|**" por el operador "**&**". En el *Global Environment* podemos comprobar cómo el *data frame* "muestra_so" posee el mismo número de variables que el *data frame* "muestra"; pero con dos observaciones o casos menos (101).
 
+Como ocurría con los *missing values*, el procedimiento de detección y eliminación de *outliers* se repite en muchos capítulos siguientes: un *boxplot* con `ggplot()` + cálculo de Q1 y Q3 con `quantile()` + `filter()` para listar los casos + `filter()` para eliminarlos. Para aligerar el código, el paquete `{MATrstars}` incluye la función auxiliar `explora_outliers()`, que encapsula todo el bloque anterior en una sola llamada y presenta la tabla de casos afectados con el estilo tipográfico habitual del libro (mediante `kable_rstars()`, internamente). Además, cuando los *outliers* son tan extremos que aplastan la caja del *boxplot*, la función activa automáticamente una escala pseudo-logarítmica en el eje Y para que la caja siga siendo legible sin problemas con valores negativos o nulos.
+
+De este modo, todo el bloque de código anterior podría haberse escrito de forma mucho más compacta como:
+
+```{r eval=FALSE, echo=TRUE, message=FALSE}
+muestra_so <- explora_outliers(
+  muestra,
+  variables = RENECO,
+  accion    = "eliminar",
+  titulo    = "Rentabilidad Económica",
+  subtitulo = "Empresas de transporte interestelar"
+)
+```
+
+Como en este punto ya hemos eliminado los *outliers* de "muestra_so", vamos a comprobar el funcionamiento de la función sobre una **copia limpia** del *data frame* original que contenga únicamente la variable RENECO (a esa copia auxiliar la llamaremos "muestra_demo"). Aplicamos primero `explora_na()` para descartar los NAs, y a continuación `explora_outliers()`. El resultado será el mismo que se obtuvo con el bloque manual, pero presentado con las mejoras estéticas comentadas:
+
+```{r eval=FALSE, echo=TRUE, message=FALSE}
+muestra_demo <- select(interestelar_100, RENECO)
+muestra_demo <- explora_na(muestra_demo, RENECO, accion = "eliminar")
+muestra_demo <- explora_outliers(
+  muestra_demo,
+  variables = RENECO,
+  accion    = "eliminar",
+  titulo    = "Rentabilidad Económica",
+  subtitulo = "Empresas de transporte interestelar"
+)
+rm(muestra_demo)
+```
+
+```{r include=FALSE}
+# Preparacion silenciosa: crear la copia y descartar los NAs con explora_na().
+# Se hace en un chunk oculto para que el numerador no reserve Figura/Tabla
+# aqui (las etiquetas del explora_na univariante ya se emitieron mas arriba
+# en el chunk 5.3).
+muestra_demo <- select(interestelar_100, RENECO)
+muestra_demo <- explora_na(muestra_demo, RENECO, accion = "eliminar")
+```
+
+```{r eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+options(matrstars.figura_num = "5.5", matrstars.tabla_num = "5.4")
+muestra_demo <- explora_outliers(
+  muestra_demo,
+  variables = RENECO,
+  accion    = "eliminar",
+  titulo    = "Rentabilidad Económica",
+  subtitulo = "Empresas de transporte interestelar"
+)
+```
+
+```{r include=FALSE}
+rm(muestra_demo)
+```
+
+Más adelante, tras trabajar con varias variables simultáneamente, veremos cómo esta misma función `explora_outliers()` se aplica también al caso multivariante, calculando internamente la distancia de Mahalanobis. En los capítulos que siguen, la detección y eliminación de *outliers* se realizará con `explora_outliers()`, cuya ficha completa —argumentos, valores por defecto y enlace al código fuente en GitHub— puede consultarse en el **Apéndice: Funciones auxiliares del paquete `{MATrstars}`** al final del libro.
+
 ### ![](figuras/key.svg){.hicon} Descripción de una variable.
 
 Una vez que se tiene preparada la base de datos, con un tratamiento adecuado de los *missing values* y de los *outliers,* y **antes** de proceder a la aplicación de una técnica adecuada según los objetivos perseguidos en el estudio; suelen presentarse una serie de **gráficos** básicos y **medidas** descriptivas que proporcionan una **idea inicial de la estructura** del sector para la variable o variables analizadas. Nos referimos a medidas y/o gráficos de posición, dispersión y forma (asimetría y curtosis).
@@ -432,7 +487,7 @@ conteo_intervalos_df %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 5.4.** Distribución de frecuencias agrupadas en intervalos de Rentabilidad Económica
+**Tabla 5.5.** Distribución de frecuencias agrupadas en intervalos de Rentabilidad Económica
 :::
 
 
@@ -471,7 +526,7 @@ conteo_intervalos_df %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 5.5.** Distribución de frecuencias agrupadas en intervalos de Rentabilidad Económica
+**Tabla 5.6.** Distribución de frecuencias agrupadas en intervalos de Rentabilidad Económica
 :::
 
 
@@ -505,7 +560,7 @@ g1
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.5**
+**Figura 5.6**
 :::
 
 
@@ -537,7 +592,7 @@ g2
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.6**
+**Figura 5.7**
 :::
 
 
@@ -566,7 +621,7 @@ g3
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.7**
+**Figura 5.8**
 :::
 
 
@@ -609,7 +664,7 @@ estadisticos %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 5.6.** Principales Estadísticos de la Rentabilidad Económica
+**Tabla 5.7.** Principales Estadísticos de la Rentabilidad Económica
 :::
 
 
@@ -662,7 +717,7 @@ g4
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.8**
+**Figura 5.9**
 :::
 
 
@@ -712,7 +767,7 @@ resumen
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.9**
+**Figura 5.10**
 :::
 
 
@@ -735,7 +790,7 @@ Vamos a imaginar que queremos realizar un análisis en el que tendremos en cuent
 En primer lugar, generaremos una copia del *data frame* original, "interestelar_100", para preservar su integridad. A esa copia la hemos llamado "muestra2". Aplicamos entonces la función `explora_na()` del paquete `{MATrstars}`, indicando en el argumento `variables` las cuatro variables del análisis (RENECO, ACTIVO, MARGEN y RES) y `accion = "eliminar"` para que, además de mostrar el gráfico y la tabla con los casos afectados, se descarten esos casos del *data frame*:
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
-options(matrstars.figura_num = "5.10", matrstars.tabla_num = "5.7")
+options(matrstars.figura_num = "5.11", matrstars.tabla_num = "5.8")
 ## Trabajando con multiples variables.
 
 # Copia de df original.
@@ -810,7 +865,7 @@ ggplot(data = muestra2, map = (aes(y = MAHALANOBIS))) +
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.11**
+**Figura 5.12**
 :::
 
 
@@ -860,6 +915,59 @@ muestra2_so <- muestra2 %>%
 
 El *data frame* "muestra2_so" será una réplica de "muestra2", aunque sin incluir los casos detectados como atípicos o *outliers* (91 casos).
 
+Como ocurría en el caso univariante, este bloque también se puede sintetizar aplicando la función auxiliar `explora_outliers()` del paquete `{MATrstars}`. Cuando se le pasan varias variables, la función detecta automáticamente el caso multivariante y calcula internamente la distancia de Mahalanobis, sobre la que aplica la regla 1.5·IQR. Es decir, **la misma función sirve para uno y varios ámbitos**: si se le pasa una sola variable, trabaja sobre ella; si se le pasan varias, sintetiza su comportamiento con Mahalanobis. De este modo, el bloque manual anterior podría reescribirse así:
+
+```{r eval=FALSE, echo=TRUE, message=FALSE}
+muestra2_so <- explora_outliers(
+  muestra2,
+  variables = c(RENECO, ACTIVO, MARGEN, RES),
+  accion    = "eliminar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "RENECO, ACTIVO, MARGEN, RES. Empresas TMI."
+)
+```
+
+De nuevo, como en este punto ya hemos eliminado los *outliers* de "muestra2_so", vamos a comprobar el funcionamiento sobre una **copia limpia** del *data frame* original con únicamente las cuatro variables de interés (la llamaremos "muestra2_demo"). Aplicamos primero `explora_na()` para descartar los tres casos con NAs, y a continuación `explora_outliers()` sobre el resultado:
+
+```{r eval=FALSE, echo=TRUE, message=FALSE}
+muestra2_demo <- select(interestelar_100, RENECO, ACTIVO, MARGEN, RES)
+muestra2_demo <- explora_na(muestra2_demo, accion = "eliminar")
+muestra2_demo <- explora_outliers(
+  muestra2_demo,
+  variables = c(RENECO, ACTIVO, MARGEN, RES),
+  accion    = "eliminar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "RENECO, ACTIVO, MARGEN, RES. Empresas TMI."
+)
+rm(muestra2_demo)
+```
+
+```{r include=FALSE}
+# Preparacion silenciosa: crear la copia y descartar los 3 NAs con
+# explora_na(). Se hace en un chunk oculto para que el numerador no
+# reserve Figura/Tabla aqui (las etiquetas del explora_na multivariante
+# ya se emitieron mas arriba, en el chunk 5.3.1).
+muestra2_demo <- select(interestelar_100, RENECO, ACTIVO, MARGEN, RES)
+muestra2_demo <- explora_na(muestra2_demo, accion = "eliminar")
+```
+
+```{r eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+options(matrstars.figura_num = "5.13", matrstars.tabla_num = "5.9")
+muestra2_demo <- explora_outliers(
+  muestra2_demo,
+  variables = c(RENECO, ACTIVO, MARGEN, RES),
+  accion    = "eliminar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "RENECO, ACTIVO, MARGEN, RES. Empresas TMI."
+)
+```
+
+```{r include=FALSE}
+rm(muestra2_demo)
+```
+
+**A partir de aquí, y en los capítulos siguientes, la detección y eliminación de *outliers* se realizará con `explora_outliers()`**, ya sea en el caso univariante o multivariante. La ficha completa de la función —argumentos, valores por defecto, ejemplos de uso y enlace al código fuente en GitHub— puede consultarse en el **Apéndice: Funciones auxiliares del paquete `{MATrstars}`** al final del libro.
+
 ### ![](figuras/key.svg){.hicon} Correlación entre variables.
 
 Cuando trabajamos con más de una variable, una característica muy importante viene dada por la intensidad con la que tales variables están relacionadas estadísticamente entre sí, es decir, el estudio de las correlaciones. Un modo atractivo y rápido de visualizar la **matriz de correlaciones** de las variables es a través de la función `ggpairs()` del paquete `{GGally}`. Para aplicar la función, hemos creado el *data frame* "temporal" con las variables (métricas) del estudio, que borramos tras general el gráfico:
@@ -878,7 +986,7 @@ corr_plot_so
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.12**
+**Figura 5.14**
 :::
 
 
@@ -925,7 +1033,7 @@ grid.arrange(corr_plot_so_gg, corr_plot_co_gg, ncol = 2, top = "CORRELACIONES")
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.13**
+**Figura 5.15**
 :::
 
 
