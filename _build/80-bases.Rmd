@@ -1,0 +1,122 @@
+```{r matrstars-numerado-setup-cap80, include=FALSE}
+options(matrstars.suppress_caption = TRUE)
+```
+
+# Apéndice: Bases de datos utilizadas en el libro. {.unnumbered}
+
+A lo largo del libro se utilizan **tres bases de datos**, todas ellas ambientadas en el universo *R-Stars* (véase el apéndice correspondiente). Se distribuyen como ficheros de Excel con una estructura homogénea de tres hojas: una hoja `Inicio` con una breve descripción de la base y un aviso legal, una hoja `Variables` con la definición y las unidades de cada variable, y una hoja `Datos` con los registros propiamente dichos.
+
+En este apéndice se documenta el contenido de las tres bases, indicando para cada variable su **nombre**, una **descripción** breve, sus **unidades** de medida y su **tipo** desde el punto de vista estadístico. Para el tipo se emplean cuatro categorías:
+
+-   **Métrica** (o cuantitativa): variable que representa una magnitud numérica medible, ya sea continua (ratios, índices, importes monetarios) o discreta de recuento (número de empleados, número de rutas, etc.).
+-   **Atributo nominal**: variable categórica cuyas modalidades **no admiten un orden natural** (por ejemplo, la galaxia en la que opera una compañía, o el departamento al que está asignado un trabajador).
+-   **Atributo ordinal**: variable categórica cuyas modalidades **sí admiten un orden natural** (por ejemplo, el nivel de estudios de un trabajador, o el estado de renovación de la flota).
+-   **Identificador**: variable de texto que sirve para etiquetar de forma unívoca cada registro (nombre de la empresa, del trabajador o de la nave). Desde el punto de vista estadístico son atributos nominales, pero se distinguen aquí porque no son objeto de análisis, sino de identificación.
+
+Buena parte de las variables monetarias se expresan en **PAVOs**, la unidad de cuenta convencional del sector interestelar (siglas de *Patrón Anual de Valor Operativo*, unidad armonizada por el TLCI para permitir el comercio entre galaxias sin conversiones de tipo de cambio). Cuando el importe es elevado, se utiliza el múltiplo *Miles de PAVOs*.
+
+## `interestelar_300`. {.unnumbered}
+
+### Descripción general. {.unnumbered}
+
+Contiene información **financiera y operativa** de una muestra representativa de **300 compañías** del sector del transporte interestelar de mercancías en un año de referencia. La base cubre las cinco galaxias operativas del sector y las tres formas jurídicas galácticas más habituales. Es la base principal del libro: se utiliza en la mayor parte de los capítulos, tanto en los de análisis univariante y bivariante como en los de análisis multivariante (regresión, análisis clúster y modelos log-lineales, entre otros).
+
+**Estructura**: 300 filas × 29 columnas.
+
+### Variables. {.unnumbered}
+
+| Variable | Descripción | Unidades | Tipo |
+|----|----|----|----|
+| `NOMBRE` | Nombre comercial de la compañía. | Texto | Identificador |
+| `SEDE` | Planeta en el que se encuentra la sede operativa de la compañía. | Texto (30 modalidades) | Atributo nominal |
+| `GALAXIA` | Galaxia en la que se ubica la sede de la compañía. | Texto (5 modalidades) | Atributo nominal |
+| `ACTIVO` | Valor total de los recursos de la empresa. | Miles de PAVOs | Métrica |
+| `FPIOS` | Recursos propios de la empresa, excluyendo pasivos. | Miles de PAVOs | Métrica |
+| `ING` | Ingresos generados por la actividad principal de la empresa. | Miles de PAVOs | Métrica |
+| `MARGEN` | Margen operativo como porcentaje sobre los ingresos. | \% | Métrica |
+| `RES` | Beneficio neto de la empresa. | Miles de PAVOs | Métrica |
+| `SOLVENCIA` | Capacidad de la empresa para cubrir sus obligaciones financieras a largo plazo. | Índice (sin unidades) | Métrica |
+| `ACTCOR` | Parte del activo total que puede convertirse en efectivo a corto plazo (activo corriente). | Miles de PAVOs | Métrica |
+| `PASCOR` | Parte del pasivo total con vencimiento a corto plazo (pasivo corriente). | Miles de PAVOs | Métrica |
+| `LIQUIDEZ` | Capacidad de la empresa para cubrir pasivos corrientes. | Cociente (sin unidades) | Métrica |
+| `APALANCA` | Proporción entre pasivos totales y fondos propios (apalancamiento). | Cociente (sin unidades) | Métrica |
+| `RENECO` | Rentabilidad económica: eficiencia del uso de los activos para generar beneficios. | \% | Métrica |
+| `RENFIN` | Rentabilidad financiera: rentabilidad obtenida sobre los fondos propios. | \% | Métrica |
+| `EMPLEA` | Cantidad de empleados en la empresa. | Entero (nº de personas) | Métrica |
+| `FJUR` | Forma jurídica galáctica de la empresa. Modalidades: `CG` (Compañía Galáctica), `SLG` (Sociedad Limitada Galáctica) y `SAG` (Sociedad Anónima Galáctica). | Categórico (3 modalidades) | Atributo nominal |
+| `FLOTA` | Número de cargueros espaciales operativos. | Entero (nº de naves) | Métrica |
+| `COSTOP` | Costos operativos de la empresa. | Miles de PAVOs | Métrica |
+| `CAPEX` | Inversiones realizadas en activos fijos, como naves o infraestructura. | Miles de PAVOs | Métrica |
+| `IMD` | Inversiones en investigación y desarrollo tecnológico. | Miles de PAVOs | Métrica |
+| `EFLO` | Categorización de la antigüedad promedio de la flota. Modalidades ordenadas de menor a mayor antigüedad: `RENOVADA` \< `MADURA` \< `ANTIGUA`. | Categórico (3 modalidades) | Atributo ordinal |
+| `RUTAS` | Número de rutas interestelares gestionadas por la empresa. | Entero (nº de rutas) | Métrica |
+| `IDIG` | Índice de digitalización de la empresa. | Índice (sin unidades) | Métrica |
+| `IDIVERSE` | Índice de diversificación de la empresa. | Índice (sin unidades) | Métrica |
+| `IFIDE` | Índice de fidelización de los clientes. | Índice (sin unidades) | Métrica |
+| `GMEDRUT` | Distancia media de las rutas gestionadas. | Años luz | Métrica |
+| `DIST` | Distancia operada globalmente por la flota de la empresa. | Millones de años luz / año | Métrica |
+| `BMAL` | Beneficio medio obtenido por cada 1.000 años luz operados. | PAVOs / 1.000 años luz | Métrica |
+
+::: {style="text-align: center;"}
+**Tabla 80.1**
+:::
+
+
+## `trabajadores`. {.unnumbered}
+
+### Descripción general. {.unnumbered}
+
+Contiene información laboral básica sobre los **trabajadores de una compañía del sector** en un año de referencia. La base incluye el salario percibido, el nivel de estudios y el departamento de asignación de cada empleado. Se utiliza principalmente en los capítulos de análisis bivariante (comparación de medias entre grupos, análisis de la varianza y tablas de contingencia).
+
+**Estructura**: 49 filas × 4 columnas.
+
+### Variables. {.unnumbered}
+
+| Variable | Descripción | Unidades | Tipo |
+|----|----|----|----|
+| `NOMBRE` | Nombre del trabajador. | Texto | Identificador |
+| `SALARIO` | Salario anual bruto percibido por el trabajador. | Cientos de PAVOs | Métrica |
+| `NESTUDIOS` | Nivel de estudios alcanzado por el trabajador. Modalidades ordenadas de menor a mayor: `Básicos` \< `Medios` \< `Universitarios`. | Categórico (3 modalidades) | Atributo ordinal |
+| `DEP` | Departamento de la empresa en el que trabaja. Modalidades: `Almacén`, `Gestión Interna`, `Personal Navegación`, `Gestión Clientes`, `Marketing`, `Coordinación` y `Dirección`. | Categórico (7 modalidades) | Atributo nominal |
+
+::: {style="text-align: center;"}
+**Tabla 80.2**
+:::
+
+
+## `astilleros_48`. {.unnumbered}
+
+### Descripción general. {.unnumbered}
+
+Contiene información **técnica** sobre una muestra de **48 cargueros** fabricados por los tres grandes astilleros del sector: *Korrigan Heavy Works*, *Selene Dynamics* y *Arcturus Shipyards*. La base recoge indicadores de rendimiento energético, historial de incidencias graves, antigüedad y capacidad de carga. Constituye la base sobre la que se elabora el *Informe Crestfall* (véase el apéndice de la guía friki), y se utiliza en el libro en los capítulos dedicados a la comparación de medias entre más de dos poblaciones, al análisis de la covarianza y a la regresión.
+
+**Estructura**: 48 filas × 7 columnas.
+
+### Variables. {.unnumbered}
+
+| Variable | Descripción | Unidades | Tipo |
+|----|----|----|----|
+| `NOMBRE` | Identificación (nombre comercial) de la nave carguera. | Texto | Identificador |
+| `ASTILLERO` | Empresa constructora y fabricante de la nave carguera. Modalidades: `KORRIGAN`, `SELENE` y `ARCTURUS`. | Categórico (3 modalidades) | Atributo nominal |
+| `SEDE` | Puerto base de operaciones de la nave. | Texto | Atributo nominal |
+| `IRE` | **Índice de Rendimiento Energético**: toneladas de carga transportadas por unidad de especia consumida en la ruta de referencia Sol–Centauri B. | Toneladas / unidad de especia | Métrica |
+| `IIG` | **Índice de Incidencias Graves**: número de averías mayores registradas a lo largo de la vida operativa de la nave. | Entero (nº de averías) | Métrica |
+| `ANTIGÜEDAD` | Años en servicio activo de la nave desde su puesta en operación. | Años | Métrica |
+| `TONELAJE` | Capacidad máxima de carga útil de la nave. | Miles de toneladas | Métrica |
+
+::: {style="text-align: center;"}
+**Tabla 80.3**
+:::
+
+
+## Nota sobre carga y uso de las bases. {.unnumbered}
+
+Las tres bases se distribuyen como ficheros `.xlsx`. Para cargarlas en R desde los *scripts* del libro se utiliza la función `readxl::read_excel()`, indicando explícitamente la hoja `Datos`. Un ejemplo típico de carga —adaptable a cualquiera de las tres bases— es el siguiente:
+
+```{r, eval=FALSE, echo=TRUE}
+library(readxl)
+
+datos <- read_excel("interestelar_300.xlsx", sheet = "Datos")
+```
+
+Los ficheros originales incluyen, además de las hojas `Datos` y `Variables`, una hoja `Inicio` con el aviso legal correspondiente. Todas las bases son **totalmente ficticias**: los nombres de empresas, planetas, sedes, trabajadores y naves están inspirados en distintas fuentes de la filmografía y la literatura de ciencia ficción, con intereses puramente didácticos.
