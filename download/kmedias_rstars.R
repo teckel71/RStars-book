@@ -46,34 +46,17 @@ seleccion <- explora_na(
   subtitulo = "Transporte de mercancías interestelar"
 )
 
-# Identificando outliers con distancia de Mahalanobis.
-seleccion <- seleccion %>%
-  mutate(MAHALANOBIS = mahalanobis(as.matrix(.),
-                                   center = colMeans(.),
-                                   cov    = cov(.)))
-
-ggplot(data = seleccion, map = (aes(y = MAHALANOBIS))) +
-  geom_boxplot(fill = "orange") +
-  ggtitle("DISTANCIA DE MAHALANOBIS",
-          subtitle = "IDIVERSE, IFIDE, IDIG. Empresas TMI.") +
-  ylab("MAHALANOBIS")
-
-Q1M <- quantile (seleccion$MAHALANOBIS, c(0.25))
-Q3M <- quantile (seleccion$MAHALANOBIS, c(0.75))
-
-seleccion %>%
-  filter(MAHALANOBIS > Q3M + 1.5*IQR(MAHALANOBIS) |
-         MAHALANOBIS < Q1M - 1.5*IQR(MAHALANOBIS))%>%
-  select(MAHALANOBIS, IDIVERSE, IFIDE, IDIG)
-
-# Eliminando outliers.
-seleccion_so <-seleccion %>%
-  filter(MAHALANOBIS <= Q3M + 1.5*IQR(MAHALANOBIS) &
-         MAHALANOBIS >= Q1M - 1.5*IQR(MAHALANOBIS))%>%
-  select(IDIVERSE, IFIDE, IDIG)
-
-# Eliminando variable MAHALANOBIS del df con outliers
-seleccion <- seleccion %>% select(-MAHALANOBIS)
+# Diagnóstico y filtrado de outliers con explora_outliers().
+# Al pasar un df con varias variables métricas, la función calcula
+# internamente la distancia de Mahalanobis. Con accion = "eliminar"
+# devuelve un nuevo df sin los casos identificados como outliers, que
+# será el que use el resto del análisis k-medias.
+seleccion_so <- explora_outliers(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "IDIVERSE, IFIDE, IDIG. Empresas TMI."
+)
 
 
 ## CLUSTER K-MEDIAS CON VARIABLES ORIGINALES

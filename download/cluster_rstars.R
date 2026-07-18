@@ -44,28 +44,17 @@ seleccion <- explora_na(
   subtitulo = "Transporte de mercancías interestelar"
 )
 
-# Identificando outliers con distancia de Mahalanobis.
-seleccion <- seleccion %>%
-  mutate(MAHALANOBIS = mahalanobis(as.matrix(.),
-                                   center = colMeans(.),
-                                   cov    = cov(.)))
-
-ggplot(data = seleccion, map = (aes(y = MAHALANOBIS))) +
-  geom_boxplot(fill = "orange") +
-  ggtitle("DISTANCIA DE MAHALANOBIS",
-          subtitle = "IDIVERSE, IFIDE, IDIG. Empresas TMI.") +
-  ylab("MAHALANOBIS")
-
-Q1M <- quantile (seleccion$MAHALANOBIS, c(0.25))
-Q3M <- quantile (seleccion$MAHALANOBIS, c(0.75))
-
-seleccion %>%
-  filter(MAHALANOBIS > Q3M + 1.5*IQR(MAHALANOBIS) |
-           MAHALANOBIS < Q1M - 1.5*IQR(MAHALANOBIS))%>%
-  select(MAHALANOBIS, IDIVERSE, IFIDE, IDIG)
-
-# Eliminando variable MAHALANOBIS del df
-seleccion    <- seleccion    %>% select(-MAHALANOBIS)
+# Diagnóstico de outliers con explora_outliers().
+# Al pasar un df con varias variables métricas, la función calcula
+# internamente la distancia de Mahalanobis. Usamos accion = "documentar"
+# porque en el análisis cluster jerárquico solo interesa identificar los
+# outliers y verlos como puntos en el dendrograma, sin eliminarlos.
+explora_outliers(
+  seleccion,
+  accion    = "documentar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "IDIVERSE, IFIDE, IDIG. Empresas TMI."
+)
 
 ## CLUSTER JERARQUICO CON VARIABLES ORIGINALES.
 

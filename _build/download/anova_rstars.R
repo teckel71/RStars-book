@@ -48,24 +48,14 @@ muestra <- explora_na(
 # --- Outliers -----------------------------------------------------------------
 
 library(ggplot2)
-ggplot(data = muestra,
-       aes(y = IRE)) +
-geom_boxplot(fill = "steelblue", alpha = 0.7) +
-ggtitle("ÍNDICE DE RENDIMIENTO ENERGÉTICO",
-        subtitle = "48 naves cargueras interestelares") +
-ylab("IRE (tn / unidad de especia)")
 
-Q1 <- quantile(muestra$IRE, 0.25)
-Q3 <- quantile(muestra$IRE, 0.75)
-
-muestra %>%
-  filter(IRE > Q3 + 1.5 * IQR(IRE) |
-         IRE < Q1 - 1.5 * IQR(IRE)) %>%
-  select(IRE, ASTILLERO)
-
-muestra_so <- muestra %>%
-              filter(IRE <= Q3 + 1.5 * IQR(IRE) &
-                     IRE >= Q1 - 1.5 * IQR(IRE))
+muestra_so <- explora_outliers(
+  muestra,
+  variables = IRE,
+  accion    = "eliminar",
+  titulo    = "ÍNDICE DE RENDIMIENTO ENERGÉTICO",
+  subtitulo = "48 naves cargueras interestelares"
+)
 
 # --- Tabla de medias por astillero -------------------------------------------
 
@@ -190,24 +180,13 @@ muestra2 <- explora_na(
 
 # --- Outliers -----------------------------------------------------------------
 
-ggplot(data = muestra2,
-       aes(y = IIG)) +
-geom_boxplot(fill = "coral", alpha = 0.7) +
-ggtitle("ÍNDICE DE INCIDENCIAS GRAVES",
-        subtitle = "48 naves cargueras interestelares") +
-ylab("IIG (nº de averías mayores)")
-
-Q1b <- quantile(muestra2$IIG, 0.25)
-Q3b <- quantile(muestra2$IIG, 0.75)
-
-muestra2 %>%
-  filter(IIG > Q3b + 1.5 * IQR(IIG) |
-         IIG < Q1b - 1.5 * IQR(IIG)) %>%
-  select(IIG, ASTILLERO)
-
-muestra2_so <- muestra2 %>%
-               filter(IIG <= Q3b + 1.5 * IQR(IIG) &
-                      IIG >= Q1b - 1.5 * IQR(IIG))
+muestra2_so <- explora_outliers(
+  muestra2,
+  variables = IIG,
+  accion    = "eliminar",
+  titulo    = "ÍNDICE DE INCIDENCIAS GRAVES",
+  subtitulo = "48 naves cargueras interestelares"
+)
 
 # --- Tabla de medias por astillero -------------------------------------------
 

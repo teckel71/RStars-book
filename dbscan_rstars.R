@@ -44,34 +44,18 @@ seleccion <- explora_na(
   subtitulo = "Transporte de mercancías interestelar"
 )
 
-# Identificando outliers con distancia de Mahalanobis.
-seleccion <- seleccion %>%
-  mutate(MAHALANOBIS = mahalanobis(as.matrix(.),
-                                   center = colMeans(.),
-                                   cov    = cov(.)))
-
-ggplot(data = seleccion, map = (aes(y = MAHALANOBIS))) +
-  geom_boxplot(fill = "orange") +
-  ggtitle("DISTANCIA DE MAHALANOBIS",
-          subtitle = "IDIVERSE, IFIDE, IDIG. Empresas TMI.") +
-  ylab("MAHALANOBIS")
-
-Q1M <- quantile (seleccion$MAHALANOBIS, c(0.25))
-Q3M <- quantile (seleccion$MAHALANOBIS, c(0.75))
-
-seleccion %>%
-  filter(MAHALANOBIS > Q3M + 1.5*IQR(MAHALANOBIS) |
-           MAHALANOBIS < Q1M - 1.5*IQR(MAHALANOBIS))%>%
-  select(MAHALANOBIS, IDIVERSE, IFIDE, IDIG)
-
-# Eliminando outliers.
-seleccion_so <-seleccion %>%
-  filter(MAHALANOBIS <= Q3M + 1.5*IQR(MAHALANOBIS) &
-           MAHALANOBIS >= Q1M - 1.5*IQR(MAHALANOBIS))%>%
-  select(IDIVERSE, IFIDE, IDIG)
-
-# Eliminando variable MAHALANOBIS del df con outliers
-seleccion <- seleccion %>% select(-MAHALANOBIS)
+# Diagnóstico de outliers con explora_outliers().
+# En el análisis DBSCAN se emplean todos los casos (los outliers no se
+# eliminan del df), ya que el propio algoritmo los identificara como
+# "ruido" (cluster 0). Aquí solo documentamos gráficamente qué casos
+# se comportan como outliers estadísticos (Mahalanobis + regla 1.5·IQR)
+# para poder contrastarlos más adelante con la clasificación de DBSCAN.
+explora_outliers(
+  seleccion,
+  accion    = "documentar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "IDIVERSE, IFIDE, IDIG. Empresas TMI."
+)
 
 ## APLICACION DE DBSCAN
 

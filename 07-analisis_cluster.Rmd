@@ -142,54 +142,23 @@ seleccion <- explora_na(
 
 No se ha localizado ninguna observación con *missing values*, luego no se ha de realizar ningún tipo de tratamiento.
 
-El siguiente paso es la **identificación de *outliers*.** Para realizar este proceso, y dado que en nuestro análisis contamos con 3 variables, primero “resumiremos” el valor que toman dichas variables para cada caso, mediante el cálculo de la *distancia de Mahalanobis*. De hecho, las distancias de los diferentes casos se almacenarán en una nueva variable, a la que llamaremos MAHALANOBIS, que se incorporará al *data frame* "originales" por medio de la función `mutate()` de `{dplyr}`, y la función `mahalanobis()`. Recordemos que, en los diferentes argumentos de esta función, el punto "." hace referencia al *data frame* que está delante del operador pipe (%\>%).
+El siguiente paso es la **identificación de *outliers***. Como en el análisis contamos con 3 variables métricas, "resumiremos" el valor que toma cada caso en el conjunto de las variables mediante el cálculo de la ***distancia de Mahalanobis***, sobre la que aplicaremos la regla clásica de 1.5 veces el rango intercuartílico para identificar los casos atípicos.
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-# Identificando y descartando outliers con distancia de Mahalanobis.
-seleccion <- seleccion %>%
-  mutate(MAHALANOBIS = mahalanobis(as.matrix(.),
-                                   center = colMeans(.),
-                                   cov    = cov(.)))
+Todo este proceso —cálculo de Mahalanobis, *boxplot* de la distancia, identificación de los casos atípicos y presentación en una tabla— se realiza en una sola llamada mediante la función auxiliar `explora_outliers()` del paquete `{MATrstars}` que ya se presentó en el capítulo 5. Cuando se le pasa un *data frame* con varias variables métricas, la función detecta el caso multivariante y calcula internamente la distancia de Mahalanobis. Como en "seleccion" solo hay ya las tres variables del análisis, no es necesario especificar el argumento `variables`. Además, en esta ocasión usamos `accion = "documentar"` porque **no** queremos eliminar los *outliers*, sino solo identificarlos:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
+# Diagnóstico de outliers.
+explora_outliers(
+  seleccion,
+  accion    = "documentar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "IDIVERSE, IFIDE, IDIG. Empresas TMI."
+)
 ```
 
-Una vez creada la variable MAHALANOBIS, se estudia la existencia en sus valores de *outliers* mediante la construcción de un diagrama de caja o *boxplot*:
+De la tabla anterior se desprende que los *outliers* identificados son las empresas *Chakotay Cargo Systems*, *Home One Cargo*, y de modo más moderado, *Tannhäuser Freight* e *Hyperion Star Haulage*. Estos son, en definitiva, los 4 casos en los que nos fijaremos específicamente más adelante, al analizar los resultados del análisis clúster.
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-# Identificando outliers con distancia de Mahalanobis.
-seleccion <- seleccion %>%
-  mutate(MAHALANOBIS = mahalanobis(as.matrix(.),
-                                   center = colMeans(.),
-                                   cov    = cov(.)))
-
-ggplot(data = seleccion, map = (aes(y = MAHALANOBIS))) +
-  geom_boxplot(fill = "orange") +
-  ggtitle("DISTANCIA DE MAHALANOBIS",
-          subtitle = "IDIVERSE, IFIDE, IDIG. Empresas TMI.") +
-  ylab("MAHALANOBIS")
-```
-
-En el gráfico se observa que existen, por encima de la caja, 4 *outliers*. Para identificarlos de modo concreto, hemos de calcular los cuartiles primero y tercero de la variable MAHALANOBIS y pasar el correspondiente filtro:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-Q1M <- quantile (seleccion$MAHALANOBIS, c(0.25))
-Q3M <- quantile (seleccion$MAHALANOBIS, c(0.75))
-
-seleccion %>%
-  filter(MAHALANOBIS > Q3M + 1.5*IQR(MAHALANOBIS) |
-           MAHALANOBIS < Q1M - 1.5*IQR(MAHALANOBIS))%>%
-  select(MAHALANOBIS, IDIVERSE, IFIDE, IDIG)
-```
-
-De la tabla anterior se desprende que los outliers identificados son las empresas *Chakotay Cargo Systems*, *Home One Cargo*, y de modo más moderado, *Tannhäuser Freight* e *Hyperion Star Haulage*. Estos son, en definitiva, los 4 casos en los que nos fijaremos específicamente más adelante, al analizar los resultados del análisis clúster.
-
-Estas empresas cuentan con un valor atípico en la variable MAHALANOBIS, lo que, a su vez, implica que muestren valores atípicos en una o varias de las variables originales (IDIVERSE, IFIDE, IDIG). En el desarrollo de otras técnicas, en este punto localizaríamos y eliminaríamos los *outliers*. En este caso **no** lo vamos a hacer, ya que queremos agrupar **todos los casos** que tenemos en el análisis. Precisamente, si hay algún caso que permanece aislado, sin agruparse con otros en el proceso de agrupación hasta las últimas etapas, quizá se trate de un candidato a *outlier*, por lo que el análisis clúster **también puede considerarse una técnica de localización de casos atípicos**.
-
-Por último, borramos la variable MAHALANOBIS del *data frame* "seleccion", puesto que ya ha cumplido la función de localizar los casos atípicos:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-# Eliminando variable MAHALANOBIS del df
-seleccion    <- seleccion    %>% select(-MAHALANOBIS)
-```
+Estas empresas cuentan con un valor atípico en la distancia de Mahalanobis, lo que, a su vez, implica que muestren valores atípicos en una o varias de las variables originales (IDIVERSE, IFIDE, IDIG). En el desarrollo de otras técnicas, en este punto localizaríamos y eliminaríamos los *outliers*. En este caso **no** lo vamos a hacer, ya que queremos agrupar **todos los casos** que tenemos en el análisis. Precisamente, si hay algún caso que permanece aislado, sin agruparse con otros en el proceso de agrupación hasta las últimas etapas, quizá se trate de un candidato a *outlier*, por lo que el análisis clúster **también puede considerarse una técnica de localización de casos atípicos**.
 
 La siguiente etapa se refiere a la aplicación propia del análisis clúster al grupo de 25 compañías que toman valores para las tres variables incluidas en el análisis.
 
@@ -773,50 +742,19 @@ seleccion <- explora_na(
 
 Aunque se ha incluido el código para identificar y eliminar los casos con ***missing values***, en las 300 empresas no hay ningún dato ausente en las tres variables de interés, almacenadas en el *data frame* "seleccion", luego se siguen manteniendo los 300 casos.
 
-Para la detección de ***outliers***, se ha utilizado también el mismo código que en el análisis clúster jerárquico: obtención de las distancias de *Mahalanobis*, y aplicación de diagrama de caja o *boxplot*:
+Para la detección de ***outliers***, se aplica también la función auxiliar `explora_outliers()` del paquete `{MATrstars}`, análoga a la usada en el análisis clúster jerárquico. Con `accion = "eliminar"` la función devuelve un nuevo *data frame* sin los casos identificados, que en el resto del análisis será el que utilicemos:
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-# Identificando outliers con distancia de Mahalanobis.
-seleccion <- seleccion %>%
-  mutate(MAHALANOBIS = mahalanobis(as.matrix(.),
-                                   center = colMeans(.),
-                                   cov    = cov(.)))
-
-ggplot(data = seleccion, map = (aes(y = MAHALANOBIS))) +
-  geom_boxplot(fill = "orange") +
-  ggtitle("DISTANCIA DE MAHALANOBIS",
-          subtitle = "IDIVERSE, IFIDE, IDIG. Empresas TMI.") +
-  ylab("MAHALANOBIS")
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
+# Diagnóstico y filtrado de outliers.
+seleccion_so <- explora_outliers(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "IDIVERSE, IFIDE, IDIG. Empresas TMI."
+)
 ```
 
-Una vez se constata que existen casos *outliers*, se pueden identificar con el código:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-Q1M <- quantile (seleccion$MAHALANOBIS, c(0.25))
-Q3M <- quantile (seleccion$MAHALANOBIS, c(0.75))
-
-seleccion %>%
-  filter(MAHALANOBIS > Q3M + 1.5*IQR(MAHALANOBIS) |
-         MAHALANOBIS < Q1M - 1.5*IQR(MAHALANOBIS))%>%
-  select(MAHALANOBIS, IDIVERSE, IFIDE, IDIG)
-```
-
-Puede comprobarse que son 26 casos. En esta ocasión, y a diferencia del caso del análisis jerárquico, vamos a eliminar estas observaciones, ya que lo que deseamos no es agrupar casos concretos, sino identificar patrones que caractericen a la mayor parte de las empresas. Para eliminar los *outliers*, ejecutaremos:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-# Eliminando outliers.
-seleccion_so <-seleccion %>%
-  filter(MAHALANOBIS <= Q3M + 1.5*IQR(MAHALANOBIS) &
-         MAHALANOBIS >= Q1M - 1.5*IQR(MAHALANOBIS))%>%
-  select(IDIVERSE, IFIDE, IDIG)
-```
-
-Hemos creado un *data frame* llamado "seleccion_so" con las variables de nuestro análisis; pero sin los casos considerados atípicos. Por último, eliminaremos la variable MAHALANOBIS, ya que no será necesaria para el resto del análisis:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-# Eliminando variable MAHALANOBIS del df con outliers
-seleccion <- seleccion %>% select(-MAHALANOBIS)
-```
+La tabla anterior recoge los 26 casos identificados como *outliers*. En esta ocasión, y a diferencia del caso del análisis jerárquico, sí los eliminamos, ya que lo que deseamos no es agrupar casos concretos, sino identificar patrones que caractericen a la mayor parte de las empresas. El *data frame* "seleccion_so" contiene los 274 casos restantes con las tres variables del análisis.
 
 ### ![](figuras/pie-chart.svg) Determinación del número de grupos o clústeres a formar.
 
@@ -1335,28 +1273,17 @@ seleccion <- explora_na(
   subtitulo = "Transporte de mercancías interestelar"
 )
 
-# Identificando outliers con distancia de Mahalanobis.
-seleccion <- seleccion %>%
-  mutate(MAHALANOBIS = mahalanobis(as.matrix(.),
-                                   center = colMeans(.),
-                                   cov    = cov(.)))
-
-ggplot(data = seleccion, map = (aes(y = MAHALANOBIS))) +
-  geom_boxplot(fill = "orange") +
-  ggtitle("DISTANCIA DE MAHALANOBIS",
-          subtitle = "IDIVERSE, IFIDE, IDIG. Empresas TMI.") +
-  ylab("MAHALANOBIS")
-
-Q1M <- quantile (seleccion$MAHALANOBIS, c(0.25))
-Q3M <- quantile (seleccion$MAHALANOBIS, c(0.75))
-
-seleccion %>%
-  filter(MAHALANOBIS > Q3M + 1.5*IQR(MAHALANOBIS) |
-           MAHALANOBIS < Q1M - 1.5*IQR(MAHALANOBIS))%>%
-  select(MAHALANOBIS, IDIVERSE, IFIDE, IDIG)
-
-# Eliminando variable MAHALANOBIS del df con outliers
-seleccion <- seleccion %>% select(-MAHALANOBIS)
+# Diagnóstico de outliers con explora_outliers().
+# En el análisis DBSCAN se emplean todos los casos: el propio algoritmo
+# identificara los outliers como "ruido" (cluster 0). Aquí solo
+# documentamos gráficamente los outliers estadísticos para poder
+# contrastarlos más adelante con la clasificación de DBSCAN.
+explora_outliers(
+  seleccion,
+  accion    = "documentar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "IDIVERSE, IFIDE, IDIG. Empresas TMI."
+)
 ```
 
 Aunque el *script* incluye la llamada a `explora_na()` para detectar y eliminar posibles *missing values*, la función ha verificado que no existen datos ausentes en las tres variables de interés (por eso no ha generado gráfico ni tabla). Por tanto, el *data frame* "seleccion" mantiene los 300 casos originales:
@@ -1406,46 +1333,20 @@ seleccion <- explora_na(
   titulo    = "Indicadores: Diversificación, Fidelidad, Digitalización",
   subtitulo = "Transporte de mercancías interestelar"
 )
-
-# Identificando outliers con distancia de Mahalanobis.
-seleccion <- seleccion %>%
-  mutate(MAHALANOBIS = mahalanobis(as.matrix(.),
-                                   center = colMeans(.),
-                                   cov    = cov(.)))
 ```
 
-En la detección de *outliers*, se calcularon las *distancias de Mahalanobis* y se representaron mediante un *boxplot*. El gráfico evidenció la presencia de casos atípicos, que fueron identificados mediante el filtro habitual (26 observaciones):
+En la detección de *outliers*, se han calculado las *distancias de Mahalanobis* y se han identificado los casos atípicos mediante la regla clásica de 1.5·IQR (26 observaciones). Todo el bloque se ejecuta en una sola llamada a `explora_outliers()`, con `accion = "documentar"` porque en el análisis DBSCAN mantendremos las 300 observaciones:
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-ggplot(data = seleccion, map = (aes(y = MAHALANOBIS))) +
-  geom_boxplot(fill = "orange") +
-  ggtitle("DISTANCIA DE MAHALANOBIS",
-          subtitle = "IDIVERSE, IFIDE, IDIG. Empresas TMI.") +
-  ylab("MAHALANOBIS")
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+explora_outliers(
+  seleccion,
+  accion    = "documentar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "IDIVERSE, IFIDE, IDIG. Empresas TMI."
+)
 ```
 
-```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
-Q1M <- quantile (seleccion$MAHALANOBIS, c(0.25))
-Q3M <- quantile (seleccion$MAHALANOBIS, c(0.75))
-
-seleccion %>%
-  filter(MAHALANOBIS > Q3M + 1.5*IQR(MAHALANOBIS) |
-           MAHALANOBIS < Q1M - 1.5*IQR(MAHALANOBIS))%>%
-  select(MAHALANOBIS, IDIVERSE, IFIDE, IDIG)
-```
-
-```{r, eval=TRUE, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
-# Eliminando outliers.
-seleccion_so <-seleccion %>%
-  filter(MAHALANOBIS <= Q3M + 1.5*IQR(MAHALANOBIS) &
-           MAHALANOBIS >= Q1M - 1.5*IQR(MAHALANOBIS))%>%
-  select(IDIVERSE, IFIDE, IDIG)
-
-# Eliminando variable MAHALANOBIS del df con outliers
-seleccion <- seleccion %>% select(-MAHALANOBIS)
-```
-
-A partir de aquí iniciaremos un procedimiento de análisis diferente. *DBSCAN* es una técnica robusta frente a los *outliers*, ya que estos no afectan a la formación de los clústeres, sino que el propio algoritmo los identifica y clasifica como “ruido”. Por tanto, mantendremos las 300 observaciones en el análisis.
+A partir de aquí iniciaremos un procedimiento de análisis diferente. *DBSCAN* es una técnica robusta frente a los *outliers*, ya que estos no afectan a la formación de los clústeres, sino que el propio algoritmo los identifica y clasifica como "ruido". Por tanto, mantendremos las 300 observaciones en el análisis.
 
 ### ![](figuras/pie-chart.svg) Aplicación de la técnica.
 

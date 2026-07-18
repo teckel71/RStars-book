@@ -226,6 +226,109 @@ seleccion <- explora_na(
 
 - [`R/explora_na.R`](https://github.com/teckel71/MATrstars/blob/main/R/explora_na.R)
 
+## `explora_outliers()`. {-}
+
+### Propósito. {-}
+
+Diagnostica los *outliers* (valores atípicos) de un *data frame* sobre un conjunto de variables métricas, siguiendo la regla clásica de Tukey de 1,5 veces el rango intercuartílico (IQR). La función distingue automáticamente dos casos según el número de variables seleccionadas:
+
+- **Univariante** (una sola variable): el análisis se realiza directamente sobre esa variable.
+- **Multivariante** (dos o más): se calcula internamente la **distancia de Mahalanobis** de cada caso y el análisis se aplica sobre esa medida sintética.
+
+En ambos casos, la función genera un diagrama de caja (*boxplot*) con el estilo tipográfico habitual del libro y, si detecta *outliers*, una tabla con los casos afectados formateada con `kable_rstars()`. Si no hay *outliers*, se limita a emitir un mensaje informativo. Opcionalmente, elimina los casos identificados. En el caso multivariante, la columna auxiliar `MAHALANOBIS` que se calcula internamente **no se conserva** en el *data frame* devuelto.
+
+La selección de variables sigue el estilo *tidy-select* del *tidyverse*, igual que en `explora_na()`. Si no se especifica ninguna variable, se analizan todas las columnas del *data frame*. Si alguna de las variables seleccionadas **no es métrica** (por ejemplo, un factor o una cadena), la función emite un aviso y no realiza el análisis, devolviendo el *data frame* sin cambios.
+
+Cuando existen *outliers* muy extremos, la caja del *boxplot* puede aplastarse hasta el punto de resultar ilegible. Para mitigarlo, la función detecta automáticamente esta situación (cuando el IQR ocupa menos del 10% del rango total de la variable) y transforma el eje Y con una **escala pseudo-logarítmica** (`scales::pseudo_log_trans()`), que se comporta como una escala lineal cerca de 0 y como una logarítmica en los extremos. Esta transformación funciona correctamente con valores negativos o nulos, a diferencia de `log10()`. El subtítulo del gráfico indica cuando se ha aplicado. El comportamiento se controla con el argumento `escala`:
+
+- `"auto"` (por defecto): detecta y aplica la escala pseudo-logarítmica si es necesario.
+- `"lineal"`: fuerza siempre la escala lineal.
+- `"pseudo_log"`: fuerza siempre la escala pseudo-logarítmica.
+
+Esta función sustituye, a partir del capítulo 5, al bloque manual formado por el `ggplot()` + `geom_boxplot()`, el cálculo de `Q1` y `Q3` con `quantile()`, el `filter(...)` para listar los casos y, en su caso, un segundo `filter(...)` para eliminarlos. En el caso multivariante, también absorbe la creación previa de una columna `MAHALANOBIS` con `mutate(MAHALANOBIS = mahalanobis(...))` y su posterior eliminación con `select(-MAHALANOBIS)`. Aparece en los capítulos 5 a 9, siempre en la fase de preparación previa de datos.
+
+### Sintaxis. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+explora_outliers(datos,
+                 variables = NULL,
+                 accion    = c("documentar", "eliminar"),
+                 titulo    = NULL,
+                 subtitulo = NULL,
+                 escala    = c("auto", "lineal", "pseudo_log"),
+                 caption   = NULL,
+                 ...)
+```
+
+### Argumentos. {-}
+
+- **`datos`**: *data frame* de entrada.
+- **`variables`**: variables a analizar, en sintaxis *tidy-select* (nombres sin comillas, `c(...)` o *helpers* de `dplyr::select()`). Si se omite, se analizan todas las columnas numéricas de `datos`.
+- **`accion`**: `"documentar"` (por defecto) solo diagnostica. `"eliminar"` además filtra los casos identificados como *outliers*.
+- **`titulo`**: título del gráfico. Si es `NULL` (por defecto), se genera automáticamente según sea univariante (`"Outliers en <nombre>"`) o multivariante (`"Outliers (Mahalanobis) en: <lista>"`).
+- **`subtitulo`**: subtítulo del gráfico. Por defecto, `NULL`. Cuando se activa la escala pseudo-logarítmica, se añade automáticamente un aviso al subtítulo.
+- **`escala`**: escala del eje Y del *boxplot*. `"auto"` (por defecto) detecta automáticamente si la caja se comprime por *outliers* extremos y aplica una transformación pseudo-logarítmica. `"lineal"` fuerza la escala clásica. `"pseudo_log"` fuerza siempre la transformación.
+- **`caption`**: título de la tabla `kable_rstars()` con los casos *outliers*. Si es `NULL` (por defecto), se genera automáticamente indicando el número de casos y la variable analizada (o el conjunto de variables, en el caso multivariante).
+- **`...`**: argumentos adicionales reenviados a `kable_rstars()` (por ejemplo, `digits`, `font_size` o `bootstrap_options`).
+
+### Valor devuelto. {-}
+
+El *data frame* (invisible): sin cambios si `accion = "documentar"`, o filtrado (sin los casos *outliers*) si `accion = "eliminar"`. En el caso multivariante, la columna auxiliar `MAHALANOBIS` calculada internamente **no se conserva** en el *data frame* devuelto.
+
+Como efectos colaterales, la función imprime el *boxplot* y la tabla `kable_rstars()` con los casos afectados (si los hay), o un mensaje informativo por la consola (si no los hay).
+
+### Ejemplo. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+library(MATrstars)
+
+# 1. Univariante (una sola variable, sin comillas):
+muestra_so <- explora_outliers(
+  muestra,
+  variables = RENECO,
+  accion    = "eliminar",
+  titulo    = "Rentabilidad Económica",
+  subtitulo = "Empresas de transporte interestelar"
+)
+
+# 2. Multivariante (varias variables, Mahalanobis interno):
+muestra2_so <- explora_outliers(
+  muestra2,
+  variables = c(RENECO, ACTIVO, MARGEN, RES),
+  accion    = "eliminar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "RENECO, ACTIVO, MARGEN, RES. Empresas TMI."
+)
+
+# 3. Todo el data frame (todas las columnas numéricas):
+seleccion_so <- explora_outliers(
+  seleccion,
+  accion    = "eliminar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "IDIVERSE, IFIDE, IDIG. Empresas TMI."
+)
+
+# 4. Solo documentar, sin eliminar (útil, por ejemplo, en cluster jerárquico):
+explora_outliers(
+  seleccion,
+  accion    = "documentar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "IDIVERSE, IFIDE, IDIG. Empresas TMI."
+)
+
+# 5. Forzar escala lineal (por ejemplo, en un boxplot sin outliers extremos):
+explora_outliers(
+  muestra,
+  variables = RENECO,
+  accion    = "documentar",
+  escala    = "lineal"
+)
+```
+
+### Código fuente. {-}
+
+- [`R/explora_outliers.R`](https://github.com/teckel71/MATrstars/blob/main/R/explora_outliers.R)
+
 ## `presenta_modelo()`. {-}
 
 ### Propósito. {-}

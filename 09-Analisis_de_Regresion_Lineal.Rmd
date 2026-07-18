@@ -242,46 +242,20 @@ seleccion <- explora_na(
 
 No se ha localizado ninguna observación con *missing values*, luego no se ha de realizar ningún tipo de tratamiento.
 
-El siguiente paso es la **identificación de *outliers*.** Para realizar este proceso, y dado que en nuestro análisis contamos con 3 variables, primero “resumiremos” el valor que toman dichas variables para cada caso, mediante el cálculo de la *distancia de Mahalanobis*. De hecho, las distancias de los diferentes casos se almacenarán en una nueva variable, a la que llamaremos MAHALANOBIS, que se incorporará al *data frame* "originales" por medio de la función `mutate()` de `{dplyr}`, y la función `mahalanobis()`. Recordemos que, en los diferentes argumentos de esta función, el punto "." hace referencia al *data frame* que está delante del operador pipe (%\>%).
+El siguiente paso es la **identificación de *outliers***. Como en el análisis contamos con cinco variables métricas (BMAL, DIST, IDIVERSE, ACTIVO y LIQUIDEZ; EFLO es conceptualmente categórica y se convertirá a factor a continuación), "resumiremos" el valor que toma cada empresa en el conjunto de las variables mediante el cálculo de la ***distancia de Mahalanobis***, sobre la que aplicaremos la regla clásica de 1.5 veces el rango intercuartílico. Todo el proceso —cálculo de Mahalanobis, *boxplot*, identificación y filtrado— se realiza en una sola llamada a la función auxiliar `explora_outliers()` del paquete `{MATrstars}`, presentada en el capítulo 5. En esta ocasión sí es necesario especificar el argumento `variables`, porque no queremos incluir EFLO en el cálculo:
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-# Identificando outliers con distancia de Mahalanobis.
-seleccion <- seleccion %>%
-  mutate(
-    MAHALANOBIS = mahalanobis(
-      x      = as.matrix(pick(where(is.numeric))),
-      center = colMeans(pick(where(is.numeric))),
-      cov    = cov(pick(where(is.numeric)))
-    )
-  )
-
-ggplot(data = seleccion, map = (aes(y = MAHALANOBIS))) +
-  geom_boxplot(fill = "orange") +
-  ggtitle("DISTANCIA DE MAHALANOBIS",
-          subtitle = "BMAL, DIST, IDIVERSE, ACTIVO, LIQUIDEZ. Empresas TMI.") +
-  ylab("MAHALANOBIS")
-
-Q1M <- quantile (seleccion$MAHALANOBIS, c(0.25))
-Q3M <- quantile (seleccion$MAHALANOBIS, c(0.75))
-
-seleccion %>%
-  filter(MAHALANOBIS > Q3M + 1.5*IQR(MAHALANOBIS) |
-           MAHALANOBIS < Q1M - 1.5*IQR(MAHALANOBIS))%>%
-  select(MAHALANOBIS, BMAL, DIST, IDIVERSE, ACTIVO, LIQUIDEZ)
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
+# Diagnóstico y filtrado de outliers.
+seleccion_so <- explora_outliers(
+  seleccion,
+  variables = c(BMAL, DIST, IDIVERSE, ACTIVO, LIQUIDEZ),
+  accion    = "eliminar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "BMAL, DIST, IDIVERSE, ACTIVO, LIQUIDEZ. Empresas TMI."
+)
 ```
 
-Puede comprobarse que son 28 casos. Vamos a optar por eliminar estas observaciones, ya que el análisis de regresión lineal es muy sensible a la presencia de *casos atípicos*. Para eliminar los *outliers*, y la propia variable MAHALANOBIS una vez ha desempeñado su cometido, ejecutaremos:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-# Eliminando outliers.
-seleccion_so <-seleccion %>%
-  filter(MAHALANOBIS <= Q3M + 1.5*IQR(MAHALANOBIS) &
-           MAHALANOBIS >= Q1M - 1.5*IQR(MAHALANOBIS))
-
-# Eliminando variable MAHALANOBIS de los df
-seleccion <- seleccion %>% select(-MAHALANOBIS)
-seleccion_so <- seleccion_so %>% select(-MAHALANOBIS)
-```
+La tabla anterior recoge los 28 casos identificados como *outliers*. Vamos a optar por eliminar estas observaciones, ya que el análisis de regresión lineal es muy sensible a la presencia de *casos atípicos*. El *data frame* "seleccion_so" contiene los 272 casos restantes con las seis columnas originales (incluida EFLO, que preservamos para las etapas posteriores del análisis).
 
 Antes de pasar a la especificación y estimación inicial del modelo, queda un detalle: es necesario, si existen variables explicativas categóricas, definirlas como **factores**, a fin de que puedan ser debidamente integradas en el modelo. Tal es el caso de la variable EFLO:
 

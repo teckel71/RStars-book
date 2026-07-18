@@ -126,44 +126,21 @@ muestra <- explora_na(
 )
 ```
 
-Una vez tratados los casos con valores perdidos o *missing values*, **es necesario detectar la presencia de *outliers*** o casos atípicos en la muestra, que pudieran desvirtuar los resultados derivados del ANOVA. Para ello, realizaremos un ***boxplot*** o gráfico de caja. Aplicaremos, por ejemplo, el código siguiente, que utiliza la gramática del paquete `{ggplot2}`:
+Una vez tratados los casos con valores perdidos o *missing values*, **es necesario detectar la presencia de *outliers*** o casos atípicos en la muestra, que pudieran desvirtuar los resultados derivados del ANOVA. Para ello, aplicamos la función auxiliar `explora_outliers()` del paquete `{MATrstars}` que ya se presentó en el capítulo 5. Al pasarle una sola variable métrica —en este caso IRE— la función detecta el caso univariante y aplica directamente la regla clásica de 1.5 veces el rango intercuartílico sobre ella. Con `accion = "eliminar"` la función devuelve un nuevo *data frame* sin los casos identificados como *outliers*, que llamaremos "**muestra_so**":
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
+options(matrstars.figura_num = "8.3", matrstars.tabla_num = "8.1")
   # Outliers
-
-  library (ggplot2)
-  ggplot(data = muestra,
-         map = (aes(y = IRE))) +
-  geom_boxplot(fill = "steelblue", alpha = 0.7) +
-  ggtitle("ÍNDICE DE RENDIMIENTO ENERGÉTICO",
-          subtitle = "48 naves cargueras interestelares") +
-  ylab("IRE (tn / unidad de especia)")
+  muestra_so <- explora_outliers(
+    muestra,
+    variables = IRE,
+    accion    = "eliminar",
+    titulo    = "ÍNDICE DE RENDIMIENTO ENERGÉTICO",
+    subtitulo = "48 naves cargueras interestelares"
+  )
 ```
 
-::: {style="text-align: center;"}
-**Figura 8.3**
-:::
-
-
-En el gráfico de caja se aprecia claramente la presencia de *outliers*. Para identificar las naves concretas que los originan, calcularemos, respecto a la variable IRE, el primer y tercer cuartiles, que nos servirán para construir el filtro que capturará los casos atípicos. Así, en el código, las dos primeras filas calculan los cuartiles primero (Q1) y tercero (Q3) mediante la función `quantile()`. Luego se filtran, mediante la función `filter()` de `{dplyr}`, los *outliers*, calculados como aquellos casos con valores de IRE mayores que Q3 más 1,5 veces el *rango intercuartílico* de la variable; o menores que Q1 menos 1,5 veces dicho rango intercuartílico. Para calcular el rango intercuartílico se recurre a la función `IQR()`. Finalmente, con `select()` se muestran los casos en la consola de RStudio:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-  Q1 <- quantile (muestra$IRE, c(0.25))
-  Q3 <- quantile (muestra$IRE, c(0.75))
-
-  muestra %>%
-    filter(IRE > Q3 + 1.5*IQR(IRE) |
-           IRE < Q1 - 1.5*IQR(IRE)) %>%
-    select(IRE, ASTILLERO)
-```
-
-Las naves identificadas como *outliers* son "iron sovereign" (un viejo carguero de Korrigan con un IRE inusualmente bajo, posiblemente fruto de un desgaste excepcional de su cámara de combustión) y "aurora swift" (un prototipo de Selene con un IRE extraordinariamente alto, probablemente derivado de un calibrado experimental). Como ocurría con los *missing values*, el tratamiento de los *outliers* depende de la información que se tenga, existiendo varias alternativas (corrección del dato, estimación, etc.) Si no se tiene información fiable, y los *outliers* no representan una gran proporción respecto al total de casos, puede optarse por su eliminación de la muestra, como haremos en este ejemplo. Podemos hacerlo creando un nuevo *data frame* a partir de "muestra"; pero sin esos casos. Ese nuevo *data frame* se llamará, por ejemplo, "**muestra_so**":
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-  
-  muestra_so <- muestra %>% filter(IRE <= Q3 + 1.5*IQR(IRE) &
-                                   IRE >= Q1 - 1.5*IQR(IRE))
-```
+Las naves identificadas como *outliers* son "iron sovereign" (un viejo carguero de Korrigan con un IRE inusualmente bajo, posiblemente fruto de un desgaste excepcional de su cámara de combustión) y "aurora swift" (un prototipo de Selene con un IRE extraordinariamente alto, probablemente derivado de un calibrado experimental). Como ocurría con los *missing values*, el tratamiento de los *outliers* depende de la información que se tenga, existiendo varias alternativas (corrección del dato, estimación, etc.) Si no se tiene información fiable, y los *outliers* no representan una gran proporción respecto al total de casos, puede optarse por su eliminación de la muestra, como haremos en este ejemplo. El *data frame* "muestra_so" contiene los 46 casos restantes.
 
 Una vez preparados los datos, vamos a presentar los grupos de naves y sus rendimientos energéticos medios. Para ello, diseñaremos una tabla mediante `kable_rstars()` del paquete `{MATrstars}`, ya presentada en el capítulo 5 (véase también el **Apéndice: Funciones auxiliares del paquete `MATrstars`** para su ficha completa). Antes, hemos de crear un pequeño *data frame*, llamado por ejemplo "tablamedias", en el que cada caso o fila sea uno de los grupos en que queda dividida la muestra a partir de los niveles del factor "ASTILLERO", y que contenga tres variables: el ASTILLERO de cada grupo o submuestra, su número de casos contenidos (variable "observaciones"), y los respectivos IRE medios (variable "media"):
 
@@ -210,7 +187,7 @@ Una vez preparados los datos, vamos a presentar los grupos de naves y sus rendim
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 8.1.** IRE. Medias por astillero.
+**Tabla 8.2.** IRE. Medias por astillero.
 :::
 
 
@@ -326,7 +303,7 @@ En el código anterior, se crea un pequeño *data frame* denominado "normalidad"
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 8.2**
+**Tabla 8.3**
 :::
 
 
@@ -385,7 +362,7 @@ summary_aov <- summary(Datos.aov)
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 8.3.** Resultados del ANOVA
+**Tabla 8.4.** Resultados del ANOVA
 :::
 
 
@@ -431,7 +408,7 @@ pares_df %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 8.4.** Resultados comparaciones múltiples
+**Tabla 8.5.** Resultados comparaciones múltiples
 :::
 
 
@@ -470,35 +447,18 @@ muestra2 <- explora_na(
 )
 ```
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+Aplicamos de nuevo `explora_outliers()`, esta vez sobre la variable IIG, con `accion = "eliminar"` para descartar los casos identificados como *outliers*. El resultado se guarda en el *data frame* "muestra2_so":
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
+options(matrstars.figura_num = "8.6", matrstars.tabla_num = "8.6")
   # Outliers
-
-  ggplot(data = muestra2,
-         map = (aes(y = IIG))) +
-  geom_boxplot(fill = "coral", alpha = 0.7) +
-  ggtitle("ÍNDICE DE INCIDENCIAS GRAVES",
-          subtitle = "48 naves cargueras interestelares") +
-  ylab("IIG (nº de averías mayores)")
-```
-
-::: {style="text-align: center;"}
-**Figura 8.6**
-:::
-
-
-Identificamos los outliers concretos y los eliminamos de la muestra, creando el *data frame* "muestra2_so":
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-  Q1b <- quantile (muestra2$IIG, c(0.25))
-  Q3b <- quantile (muestra2$IIG, c(0.75))
-
-  muestra2 %>%
-    filter(IIG > Q3b + 1.5*IQR(IIG) |
-           IIG < Q1b - 1.5*IQR(IIG)) %>%
-    select(IIG, ASTILLERO)
-  
-  muestra2_so <- muestra2 %>% filter(IIG <= Q3b + 1.5*IQR(IIG) &
-                                     IIG >= Q1b - 1.5*IQR(IIG))
+  muestra2_so <- explora_outliers(
+    muestra2,
+    variables = IIG,
+    accion    = "eliminar",
+    titulo    = "ÍNDICE DE INCIDENCIAS GRAVES",
+    subtitulo = "48 naves cargueras interestelares"
+  )
 ```
 
 Las naves identificadas como *outliers* son, en este caso, "iron sovereign" (Korrigan, con 16 averías acumuladas, fruto presumiblemente de la misma situación de desgaste excepcional que afectaba a su rendimiento) y "transit lane" (Arcturus, con 35 averías, una cifra excepcional posiblemente debida a un siniestro mayor en una de las primeras travesías de la nave). Ambas se eliminan de "muestra2_so".
@@ -528,7 +488,7 @@ Construimos a continuación la tabla de medias por astillero:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 8.5.** IIG. Medias por astillero.
+**Tabla 8.7.** IIG. Medias por astillero.
 :::
 
 
@@ -621,7 +581,7 @@ Procedemos al contraste de normalidad mediante el gráfico QQ y la prueba de *Sh
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 8.6**
+**Tabla 8.8**
 :::
 
 
@@ -666,7 +626,7 @@ aov_table2 <- as.data.frame(summary_aov2[[1]])
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 8.7.** Resultados del ANOVA — IIG (solo ilustrativo)
+**Tabla 8.9.** Resultados del ANOVA — IIG (solo ilustrativo)
 :::
 
 
@@ -720,7 +680,7 @@ De nuevo, si se rechaza la hipótesis nula, cabe preguntarse cuáles son los gru
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 8.8.** Kruskal-Wallis. Múltiples diferencias
+**Tabla 8.10.** Kruskal-Wallis. Múltiples diferencias
 :::
 
 

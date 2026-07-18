@@ -50,38 +50,18 @@ seleccion <- explora_na(
   subtitulo = "Transporte de mercancías interestelar"
 )
 
-# Identificando outliers con distancia de Mahalanobis.
-seleccion <- seleccion %>%
-  mutate(
-    MAHALANOBIS = mahalanobis(
-      x      = as.matrix(pick(where(is.numeric))),
-      center = colMeans(pick(where(is.numeric))),
-      cov    = cov(pick(where(is.numeric)))
-    )
-  )
-
-ggplot(data = seleccion, map = (aes(y = MAHALANOBIS))) +
-  geom_boxplot(fill = "orange") +
-  ggtitle("DISTANCIA DE MAHALANOBIS",
-          subtitle = "BMAL, DIST, IDIVERSE, ACTIVO, LIQUIDEZ. Empresas TMI.") +
-  ylab("MAHALANOBIS")
-
-Q1M <- quantile (seleccion$MAHALANOBIS, c(0.25))                #!
-Q3M <- quantile (seleccion$MAHALANOBIS, c(0.75))                #!
-
-seleccion %>%
-  filter(MAHALANOBIS > Q3M + 1.5*IQR(MAHALANOBIS) |
-           MAHALANOBIS < Q1M - 1.5*IQR(MAHALANOBIS))%>%
-  select(MAHALANOBIS, BMAL, DIST, IDIVERSE, ACTIVO, LIQUIDEZ)
-
-# Eliminando outliers.
-seleccion_so <-seleccion %>%
-  filter(MAHALANOBIS <= Q3M + 1.5*IQR(MAHALANOBIS) &
-           MAHALANOBIS >= Q1M - 1.5*IQR(MAHALANOBIS))
-
-# Eliminando variable MAHALANOBIS de los df
-seleccion <- seleccion %>% select(-MAHALANOBIS)
-seleccion_so <- seleccion_so %>% select(-MAHALANOBIS)
+# Diagnóstico y filtrado de outliers con explora_outliers().
+# Se pasan explícitamente las 5 variables métricas del análisis: EFLO,
+# aunque llega como numérica desde Excel, es conceptualmente categórica
+# y se convertirá a factor a continuación. La función calcula
+# internamente la distancia de Mahalanobis y aplica la regla 1.5·IQR.
+seleccion_so <- explora_outliers(
+  seleccion,
+  variables = c(BMAL, DIST, IDIVERSE, ACTIVO, LIQUIDEZ),
+  accion    = "eliminar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "BMAL, DIST, IDIVERSE, ACTIVO, LIQUIDEZ. Empresas TMI."
+)
 
 # Convertir variable EFLO en Factor.
 
