@@ -387,15 +387,105 @@ presenta_modelo(modelo,
 
 - [`R/presenta_modelo.R`](https://github.com/teckel71/MATrstars/blob/main/R/presenta_modelo.R)
 
+## `presenta_logit()`. {-}
+
+### Propósito. {-}
+
+Convierte el objeto devuelto por `stats::glm()` con `family = binomial(link = "logit")` en un conjunto de tablas formateadas con `kable_rstars()`, listas para su inclusión en un documento R Markdown con salida HTML. Es la función hermana de `presenta_modelo()`, adaptada a las particularidades de los modelos logit binomiales. Las tablas que genera son:
+
+1. **Coeficientes**: estimaciones, errores estándar, estadístico z (contraste de Wald individual), p-valor y niveles de significación (columna `Sig.`).
+2. **Bondad del ajuste**: pseudo R² de Nagelkerke, AIC, devianza nula (con grados de libertad), devianza residual (con grados de libertad) y número de observaciones.
+3. ***Odd ratios***: para cada variable, el coeficiente estimado, el *odd ratio* ($e^{\hat{\beta}}$) y la variación porcentual de la ventaja (*odds*) cuando la variable aumenta en una unidad. Un valor positivo del cambio indica que la ventaja del suceso $Y = 1$ aumenta; uno negativo, que disminuye.
+4. **Matriz de confusión** (opcional): tabla cruzada de valores observados frente a predichos, con el porcentaje global de predicciones correctas. Solo se genera si se suministra el argumento `datos`.
+
+Internamente, cada tabla se construye con `kable_rstars()`, por lo que heredan automáticamente el estilo tipográfico habitual del libro. Cualquier argumento adicional pasado a `presenta_logit()` a través de `...` se reenvía a las llamadas internas de `kable_rstars()`, permitiendo ajustar de forma uniforme, por ejemplo, el tamaño de fuente o las opciones Bootstrap. Esta función se emplea en el capítulo 10 (modelos de elección discreta) para presentar de manera homogénea los distintos modelos logit estimados a lo largo de la práctica.
+
+El pseudo R² de Nagelkerke se calcula internamente a partir de la log-verosimilitud del modelo completo ($L_1$) y del modelo nulo ($L_0$), sin recurrir a paquetes externos:
+
+$$R^2_{\text{Nagelkerke}} = \frac{1 - \exp\!\left(-\tfrac{2}{n}(L_1 - L_0)\right)}{1 - \exp\!\left(\tfrac{2}{n}\, L_0\right)}$$
+
+La separación del *odd ratio* en una tabla independiente (tabla 3), distinta de la de coeficientes (tabla 1), es deliberada: la tabla 1 presenta el contraste estadístico formal (¿es el parámetro significativamente distinto de cero?), mientras que la tabla 3 ofrece la interpretación económica del efecto (¿cuánto cambia la ventaja del suceso cuando la variable sube una unidad?). Esta separación facilita la lectura secuencial en el capítulo.
+
+### Sintaxis. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+presenta_logit(modelo,
+               datos    = NULL,
+               umbral   = 0.5,
+               captions = c("Modelo Logit Binomial",
+                            "Bondad del ajuste",
+                            "Odd ratios",
+                            "Matriz de confusión"),
+               ...)
+```
+
+### Argumentos. {-}
+
+- **`modelo`**: objeto de clase `glm` ajustado con `family = binomial(link = "logit")`. Debe ser compatible con `broom::tidy()` y `broom::glance()`.
+- **`datos`**: *data frame* sobre el que calcular la matriz de confusión. Si se proporciona, se genera la tabla 4; si es `NULL` (por defecto), la tabla 4 no se genera. Esto permite pasar tanto la muestra de estimación como una muestra de test independiente.
+- **`umbral`**: probabilidad umbral para la clasificación. Por defecto, `0.5`: los casos con probabilidad estimada $\hat{P}(Y=1) \geq 0.5$ se clasifican en el grupo 1.
+- **`captions`**: vector de caracteres de longitud 4 con los títulos de las cuatro tablas, en orden: coeficientes, bondad del ajuste, *odd ratios* y matriz de confusión. Por defecto, `c("Modelo Logit Binomial", "Bondad del ajuste", "Odd ratios", "Matriz de confusión")`.
+- **`...`**: argumentos adicionales pasados a `kable_rstars()` (por ejemplo, `font_size` o `bootstrap_options`), aplicados por igual a todas las tablas.
+
+### Valor devuelto. {-}
+
+Una **lista de 3 o 4 elementos**, cada uno un objeto `knitr_kable` con el estilo del libro aplicado. Los elementos están nombrados como `coef`, `gof`, `or` y, opcionalmente, `conf`, de forma que se puede acceder a ellos tanto por posición (`x[[1]]`) como por nombre (`x$coef`).
+
+### Ejemplo. {-}
+
+```{r, eval=FALSE, echo=TRUE}
+library(MATrstars)
+
+# Ajustar un modelo logit binomial
+modelo <- glm(am ~ wt + hp + disp, data = mtcars,
+              family = binomial(link = "logit"))
+
+# Presentar resultados (sin matriz de confusión)
+salida <- presenta_logit(modelo)
+salida$coef    # tabla de coeficientes
+salida$gof     # bondad del ajuste
+salida$or      # odd ratios
+
+# Presentar resultados con matriz de confusión
+salida <- presenta_logit(modelo, datos = mtcars)
+salida$conf    # matriz de confusión
+
+# Con muestra de test separada
+ESTIMA <- mtcars[1:25, ]
+TEST   <- mtcars[26:32, ]
+modelo <- glm(am ~ wt + hp, data = ESTIMA,
+              family = binomial(link = "logit"))
+salida_test <- presenta_logit(modelo, datos = TEST)
+salida_test$conf   # confusión sobre datos no vistos
+
+# Personalizar títulos y tamaño de fuente:
+presenta_logit(modelo,
+               datos    = ESTIMA,
+               captions = c("Coeficientes", "Ajuste",
+                            "Odd ratios", "Confusión"),
+               font_size = 12)
+```
+
+### Código fuente. {-}
+
+- [`R/presenta_logit.R`](https://github.com/teckel71/MATrstars/blob/main/R/presenta_logit.R)
+
 ## `predict_from_excel_scenarios()`. {-}
 
 ### Propósito. {-}
 
-Lee escenarios de simulación o previsión desde una hoja de un archivo Excel y devuelve las predicciones del modelo para cada escenario. La particularidad principal es que **las celdas del Excel pueden contener tanto valores numéricos como fórmulas de R** (por ejemplo, `mean(train$ACTIVO)` o `df1$IVENTAS[1]`), lo que permite al usuario del script definir escenarios de simulación desde Excel sin necesidad de codificarlos en R.
+Lee escenarios de simulación o previsión desde una hoja de un archivo Excel y devuelve las predicciones del modelo para cada escenario. La particularidad principal es que **las celdas del Excel pueden contener tanto valores numéricos como fórmulas de R** (por ejemplo, `mean(train$ACTIVO)` o `df1$IVENTAS[1]`), lo que permite al usuario del *script* definir escenarios de simulación desde Excel sin necesidad de codificarlos en R.
 
 Las fórmulas escritas en las celdas de Excel se evalúan en un entorno donde: (a) cada variable de `train_df` está disponible por su nombre (por ejemplo, `mean(ACTIVO)`); (b) el propio `train_df` está disponible bajo el alias `train` (salvo que `eval_dfs` lo sobrescriba); (c) cualquier *data frame* adicional pasado por `eval_dfs` está disponible bajo el nombre que se le asigne en la lista.
 
-Opcionalmente, la función devuelve además una tabla con los resultados formateada con `kable_rstars()`. Se emplea en el capítulo 9 (regresión lineal múltiple) para las simulaciones de escenarios sobre el modelo final estimado.
+La función **detecta automáticamente el tipo de modelo** y adapta su comportamiento:
+
+- **Modelos lineales** (`lm`): devuelve la predicción puntual con intervalos de predicción o confianza, desviación típica de la predicción y, opcionalmente, la transformación antilog para modelos estimados en logaritmos.
+- **Modelos logit binomiales** (`glm` con `family = binomial(link = "logit")`): devuelve la **probabilidad estimada** de pertenencia al grupo 1 con un **intervalo de confianza** calculado en la escala del enlace (logit) y transformado a probabilidades mediante la función logística inversa, junto con una columna de **clasificación** según el umbral especificado.
+
+Opcionalmente, la función devuelve además una tabla con los resultados formateada con `kable_rstars()`. Se emplea en el capítulo 9 (regresión lineal múltiple) y en el capítulo 10 (modelos de elección discreta) para las simulaciones de escenarios sobre los modelos finales estimados.
+
+> **Detalle técnico (rama logit).** El intervalo de confianza sobre la probabilidad se construye en dos pasos: (1) se obtiene la predicción en la escala del logit ($\hat{\eta}$) con su error estándar ($\text{SE}_\eta$) mediante `predict(type = "link", se.fit = TRUE)`; (2) se construye el intervalo como $\hat{\eta} \pm z_{\alpha/2} \cdot \text{SE}_\eta$ y se transforma a probabilidades aplicando la función logística inversa $p = 1/(1 + e^{-\eta})$ a los tres valores (estimación central, extremo inferior, extremo superior). Esta estrategia garantiza que el intervalo quede siempre acotado entre 0 y 1, lo que no ocurriría si se construyera directamente en la escala de probabilidades.
 
 ### Sintaxis. {-}
 
@@ -409,6 +499,7 @@ predict_from_excel_scenarios(model,
                              interval       = c("prediction", "confidence"),
                              level          = 0.95,
                              transforma_log = FALSE,
+                             umbral         = 0.5,
                              return_kable   = TRUE,
                              caption        = "Predicciones por escenario",
                              ...)
@@ -416,24 +507,27 @@ predict_from_excel_scenarios(model,
 
 ### Argumentos. {-}
 
-- **`model`**: objeto de modelo ajustado (por ejemplo, devuelto por `stats::lm()`).
+- **`model`**: objeto de modelo ajustado, devuelto por `stats::lm()` o por `stats::glm()` con `family = binomial(link = "logit")`. La función detecta automáticamente el tipo y adapta la predicción.
 - **`train_df`**: *data frame* de entrenamiento del modelo. Se utiliza para determinar los niveles de las variables factor y para resolver las referencias a variables sin prefijo dentro de las fórmulas de Excel. Además, queda disponible bajo el alias `train` en dichas fórmulas.
 - **`excel_path`**: ruta al archivo Excel con los escenarios.
 - **`sheet`**: nombre o índice de la hoja del Excel. Por defecto, `"Escenarios"`.
 - **`id_col`**: nombre de la columna del Excel que identifica cada escenario. Por defecto, `"ESCENARIO"`. Si la columna no existe en la hoja, se crea con un identificador correlativo.
 - **`eval_dfs`**: lista con nombre de *data frames* adicionales que se quieren exponer, bajo esos nombres, a las fórmulas escritas en las celdas de Excel. Por ejemplo, `list(df1 = seleccion)` permite escribir en Excel `df1$IVENTAS`. Por defecto, `list()`.
-- **`interval`**: tipo de intervalo devuelto por `stats::predict.lm()`: `"prediction"` (por defecto) o `"confidence"`.
+- **`interval`**: tipo de intervalo devuelto por `stats::predict.lm()`: `"prediction"` (por defecto) o `"confidence"`. Para modelos logit este argumento se ignora (siempre se calcula un intervalo de confianza sobre la probabilidad).
 - **`level`**: nivel de confianza del intervalo. Por defecto, `0.95`.
-- **`transforma_log`**: si `TRUE`, aplica `exp()` a las predicciones y a los extremos del intervalo. Útil cuando el modelo estima `log(y)` pero se desea presentar los resultados en la escala original de `y`. La desviación típica se transforma mediante el método delta aproximado. Por defecto, `FALSE`.
+- **`transforma_log`**: si `TRUE`, aplica `exp()` a las predicciones y a los extremos del intervalo. Útil cuando el modelo estima `log(y)` pero se desea presentar los resultados en la escala original de `y`. La desviación típica se transforma mediante el método delta aproximado. Por defecto, `FALSE`. Se ignora para modelos logit (con un `message()` informativo).
+- **`umbral`**: probabilidad umbral para la clasificación en modelos logit. Por defecto, `0.5`. Se ignora para modelos lineales.
 - **`return_kable`**: si `TRUE` (por defecto), devuelve además una tabla formateada con `kable_rstars()` en el elemento `$table` de la lista de salida. Si `FALSE`, ese elemento vale `NULL`.
-- **`caption`**: título base de la tabla formateada. La función lo completa automáticamente añadiendo el nombre de la variable dependiente, el tipo de intervalo, el nivel de confianza y, si procede, una indicación de que los valores están en la escala original tras antilog. Por defecto, `"Predicciones por escenario"`.
+- **`caption`**: título base de la tabla formateada. La función lo completa automáticamente añadiendo el nombre de la variable dependiente, el tipo de intervalo, el nivel de confianza y, para modelos logit, el umbral de clasificación. Por defecto, `"Predicciones por escenario"`.
 - **`...`**: argumentos adicionales pasados a `kable_rstars()` (por ejemplo, `digits`, `font_size` o `bootstrap_options`). Si no se pasa `digits`, se aplica un valor por defecto de `3`.
 
 ### Valor devuelto. {-}
 
 Una **lista con dos elementos**:
 
-- **`data`**: *data frame* con una fila por escenario, incluyendo la columna identificadora, las variables explicativas evaluadas, la predicción puntual (`.fitted`), los extremos del intervalo (`.lwr`, `.upr`), la desviación típica de la predicción (`.se_fit`) y los metadatos `.interval`, `.level` y `.log_transform`.
+- **`data`**: *data frame* con una fila por escenario, cuyas columnas dependen del tipo de modelo:
+  - *Modelos lineales*: columna identificadora, variables explicativas evaluadas, predicción puntual (`.fitted`), extremos del intervalo (`.lwr`, `.upr`), desviación típica de la predicción (`.se_fit`) y metadatos `.interval`, `.level` y `.log_transform`.
+  - *Modelos logit*: columna identificadora, variables explicativas evaluadas, probabilidad estimada (`.prob`), extremos del intervalo de confianza sobre la probabilidad (`.prob_lwr`, `.prob_upr`), error estándar en la escala del logit (`.se_link`), clasificación según el umbral (`.clasif`), y metadatos `.level` y `.umbral`.
 - **`table`**: objeto `knitr_kable` con el *data frame* anterior formateado con `kable_rstars()` (o `NULL` si `return_kable = FALSE`).
 
 ### Ejemplo. {-}
@@ -441,20 +535,36 @@ Una **lista con dos elementos**:
 ```{r, eval=FALSE, echo=TRUE}
 library(MATrstars)
 
-# Estimación de un modelo log-lineal
-modelo <- lm(log(mpg) ~ wt + hp, data = mtcars)
+# ── Ejemplo 1: modelo lineal (capítulo 9) ──
+modelo_lm <- lm(log(mpg) ~ wt + hp, data = mtcars)
 
-# Predicciones desde un archivo Excel con escenarios
 res <- predict_from_excel_scenarios(
-  model          = modelo,
+  model          = modelo_lm,
   train_df       = mtcars,
-  excel_path     = "escenarios.xlsx",
+  excel_path     = "escenarios_rstars.xlsx",
   sheet          = "Simula1",
   transforma_log = TRUE
 )
 
 res$table    # tabla formateada con kable_rstars()
 res$data     # data frame crudo con predicciones y metadatos
+
+# ── Ejemplo 2: modelo logit (capítulo 10) ──
+modelo_glm <- glm(LICENCIA ~ SOLVENCIA + IPUNT + TINCID + EFLO,
+                  data   = ESTIMA,
+                  family = binomial(link = "logit"))
+
+res2 <- predict_from_excel_scenarios(
+  model      = modelo_glm,
+  train_df   = ESTIMA,
+  excel_path = "escenarios_logit_rstars.xlsx",
+  sheet      = "Escenarios",
+  id_col     = "ESCENARIO",
+  umbral     = 0.5
+)
+
+res2$table   # probabilidades estimadas con IC y clasificación
+res2$data    # data frame con .prob, .prob_lwr, .prob_upr, .clasif
 ```
 
 ### Código fuente. {-}

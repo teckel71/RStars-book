@@ -1,0 +1,501 @@
+# Modelos de Elección Discreta.
+
+![[Concedida o denegada: la decisión como variable.]{.smallcaps}](figuras/licencia.jpg){width="100%"}
+
+## ![](figuras/book.svg){.hicon} Introducción.
+
+En los capítulos anteriores hemos trabajado con modelos en los que la variable dependiente es de naturaleza métrica (continua): la rentabilidad económica de una empresa, el beneficio por cada mil años-luz recorridos, un índice de satisfacción… En todos esos casos, la variable que queremos explicar puede tomar, en principio, cualquier valor dentro de un rango continuo, y los modelos de regresión lineal resultan adecuados para modelizar su comportamiento.
+
+Sin embargo, en muchas situaciones reales del entorno empresarial, la variable que deseamos explicar no es continua, sino **categórica**: un banco concede o deniega un crédito, un consumidor compra o no un producto, una empresa pertenece a un sector u otro, un regulador otorga o rechaza una licencia. En todos estos casos, el resultado de la decisión es una **categoría**, no una cifra. La variable dependiente toma un número finito de valores discretos que representan las alternativas posibles, y lo que interesa modelizar es la **probabilidad de que un individuo o caso pertenezca a una u otra categoría** en función de un conjunto de variables explicativas.
+
+La necesidad de interpretar económicamente estas pautas de comportamiento de los agentes económicos ha originado el desarrollo de la **modelización microeconométrica**. Los modelos microeconométricos ayudan a explicar las decisiones que los agentes del entorno de la empresa toman ante diferentes estímulos concretados en variables o atributos. En definitiva, intentan objetivar la toma de decisiones de los agentes económicos.
+
+## ![](figuras/book.svg){.hicon} Clasificación de los modelos de elección discreta.
+
+Los modelos de elección discreta constituyen una familia amplia de técnicas que se clasifican según las características de la variable dependiente:
+
+-   **Modelos de respuesta binaria:** la variable dependiente presenta solo dos alternativas, codificadas como 0 y 1. Por ejemplo: conceder o no un crédito, comprar o no un producto, obtener o no una licencia. Son los modelos más sencillos y frecuentes.
+
+-   **Modelos de respuesta múltiple:** la variable dependiente admite más de dos categorías. A su vez, se subdividen en:
+
+    -   *Multinomiales:* las categorías no tienen un orden natural (por ejemplo, elegir entre tres marcas).
+
+    -   *Ordenados:* las categorías responden a una escala ordinal (por ejemplo, grado de satisfacción: bajo, medio, alto).
+
+En este capítulo nos centraremos en los **modelos de respuesta binaria** y, dentro de ellos, en el **modelo logit binomial**, que es el más utilizado en la práctica por la facilidad de su especificación, estimación e interpretación.
+
+## ![](figuras/book.svg){.hicon} El modelo de respuesta binaria.
+
+### Planteamiento general.
+
+Supongamos una variable dependiente categórica $Y$ que puede tomar valores 0 ó 1, y un conjunto de $k$ variables explicativas $X_1, X_2, \ldots, X_k$. El objetivo es determinar:
+
+$$
+P[Y = 1 \,/\, X_1, X_2, \ldots, X_k]
+$$
+
+Es decir, la probabilidad de que la variable dependiente tome el valor 1 (pertenencia al grupo de interés) condicionada a los valores de las variables explicativas. Naturalmente, $P[Y = 0 \,/\, X_1, \ldots, X_k] = 1 - P[Y = 1 \,/\, X_1, \ldots, X_k]$.
+
+Para relacionar la probabilidad con el valor de las variables explicativas, construimos una **función de enlace** que incorpora una función de distribución de probabilidad subyacente:
+
+$$
+P[Y = 1 \,/\, X_1, X_2, \ldots, X_k] = f(X_1, X_2, \ldots, X_k; \beta)
+$$
+
+donde $\beta$ es el vector de los $k$ parámetros estructurales del modelo. En la función de enlace supondremos que las variables independientes actúan siguiendo un esquema lineal:
+
+$$
+f(X_1, X_2, \ldots, X_k; \beta) = f(X_1\beta_1 + X_2\beta_2 + \cdots + X_k\beta_k)
+$$
+
+y el modelo a estimar será:
+
+$$
+y = f(X_1\beta_1 + X_2\beta_2 + \cdots + X_k\beta_k) + \varepsilon
+$$
+
+donde $y$ es la variable dependiente (0 ó 1) y $\varepsilon$ es la perturbación aleatoria.
+
+### La función de enlace: logit y probit.
+
+La forma funcional concreta de la función de enlace depende de la distribución de probabilidad que asumamos para el comportamiento de la variable $Y$. Aunque la verdadera naturaleza de $Y$ es discreta, asumimos para ella una distribución de probabilidad continua:
+
+-   **Modelo logit:** suponemos que la variable dependiente sigue una distribución de probabilidad que se ajusta a una **curva logística**.
+
+-   **Modelo probit:** suponemos que la variable dependiente sigue una distribución de probabilidad que se ajusta a una **distribución normal**.
+
+En general, ambos modelos aportan soluciones similares en la mayoría de los casos. A nivel práctico, suelen utilizarse más los modelos logit, al ser menos dificultosa su especificación e interpretación de resultados. Por ello, el resto del capítulo se centrará en el modelo logit.
+
+## ![](figuras/book.svg){.hicon} El modelo logit binomial.
+
+### Especificación.
+
+En el modelo logit binomial, la función de enlace adopta la forma de la **función logística**:
+
+$$
+y_i = \frac{1}{1 + e^{-(\alpha + x_i\beta)}} + \varepsilon_i
+$$
+
+Bajo las hipótesis básicas habituales (el error sigue una distribución normal de media cero, tiene varianza constante y no está autocorrelacionado), la probabilidad de que la variable dependiente tome el valor 1 viene dada por:
+
+$$
+P(y_i = 1 \,/\, x_i) = E(Y) = \frac{1}{1 + e^{-(\alpha + x_i\beta)}}
+$$
+
+y la probabilidad estimada, una vez obtenidos los parámetros del modelo, será:
+
+$$
+\hat{P}(y_i = 1 \,/\, x_i) = \frac{1}{1 + e^{-(\hat{\alpha} + x_i\hat{\beta})}}
+$$
+
+Los parámetros se estiman mediante el método de **máxima verosimilitud**, a diferencia de la regresión lineal, donde frecuentemente se emplean mínimos cuadrados ordinarios (MCO).
+
+### Contraste de significación individual: contraste de Wald.
+
+Para contrastar si un parámetro individual es significativamente distinto de cero, se utiliza el **contraste de Wald**, que desempeña en el modelo logit un papel análogo al del contraste *t* en la regresión lineal. La hipótesis nula es $H_0: \beta_j = 0$, y el estadístico de contraste es:
+
+$$
+z = \frac{\hat{\beta}_j}{\text{SE}(\hat{\beta}_j)}
+$$
+
+que, bajo $H_0$, sigue una distribución normal estándar. Si el p-valor asociado es inferior al nivel de significación elegido (por ejemplo, 0,05), se rechaza $H_0$ y se concluye que la variable es estadísticamente significativa.
+
+Cuando una variable explicativa es un **factor con más de dos niveles** (por ejemplo, EFLO con tres categorías: ANTIGUA, MADURA, RENOVADA), el modelo genera varias variables *dummy*. Es posible que ninguna de ellas sea individualmente significativa, pero que el factor en su conjunto sí lo sea. Para comprobarlo, se aplica el **contraste de Wald conjunto**, que evalúa simultáneamente la hipótesis $H_0: \beta_{\text{MADURA}} = \beta_{\text{RENOVADA}} = 0$.
+
+### Medidas de la bondad del ajuste.
+
+La evaluación de la calidad de un modelo logit difiere de la regresión lineal. No existe un $R^2$ clásico, pero sí varios indicadores alternativos:
+
+-   **Porcentaje de predicciones correctas:** se compara la clasificación predicha por el modelo (asignando al grupo 1 los casos con probabilidad estimada $\geq 0,5$) con la pertenencia real. Es una medida intuitiva, pero puede ser engañosa cuando los grupos están muy desbalanceados.
+
+-   **Pseudo** $R^2$ de Nagelkerke: es una adaptación del coeficiente de determinación para modelos estimados por máxima verosimilitud. Se calcula a partir de las log-verosimilitudes del modelo completo ($L_1$) y del modelo nulo ($L_0$):
+
+$$
+R^2_{\text{Nagelkerke}} = \frac{1 - \exp\!\left(-\frac{2}{n}(L_1 - L_0)\right)}{1 - \exp\!\left(\frac{2}{n}\, L_0\right)}
+$$
+
+Sus valores oscilan entre 0 y 1, y se interpreta de forma análoga al $R^2$ ajustado: valores más altos indican mejor ajuste.
+
+-   **Criterio de información de Akaike (AIC):** permite comparar modelos con distinto número de variables. Cuanto menor sea el AIC, mejor es la especificación del modelo.
+
+-   **Comparación de la devianza:** la devianza mide la discrepancia entre el modelo estimado y un modelo saturado. La diferencia entre la devianza del modelo nulo y la del modelo completo se distribuye como una $\chi^2$ y permite contrastar la significación conjunta del modelo.
+
+### *Odd ratios*: interpretación económica de los coeficientes.
+
+En la regresión lineal, cada coeficiente indica directamente cuánto varía la variable dependiente cuando la explicativa se incrementa en una unidad. En el modelo logit, la interpretación no es tan directa, porque la relación entre las variables explicativas y la probabilidad no es lineal. Sin embargo, existe una transformación que facilita enormemente la lectura: el ***odd ratio***.
+
+El *odd* (o *ventaja*) del suceso $Y = 1$ frente al suceso $Y = 0$ se define como el cociente entre sus probabilidades:
+
+$$
+\frac{P(y_i = 1)}{P(y_i = 0)} = e^{\alpha + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_k x_{ik}}
+$$
+
+Cuando una variable $x_k$ se incrementa en una unidad (manteniendo las demás constantes), la nueva ventaja se divide por la antigua, obteniéndose:
+
+$$
+\frac{\text{Ventaja nueva}}{\text{Ventaja antigua}} = e^{\beta_k}
+$$
+
+El valor $e^{\beta_k}$ se denomina ***odd ratio*** de la variable $x_k$, y es el **factor por el que se multiplica la ventaja** cuando la variable se incrementa en una unidad:
+
+-   Si $\beta_k > 0$ (parámetro positivo), entonces $e^{\beta_k} > 1$: la ventaja **aumenta** cuando aumenta la variable.
+
+-   Si $\beta_k < 0$ (parámetro negativo), entonces $e^{\beta_k} < 1$: la ventaja **disminuye** cuando aumenta la variable.
+
+El cambio porcentual en la ventaja se calcula como $(e^{\beta_k} - 1) \times 100\%$.
+
+## ![](figuras/pie-chart.svg) Práctica: ¿qué determina la concesión de licencias en el sector interestelar?
+
+### ![](figuras/star.svg){.hicon} La ruta Coruscant–Arrakis.
+
+La ruta comercial entre los planetas *Coruscant* (en la Galaxia de Andrómeda) y *Arrakis* (en la Gran Nube de Magallanes) se ha consolidado en los últimos años como una de las más rentables del sector del transporte interestelar de mercancías. La expansión del tráfico comercial entre ambos planetas —impulsada por el crecimiento de la demanda de *especia* y componentes tecnológicos— ha atraído el interés de numerosas compañías navieras.
+
+La **Autoridad Galáctica de Transporte Interestelar (AGTI)**, organismo regulador del sector, gestiona la concesión de licencias de operación para esta ruta. De las 100 compañías que solicitaron operar en la ruta Coruscant–Arrakis, la AGTI concedió la licencia a **40** y la denegó a **60**, basándose en una evaluación de múltiples indicadores financieros, operativos y de calidad de servicio.
+
+Ante la previsión de que se convoque un nuevo concurso de licencias para atender la creciente demanda, un equipo de analistas de la consultora *Data-Evidence* ha decidido construir un **modelo logit binomial** que permita identificar qué factores determinan la concesión o denegación de la licencia. Este modelo será útil tanto para las compañías que deseen evaluar sus posibilidades como para la propia AGTI como herramienta de apoyo a la decisión.
+
+### ![](figuras/pie-chart.svg) Preparación de los datos.
+
+Para llevar a cabo la práctica, necesitamos dos archivos en la carpeta de nuestro proyecto:
+
+-   El archivo de datos **licencias_100.xlsx**, que contiene tres hojas: una con un aviso sobre la naturaleza ficticia de los datos, otra con la descripción de las variables y una tercera (hoja "Datos") con los datos de las 100 compañías solicitantes.
+
+-   El *script* **logit_rstars.R**, con el código que iremos ejecutando paso a paso.
+
+Además, para la simulación de escenarios, utilizaremos el archivo **escenarios_logit_rstars.xlsx**.
+
+Como es habitual, la primera parte del *script* está dedicada a la limpieza de la memoria y a la carga de los paquetes necesarios:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+# Limpiando el Environment de objetos
+
+rm(list = ls())
+
+
+# Cargando paquetes
+
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(aod)       # Para el contraste de Wald sobre factores
+
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
+}
+library(MATrstars)
+```
+
+En esta ocasión se incorpora un paquete nuevo, `{aod}`, que proporciona la función `wald.test()` necesaria para realizar el contraste de Wald conjunto sobre variables categóricas con más de dos niveles. Además, se utilizan del paquete `{MATrstars}` dos funciones clave:
+
+-   **Función `presenta_logit()`**: convierte el objeto devuelto por `glm()` en una presentación formateada de los resultados del modelo logit, compuesta por cuatro tablas: coeficientes con contraste de Wald individual, bondad del ajuste, *odd ratios* y matriz de confusión. Es la función hermana de `presenta_modelo()`, adaptada a las particularidades del modelo logit (véase el **Apéndice: Funciones auxiliares del paquete `MATrstars`** para su ficha completa).
+
+-   **Función `predict_from_excel_scenarios()`**: ya utilizada en el capítulo 9 para la regresión lineal, esta función ha sido extendida para detectar automáticamente si el modelo es un logit binomial y adaptar su comportamiento: en lugar de intervalos de predicción, calcula la probabilidad estimada con un intervalo de confianza y clasifica cada escenario según un umbral.
+
+A continuación, se importan los datos desde el archivo Excel:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+LICENCIAS <- read_excel("licencias_100.xlsx", sheet = "Datos")
+LICENCIAS <- as.data.frame(LICENCIAS, row.names = 1)
+```
+
+Una vez cargados los datos, es imprescindible convertir las variables categóricas a **factor**. La variable EFLO (estado de la flota) tiene tres niveles, y fijamos como nivel de referencia la categoría ANTIGUA, de modo que los coeficientes de MADURA y RENOVADA indicarán la mejora respecto a ese nivel base. La variable LICENCIA es la variable dependiente binaria (0 = denegada, 1 = concedida):
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+# Conversión de variables categóricas a factor
+
+LICENCIAS$EFLO <- factor(LICENCIAS$EFLO,
+                         levels = c("ANTIGUA", "MADURA", "RENOVADA"))
+
+LICENCIAS$LICENCIA <- factor(LICENCIAS$LICENCIA)
+
+# Verificamos la conversión y la codificación de contrastes
+is.factor(LICENCIAS$EFLO)
+is.factor(LICENCIAS$LICENCIA)
+contrasts(LICENCIAS$EFLO)
+contrasts(LICENCIAS$LICENCIA)
+```
+
+La función `contrasts()` confirma la codificación de las variables *dummy*: para EFLO, la categoría ANTIGUA es la referencia (omitida), y se crean dos indicadores para MADURA y RENOVADA. Para LICENCIA, el valor 0 es la referencia y el valor 1 el evento de interés.
+
+### ![](figuras/pie-chart.svg) Análisis descriptivo previo.
+
+Antes de estimar el modelo, conviene examinar las diferencias descriptivas entre los dos grupos (licencia concedida vs. denegada). Esto nos permitirá anticipar qué variables podrían ser relevantes:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+# Distribución de la variable dependiente
+table(LICENCIAS$LICENCIA)
+
+# Tabla cruzada: LICENCIA por EFLO
+table(LICENCIAS$EFLO, LICENCIAS$LICENCIA)
+```
+
+La tabla cruzada revela un patrón sugerente: entre las compañías con flota RENOVADA, el 66% obtuvieron la licencia, frente al 29% de las MADURA y el 20% de las ANTIGUA. Esto sugiere que el estado de la flota podría ser un factor relevante, aunque habrá que confirmar si este efecto se mantiene tras controlar por las demás variables.
+
+Veamos ahora las medias de las variables métricas en cada grupo:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+# Medias de las variables métricas según LICENCIA
+LICENCIAS %>%
+  group_by(LICENCIA) %>%
+  summarise(across(c(SOLVENCIA, IPUNT, TINCID, IFIDE, FLOTA, RUTAS, EXPERIENCIA),
+                   ~ round(mean(.), 2))) %>%
+  kable_rstars(caption = "Medias por grupo de licencia",
+               col.names = c("LICENCIA", "SOLVENCIA", "IPUNT", "TINCID",
+                              "IFIDE", "FLOTA", "RUTAS", "EXPERIENCIA"))
+```
+
+Las diferencias más acusadas se observan en IPUNT (puntualidad), TINCID (tasa de incidencias) y, en menor medida, SOLVENCIA: las compañías que obtuvieron la licencia son, en promedio, más puntuales, registran muchas menos incidencias y tienen mayor solvencia financiera. En cambio, FLOTA muestra medias muy similares en ambos grupos, lo que anticipa que probablemente no será una variable significativa en el modelo.
+
+### ![](figuras/pie-chart.svg) Partición en muestra de estimación y muestra de test.
+
+Para evaluar la capacidad predictiva del modelo sobre datos no vistos, dividimos la muestra en dos subconjuntos: una **muestra de estimación** (80 observaciones) con la que se ajustarán los parámetros del modelo, y una **muestra de test** (20 observaciones) que se reserva exclusivamente para la validación:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+ESTIMA <- LICENCIAS[1:80, ]
+TEST   <- LICENCIAS[81:100, ]
+
+cat("Muestra de estimación:", nrow(ESTIMA), "observaciones\n")
+cat("Muestra de test:",       nrow(TEST),   "observaciones\n")
+table(ESTIMA$LICENCIA)
+table(TEST$LICENCIA)
+```
+
+### ![](figuras/pie-chart.svg) Estimación del modelo logit completo.
+
+Con los datos preparados, estimamos el modelo logit binomial completo, incluyendo todas las variables explicativas disponibles. En R, la estimación se realiza mediante la función `glm()` (*generalized linear model*), especificando la familia `binomial` con enlace `logit`:
+
+```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
+modelo <- glm(LICENCIA ~ SOLVENCIA + IPUNT + TINCID + IFIDE +
+                          FLOTA + RUTAS + EXPERIENCIA + EFLO,
+              data   = ESTIMA,
+              family = binomial(link = "logit"))
+
+summary(modelo)
+```
+
+El resultado es:
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+modelo <- glm(LICENCIA ~ SOLVENCIA + IPUNT + TINCID + IFIDE +
+                          FLOTA + RUTAS + EXPERIENCIA + EFLO,
+              data   = ESTIMA,
+              family = binomial(link = "logit"))
+
+summary(modelo)
+```
+
+El `summary()` muestra los coeficientes estimados, sus errores estándar, el estadístico z del contraste de Wald individual y los p-valores. Sin embargo, al igual que ocurría en la regresión lineal, conviene presentar los resultados de un modo más completo y organizado. Para ello utilizamos la función `presenta_logit()`:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+salida <- presenta_logit(modelo, datos = ESTIMA)
+```
+
+La tabla de coeficientes:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+salida$coef
+```
+
+La tabla de bondad del ajuste:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+salida$gof
+```
+
+Y la tabla de *odd ratios*:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+salida$or
+```
+
+### ![](figuras/pie-chart.svg) Interpretación de los resultados.
+
+A partir de las tablas generadas por `presenta_logit()`, podemos analizar los resultados del modelo:
+
+A nivel individual, el contraste de Wald (columna "Estadístico z" y "p-valor" de la tabla de coeficientes) revela que **tres variables son estadísticamente significativas**:
+
+1.  **TINCID** (tasa de incidencias): es la variable más significativa del modelo. Su coeficiente es negativo, lo que indica que cuanto mayor es la tasa de incidencias de una compañía, menor es su probabilidad de obtener la licencia. Cada incidencia adicional por cada 1.000 años-luz reduce sustancialmente la ventaja (*odds*) de la concesión.
+
+2.  **IPUNT** (índice de puntualidad): su coeficiente positivo indica que la puntualidad favorece la concesión. Cada punto adicional en el índice de puntualidad aumenta la ventaja de obtener la licencia.
+
+3.  **SOLVENCIA**: su coeficiente positivo refleja que las compañías con mayor capacidad financiera tienen más probabilidad de obtener la licencia.
+
+Las demás variables (IFIDE, FLOTA, RUTAS, EXPERIENCIA y EFLO) **no son estadísticamente significativas** a los niveles habituales. Esto no significa que carezcan de relación con la concesión de la licencia —el análisis descriptivo mostró que sí la tienen—, sino que su efecto queda absorbido por las tres variables significativas una vez que estas se incluyen en el modelo.
+
+Un resultado especialmente interesante es el de **EFLO**: en el análisis descriptivo, el estado de la flota mostraba una asociación clara con la licencia (66% de concesión en flotas renovadas frente a 20% en antiguas). Sin embargo, en el modelo multivariante, EFLO pierde significación. La explicación radica en que las compañías con flota renovada tienden a tener también mejor puntualidad y menor tasa de incidencias, que son las variables que verdaderamente capturan el efecto. Este hallazgo ilustra un principio fundamental del análisis multivariante: **una asociación bivariante puede desaparecer cuando se controla por otras variables** que median o confunden la relación.
+
+### ![](figuras/pie-chart.svg) Contraste de Wald para el factor EFLO.
+
+Dado que EFLO genera dos variables *dummy* (EFLOMADURA y EFLORENOVADA), es posible que ninguna sea individualmente significativa pero que el factor en su conjunto sí lo sea. Para comprobarlo, aplicamos el contraste de Wald conjunto con la función `wald.test()` del paquete `{aod}`:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+# Posiciones de los coeficientes de EFLO
+names(coef(modelo))
+
+wald.test(b     = coef(modelo),
+          Sigma = vcov(modelo),
+          Terms = 9:10)
+```
+
+El resultado del contraste confirma lo que ya anticipaban los contrastes individuales: el factor EFLO no es conjuntamente significativo una vez que IPUNT y TINCID están incluidos en el modelo. Esto refuerza la interpretación de que el efecto aparente de la renovación de la flota opera a través de la puntualidad y la seguridad operativa, no de forma directa.
+
+### ![](figuras/pie-chart.svg) Interpretación de los *odd ratios*.
+
+La tabla de *odd ratios* (tercera tabla de `presenta_logit()`) muestra, para cada variable, el factor por el que se multiplica la ventaja del suceso LICENCIA = 1 cuando la variable se incrementa en una unidad, manteniendo las demás constantes:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+salida$or
+```
+
+La lectura de esta tabla permite trasladar los resultados estadísticos a un lenguaje económico directo. Por ejemplo, si el *odd ratio* de TINCID es inferior a 1 (con un cambio negativo en la ventaja), significa que cada incidencia adicional por cada 1.000 años-luz reduce la ventaja de obtener la licencia en el porcentaje que indica la columna "Cambio en ventaja (%)". Si el *odd ratio* de IPUNT es superior a 1, cada punto adicional de puntualidad multiplica la ventaja por ese factor.
+
+### ![](figuras/pie-chart.svg) Bondad del ajuste.
+
+Además de la tabla de bondad del ajuste ya presentada, podemos evaluar la mejora del modelo frente al modelo nulo (un modelo sin ninguna variable explicativa) mediante el análisis de la devianza:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+# Mejora de la devianza (análisis de devianza tipo chi-cuadrado)
+anova(modelo, test = "Chisq")
+```
+
+También resulta ilustrativo comparar el AIC del modelo completo con el del modelo nulo:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+# Comparación de AIC con el modelo nulo
+modelo_nulo <- glm(LICENCIA ~ 1, data = ESTIMA,
+                   family = binomial(link = "logit"))
+AIC(modelo_nulo, modelo)
+```
+
+La reducción sustancial del AIC confirma que las variables explicativas aportan información relevante para explicar la concesión de licencias.
+
+## ![](figuras/pie-chart.svg) Capacidad predictiva del modelo.
+
+### Predicción *in-sample*.
+
+La **matriz de confusión** compara las clasificaciones realizadas por el modelo (basadas en un umbral de probabilidad de 0,5) con las pertenencias reales. `presenta_logit()` la genera automáticamente cuando se le pasa el argumento `datos`:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+salida$conf
+```
+
+El porcentaje de predicciones correctas sobre la muestra de estimación da una primera indicación de la calidad del modelo. Sin embargo, esta medida puede ser optimista, ya que el modelo ha sido ajustado sobre esos mismos datos.
+
+### Predicción sobre la muestra de test.
+
+La verdadera prueba de la capacidad predictiva de un modelo es su comportamiento sobre **datos que no ha visto durante la estimación**. Para ello, aplicamos `presenta_logit()` sobre la muestra de test:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+salida_test <- presenta_logit(modelo, datos = TEST,
+                              captions = c("Modelo Logit Binomial",
+                                           "Bondad del ajuste",
+                                           "Odd ratios",
+                                           "Matriz de confusión (TEST)"))
+salida_test$conf
+```
+
+El porcentaje de acierto sobre la muestra de test permite evaluar de forma honesta si el modelo es capaz de generalizar sus predicciones a nuevos casos.
+
+## ![](figuras/pie-chart.svg) Simulación de escenarios.
+
+Una vez estimado y validado el modelo, podemos utilizarlo para simular la probabilidad de obtener la licencia bajo diferentes perfiles de compañía. Esto resulta especialmente útil para las empresas que estén considerando presentarse al próximo concurso de licencias: pueden evaluar *ex ante* sus posibilidades y, en su caso, identificar qué indicadores deberían mejorar para maximizar su probabilidad de concesión.
+
+Los escenarios se definen en el archivo de Microsoft® Excel® **escenarios_logit_rstars.xlsx**, en su hoja "Escenarios". Se plantean tres perfiles ficticios:
+
+-   **Candidata fuerte:** alta solvencia, alta puntualidad, pocas incidencias, flota renovada y amplia experiencia.
+
+-   **Candidata débil:** solvencia baja, puntualidad deficiente, alta tasa de incidencias, flota antigua y escasa experiencia.
+
+-   **Candidata media:** valores intermedios en todos los indicadores y flota madura.
+
+Para obtener las predicciones, se utiliza la función `predict_from_excel_scenarios()`, que detecta automáticamente que el modelo es un logit binomial y adapta su comportamiento: en lugar de devolver intervalos de predicción (como hacía en el capítulo 9 con la regresión lineal), calcula la **probabilidad estimada** de pertenencia al grupo 1, un **intervalo de confianza** sobre dicha probabilidad y una **clasificación** según el umbral:
+
+```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
+simulacion <- predict_from_excel_scenarios(
+  model      = modelo,
+  train_df   = ESTIMA,
+  excel_path = "escenarios_logit_rstars.xlsx",
+  sheet      = "Escenarios",
+  id_col     = "ESCENARIO",
+  umbral     = 0.5,
+  caption    = "Simulación de escenarios"
+)
+```
+
+El resultado es:
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+simulacion <- predict_from_excel_scenarios(
+  model      = modelo,
+  train_df   = ESTIMA,
+  excel_path = "escenarios_logit_rstars.xlsx",
+  sheet      = "Escenarios",
+  id_col     = "ESCENARIO",
+  umbral     = 0.5,
+  caption    = "Simulación de escenarios"
+)
+```
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+simulacion$table
+```
+
+Los resultados de la simulación ilustran de forma elocuente el poder discriminante del modelo. La candidata fuerte obtiene una probabilidad muy elevada de concesión, coherente con sus buenos indicadores de puntualidad, seguridad y solvencia. La candidata débil, con perfil opuesto, tiene una probabilidad muy baja. La candidata media se sitúa en una zona intermedia, lo que refleja que sus indicadores no son suficientes para asegurar la licencia pero tampoco descartan la posibilidad.
+
+Para las compañías que deseen mejorar sus posibilidades, el modelo señala con claridad dónde concentrar los esfuerzos: **reducir la tasa de incidencias y mejorar la puntualidad** son las dos palancas con mayor impacto sobre la probabilidad de concesión, seguidas de la mejora de la solvencia financiera.
+
+## ![](figuras/pie-chart.svg) Selección automática de la especificación.
+
+Al igual que en la regresión lineal, el algoritmo `step()` puede aplicarse a un modelo logit para buscar una especificación más parsimoniosa. El procedimiento elimina iterativamente las variables que no aportan al modelo según el criterio de información de Akaike (AIC):
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+modelo_step <- step(modelo)
+```
+
+La presentación del modelo reducido:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+salida_red <- presenta_logit(modelo_step, datos = ESTIMA,
+                             captions = c("Modelo reducido (step)",
+                                          "Bondad del ajuste",
+                                          "Odd ratios",
+                                          "Matriz de confusión"))
+salida_red$coef
+salida_red$gof
+salida_red$or
+salida_red$conf
+```
+
+El modelo reducido, al eliminar las variables no significativas, mejora el AIC sin perder capacidad predictiva. Podemos comparar formalmente ambos modelos:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+AIC(modelo, modelo_step)
+```
+
+Finalmente, comprobamos la capacidad predictiva del modelo reducido sobre la muestra de test:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+salida_red_test <- presenta_logit(modelo_step, datos = TEST,
+                                  captions = c("Modelo reducido",
+                                               "Bondad del ajuste",
+                                               "Odd ratios",
+                                               "Confusión TEST (reducido)"))
+salida_red_test$conf
+```
+
+El modelo reducido mantiene una capacidad predictiva similar al completo, con la ventaja de ser más sencillo y de utilizar únicamente las variables que tienen un efecto estadísticamente significativo. En coherencia con el **principio de parsimonia**, el modelo reducido es preferible: explica lo mismo con menos complejidad.
+
+## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo.
+
+En esta sección se muestran los links de acceso a los diferentes materiales (*scripts*, datos...) necesarios para llevar a cabo los contenidos prácticos del capítulo.
+
+**Datos (en formato Microsoft (R) Excel (R)):**
+
+-   licencias_100.xlsx ([obtener aquí](https://raw.githubusercontent.com/teckel71/RStars-book/main/download/licencias_100.xlsx))
+
+-   escenarios_logit_rstars.xlsx ([obtener aquí](https://raw.githubusercontent.com/teckel71/RStars-book/main/download/escenarios_logit_rstars.xlsx))
+
+**Scripts:**
+
+-   logit_rstars.R ([obtener aquí](https://raw.githubusercontent.com/teckel71/RStars-book/main/download/logit_rstars.R))
