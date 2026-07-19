@@ -210,6 +210,21 @@ procesar_rmd <- function(ruta_entrada,
         NA_character_,
         "Predicciones por escenario"
       )
+    ),
+    presenta_logit = list(
+      figures = 0L,
+      captions_by_field = c(
+        coef = "Modelo Logit Binomial",
+        gof  = "Bondad del ajuste",
+        or   = "Odd ratios",
+        conf = "Matriz de confusi\u00f3n"
+      ),
+      captions_by_index = c(
+        "Modelo Logit Binomial",
+        "Bondad del ajuste",
+        "Odd ratios",
+        "Matriz de confusi\u00f3n"
+      )
     )
   )
 

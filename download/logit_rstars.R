@@ -22,8 +22,8 @@ library(ggplot2)
 library(aod)       # Para el contraste de Wald sobre factores
 
 # Paquete MATrstars: funciones auxiliares del libro R-Stars.
-# Contiene, entre otras, las funciones presenta_logit() y kable_rstars(),
-# utilizadas más adelante.
+# Contiene, entre otras, las funciones presenta_logit(), kable_rstars(),
+# explora_na() y create_patchwork(), utilizadas más adelante.
 # Si el paquete no está instalado, se instala desde GitHub (una sola vez).
 if (!requireNamespace("MATrstars", quietly = TRUE)) {
   if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
@@ -43,7 +43,17 @@ summary(LICENCIAS)
 str(LICENCIAS)
 
 
-# 1a. Conversión de variables categóricas a factor
+# 1a. Detección y tratamiento de valores perdidos
+
+LICENCIAS <- explora_na(
+  LICENCIAS,
+  accion    = "eliminar",
+  titulo    = "Modelo logit binomial.",
+  subtitulo = "Licencias de operación — Ruta Coruscant–Arrakis"
+)
+
+
+# 1b. Conversión de variables categóricas a factor
 
 # EFLO: estado de la flota (categórico ordinal).
 # Fijamos el nivel de referencia en ANTIGUA (la categoría "peor"),
@@ -65,7 +75,7 @@ contrasts(LICENCIAS$EFLO)
 contrasts(LICENCIAS$LICENCIA)
 
 
-# 1b. Análisis descriptivo previo
+# 1c. Análisis descriptivo previo
 
 # Distribución de la variable dependiente
 table(LICENCIAS$LICENCIA)
@@ -73,7 +83,39 @@ table(LICENCIAS$LICENCIA)
 # Tabla cruzada: LICENCIA por EFLO
 table(LICENCIAS$EFLO, LICENCIAS$LICENCIA)
 
-# Medias de las variables métricas según LICENCIA
+
+# 1d. Visualización de las variables categóricas frente a LICENCIA
+
+# Gráfico de barras apiladas: EFLO × LICENCIA (proporciones)
+g_eflo <- ggplot(LICENCIAS, aes(x = EFLO, fill = LICENCIA)) +
+  geom_bar(position = "fill") +
+  scale_y_continuous(labels = scales::percent_format()) +
+  scale_fill_manual(values = c("0" = "#E74C3C", "1" = "#2ECC71"),
+                    labels = c("0" = "Denegada", "1" = "Concedida")) +
+  labs(title = "Licencia según estado de la flota",
+       x = "EFLO", y = "Proporción", fill = "Licencia") +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", size = 11))
+
+# Gráfico de barras apiladas: GALAXIA × LICENCIA (proporciones)
+g_gal <- ggplot(LICENCIAS, aes(x = GALAXIA, fill = LICENCIA)) +
+  geom_bar(position = "fill") +
+  scale_y_continuous(labels = scales::percent_format()) +
+  scale_fill_manual(values = c("0" = "#E74C3C", "1" = "#2ECC71"),
+                    labels = c("0" = "Denegada", "1" = "Concedida")) +
+  labs(title = "Licencia según galaxia de operación",
+       x = "GALAXIA", y = "Proporción", fill = "Licencia") +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", size = 11),
+        axis.text.x = element_text(angle = 25, hjust = 1, size = 8))
+
+# Composición de los dos gráficos categóricos
+g_eflo + g_gal + patchwork::plot_layout(guides = "collect")
+
+
+# 1e. Visualización de las variables métricas por grupo de LICENCIA
+
+# Tabla de medias
 LICENCIAS %>%
   group_by(LICENCIA) %>%
   summarise(across(c(SOLVENCIA, IPUNT, TINCID, IFIDE, FLOTA, RUTAS, EXPERIENCIA),
@@ -81,6 +123,32 @@ LICENCIAS %>%
   kable_rstars(caption = "Medias por grupo de licencia",
                col.names = c("LICENCIA", "SOLVENCIA", "IPUNT", "TINCID",
                               "IFIDE", "FLOTA", "RUTAS", "EXPERIENCIA"))
+
+# Gráficos de barras agrupadas para cada variable métrica
+vars_metricas <- c("SOLVENCIA", "IPUNT", "TINCID", "IFIDE",
+                   "FLOTA", "RUTAS", "EXPERIENCIA")
+
+graficos_metricas <- lapply(vars_metricas, function(var) {
+  df_medias <- LICENCIAS %>%
+    group_by(LICENCIA) %>%
+    summarise(media = mean(.data[[var]], na.rm = TRUE), .groups = "drop")
+
+  ggplot(df_medias, aes(x = LICENCIA, y = media, fill = LICENCIA)) +
+    geom_col(width = 0.6) +
+    geom_text(aes(label = round(media, 1)), vjust = -0.5, size = 3) +
+    scale_fill_manual(values = c("0" = "#E74C3C", "1" = "#2ECC71"),
+                      labels = c("0" = "Denegada", "1" = "Concedida")) +
+    labs(title = var, x = NULL, y = "Media", fill = "Licencia") +
+    theme_minimal() +
+    theme(plot.title = element_text(face = "bold", size = 11, hjust = 0.5),
+          legend.position = "bottom",
+          legend.title = element_text(size = 9),
+          legend.text = element_text(size = 8))
+})
+
+# Composición en patchwork (2x2)
+pw_metricas <- create_patchwork(graficos_metricas)
+for (p in pw_metricas) print(p)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -261,3 +329,4 @@ salida_red_test$conf
 
 # Comparación de AIC: modelo completo vs. modelo reducido
 AIC(modelo, modelo_step)
+

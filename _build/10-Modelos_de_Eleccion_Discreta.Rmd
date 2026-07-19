@@ -97,7 +97,7 @@ $$
 \hat{P}(y_i = 1 \,/\, x_i) = \frac{1}{1 + e^{-(\hat{\alpha} + x_i\hat{\beta})}}
 $$
 
-Los parámetros se estiman mediante el método de **máxima verosimilitud**, a diferencia de la regresión lineal, donde frecuentemente se emplean mínimos cuadrados ordinarios (MCO).
+Los parámetros se estiman mediante el método de **máxima verosimilitud**, a diferencia de la regresión lineal, donde se emplea mínimos cuadrados ordinarios (MCO).
 
 ### Contraste de significación individual: contraste de Wald.
 
@@ -195,11 +195,15 @@ if (!requireNamespace("MATrstars", quietly = TRUE)) {
 library(MATrstars)
 ```
 
-En esta ocasión se incorpora un paquete nuevo, `{aod}`, que proporciona la función `wald.test()` necesaria para realizar el contraste de Wald conjunto sobre variables categóricas con más de dos niveles. Además, se utilizan del paquete `{MATrstars}` dos funciones clave:
+En esta ocasión se incorpora un paquete nuevo, `{aod}`, que proporciona la función `wald.test()` necesaria para realizar el contraste de Wald conjunto sobre variables categóricas con más de dos niveles. Además, se utilizan del paquete `{MATrstars}` varias funciones:
 
 -   **Función `presenta_logit()`**: convierte el objeto devuelto por `glm()` en una presentación formateada de los resultados del modelo logit, compuesta por cuatro tablas: coeficientes con contraste de Wald individual, bondad del ajuste, *odd ratios* y matriz de confusión. Es la función hermana de `presenta_modelo()`, adaptada a las particularidades del modelo logit (véase el **Apéndice: Funciones auxiliares del paquete `MATrstars`** para su ficha completa).
 
 -   **Función `predict_from_excel_scenarios()`**: ya utilizada en el capítulo 9 para la regresión lineal, esta función ha sido extendida para detectar automáticamente si el modelo es un logit binomial y adaptar su comportamiento: en lugar de intervalos de predicción, calcula la probabilidad estimada con un intervalo de confianza y clasifica cada escenario según un umbral.
+
+-   **Función `explora_na()`**: ya utilizada en capítulos anteriores, diagnostica los valores ausentes de un *data frame* mediante un gráfico `vis_miss()` con el estilo del libro y, opcionalmente, elimina los casos afectados.
+
+-   **Función `create_patchwork()`**: ya utilizada en capítulos anteriores para componer listas de gráficos `{ggplot2}` en retículas de 2×2, facilitando la comparación visual.
 
 A continuación, se importan los datos desde el archivo Excel:
 
@@ -208,7 +212,25 @@ LICENCIAS <- read_excel("licencias_100.xlsx", sheet = "Datos")
 LICENCIAS <- as.data.frame(LICENCIAS, row.names = 1)
 ```
 
-Una vez cargados los datos, es imprescindible convertir las variables categóricas a **factor**. La variable EFLO (estado de la flota) tiene tres niveles, y fijamos como nivel de referencia la categoría ANTIGUA, de modo que los coeficientes de MADURA y RENOVADA indicarán la mejora respecto a ese nivel base. La variable LICENCIA es la variable dependiente binaria (0 = denegada, 1 = concedida):
+### ![](figuras/pie-chart.svg) Detección de valores perdidos.
+
+Como paso previo a cualquier análisis, comprobamos la presencia de valores perdidos (*missing values*) en la base de datos mediante la función `explora_na()` del paquete `{MATrstars}`:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, fig.width=8, fig.height=4}
+options(matrstars.figura_num = "10.2", matrstars.tabla_num = "10.1")
+LICENCIAS <- explora_na(
+  LICENCIAS,
+  accion    = "eliminar",
+  titulo    = "Modelo logit binomial.",
+  subtitulo = "Licencias de operación — Ruta Coruscant–Arrakis"
+)
+```
+
+La función confirma que la base de datos está completa: no se detectan valores perdidos en ninguna de las 100 observaciones ni en ninguna de las 12 variables. No obstante, al haber utilizado `accion = "eliminar"`, si se hubieran detectado casos con `NA`, habrían quedado automáticamente excluidos del *data frame* de trabajo.
+
+### ![](figuras/pie-chart.svg) Conversión de variables categóricas.
+
+Una vez confirmada la integridad de los datos, es imprescindible convertir las variables categóricas a **factor**. La variable EFLO (estado de la flota) tiene tres niveles, y fijamos como nivel de referencia la categoría ANTIGUA, de modo que los coeficientes de MADURA y RENOVADA indicarán la mejora respecto a ese nivel base. La variable LICENCIA es la variable dependiente binaria (0 = denegada, 1 = concedida):
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 # Conversión de variables categóricas a factor
@@ -229,7 +251,7 @@ La función `contrasts()` confirma la codificación de las variables *dummy*: pa
 
 ### ![](figuras/pie-chart.svg) Análisis descriptivo previo.
 
-Antes de estimar el modelo, conviene examinar las diferencias descriptivas entre los dos grupos (licencia concedida vs. denegada). Esto nos permitirá anticipar qué variables podrían ser relevantes:
+Antes de estimar el modelo, conviene examinar las diferencias descriptivas entre los dos grupos (licencia concedida vs. denegada). Esto nos permitirá anticipar qué variables podrían ser relevantes. Comenzamos con las tablas de frecuencias:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 # Distribución de la variable dependiente
@@ -241,10 +263,42 @@ table(LICENCIAS$EFLO, LICENCIAS$LICENCIA)
 
 La tabla cruzada revela un patrón sugerente: entre las compañías con flota RENOVADA, el 66% obtuvieron la licencia, frente al 29% de las MADURA y el 20% de las ANTIGUA. Esto sugiere que el estado de la flota podría ser un factor relevante, aunque habrá que confirmar si este efecto se mantiene tras controlar por las demás variables.
 
-Veamos ahora las medias de las variables métricas en cada grupo:
+Visualizamos la relación entre las variables categóricas (EFLO y GALAXIA) y la concesión de la licencia mediante gráficos de barras apiladas porcentuales, que muestran la proporción de concesión y denegación dentro de cada categoría:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, out.width="100%", fig.width=10, fig.height=4}
+# Gráfico de barras apiladas: EFLO × LICENCIA (proporciones)
+g_eflo <- ggplot(LICENCIAS, aes(x = EFLO, fill = LICENCIA)) +
+  geom_bar(position = "fill") +
+  scale_y_continuous(labels = scales::percent_format()) +
+  scale_fill_manual(values = c("0" = "#E74C3C", "1" = "#2ECC71"),
+                    labels = c("0" = "Denegada", "1" = "Concedida")) +
+  labs(title = "Licencia según estado de la flota",
+       x = "EFLO", y = "Proporción", fill = "Licencia") +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", size = 11))
+
+# Gráfico de barras apiladas: GALAXIA × LICENCIA (proporciones)
+g_gal <- ggplot(LICENCIAS, aes(x = GALAXIA, fill = LICENCIA)) +
+  geom_bar(position = "fill") +
+  scale_y_continuous(labels = scales::percent_format()) +
+  scale_fill_manual(values = c("0" = "#E74C3C", "1" = "#2ECC71"),
+                    labels = c("0" = "Denegada", "1" = "Concedida")) +
+  labs(title = "Licencia según galaxia de operación",
+       x = "GALAXIA", y = "Proporción", fill = "Licencia") +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", size = 11),
+        axis.text.x = element_text(angle = 25, hjust = 1, size = 8))
+
+# Composición de los dos gráficos categóricos
+g_eflo + g_gal + patchwork::plot_layout(guides = "collect")
+```
+
+El gráfico de EFLO confirma visualmente la asociación ya detectada en la tabla cruzada: la proporción de licencias concedidas crece de forma clara al pasar de flotas antiguas a renovadas. En cuanto a GALAXIA, las diferencias son menos marcadas, lo que anticipa que la galaxia de operación probablemente no será una variable determinante en el modelo.
+
+Veamos ahora las medias de las variables métricas en cada grupo, tanto en formato tabla como en formato gráfico:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-# Medias de las variables métricas según LICENCIA
+# Tabla de medias por grupo de licencia
 LICENCIAS %>%
   group_by(LICENCIA) %>%
   summarise(across(c(SOLVENCIA, IPUNT, TINCID, IFIDE, FLOTA, RUTAS, EXPERIENCIA),
@@ -255,11 +309,46 @@ LICENCIAS %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.1.** Medias por grupo de licencia
+**Tabla 10.2.** Medias por grupo de licencia
 :::
 
 
-Las diferencias más acusadas se observan en IPUNT (puntualidad), TINCID (tasa de incidencias) y, en menor medida, SOLVENCIA: las compañías que obtuvieron la licencia son, en promedio, más puntuales, registran muchas menos incidencias y tienen mayor solvencia financiera. En cambio, FLOTA muestra medias muy similares en ambos grupos, lo que anticipa que probablemente no será una variable significativa en el modelo.
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+# Gráficos de barras agrupadas para cada variable métrica
+vars_metricas <- c("SOLVENCIA", "IPUNT", "TINCID", "IFIDE",
+                   "FLOTA", "RUTAS", "EXPERIENCIA")
+
+graficos_metricas <- lapply(vars_metricas, function(var) {
+  df_medias <- LICENCIAS %>%
+    group_by(LICENCIA) %>%
+    summarise(media = mean(.data[[var]], na.rm = TRUE), .groups = "drop")
+
+  ggplot(df_medias, aes(x = LICENCIA, y = media, fill = LICENCIA)) +
+    geom_col(width = 0.6) +
+    geom_text(aes(label = round(media, 1)), vjust = -0.5, size = 3) +
+    scale_fill_manual(values = c("0" = "#E74C3C", "1" = "#2ECC71"),
+                      labels = c("0" = "Denegada", "1" = "Concedida")) +
+    labs(title = var, x = NULL, y = "Media", fill = "Licencia") +
+    theme_minimal() +
+    theme(plot.title = element_text(face = "bold", size = 11, hjust = 0.5),
+          legend.position = "bottom",
+          legend.title = element_text(size = 9),
+          legend.text = element_text(size = 8))
+})
+
+# Composición en patchwork (2x2)
+pw_metricas <- create_patchwork(graficos_metricas)
+```
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, out.width="100%", fig.width=9, fig.height=5}
+pw_metricas[[1]]
+```
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, out.width="100%", fig.width=9, fig.height=5}
+pw_metricas[[2]]
+```
+
+Los gráficos permiten apreciar de un vistazo las diferencias entre los dos grupos. Las variables que muestran contrastes más acusados son IPUNT (puntualidad), TINCID (tasa de incidencias) y, en menor medida, SOLVENCIA: las compañías que obtuvieron la licencia son, en promedio, más puntuales, registran muchas menos incidencias y tienen mayor solvencia financiera. RUTAS y EXPERIENCIA también presentan diferencias apreciables. En cambio, FLOTA muestra medias muy similares en ambos grupos, lo que anticipa que probablemente no será una variable significativa en el modelo.
 
 ### ![](figuras/pie-chart.svg) Partición en muestra de estimación y muestra de test.
 
@@ -299,44 +388,15 @@ modelo <- glm(LICENCIA ~ SOLVENCIA + IPUNT + TINCID + IFIDE +
 summary(modelo)
 ```
 
-El `summary()` muestra los coeficientes estimados, sus errores estándar, el estadístico z del contraste de Wald individual y los p-valores. Sin embargo, al igual que ocurría en la regresión lineal, conviene presentar los resultados de un modo más completo y organizado. Para ello utilizamos la función `presenta_logit()`:
+El `summary()` muestra los coeficientes estimados, sus errores estándar, el estadístico z del contraste de Wald individual y los p-valores. Sin embargo, al igual que ocurría en la regresión lineal, conviene presentar los resultados de un modo más completo y organizado. Para ello utilizamos la función `presenta_logit()`, que genera tres tablas (coeficientes, bondad del ajuste y *odd ratios*), más una cuarta (matriz de confusión) si se pasa el argumento `datos`:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 salida <- presenta_logit(modelo, datos = ESTIMA)
+
+salida$coef    # Tabla 1: Coeficientes del modelo
+salida$gof     # Tabla 2: Bondad del ajuste
+salida$or      # Tabla 3: Odd ratios
 ```
-
-La tabla de coeficientes:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-salida$coef
-```
-
-::: {style="text-align: center;"}
-**Tabla 10.2**
-:::
-
-
-La tabla de bondad del ajuste:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-salida$gof
-```
-
-::: {style="text-align: center;"}
-**Tabla 10.3**
-:::
-
-
-Y la tabla de *odd ratios*:
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-salida$or
-```
-
-::: {style="text-align: center;"}
-**Tabla 10.4**
-:::
-
 
 ### ![](figuras/pie-chart.svg) Interpretación de los resultados.
 
@@ -378,7 +438,7 @@ salida$or
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.5**
+**Tabla 10.3.** Odd ratios
 :::
 
 
@@ -415,7 +475,7 @@ salida$conf
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.6**
+**Tabla 10.4.** Matriz de confusión
 :::
 
 
@@ -435,7 +495,7 @@ salida_test$conf
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.7**
+**Tabla 10.5.** Matriz de confusión
 :::
 
 
@@ -456,7 +516,7 @@ Los escenarios se definen en el archivo de Microsoft® Excel® **escenarios_logi
 ![](figuras/escenarios_logit.jpg){width="100%"}
 
 ::: {style="text-align: center;"}
-**Figura 10.2.** [Escenarios de empresas candidatas a obtención de licencia.]{.smallcaps}
+**Figura 10.3.** [Escenarios de empresas candidatas a obtención de licencia.]{.smallcaps}
 :::
 
 
@@ -493,7 +553,7 @@ simulacion$table
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.8.** Predicciones por escenario
+**Tabla 10.6.** Predicciones por escenario
 :::
 
 
@@ -521,7 +581,7 @@ salida_red$coef
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.9**
+**Tabla 10.7.** Modelo Logit Binomial
 :::
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
@@ -529,7 +589,7 @@ salida_red$gof
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.10**
+**Tabla 10.8.** Bondad del ajuste
 :::
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
@@ -537,7 +597,7 @@ salida_red$or
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.11**
+**Tabla 10.9.** Odd ratios
 :::
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
@@ -545,7 +605,7 @@ salida_red$conf
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.12**
+**Tabla 10.10.** Matriz de confusión
 :::
 
 
@@ -567,7 +627,7 @@ salida_red_test$conf
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.13**
+**Tabla 10.11.** Matriz de confusión
 :::
 
 
