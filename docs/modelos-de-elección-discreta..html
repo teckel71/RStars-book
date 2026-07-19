@@ -1332,6 +1332,10 @@ Observado  Predicho
 <li><p><strong>Candidata débil:</strong> solvencia baja, puntualidad deficiente, alta tasa de incidencias, flota antigua y escasa experiencia.</p></li>
 <li><p><strong>Candidata media:</strong> valores intermedios en todos los indicadores y flota madura.</p></li>
 </ul>
+<div class="inline-figure"><img src="figuras/escenarios_logit.jpg" style="width:100.0%"></div>
+<div style="text-align: center;">
+<p><strong>Figura 10.2.</strong> <span class="smallcaps">Escenarios de empresas candidatas a obtención de licencia.</span></p>
+</div>
 <p>Para obtener las predicciones, se utiliza la función <code><a href="https://rdrr.io/pkg/MATrstars/man/predict_from_excel_scenarios.html">predict_from_excel_scenarios()</a></code>, que detecta automáticamente que el modelo es un logit binomial y adapta su comportamiento: en lugar de devolver intervalos de predicción (como hacía en el capítulo 9 con la regresión lineal), calcula la <strong>probabilidad estimada</strong> de pertenencia al grupo 1, un <strong>intervalo de confianza</strong> sobre dicha probabilidad y una <strong>clasificación</strong> según el umbral:</p>
 <div class="sourceCode" id="cb382"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simulacion</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/predict_from_excel_scenarios.html">predict_from_excel_scenarios</a></span><span class="op">(</span></span>

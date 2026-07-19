@@ -1,6 +1,6 @@
 # Apéndice: Bases de datos utilizadas en el libro. {.unnumbered}
 
-A lo largo del libro se utilizan **tres bases de datos**, todas ellas ambientadas en el universo *R-Stars* (véase el apéndice correspondiente). Se distribuyen como ficheros de Excel con una estructura homogénea de tres hojas: una hoja `Inicio` con una breve descripción de la base y un aviso legal, una hoja `Variables` con la definición y las unidades de cada variable, y una hoja `Datos` con los registros propiamente dichos.
+A lo largo del libro se utilizan **cuatro bases de datos**, todas ellas ambientadas en el universo *R-Stars* (véase el apéndice correspondiente). Se distribuyen como ficheros de Excel con una estructura homogénea de tres hojas: una hoja `Inicio` con una breve descripción de la base y un aviso legal, una hoja `Variables` con la definición y las unidades de cada variable, y una hoja `Datos` con los registros propiamente dichos.
 
 En este apéndice se documenta el contenido de las tres bases, indicando para cada variable su **nombre**, una **descripción** breve, sus **unidades** de medida y su **tipo** desde el punto de vista estadístico. Para el tipo se emplean cuatro categorías:
 
@@ -90,9 +90,34 @@ Contiene información **técnica** sobre una muestra de **48 cargueros** fabrica
 | `ANTIGÜEDAD` | Años en servicio activo de la nave desde su puesta en operación. | Años | Métrica |
 | `TONELAJE` | Capacidad máxima de carga útil de la nave. | Miles de toneladas | Métrica |
 
+## `licencias_100`. {.unnumbered}
+
+### Descripción general. {.unnumbered}
+
+Contiene información sobre **100 compañías** del sector del transporte interestelar de mercancías que solicitaron una **licencia de operación** en la ruta Coruscant (Galaxia de Andrómeda) – Arrakis (Gran Nube de Magallanes), gestionada por la Autoridad Galáctica de Transporte Interestelar (AGTI). De las 100 solicitantes, 40 obtuvieron la licencia y 60 fueron denegadas. La base recoge variables financieras, operativas y de calidad de servicio evaluadas por la AGTI en el proceso de concesión. Las 100 compañías están extraídas de `interestelar_300`, y las variables compartidas (`NOMBRE`, `SEDE`, `GALAXIA`, `SOLVENCIA`, `FLOTA`, `EFLO`, `IFIDE` y `RUTAS`) conservan exactamente sus valores originales. Se utiliza en el capítulo 10 (modelos de elección discreta) para la estimación de un modelo logit binomial.
+
+**Estructura**: 100 filas × 12 columnas.
+
+### Variables. {.unnumbered}
+
+| Variable | Descripción | Unidades | Tipo |
+|----|----|----|----|
+| `NOMBRE` | Nombre comercial de la compañía. | Texto | Identificador |
+| `SEDE` | Planeta en el que se encuentra la sede operativa de la compañía. | Texto | Atributo nominal |
+| `GALAXIA` | Galaxia en la que opera principalmente la compañía. | Texto (5 modalidades) | Atributo nominal |
+| `EFLO` | Estado de renovación de la flota de cargueros. Modalidades ordenadas de menor a mayor antigüedad: `RENOVADA` \< `MADURA` \< `ANTIGUA`. | Categórico (3 modalidades) | Atributo ordinal |
+| `SOLVENCIA` | Capacidad de la empresa para cubrir sus obligaciones financieras a largo plazo. | Índice (sin unidades) | Métrica |
+| `FLOTA` | Número de cargueros espaciales operativos. | Entero (nº de naves) | Métrica |
+| `RUTAS` | Número de rutas interestelares gestionadas por la empresa. | Entero (nº de rutas) | Métrica |
+| `IFIDE` | Índice de fidelización de los clientes. | Índice (sin unidades) | Métrica |
+| `IPUNT` | Índice de puntualidad de la compañía en sus entregas. | Índice (0–100) | Métrica |
+| `TINCID` | Tasa de incidencias registradas por cada 1.000 años-luz operados. | Incidencias / 1.000 años-luz | Métrica |
+| `EXPERIENCIA` | Años de experiencia de la compañía en rutas intergalácticas similares a la solicitada. | Años | Métrica |
+| `LICENCIA` | Resultado de la solicitud de licencia de operación en la ruta Coruscant–Arrakis. | Binario (1 = concedida, 0 = denegada) | Atributo nominal |
+
 ## Nota sobre carga y uso de las bases. {.unnumbered}
 
-Las tres bases se distribuyen como ficheros `.xlsx`. Para cargarlas en R desde los *scripts* del libro se utiliza la función `readxl::read_excel()`, indicando explícitamente la hoja `Datos`. Un ejemplo típico de carga —adaptable a cualquiera de las tres bases— es el siguiente:
+Las cuatro bases se distribuyen como ficheros `.xlsx`. Para cargarlas en R desde los *scripts* del libro se utiliza la función `readxl::read_excel()`, indicando explícitamente la hoja `Datos`. Un ejemplo típico de carga —adaptable a cualquiera de las cuatro bases— es el siguiente:
 
 ```{r, eval=FALSE, echo=TRUE}
 library(readxl)
