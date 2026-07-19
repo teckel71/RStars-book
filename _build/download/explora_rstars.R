@@ -30,16 +30,6 @@ select(interestelar_100, ACTIVO, FPIOS, LIQUIDEZ)
 interestelar_100A <-select(interestelar_100, ACTIVO, FPIOS, LIQUIDEZ)
 summary (interestelar_100A)
 
-interestelar_100_replica <-select(interestelar_100, everything())
-
-# Seleccionando casos
-select(filter(interestelar_100, RES >= 500), RES, RENECO)
-
-interestelar_100B <-select(filter(interestelar_100,
-                                  RES >= 500 & RENECO < 40),
-                           RES, RENECO, ACTIVO)
-interestelar_100B
-
 # Ordenando casos
 interestelar_100C <- select(interestelar_100, RENECO, EFLO, ACTIVO)
 interestelar_100C <- arrange(interestelar_100C, RENECO)
@@ -50,6 +40,24 @@ interestelar_100D
 
 interestelar_100E <- arrange(interestelar_100C, EFLO, desc(RENECO))
 interestelar_100E
+
+# Operador pipe: encadenando select + arrange
+interestelar_100 %>%
+  select(RENECO, EFLO, ACTIVO) %>%
+  arrange(RENECO)
+
+# Seleccionando casos
+select(filter(interestelar_100, RES >= 500), RES, RENECO)
+
+interestelar_100B <-select(filter(interestelar_100,
+                                  RES >= 500 & RENECO < 40),
+                           RES, RENECO, ACTIVO)
+interestelar_100B
+
+# Seleccionando casos por posición
+interestelar_100 %>% slice(1:5)
+interestelar_100 %>% slice_max(RENECO, n = 3)
+interestelar_100 %>% slice_min(RES, n = 3)
 
 # Renombrando variables
 interestelar_100 <- rename(interestelar_100, SOLVE = SOLVENCIA)

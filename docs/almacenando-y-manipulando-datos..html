@@ -302,7 +302,7 @@
 <p>Para convertirlo en un objeto de la clase “factor”, podemos ejecutar:</p>
 <div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Cl.ojosF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">Cl.ojos</span><span class="op">)</span></span></code></pre></div>
-<p>En el Global Environment vemos que se ha creado el objaeto “Cl.ojosF”, de tipo factor. Si representamos ambos objetos:</p>
+<p>En el Global Environment vemos que se ha creado el objeto “Cl.ojosF”, de tipo factor. Si representamos ambos objetos:</p>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Cl.ojos</span></span></code></pre></div>
 <pre><code>## [1] "azules"   "marrones" "marrones"</code></pre>
@@ -372,6 +372,7 @@
 <code class="sourceCode R"><span><span class="va">mi_lista</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <pre><code>## [1] 8.5 9.0 7.2</code></pre>
 <p>Las listas son las estructuras de almacenamiento más flexibles de R, y son muy utilizadas para organizar y empaquetar resultados complejos.</p>
+<p>En la práctica, la estructura con la que más trabajaremos a lo largo del libro es el <strong><em>data frame</em></strong>: cada columna es un vector (numérico o factor) y cada fila un caso de la muestra. Además, cuando apliquemos técnicas estadísticas, los resultados de los modelos se devolverán habitualmente empaquetados en <strong>listas</strong>, ya que contienen elementos de distinta naturaleza (coeficientes, residuos, estadísticos de bondad de ajuste, etc.). De este modo, los cinco tipos de objetos que acabamos de presentar no son compartimentos estancos: conviven y se complementan en cualquier análisis real.</p>
 </div>
 </div>
 <div id="importando-datos." class="section level2" number="2.2">
@@ -397,8 +398,7 @@
 <code class="sourceCode R"><span><span class="co"># Cargando paquetes</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jthomasmock/gtExtras">gtExtras</a></span><span class="op">)</span></span></code></pre></div>
-<p>Obviamente, para cargar o activar un paquete, previamente debe de haber sido instalado en la máquina donde estamos trabajando. Anteriormente hemos visto como instalar un paquete del repositorio <em>CRAN</em>. De nuevo, si no hemos instalado antes los paquetes <a href="https://readxl.tidyverse.org">readxl</a> y <a href="https://github.com/jthomasmock/gtExtras">gtExtras</a>, tendremos que instalarlos, o nos dará error.</p>
-<p>Para instalar, por ejemplo,el paquete <a href="https://readxl.tidyverse.org">readxl</a>, (que contiene el código necesario para importar datos de un archivo de Microsoft® Excel®), iremos a la ventana inferior-derecha y pulsaremos la pestaña <code>Packages</code>, pulsaremos en <code>Install</code>, y emergerá una ventana donde dejaremos el “repositorio” que viene por defecto. En el campo “Packages”, escribiremos el nombre del “paquete” que contiene la librería que nos hace falta (normalmente coincide con el nombre de la propia librería, en nuestro caso <a href="https://readxl.tidyverse.org">readxl</a>. Una vez descargado el “paquete”, podremos ejecutar el código anterior sin problemas. Si hemos de instalar el paquete <a href="https://github.com/jthomasmock/gtExtras">gtExtras</a>, procederemos de idéntico modo.</p>
+<p>Obviamente, para cargar o activar un paquete, previamente debe de haber sido instalado en la máquina donde estamos trabajando. Si no hemos instalado antes los paquetes <a href="https://readxl.tidyverse.org">readxl</a> y <a href="https://github.com/jthomasmock/gtExtras">gtExtras</a>, tendremos que instalarlos siguiendo el procedimiento descrito en la sección de <em>Paquetes</em> del capítulo anterior (sección 1.7), o nos dará error.</p>
 <p>Para importar los datos localizados en el archivo de Microsoft® Excel® “interestelar_100.xlsx” el código que podemos usar es:</p>
 <div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># DATOS</span></span>
@@ -406,7 +406,7 @@
 <span><span class="va">interestelar_100</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"interestelar_100.xlsx"</span>, sheet <span class="op">=</span> <span class="st">"Datos"</span>, na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"n.d."</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>La función encargada de importar los datos es <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code>, del paquete <a href="https://readxl.tidyverse.org">readxl</a>.</p>
 <p>Una cuestión importante a tener en cuenta es que, si hay valores perdidos que, en la hoja de cálculo vienen indicados en las celdas mediante algún tipo de anotación, como por ejemplo, “n.d.” (no disponible); deberá incluirse el argumento <code>na =</code> para informar de las anotaciones en las celdas que deben traducirse como valores faltantes. Si las celdas sin dato aparecieran en la hoja de cálculo siempre en blanco, este argumento no haría falta.</p>
-<p>Volviendo a nuestro ejemplo, podemos observar cómo en el <em>Environment</em> ya aparece un objeto. Este objeto es una estructura de datos tipo <em>data frame</em>, se llama “interestelar_100” y contiene 104 filas (una por empresa) y 29 columnas, una por cada una de las variables almacenadas en el archivo de Microsoft® Excel®. De estas variables, cinco son de tipo cualitativo, formadas por cadenas de caracteres.</p>
+<p>Volviendo a nuestro ejemplo, podemos observar cómo en el <em>Global Environment</em> ya aparece un objeto. Este objeto es una estructura de datos tipo <em>data frame</em>, se llama “interestelar_100” y contiene 104 filas (una por empresa) y 29 columnas, una por cada una de las variables almacenadas en el archivo de Microsoft® Excel®. De estas variables, cinco son de tipo cualitativo, formadas por cadenas de caracteres.</p>
 <p>Puede explorarse el contenido del <em>data frame</em> y los principales estadísticos con la función <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>:</p>
 <div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span> <span class="op">(</span><span class="va">interestelar_100</span><span class="op">)</span></span></code></pre></div>
@@ -548,7 +548,7 @@
 ##  3rd Qu.:40.40   3rd Qu.:0.520769   3rd Qu.: 197.3137   3rd Qu.:  3206.33  
 ##  Max.   :73.30   Max.   :1.550435   Max.   :2151.6418   Max.   :262555.82  
 ##  NA's   :1       NA's   :1          NA's   :2           NA's   :2</code></pre>
-<p>Vemos que ya no aparece “NOMBRE” como variable, y en el <em>Environment</em> ya aparece el data frame “interestelar_100” con 100 observaciones (casos), pero con 28 variables (una menos).</p>
+<p>Vemos que ya no aparece “NOMBRE” como variable, y en el <em>Global Environment</em> ya aparece el data frame “interestelar_100” con 100 observaciones (casos), pero con 28 variables (una menos).</p>
 <p>Un modo visualmente más elegante de explorar el contenido del data frame es la utilización de la función <code><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary()</a></code> del paquete <a href="https://github.com/jthomasmock/gtExtras">gtExtras</a>:</p>
 <div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># visualizando el data frame de modo elegante con {gtExtras}</span></span>
@@ -557,24 +557,24 @@
 <div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">datos_df_graph</span></span></code></pre></div>
 <p>Y el resultado será:</p>
-<div id="hutiahklut" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="waqdlrrujc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#hutiahklut table {
+#waqdlrrujc table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#hutiahklut thead, #hutiahklut tbody, #hutiahklut tfoot, #hutiahklut tr, #hutiahklut td, #hutiahklut th {
+#waqdlrrujc thead, #waqdlrrujc tbody, #waqdlrrujc tfoot, #waqdlrrujc tr, #waqdlrrujc td, #waqdlrrujc th {
   border-style: none;
 }
 
-#hutiahklut p {
+#waqdlrrujc p {
   margin: 0;
   padding: 0;
 }
 
-#hutiahklut .gt_table {
+#waqdlrrujc .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -600,12 +600,12 @@
   border-left-color: #D3D3D3;
 }
 
-#hutiahklut .gt_caption {
+#waqdlrrujc .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#hutiahklut .gt_title {
+#waqdlrrujc .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -617,7 +617,7 @@
   border-bottom-width: 0;
 }
 
-#hutiahklut .gt_subtitle {
+#waqdlrrujc .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -629,7 +629,7 @@
   border-top-width: 0;
 }
 
-#hutiahklut .gt_heading {
+#waqdlrrujc .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -641,13 +641,13 @@
   border-right-color: #D3D3D3;
 }
 
-#hutiahklut .gt_bottom_border {
+#waqdlrrujc .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 0px;
   border-bottom-color: #D3D3D3;
 }
 
-#hutiahklut .gt_col_headings {
+#waqdlrrujc .gt_col_headings {
   border-top-style: solid;
   border-top-width: 0px;
   border-top-color: #D3D3D3;
@@ -662,7 +662,7 @@
   border-right-color: #D3D3D3;
 }
 
-#hutiahklut .gt_col_heading {
+#waqdlrrujc .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -682,7 +682,7 @@
   overflow-x: hidden;
 }
 
-#hutiahklut .gt_column_spanner_outer {
+#waqdlrrujc .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -694,15 +694,15 @@
   padding-right: 4px;
 }
 
-#hutiahklut .gt_column_spanner_outer:first-child {
+#waqdlrrujc .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#hutiahklut .gt_column_spanner_outer:last-child {
+#waqdlrrujc .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#hutiahklut .gt_column_spanner {
+#waqdlrrujc .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -714,11 +714,11 @@
   width: 100%;
 }
 
-#hutiahklut .gt_spanner_row {
+#waqdlrrujc .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#hutiahklut .gt_group_heading {
+#waqdlrrujc .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -744,7 +744,7 @@
   text-align: left;
 }
 
-#hutiahklut .gt_empty_group_heading {
+#waqdlrrujc .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -759,15 +759,15 @@
   vertical-align: middle;
 }
 
-#hutiahklut .gt_from_md > :first-child {
+#waqdlrrujc .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#hutiahklut .gt_from_md > :last-child {
+#waqdlrrujc .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#hutiahklut .gt_row {
+#waqdlrrujc .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -786,7 +786,7 @@
   overflow-x: hidden;
 }
 
-#hutiahklut .gt_stub {
+#waqdlrrujc .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -799,7 +799,7 @@
   padding-right: 5px;
 }
 
-#hutiahklut .gt_stub_row_group {
+#waqdlrrujc .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -813,15 +813,15 @@
   vertical-align: top;
 }
 
-#hutiahklut .gt_row_group_first td {
+#waqdlrrujc .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#hutiahklut .gt_row_group_first th {
+#waqdlrrujc .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#hutiahklut .gt_summary_row {
+#waqdlrrujc .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -831,16 +831,16 @@
   padding-right: 5px;
 }
 
-#hutiahklut .gt_first_summary_row {
+#waqdlrrujc .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#hutiahklut .gt_first_summary_row.thick {
+#waqdlrrujc .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#hutiahklut .gt_last_summary_row {
+#waqdlrrujc .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -850,7 +850,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#hutiahklut .gt_grand_summary_row {
+#waqdlrrujc .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -860,7 +860,7 @@
   padding-right: 5px;
 }
 
-#hutiahklut .gt_first_grand_summary_row {
+#waqdlrrujc .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -870,7 +870,7 @@
   border-top-color: #D3D3D3;
 }
 
-#hutiahklut .gt_last_grand_summary_row_top {
+#waqdlrrujc .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -880,11 +880,11 @@
   border-bottom-color: #D3D3D3;
 }
 
-#hutiahklut .gt_striped {
+#waqdlrrujc .gt_striped {
   background-color: #FAFAFA;
 }
 
-#hutiahklut .gt_table_body {
+#waqdlrrujc .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -893,7 +893,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#hutiahklut .gt_footnotes {
+#waqdlrrujc .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -907,7 +907,7 @@
   border-right-color: #D3D3D3;
 }
 
-#hutiahklut .gt_footnote {
+#waqdlrrujc .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -916,7 +916,7 @@
   padding-right: 5px;
 }
 
-#hutiahklut .gt_sourcenotes {
+#waqdlrrujc .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -930,7 +930,7 @@
   border-right-color: #D3D3D3;
 }
 
-#hutiahklut .gt_sourcenote {
+#waqdlrrujc .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -938,72 +938,72 @@
   padding-right: 5px;
 }
 
-#hutiahklut .gt_left {
+#waqdlrrujc .gt_left {
   text-align: left;
 }
 
-#hutiahklut .gt_center {
+#waqdlrrujc .gt_center {
   text-align: center;
 }
 
-#hutiahklut .gt_right {
+#waqdlrrujc .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#hutiahklut .gt_font_normal {
+#waqdlrrujc .gt_font_normal {
   font-weight: normal;
 }
 
-#hutiahklut .gt_font_bold {
+#waqdlrrujc .gt_font_bold {
   font-weight: bold;
 }
 
-#hutiahklut .gt_font_italic {
+#waqdlrrujc .gt_font_italic {
   font-style: italic;
 }
 
-#hutiahklut .gt_super {
+#waqdlrrujc .gt_super {
   font-size: 65%;
 }
 
-#hutiahklut .gt_footnote_marks {
+#waqdlrrujc .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#hutiahklut .gt_asterisk {
+#waqdlrrujc .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#hutiahklut .gt_indent_1 {
+#waqdlrrujc .gt_indent_1 {
   text-indent: 5px;
 }
 
-#hutiahklut .gt_indent_2 {
+#waqdlrrujc .gt_indent_2 {
   text-indent: 10px;
 }
 
-#hutiahklut .gt_indent_3 {
+#waqdlrrujc .gt_indent_3 {
   text-indent: 15px;
 }
 
-#hutiahklut .gt_indent_4 {
+#waqdlrrujc .gt_indent_4 {
   text-indent: 20px;
 }
 
-#hutiahklut .gt_indent_5 {
+#waqdlrrujc .gt_indent_5 {
   text-indent: 25px;
 }
 
-#hutiahklut .katex-display {
+#waqdlrrujc .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#hutiahklut div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#waqdlrrujc div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1369,10 +1369,9 @@ ANTIGUA, MADURA and RENOVADA
 <p>El <strong><em>Tidyverse</em></strong> es un conjunto de paquetes / librerías con una filosofía común, como es el uso de ciertas estructuras gramaticales, que facilitan muchas de las tareas y análisis que podrían hacerse con el lenguaje R estándar. Una buena obra para profundizar en el Tidyverse es <span class="citation">Wickham and Grolemund (<a href="bibliograf%C3%ADa.html#ref-Wickham2017R">2017</a>)</span>.</p>
 <p>Uno de esos paquetes es <a href="https://dplyr.tidyverse.org">dplyr</a>, que proporciona una gramática más sencilla que la del lenguaje R convencional para <strong>manipular</strong> los objetos de estructuras de datos conocidos como <strong><em>data frames</em></strong>.</p>
 <p>Los data frames, como ya sabemos, son estructuras en las que se almacenan datos de modo que, por columnas, se disponen las variables del análisis; y por filas los casos que conforman la muestra / población.</p>
-<p>Vamos a suponer que trabajamos dentro del proyecto que hemos creado previamente, de nombre “explora” (ver capítulo 1), y que seguimos con el script “explora_rstars.R”, co el que importamos los datos del archivo de Microsoft® Excel® “interestelar_100.xlsx”, que contení información sobre 104 empresas de transporte de mercancías a escala interestelar.</p>
-<p>Suponemos que hemos ejecutado la primera parte del script (importación de datos con corrección de la columna de nombres de las filas, al <em>data frame</em> interestelar_100, que está almacenado en el <em>Global Environment.</em></p>
-<p>Vamos a continuar desde este punto.</p>
-<p>A continuación, cargaremos el paquete <a href="https://dplyr.tidyverse.org">dplyr</a>. Si nunca antes se ha utilizado este paquete, cuando lo intentemos activar con la función <code><a href="https://rdrr.io/r/base/library.html">library()</a></code> nos dará un error o nos dirá que previamente hay que importarlo. En ese caso, iremos a la ventana inferior-derecha y pulsaremos la pestaña “Packages”, pulsaremos en <code>Install</code>, y emergerá una ventana donde dejaremos el “repositorio” que viene por defecto y, en el campo <code>Packages</code>, escribiremos el nombre del “paquete” (en nuestro caso <a href="https://dplyr.tidyverse.org">dplyr</a>). Una vez descargado el “paquete”, podremos ejecutar el código sin problemas:</p>
+<p>Vamos a suponer que trabajamos dentro del proyecto que hemos creado previamente, de nombre “explora” (ver capítulo 1), y que seguimos con el script “explora_rstars.R”, con el que importamos los datos del archivo de Microsoft® Excel® “interestelar_100.xlsx”, que contenía información sobre 104 empresas de transporte de mercancías a escala interestelar.</p>
+<p>Suponemos que hemos ejecutado la primera parte del script (importación de datos con corrección de la columna de nombres de las filas), al <em>data frame</em> interestelar_100, que está almacenado en el <em>Global Environment.</em></p>
+<p>Vamos a continuar desde este punto. A continuación, cargaremos el paquete <a href="https://dplyr.tidyverse.org">dplyr</a> (si no está instalado, instálalo como se indicó en la sección 1.7):</p>
 <div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## dplyr</span></span>
 <span><span class="co"># Cargando dplyr</span></span>
@@ -1457,7 +1456,7 @@ ANTIGUA, MADURA and RENOVADA
 ##  3rd Qu.:0.520769   3rd Qu.: 197.3137   3rd Qu.:  3206.33  
 ##  Max.   :1.550435   Max.   :2151.6418   Max.   :262555.82  
 ##  NA's   :1          NA's   :2           NA's   :2</code></pre>
-<p>Podemos verificar que, en el <em>Environment,</em> el <em>data frame</em> ha pasado a tener una variable menos (27), ya que hemos eliminado la variable FJUR. Es decir, con el guión “-” se pueden eliminar directamente variables de un <em>data frame</em>.</p>
+<p>Podemos verificar que, en el <em>Global Environment,</em> el <em>data frame</em> ha pasado a tener una variable menos (27), ya que hemos eliminado la variable FJUR. Es decir, con el guión “-” se pueden eliminar directamente variables de un <em>data frame</em>.</p>
 <p>Ahora, suponemos que queremos visualizar las variables del <em>data frame</em> “interestelar_100”: ACTIVO, FPIOS, LIQUIDEZ. Para ello, ejecutaremos el código:</p>
 <div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">interestelar_100</span>, <span class="va">ACTIVO</span>, <span class="va">FPIOS</span>, <span class="va">LIQUIDEZ</span><span class="op">)</span></span></code></pre></div>
@@ -1473,7 +1472,7 @@ ANTIGUA, MADURA and RENOVADA
 ## moya cargo systems           520.29 169.4900 0.5264522
 ## travis star haulage          466.63 244.9200 0.4893415</code></pre>
 <p>(<strong>Nota:</strong> solo mostramos aquí los 10 primeros casos del <em>data frame</em>).</p>
-<p>Como no hemos asignado el resultado de la función a ningún “nombre”, R simplemente muestra el resultado en pantalla; pero no guarda ningún objeto en el <em>Environment</em>. Si asignamos un <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> a un “nombre”, se creará un <em>data frame</em> con ese nombre, y las variables seleccionadas:</p>
+<p>Como no hemos asignado el resultado de la función a ningún “nombre”, R simplemente muestra el resultado en pantalla; pero no guarda ningún objeto en el <em>Global Environment</em>. Si asignamos un <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> a un “nombre”, se creará un <em>data frame</em> con ese nombre, y las variables seleccionadas:</p>
 <div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">interestelar_100A</span> <span class="op">&lt;-</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">interestelar_100</span>, <span class="va">ACTIVO</span>, <span class="va">FPIOS</span>, <span class="va">LIQUIDEZ</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span> <span class="op">(</span><span class="va">interestelar_100A</span><span class="op">)</span></span></code></pre></div>
@@ -1486,41 +1485,13 @@ ANTIGUA, MADURA and RENOVADA
 ##  Max.   :2966.52   Max.   :1441.44   Max.   :1.2580  
 ##  NA's   :1</code></pre>
 <p>Podemos comprobar cómo en el <em>Global Environment</em> hay otro objeto <em>data frame</em> llamado “interestelar_100A”, con 4 variables (y los mismos 104 casos).</p>
-<p>Otra posibilidad que tenemos es hacer una copia de un <em>data frame</em> rápidamente con el argumento <code><a href="https://tidyselect.r-lib.org/reference/everything.html">everything()</a></code>. Por ejemplo:</p>
+</div>
+<div id="ordenando-casos-de-un-data-frame." class="section level3" number="2.3.3">
+<h3>
+<span class="header-section-number">2.3.3</span> <img src="figuras/key.svg" class="hicon"> Ordenando casos de un <em>data frame</em>.<a class="anchor" aria-label="anchor" href="#ordenando-casos-de-un-data-frame."><i class="fas fa-link"></i></a>
+</h3>
+<p>Además de seleccionar determinados casos u observaciones (filas) de un <em>data frame</em>, con las funciones de <a href="https://dplyr.tidyverse.org">dplyr</a> también se pueden ordenar estos casos a partir de los valores de ciertas variables (columnas). La función a utilizar es <code><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange()</a></code>. Esta función, por defecto, ordena los casos de modo <strong>ascendente</strong>. Por ejemplo, crearemos el data frame “interestelar_100C” con variables RENECO, EFLO y ACTIVO, con los casos ordenados de modo ascendente según el valor de RENECO:</p>
 <div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">interestelar_100_replica</span> <span class="op">&lt;-</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">interestelar_100</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Se ha creado el <em>date frame</em> “interestelar_100_replica” que es una copia exacta de “interestelar_100”.</p>
-</div>
-<div id="seleccionando-casos-de-un-data-frame." class="section level3" number="2.3.3">
-<h3>
-<span class="header-section-number">2.3.3</span> <img src="figuras/key.svg" class="hicon"> Seleccionando casos de un <em>data frame</em>.<a class="anchor" aria-label="anchor" href="#seleccionando-casos-de-un-data-frame."><i class="fas fa-link"></i></a>
-</h3>
-<p>Además de seleccionar variables, con <a href="https://dplyr.tidyverse.org">dplyr</a> también se pueden seleccionar casos que cumplan ciertas condiciones. La función para realizar este cometido es <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code>. Por ejemplo, si queremos seleccionar las empresas con un resultado (variable RES) mayor o igual a 500 miles de PAVOs y presentar en pantalla el valor de RES y RENECO, la instrucción será:</p>
-<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Seleccionando casos</span></span>
-<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">interestelar_100</span>, <span class="va">RES</span> <span class="op">&gt;=</span> <span class="fl">500</span><span class="op">)</span>, <span class="va">RES</span>, <span class="va">RENECO</span><span class="op">)</span></span></code></pre></div>
-<pre><code>##                            RES   RENECO
-## chakotay cargo systems  800.81 37.09704
-## hyperdrive express     1130.14 45.20668
-## home one cargo          609.58 53.21612
-## arrakis freight        1189.86 40.10962</code></pre>
-<p>Se pueden incluir varias condiciones en un mismo filtro. Por ejemplo, vamos a construir un nuevo <em>data frame</em> llamado “interestelar_100B” con las empresas que posean un resultado mayor o igual a 500 miles de PAVOs y una rentabilidad económica (variable RENECO) inferior al 40%, y que contenga las variables RES, RENECO y ACTIVO:</p>
-<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">interestelar_100B</span> <span class="op">&lt;-</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">interestelar_100</span>,</span>
-<span>                                  <span class="va">RES</span> <span class="op">&gt;=</span> <span class="fl">500</span> <span class="op">&amp;</span> <span class="va">RENECO</span> <span class="op">&lt;</span> <span class="fl">40</span><span class="op">)</span>,</span>
-<span>                                  <span class="va">RES</span>, <span class="va">RENECO</span>, <span class="va">ACTIVO</span><span class="op">)</span></span>
-<span><span class="va">interestelar_100B</span></span></code></pre></div>
-<pre><code>##                           RES   RENECO  ACTIVO
-## chakotay cargo systems 800.81 37.09704 2158.69</code></pre>
-<p>En el <em>Global</em> <em>Environment</em> aparecerá el <em>data frame</em> “interestelar_100B” con solo un caso: la empresa que cumple con ambas condiciones, introducidas mediante el operador lógico relacional “<strong>&amp;</strong>”, que es el equivalente a la conjunción “y” o, dicho de otro modo, la intersección. Otro operador lógico relacional muy utilizado es la barra vertical “<strong>|</strong>”, que es el equivalente a la conjunción “o”, es decir, la unión.</p>
-<p>Los filtros más usuales son &gt;, &lt;, &gt;=, &lt;=, == (igual, ojo, con dos símbolos de igualdad seguidos) y != (no igual).</p>
-</div>
-<div id="ordenando-casos-de-un-data-frame." class="section level3" number="2.3.4">
-<h3>
-<span class="header-section-number">2.3.4</span> <img src="figuras/key.svg" class="hicon"> Ordenando casos de un <em>data frame</em>.<a class="anchor" aria-label="anchor" href="#ordenando-casos-de-un-data-frame."><i class="fas fa-link"></i></a>
-</h3>
-<p>Además de seleccionar determinados casos u observaciones (filas) de un <em>data frame</em>, con las funciones de <a href="https://dplyr.tidyverse.org">dplyr</a> también se pueden ordenar estos casos a partir de los valores de ciertas variables (columnas). La función a utilizar es <code><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange()</a></code>. Esta función, por defecto, ordena los casos de modo <strong>ascendente</strong>. Por ejemplo, creremos el data frame “interestelar_100C” con variables RENECO, EFLO y ACTIVO, con los casos ordenados de modo ascendente según el valor de RENECO:</p>
-<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Ordenando casos</span></span>
 <span><span class="va">interestelar_100C</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">interestelar_100</span>, <span class="va">RENECO</span>, <span class="va">EFLO</span>, <span class="va">ACTIVO</span><span class="op">)</span></span>
 <span><span class="va">interestelar_100C</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">interestelar_100C</span>, <span class="va">RENECO</span><span class="op">)</span></span>
@@ -1538,7 +1509,7 @@ ANTIGUA, MADURA and RENOVADA
 ## darth vader logistics    38.20225  ANTIGUA   29.37</code></pre>
 <p>(<strong>Nota:</strong> solo mostramos aquí los 10 primeros casos del <em>data frame</em>).</p>
 <p>En cambio, para ordenar de modo descendente, hay que utilizar el argumento <code><a href="https://dplyr.tidyverse.org/reference/desc.html">desc()</a></code>:</p>
-<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">interestelar_100D</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">interestelar_100C</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">interestelar_100D</span></span></code></pre></div>
 <pre><code>##                         RENECO     EFLO ACTIVO
@@ -1553,8 +1524,8 @@ ANTIGUA, MADURA and RENOVADA
 ## super star logistics  66.25660 RENOVADA 490.17
 ## moya cargo systems    66.05547 RENOVADA 520.29</code></pre>
 <p>(<strong>Nota:</strong> solo mostramos aquí los 10 primeros casos del <em>data frame</em>).</p>
-<p>En el supuesto de que, en relación con una variable, hubiera varios casos con el mismo valor, podría añadirse otro criterio de ordenación con otra variable, que afectaría a tales casos para deshacer el “empate”. Por ejemplo,vamos a ordenar las empresas según la variable EFLO (categorización de la antigüedad promedio de la flota, con categorías: ANTIGUA, MADURA, RENOVADA). Al ser una variable categórica, los casos se ordenarán por orden alfabético según la categoría a la que pertenenecen. Para ordenar los casos pertenecientes a una misma categoría de EFLO, utilizaremos, de nuevo RENECO (en orden de valor descendente):</p>
-<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
+<p>En el supuesto de que, en relación con una variable, hubiera varios casos con el mismo valor, podría añadirse otro criterio de ordenación con otra variable, que afectaría a tales casos para deshacer el “empate”. Por ejemplo, vamos a ordenar las empresas según la variable EFLO (categorización de la antigüedad promedio de la flota, con categorías: ANTIGUA, MADURA, RENOVADA). Al ser una variable categórica, los casos se ordenarán por orden alfabético según la categoría a la que pertenecen. Para ordenar los casos pertenecientes a una misma categoría de EFLO, utilizaremos, de nuevo RENECO (en orden de valor descendente):</p>
+<div class="sourceCode" id="cb95"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">interestelar_100E</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">interestelar_100C</span>, <span class="va">EFLO</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">interestelar_100E</span></span></code></pre></div>
 <pre><code>##                               RENECO    EFLO ACTIVO
@@ -1570,23 +1541,115 @@ ANTIGUA, MADURA and RENOVADA
 ## uhura cargo systems         60.28957 ANTIGUA  61.47</code></pre>
 <p>(<strong>Nota:</strong> solo mostramos aquí los 10 primeros casos del <em>data frame.</em> Una vez concluidos los casos con categoría de EFLO “ANTIGUA”, comenzarían a aparecer los de categoría “MADURA”, desde el caso con posición 52, exactamente).</p>
 </div>
-<div id="cambiando-el-nombre-de-las-variables-de-un-data-frame." class="section level3" number="2.3.5">
+<div id="el-operador-pipe." class="section level3" number="2.3.4">
 <h3>
-<span class="header-section-number">2.3.5</span> <img src="figuras/key.svg" class="hicon"> Cambiando el nombre de las variables de un <em>data frame</em>.<a class="anchor" aria-label="anchor" href="#cambiando-el-nombre-de-las-variables-de-un-data-frame."><i class="fas fa-link"></i></a>
+<span class="header-section-number">2.3.4</span> <img src="figuras/key.svg" class="hicon"> El operador <em>pipe</em>.<a class="anchor" aria-label="anchor" href="#el-operador-pipe."><i class="fas fa-link"></i></a>
+</h3>
+<p>Ahora que conocemos <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> y <code><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange()</a></code>, podemos apreciar un problema: cuando necesitamos combinar varias operaciones, el código anidado se vuelve difícil de leer. El <strong>operador <em>pipe</em></strong> <code>%&gt;%</code>, proporcionado por el paquete <a href="https://magrittr.tidyverse.org">magrittr</a> (que se carga automáticamente con <a href="https://dplyr.tidyverse.org">dplyr</a>), resuelve este problema permitiendo <strong>encadenar</strong> operaciones de forma legible: toma el resultado de la expresión a su izquierda y lo pasa como primer argumento de la función a su derecha. Así, en lugar de anidar funciones —lo que obliga a leer “de dentro hacia fuera”—, el código se lee de izquierda a derecha y de arriba abajo, como una secuencia de pasos.</p>
+<p>Veamos un ejemplo. Ya sabemos seleccionar variables con <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> y ordenar casos con <code><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange()</a></code>. Si quisiéramos hacer ambas cosas a la vez, sin <em>pipe</em> habría que anidar las funciones:</p>
+<div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Sin pipe (lectura "de dentro hacia fuera"):</span></span>
+<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">interestelar_100</span>, <span class="va">RENECO</span>, <span class="va">EFLO</span>, <span class="va">ACTIVO</span><span class="op">)</span>, <span class="va">RENECO</span><span class="op">)</span></span></code></pre></div>
+<p>Con el operador <em>pipe</em>, el mismo código se escribe así:</p>
+<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Con pipe (lectura secuencial):</span></span>
+<span><span class="va">interestelar_100</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">RENECO</span>, <span class="va">EFLO</span>, <span class="va">ACTIVO</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">RENECO</span><span class="op">)</span></span></code></pre></div>
+<p>La segunda versión se lee de un modo mucho más natural: “toma <code>interestelar_100</code>, selecciona esas tres variables y ordena por RENECO”. A lo largo del libro, utilizaremos habitualmente el operador <em>pipe</em> para construir secuencias de instrucciones.</p>
+<p><strong>Nota:</strong> Desde la versión 4.1, R incorpora un <em>pipe</em> nativo, <code>|&gt;</code>, que funciona de forma muy similar a <code>%&gt;%</code>. En este libro utilizaremos <code>%&gt;%</code> por ser el más habitual en el ecosistema <em>tidyverse</em>, pero es posible encontrar <code>|&gt;</code> en documentación y código más reciente.</p>
+</div>
+<div id="seleccionando-casos-de-un-data-frame." class="section level3" number="2.3.5">
+<h3>
+<span class="header-section-number">2.3.5</span> <img src="figuras/key.svg" class="hicon"> Seleccionando casos de un <em>data frame</em>.<a class="anchor" aria-label="anchor" href="#seleccionando-casos-de-un-data-frame."><i class="fas fa-link"></i></a>
+</h3>
+<p>Además de seleccionar variables, con <a href="https://dplyr.tidyverse.org">dplyr</a> también se pueden seleccionar casos que cumplan ciertas condiciones. La función para realizar este cometido es <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code>. Por ejemplo, si queremos seleccionar las empresas con un resultado (variable RES) mayor o igual a 500 miles de PAVOs y presentar en pantalla el valor de RES y RENECO, la instrucción será:</p>
+<div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Seleccionando casos</span></span>
+<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">interestelar_100</span>, <span class="va">RES</span> <span class="op">&gt;=</span> <span class="fl">500</span><span class="op">)</span>, <span class="va">RES</span>, <span class="va">RENECO</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##                            RES   RENECO
+## chakotay cargo systems  800.81 37.09704
+## hyperdrive express     1130.14 45.20668
+## home one cargo          609.58 53.21612
+## arrakis freight        1189.86 40.10962</code></pre>
+<p>Se pueden incluir varias condiciones en un mismo filtro. Por ejemplo, vamos a construir un nuevo <em>data frame</em> llamado “interestelar_100B” con las empresas que posean un resultado mayor o igual a 500 miles de PAVOs y una rentabilidad económica (variable RENECO) inferior al 40%, y que contenga las variables RES, RENECO y ACTIVO:</p>
+<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">interestelar_100B</span> <span class="op">&lt;-</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">interestelar_100</span>,</span>
+<span>                                  <span class="va">RES</span> <span class="op">&gt;=</span> <span class="fl">500</span> <span class="op">&amp;</span> <span class="va">RENECO</span> <span class="op">&lt;</span> <span class="fl">40</span><span class="op">)</span>,</span>
+<span>                                  <span class="va">RES</span>, <span class="va">RENECO</span>, <span class="va">ACTIVO</span><span class="op">)</span></span>
+<span><span class="va">interestelar_100B</span></span></code></pre></div>
+<pre><code>##                           RES   RENECO  ACTIVO
+## chakotay cargo systems 800.81 37.09704 2158.69</code></pre>
+<p>En el <em>Global Environment</em> aparecerá el <em>data frame</em> “interestelar_100B” con solo un caso: la empresa que cumple con ambas condiciones, introducidas mediante el operador lógico relacional “<strong>&amp;</strong>”, que es el equivalente a la conjunción “y” o, dicho de otro modo, la intersección. Otro operador lógico relacional muy utilizado es la barra vertical “<strong>|</strong>”, que es el equivalente a la conjunción “o”, es decir, la unión.</p>
+<p>Los filtros más usuales son &gt;, &lt;, &gt;=, &lt;=, == (igual, ojo, con dos símbolos de igualdad seguidos) y != (no igual).</p>
+</div>
+<div id="seleccionando-casos-por-posición-slice." class="section level3" number="2.3.6">
+<h3>
+<span class="header-section-number">2.3.6</span> <img src="figuras/key.svg" class="hicon"> Seleccionando casos por posición: <code>slice()</code>.<a class="anchor" aria-label="anchor" href="#seleccionando-casos-por-posici%C3%B3n-slice."><i class="fas fa-link"></i></a>
+</h3>
+<p>Mientras que <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> selecciona casos según una <strong>condición lógica</strong>, la función <code><a href="https://dplyr.tidyverse.org/reference/slice.html">slice()</a></code> selecciona casos por su <strong>posición</strong> (número de fila). Por ejemplo, para obtener los 5 primeros casos del <em>data frame</em>:</p>
+<div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Seleccionando las 5 primeras filas</span></span>
+<span><span class="va">interestelar_100</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##                                SEDE                    GALAXIA  ACTIVO    FPIOS     ING
+## hyperion star haulage        Tierra                 Vía Láctea  211.14  88.9400  405.29
+## jovian logistics            Miranda    Gran Nube de Magallanes  220.56  78.9300  644.59
+## sandworm freight              Kobol Pequeña Nube de Magallanes   17.55   8.6700   44.67
+## ripley interstellar freight    Mann Pequeña Nube de Magallanes   37.07  19.6300   25.45
+## chakotay cargo systems      Romulus      Galaxia del Triángulo 2158.69 971.4105 1786.00
+##                               MARGEN    RES SOLVENCIA  ACTCOR   PASCOR  LIQUIDEZ APALANCA
+## hyperion star haulage       41.51348 168.25    172.78  50.960  91.6500 0.5592011   137.40
+## jovian logistics            32.11189 206.99    155.73  55.250 106.2225 0.5358355   179.44
+## sandworm freight            35.12424  15.69    197.64   6.810   6.6600 0.9659574   102.42
+## ripley interstellar freight 59.52849  15.15    212.56  11.180  13.0800 0.8586790    88.84
+## chakotay cargo systems      44.83819 800.81    125.77 647.607 890.4596 0.5963287   388.00
+##                               RENECO    RENFIN EMPLEA FLOTA COSTOP      CAPEX       IMD
+## hyperion star haulage       79.68646 189.17248     35    14 237.04  19.380235 18.422000
+## jovian logistics            93.84748 262.24503     24    25 437.60  33.869023 61.914877
+## sandworm freight            89.40171 180.96886      7     8  28.98   1.038288  1.441949
+## ripley interstellar freight 40.86863  77.17779     19    13  10.30   3.490783  1.101115
+## chakotay cargo systems      37.09704  82.43786     65    46 985.19 124.669222 56.063919
+##                                 EFLO RUTAS      IDIG  IDIVERSE    IFIDE     GMEDRUT       DIST
+## hyperion star haulage         MADURA   244 13.740744 11.715023 26.44375 0.689549180   38.35032
+## jovian logistics              MADURA   406 27.434229 22.392005 29.77401 0.509827586 1006.90062
+## sandworm freight             ANTIGUA    70  2.318556  3.958736 30.85507 0.224142857   33.28985
+## ripley interstellar freight  ANTIGUA  2915  4.446463 71.350741 40.12974 0.005197256  379.05223
+## chakotay cargo systems      RENOVADA  1229 42.719724 54.368150 64.26013 0.651594793  928.84218
+##                                   BMAL
+## hyperion star haulage       4387.18643
+## jovian logistics             205.57143
+## sandworm freight             471.31488
+## ripley interstellar freight   39.96811
+## chakotay cargo systems       862.15938</code></pre>
+<p><a href="https://dplyr.tidyverse.org">dplyr</a> ofrece además variantes muy útiles de <code><a href="https://dplyr.tidyverse.org/reference/slice.html">slice()</a></code>. Por ejemplo, <code><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_head()</a></code> y <code><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_tail()</a></code> seleccionan las primeras o últimas <em>n</em> filas, y <code><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_max()</a></code> y <code><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_min()</a></code> seleccionan los casos con los valores más altos o más bajos de una variable:</p>
+<div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Las 3 empresas con mayor rentabilidad económica</span></span>
+<span><span class="va">interestelar_100</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_max</a></span><span class="op">(</span><span class="va">RENECO</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Las 3 empresas con menor resultado</span></span>
+<span><span class="va">interestelar_100</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_min</a></span><span class="op">(</span><span class="va">RES</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##                         RENECO    RES ACTIVO
+## jovian logistics      93.84748 206.99 220.56
+## sandworm freight      89.40171  15.69  17.55
+## hyperion star haulage 79.68646 168.25 211.14</code></pre>
+</div>
+<div id="cambiando-el-nombre-de-las-variables-de-un-data-frame." class="section level3" number="2.3.7">
+<h3>
+<span class="header-section-number">2.3.7</span> <img src="figuras/key.svg" class="hicon"> Cambiando el nombre de las variables de un <em>data frame</em>.<a class="anchor" aria-label="anchor" href="#cambiando-el-nombre-de-las-variables-de-un-data-frame."><i class="fas fa-link"></i></a>
 </h3>
 <p><a href="https://dplyr.tidyverse.org">dplyr</a> cuenta con una función que cambia fácilmente el nombre de una variable o columna de un <em>data frame</em>: la función <code><a href="https://dplyr.tidyverse.org/reference/rename.html">rename()</a></code>. Por ejemplo, si queremos cambiar el nombre de la variable SOLVENCIA por SOLVE, simplemente ejecutaremos:</p>
-<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Renombrando variables</span></span>
 <span><span class="va">interestelar_100</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span><span class="va">interestelar_100</span>, SOLVE <span class="op">=</span> <span class="va">SOLVENCIA</span><span class="op">)</span></span></code></pre></div>
 <p>Podemos comprobar en el <em>Global</em> <em>Environment</em>, despegando el <em>data frame</em> “interestelar_100”, cómo ya no aparece la variable SOLVENCIA; pero sí SOLVE en su lugar (obviamente, con los mismos datos). Es necesario tener en cuenta que en el <strong>lado izquierdo</strong> de la igualdad hay que poner el <strong>nuevo nombre</strong>, y en la derecha el antiguo. Además, en el mismo <code><a href="https://dplyr.tidyverse.org/reference/rename.html">rename()</a></code> se pueden cambiar los nombres de <strong>varias variables</strong>, separando las igualdades correspondientes con comas.</p>
 </div>
-<div id="añadiendo-variables-como-transformación-de-otras-variables-en-un-data-frame." class="section level3" number="2.3.6">
+<div id="añadiendo-variables-como-transformación-de-otras-variables-en-un-data-frame." class="section level3" number="2.3.8">
 <h3>
-<span class="header-section-number">2.3.6</span> <img src="figuras/key.svg" class="hicon"> Añadiendo variables como transformación de otras variables en un <em>data frame</em>.<a class="anchor" aria-label="anchor" href="#a%C3%B1adiendo-variables-como-transformaci%C3%B3n-de-otras-variables-en-un-data-frame."><i class="fas fa-link"></i></a>
+<span class="header-section-number">2.3.8</span> <img src="figuras/key.svg" class="hicon"> Añadiendo variables como transformación de otras variables en un <em>data frame</em>.<a class="anchor" aria-label="anchor" href="#a%C3%B1adiendo-variables-como-transformaci%C3%B3n-de-otras-variables-en-un-data-frame."><i class="fas fa-link"></i></a>
 </h3>
 <p>El paquete <a href="https://dplyr.tidyverse.org">dplyr</a> también permite añadir a un <em>data frame</em> variables que son el resultado de <strong>someter a otras variables a diversas transformaciones</strong>. La función para realizar este cometido es <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code>.</p>
 <p>Así, por ejemplo, imaginemos que necesitamos calcular una variable como el cociente entre los resultados obtenidos y el activo. A esta nueva variable la denominaremos RATIO. El código será:</p>
-<div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Añadiendo variables como transformacion de otras variables</span></span>
 <span><span class="va">interestelar_100</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span> <span class="op">(</span><span class="va">interestelar_100</span>, RATIO <span class="op">=</span> <span class="va">RES</span> <span class="op">/</span> <span class="va">ACTIVO</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">interestelar_100</span><span class="op">)</span></span></code></pre></div>
@@ -1653,7 +1716,7 @@ ANTIGUA, MADURA and RENOVADA
 ##  Max.   :1.550435   Max.   :2151.6418   Max.   :262555.82   Max.   :0.9385  
 ##  NA's   :1          NA's   :2           NA's   :2           NA's   :1</code></pre>
 <p>En la transformación de variables mediante la función <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code>, se pueden utilizar <strong>funciones integradas en otros paquetes</strong> de R. Por ejemplo, si queremos calcular la variable ACTIVOS_ACUM como la variable que recoge los activos acumulados de las empresas, comenzando por la empresa con menor activo, podríamos utilizar la función <code><a href="https://rdrr.io/r/base/cumsum.html">cumsum()</a></code> del paquete <code>{base}</code>, y hacer:</p>
-<div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">interestelar_100</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">interestelar_100</span>, <span class="va">ACTIVO</span><span class="op">)</span></span>
 <span><span class="va">interestelar_100</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span> <span class="op">(</span><span class="va">interestelar_100</span>, ACTIVOS_ACUM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="va">ACTIVO</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">interestelar_100</span>, <span class="va">ACTIVO</span>, <span class="va">ACTIVOS_ACUM</span><span class="op">)</span></span></code></pre></div>
@@ -1671,7 +1734,7 @@ ANTIGUA, MADURA and RENOVADA
 ## atreides logistics           43.52       360.36</code></pre>
 <p>(<strong>Nota:</strong> solo mostramos aquí los 10 primeros casos del <em>data frame)</em></p>
 <p>Un último ejemplo de adición de una variable que es transformación de otras. En este caso, crearemos la variable DIM (dimensión), que es <strong>categórica</strong> (los datos son conjuntos de caracteres). Esta variable tomará valor “ALTA” para las empresas con un valor de la variable ACTIVO mayor o igual que 216 miles de PAVOs, “MEDIA” para las empresas con un ACTIVO menor que 216 miles de PAVOs y mayor o igual que 54 miles de PAVOs, y “REDUCIDA” para las que tengan un valor en la variable ACTIVO menor que 54 miles de PAVOs. Para calcular automáticamente esta nueva variable categórica, utilizaremos la función de <code>{base}</code> llamada <code><a href="https://rdrr.io/r/base/cut.html">cut()</a></code>. De este modo, haremos:</p>
-<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">interestelar_100</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="va">interestelar_100</span>,</span>
 <span>                           DIM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span><span class="op">(</span><span class="va">ACTIVO</span>,</span>
 <span>                                 breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">54</span>, <span class="fl">216</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
@@ -1690,27 +1753,28 @@ ANTIGUA, MADURA and RENOVADA
 ## quantum freightlines         43.26 REDUCIDA
 ## atreides logistics           43.52 REDUCIDA</code></pre>
 <p>(<strong>Nota:</strong> solo mostramos aquí los 10 primeros casos del <em>data frame)</em></p>
-<p>Cabe destacar que podíamos haber escrito el código para crear la variable DIM de un modo más elegante y cómodo, utilizando <strong>el operador</strong> <strong>“<em>pipe</em>”</strong> <code>%&gt;%</code>. Este operador permite concatenar una serie de instrucciones:</p>
-<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
+<p>Este mismo código puede escribirse de un modo más legible utilizando el operador <em>pipe</em> <code>%&gt;%</code> que ya presentamos al comienzo de la sección:</p>
+<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">interestelar_100</span> <span class="op">&lt;-</span> <span class="va">interestelar_100</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>                              <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>DIM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span><span class="op">(</span><span class="va">ACTIVO</span>,</span>
-<span>                                breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">54</span>, <span class="fl">216</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
-<span>                                labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"REDUCIDA"</span>, <span class="st">"MEDIA"</span>, <span class="st">"ALTA"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>DIM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span><span class="op">(</span><span class="va">ACTIVO</span>,</span>
+<span>                   breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">54</span>, <span class="fl">216</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
+<span>                   labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"REDUCIDA"</span>, <span class="st">"MEDIA"</span>, <span class="st">"ALTA"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">interestelar_100</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">ACTIVO</span>, <span class="va">DIM</span><span class="op">)</span></span></code></pre></div>
-<p>Podríamos interpretar la línea de código así: asigna al <em>data frame</em> “interestelar_100” sus propios datos, después (<code>%&gt;%</code>) crea la variable DIM con la función <code><a href="https://rdrr.io/r/base/cut.html">cut()</a></code> y añádela a “interestelar_100”. En el segundo caso, es más sencillo aún: toma “interestelar_100” y saca en pantalla los valores de las variables ACTIVO y DIM.</p>
+<p>La lectura es ahora secuencial: “toma <code>interestelar_100</code>, crea la variable DIM con <code><a href="https://rdrr.io/r/base/cut.html">cut()</a></code> y guarda el resultado”. En la segunda línea: “toma <code>interestelar_100</code> y muestra las variables ACTIVO y DIM”.</p>
 </div>
-<div id="extrayendo-y-sintetizando-información-de-las-variables-de-un-data-frame." class="section level3" number="2.3.7">
+<div id="extrayendo-y-sintetizando-información-de-las-variables-de-un-data-frame." class="section level3" number="2.3.9">
 <h3>
-<span class="header-section-number">2.3.7</span> <img src="figuras/key.svg" class="hicon"> Extrayendo y sintetizando información de las variables de un <em>data frame</em>.<a class="anchor" aria-label="anchor" href="#extrayendo-y-sintetizando-informaci%C3%B3n-de-las-variables-de-un-data-frame."><i class="fas fa-link"></i></a>
+<span class="header-section-number">2.3.9</span> <img src="figuras/key.svg" class="hicon"> Extrayendo y sintetizando información de las variables de un <em>data frame</em>.<a class="anchor" aria-label="anchor" href="#extrayendo-y-sintetizando-informaci%C3%B3n-de-las-variables-de-un-data-frame."><i class="fas fa-link"></i></a>
 </h3>
 <p>Otra posibilidad que permite <a href="https://dplyr.tidyverse.org">dplyr</a> es extraer y sintetizar mediante <em>medidas</em> la información de las variables contenidas en un <em>data frame</em>. Para ello, nos ayudaremos de la función <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code>. Como ejemplo, calculemos la <em>rentabilidad financiera</em> media de las 20 empresas:</p>
-<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#Extrayendo información de las variables de un data frame</span></span>
 <span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span><span class="va">interestelar_100</span>, RENFIN_media <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">RENFIN</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
 <pre><code>##   RENFIN_media
 ## 1     121.5434</code></pre>
 <p>A veces, es de gran utilidad combinar <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code> con <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code>, que extrae la información dividiendo el conjunto de casos por grupos definidos por una de las variables. Para ilustrarlo, vamos a utilizar la variable recién creada DIM para hacer tres grupos de empresas, tras lo cual calcularemos la media de las rentabilidades para cada grupo:</p>
-<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">interestelar_100</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">DIM</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>RENFIN_media <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">RENFIN</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -1729,15 +1793,15 @@ ANTIGUA, MADURA and RENOVADA
 <span class="header-section-number">2.4</span> <img src="figuras/pie-chart.svg" class="hicon"><img src="figuras/key.svg" class="hicon"> Exportando datos.<a class="anchor" aria-label="anchor" href="#exportando-datos."><i class="fas fa-link"></i></a>
 </h2>
 <p>Antes de concluir el capítulo, vamos a tratar brevemente el aspecto de la exportación de datos.</p>
-<p>R cuenta con un <strong>formato propio de datos</strong>, que se traduce en archivos de extensión “RData”, y que puede incluir cualquier objeto de R. Vamos a exportar el <em>data frame</em> “interestelar_100” como el archivo de datos de R “interestelar_100.RData”. Posteriormente, borraremos el <em>data frame</em> del <em>Environment</em> y recuperaremos los datos cargando ese archivo “interestelar_100.RData”.</p>
+<p>R cuenta con un <strong>formato propio de datos</strong>, que se traduce en archivos de extensión “RData”, y que puede incluir cualquier objeto de R. Vamos a exportar el <em>data frame</em> “interestelar_100” como el archivo de datos de R “interestelar_100.RData”. Posteriormente, borraremos el <em>data frame</em> del <em>Global Environment</em> y recuperaremos los datos cargando ese archivo “interestelar_100.RData”.</p>
 <p>Para exportar el <em>data frame</em> “interestelar_100” al archivo de formato R, “interestelar_100.RData”, utilizaremos la función <code><a href="https://rdrr.io/r/base/save.html">save()</a></code>:</p>
-<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb119"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Exportación de datos</span></span>
 <span></span>
 <span><span class="co"># Exportando data frame a formato R (.RData)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">interestelar_100</span>, file <span class="op">=</span> <span class="st">"interestelar_100.RData"</span><span class="op">)</span></span></code></pre></div>
 <p>Puede comprobarse cómo se ha generado el archivo correspondiente en la carpeta de proyecto. Para comprobar que la exportación es correcta, vamos a borrar del <em>Global</em> <em>Environment</em> el <em>data frame</em> “interestelar_100” con la función <code><a href="https://rdrr.io/r/base/rm.html">rm()</a></code> (remove). Después, cargaremos el archivo “interestelar_100.RData” con la función <code><a href="https://rdrr.io/r/base/load.html">load()</a></code>. Como resultado, podremos comprobar que tenemos un nuevo <em>data frame</em> “interestelar_100” que es exactamente igual al que teníamos al principio:</p>
-<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Borrando el data frame interestelar_100</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span><span class="va">interestelar_100</span><span class="op">)</span></span>
 <span></span>
@@ -1815,9 +1879,9 @@ ANTIGUA, MADURA and RENOVADA
 ##  3rd Qu.: 7861.85                
 ##  Max.   :26778.41                
 ##  NA's   :1</code></pre>
-<p>Por supuesto, hay más formatos en los que se pueden exportar datos desde R. Por ejemplo, <strong>a un archivo de Microsoft® Excel®</strong>. Un modo de hacerlo es haciendo uso de la función <code><a href="https://docs.ropensci.org/writexl//reference/write_xlsx.html">write_xlsx()</a></code> del paquete {writexl}. Para que en la hoja de cálculo resultante se incluyan los nombres de las filas (empresas eólicas), hemos tenido previamente que crear un vector con el nombre de estas (vector “NOMBRE”), mediante la función <code><a href="https://rdrr.io/r/base/row.names.html">row.names()</a></code>, y unir ese vector al <em>data frame</em> “interestelar_100”, a modo de primera columna, creando un nuevo finalmente un <em>data frame</em> llamado “interestelar_100n”, para lo que se ha utilizado la función <code><a href="https://rdrr.io/r/base/cbind.html">cbind()</a></code>, que permite <strong>pegar columnas de datos</strong> que tengan un mismo número de filas.</p>
+<p>Por supuesto, hay más formatos en los que se pueden exportar datos desde R. Por ejemplo, <strong>a un archivo de Microsoft® Excel®</strong>. Un modo de hacerlo es haciendo uso de la función <code><a href="https://docs.ropensci.org/writexl//reference/write_xlsx.html">write_xlsx()</a></code> del paquete {writexl}. Para que en la hoja de cálculo resultante se incluyan los nombres de las filas (empresas), hemos tenido previamente que crear un vector con el nombre de estas (vector “NOMBRE”), mediante la función <code><a href="https://rdrr.io/r/base/row.names.html">row.names()</a></code>, y unir ese vector al <em>data frame</em> “interestelar_100”, a modo de primera columna, creando un nuevo finalmente un <em>data frame</em> llamado “interestelar_100n”, para lo que se ha utilizado la función <code><a href="https://rdrr.io/r/base/cbind.html">cbind()</a></code>, que permite <strong>pegar columnas de datos</strong> que tengan un mismo número de filas.</p>
 <p>Como resultado de todo el código, se ha obtenido el archivo de Microsoft® Excel® “interestelar_100_new.xlsx”:</p>
-<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Exportando el data frame interestelar_100 a Microsoft (R) Excel (R)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ropensci.r-universe.dev/writexl">writexl</a></span><span class="op">)</span></span>
 <span><span class="va">NOMBRE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">interestelar_100</span><span class="op">)</span></span>
@@ -1830,104 +1894,7 @@ ANTIGUA, MADURA and RENOVADA
 <h2>
 <span class="header-section-number">2.5</span> <img src="figuras/star.svg" class="hicon"> Las variables de la base de datos del proyecto R-Stars.<a class="anchor" aria-label="anchor" href="#las-variables-de-la-base-de-datos-del-proyecto-r-stars."><i class="fas fa-link"></i></a>
 </h2>
-<p>La base de datos completa del proyecto R-Stars contiene datos económicos, financieros y de diversa índole de 300 empresas de trasnporte interestelar de mercancías, recogidos en unas 30 variables.</p>
-<p>El sector del transporte interestelar se extiende a lo largo y ancho de 5 galaxias. Son 30 los planetas donde se localizan las sedes de las 300 empresas.</p>
-<div class="inline-figure"><img src="figuras/mapa_galactico_final.jpg" style="width:100.0%"></div>
-<div style="text-align: center;">
-<p><strong>Figura 2.3.</strong> <span class="smallcaps">Galaxias y principales planetas del transporte de mercancías.</span></p>
-</div>
-<p>Las galaxias donde se desarrolla este tipo de actividad son:</p>
-<ul>
-<li><p><strong>Andrómeda (M31), Vía Láctea y Galaxia del Triángulo (M33):</strong> Son galaxias espirales, caracterizadas por un disco con brazos espirales, un bulbo central y un halo estelar. Presentan componentes como discos delgados y gruesos, bulbos y halos, con poblaciones estelares de diferentes edades y metalicidades.</p></li>
-<li><p><strong>Gran Nube de Magallanes (LMC) y Pequeña Nube de Magallanes (SMC):</strong> Son galaxias irregulares, con estructuras menos definidas, ricas en gas y con intensa formación estelar. Su morfología es más caótica y carecen de un bulbo central prominente.</p></li>
-</ul>
-<p>En cuanto a las variables que componen la base de dato, son las siguientes (<strong>importante:</strong> estos datos se refieren a la base de datos madre, de 300 casos. No se refiere a la muestra de 104 observaciones utilizada para desarrollar los ejemplos de este capítulo):</p>
-<p><strong>ACTCOR.</strong> Activo corriente. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 6.810, ‘q1’: 17.450, ‘median’: 24.005, ‘mean’: 59.787, ‘q3’: 55.635, ‘max’: 889.956}.<br>
-Número estimado de outliers: 36.</p>
-<p><strong>ACTIVO.</strong> Valor total de los recursos de la empresa (miles de PAVOs). Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 17.550, ‘q1’: 50.530, ‘median’: 156.315, ‘mean’: 241.407, ‘q3’: 227.017, ‘max’: 2966.520}.<br>
-Número estimado de outliers: 45.</p>
-<p><strong>APALANCA.</strong> Nivel de apalancamiento (Pasivo total / Fondos propios). Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 44.380, ‘q1’: 100.593, ‘median’: 121.860, ‘mean’: 132.667, ‘q3’: 154.550, ‘max’: 433.550}.<br>
-Número estimado de outliers: 13.</p>
-<p><strong>BMAL.</strong> Beneficio medio por año luz. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 24.135, ‘q1’: 466.114, ‘median’: 1491.416, ‘mean’: 6084.857, ‘q3’: 4368.461, ‘max’: 262555.815}.<br>
-Número estimado de outliers: 31.</p>
-<p><strong>CAPEX.</strong> Gastos de capital. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 1.038, ‘q1’: 6.156, ‘median’: 11.600, ‘mean’: 33.748, ‘q3’: 34.329, ‘max’: 1087.196}.<br>
-Número estimado de outliers: 29.</p>
-<p><strong>COSTOP.</strong> Costes operativos. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 0.980, ‘q1’: 15.305, ‘median’: 31.195, ‘mean’: 97.803, ‘q3’: 105.143, ‘max’: 1422.300}.<br>
-Número estimado de outliers: 28.</p>
-<p><strong>DIST.</strong> Distancia operada globalmente. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 0.151, ‘q1’: 12.606, ‘median’: 44.229, ‘mean’: 133.686, ‘q3’: 165.292, ‘max’: 2151.642}.<br>
-Número estimado de outliers: 26.</p>
-<p><strong>EFLO.</strong> Edad media de la flota (categorías). Tipo de datos: carácter/categórico. NAs: 0.<br>
-Distribución/aproximación: {‘ANTIGUA’: 148, ‘MADURA’: 90, ‘RENOVADA’: 62}.</p>
-<p><strong>EFLO_FACTOR.</strong> Factor derivado de la edad media de la flota. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 0.800, ‘q1’: 0.800, ‘median’: 1.000, ‘mean’: 0.943, ‘q3’: 1.000, ‘max’: 1.200}.<br>
-Número estimado de outliers: 0.</p>
-<p><strong>EMPLEA.</strong> Número de empleados. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 7.000, ‘q1’: 22.750, ‘median’: 30.000, ‘mean’: 36.287, ‘q3’: 44.000, ‘max’: 106.000}.<br>
-Número estimado de outliers: 16.</p>
-<p><strong>FLOTA.</strong> Número de cargueros espaciales. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 3.000, ‘q1’: 15.000, ‘median’: 24.000, ‘mean’: 26.143, ‘q3’: 38.000, ‘max’: 50.000}.<br>
-Número estimado de outliers: 0.</p>
-<p><strong>FJUR.</strong> Forma jurídica de la empresa. Tipo de datos: carácter/categórico. NAs: 0.</p>
-<p><strong>FPIOS.</strong> Fondos propios de la empresa. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 8.670, ‘q1’: 22.530, ‘median’: 57.430, ‘mean’: 111.042, ‘q3’: 108.408, ‘max’: 1453.450}.<br>
-Número estimado de outliers: 23.</p>
-<p><strong>FROM.</strong> Inspiración temática de la empresa. Tipo de datos: carácter/categórico. NAs: 0.<br>
-Distribución/aproximación: {‘Star Wars’: 84, ‘2001: Una Odisea en el Espacio’: 84, ‘Dune’: 52, ‘Star Trek’: 47, ‘Interstellar’: 33}.</p>
-<p><strong>GALAXIA.</strong> Galaxia principal en la que opera la empresa. Tipo de datos: carácter/categórico. NAs: 0.</p>
-<p><strong>GALAXY_FACTOR.</strong> Factor de distancia intergaláctica. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 1.000, ‘q1’: 1.000, ‘median’: 2.500, ‘mean’: 2.812, ‘q3’: 4.500, ‘max’: 5.000}.<br>
-Número estimado de outliers: 0.</p>
-<p><strong>GMEDRUT.</strong> Distancia media de las rutas (años luz). Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 0.005, ‘q1’: 0.112, ‘median’: 0.224, ‘mean’: 0.319, ‘q3’: 0.448, ‘max’: 1.550}.<br>
-Número estimado de outliers: 10.</p>
-<p><strong>IDIG.</strong> Índice de digitalización. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 0.338, ‘q1’: 8.498, ‘median’: 15.672, ‘mean’: 17.234, ‘q3’: 23.848, ‘max’: 60.833}.<br>
-Número estimado de outliers: 4.</p>
-<p><strong>IDIVERSE.</strong> Índice de diversificación. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 0.000, ‘q1’: 11.655, ‘median’: 21.165, ‘mean’: 22.210, ‘q3’: 32.390, ‘max’: 78.298}.<br>
-Número estimado de outliers: 2.</p>
-<p><strong>IFIDE.</strong> Índice de fidelización. Tipo de datos: numérico (real o entero). NAs: 0. Observaciones corruptas: 0.<br>
-Distribución/aproximación: {‘min’: 5.261, ‘q1’: 36.928, ‘median’: 39.268, ‘mean’: 39.002, ‘q3’: 40.432, ‘max’: 79.154}.<br>
-Número estimado de outliers: 33.</p>
-<p><strong>IMD.</strong> Gasto en I+D. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 0.478, ‘q1’: 1.409, ‘median’: 4.700, ‘mean’: 15.203, ‘q3’: 18.240, ‘max’: 202.478}.<br>
-Número estimado de outliers: 40.</p>
-<p><strong>ING.</strong> Ingresos generados por la actividad principal de la empresa. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 19.400, ‘q1’: 42.005, ‘median’: 103.470, ‘mean’: 218.386, ‘q3’: 240.973, ‘max’: 2471.540}.<br>
-Número estimado de outliers: 23.</p>
-<p><strong>LIQUIDEZ.</strong> Cociente entre ACTCOR y PASCOR. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 0.225, ‘q1’: 0.526, ‘median’: 0.706, ‘mean’: 0.702, ‘q3’: 0.836, ‘max’: 3.118}.<br>
-Número estimado de outliers: 7.</p>
-<p><strong>MARGEN.</strong> Margen operativo como porcentaje sobre los ingresos. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 12.432, ‘q1’: 48.095, ‘median’: 57.449, ‘mean’: 60.160, ‘q3’: 73.610, ‘max’: 96.489}.<br>
-Número estimado de outliers: 0.</p>
-<p><strong>NOMBRE.</strong> Nombre de la empresa. Tipo de datos: carácter/categórico. NAs: 0.</p>
-<p><strong>PASCOR.</strong> Pasivo corriente. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 6.660, ‘q1’: 20.222, ‘median’: 59.224, ‘mean’: 97.773, ‘q3’: 100.558, ‘max’: 1143.810}.<br>
-Número estimado de outliers: 25.</p>
-<p><strong>RENECO.</strong> Rentabilidad económica. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 24.082, ‘q1’: 44.110, ‘median’: 50.323, ‘mean’: 51.055, ‘q3’: 57.745, ‘max’: 93.847}.<br>
-Número estimado de outliers: 4.</p>
-<p><strong>RENFIN.</strong> Rentabilidad financiera. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 51.388, ‘q1’: 95.620, ‘median’: 113.048, ‘mean’: 116.138, ‘q3’: 131.138, ‘max’: 262.245}.<br>
-Número estimado de outliers: 6.</p>
-<p><strong>RES.</strong> Resultado del ejercicio (beneficio neto). Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 9.620, ‘q1’: 25.315, ‘median’: 59.220, ‘mean’: 120.583, ‘q3’: 128.178, ‘max’: 1561.930}.<br>
-Número estimado de outliers: 28.</p>
-<p><strong>RUTAS.</strong> Número de rutas atendidas. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 36.000, ‘q1’: 176.000, ‘median’: 310.000, ‘mean’: 365.580, ‘q3’: 436.500, ‘max’: 3138.000}.<br>
-Número estimado de outliers: 12.</p>
-<p><strong>SEDE.</strong> Planeta principal donde se encuentra la base de operaciones de la empresa. Tipo de datos: carácter/categórico. NAs: 0.</p>
-<p><strong>SOLVENCIA.</strong> Capacidad de la empresa para cubrir sus obligaciones financieras a largo plazo. Tipo de datos: numérico (real o entero). NAs: 0.<br>
-Distribución/aproximación: {‘min’: 123.070, ‘q1’: 164.703, ‘median’: 182.060, ‘mean’: 185.718, ‘q3’: 199.415, ‘max’: 325.320}.<br>
-Número estimado de outliers: 10.</p>
+<p>La base de datos completa del proyecto R-Stars contiene datos económicos, financieros y operativos de 300 empresas de transporte interestelar de mercancías, recogidos en unas 30 variables. La ficha detallada de cada variable —nombre, tipo de datos, distribución, valores ausentes y número estimado de <em>outliers</em>— puede consultarse en el <strong>Apéndice: Bases de datos utilizadas en el libro</strong> al final del libro.</p>
 </div>
 <div id="materiales-para-realizar-las-prácticas-del-capítulo." class="section level2" number="2.6">
 <h2>
@@ -1965,11 +1932,13 @@ Número estimado de outliers: 10.</p>
 <a class="nav-link" href="#dplyr."><span class="header-section-number">2.3</span>  {dplyr}.</a><ul class="nav navbar-nav">
 <li><a class="nav-link" href="#el-tidyverse.-cargando-dplyr."><span class="header-section-number">2.3.1</span>  El Tidyverse. Cargando {dplyr}.</a></li>
 <li><a class="nav-link" href="#seleccionando-columnas-de-un-data-frame."><span class="header-section-number">2.3.2</span>  Seleccionando columnas de un data frame.</a></li>
-<li><a class="nav-link" href="#seleccionando-casos-de-un-data-frame."><span class="header-section-number">2.3.3</span>  Seleccionando casos de un data frame.</a></li>
-<li><a class="nav-link" href="#ordenando-casos-de-un-data-frame."><span class="header-section-number">2.3.4</span>  Ordenando casos de un data frame.</a></li>
-<li><a class="nav-link" href="#cambiando-el-nombre-de-las-variables-de-un-data-frame."><span class="header-section-number">2.3.5</span>  Cambiando el nombre de las variables de un data frame.</a></li>
-<li><a class="nav-link" href="#a%C3%B1adiendo-variables-como-transformaci%C3%B3n-de-otras-variables-en-un-data-frame."><span class="header-section-number">2.3.6</span>  Añadiendo variables como transformación de otras variables en un data frame.</a></li>
-<li><a class="nav-link" href="#extrayendo-y-sintetizando-informaci%C3%B3n-de-las-variables-de-un-data-frame."><span class="header-section-number">2.3.7</span>  Extrayendo y sintetizando información de las variables de un data frame.</a></li>
+<li><a class="nav-link" href="#ordenando-casos-de-un-data-frame."><span class="header-section-number">2.3.3</span>  Ordenando casos de un data frame.</a></li>
+<li><a class="nav-link" href="#el-operador-pipe."><span class="header-section-number">2.3.4</span>  El operador pipe.</a></li>
+<li><a class="nav-link" href="#seleccionando-casos-de-un-data-frame."><span class="header-section-number">2.3.5</span>  Seleccionando casos de un data frame.</a></li>
+<li><a class="nav-link" href="#seleccionando-casos-por-posici%C3%B3n-slice."><span class="header-section-number">2.3.6</span>  Seleccionando casos por posición: slice().</a></li>
+<li><a class="nav-link" href="#cambiando-el-nombre-de-las-variables-de-un-data-frame."><span class="header-section-number">2.3.7</span>  Cambiando el nombre de las variables de un data frame.</a></li>
+<li><a class="nav-link" href="#a%C3%B1adiendo-variables-como-transformaci%C3%B3n-de-otras-variables-en-un-data-frame."><span class="header-section-number">2.3.8</span>  Añadiendo variables como transformación de otras variables en un data frame.</a></li>
+<li><a class="nav-link" href="#extrayendo-y-sintetizando-informaci%C3%B3n-de-las-variables-de-un-data-frame."><span class="header-section-number">2.3.9</span>  Extrayendo y sintetizando información de las variables de un data frame.</a></li>
 </ul>
 </li>
 <li><a class="nav-link" href="#exportando-datos."><span class="header-section-number">2.4</span>  Exportando datos.</a></li>

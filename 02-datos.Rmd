@@ -245,7 +245,7 @@ Para convertirlo en un objeto de la clase "factor", podemos ejecutar:
 Cl.ojosF <- factor(Cl.ojos)
 ```
 
-En el Global Environment vemos que se ha creado el objaeto "Cl.ojosF", de tipo factor. Si representamos ambos objetos:
+En el Global Environment vemos que se ha creado el objeto "Cl.ojosF", de tipo factor. Si representamos ambos objetos:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 Cl.ojos
@@ -312,6 +312,8 @@ mi_lista[[3]]
 
 Las listas son las estructuras de almacenamiento más flexibles de R, y son muy utilizadas para organizar y empaquetar resultados complejos.
 
+En la práctica, la estructura con la que más trabajaremos a lo largo del libro es el ***data frame***: cada columna es un vector (numérico o factor) y cada fila un caso de la muestra. Además, cuando apliquemos técnicas estadísticas, los resultados de los modelos se devolverán habitualmente empaquetados en **listas**, ya que contienen elementos de distinta naturaleza (coeficientes, residuos, estadísticos de bondad de ajuste, etc.). De este modo, los cinco tipos de objetos que acabamos de presentar no son compartimentos estancos: conviven y se complementan en cualquier análisis real.
+
 ## ![](figuras/pie-chart.svg){.hicon} Importando datos.
 
 Lo más frecuente es que no tecleemos los datos, como hemos hecho hasta ahora; sino que los importemos a R desde algún contenedor externo (archivo de texto, hoja de cálculo, base de datos...). Nosotros vamos a importar nuestros datos desde Microsoft® Excel®. Vamos a cerrar el script que hemos estado construyendo en los apartados anteriores (para conservarlo hay que guardarlo antes), aunque vamos a seguir trabajando en el mismo proyecto (que habíamos llamado "explora"). Iremos a la carpeta del proyecto y guardaremos en ella los dos archivos de esta práctica (obtén el enlace a los archivos en la sección final del capítulo):
@@ -343,9 +345,7 @@ library(readxl)
 library(gtExtras)
 ```
 
-Obviamente, para cargar o activar un paquete, previamente debe de haber sido instalado en la máquina donde estamos trabajando. Anteriormente hemos visto como instalar un paquete del repositorio *CRAN*. De nuevo, si no hemos instalado antes los paquetes `{readxl}` y `{gtExtras}`, tendremos que instalarlos, o nos dará error.
-
-Para instalar, por ejemplo,el paquete `{readxl}`, (que contiene el código necesario para importar datos de un archivo de Microsoft® Excel®), iremos a la ventana inferior-derecha y pulsaremos la pestaña `Packages`, pulsaremos en `Install`, y emergerá una ventana donde dejaremos el "repositorio" que viene por defecto. En el campo "Packages", escribiremos el nombre del "paquete" que contiene la librería que nos hace falta (normalmente coincide con el nombre de la propia librería, en nuestro caso `{readxl}`. Una vez descargado el "paquete", podremos ejecutar el código anterior sin problemas. Si hemos de instalar el paquete `{gtExtras}`, procederemos de idéntico modo.
+Obviamente, para cargar o activar un paquete, previamente debe de haber sido instalado en la máquina donde estamos trabajando. Si no hemos instalado antes los paquetes `{readxl}` y `{gtExtras}`, tendremos que instalarlos siguiendo el procedimiento descrito en la sección de *Paquetes* del capítulo anterior (sección 1.7), o nos dará error.
 
 Para importar los datos localizados en el archivo de Microsoft® Excel® "interestelar_100.xlsx" el código que podemos usar es:
 
@@ -359,7 +359,7 @@ La función encargada de importar los datos es `read_excel()`, del paquete `{rea
 
 Una cuestión importante a tener en cuenta es que, si hay valores perdidos que, en la hoja de cálculo vienen indicados en las celdas mediante algún tipo de anotación, como por ejemplo, "n.d." (no disponible); deberá incluirse el argumento `na =` para informar de las anotaciones en las celdas que deben traducirse como valores faltantes. Si las celdas sin dato aparecieran en la hoja de cálculo siempre en blanco, este argumento no haría falta.
 
-Volviendo a nuestro ejemplo, podemos observar cómo en el *Environment* ya aparece un objeto. Este objeto es una estructura de datos tipo *data frame*, se llama "interestelar_100" y contiene 104 filas (una por empresa) y 29 columnas, una por cada una de las variables almacenadas en el archivo de Microsoft® Excel®. De estas variables, cinco son de tipo cualitativo, formadas por cadenas de caracteres.
+Volviendo a nuestro ejemplo, podemos observar cómo en el *Global Environment* ya aparece un objeto. Este objeto es una estructura de datos tipo *data frame*, se llama "interestelar_100" y contiene 104 filas (una por empresa) y 29 columnas, una por cada una de las variables almacenadas en el archivo de Microsoft® Excel®. De estas variables, cinco son de tipo cualitativo, formadas por cadenas de caracteres.
 
 Puede explorarse el contenido del *data frame* y los principales estadísticos con la función `summary()`:
 
@@ -416,7 +416,7 @@ rm (variables_por_bloque)
 rm (df)
 ```
 
-Vemos que ya no aparece "NOMBRE" como variable, y en el *Environment* ya aparece el data frame "interestelar_100" con 100 observaciones (casos), pero con 28 variables (una menos).
+Vemos que ya no aparece "NOMBRE" como variable, y en el *Global Environment* ya aparece el data frame "interestelar_100" con 100 observaciones (casos), pero con 28 variables (una menos).
 
 Un modo visualmente más elegante de explorar el contenido del data frame es la utilización de la función `gt_plt_summary()` del paquete `{gtExtras}`:
 
@@ -451,13 +451,11 @@ Uno de esos paquetes es `{dplyr}`, que proporciona una gramática más sencilla 
 
 Los data frames, como ya sabemos, son estructuras en las que se almacenan datos de modo que, por columnas, se disponen las variables del análisis; y por filas los casos que conforman la muestra / población.
 
-Vamos a suponer que trabajamos dentro del proyecto que hemos creado previamente, de nombre "explora" (ver capítulo 1), y que seguimos con el script "explora_rstars.R", co el que importamos los datos del archivo de Microsoft® Excel® "interestelar_100.xlsx", que contení información sobre 104 empresas de transporte de mercancías a escala interestelar.
+Vamos a suponer que trabajamos dentro del proyecto que hemos creado previamente, de nombre "explora" (ver capítulo 1), y que seguimos con el script "explora_rstars.R", con el que importamos los datos del archivo de Microsoft® Excel® "interestelar_100.xlsx", que contenía información sobre 104 empresas de transporte de mercancías a escala interestelar.
 
-Suponemos que hemos ejecutado la primera parte del script (importación de datos con corrección de la columna de nombres de las filas, al *data frame* interestelar_100, que está almacenado en el *Global Environment.*
+Suponemos que hemos ejecutado la primera parte del script (importación de datos con corrección de la columna de nombres de las filas), al *data frame* interestelar_100, que está almacenado en el *Global Environment.*
 
-Vamos a continuar desde este punto.
-
-A continuación, cargaremos el paquete `{dplyr}`. Si nunca antes se ha utilizado este paquete, cuando lo intentemos activar con la función `library()` nos dará un error o nos dirá que previamente hay que importarlo. En ese caso, iremos a la ventana inferior-derecha y pulsaremos la pestaña "Packages", pulsaremos en `Install`, y emergerá una ventana donde dejaremos el "repositorio" que viene por defecto y, en el campo `Packages`, escribiremos el nombre del "paquete" (en nuestro caso `{dplyr}`). Una vez descargado el "paquete", podremos ejecutar el código sin problemas:
+Vamos a continuar desde este punto. A continuación, cargaremos el paquete `{dplyr}` (si no está instalado, instálalo como se indicó en la sección 1.7):
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ## dplyr
@@ -510,7 +508,7 @@ rm (variables_por_bloque)
 rm (df)
 ```
 
-Podemos verificar que, en el *Environment,* el *data frame* ha pasado a tener una variable menos (27), ya que hemos eliminado la variable FJUR. Es decir, con el guión "-" se pueden eliminar directamente variables de un *data frame*.
+Podemos verificar que, en el *Global Environment,* el *data frame* ha pasado a tener una variable menos (27), ya que hemos eliminado la variable FJUR. Es decir, con el guión "-" se pueden eliminar directamente variables de un *data frame*.
 
 Ahora, suponemos que queremos visualizar las variables del *data frame* "interestelar_100": ACTIVO, FPIOS, LIQUIDEZ. Para ello, ejecutaremos el código:
 
@@ -537,7 +535,7 @@ rm(columnas_por_bloque)
 
 (**Nota:** solo mostramos aquí los 10 primeros casos del *data frame*).
 
-Como no hemos asignado el resultado de la función a ningún "nombre", R simplemente muestra el resultado en pantalla; pero no guarda ningún objeto en el *Environment*. Si asignamos un `select()` a un "nombre", se creará un *data frame* con ese nombre, y las variables seleccionadas:
+Como no hemos asignado el resultado de la función a ningún "nombre", R simplemente muestra el resultado en pantalla; pero no guarda ningún objeto en el *Global Environment*. Si asignamos un `select()` a un "nombre", se creará un *data frame* con ese nombre, y las variables seleccionadas:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 
@@ -567,13 +565,110 @@ rm (df)
 
 Podemos comprobar cómo en el *Global Environment* hay otro objeto *data frame* llamado "interestelar_100A", con 4 variables (y los mismos 104 casos).
 
-Otra posibilidad que tenemos es hacer una copia de un *data frame* rápidamente con el argumento `everything()`. Por ejemplo:
+### ![](figuras/key.svg){.hicon} Ordenando casos de un *data frame*.
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
-interestelar_100_replica <-select(interestelar_100, everything())
+Además de seleccionar determinados casos u observaciones (filas) de un *data frame*, con las funciones de `{dplyr}` también se pueden ordenar estos casos a partir de los valores de ciertas variables (columnas). La función a utilizar es `arrange()`. Esta función, por defecto, ordena los casos de modo **ascendente**. Por ejemplo, crearemos el data frame "interestelar_100C" con variables RENECO, EFLO y ACTIVO, con los casos ordenados de modo ascendente según el valor de RENECO:
+
+```{r, eval=FALSE, echo=TRUE, message=FALSE}
+# Ordenando casos
+interestelar_100C <- select(interestelar_100, RENECO, EFLO, ACTIVO)
+interestelar_100C <- arrange(interestelar_100C, RENECO)
+interestelar_100C
 ```
 
-Se ha creado el *date frame* "interestelar_100_replica" que es una copia exacta de "interestelar_100".
+```{r, eval=TRUE, echo=FALSE, message=FALSE}
+interestelar_100C <- select(interestelar_100, RENECO, EFLO, ACTIVO)
+interestelar_100C <- arrange(interestelar_100C, RENECO)
+df<-interestelar_100C
+df <- dplyr::slice_head(df, n = 10)  # Solo primeras 10 filas
+# Número de columnas por bloque
+columnas_por_bloque <- 3
+
+# Dividir las columnas en bloques y mostrar los datos en la consola
+for (i in seq(1, ncol(df), columnas_por_bloque)) {
+  print(df[, i:min(i + columnas_por_bloque - 1, ncol(df))])
+  cat("\n")
+  }
+rm(df)
+rm(columnas_por_bloque)
+```
+
+(**Nota:** solo mostramos aquí los 10 primeros casos del *data frame*).
+
+En cambio, para ordenar de modo descendente, hay que utilizar el argumento `desc()`:
+
+```{r, eval=FALSE, echo=TRUE, message=FALSE}
+interestelar_100D <- arrange(interestelar_100C, desc(RENECO))
+interestelar_100D
+```
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE}
+interestelar_100D <- arrange(interestelar_100C, desc(RENECO))
+df<-interestelar_100D
+df <- dplyr::slice_head(df, n = 10)  # Solo primeras 10 filas
+# Número de columnas por bloque
+columnas_por_bloque <- 3
+
+# Dividir las columnas en bloques y mostrar los datos en la consola
+for (i in seq(1, ncol(df), columnas_por_bloque)) {
+  print(df[, i:min(i + columnas_por_bloque - 1, ncol(df))])
+  cat("\n")
+  }
+rm(df)
+rm(columnas_por_bloque)
+```
+
+(**Nota:** solo mostramos aquí los 10 primeros casos del *data frame*).
+
+En el supuesto de que, en relación con una variable, hubiera varios casos con el mismo valor, podría añadirse otro criterio de ordenación con otra variable, que afectaría a tales casos para deshacer el "empate". Por ejemplo, vamos a ordenar las empresas según la variable EFLO (categorización de la antigüedad promedio de la flota, con categorías: ANTIGUA, MADURA, RENOVADA). Al ser una variable categórica, los casos se ordenarán por orden alfabético según la categoría a la que pertenecen. Para ordenar los casos pertenecientes a una misma categoría de EFLO, utilizaremos, de nuevo RENECO (en orden de valor descendente):
+
+```{r, eval=FALSE, echo=TRUE, message=FALSE}
+interestelar_100E <- arrange(interestelar_100C, EFLO, desc(RENECO))
+interestelar_100E
+```
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE}
+interestelar_100E <- arrange(interestelar_100C, EFLO, desc(RENECO))
+df<- interestelar_100E
+df <- dplyr::slice_head(df, n = 10)  # Solo primeras 10 filas
+# Número de columnas por bloque
+columnas_por_bloque <- 3
+
+# Dividir las columnas en bloques y mostrar los datos en la consola
+for (i in seq(1, ncol(df), columnas_por_bloque)) {
+  print(df[, i:min(i + columnas_por_bloque - 1, ncol(df))])
+  cat("\n")
+}
+rm(df)
+rm(columnas_por_bloque)
+rm(i)
+```
+
+(**Nota:** solo mostramos aquí los 10 primeros casos del *data frame.* Una vez concluidos los casos con categoría de EFLO "ANTIGUA", comenzarían a aparecer los de categoría "MADURA", desde el caso con posición 52, exactamente).
+
+### ![](figuras/key.svg){.hicon} El operador *pipe*.
+
+Ahora que conocemos `select()` y `arrange()`, podemos apreciar un problema: cuando necesitamos combinar varias operaciones, el código anidado se vuelve difícil de leer. El **operador *pipe*** `%>%`, proporcionado por el paquete `{magrittr}` (que se carga automáticamente con `{dplyr}`), resuelve este problema permitiendo **encadenar** operaciones de forma legible: toma el resultado de la expresión a su izquierda y lo pasa como primer argumento de la función a su derecha. Así, en lugar de anidar funciones —lo que obliga a leer "de dentro hacia fuera"—, el código se lee de izquierda a derecha y de arriba abajo, como una secuencia de pasos.
+
+Veamos un ejemplo. Ya sabemos seleccionar variables con `select()` y ordenar casos con `arrange()`. Si quisiéramos hacer ambas cosas a la vez, sin *pipe* habría que anidar las funciones:
+
+```{r, eval=FALSE, echo=TRUE, message=FALSE}
+# Sin pipe (lectura "de dentro hacia fuera"):
+arrange(select(interestelar_100, RENECO, EFLO, ACTIVO), RENECO)
+```
+
+Con el operador *pipe*, el mismo código se escribe así:
+
+```{r, eval=FALSE, echo=TRUE, message=FALSE}
+# Con pipe (lectura secuencial):
+interestelar_100 %>%
+  select(RENECO, EFLO, ACTIVO) %>%
+  arrange(RENECO)
+```
+
+La segunda versión se lee de un modo mucho más natural: "toma `interestelar_100`, selecciona esas tres variables y ordena por RENECO". A lo largo del libro, utilizaremos habitualmente el operador *pipe* para construir secuencias de instrucciones.
+
+**Nota:** Desde la versión 4.1, R incorpora un *pipe* nativo, `|>`, que funciona de forma muy similar a `%>%`. En este libro utilizaremos `%>%` por ser el más habitual en el ecosistema *tidyverse*, pero es posible encontrar `|>` en documentación y código más reciente.
 
 ### ![](figuras/key.svg){.hicon} Seleccionando casos de un *data frame*.
 
@@ -628,90 +723,34 @@ rm(df)
 rm(columnas_por_bloque)
 ```
 
-En el *Global* *Environment* aparecerá el *data frame* "interestelar_100B" con solo un caso: la empresa que cumple con ambas condiciones, introducidas mediante el operador lógico relacional "**&**", que es el equivalente a la conjunción "y" o, dicho de otro modo, la intersección. Otro operador lógico relacional muy utilizado es la barra vertical "**\|**", que es el equivalente a la conjunción "o", es decir, la unión.
+En el *Global Environment* aparecerá el *data frame* "interestelar_100B" con solo un caso: la empresa que cumple con ambas condiciones, introducidas mediante el operador lógico relacional "**&**", que es el equivalente a la conjunción "y" o, dicho de otro modo, la intersección. Otro operador lógico relacional muy utilizado es la barra vertical "**\|**", que es el equivalente a la conjunción "o", es decir, la unión.
 
 Los filtros más usuales son \>, \<, \>=, \<=, == (igual, ojo, con dos símbolos de igualdad seguidos) y != (no igual).
 
-### ![](figuras/key.svg){.hicon} Ordenando casos de un *data frame*.
+### ![](figuras/key.svg){.hicon} Seleccionando casos por posición: `slice()`.
 
-Además de seleccionar determinados casos u observaciones (filas) de un *data frame*, con las funciones de `{dplyr}` también se pueden ordenar estos casos a partir de los valores de ciertas variables (columnas). La función a utilizar es `arrange()`. Esta función, por defecto, ordena los casos de modo **ascendente**. Por ejemplo, creremos el data frame "interestelar_100C" con variables RENECO, EFLO y ACTIVO, con los casos ordenados de modo ascendente según el valor de RENECO:
+Mientras que `filter()` selecciona casos según una **condición lógica**, la función `slice()` selecciona casos por su **posición** (número de fila). Por ejemplo, para obtener los 5 primeros casos del *data frame*:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+# Seleccionando las 5 primeras filas
+interestelar_100 %>% slice(1:5)
+```
+
+`{dplyr}` ofrece además variantes muy útiles de `slice()`. Por ejemplo, `slice_head()` y `slice_tail()` seleccionan las primeras o últimas *n* filas, y `slice_max()` y `slice_min()` seleccionan los casos con los valores más altos o más bajos de una variable:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
-# Ordenando casos
-interestelar_100C <- select(interestelar_100, RENECO, EFLO, ACTIVO)
-interestelar_100C <- arrange(interestelar_100C, RENECO)
-interestelar_100C
+# Las 3 empresas con mayor rentabilidad económica
+interestelar_100 %>% slice_max(RENECO, n = 3)
+
+# Las 3 empresas con menor resultado
+interestelar_100 %>% slice_min(RES, n = 3)
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
-interestelar_100C <- select(interestelar_100, RENECO, EFLO, ACTIVO)
-interestelar_100C <- arrange(interestelar_100C, RENECO)
-df<-interestelar_100C
-df <- dplyr::slice_head(df, n = 10)  # Solo primeras 10 filas
-# Número de columnas por bloque
-columnas_por_bloque <- 3
-
-# Dividir las columnas en bloques y mostrar los datos en la consola
-for (i in seq(1, ncol(df), columnas_por_bloque)) {
-  print(df[, i:min(i + columnas_por_bloque - 1, ncol(df))])
-  cat("\n")
-  }
-rm(df)
-rm(columnas_por_bloque)
+interestelar_100 %>%
+  slice_max(RENECO, n = 3) %>%
+  select(RENECO, RES, ACTIVO)
 ```
-
-(**Nota:** solo mostramos aquí los 10 primeros casos del *data frame*).
-
-En cambio, para ordenar de modo descendente, hay que utilizar el argumento `desc()`:
-
-```{r, eval=FALSE, echo=TRUE, message=FALSE}
-interestelar_100D <- arrange(interestelar_100C, desc(RENECO))
-interestelar_100D
-```
-
-```{r, eval=TRUE, echo=FALSE, message=FALSE}
-interestelar_100D <- arrange(interestelar_100C, desc(RENECO))
-df<-interestelar_100D
-df <- dplyr::slice_head(df, n = 10)  # Solo primeras 10 filas
-# Número de columnas por bloque
-columnas_por_bloque <- 3
-
-# Dividir las columnas en bloques y mostrar los datos en la consola
-for (i in seq(1, ncol(df), columnas_por_bloque)) {
-  print(df[, i:min(i + columnas_por_bloque - 1, ncol(df))])
-  cat("\n")
-  }
-rm(df)
-rm(columnas_por_bloque)
-```
-
-(**Nota:** solo mostramos aquí los 10 primeros casos del *data frame*).
-
-En el supuesto de que, en relación con una variable, hubiera varios casos con el mismo valor, podría añadirse otro criterio de ordenación con otra variable, que afectaría a tales casos para deshacer el "empate". Por ejemplo,vamos a ordenar las empresas según la variable EFLO (categorización de la antigüedad promedio de la flota, con categorías: ANTIGUA, MADURA, RENOVADA). Al ser una variable categórica, los casos se ordenarán por orden alfabético según la categoría a la que pertenenecen. Para ordenar los casos pertenecientes a una misma categoría de EFLO, utilizaremos, de nuevo RENECO (en orden de valor descendente):
-
-```{r, eval=FALSE, echo=TRUE, message=FALSE}
-interestelar_100E <- arrange(interestelar_100C, EFLO, desc(RENECO))
-interestelar_100E
-```
-
-```{r, eval=TRUE, echo=FALSE, message=FALSE}
-interestelar_100E <- arrange(interestelar_100C, EFLO, desc(RENECO))
-df<- interestelar_100E
-df <- dplyr::slice_head(df, n = 10)  # Solo primeras 10 filas
-# Número de columnas por bloque
-columnas_por_bloque <- 3
-
-# Dividir las columnas en bloques y mostrar los datos en la consola
-for (i in seq(1, ncol(df), columnas_por_bloque)) {
-  print(df[, i:min(i + columnas_por_bloque - 1, ncol(df))])
-  cat("\n")
-}
-rm(df)
-rm(columnas_por_bloque)
-rm(i)
-```
-
-(**Nota:** solo mostramos aquí los 10 primeros casos del *data frame.* Una vez concluidos los casos con categoría de EFLO "ANTIGUA", comenzarían a aparecer los de categoría "MADURA", desde el caso con posición 52, exactamente).
 
 ### ![](figuras/key.svg){.hicon} Cambiando el nombre de las variables de un *data frame*.
 
@@ -821,17 +860,18 @@ rm(i)
 
 (**Nota:** solo mostramos aquí los 10 primeros casos del *data frame)*
 
-Cabe destacar que podíamos haber escrito el código para crear la variable DIM de un modo más elegante y cómodo, utilizando **el operador** **"*pipe*"** `%>%`. Este operador permite concatenar una serie de instrucciones:
+Este mismo código puede escribirse de un modo más legible utilizando el operador *pipe* `%>%` que ya presentamos al comienzo de la sección:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 interestelar_100 <- interestelar_100 %>%
-                              mutate(DIM = cut(ACTIVO,
-                                breaks = c(-Inf, 54, 216, Inf),
-                                labels = c("REDUCIDA", "MEDIA", "ALTA")))
+  mutate(DIM = cut(ACTIVO,
+                   breaks = c(-Inf, 54, 216, Inf),
+                   labels = c("REDUCIDA", "MEDIA", "ALTA")))
+
 interestelar_100 %>% select(ACTIVO, DIM)
 ```
 
-Podríamos interpretar la línea de código así: asigna al *data frame* "interestelar_100" sus propios datos, después (`%>%`) crea la variable DIM con la función `cut()` y añádela a "interestelar_100". En el segundo caso, es más sencillo aún: toma "interestelar_100" y saca en pantalla los valores de las variables ACTIVO y DIM.
+La lectura es ahora secuencial: "toma `interestelar_100`, crea la variable DIM con `cut()` y guarda el resultado". En la segunda línea: "toma `interestelar_100` y muestra las variables ACTIVO y DIM".
 
 ### ![](figuras/key.svg){.hicon} Extrayendo y sintetizando información de las variables de un *data frame*.
 
@@ -856,7 +896,7 @@ Hemos utilizado el operador *pipe* `%>%` para concatenar diferentes instruccione
 
 Antes de concluir el capítulo, vamos a tratar brevemente el aspecto de la exportación de datos.
 
-R cuenta con un **formato propio de datos**, que se traduce en archivos de extensión "RData", y que puede incluir cualquier objeto de R. Vamos a exportar el *data frame* "interestelar_100" como el archivo de datos de R "interestelar_100.RData". Posteriormente, borraremos el *data frame* del *Environment* y recuperaremos los datos cargando ese archivo "interestelar_100.RData".
+R cuenta con un **formato propio de datos**, que se traduce en archivos de extensión "RData", y que puede incluir cualquier objeto de R. Vamos a exportar el *data frame* "interestelar_100" como el archivo de datos de R "interestelar_100.RData". Posteriormente, borraremos el *data frame* del *Global Environment* y recuperaremos los datos cargando ese archivo "interestelar_100.RData".
 
 Para exportar el *data frame* "interestelar_100" al archivo de formato R, "interestelar_100.RData", utilizaremos la función `save()`:
 
@@ -901,7 +941,7 @@ rm (variables_por_bloque)
 rm (df)
 ```
 
-Por supuesto, hay más formatos en los que se pueden exportar datos desde R. Por ejemplo, **a un archivo de Microsoft® Excel®**. Un modo de hacerlo es haciendo uso de la función `write_xlsx()` del paquete {writexl}. Para que en la hoja de cálculo resultante se incluyan los nombres de las filas (empresas eólicas), hemos tenido previamente que crear un vector con el nombre de estas (vector "NOMBRE"), mediante la función `row.names()`, y unir ese vector al *data frame* "interestelar_100", a modo de primera columna, creando un nuevo finalmente un *data frame* llamado "interestelar_100n", para lo que se ha utilizado la función `cbind()`, que permite **pegar columnas de datos** que tengan un mismo número de filas.
+Por supuesto, hay más formatos en los que se pueden exportar datos desde R. Por ejemplo, **a un archivo de Microsoft® Excel®**. Un modo de hacerlo es haciendo uso de la función `write_xlsx()` del paquete {writexl}. Para que en la hoja de cálculo resultante se incluyan los nombres de las filas (empresas), hemos tenido previamente que crear un vector con el nombre de estas (vector "NOMBRE"), mediante la función `row.names()`, y unir ese vector al *data frame* "interestelar_100", a modo de primera columna, creando un nuevo finalmente un *data frame* llamado "interestelar_100n", para lo que se ha utilizado la función `cbind()`, que permite **pegar columnas de datos** que tengan un mismo número de filas.
 
 Como resultado de todo el código, se ha obtenido el archivo de Microsoft® Excel® "interestelar_100_new.xlsx":
 
@@ -917,137 +957,7 @@ write_xlsx(interestelar_100n, path = "interestelar_100_new.xlsx")
 
 ## ![](figuras/star.svg){.hicon} Las variables de la base de datos del proyecto R-Stars.
 
-La base de datos completa del proyecto R-Stars contiene datos económicos, financieros y de diversa índole de 300 empresas de trasnporte interestelar de mercancías, recogidos en unas 30 variables.
-
-El sector del transporte interestelar se extiende a lo largo y ancho de 5 galaxias. Son 30 los planetas donde se localizan las sedes de las 300 empresas.
-
-![[Galaxias y principales planetas del transporte de mercancías.]{.smallcaps}](figuras/mapa_galactico_final.jpg){width="100%"}
-
-Las galaxias donde se desarrolla este tipo de actividad son:
-
--   **Andrómeda (M31), Vía Láctea y Galaxia del Triángulo (M33):** Son galaxias espirales, caracterizadas por un disco con brazos espirales, un bulbo central y un halo estelar. Presentan componentes como discos delgados y gruesos, bulbos y halos, con poblaciones estelares de diferentes edades y metalicidades.
-
--   **Gran Nube de Magallanes (LMC) y Pequeña Nube de Magallanes (SMC):** Son galaxias irregulares, con estructuras menos definidas, ricas en gas y con intensa formación estelar. Su morfología es más caótica y carecen de un bulbo central prominente.
-
-En cuanto a las variables que componen la base de dato, son las siguientes (**importante:** estos datos se refieren a la base de datos madre, de 300 casos. No se refiere a la muestra de 104 observaciones utilizada para desarrollar los ejemplos de este capítulo):
-
-**ACTCOR.** Activo corriente. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 6.810, 'q1': 17.450, 'median': 24.005, 'mean': 59.787, 'q3': 55.635, 'max': 889.956}.\
-Número estimado de outliers: 36.
-
-**ACTIVO.** Valor total de los recursos de la empresa (miles de PAVOs). Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 17.550, 'q1': 50.530, 'median': 156.315, 'mean': 241.407, 'q3': 227.017, 'max': 2966.520}.\
-Número estimado de outliers: 45.
-
-**APALANCA.** Nivel de apalancamiento (Pasivo total / Fondos propios). Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 44.380, 'q1': 100.593, 'median': 121.860, 'mean': 132.667, 'q3': 154.550, 'max': 433.550}.\
-Número estimado de outliers: 13.
-
-**BMAL.** Beneficio medio por año luz. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 24.135, 'q1': 466.114, 'median': 1491.416, 'mean': 6084.857, 'q3': 4368.461, 'max': 262555.815}.\
-Número estimado de outliers: 31.
-
-**CAPEX.** Gastos de capital. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 1.038, 'q1': 6.156, 'median': 11.600, 'mean': 33.748, 'q3': 34.329, 'max': 1087.196}.\
-Número estimado de outliers: 29.
-
-**COSTOP.** Costes operativos. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 0.980, 'q1': 15.305, 'median': 31.195, 'mean': 97.803, 'q3': 105.143, 'max': 1422.300}.\
-Número estimado de outliers: 28.
-
-**DIST.** Distancia operada globalmente. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 0.151, 'q1': 12.606, 'median': 44.229, 'mean': 133.686, 'q3': 165.292, 'max': 2151.642}.\
-Número estimado de outliers: 26.
-
-**EFLO.** Edad media de la flota (categorías). Tipo de datos: carácter/categórico. NAs: 0.\
-Distribución/aproximación: {'ANTIGUA': 148, 'MADURA': 90, 'RENOVADA': 62}.
-
-**EFLO_FACTOR.** Factor derivado de la edad media de la flota. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 0.800, 'q1': 0.800, 'median': 1.000, 'mean': 0.943, 'q3': 1.000, 'max': 1.200}.\
-Número estimado de outliers: 0.
-
-**EMPLEA.** Número de empleados. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 7.000, 'q1': 22.750, 'median': 30.000, 'mean': 36.287, 'q3': 44.000, 'max': 106.000}.\
-Número estimado de outliers: 16.
-
-**FLOTA.** Número de cargueros espaciales. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 3.000, 'q1': 15.000, 'median': 24.000, 'mean': 26.143, 'q3': 38.000, 'max': 50.000}.\
-Número estimado de outliers: 0.
-
-**FJUR.** Forma jurídica de la empresa. Tipo de datos: carácter/categórico. NAs: 0.
-
-**FPIOS.** Fondos propios de la empresa. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 8.670, 'q1': 22.530, 'median': 57.430, 'mean': 111.042, 'q3': 108.408, 'max': 1453.450}.\
-Número estimado de outliers: 23.
-
-**FROM.** Inspiración temática de la empresa. Tipo de datos: carácter/categórico. NAs: 0.\
-Distribución/aproximación: {'Star Wars': 84, '2001: Una Odisea en el Espacio': 84, 'Dune': 52, 'Star Trek': 47, 'Interstellar': 33}.
-
-**GALAXIA.** Galaxia principal en la que opera la empresa. Tipo de datos: carácter/categórico. NAs: 0.
-
-**GALAXY_FACTOR.** Factor de distancia intergaláctica. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 1.000, 'q1': 1.000, 'median': 2.500, 'mean': 2.812, 'q3': 4.500, 'max': 5.000}.\
-Número estimado de outliers: 0.
-
-**GMEDRUT.** Distancia media de las rutas (años luz). Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 0.005, 'q1': 0.112, 'median': 0.224, 'mean': 0.319, 'q3': 0.448, 'max': 1.550}.\
-Número estimado de outliers: 10.
-
-**IDIG.** Índice de digitalización. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 0.338, 'q1': 8.498, 'median': 15.672, 'mean': 17.234, 'q3': 23.848, 'max': 60.833}.\
-Número estimado de outliers: 4.
-
-**IDIVERSE.** Índice de diversificación. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 0.000, 'q1': 11.655, 'median': 21.165, 'mean': 22.210, 'q3': 32.390, 'max': 78.298}.\
-Número estimado de outliers: 2.
-
-**IFIDE.** Índice de fidelización. Tipo de datos: numérico (real o entero). NAs: 0. Observaciones corruptas: 0.\
-Distribución/aproximación: {'min': 5.261, 'q1': 36.928, 'median': 39.268, 'mean': 39.002, 'q3': 40.432, 'max': 79.154}.\
-Número estimado de outliers: 33.
-
-**IMD.** Gasto en I+D. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 0.478, 'q1': 1.409, 'median': 4.700, 'mean': 15.203, 'q3': 18.240, 'max': 202.478}.\
-Número estimado de outliers: 40.
-
-**ING.** Ingresos generados por la actividad principal de la empresa. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 19.400, 'q1': 42.005, 'median': 103.470, 'mean': 218.386, 'q3': 240.973, 'max': 2471.540}.\
-Número estimado de outliers: 23.
-
-**LIQUIDEZ.** Cociente entre ACTCOR y PASCOR. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 0.225, 'q1': 0.526, 'median': 0.706, 'mean': 0.702, 'q3': 0.836, 'max': 3.118}.\
-Número estimado de outliers: 7.
-
-**MARGEN.** Margen operativo como porcentaje sobre los ingresos. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 12.432, 'q1': 48.095, 'median': 57.449, 'mean': 60.160, 'q3': 73.610, 'max': 96.489}.\
-Número estimado de outliers: 0.
-
-**NOMBRE.** Nombre de la empresa. Tipo de datos: carácter/categórico. NAs: 0.
-
-**PASCOR.** Pasivo corriente. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 6.660, 'q1': 20.222, 'median': 59.224, 'mean': 97.773, 'q3': 100.558, 'max': 1143.810}.\
-Número estimado de outliers: 25.
-
-**RENECO.** Rentabilidad económica. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 24.082, 'q1': 44.110, 'median': 50.323, 'mean': 51.055, 'q3': 57.745, 'max': 93.847}.\
-Número estimado de outliers: 4.
-
-**RENFIN.** Rentabilidad financiera. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 51.388, 'q1': 95.620, 'median': 113.048, 'mean': 116.138, 'q3': 131.138, 'max': 262.245}.\
-Número estimado de outliers: 6.
-
-**RES.** Resultado del ejercicio (beneficio neto). Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 9.620, 'q1': 25.315, 'median': 59.220, 'mean': 120.583, 'q3': 128.178, 'max': 1561.930}.\
-Número estimado de outliers: 28.
-
-**RUTAS.** Número de rutas atendidas. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 36.000, 'q1': 176.000, 'median': 310.000, 'mean': 365.580, 'q3': 436.500, 'max': 3138.000}.\
-Número estimado de outliers: 12.
-
-**SEDE.** Planeta principal donde se encuentra la base de operaciones de la empresa. Tipo de datos: carácter/categórico. NAs: 0.
-
-**SOLVENCIA.** Capacidad de la empresa para cubrir sus obligaciones financieras a largo plazo. Tipo de datos: numérico (real o entero). NAs: 0.\
-Distribución/aproximación: {'min': 123.070, 'q1': 164.703, 'median': 182.060, 'mean': 185.718, 'q3': 199.415, 'max': 325.320}.\
-Número estimado de outliers: 10.
+La base de datos completa del proyecto R-Stars contiene datos económicos, financieros y operativos de 300 empresas de transporte interestelar de mercancías, recogidos en unas 30 variables. La ficha detallada de cada variable —nombre, tipo de datos, distribución, valores ausentes y número estimado de *outliers*— puede consultarse en el **Apéndice: Bases de datos utilizadas en el libro** al final del libro.
 
 ## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo.
 
