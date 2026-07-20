@@ -33,9 +33,9 @@ Antes de profundizar en las principales medidas, su significado y su obtención;
 
 Se va a utilizar, a modo de ilustración, los datos correspondientes a los salarios percibidos por una de las empresas de transporte de mercancías interestelar del proyecto *R-Stars*.
 
-## ![](figuras/star.svg){.hicon}*Shuttlepod Movers*.
+## ![](figuras/star.svg){.hicon} *Shuttlepod Movers*: ¿una estructura salarial demasiado plana?
 
--   **Origen y Contexto:** Shuttlepod Movers nació en el planeta **Arrakis**, en plena **Gran Nube de Magallanes**, un enclave estratégico del comercio galáctico gracias a su proximidad a fuentes de minerales raros y especias. La empresa se fundó como una **Sociedad Anónima Galáctica (SAG)** con el propósito de atender rutas medianas y largas, apoyándose en la tradición logística de la zona y en la creciente demanda de transporte interestelar durante el siglo XXII. Actualmente, la mayor parte de las acciones de la compañía pertenece a varios empresarios del propio Arrakis. La actual CEO es *Tasha Tachybaptus*, que afronta el reto de la renovación de la flota sin debilitar más la liquidez de la empresa.
+*Shuttlepod Movers* es una empresa de transporte interestelar de mercancías fundada en el planeta **Arrakis**, en la **Gran Nube de Magallanes**. Constituida como Sociedad Anónima Galáctica (SAG), atiende rutas medianas y largas con una flota de 47 cargueros espaciales y una plantilla de 49 trabajadores. Su actual CEO es *Tasha Tachybaptus*.
 
 ![](figuras/04%20plano%20carguero.jpg){.d-block .mx-auto width="500"}
 
@@ -44,60 +44,50 @@ Se va a utilizar, a modo de ilustración, los datos correspondientes a los salar
 :::
 
 
--   **Características Operativas:**
+La siguiente tabla resume los principales indicadores de la compañía:
 
-    -   Activos: 249,39 mil PAVOs
-    -   Flota: 47 cargueros espaciales
-    -   Edad media de la flota: *Madura*
-    -   Rutas operadas: 594
-    -   Distancia global anual: 340,93 millones de años luz
-    -   Distancia media por ruta: 0,30 años luz
+```{r, eval=TRUE, echo=FALSE, message=FALSE}
+library(knitr)
+library(kableExtra)
 
--   **Situación Financiera:**
+ficha <- data.frame(
+  Indicador = c("Activos", "Flota", "Edad media flota", "Rutas operadas",
+                "Ingresos", "Beneficio neto", "Margen operativo",
+                "Rentabilidad económica", "Liquidez", "Plantilla"),
+  Valor = c("249,4 mil PAVOs", "47 cargueros", "Madura", "594",
+            "241,7 mil PAVOs", "180,8 mil PAVOs", "74,8%",
+            "72,5%", "0,56", "49 trabajadores")
+)
 
-    -   Ingresos: 241,73 mil PAVOs
-    -   Beneficio neto (RES): 180,82 mil PAVOs
-    -   Margen operativo: **74,8%**
-    -   Rentabilidad económica (RENECO): 72,5%
-    -   Rentabilidad financiera (RENFIN): 167,5%
-    -   Solvencia: 176,3%
-    -   Apalancamiento: 131
-    -   Liquidez: 0,56
+ficha %>%
+  kable(
+        col.names = c("Indicador", "Valor")) %>%
+  kable_styling(full_width = F,
+                bootstrap_options = c("striped", "bordered", "condensed"),
+                position = "center",
+                font_size = 11) %>%
+  row_spec(0, bold = T, align = "c") %>%
+  row_spec(1:nrow(ficha), bold = F, align = "c")
+```
 
-::: callout-warning
-**Atención**: Aunque la empresa presenta márgenes y rentabilidades muy elevados, la **liquidez reducida** supone un riesgo a corto plazo.
+::: {style="text-align: center;"}
+**Tabla 4.1.** Ficha resumen de Shuttlepod Movers
 :::
 
--   **Capital Humano:**
 
-    Plantilla de 49 trabajadores, organizados en áreas como almacén, gestión interna, mantenimiento y operaciones de vuelo. El tamaño de la plantilla es coherente con la escala de la compañía y el mantenimiento de 47 naves operativas.
+A pesar de presentar márgenes y rentabilidades muy elevados, la empresa tiene una **liquidez reducida** (0,56), lo que supone un riesgo a corto plazo. Pero lo que más preocupa a Tasha Tachybaptus es otra cosa: sospecha que la **estructura salarial de la empresa es demasiado plana**. Prácticamente todos los empleados perciben salarios similares, sin una diferenciación clara entre niveles de cualificación. Esto podría estar dificultando la atracción y retención de perfiles altamente cualificados, que son imprescindibles en un sector tecnológicamente exigente como el transporte interestelar.
 
--   **Innovación y Estrategia:**
+**Tasha nos pide un análisis descriptivo de la variable SALARIO** que responda a estas preguntas: ¿cuál es el nivel salarial típico de la plantilla? ¿Cuán dispersos están los salarios? ¿La distribución salarial es simétrica o está sesgada hacia algún extremo? En definitiva: ¿es cierto que la estructura salarial de *Shuttlepod Movers* es excesivamente homogénea?
 
-    -   Inversión en I+D: 18,5 mil PAVOs
-    -   Índice de digitalización (IDIG): 28,1
-    -   Índice de diversificación (IDIVERSE): 40,7
-    -   Índice de fidelización (IFIDE): 43,1
-
-La empresa presenta una **alta diversificación de mercados** y una **fidelización sólida de clientes**, apoyándose en un grado notable de digitalización para su tamaño.
-
--   **Diagnóstico General:**
-
-    -   **Fortalezas:**
-        -   Márgenes de beneficio extraordinariamente altos.
-        -   Excelente rentabilidad financiera y económica.
-        -   Diversificación y fidelización destacadas.
-    -   **Debilidades:**
-        -   Liquidez reducida (riesgo en el corto plazo).
-        -   Flota madura que requerirá renovación en próximos ciclos.
+Vamos a responder a estas preguntas aplicando las herramientas de la estadística descriptiva.
 
 ## ![](figuras/pie-chart.svg){.hicon} Representando datos y distribuciones de frecuencias en tablas con R.
 
-Para aprender a representar los datos referentes a las variables y atributos que caracterizan a un grupo de casos o individuos, y las distribuciones de frecuencias univariantes, vamos a suponer que trabajamos dentro de un proyecto que hemos creado previamente, de nombre “explora”. Dentro de la carpeta del proyecto guardaremos el *script* llamado “describe_rstars.R” y el archivo de *Microsoft® Excel®* llamado “trabajadores.xlsx”. Al final del capítulo se encuentran los enlaces correspondientes a estos archivos.
+Para aprender a representar los datos referentes a las variables y atributos que caracterizan a un grupo de casos o individuos, y las distribuciones de frecuencias univariantes, vamos a suponer que trabajamos dentro de un proyecto que hemos creado previamente, de nombre "explora". Dentro de la carpeta del proyecto guardaremos el *script* llamado "describe_rstars.R" y el archivo de *Microsoft® Excel®* llamado "trabajadores.xlsx". Al final del capítulo se encuentran los enlaces correspondientes a estos archivos.
 
-El archivo de Excel*®* recoge algunos datos correspondientes a la plantilla que compone el personal de la compañía de transporte de mercancías interestelar *Shuttlepod Movers* (hoja "Datos"), tales como el salario percibido (variable **SALARIO**, expresada en cientos de PAVOs), el nivel de estudios (atributo **NESTUDIOS**) y departamento al que se pertenece (atributo **DEP**).
+El archivo de Excel*®* recoge algunos datos correspondientes a la plantilla que compone el personal de la compañía *Shuttlepod Movers* (hoja "Datos"), tales como el salario percibido (variable **SALARIO**, expresada en cientos de PAVOs), el nivel de estudios (atributo **NESTUDIOS**) y departamento al que se pertenece (atributo **DEP**).
 
-Las primeras líneas del script se refieren, como ya hemos visto en otras secciones del libro, a la limpieza de la memoria o environment, eliminando objetos que se hayan podido crear con anterioridad, carga de los paquetes necesarios, e importación de los datos:
+Las primeras líneas del script se refieren, como ya hemos visto en otras secciones del libro, a la limpieza de la memoria o *Global Environment*, eliminando objetos que se hayan podido crear con anterioridad, carga de los paquetes necesarios, e importación de los datos:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 # Script para la construcción de tablas de datos 
@@ -109,12 +99,12 @@ rm(list = ls())
 # Cargando paquetes
 library(readxl)
 library(gtExtras)
-library (knitr)
-library (kableExtra)
-library (dplyr)
+library(knitr)
+library(kableExtra)
+library(dplyr)
 library(DescTools)
 library(moments)
-library (ggplot2)
+library(ggplot2)
 
 ## DATOS
 
@@ -130,11 +120,11 @@ datos_df_graph
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 4.1**
+**Tabla 4.2**
 :::
 
 
-Los datos se han almacenado en el *data frame* "datos", y hemos presentado las variables contenidas en el mismo con la función `gt_plt_summary()` del paquete `{gtExtras}` Sabemos que, simplemente escribiendo el nombre del *data frame*, aparecerán en la consola los datos almacenados en él. No obstante, esta presentación no es muy elegante para presentar los datos. Vamos a presentarlos de un modo más amigable, mediante la **confección de una "tabla"**.
+Los datos se han almacenado en el *data frame* "datos", y hemos presentado las variables contenidas en el mismo con la función `gt_plt_summary()` del paquete `{gtExtras}`. Sabemos que, simplemente escribiendo el nombre del *data frame*, aparecerán en la consola los datos almacenados en él. No obstante, esta presentación no es muy elegante para presentar los datos. Vamos a presentarlos de un modo más amigable, mediante la **confección de una "tabla"**.
 
 Un paquete de R muy popular para generar tablas de datos es `{knitr}`. Este paquete contiene la función `kable()`, que permite generar tablas en varios formatos y con diversas características que pueden ser personalizadas (como el título de la tabla). Si queremos personalizar más aún la apariencia de nuestras tablas, podemos usar las facilidades del paquete `{kableExtra}`, que complementa las posibilidades que ofrece la función `kable()` de `{knitr}`.
 
@@ -147,14 +137,14 @@ datos %>%
         col.names = c("Trabajador", "Salario", "Nivel de estudios",
                       "Departamento")) %>%
   kable_styling(full_width = F,
-                bootstrap_options = "striped", "bordered", "condensed",
+                bootstrap_options = c("striped", "bordered", "condensed"),
                 position = "center",
                 font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
   row_spec(1:(nrow(datos)), bold= F, align = "c")
 ```
 
-Primero llamamos al *data frame* a partir de cuyos datos vamos a generar la tabla, "datos". Con el operador *pipe* `%>%`, ligamos los datos del *data frame* al diseño la tabla realizado con la función `kable()` de `{knitr}`. `kable()` tiene diversos argumentos, entre los que destacan:
+Primero llamamos al *data frame* a partir de cuyos datos vamos a generar la tabla, "datos". Con el operador *pipe* `%>%`, ligamos los datos del *data frame* al diseño de la tabla realizado con la función `kable()` de `{knitr}`. `kable()` tiene diversos argumentos, entre los que destacan:
 
 -   **`caption =`**: Este argumento informa del título de la tabla.
 
@@ -168,7 +158,7 @@ Luego, con el operador *pipe* `%>%` informamos de que vamos a completar o person
 
 -   **`position =`** : este argumento se utiliza para situar la tabla centrada, a la izquierda del párrafo, o a la derecha.
 
--   **`font_size =`** : este argumento numérico se refiere al tamaño de los caracteres, lo cuál es importante a la hora de que una tabla "quepa" en un documento de deteminada anchura.
+-   **`font_size =`** : este argumento numérico se refiere al tamaño de los caracteres, lo cual es importante a la hora de que una tabla "quepa" en un documento de determinada anchura.
 
 Por último, hacemos uso dos veces de la función `row_spec()` del paquete `{kableExtra}`. Esta función sirve para personalizar algo más las filas concretas de la tabla que consideremos. El encabezado se identifica como la fila "0". En el ejemplo, se ha utilizado esta función dos veces: una para el encabezado (el primer argumento de la función nos informa de las filas a las que se refiere, en esta ocasión la fila 0), y otra para el resto de filas (desde la fila 1 hasta la que contiene al último caso individuo, la fila con posición `nrow(datos)`). Los otros argumentos definen si se quiere que los caracteres aparezcan en negrita (`bold =` ) y cómo deben estar alineados los elementos, dentro de las columnas ( `align =` ).
 
@@ -180,7 +170,7 @@ datos %>%
         col.names = c("Trabajador", "Salario", "Nivel de estudios",
                       "Departamento")) %>%
   kable_styling(full_width = F,
-                bootstrap_options = "striped", "bordered", "condensed",
+                bootstrap_options = c("striped", "bordered", "condensed"),
                 position = "center",
                 font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
@@ -188,13 +178,13 @@ datos %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 4.2.** Trabajadores de Shuttlepod Movers
+**Tabla 4.3.** Trabajadores de Shuttlepod Movers
 :::
 
 
 A veces, puede ocurrir que solo nos interese estudiar una variable (columna del *data frame*). Además, es posible que el conjunto de casos sea muy numeroso, y que, adicionalmente, algunos de los valores de la variable que queremos estudiar estén repetidos para varios casos. Cuando esto ocurre, una opción interesante es, en lugar de representar en una tabla todos nuestros datos, **representar la distribución de frecuencias** de la variable (o atributo) que nos interesa. Es lo que vamos a hacer a continuación, tomando SALARIO como variable a analizar.
 
-Lo primero a tener en cuenta es que, en las distribuciones de frecuencias, **los valores de la variable suelen disponerse de menor a mayor**. Para ello, previamente vamos a ordenar las filas del *data frame* "datos" según el valor que toma, en el caso correspondiente, la variable SALARIO y, si existen casos con el mismo valor de SALARIO, los ordenaremos por orden alfabético del nombre del caso (nombre del trabajador, o de la fila del *data frame*). Para realizar este reordenamiento de casos (filas) del *data frame* de un modo sencillo, vamos a utilizar la función `arrange()` del paquete `{deplyr}`:
+Lo primero a tener en cuenta es que, en las distribuciones de frecuencias, **los valores de la variable suelen disponerse de menor a mayor**. Para ello, previamente vamos a ordenar las filas del *data frame* "datos" según el valor que toma, en el caso correspondiente, la variable SALARIO y, si existen casos con el mismo valor de SALARIO, los ordenaremos por orden alfabético del nombre del caso (nombre del trabajador, o de la fila del *data frame*). Para realizar este reordenamiento de casos (filas) del *data frame* de un modo sencillo, vamos a utilizar la función `arrange()` del paquete `{dplyr}`:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 # Distribución de frecuencias del salario de los trabajadores de la empresa.
@@ -211,7 +201,7 @@ conteo <- table(datos$SALARIO)
 conteo
 ```
 
-Al mostrar en la consola el "conteo", vemos cómo se compone de dos filas de datos. La primera se corresponde con los valores que toma la variable SALARIO en los distintos casos, y la segunda es el número de casos (**frecuencia absoluta**) que se adopta cada valor. Es decir, el objeto "tabla" es la distribución de frecuencias de la variable SALARIO.
+Al mostrar en la consola el "conteo", vemos cómo se compone de dos filas de datos. La primera se corresponde con los valores que toma la variable SALARIO en los distintos casos, y la segunda es el número de casos (**frecuencia absoluta**) que adopta cada valor. Es decir, el objeto "tabla" es la distribución de frecuencias de la variable SALARIO.
 
 Vamos a convertir este objeto "tabla" en un *data frame*, llamado "conteo_df", con el objeto de poder representar de un modo más elegante la distribución de frecuencias. Para ello, ejecutaremos el código:
 
@@ -265,7 +255,7 @@ conteo_df %>%
         digits  = c(0, 0, 0, 2, 2),
         format.args = list(decimal.mark = ".", scientific = FALSE)) %>%
   kable_styling(full_width = F,
-                bootstrap_options = "striped", "bordered", "condensed",
+                bootstrap_options = c("striped", "bordered", "condensed"),
                 position = "center",
                 font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
@@ -281,7 +271,7 @@ conteo_df %>%
         digits  = c(0, 0, 0, 2, 2),
         format.args = list(decimal.mark = ".", scientific = FALSE)) %>%
   kable_styling(full_width = F,
-                bootstrap_options = "striped", "bordered", "condensed",
+                bootstrap_options = c("striped", "bordered", "condensed"),
                 position = "center",
                 font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
@@ -289,7 +279,7 @@ conteo_df %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 4.3.** Distribución de frecuencias de salarios. Shuttlepod Movers
+**Tabla 4.4.** Distribución de frecuencias de salarios. Shuttlepod Movers
 :::
 
 
@@ -299,11 +289,11 @@ Hemos de advertir que en la función `kable()` se han insertado dos nuevos argum
 
 -   **`format.args =`** es una "lista" que controla aspectos de formato como si los decimales se indican con un punto o una coma, o si en cifras muy grandes se debe utilizar notación científica.
 
-En cuanto a la interpretación de la distribución, podemos apreciar que la distribución de salarios en *Shuttlepod Movers* refleja una estructura claramente concentrada en los niveles intermedios. La mayor parte de los trabajadores percibe entre 12 y 20 cientos de PAVOs, lo que supone cerca del 70% de la plantilla, mientras que los salarios bajos (8–10) y los más altos (25–30) son minoritarios. Este patrón sugiere una organización con un núcleo amplio de personal con remuneraciones medias, posiblemente operativas o técnicas, y una proporción reducida de empleados en los extremos, que podrían corresponder a personal de apoyo poco cualificado (en la base) y a mandos o especialistas (en la parte alta). Desde el punto de vista económico, la distribución es relativamente equilibrada.
+En cuanto a la interpretación de la distribución, una primera mirada a los datos ya apunta en la dirección de la sospecha de la CEO: la mayor parte de los trabajadores percibe entre 12 y 20 cientos de PAVOs, lo que supone cerca del 70% de la plantilla. Los salarios bajos (8–10) y los más altos (25–30) son minoritarios. La distribución parece, efectivamente, **concentrada en los niveles intermedios**. Pero para confirmar esta impresión con rigor necesitaremos calcular las medidas de dispersión y forma.
 
-Hay ocasiones en las que la cantidad de valores diferentes que toma la variable analizada para los diferentes casos es muy elevado. Esto puede deberse, por ejemplo, a que el número de casos es muy elevado, o a que la variable es de naturaleza continua, y puede tomar una gran variedad de posibles valores (incluso infinitos). En estos casos, un modo de representar la distribución de frecuencias de la variable en una tabla de dimensión reducida es **agrupando los valores en intervalos**. Esto es lo que vamos a hacer ahora con la variable SALARIO.
+Hay ocasiones en las que la cantidad de valores diferentes que toma la variable analizada para los diferentes casos es muy elevada. Esto puede deberse, por ejemplo, a que el número de casos es muy elevado, o a que la variable es de naturaleza continua, y puede tomar una gran variedad de posibles valores (incluso infinitos). En estos casos, un modo de representar la distribución de frecuencias de la variable en una tabla de dimensión reducida es **agrupando los valores en intervalos**. Esto es lo que vamos a hacer ahora con la variable SALARIO.
 
-La primera tarea a realizar será formar los intervalos. Para ello podemos usar la función `cut()`, que permite decir el número de intervalos (de la misma amplitud) en que queremos dividir el intervalo que va desde el menor valor de la distribución (menor salario) al mayor valor (mayor salario). Vamos a controlar el número de intervalos en que deseamos dividir el rango de valores que puede tomar la variable estudiada mediante una constante ***k***. Si en lugar de decidir nosotros este número, preferimos que sea calculado por un método objetivo, como el de Sturges, ligaremos *k* al método. Por ejemplo:
+La primera tarea a realizar será formar los intervalos. Para ello podemos usar la función `cut()`, que permite decidir el número de intervalos (de la misma amplitud) en que queremos dividir el rango que va desde el menor valor de la distribución (menor salario) al mayor valor (mayor salario). Vamos a controlar el número de intervalos mediante una constante ***k***. Si en lugar de decidir nosotros este número, preferimos que sea calculado por un método objetivo, como el de Sturges, ligaremos *k* al método:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 
@@ -316,7 +306,7 @@ datos$intervalos <- cut(datos$SALARIO, breaks = k, include.lowest = TRUE)
 levels(datos$intervalos)
 ```
 
-El resultado del código anterior es una nueva columna en el *data frame* "datos", llamada "intervalos", que informa, para cada caso, cuál de los intervalos calculados lo contiene. El argumento lógico `include.lowest =` se especifica para indicar que el intervalo inferior es cerrados por la izquierda. Lo usual es que, salvo este, el resto sean abiertos, es decir, que los casos que toman como valor de la variable un extremo de intervalo se contabilicen dentro del intervalo donde ese valor es el extremo superior.
+El resultado del código anterior es una nueva columna en el *data frame* "datos", llamada "intervalos", que informa, para cada caso, cuál de los intervalos calculados lo contiene. El argumento lógico `include.lowest =` se especifica para indicar que el intervalo inferior es cerrado por la izquierda. Lo usual es que, salvo este, el resto sean abiertos, es decir, que los casos que toman como valor de la variable un extremo de intervalo se contabilicen dentro del intervalo donde ese valor es el extremo superior.
 
 La columna "intervalos" es de la clase ***factor***. Precisamente, los posibles "niveles" de ese factor son los intervalos que se han creado con `cut()`.
 
@@ -338,36 +328,25 @@ Con todo lo anterior, se obtiene un *data frame* denominado "conteo_intervalos_d
 
 Antes de proceder a diseñar la tabla de presentación de la distribución de frecuencia con `kable()`, vamos a obtener, para incluir en la tabla, otras informaciones que suelen ser presentadas junto a las frecuencias absolutas de cada intervalo.
 
-Una de estas informaciones es lo que denominamos ***marca de clase*** de un intervalo. La marca de clase de un intervalo de valores es simplemente el punto medio de dicho intervalo. La obtención en nuestro ejemplo de las marcas de clase puede resultar algo compleja, ya que hemos de recordar que los intervalos, tal y como están almacenados, son los niveles de una variable de clase f*actor*:
+Una de estas informaciones es lo que denominamos ***marca de clase*** de un intervalo. La marca de clase de un intervalo de valores es simplemente el **punto medio** de dicho intervalo. Para calcular las marcas de clase, podemos generar los mismos puntos de corte que usó `cut()` y obtener el promedio de cada par de extremos consecutivos:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
-marca_clase <- sapply(strsplit(as.character(conteo_intervalos_df$Intervalo),
-                               ",|\\[|\\(|\\]"),
-                      function(x) {mean(as.numeric(x[2:3]))})
+# Calcular la marca de clase de cada intervalo
+breaks <- seq(min(datos$SALARIO), max(datos$SALARIO), length.out = k + 1)
+marca_clase <- (breaks[-length(breaks)] + breaks[-1]) / 2
 ```
 
-Explicaremos detenidamente el código anterior:
+La función `seq()` genera una secuencia de *k + 1* puntos equidistantes entre el valor mínimo y el máximo de SALARIO, que son los extremos de los *k* intervalos. Luego, `breaks[-length(breaks)]` son los extremos inferiores y `breaks[-1]` los extremos superiores, y su promedio es la marca de clase.
 
-1.  **`conteo_intervalos_df$Intervalo`**: Aquí se está accediendo a la columna "Intervalo" del *data frame* "conteo_intervalos_df".
-
-2.  **`as.character(conteo_intervalos_df$Intervalo)`**: convierte los valores de la columna "Intervalo" a caracteres (*strings*). Esto es necesario porque la función `strsplit()` trabaja con cadenas de texto.
-
-3.  **`strsplit(as.character(conteo_intervalos_df$Intervalo), ",|\\[|\\(|\\]")`**: `strsplit()` divide cada cadena de texto en partes usando los delimitadores especificados. En este caso, se están utilizando como delimitadores las comas ",", los corchetes "[" y "]", y el paréntesis de apertura "(". Cada separador queda "encerrado" entre una doble barra inclinada "\\\\" (o unas comillas, si es el primer separador que se pone), y una barra vertical "\|" (o unas comillas, si es el último separador que se considera). El resultado es una lista de vectores de caracteres, donde cada vector contiene las partes de la cadena original que estaban separadas por los delimitadores.
-
-4.  **`sapply(..., function(x) { ... })`**: `sapply()` aplica una función a cada elemento de una lista y simplifica el resultado a un vector o matriz. Por otro lado, la función anónima `function(x) { ... }` se aplica a cada vector resultante de `strsplit()`.
-
-5.  **`function(x) { mean(as.numeric(x[2:3])) }`**: Esta es la función anónima que se aplica a cada vector "x". Después, **`x[2:3]`** selecciona el segundo y tercer elemento del vector "x". Estos elementos corresponden con los límites del intervalo. **`as.numeric(x[2:3])`** convierte estos elementos a números. **`mean(as.numeric(x[2:3]))`** calcula la media de estos dos números, que representa el punto medio del intervalo.
-
-6.  **`marca_clase <- ...`**: Finalmente, el resultado de `sapply()` se asigna al vector"marca_clase", que contendrá los puntos medios de los 4 intervalos.
-
-El resto de código integra el vector "marca_clase" en el *data frame* "conteo_intervalo_df" como una variable más, reodena con la función select() del paquete {dplyr} el orden de las columnas del *data frame*, calcula el resto de frecuencias (absoluta acumulada, relativa, relativa acumulada), y diseña la tabla de presentación de la distribución de frecuencias de los salarios de los trabajadores de la empresa; pero agrupada en los intervalos de valores que se fijaron con la constante *k*:
+El resto de código integra el vector "marca_clase" en el *data frame* "conteo_intervalos_df" como una variable más, reordena las columnas con `select()`, calcula el resto de frecuencias (absoluta acumulada, relativa, relativa acumulada), y diseña la tabla de presentación:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 # Agregar la columna "marca_clase" al data frame
 conteo_intervalos_df$marca_clase <- marca_clase
 
-#Cambiar el orden de las columnas en el data frame con dplyr
-conteo_intervalos_df <- conteo_intervalos_df %>% select(Intervalo, marca_clase, Frecuencia)
+# Cambiar el orden de las columnas en el data frame con dplyr
+conteo_intervalos_df <- conteo_intervalos_df %>%
+  select(Intervalo, marca_clase, Frecuencia)
 
 # Calcular y guardar la frecuencia total
 N_agre <- sum(conteo_intervalos_df$Frecuencia)
@@ -393,7 +372,7 @@ conteo_intervalos_df %>%
         digits  = c(NA, 2, 0, 0, 2, 2),
         format.args = list(decimal.mark = ".", scientific = FALSE)) %>%
   kable_styling(full_width = F,
-                bootstrap_options = "striped", "bordered", "condensed",
+                bootstrap_options = c("striped", "bordered", "condensed"),
                 position = "center",
                 font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
@@ -404,8 +383,9 @@ conteo_intervalos_df %>%
 # Agregar la columna "marca_clase" al data frame
 conteo_intervalos_df$marca_clase <- marca_clase
 
-#Cambiar el orden de las columnas en el data frame con dplyr
-conteo_intervalos_df <- conteo_intervalos_df %>% select(Intervalo, marca_clase, Frecuencia)
+# Cambiar el orden de las columnas en el data frame con dplyr
+conteo_intervalos_df <- conteo_intervalos_df %>%
+  select(Intervalo, marca_clase, Frecuencia)
 
 # Calcular y guardar la frecuencia total
 N_agre <- sum(conteo_intervalos_df$Frecuencia)
@@ -433,7 +413,7 @@ conteo_intervalos_df %>%
         digits  = c(NA, 2, 0, 0, 2, 2),
         format.args = list(decimal.mark = ".", scientific = FALSE)) %>%
   kable_styling(full_width = F,
-                bootstrap_options = "striped", "bordered", "condensed",
+                bootstrap_options = c("striped", "bordered", "condensed"),
                 position = "center",
                 font_size = 11) %>%
   row_spec(0, bold= T, align = "c") %>%
@@ -441,11 +421,11 @@ conteo_intervalos_df %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 4.4.** Distribución de frecuencias agrupadas en intervalos de salarios. Shuttlepod Movers
+**Tabla 4.5.** Distribución de frecuencias agrupadas en intervalos de salarios. Shuttlepod Movers
 :::
 
 
-La distribución agrupada de salarios en *Shuttlepod Movers,* expresada en cientos de PAVOs, confirma la concentración de la plantilla en niveles intermedios de ingresos. En particular, los intervalos [7.98, 11.1] y (14.3, 17.4] concentran cada uno un 22% de los trabajadores, mientras que los tramos (11.1, 14.3] y (17.4, 20.6] aportan un 16% adicional cada uno. Esto refleja que casi tres cuartas partes de la fuerza laboral percibe salarios entre 8 y 20 cientos de PAVOs, lo que configura una estructura salarial predominantemente media. Los tramos superiores muestran menor densidad: solo un 10% supera los 23.7 cientos de PAVOs, y el salario máximo (30 cientos) corresponde a un único trabajador.
+La distribución agrupada confirma la concentración salarial: casi tres cuartas partes de la plantilla percibe entre 8 y 20 cientos de PAVOs. Los tramos superiores muestran menor densidad: solo un 10% supera los 23,7 cientos de PAVOs, y el salario máximo (30 cientos) corresponde a un único trabajador. La sospecha de Tasha va tomando forma, pero necesitamos medidas concretas.
 
 ## ![](figuras/book.svg){.hicon}![](figuras/pie-chart.svg){.hicon} Medidas de posición.
 
@@ -467,7 +447,7 @@ Si las frecuencias de todos los valores de la variable son 1 (distribución de f
 
 $$
 \overline{x} = \frac{1}{N} \sum_{i=1}^{N} x_i
-$$ En R, la función para obtener la media de una variable es `mean()`. Así, para obtener el salario medio de la variable SALARIO de los trabajadoes de la empresa, ejecutaremos el código:
+$$ En R, la función para obtener la media de una variable es `mean()`. Así, para obtener el salario medio de la variable SALARIO de los trabajadores de la empresa, ejecutaremos el código:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ## MEDIDAS
@@ -477,15 +457,15 @@ media <- mean(datos$SALARIO)
 media
 ```
 
-Como podemos observar, el salario medio de los trabajadores de la empresa, recogido en el valor "media", es de 16.04 cientos de PAVOs, es decir, 1604 PAVOs.
+El salario medio de los trabajadores de *Shuttlepod Movers* es de 16,04 cientos de PAVOs (1.604 PAVOs). Esto nos da un primer indicador del **nivel salarial típico** de la plantilla: si la masa salarial se repartiera igualitariamente entre todos los trabajadores, cada uno percibiría esa cantidad.
 
 ¿Qué significado tiene la media aritmética? La media aritmética es el "centro de gravedad" de la distribución, el punto de equilibrio, en el sentido de que, si todos los trabajadores ganaran el salario medio, no habría diferencias salariales aun cuando la "masa" salarial invertida por la empresa permanecería invariable. Es decir, **la media aritmética supone un reparto igualitario de la masa total de la variable**.
 
 Entre sus ventajas destaca el que, para variables (escala métrica) es siempre calculable y única. Como inconvenientes, que pierde su representatividad ante la existencia de casos atípicos o *outliers*, y que no se puede calcular en el caso de trabajar con atributos, variables cualitativas o factores (escalas nominal u ordinal).
 
-La **mediana** es el valor que se corresponde con el caso o casos que dividen a la distribución en dos grupos con el mismo número de elementos (frecuencias), siempre teniendo en cuenta que, previamente, la distribución ha sido ordenada según los valores de la variable en estudio, de menor a mayor. Si la distribución tiene frecuencia total par, los casos "frontera" entre los dos grupos en que queda dividida la distribución son dos, por lo que, si estos casos asumen valores diferentes en la variable estudiada, podría ocurrir que hubiera dos medianas diferentes. En tal circunstancia, se suele tomar, como convenio, el promedio de de ambos valores para tener una única mediana.
+La **mediana** es el valor que se corresponde con el caso o casos que dividen a la distribución en dos grupos con el mismo número de elementos (frecuencias), siempre teniendo en cuenta que, previamente, la distribución ha sido ordenada según los valores de la variable en estudio, de menor a mayor. Si la distribución tiene frecuencia total par, los casos "frontera" entre los dos grupos en que queda dividida la distribución son dos, por lo que, si estos casos asumen valores diferentes en la variable estudiada, podría ocurrir que hubiera dos medianas diferentes. En tal circunstancia, se suele tomar, como convenio, el promedio de ambos valores para tener una única mediana.
 
-En R, la función para obtener la mediana de una variable es `median()`. De este modo, para obtener el salario mediano de la variable SALARIO de los trabajadoes de la empresa, ejecutaremos el código:
+En R, la función para obtener la mediana de una variable es `median()`. De este modo, para obtener el salario mediano de la variable SALARIO de los trabajadores de la empresa, ejecutaremos el código:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 # Mediana
@@ -493,7 +473,7 @@ mediana <- median(datos$SALARIO)
 mediana
 ```
 
-En el ejemplo de la variable SALARIO, la mediana es 15. Es decir, 15 cientos de PAVOs es el salario percibido por el caso 25, que es el trabajador que divide la distribución de frecuencias en dos grupos de 24 trabajadores: 24 que ganan un salario menor o igual que el caso 25 (menos o igual que 15 cientos de PAVOs), y otros 24 trabajadores que ganan más o lo mismo que el caso en la posición 25 (o sea, igual o más que 15 cientos de PAVOs).
+La mediana es 15 cientos de PAVOs. Esto significa que la mitad de la plantilla percibe 15 o menos cientos de PAVOs, y la otra mitad percibe 15 o más. Observemos que la mediana (15) es ligeramente inferior a la media (16,04), lo que sugiere la existencia de algunos salarios altos que "tiran" de la media hacia arriba.
 
 Como ventajas de la mediana, contamos con que no es sensible a la existencia de casos atípicos o outliers, y que se puede calcular en el caso de atributos o factores en escala ordinal. Como desventajas, tenemos que no es necesariamente única, y que no tiene en cuenta la totalidad de los valores de la distribución.
 
@@ -507,13 +487,13 @@ moda <- Mode(datos$SALARIO)
 moda
 ```
 
-Como podemos apreciar, la moda de la distribución es 15 (un salario de 1500 PAVOs), que aparece en la distribución en 11 ocasiones (la frecuencia absoluta de ese salario es 11).
+La moda de la distribución es 15 (un salario de 1.500 PAVOs), que aparece 11 veces. El hecho de que **media, mediana y moda estén muy próximas** (16,04, 15 y 15 respectivamente) ya es un indicio de que la distribución está bastante centrada, lo cual refuerza la percepción de Tasha sobre una estructura salarial concentrada.
 
 La moda puede ser calculada en atributos o factores en escala nominal. Como inconveniente principal, tenemos que no necesariamente es un valor único (existen distribuciones multimodales).
 
-Existen otras medidas que son de posición no central, principalmente lo que llamamos **cuantiles**. La naturaleza de los cuantiles es fácil de comprender si los consideramos como una generalización de la mediana. Ya sabemos que, ordenados los valores (y por tanto, los casos que toman dichos valores) de una distribución de frecuencias de una variable de menor a mayor, la mediana es el valor (o valores, porque pueden existir dos medianas, aunque vamos a suponer que solo hay una) de la variable correspondiente al caso que divide a la distribución en dos grupos con el mismo número de frecuencias. Pues bien, si en lugar de dividir a la distribución de frecuencias en dos grupos con el mismo número de elementos, la dividimos en 4 grupos, estaremos hablando de tres valores correspondientes a los casos que delimitan a esos cuatro grupos. Estos valores serán los **cuartiles** de la distribución.
+Existen otras medidas que son de posición no central, principalmente lo que llamamos **cuantiles**. La naturaleza de los cuantiles es fácil de comprender si los consideramos como una generalización de la mediana. Ya sabemos que, ordenados los valores (y por tanto, los casos que toman dichos valores) de una distribución de frecuencias de una variable de menor a mayor, la mediana es el valor de la variable correspondiente al caso que divide a la distribución en dos grupos con el mismo número de frecuencias. Pues bien, si en lugar de dividir a la distribución de frecuencias en dos grupos con el mismo número de elementos, la dividimos en 4 grupos, estaremos hablando de tres valores correspondientes a los casos que delimitan a esos cuatro grupos. Estos valores serán los **cuartiles** de la distribución.
 
-Si queremos dividir la distribución de 9 valores de la variable que toman los casos "frontera" que separan a estos 10 grupos. Esos valores serán los **deciles**. Y si queremos dividir la distribución de frecuencias en 100 grupos con el mismo número de casos o individuos, estaríamos hablando de 99 valores de la variable que toman los casos "frontera" que separan a estos 100 grupos. Esos valores serán los **percentiles**.
+Si queremos dividir la distribución en 10 grupos con el mismo número de casos o individuos, estaremos hablando de 9 valores de la variable que toman los casos "frontera" que separan a estos 10 grupos. Esos valores serán los **deciles**. Y si queremos dividir la distribución de frecuencias en 100 grupos con el mismo número de casos o individuos, estaríamos hablando de 99 valores de la variable que toman los casos "frontera" que separan a estos 100 grupos. Esos valores serán los **percentiles**.
 
 En R, la función para calcular los diferentes cuantiles es `quantile()`. Para calcular, por ejemplo, los cuartiles de la variable SALARIO, procederemos así:
 
@@ -523,7 +503,7 @@ cuartiles <- quantile(datos$SALARIO, probs = c(0.25, 0.5, 0.75))
 cuartiles
 ```
 
-El argumento `probs =` informa de la proporción de los casos que han de quedar por detrás (con valores menores o iguales) de cada uno de los casos que hacen de "frontera" entre los grupos. En el caso de los cuartiles, estos son 0.25, 0.5 (este cuartil es, a su vez, la mediana de la distribución) y 0.75. Vemos cómo los cuartiles son 12, 15 y 20.
+El argumento `probs =` informa de la proporción de los casos que han de quedar por detrás (con valores menores o iguales) de cada uno de los casos que hacen de "frontera" entre los grupos. En el caso de los cuartiles, estos son 0.25, 0.5 (este cuartil es, a su vez, la mediana de la distribución) y 0.75. Vemos cómo los cuartiles son 12, 15 y 20. Esto significa que el 50% central de la plantilla (entre Q1 y Q3) percibe entre 12 y 20 cientos de PAVOs, un rango de tan solo 8 unidades. La diferencia entre Q3 y Q1, que es el **rango intercuartílico** (IQR = 8), nos confirma que la mitad de los salarios está comprimida en un intervalo relativamente estrecho.
 
 ## ![](figuras/book.svg){.hicon}![](figuras/pie-chart.svg){.hicon} Medidas de dispersión o variabilidad.
 
@@ -531,7 +511,7 @@ Las medidas de dispersión cuantifican **lo cerca o lejos que, en general, los v
 
 La medida de posición central a la que suelen hacer referencia las medidas de dispersión es la media aritmética.
 
-Existen múltiples medidas de dispersión, que principalmente se dividen en **medidas absolutas** (que se expresan en ciertas unidades, como por ejemplo euros, o euros al cuadrado) y **medidas relativas** (que carecen de unidades y siven, por tanto, para comparar la dispersión entre distribuciones de frecuencias expresadas en distintas unidades).
+Existen múltiples medidas de dispersión, que principalmente se dividen en **medidas absolutas** (que se expresan en ciertas unidades, como por ejemplo euros, o euros al cuadrado) y **medidas relativas** (que carecen de unidades y sirven, por tanto, para comparar la dispersión entre distribuciones de frecuencias expresadas en distintas unidades).
 
 La medida de dispersión absoluta más utilizada es la **varianza**, cuya fórmula es:
 
@@ -539,7 +519,7 @@ $$
 S^2 = \frac{1}{N} \sum_{i=1}^{h} (x_i - \overline{x})^2 n_i
 $$
 
-Hemos de tener en cuenta en la fórmula anterior que *N* es la frecuencia total, y `h` es el número de valores diferentes que toma la variable.
+Hemos de tener en cuenta en la fórmula anterior que *N* es la frecuencia total, y *h* es el número de valores diferentes que toma la variable.
 
 Si las frecuencias de todos los valores de la variable son 1 (distribución de frecuencias unitarias), lógicamente la varianza pasará a ser:
 
@@ -555,7 +535,7 @@ $$
 S = +\sqrt{S^2}
 $$
 
-Otra media de dispersión muy utilizada, sobre todo en *Econometría*, es la *varianza insesgada* o **cuasivarianza**, cuya fórmula es:
+Otra medida de dispersión muy utilizada, sobre todo en *Econometría*, es la *varianza insesgada* o **cuasivarianza**, cuya fórmula es:
 
 $$
 {\overline{S}}^2 = \frac{1}{N-1} \sum_{i=1}^{h} (x_i - \overline{x})^2 n_i
@@ -587,7 +567,7 @@ desv <- varianza ^ (1/2)
 desv
 
 # Cuasivarianza
-cuasivarianza <- var (datos$SALARIO)
+cuasivarianza <- var(datos$SALARIO)
 cuasivarianza
 
 # Coeficiente de variación
@@ -595,13 +575,13 @@ cvariacion <- desv / abs(media)
 cvariacion
 ```
 
-Según los resultados, puede destacarse que el coeficiente de variación indica que en la desviación típica de la variable SALARIO "cabe" el 34,4% de la media.
+El coeficiente de variación es 0,344, es decir, la desviación típica supone un 34,4% de la media salarial. Este valor es moderado: la dispersión salarial existe, pero no es elevada. **La sospecha de Tasha se confirma parcialmente**: la estructura salarial de *Shuttlepod Movers* es relativamente compacta, aunque no extremadamente plana. La mayoría de los salarios se mueve dentro de un rango razonable en torno a la media.
 
 ## ![](figuras/book.svg){.hicon}![](figuras/pie-chart.svg){.hicon} Medidas de forma.
 
 Las medidas de forma cuantifican el grado de deformación horizontal y vertical de la representación gráfica de una distribución de frecuencias. Son de dos tipos: medidas de asimetría y medidas de apuntamiento o curtosis.
 
-Las **medidas de asimetría** miden el grado de deformación horizontal con respecto a un “eje de simetría”, que es aquel que pasa por el valor medio de la distribución. Si suponemos que la distribución es unimodal y campaniforme, tendremos los casos que se muestran en la figura:
+Las **medidas de asimetría** miden el grado de deformación horizontal con respecto a un "eje de simetría", que es aquel que pasa por el valor medio de la distribución. Si suponemos que la distribución es unimodal y campaniforme, tendremos los casos que se muestran en la figura:
 
 ![](figuras/asimetría.png){width="100%"}
 
@@ -618,12 +598,11 @@ asimetria <- skewness(datos$SALARIO)
 asimetria
 ```
 
-El valor obtenido para la variable SALARIO de nuestra distribución de frecuencias de los trabajadores de la empresa es positivo, lo que indica asimetría positiva: las mayores frecuencias se localizan a la derecha de la media. Esto se puede comprobar fácilmente construyendo el histograma de la variable SALARIO y trazando una línea vertical que pase por la media salarial. Para ello usamos el paquete `{ggplot2}`:
+El valor obtenido es positivo, lo que indica **asimetría positiva**: la cola de la distribución se extiende hacia los salarios altos. Esto se puede comprobar fácilmente construyendo el histograma de la variable SALARIO y trazando una línea vertical que pase por la media salarial:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
-ggplot(data = datos,
-       map = aes(x = SALARIO)) +
-  geom_histogram(bins = k,            # k ya fue definida antes (Sturges)
+ggplot(data = datos, aes(x = SALARIO)) +
+  geom_histogram(bins = k,
                  colour = "red",
                  fill = "orange") +
   geom_vline(aes(xintercept = mean(SALARIO)),
@@ -641,9 +620,9 @@ ggplot(data = datos,
 :::
 
 
-Como comprobamos, la distribución es claramente asimétrica positiva.
+La distribución es claramente asimétrica positiva. En términos de la pregunta de Tasha, esto significa que **el grueso de la plantilla se concentra en salarios medios-bajos**, y solo unos pocos trabajadores alcanzan salarios altos. La "cola" derecha corresponde, probablemente, a mandos o especialistas con mayor cualificación.
 
-En cuanto a las **medidas de curtosis**, miden el grado de deformación vertical con respecto a una distribución “tipo”, la distribución normal. Suponemos previamente que la distribución de frecuencias estudiada es campaniforme, unimodal y simétrica (o con ligera asimetría). Pueden darse los casos que se muestran en la figura:
+En cuanto a las **medidas de curtosis**, miden el grado de deformación vertical con respecto a una distribución "tipo", la distribución normal. Suponemos previamente que la distribución de frecuencias estudiada es campaniforme, unimodal y simétrica (o con ligera asimetría). Pueden darse los casos que se muestran en la figura:
 
 ![](figuras/curtosis.png){width="100%"}
 
@@ -652,7 +631,7 @@ En cuanto a las **medidas de curtosis**, miden el grado de deformación vertical
 :::
 
 
-El tipo y grado de apuntamiento o curtosis se puede obtener mediante el **coeficiente de apuntamiento de Fisher**. Este coeficiente toma valor negativo si la distribución es *platicúrtica* (más aplastada que la distribución normal), valor positivo si la distribución es *leptocúrtica* (más apuntada que la distribución normal), y se acerca a 0 en caso de que la distribución sea aproximadamente igual de apuntada que la distribución normal. En R, se puede obtener el coeficiente de asimetría mediante la función `kurtosis()` del paquete `{moments}`. Hay que tener en cuenta que para que esta versión coincida con lo dicho anteriormente, al valor calculado hay que restarle el valor "3":
+El tipo y grado de apuntamiento o curtosis se puede obtener mediante el **coeficiente de apuntamiento de Fisher**. Este coeficiente toma valor negativo si la distribución es *platicúrtica* (más aplastada que la distribución normal), valor positivo si la distribución es *leptocúrtica* (más apuntada que la distribución normal), y se acerca a 0 en caso de que la distribución sea aproximadamente igual de apuntada que la distribución normal. En R, se puede obtener el coeficiente de curtosis mediante la función `kurtosis()` del paquete `{moments}`. Hay que tener en cuenta que para que esta versión coincida con lo dicho anteriormente, al valor calculado hay que restarle el valor "3":
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 # Coeficiente de apuntamiento o curtosis de Fisher
@@ -660,10 +639,10 @@ curtosis <- kurtosis(datos$SALARIO) - 3
 curtosis
 ```
 
-Se aprecia como el coeficiente (corregido) es menor que 0, por lo que la distribución de frecuencias de la variable SALARIO es platicúrtica (más "aplastada" que la distribución de frecuencias normal). También hay que tener en cuenta que debemos prestar atención a la aplicación del coeficiente, ya que vimos con anterioridad que la distribución no es aproximadamente simétrica. Gráficamente, podemos comprobar lo anterior representando el histograma y una curva normal que posea la misma moda (que ya calculamos anteriormente). Para que sean comparables, debemos transformar el eje "y" del gráfico, pasando de "frecuencias" a "densidad", para lo cuál se incluye en el `geom_histogram()` el argumento `aes(y = ..density..)`:
+El coeficiente (corregido) es menor que 0, por lo que la distribución de frecuencias de la variable SALARIO es **platicúrtica** (más "aplastada" que la distribución normal). También hay que tener en cuenta que debemos prestar cierta cautela en la aplicación del coeficiente, ya que vimos con anterioridad que la distribución no es aproximadamente simétrica. Gráficamente, podemos comprobar lo anterior representando el histograma y una curva normal que posea la misma moda. Para que sean comparables, debemos transformar el eje "y" del gráfico, pasando de "frecuencias" a "densidad", para lo cual se incluye en el `geom_histogram()` el argumento `aes(y = after_stat(density))`:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
-ggplot(data = datos, map = aes(x = SALARIO)) +
+ggplot(data = datos, aes(x = SALARIO)) +
   geom_histogram(bins = k,
                  colour = "red",
                  fill = "orange",
@@ -673,7 +652,7 @@ ggplot(data = datos, map = aes(x = SALARIO)) +
                 colour = "darkblue",
                 linewidth = 1) +
   ggtitle("SALARIO MENSUAL",
-          subtitle = "trabajadores de la empresa Shuttlepod Movers")+
+          subtitle = "trabajadores de Shuttlepod Movers")+
   xlab("Salario (cientos de PAVOs)") +
   ylab("Densidad")
 ```
@@ -683,9 +662,43 @@ ggplot(data = datos, map = aes(x = SALARIO)) +
 :::
 
 
-El histograma de salarios de *Shuttlepod Movers* muestra con claridad que la mayor densidad de trabajadores se concentra en los tramos intermedios, especialmente entre los 10 y 17 cientos de PAVOs, donde se alcanza el pico de la distribución. A partir de ahí, la frecuencia va disminuyendo progresivamente hacia los intervalos superiores, lo que indica una asimetría positiva: la cola de la distribución se extiende hacia los salarios altos, aunque con muy pocos casos (apenas uno llega a 30 cientos de PAVOs).
+El carácter platicúrtico de la distribución indica que los salarios están **más uniformemente repartidos** de lo que cabría esperar en una distribución normal, con menos concentración alrededor de la media y colas menos pronunciadas. Esto es coherente con la percepción de la CEO: la empresa tiende a pagar salarios parecidos a la mayoría de la plantilla.
 
-Desde un punto de vista económico, la gráfica confirma que la empresa presenta una **estructura salarial relativamente compacta**, dominada por ingresos medios, lo que sugiere un modelo de retribución homogéneo para la mayor parte de la plantilla. Sin embargo, la escasez de salarios muy altos revela **una débil diferenciación jerárquica**, característica de empresas con poca estratificación en su organigrama. Esto puede favorecer la cohesión interna y el control de costes salariales, pero también limita los incentivos para atraer y retener perfiles altamente cualificados en un sector tecnológicamente exigente como el transporte interespacial.
+## ![](figuras/book.svg){.hicon}![](figuras/pie-chart.svg){.hicon} Resumen del análisis descriptivo.
+
+Para cerrar el análisis, reunimos todas las medidas calculadas en una única tabla resumen:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
+# Tabla resumen de medidas descriptivas
+resumen <- data.frame(
+  Medida = c("Media aritmética", "Mediana", "Moda",
+             "Cuartil 1 (Q1)", "Cuartil 3 (Q3)", "Rango intercuartílico (IQR)",
+             "Varianza", "Desviación típica", "Cuasivarianza",
+             "Coef. de variación", "Coef. de asimetría (Fisher)",
+             "Coef. de curtosis (Fisher)"),
+  Valor = round(c(media, mediana, as.numeric(moda),
+                  cuartiles[1], cuartiles[3], cuartiles[3] - cuartiles[1],
+                  varianza, desv, cuasivarianza,
+                  cvariacion, asimetria, curtosis), 3)
+)
+
+resumen %>%
+  kable(
+        col.names = c("Medida", "Valor")) %>%
+  kable_styling(full_width = F,
+                bootstrap_options = c("striped", "bordered", "condensed"),
+                position = "center",
+                font_size = 11) %>%
+  row_spec(0, bold = T, align = "c") %>%
+  row_spec(1:nrow(resumen), bold = F, align = "c")
+```
+
+::: {style="text-align: center;"}
+**Tabla 4.6.** Resumen del análisis descriptivo de SALARIO. Shuttlepod Movers
+:::
+
+
+**Conclusión para Tasha Tachybaptus:** el análisis descriptivo confirma que la estructura salarial de *Shuttlepod Movers* es efectivamente **compacta y concentrada en los niveles intermedios**. El salario medio (16,04) y la mediana (15) están muy próximos, la dispersión es moderada (CV = 34,4%) y la distribución es platicúrtica, lo que indica salarios bastante uniformes. La asimetría positiva revela que, si bien existe un pequeño grupo de trabajadores con salarios superiores, la diferenciación retributiva hacia arriba es muy limitada. Si la CEO desea retener talento altamente cualificado, este análisis le da base empírica para considerar una revisión de la política salarial que introduzca una mayor diferenciación en los tramos superiores.
 
 ## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo.
 
@@ -693,7 +706,7 @@ En esta sección se muestran los links de acceso a los diferentes materiales (*s
 
 **Datos (en formato Microsoft® Excel®):**
 
--   interestelar_100.xlsx ([obtener aquí](https://raw.githubusercontent.com/teckel71/RStars-book/main/download/trabajadores.xlsx))
+-   trabajadores.xlsx ([obtener aquí](https://raw.githubusercontent.com/teckel71/RStars-book/main/download/trabajadores.xlsx))
 
 **Scripts:**
 
