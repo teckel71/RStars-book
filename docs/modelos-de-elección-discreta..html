@@ -265,7 +265,7 @@ R^2_{\text{Nagelkerke}} = \frac{1 - \exp\!\left(-\frac{2}{n}(L_1 - L_0)\right)}{
 </ul>
 <p>Además, para la simulación de escenarios, utilizaremos el archivo <strong>escenarios_logit_rstars.xlsx</strong>.</p>
 <p>Como es habitual, la primera parte del <em>script</em> está dedicada a la limpieza de la memoria y a la carga de los paquetes necesarios:</p>
-<div class="sourceCode" id="cb352"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb351"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Limpiando el Environment de objetos</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -291,7 +291,7 @@ R^2_{\text{Nagelkerke}} = \frac{1 - \exp\!\left(-\frac{2}{n}(L_1 - L_0)\right)}{
 <li><p><strong>Función <code><a href="https://rdrr.io/pkg/MATrstars/man/create_patchwork.html">create_patchwork()</a></code></strong>: ya utilizada en capítulos anteriores para componer listas de gráficos <a href="https://ggplot2.tidyverse.org">ggplot2</a> en retículas de 2×2, facilitando la comparación visual.</p></li>
 </ul>
 <p>A continuación, se importan los datos desde el archivo Excel:</p>
-<div class="sourceCode" id="cb353"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb352"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">LICENCIAS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"licencias_100.xlsx"</span>, sheet <span class="op">=</span> <span class="st">"Datos"</span><span class="op">)</span></span>
 <span><span class="va">LICENCIAS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">LICENCIAS</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -300,7 +300,7 @@ R^2_{\text{Nagelkerke}} = \frac{1 - \exp\!\left(-\frac{2}{n}(L_1 - L_0)\right)}{
 <span class="header-section-number">10.5.3</span> <img src="figuras/pie-chart.svg"> Detección de valores perdidos.<a class="anchor" aria-label="anchor" href="#detecci%C3%B3n-de-valores-perdidos."><i class="fas fa-link"></i></a>
 </h3>
 <p>Como paso previo a cualquier análisis, comprobamos la presencia de valores perdidos (<em>missing values</em>) en la base de datos mediante la función <code><a href="https://rdrr.io/pkg/MATrstars/man/explora_na.html">explora_na()</a></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a>:</p>
-<div class="sourceCode" id="cb354"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb353"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>matrstars.figura_num <span class="op">=</span> <span class="st">"10.2"</span>, matrstars.tabla_num <span class="op">=</span> <span class="st">"10.1"</span><span class="op">)</span></span>
 <span><span class="va">LICENCIAS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/explora_na.html">explora_na</a></span><span class="op">(</span></span>
 <span>  <span class="va">LICENCIAS</span>,</span>
@@ -315,7 +315,7 @@ R^2_{\text{Nagelkerke}} = \frac{1 - \exp\!\left(-\frac{2}{n}(L_1 - L_0)\right)}{
 <span class="header-section-number">10.5.4</span> <img src="figuras/pie-chart.svg"> Conversión de variables categóricas.<a class="anchor" aria-label="anchor" href="#conversi%C3%B3n-de-variables-categ%C3%B3ricas."><i class="fas fa-link"></i></a>
 </h3>
 <p>Una vez confirmada la integridad de los datos, es imprescindible convertir las variables categóricas a <strong>factor</strong>. La variable EFLO (estado de la flota) tiene tres niveles, y fijamos como nivel de referencia la categoría ANTIGUA, de modo que los coeficientes de MADURA y RENOVADA indicarán la mejora respecto a ese nivel base. La variable LICENCIA es la variable dependiente binaria (0 = denegada, 1 = concedida):</p>
-<div class="sourceCode" id="cb355"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb354"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Conversión de variables categóricas a factor</span></span>
 <span></span>
 <span><span class="va">LICENCIAS</span><span class="op">$</span><span class="va">EFLO</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">LICENCIAS</span><span class="op">$</span><span class="va">EFLO</span>,</span>
@@ -326,16 +326,16 @@ R^2_{\text{Nagelkerke}} = \frac{1 - \exp\!\left(-\frac{2}{n}(L_1 - L_0)\right)}{
 <span><span class="co"># Verificamos la conversión y la codificación de contrastes</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">is.factor</a></span><span class="op">(</span><span class="va">LICENCIAS</span><span class="op">$</span><span class="va">EFLO</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb357"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb356"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">is.factor</a></span><span class="op">(</span><span class="va">LICENCIAS</span><span class="op">$</span><span class="va">LICENCIA</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb359"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb358"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/contrasts.html">contrasts</a></span><span class="op">(</span><span class="va">LICENCIAS</span><span class="op">$</span><span class="va">EFLO</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##          MADURA RENOVADA
 ## ANTIGUA       0        0
 ## MADURA        1        0
 ## RENOVADA      0        1</code></pre>
-<div class="sourceCode" id="cb361"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb360"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/contrasts.html">contrasts</a></span><span class="op">(</span><span class="va">LICENCIAS</span><span class="op">$</span><span class="va">LICENCIA</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##   1
 ## 0 0
@@ -347,13 +347,13 @@ R^2_{\text{Nagelkerke}} = \frac{1 - \exp\!\left(-\frac{2}{n}(L_1 - L_0)\right)}{
 <span class="header-section-number">10.5.5</span> <img src="figuras/pie-chart.svg"> Análisis descriptivo previo.<a class="anchor" aria-label="anchor" href="#an%C3%A1lisis-descriptivo-previo."><i class="fas fa-link"></i></a>
 </h3>
 <p>Antes de estimar el modelo, conviene examinar las diferencias descriptivas entre los dos grupos (licencia concedida vs. denegada). Esto nos permitirá anticipar qué variables podrían ser relevantes. Comenzamos con las tablas de frecuencias:</p>
-<div class="sourceCode" id="cb363"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb362"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Distribución de la variable dependiente</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">LICENCIAS</span><span class="op">$</span><span class="va">LICENCIA</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## 
 ##  0  1 
 ## 60 40</code></pre>
-<div class="sourceCode" id="cb365"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb364"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Tabla cruzada: LICENCIA por EFLO</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">LICENCIAS</span><span class="op">$</span><span class="va">EFLO</span>, <span class="va">LICENCIAS</span><span class="op">$</span><span class="va">LICENCIA</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##           
@@ -363,7 +363,7 @@ R^2_{\text{Nagelkerke}} = \frac{1 - \exp\!\left(-\frac{2}{n}(L_1 - L_0)\right)}{
 ##   RENOVADA 14 21</code></pre>
 <p>La tabla cruzada revela un patrón sugerente: entre las compañías con flota RENOVADA, el 66% obtuvieron la licencia, frente al 29% de las MADURA y el 20% de las ANTIGUA. Esto sugiere que el estado de la flota podría ser un factor relevante, aunque habrá que confirmar si este efecto se mantiene tras controlar por las demás variables.</p>
 <p>Visualizamos la relación entre las variables categóricas (EFLO y GALAXIA) y la concesión de la licencia mediante gráficos de barras apiladas porcentuales, que muestran la proporción de concesión y denegación dentro de cada categoría:</p>
-<div class="sourceCode" id="cb367"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb366"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Gráfico de barras apiladas: EFLO × LICENCIA (proporciones)</span></span>
 <span><span class="va">g_eflo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">LICENCIAS</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">EFLO</span>, fill <span class="op">=</span> <span class="va">LICENCIA</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"fill"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -389,10 +389,10 @@ R^2_{\text{Nagelkerke}} = \frac{1 - \exp\!\left(-\frac{2}{n}(L_1 - L_0)\right)}{
 <span></span>
 <span><span class="co"># Composición de los dos gráficos categóricos</span></span>
 <span><span class="va">g_eflo</span> <span class="op">+</span> <span class="va">g_gal</span> <span class="op">+</span> <span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html">plot_layout</a></span><span class="op">(</span>guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-354-1.png" alt="" width="100%"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-350-1.png" alt="" width="100%"></div>
 <p>El gráfico de EFLO confirma visualmente la asociación ya detectada en la tabla cruzada: la proporción de licencias concedidas crece de forma clara al pasar de flotas antiguas a renovadas. En cuanto a GALAXIA, las diferencias son menos marcadas, lo que anticipa que la galaxia de operación probablemente no será una variable determinante en el modelo.</p>
 <p>Veamos ahora las medias de las variables métricas en cada grupo, tanto en formato tabla como en formato gráfico:</p>
-<div class="sourceCode" id="cb368"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb367"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Tabla de medias por grupo de licencia</span></span>
 <span><span class="va">LICENCIAS</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">LICENCIA</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -486,7 +486,7 @@ EXPERIENCIA
 <div style="text-align: center;">
 <p><strong>Tabla 10.2.</strong> Medias por grupo de licencia</p>
 </div>
-<div class="sourceCode" id="cb369"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb368"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Gráficos de barras agrupadas para cada variable métrica</span></span>
 <span><span class="va">vars_metricas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"SOLVENCIA"</span>, <span class="st">"IPUNT"</span>, <span class="st">"TINCID"</span>, <span class="st">"IFIDE"</span>,</span>
 <span>                   <span class="st">"FLOTA"</span>, <span class="st">"RUTAS"</span>, <span class="st">"EXPERIENCIA"</span><span class="op">)</span></span>
@@ -511,8 +511,8 @@ EXPERIENCIA
 <span></span>
 <span><span class="co"># Composición en patchwork (2x2)</span></span>
 <span><span class="va">pw_metricas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/create_patchwork.html">create_patchwork</a></span><span class="op">(</span><span class="va">graficos_metricas</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-357-1.png" alt="" width="100%"></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-358-1.png" alt="" width="100%"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-353-1.png" alt="" width="100%"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-354-1.png" alt="" width="100%"></div>
 <p>Los gráficos permiten apreciar de un vistazo las diferencias entre los dos grupos. Las variables que muestran contrastes más acusados son IPUNT (puntualidad), TINCID (tasa de incidencias) y, en menor medida, SOLVENCIA: las compañías que obtuvieron la licencia son, en promedio, más puntuales, registran muchas menos incidencias y tienen mayor solvencia financiera. RUTAS y EXPERIENCIA también presentan diferencias apreciables. En cambio, FLOTA muestra medias muy similares en ambos grupos, lo que anticipa que probablemente no será una variable significativa en el modelo.</p>
 </div>
 <div id="partición-en-muestra-de-estimación-y-muestra-de-test." class="section level3" number="10.5.6">
@@ -520,21 +520,21 @@ EXPERIENCIA
 <span class="header-section-number">10.5.6</span> <img src="figuras/pie-chart.svg"> Partición en muestra de estimación y muestra de test.<a class="anchor" aria-label="anchor" href="#partici%C3%B3n-en-muestra-de-estimaci%C3%B3n-y-muestra-de-test."><i class="fas fa-link"></i></a>
 </h3>
 <p>Para evaluar la capacidad predictiva del modelo sobre datos no vistos, dividimos la muestra en dos subconjuntos: una <strong>muestra de estimación</strong> (80 observaciones) con la que se ajustarán los parámetros del modelo, y una <strong>muestra de test</strong> (20 observaciones) que se reserva exclusivamente para la validación:</p>
-<div class="sourceCode" id="cb370"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb369"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ESTIMA</span> <span class="op">&lt;-</span> <span class="va">LICENCIAS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">80</span>, <span class="op">]</span></span>
 <span><span class="va">TEST</span>   <span class="op">&lt;-</span> <span class="va">LICENCIAS</span><span class="op">[</span><span class="fl">81</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"Muestra de estimación:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">ESTIMA</span><span class="op">)</span>, <span class="st">"observaciones\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Muestra de estimación: 80 observaciones</code></pre>
-<div class="sourceCode" id="cb372"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb371"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"Muestra de test:"</span>,       <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">TEST</span><span class="op">)</span>,   <span class="st">"observaciones\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Muestra de test: 20 observaciones</code></pre>
-<div class="sourceCode" id="cb374"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb373"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">ESTIMA</span><span class="op">$</span><span class="va">LICENCIA</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## 
 ##  0  1 
 ## 52 28</code></pre>
-<div class="sourceCode" id="cb376"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb375"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">TEST</span><span class="op">$</span><span class="va">LICENCIA</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## 
 ##  0  1 
@@ -545,7 +545,7 @@ EXPERIENCIA
 <span class="header-section-number">10.5.7</span> <img src="figuras/pie-chart.svg"> Estimación del modelo logit completo.<a class="anchor" aria-label="anchor" href="#estimaci%C3%B3n-del-modelo-logit-completo."><i class="fas fa-link"></i></a>
 </h3>
 <p>Con los datos preparados, estimamos el modelo logit binomial completo, incluyendo todas las variables explicativas disponibles. En R, la estimación se realiza mediante la función <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code> (<em>generalized linear model</em>), especificando la familia <code>binomial</code> con enlace <code>logit</code>:</p>
-<div class="sourceCode" id="cb378"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb377"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">modelo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">LICENCIA</span> <span class="op">~</span> <span class="va">SOLVENCIA</span> <span class="op">+</span> <span class="va">IPUNT</span> <span class="op">+</span> <span class="va">TINCID</span> <span class="op">+</span> <span class="va">IFIDE</span> <span class="op">+</span></span>
 <span>                          <span class="va">FLOTA</span> <span class="op">+</span> <span class="va">RUTAS</span> <span class="op">+</span> <span class="va">EXPERIENCIA</span> <span class="op">+</span> <span class="va">EFLO</span>,</span>
 <span>              data   <span class="op">=</span> <span class="va">ESTIMA</span>,</span>
@@ -582,7 +582,7 @@ EXPERIENCIA
 ## 
 ## Number of Fisher Scoring iterations: 5</code></pre>
 <p>El <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> muestra los coeficientes estimados, sus errores estándar, el estadístico z del contraste de Wald individual y los p-valores. Sin embargo, al igual que ocurría en la regresión lineal, conviene presentar los resultados de un modo más completo y organizado. Para ello utilizamos la función <code><a href="https://rdrr.io/pkg/MATrstars/man/presenta_logit.html">presenta_logit()</a></code>, que genera tres tablas (coeficientes, bondad del ajuste y <em>odd ratios</em>), más una cuarta (matriz de confusión) si se pasa el argumento <code>datos</code>:</p>
-<div class="sourceCode" id="cb380"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb379"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">salida</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/presenta_logit.html">presenta_logit</a></span><span class="op">(</span><span class="va">modelo</span>, datos <span class="op">=</span> <span class="va">ESTIMA</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">salida</span><span class="op">$</span><span class="va">coef</span>    <span class="co"># Tabla 1: Coeficientes del modelo</span></span></code></pre></div>
@@ -804,7 +804,7 @@ EFLORENOVADA
 </tr>
 </tbody>
 </table></div>
-<div class="sourceCode" id="cb381"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb380"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">salida</span><span class="op">$</span><span class="va">gof</span>     <span class="co"># Tabla 2: Bondad del ajuste</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -854,7 +854,7 @@ n
 </td>
 </tr></tbody>
 </table></div>
-<div class="sourceCode" id="cb382"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb381"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">salida</span><span class="op">$</span><span class="va">or</span>      <span class="co"># Tabla 3: Odd ratios</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -1034,12 +1034,12 @@ EFLORENOVADA
 <span class="header-section-number">10.5.9</span> <img src="figuras/pie-chart.svg"> Contraste de Wald para el factor EFLO.<a class="anchor" aria-label="anchor" href="#contraste-de-wald-para-el-factor-eflo."><i class="fas fa-link"></i></a>
 </h3>
 <p>Dado que EFLO genera dos variables <em>dummy</em> (EFLOMADURA y EFLORENOVADA), es posible que ninguna sea individualmente significativa pero que el factor en su conjunto sí lo sea. Para comprobarlo, aplicamos el contraste de Wald conjunto con la función <code><a href="https://rdrr.io/pkg/aod/man/wald.test.html">wald.test()</a></code> del paquete <a href="https://cran.r-project.org/package=aod">aod</a>:</p>
-<div class="sourceCode" id="cb383"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb382"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Posiciones de los coeficientes de EFLO</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">modelo</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##  [1] "(Intercept)"  "SOLVENCIA"    "IPUNT"        "TINCID"       "IFIDE"        "FLOTA"       
 ##  [7] "RUTAS"        "EXPERIENCIA"  "EFLOMADURA"   "EFLORENOVADA"</code></pre>
-<div class="sourceCode" id="cb385"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb384"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/aod/man/wald.test.html">wald.test</a></span><span class="op">(</span>b     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">modelo</span><span class="op">)</span>,</span>
 <span>          Sigma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/vcov.html">vcov</a></span><span class="op">(</span><span class="va">modelo</span><span class="op">)</span>,</span>
 <span>          Terms <span class="op">=</span> <span class="fl">9</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
@@ -1055,7 +1055,7 @@ EFLORENOVADA
 <span class="header-section-number">10.5.10</span> <img src="figuras/pie-chart.svg"> Interpretación de los <em>odd ratios</em>.<a class="anchor" aria-label="anchor" href="#interpretaci%C3%B3n-de-los-odd-ratios."><i class="fas fa-link"></i></a>
 </h3>
 <p>La tabla de <em>odd ratios</em> (tercera tabla de <code><a href="https://rdrr.io/pkg/MATrstars/man/presenta_logit.html">presenta_logit()</a></code>) muestra, para cada variable, el factor por el que se multiplica la ventaja del suceso LICENCIA = 1 cuando la variable se incrementa en una unidad, manteniendo las demás constantes:</p>
-<div class="sourceCode" id="cb387"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb386"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">salida</span><span class="op">$</span><span class="va">or</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -1225,7 +1225,7 @@ EFLORENOVADA
 <span class="header-section-number">10.5.11</span> <img src="figuras/pie-chart.svg"> Bondad del ajuste.<a class="anchor" aria-label="anchor" href="#bondad-del-ajuste."><i class="fas fa-link"></i></a>
 </h3>
 <p>Además de la tabla de bondad del ajuste ya presentada, podemos evaluar la mejora del modelo frente al modelo nulo (un modelo sin ninguna variable explicativa) mediante el análisis de la devianza:</p>
-<div class="sourceCode" id="cb388"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb387"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Mejora de la devianza (análisis de devianza tipo chi-cuadrado)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html">anova</a></span><span class="op">(</span><span class="va">modelo</span>, test <span class="op">=</span> <span class="st">"Chisq"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Analysis of Deviance Table
@@ -1250,7 +1250,7 @@ EFLORENOVADA
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <p>También resulta ilustrativo comparar el AIC del modelo completo con el del modelo nulo:</p>
-<div class="sourceCode" id="cb390"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb389"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Comparación de AIC con el modelo nulo</span></span>
 <span><span class="va">modelo_nulo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">LICENCIA</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">ESTIMA</span>,</span>
 <span>                   family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">binomial</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span><span class="op">)</span></span>
@@ -1270,7 +1270,7 @@ EFLORENOVADA
 <span class="header-section-number">10.6.1</span> Predicción <em>in-sample</em>.<a class="anchor" aria-label="anchor" href="#predicci%C3%B3n-in-sample."><i class="fas fa-link"></i></a>
 </h3>
 <p>La <strong>matriz de confusión</strong> compara las clasificaciones realizadas por el modelo (basadas en un umbral de probabilidad de 0,5) con las pertenencias reales. <code><a href="https://rdrr.io/pkg/MATrstars/man/presenta_logit.html">presenta_logit()</a></code> la genera automáticamente cuando se le pasa el argumento <code>datos</code>:</p>
-<div class="sourceCode" id="cb392"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb391"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">salida</span><span class="op">$</span><span class="va">conf</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -1328,7 +1328,7 @@ Observado  Predicho
 <span class="header-section-number">10.6.2</span> Predicción sobre la muestra de test.<a class="anchor" aria-label="anchor" href="#predicci%C3%B3n-sobre-la-muestra-de-test."><i class="fas fa-link"></i></a>
 </h3>
 <p>La verdadera prueba de la capacidad predictiva de un modelo es su comportamiento sobre <strong>datos que no ha visto durante la estimación</strong>. Para ello, aplicamos <code><a href="https://rdrr.io/pkg/MATrstars/man/presenta_logit.html">presenta_logit()</a></code> sobre la muestra de test:</p>
-<div class="sourceCode" id="cb393"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb392"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">salida_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/presenta_logit.html">presenta_logit</a></span><span class="op">(</span><span class="va">modelo</span>, datos <span class="op">=</span> <span class="va">TEST</span>,</span>
 <span>                              captions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Modelo Logit Binomial"</span>,</span>
 <span>                                           <span class="st">"Bondad del ajuste"</span>,</span>
@@ -1403,7 +1403,7 @@ Observado  Predicho
 <p><strong>Figura 10.3.</strong> <span class="smallcaps">Escenarios de empresas candidatas a obtención de licencia.</span></p>
 </div>
 <p>Para obtener las predicciones, se utiliza la función <code><a href="https://rdrr.io/pkg/MATrstars/man/predict_from_excel_scenarios.html">predict_from_excel_scenarios()</a></code>, que detecta automáticamente que el modelo es un logit binomial y adapta su comportamiento: en lugar de devolver intervalos de predicción (como hacía en el capítulo 9 con la regresión lineal), calcula la <strong>probabilidad estimada</strong> de pertenencia al grupo 1, un <strong>intervalo de confianza</strong> sobre dicha probabilidad y una <strong>clasificación</strong> según el umbral:</p>
-<div class="sourceCode" id="cb394"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb393"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simulacion</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/predict_from_excel_scenarios.html">predict_from_excel_scenarios</a></span><span class="op">(</span></span>
 <span>  model      <span class="op">=</span> <span class="va">modelo</span>,</span>
 <span>  train_df   <span class="op">=</span> <span class="va">ESTIMA</span>,</span>
@@ -1414,7 +1414,7 @@ Observado  Predicho
 <span>  caption    <span class="op">=</span> <span class="st">"Simulación de escenarios"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>El resultado es:</p>
-<div class="sourceCode" id="cb395"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb394"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simulacion</span><span class="op">$</span><span class="va">table</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -1631,7 +1631,7 @@ MADURA
 <span class="header-section-number">10.8</span> <img src="figuras/pie-chart.svg"> Selección automática de la especificación.<a class="anchor" aria-label="anchor" href="#selecci%C3%B3n-autom%C3%A1tica-de-la-especificaci%C3%B3n."><i class="fas fa-link"></i></a>
 </h2>
 <p>Al igual que en la regresión lineal, el algoritmo <code><a href="https://rdrr.io/r/stats/step.html">step()</a></code> puede aplicarse a un modelo logit para buscar una especificación más parsimoniosa. El procedimiento elimina iterativamente las variables que no aportan al modelo según el criterio de información de Akaike (AIC):</p>
-<div class="sourceCode" id="cb396"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb395"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">modelo_step</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/step.html">step</a></span><span class="op">(</span><span class="va">modelo</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Start:  AIC=92.59
 ## LICENCIA ~ SOLVENCIA + IPUNT + TINCID + IFIDE + FLOTA + RUTAS + 
@@ -1695,7 +1695,7 @@ MADURA
 ## - IFIDE      1   85.415 93.415
 ## - TINCID     1   85.688 93.688</code></pre>
 <p>La presentación del modelo reducido:</p>
-<div class="sourceCode" id="cb398"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb397"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">salida_red</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/presenta_logit.html">presenta_logit</a></span><span class="op">(</span><span class="va">modelo_step</span>, datos <span class="op">=</span> <span class="va">ESTIMA</span>,</span>
 <span>                             captions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Modelo reducido (step)"</span>,</span>
 <span>                                          <span class="st">"Bondad del ajuste"</span>,</span>
@@ -1829,7 +1829,7 @@ IFIDE
 <div style="text-align: center;">
 <p><strong>Tabla 10.7.</strong> Modelo Logit Binomial</p>
 </div>
-<div class="sourceCode" id="cb399"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb398"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">salida_red</span><span class="op">$</span><span class="va">gof</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -1882,7 +1882,7 @@ n
 <div style="text-align: center;">
 <p><strong>Tabla 10.8.</strong> Bondad del ajuste</p>
 </div>
-<div class="sourceCode" id="cb400"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb399"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">salida_red</span><span class="op">$</span><span class="va">or</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -1975,7 +1975,7 @@ IFIDE
 <div style="text-align: center;">
 <p><strong>Tabla 10.9.</strong> Odd ratios</p>
 </div>
-<div class="sourceCode" id="cb401"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb400"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">salida_red</span><span class="op">$</span><span class="va">conf</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -2027,13 +2027,13 @@ Observado  Predicho
 <p><strong>Tabla 10.10.</strong> Matriz de confusión</p>
 </div>
 <p>El modelo reducido, al eliminar las variables no significativas, mejora el AIC sin perder capacidad predictiva. Podemos comparar formalmente ambos modelos:</p>
-<div class="sourceCode" id="cb402"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb401"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html">AIC</a></span><span class="op">(</span><span class="va">modelo</span>, <span class="va">modelo_step</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##             df      AIC
 ## modelo      10 92.58584
 ## modelo_step  5 85.70030</code></pre>
 <p>Finalmente, comprobamos la capacidad predictiva del modelo reducido sobre la muestra de test:</p>
-<div class="sourceCode" id="cb404"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb403"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">salida_red_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/presenta_logit.html">presenta_logit</a></span><span class="op">(</span><span class="va">modelo_step</span>, datos <span class="op">=</span> <span class="va">TEST</span>,</span>
 <span>                                  captions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Modelo reducido"</span>,</span>
 <span>                                               <span class="st">"Bondad del ajuste"</span>,</span>

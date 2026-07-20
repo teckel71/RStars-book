@@ -40,7 +40,7 @@ datos_df_graph
 ## Analisis de una variable.
 
 # Copia de df
-muestra<- select(interestelar_100, everything())
+muestra <- interestelar_100
 
 # Localizando missing values.
 muestra %>%
@@ -88,7 +88,7 @@ rm(muestra_demo)
 # -----------------------------------------------------------------------------
 
 ## Localizando outliers
-ggplot(data = muestra, map = (aes(y = RENECO))) +
+ggplot(data = muestra, aes(y = RENECO)) +
     geom_boxplot(fill = "orange") +
     ggtitle("Rentabilidad Económica",
             subtitle = "Empresas de transporte interestelar") +
@@ -198,7 +198,7 @@ conteo_intervalos_df %>%
 # Gráficos básicos
 
 g1 <-
-ggplot(data = muestra_so, map = aes(x = RENECO)) +
+ggplot(data = muestra_so, aes(x = RENECO)) +
   geom_histogram(bins = k,
                  colour = "red",
                  fill = "orange",
@@ -212,7 +212,7 @@ ggplot(data = muestra_so, map = aes(x = RENECO)) +
   ylab("Frecuencias")
 
 g2 <-
-  ggplot(data = muestra_so, map = aes(x = RENECO)) +
+  ggplot(data = muestra_so, aes(x = RENECO)) +
   geom_density(colour = "red",
                fill = "orange",
                alpha = 0.7) +
@@ -233,7 +233,7 @@ g2 <-
 g2
 
 g3 <-
-ggplot(data = muestra_so, map = (aes(x = "", y = RENECO))) +
+ggplot(data = muestra_so, aes(x = "", y = RENECO)) +
   geom_boxplot(color = "red",
                fill = "orange",
                outlier.shape = NA) +
@@ -306,7 +306,7 @@ resumen
 ## Trabajando con multiples variables.
 
 # Copia de df original.
-muestra2<- select(interestelar_100, everything())
+muestra2 <- interestelar_100
 
 # Diagnóstico y filtrado de missing values con explora_na().
 muestra2 <- explora_na(
@@ -328,7 +328,7 @@ muestra2 <- muestra2 %>%
     }
   )
 
-ggplot(data = muestra2, map = (aes(y = MAHALANOBIS))) +
+ggplot(data = muestra2, aes(y = MAHALANOBIS)) +
     geom_boxplot(fill = "orange") +
     ggtitle("DISTANCIA DE MAHALANOBIS",
             subtitle = "RENECO, ACTIVO, MARGEN, RES. Empresas TMI.") +

@@ -23,7 +23,19 @@ Además, es preciso tener en cuenta que, usualmente, es conveniente que estos ra
 
 En esta práctica, por medio de un ejemplo basado en una base de datos de las empresas dedicadas al transporte de mercancías interestelar, se mostrarán una serie de buenas prácticas y análisis básicos útiles a la hora de preparar y analizar inicialmente nuestro conjunto de datos.
 
-Vamos a suponer que trabajamos dentro de un **proyecto** que hemos creado previamente, de nombre "explora". Dentro de la carpeta del proyecto guardaremos el *script* llamado "previo_rstars.R", y el archivo de Microsoft® Excel® llamado "interestelar_100.xlsx". Para decargar los ficheros, ve al final de este capítulo y pincha en los enlaces.
+## ![](figuras/star.svg){.hicon} Encargo de la ARTI: auditoría sectorial.
+
+La **Autoridad Reguladora del Transporte Interestelar (ARTI)** ha decidido realizar una auditoría de la salud financiera del sector. Su directora, ***Mara Qyà*** —conocida en los pasillos de la ARTI como *"la mujer que no firma nada sin un p-valor"*—, necesita un **informe previo** antes de que los auditores se desplieguen por las cinco galaxias. Y lo necesita, como siempre, *para ayer*.
+
+Mara Qyà plantea dos preguntas concretas:
+
+1. **¿Es la rentabilidad económica del sector razonablemente homogénea**, o hay empresas con comportamientos anómalos que merezcan una inspección particular? → Para responder, analizaremos la variable **RENECO** (rentabilidad económica) de forma univariante.
+
+2. **¿Cómo se relacionan entre sí los principales indicadores financieros** —rentabilidad, tamaño, margen y resultado—, y hay empresas que destaquen como atípicas cuando se examinan todas estas dimensiones a la vez? → Para ello, ampliaremos el análisis a cuatro variables: **RENECO**, **ACTIVO**, **MARGEN** y **RES**.
+
+Antes de responder, Mara Qyà exige que los datos estén **depurados**: sin valores faltantes que distorsionen los resultados, y con una decisión razonada sobre los posibles *outliers*. Además, quiere gráficos claros y medidas concretas. Vamos a ello.
+
+Vamos a suponer que trabajamos dentro de un **proyecto** que hemos creado previamente, de nombre "explora". Dentro de la carpeta del proyecto guardaremos el *script* llamado "previo_rstars.R", y el archivo de Microsoft® Excel® llamado "interestelar_100.xlsx". Para descargar los ficheros, ve al final de este capítulo y pincha en los enlaces.
 
 Si abrimos "interestelar_100.xlsx", comprobaremos que se compone de tres hojas. La primera muestra un aviso sobre el uso exclusivo que se debe dar a los datos incorporados; la segunda recoge la descripción de las variables consideradas; y la tercera (hoja "Datos") guarda los datos que debemos **importar** desde R-Studio. Estos datos se corresponden con diferentes variables económico-financieras y de diversa índole de una muestra de empresas que se dedican al transporte de mercancías interestelar.
 
@@ -123,11 +135,11 @@ En la "tabla" de variables obtenida, se comprueba que 24 variables son métricas
 
 ### ![](figuras/key.svg){.hicon} Buscando *missing values* y *outliers*.
 
-Vamos a suponer que la variable que queremos estudiar es la variable *Rentabilidad Económica* (RENECO). Es una buena práctica el trabajar con una copia del *data frame* original. Con ello, conseguimos mantener la integridad de este *data frame*, y que el código sea fácilmente utilizable en otros scripts, al utilizar en la copia un nombre genérico. Utilizaremos la función `select()` con el argumento `everything()` del paquete `{dplyr}`:
+Vamos a suponer que la variable que queremos estudiar es la variable *Rentabilidad Económica* (RENECO), que nos permitirá responder a la primera pregunta de Mara Qyà. Es una buena práctica el trabajar con una copia del *data frame* original para mantener su integridad:
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, message=FALSE}
 # Copia de df
-muestra<- select(interestelar_100, everything())
+muestra <- interestelar_100
 ```
 
 La primera acción que debe realizarse es comprobar que todos los casos (empresas) tienen su correspondiente dato o valor para la variable (RENECO), es decir, que no existen **valores perdidos o *missing values***.
@@ -149,7 +161,8 @@ muestra %>%
       values = c("TRUE" = "red", "FALSE" = "grey"),
       labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
   theme(
-    plot.title = element_text(face = "bold", size = 14))
+    plot.title = element_text(face = "bold", size = 14),
+    axis.text.x = element_text(margin = margin(t = -20)))
 ```
 
 ::: {style="text-align: center;"}
@@ -203,7 +216,17 @@ muestra %>% filter(is.na(RENECO)) %>% select(RENECO)
 
 Comprobamos que la empresa sin valor en RENECO es *Photon Pack Freight*.
 
-Ante la existencia de *missing values*, se puede actuar de varios modos. Por ejemplo, se puede intentar obtener por otro canal de información el conjunto de valores de RENECO que no están disponibles, o recurrir a alguna estimación para los mismos y asignarlos. En caso de que esto sea difícil, se puede optar, simplemente, por eliminar estos casos, en especial cuando representan un porcentaje muy reducido respecto al total. En nuestro ejemplo, vamos a suponer que hemos optado por esta última vía, al no conseguir unos valores más o menos verosímiles de RENECO para las empresas de las que se carece de dato. Esta **eliminación de casos** se podrá realizar mediante el código:
+Ante la existencia de *missing values*, se puede actuar de varios modos. La decisión no es trivial y depende de la proporción de datos faltantes, de si su ausencia es aleatoria o sistemática, y del tipo de análisis posterior. Las principales estrategias son:
+
+-   **Eliminación del caso** (*listwise deletion*): se descartan las observaciones con algún valor faltante. Es la opción más sencilla, pero implica perder información. Si los datos no faltan de forma completamente aleatoria (MCAR, *Missing Completely At Random*), la eliminación puede introducir sesgos en los resultados.
+
+-   **Imputación por media o mediana**: se sustituye el valor faltante por la media (o la mediana) de la variable. Conserva el tamaño muestral, pero subestima la variabilidad real y puede distorsionar las relaciones entre variables.
+
+-   **Imputación múltiple** (paquete `{mice}` en R): genera varios conjuntos de datos completos con valores simulados, analiza cada uno por separado y combina los resultados. Es el enfoque de referencia en investigación, ya que refleja la incertidumbre asociada a la imputación.
+
+-   **Imputación por k-vecinos más próximos** (función `kNN()` del paquete `{VIM}`): estima el valor faltante a partir de los casos más parecidos en las demás variables. Intuitivo y eficaz cuando las variables están relacionadas entre sí.
+
+En nuestro ejemplo, dado que los *missing values* representan un porcentaje muy reducido respecto al total (apenas 1 caso de 104 para RENECO), **optaremos por la eliminación del caso**, que es la vía más directa y no introduce distorsión apreciable en este contexto. En situaciones con mayor proporción de datos faltantes, o cuando se sospeche que la ausencia no es aleatoria, convendría considerar las técnicas de imputación mencionadas. Esta **eliminación de casos** se podrá realizar mediante el código:
 
 ```{r, eval=TRUE, echo=TRUE}
 muestra <- muestra %>% filter(! is.na(RENECO))
@@ -260,7 +283,7 @@ Una vez tratados los casos con valores perdidos o *missing values*, **conviene d
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE}
 ## Localizando outliers
-ggplot(data = muestra, map = (aes(y = RENECO))) +
+ggplot(data = muestra, aes(y = RENECO)) +
     geom_boxplot(fill = "orange") +
     ggtitle("Rentabilidad Económica",
             subtitle = "Empresas de transporte interestelar") +
@@ -272,7 +295,7 @@ Obteniéndose el gráfico:
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE}
 ## Localizando outliers
-ggplot(data = muestra, map = (aes(y = RENECO))) +
+ggplot(data = muestra, aes(y = RENECO)) +
     geom_boxplot(fill = "orange") +
     ggtitle("Rentabilidad Económica",
             subtitle = "Empresas de transporte interestelar") +
@@ -315,9 +338,19 @@ muestra %>%
 
 Los casos atípicos o *outliers* en la variable RENECO son *Jovian Logistics* y *Sandworm Freight*.
 
-Como ocurría con los *missing values*, el **tratamiento de los *outliers*** depende de la información que se tenga, y del enfoque que se quiera seguir en la aplicación de las diferentes técnicas, existiendo varias alternativas (corrección del dato, estimación, eliminación del caso, mantenimiento del caso tal y como está y utilización de *técnicas robustas*, etc.) Es un tema que a veces resulta **complejo**, y que no está exento de divergencias en la opinión de los investigadores.
+Como ocurría con los *missing values*, el **tratamiento de los *outliers*** depende de la información que se tenga, y del enfoque que se quiera seguir en la aplicación de las diferentes técnicas. Es un tema que a veces resulta **complejo**, y que no está exento de divergencias en la opinión de los investigadores. Las principales alternativas son:
 
-Por tanto, una opción posible es, si no se tiene información fiable y los *outliers* no representan una gran proporción respecto al total de casos, la eliminación de los casos que presentan valores atípicos en las variables en estudio. En este ejemplo, efectivamente, **eliminaremos estas dos empresas con comportamiento atípico** en la rentabilidad económica (RENECO), a fin de que su presencia en la muestra **no** **distorsione los resultados en la aplicación posterior de ciertas técnicas** (por ejemplo, un ANOVA o un análisis de regresión). Podemos hacerlo creando un nuevo *data frame* a partir de "muestra"; pero sin esos dos casos. Ese nuevo *data frame* se llamará, por ejemplo, "muestra_so":
+-   **Eliminar el caso**: adecuado cuando son pocos casos, representan una proporción reducida de la muestra, y se sospecha que el valor extremo se debe a un error de medida o registro. Es la opción que aplicaremos en este libro.
+
+-   **Winsorizar**: sustituir los valores extremos por el valor del percentil 5 (o 95), o por el límite del bigote del boxplot. El caso se conserva, pero su influencia queda acotada.
+
+-   **Mantener y documentar**: a veces el *outlier* es un dato real y relevante (una empresa genuinamente excepcional). Eliminarlo supondría perder información legítima. En estos casos, conviene reportar los resultados con y sin *outliers* para valorar su impacto.
+
+-   **Usar técnicas estadísticas robustas**: muchos métodos disponen de versiones diseñadas para mitigar el efecto de valores extremos sin necesidad de eliminarlos. Algunos ejemplos concretos: la **mediana** en lugar de la media como medida de posición central; la **MAD** (*Median Absolute Deviation*) en lugar de la desviación típica como medida de dispersión; la **regresión robusta** (función `rlm()` del paquete `{MASS}`) en lugar de la regresión lineal ordinaria (`lm()`); o la **correlación de Spearman** en lugar de la de Pearson, que es menos sensible a valores extremos.
+
+La decisión depende en última instancia del contexto del análisis. Al final de este capítulo veremos, precisamente, cómo la presencia o ausencia de *outliers* puede alterar las correlaciones entre variables, lo que subraya la importancia de esta decisión.
+
+En nuestro ejemplo, dado que los *outliers* son solo dos y no representan una gran proporción de la muestra, **eliminaremos estas dos empresas con comportamiento atípico** en la rentabilidad económica (RENECO), a fin de que su presencia en la muestra **no distorsione los resultados** en la aplicación posterior de ciertas técnicas (por ejemplo, un ANOVA o un análisis de regresión). Podemos hacerlo creando un nuevo *data frame* a partir de "muestra"; pero sin esos dos casos. Ese nuevo *data frame* se llamará, por ejemplo, "muestra_so":
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE}
 # Eliminar outliers
@@ -328,7 +361,9 @@ muestra_so <- muestra %>%
 
 Es importante observar que, en el código de la función `filter()`, las desigualdades deben cambiar, así como el operador "**\|**" por el operador "**&**". En el *Global Environment* podemos comprobar cómo el *data frame* "muestra_so" posee el mismo número de variables que el *data frame* "muestra"; pero con dos observaciones o casos menos (101).
 
-Como ocurría con los *missing values*, el procedimiento de detección y eliminación de *outliers* se repite en muchos capítulos siguientes: un *boxplot* con `ggplot()` + cálculo de Q1 y Q3 con `quantile()` + `filter()` para listar los casos + `filter()` para eliminarlos. Para aligerar el código, el paquete `{MATrstars}` incluye la función auxiliar `explora_outliers()`, que encapsula todo el bloque anterior en una sola llamada y presenta la tabla de casos afectados con el estilo tipográfico habitual del libro (mediante `kable_rstars()`, internamente). Además, cuando los *outliers* son tan extremos que aplastan la caja del *boxplot*, la función activa automáticamente una escala pseudo-logarítmica en el eje Y para que la caja siga siendo legible sin problemas con valores negativos o nulos.
+Como ocurría con los *missing values*, el procedimiento de detección y eliminación de *outliers* se repite en muchos capítulos siguientes: un *boxplot* con `ggplot()` + cálculo de Q1 y Q3 con `quantile()` + `filter()` para listar los casos + `filter()` para eliminarlos. Para aligerar el código, el paquete `{MATrstars}` incluye la función auxiliar `explora_outliers()`, que encapsula todo el bloque anterior en una sola llamada y presenta la tabla de casos afectados con el estilo tipográfico habitual del libro (mediante `kable_rstars()`, internamente).
+
+Además, la función incorpora una mejora visual importante: cuando los *outliers* son tan extremos que "aplastan" la caja del *boxplot* hasta hacerla ilegible, `explora_outliers()` activa automáticamente una **escala pseudologarítmica** en el eje Y. Esta transformación (`pseudo_log` en `{ggplot2}`, activable manualmente con `scale_y_continuous(trans = "pseudo_log")`) comprime los valores grandes sin alterar los pequeños, y a diferencia del logaritmo puro, admite valores cero y negativos. La función detecta cuándo es necesario aplicarla comparando el rango de los datos con el rango intercuartílico: si la diferencia es muy acusada, aplica la transformación automáticamente; en caso contrario, mantiene la escala lineal habitual.
 
 De este modo, todo el bloque de código anterior podría haberse escrito de forma mucho más compacta como:
 
@@ -387,115 +422,43 @@ Más adelante, tras trabajar con varias variables simultáneamente, veremos cóm
 
 Una vez que se tiene preparada la base de datos, con un tratamiento adecuado de los *missing values* y de los *outliers,* y **antes** de proceder a la aplicación de una técnica adecuada según los objetivos perseguidos en el estudio; suelen presentarse una serie de **gráficos** básicos y **medidas** descriptivas que proporcionan una **idea inicial de la estructura** del sector para la variable o variables analizadas. Nos referimos a medidas y/o gráficos de posición, dispersión y forma (asimetría y curtosis).
 
-Antes de ello, es conveniente presentar una tabla donde se recoja la distribución de frecuencias de la variable. Si son muchos los casos (en el ejemplo, 101), la distribución podría presentarse agrupada en intervalos, como ya se vio en el capítulo 4 de este libro. De este modo, el código para generar la tabla podría ser (recordar que tienen que estar activos los paquetes `{knitr}` y `{kableExtra}`):
+Antes de ello, es conveniente presentar una tabla donde se recoja la distribución de frecuencias de la variable. Si son muchos los casos (en el ejemplo, 101), la distribución podría presentarse agrupada en intervalos, como ya aprendimos en el capítulo 4. Aquí la generamos directamente con `kable_rstars()`, la función de presentación tabular del paquete `{MATrstars}` (que presentaremos a continuación):
 
-```{r, eval=FALSE, echo=TRUE, message=FALSE}
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
 # Tabla de datos (distribución de frecuencias agrupadas en intervalos)
-# Colocando casos
 muestra_so <- muestra_so %>% arrange(RENECO, row.names(muestra_so))
-
-# Fijar k como número de intervalos (método de Sturges)
 k <- nclass.Sturges(muestra_so$RENECO)
-
-# Crear los intervalos
 muestra_so$intervalos <- cut(muestra_so$RENECO, breaks = k, include.lowest = TRUE)
 
-# Contar las frecuencias de cada intervalo
-conteo_intervalos <- table(muestra_so$intervalos)
-
-# Convertir el resultado a un data frame para una mejor visualización
-conteo_intervalos_df <- as.data.frame(conteo_intervalos)
-
-# Renombrar las columnas para mayor claridad
+# Contar frecuencias y construir data frame
+conteo_intervalos_df <- as.data.frame(table(muestra_so$intervalos))
 colnames(conteo_intervalos_df) <- c("Intervalo", "Frecuencia")
-
-# Calcular y guardar la frecuencia total
 N_agre <- sum(conteo_intervalos_df$Frecuencia)
-
-# Calcular frecuencias absolutas acumuladas
 conteo_intervalos_df$Frecuencia_acum <- cumsum(conteo_intervalos_df$Frecuencia)
-
-# Calcular frecuencias relativas
 conteo_intervalos_df$Frecuencia_R <- conteo_intervalos_df$Frecuencia / N_agre
-
-# Calcular frecuencias relativas acumuladas
 conteo_intervalos_df$Frecuencia_R_acum <- cumsum(conteo_intervalos_df$Frecuencia_R)
 
-# Mostrar el resultado
+# Mostrar con kable_rstars()
 conteo_intervalos_df %>%
-  kable(caption = "Distribución de frecuencias agrupadas en intervalos de Rentabilidad Económica",
-        col.names = c("Intervalo rentabilidad", "Frecuencia absoluta n(i)",
-                      "Frecuencia absoluta acum. N(i)", "Frecuencia relativa f(i)",
-                      "Frecuencia relativa acum. F(i)"),
-        digits    = c(NA, 0, 0, 2, 2),
-        format.args = list(decimal.mark = ".", scientific = FALSE)) %>%
-  kable_styling(full_width = F, bootstrap_options = "striped",
-                "bordered", "condensed",
-                position = "center", font_size = 11) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(conteo_intervalos_df)), bold= F, align = "c")
-```
-
-```{r, eval=TRUE, echo=FALSE, message=FALSE}
-# Tabla de datos (distribución de frecuencias agrupadas en intervalos)
-# Colocando casos
-muestra_so <- muestra_so %>% arrange(RENECO, row.names(muestra_so))
-
-# Fijar k como número de intervalos (método de Sturges)
-k <- nclass.Sturges(muestra_so$RENECO)
-
-# Crear los intervalos
-muestra_so$intervalos <- cut(muestra_so$RENECO, breaks = k, include.lowest = TRUE)
-
-# Contar las frecuencias de cada intervalo
-conteo_intervalos <- table(muestra_so$intervalos)
-
-# Convertir el resultado a un data frame para una mejor visualización
-conteo_intervalos_df <- as.data.frame(conteo_intervalos)
-
-# Renombrar las columnas para mayor claridad
-colnames(conteo_intervalos_df) <- c("Intervalo", "Frecuencia")
-
-# Calcular y guardar la frecuencia total
-N_agre <- sum(conteo_intervalos_df$Frecuencia)
-
-# Calcular frecuencias absolutas acumuladas
-conteo_intervalos_df$Frecuencia_acum <- cumsum(conteo_intervalos_df$Frecuencia)
-
-# Calcular frecuencias relativas
-conteo_intervalos_df$Frecuencia_R <- conteo_intervalos_df$Frecuencia / N_agre
-
-# Calcular frecuencias relativas acumuladas
-conteo_intervalos_df$Frecuencia_R_acum <- cumsum(conteo_intervalos_df$Frecuencia_R)
-```
-
-```{r, eval=TRUE, echo=FALSE, message=FALSE}
-
-# Mostrar el resultado
-conteo_intervalos_df %>%
-  kable(
-        col.names = c("Intervalo rentabilidad", "Frecuencia absoluta n(i)",
-                      "Frecuencia absoluta acum. N(i)", "Frecuencia relativa f(i)",
-                      "Frecuencia relativa acum. F(i)"),
-        digits    = c(NA, 0, 0, 2, 2),
-        format.args = list(decimal.mark = ".", scientific = FALSE)) %>%
-  kable_styling(full_width = F, bootstrap_options = "striped",
-                "bordered", "condensed",
-                position = "center", font_size = 11) %>%
-  row_spec(0, bold= T, align = "c") %>%
-  row_spec(1:(nrow(conteo_intervalos_df)), bold= F, align = "c")
+  kable_rstars(
+               col.names = c("Intervalo", "n(i)", "N(i)", "f(i)", "F(i)"),
+               digits    = c(NA, 0, 0, 2, 2))
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 5.5.** Distribución de frecuencias agrupadas en intervalos de Rentabilidad Económica
+**Tabla 5.5**
 :::
 
 
-Como puede observarse, el bloque de código necesario para producir una tabla con el estilo tipográfico habitual del libro es notablemente extenso: una llamada a `kable()` con el contenido, seguida de `kable_styling()` para aplicar Bootstrap, y dos llamadas a `row_spec()` para el encabezado y el cuerpo. Y, además, ese mismo bloque de código —con muy ligeras variaciones— se repite cada vez que se genera una tabla. Para aligerar el código de los *scripts* del libro sin renunciar a la uniformidad tipográfica, se ha creado un pequeño **paquete propio** de R llamado `{MATrstars}` que reúne un conjunto de **funciones auxiliares** utilizadas a lo largo de los distintos capítulos. Este paquete no está disponible en CRAN; se distribuye a través de un repositorio público en GitHub ([https://github.com/teckel71/MATrstars](https://github.com/teckel71/MATrstars)) y se instala automáticamente la primera vez que se ejecuta el bloque siguiente (en las siguientes ocasiones, bastará con activarlo mediante `library(MATrstars)`):
+::: {style="text-align: center;"}
+**Tabla 5.6.** Dist. frecuencias agrupadas: Rentabilidad Económica
+:::
+
+
+En el código anterior, `kable_rstars()` pertenece al paquete `{MATrstars}`, un pequeño **paquete propio** de R que reúne las **funciones auxiliares** utilizadas a lo largo del libro. No está en CRAN; se distribuye a través de GitHub ([https://github.com/teckel71/MATrstars](https://github.com/teckel71/MATrstars)) y se instala automáticamente la primera vez que se ejecuta el bloque siguiente:
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 # Paquete MATrstars: funciones auxiliares del libro R-Stars.
-# Si no está instalado, se instala desde GitHub (solo la primera vez).
 if (!requireNamespace("MATrstars", quietly = TRUE)) {
   if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
   remotes::install_github("teckel71/MATrstars")
@@ -503,36 +466,11 @@ if (!requireNamespace("MATrstars", quietly = TRUE)) {
 library(MATrstars)
 ```
 
-Una de las funciones que contiene el paquete es `kable_rstars()`, un **envoltorio** de `kable()` y `kable_styling()` que aplica automáticamente todos los ajustes tipográficos habituales del libro: encabezado en negrita centrado, filas alternas rayadas, bordes discretos, cuerpo centrado, fuente de 11 puntos, punto como separador decimal y notación científica desactivada. El usuario solo necesita indicar lo específico de cada tabla —normalmente `caption`, `col.names` y `digits`—; el resto se encuentra ya configurado como valores por defecto (que también pueden ajustarse en caso necesario). De este modo, la tabla anterior podría haberse generado con este código, mucho más compacto:
+`kable_rstars()` es un **envoltorio** de `kable()` y `kable_styling()` que aplica automáticamente los ajustes tipográficos habituales del libro: encabezado en negrita centrado, filas alternas rayadas, bordes discretos, cuerpo centrado, fuente de 11 puntos, punto como separador decimal y notación científica desactivada. El usuario solo indica lo específico de cada tabla (`caption`, `col.names`, `digits`); el resto está preconfigurado.
 
-```{r eval=FALSE, echo=TRUE, message=FALSE}
-conteo_intervalos_df %>%
-  kable_rstars(caption   = "Distribución de frecuencias agrupadas en intervalos de Rentabilidad Económica",
-               col.names = c("Intervalo rentabilidad", "Frecuencia absoluta n(i)",
-                             "Frecuencia absoluta acum. N(i)", "Frecuencia relativa f(i)",
-                             "Frecuencia relativa acum. F(i)"),
-               digits    = c(NA, 0, 0, 2, 2))
-```
+**A partir de aquí, la práctica totalidad de las tablas del libro se generarán con `kable_rstars()`**. La ficha completa puede consultarse en el **Apéndice: Funciones auxiliares del paquete `MATrstars`** al final del libro.
 
-Y el resultado obtenido sería, efectivamente, idéntico al de la tabla mostrada más arriba:
-
-```{r eval=TRUE, echo=FALSE, message=FALSE}
-conteo_intervalos_df %>%
-  kable_rstars(
-               col.names = c("Intervalo rentabilidad", "Frecuencia absoluta n(i)",
-                             "Frecuencia absoluta acum. N(i)", "Frecuencia relativa f(i)",
-                             "Frecuencia relativa acum. F(i)"),
-               digits    = c(NA, 0, 0, 2, 2))
-```
-
-::: {style="text-align: center;"}
-**Tabla 5.6.** Distribución de frecuencias agrupadas en intervalos de Rentabilidad Económica
-:::
-
-
-**A partir de esta tabla, tanto en el resto del capítulo como en los capítulos siguientes, la práctica totalidad de las tablas del libro se generarán con `kable_rstars()`**. La ficha completa de la función —argumentos, valores por defecto, ejemplos de uso y enlace al código fuente en GitHub— puede consultarse en el **Apéndice: Funciones auxiliares del paquete `MATrstars`** al final del libro.
-
-En conjunto, la **rentabilidad económica** de estas empresas se concentra en valores **medios–altos**: la gran mayoría se mueve en torno al 50–60%, y dos de cada cuatro intervalos centrales (47,4–53,9 y 53,9–60,3) reúnen la mayor parte de los casos. En términos prácticos, alrededor de ocho de cada diez compañías quedan entre 41% y 66,8%, lo que sugiere un sector relativamente estable, con resultados parecidos entre sí. En los extremos hay pocas: apenas un 5% presenta rentabilidades muy bajas (por debajo del 34,5%) y sólo un 2% llega a niveles muy altos (por encima del 73,2%). Económicamente, esto indica que la competencia y la eficiencia operativa tienden a “empujar” a las empresas hacia un rendimiento **razonable y sostenido**, mientras que los casos de fracaso o de éxito excepcional son **minoría**.
+En conjunto, la **rentabilidad económica** de estas empresas se concentra en valores **medios–altos**: la gran mayoría se mueve en torno al 50–60%, y dos de cada cuatro intervalos centrales (47,4–53,9 y 53,9–60,3) reúnen la mayor parte de los casos. En términos prácticos, alrededor de ocho de cada diez compañías quedan entre 41% y 66,8%, lo que sugiere un sector relativamente estable, con resultados parecidos entre sí. En los extremos hay pocas: apenas un 5% presenta rentabilidades muy bajas (por debajo del 34,5%) y sólo un 2% llega a niveles muy altos (por encima del 73,2%). Económicamente, esto indica que la competencia y la eficiencia operativa tienden a “empujar” a las empresas hacia un rendimiento **razonable y sostenido**, mientras que los casos de fracaso o de éxito excepcional son **minoría**. **Primera respuesta parcial para Mara Qyà:** el sector muestra una rentabilidad bastante homogénea, pero aún necesitamos confirmar esta impresión con las medidas descriptivas y comprobar si existen anomalías.
 
 Por otro lado, el **análisis gráfico** suele dar una idea atractiva e intuitiva de la estructura de la distribución de frecuencias de nuestro conjunto de casos en relación con la variable a analizar.
 
@@ -543,7 +481,7 @@ Un gráfico fundamental es el **histograma** de la variable estudiada. Para ello
 
 # Gráficos básicos
 g1 <-
-ggplot(data = muestra_so, map = aes(x = RENECO)) +
+ggplot(data = muestra_so, aes(x = RENECO)) +
   geom_histogram(bins = k,
                  colour = "red",
                  fill = "orange",
@@ -566,11 +504,11 @@ g1
 
 En el gráfico vemos de un modo nítido la distribución de frecuencias en cuanto a la rentabilidad económica (RENECO). Se ha incorporado una línea vertical azul (mediante `geom_vline()`) para localizar la rentabilidad media. Entre otras cosas, se puede apreciar que la distribución de frecuencias es acampanada y prácticamente simétrica.
 
-Como complemento al histograma, podemos realizar un gráfico de densidad de RENECO, al que añadiremos una curva normal con la misma media y desviación típica que nuestra distribución de frecuencias, y que se añade mediante `stat_function()` y el argumento `fun = dnorm`. Este gráfico representa la distribución de probabilidad empírica de la muestra, es una especie de histograma "suavizado". De este modo, se podrán verificar de un modo fácil algunas de las características avanzadas con la observación del histograma, como la asimetría positiva. El código es:
+Como complemento al histograma, podemos realizar un gráfico de densidad de RENECO, al que añadiremos una curva normal con la misma media y desviación típica que nuestra distribución de frecuencias, y que se añade mediante `stat_function()` y el argumento `fun = dnorm`. Este gráfico representa la distribución de probabilidad empírica de la muestra, es una especie de histograma "suavizado". De este modo, se podrán verificar de un modo fácil algunas de las características avanzadas con la observación del histograma, como una ligera asimetría. El código es:
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE}
 g2 <-
-ggplot(data = muestra_so, map = aes(x = RENECO)) +
+ggplot(data = muestra_so, aes(x = RENECO)) +
   geom_density(colour = "red",
                fill = "orange",
                alpha = 0.7) +
@@ -602,7 +540,7 @@ Un tercer gráfico útil es el ***box-plot*** una vez se eliminaron los casos *o
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE}
 g3 <-
-ggplot(data = muestra_so, map = (aes(x = "", y = RENECO))) +
+ggplot(data = muestra_so, aes(x = "", y = RENECO)) +
   geom_boxplot(color = "red",
                fill = "orange",
                outlier.shape = NA) +
@@ -627,7 +565,7 @@ g3
 
 El *box-plot* confirma que la rentabilidad económica está bastante concentrada en la zona central. La **mediana** ronda el **50%** (línea dentro de la caja) y la mitad de las empresas cae aproximadamente entre 46% y 59% (altura de la caja, IQR), lo que sugiere variabilidad moderada. El rombo azul (media) está muy cerca de la mediana, indicando casi simetría. Los bigotes se extienden hacia valores en torno a 35–70% y aparecen pocos *outliers* tanto por abajo (≈30%) como por arriba (hasta ≈80%). En términos económicos: la mayoría de compañías rinde de forma similar y estable alrededor del 50–60%, con casos extremos poco frecuentes.
 
-Por otro lado, conviene tener conocimiento del valor de las principales **medidas descriptivas** (de posición, dispersión, forma) que caracterizan a la distribución de la variable a analizar. Para ello, vamos a crear un *data frame* llamado, por ejemplo, "estadisticos", que recogerá las diferentes medidas, calculadas al aplicar a la variable RENECO del *data frame* "muestra_so" la función de `{deplyr}` llamada `summarise()`. Se calcularán la media, desviación típica, valor mínimo, mediana, valor máximo, el coeficiente de asimetría de *Fisher*, y el coeficiente de apuntamiento o curtosis de *Fisher*. Precisamente, para poder calcular esta última medida, es preciso activar el paquete `{moments}`, que contiene la función `kurtosis()`. La versión del coeficiente de apuntamiento de esta función dispone como distribución perfectamente mesocúrtica el valor de 3, por lo que se le restará 3 en la versión que manejaremos para que la distribución mesocúrtica se sitúe en un coeficiente de 0. El código es:
+Por otro lado, conviene tener conocimiento del valor de las principales **medidas descriptivas** (de posición, dispersión, forma) que caracterizan a la distribución de la variable a analizar. Para ello, vamos a crear un *data frame* llamado, por ejemplo, "estadisticos", que recogerá las diferentes medidas, calculadas al aplicar a la variable RENECO del *data frame* "muestra_so" la función de `{dplyr}` llamada `summarise()`. Se calcularán la media, desviación típica, valor mínimo, mediana, valor máximo, el coeficiente de asimetría de *Fisher*, y el coeficiente de apuntamiento o curtosis de *Fisher*. Precisamente, para poder calcular esta última medida, es preciso activar el paquete `{moments}`, que contiene la función `kurtosis()`. La versión del coeficiente de apuntamiento de esta función dispone como distribución perfectamente mesocúrtica el valor de 3, por lo que se le restará 3 en la versión que manejaremos para que la distribución mesocúrtica se sitúe en un coeficiente de 0. El código es:
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE}
 # Calcular estadísticos
@@ -777,6 +715,8 @@ La composición gráfica se guarda en el *Global Environment* con el nombre "res
 
 Son muchas las técnicas aplicadas al análisis de datos económicos basadas en una distribución de frecuencias multivariante. En este apartado nos centraremos en el caso de **variables métricas**, ya que al caso de atributos, variables categóricas o factores; le dedicaremos un capítulo en exclusiva. Algunas técnicas multivariantes son: el análisis de componentes principales, el análisis de regresión o el análisis clúster...
 
+Pasamos ahora a la segunda pregunta de Mara Qyà: ¿cómo se relacionan entre sí los principales indicadores financieros, y hay empresas que destaquen como atípicas al examinar varias dimensiones a la vez?
+
 Todas estas metodologías requieren, de nuevo, de una fase inicial que ponga a punto la base de datos y ofrezca una fotografía de cómo es la situación en cuanto a las variables en estudio. En este sentido, es conveniente aplicar, para cada variable por separado, algunos de los análisis gráficos básicos vistos anteriormente.
 
 A estos análisis básicos hay que añadir, principalmente, algún análisis previo adicional, destinado fundamentalmente a cuantificar el **grado de intensidad en la relación estadística** entre las variables implicadas, mediante el estudio de la ***correlación***. Antes de abordar esta cuestión, hemos de pararnos en una casuística específica que se presenta cuando trabajamos con numerosas variables: la detección de casos atípicos o *outliers*.
@@ -794,7 +734,7 @@ options(matrstars.figura_num = "5.11", matrstars.tabla_num = "5.8")
 ## Trabajando con multiples variables.
 
 # Copia de df original.
-muestra2 <- select(interestelar_100, everything())
+muestra2 <- interestelar_100
 
 # Diagnóstico y filtrado de missing values.
 muestra2 <- explora_na(
@@ -857,7 +797,7 @@ muestra2 <- muestra2 %>%
 Posteriormente, se puede construir el diagrama de caja de la variable MAHALANOBIS, como cualquier otra variable:
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE}
-ggplot(data = muestra2, map = (aes(y = MAHALANOBIS))) +
+ggplot(data = muestra2, aes(y = MAHALANOBIS)) +
     geom_boxplot(fill = "orange") +
     ggtitle("DISTANCIA DE MAHALANOBIS",
             subtitle = "RENECO, ACTIVO, MARGEN, RES. Empresas TMI.") +
@@ -1038,6 +978,8 @@ grid.arrange(corr_plot_so_gg, corr_plot_co_gg, ncol = 2, top = "CORRELACIONES")
 
 
 Se aprecia cómo la presencia de outliers puede variar la relación entre las variables. Salvo el caso de la correlación entre ACTIVO y RES, que se fortalece; las correlaciones entre RENECO y MARGEN, y RENECO y RES se debilitan. Esto redunda en la idea, ya expuesta, de que **la decisión de trabajar con o sin los casos *outliers*** es una cuestión, a veces, muy **relevante** y compleja.
+
+**Conclusión para el informe de Mara Qyà (parte 2):** los principales indicadores financieros del sector están moderadamente correlacionados, con una relación especialmente fuerte entre el tamaño (ACTIVO) y el resultado (RES). No obstante, estas correlaciones son sensibles a la presencia de *outliers*, por lo que cualquier análisis más profundo deberá documentar explícitamente la decisión adoptada al respecto. Mara Qyà ya tiene los elementos clave para su auditoría.
 
 ## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo.
 
