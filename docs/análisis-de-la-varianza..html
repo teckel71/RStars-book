@@ -110,7 +110,7 @@
 <h2>
 <span class="header-section-number">8.1</span> Introducción.<a class="anchor" aria-label="anchor" href="#introducci%C3%B3n.-4"><i class="fas fa-link"></i></a>
 </h2>
-<p>El análisis de la varianza (ANOVA) puede considerarse una generalización del contraste de hipótesis de medias poblacionales iguales para el caso de poblaciones normales y con varianzas desconocidas, pero iguales. La generalización consiste en poder considerar más de dos poblaciones. La <strong>hipótesis nula</strong> será la que afirma que <strong>las medias poblacionales de la variable métrica en estudio, para todas las poblaciones, son iguales</strong>. La hipótesis alternativa, por su lado, afirmará que existe al menos dos poblaciones con medias diferentes. Como todo contraste, para llevarlo acabo hemos de tener una muestra representativa de cada población, y fijar un nivel de significación (usualmente 0.05).</p>
+<p>El análisis de la varianza (ANOVA) puede considerarse una generalización del contraste de hipótesis de medias poblacionales iguales para el caso de poblaciones normales y con varianzas desconocidas, pero iguales. La generalización consiste en poder considerar más de dos poblaciones. La <strong>hipótesis nula</strong> será la que afirma que <strong>las medias poblacionales de la variable métrica en estudio, para todas las poblaciones, son iguales</strong>. La hipótesis alternativa, por su lado, afirmará que existe al menos dos poblaciones con medias diferentes. Como todo contraste, para llevarlo a cabo hemos de tener una muestra representativa de cada población, y fijar un nivel de significación (usualmente 0.05).</p>
 <p>También se puede considerar el ANOVA como un <strong>tipo especial de análisis de regresión</strong>, en la que la variable dependiente es una variable métrica, y las variables explicativas son atributos o factores (en escala nominal u ordinal). La misión de los factores es clasificar a los casos que constituyen nuestra muestra en distintas submuestras, cada una representativa de una de las subpoblaciones cuyas medias en la variable en estudio se quiere comparar.</p>
 </div>
 <div id="anova-de-un-solo-factor." class="section level2" number="8.2">
@@ -141,18 +141,38 @@
 <span class="header-section-number">8.2.2</span> Preparación de los datos.<a class="anchor" aria-label="anchor" href="#preparaci%C3%B3n-de-los-datos.-3"><i class="fas fa-link"></i></a>
 </h3>
 <p>Los datos están almacenados en el archivo de Microsoft Excel “<a href="https://raw.githubusercontent.com/teckel71/RStars-book/main/download/astilleros_48.xlsx">astilleros_48.xlsx</a>”, y el script con el código del ejemplo se halla contenido en el fichero “<a href="https://raw.githubusercontent.com/teckel71/RStars-book/main/download/anova_rstars.R">anova_rstars.R</a>”. Vamos a suponer que trabajaremos en un proyecto de RStudio al que denominaremos “anova”.</p>
-<p>Una vez abierto el <em>script</em> en el editor de RStudio, comprobaremos que la primera parte del código está dedicada a la limpieza de la memoria (<em>Environment</em>) y a la importación de los datos. Para ello, activaremos el paquete <a href="https://readxl.tidyverse.org">readxl</a> y utilizaremos la función <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code>, indicando en los argumentos el archivo a explorar, y la <em>hoja</em> en la cual se encuentran los datos (hoja “Datos”). Los datos se almacenarán en el <em>data frame</em> “datos”. En este <em>data frame</em>, la primera columna no es una verdadera variable, sino que se compone de los nombres de los casos o naves. Con una línea de código adicional transformaremos esa primera columna en el <em>nombre de las filas</em>, de modo que tal columna abandona su <em>rol</em> de variable. En definitiva, el código para importar los datos es:</p>
+<p>Comenzaremos a ejecutar el código del <em>script</em>. En primer lugar, el código se ocupa de <strong>limpiar el <em>Global Environment</em> y cargar todos los paquetes necesarios</strong>. Uno de ellos es <a href="https://github.com/teckel71/MATrstars">MATrstars</a>, un paquete propio del libro que reúne funciones auxiliares utilizadas a lo largo de los distintos capítulos. Como no está disponible en CRAN, se instala directamente desde GitHub la primera vez; en las siguientes ocasiones bastará con activarlo con <code><a href="https://github.com/teckel71/MATrstars">library(MATrstars)</a></code>. Los detalles del paquete y de las funciones que contiene se recogen en el <strong>Apéndice: Funciones auxiliares del paquete <code>MATrstars</code></strong>.</p>
 <div class="sourceCode" id="cb288"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Análisis ANOVA de un factor.</span></span>
+<code class="sourceCode R"><span><span class="co">### ANOVA de un factor: El Informe Crestfall ###</span></span>
 <span></span>
+<span><span class="co"># Limpiando el Global Environment</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># DATOS</span></span>
+<span><span class="co"># Cargando paquetes</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bprice2652/car_repo">car</a></span><span class="op">)</span>          <span class="co"># test de Levene</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rvlenth.github.io/emmeans/">emmeans</a></span><span class="op">)</span>      <span class="co"># comparaciones múltiples (Tukey)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/effectsize/">effectsize</a></span><span class="op">)</span>   <span class="co"># tamaño del efecto (eta², omega²)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://fishr-core-team.github.io/FSA/">FSA</a></span><span class="op">)</span>          <span class="co"># comparaciones múltiples (Dunn)</span></span>
 <span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
+<span><span class="co"># Paquete MATrstars: funciones auxiliares del libro R-Stars.</span></span>
+<span><span class="co"># Si no está instalado, se instala desde GitHub (solo la primera vez).</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"MATrstars"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span>  <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"teckel71/MATrstars"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/teckel71/MATrstars">MATrstars</a></span><span class="op">)</span></span></code></pre></div>
+<p>A continuación importaremos los datos del archivo de Excel®. Con la función <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> del paquete <a href="https://readxl.tidyverse.org">readxl</a> indicamos el archivo y la <em>hoja</em> donde se encuentran los datos (hoja “Datos”). El <em>data frame</em> resultante se llamará “datos”. En este <em>data frame</em>, la primera columna no es una verdadera variable, sino que se compone de los nombres de los casos o naves. Con una línea de código adicional transformaremos esa primera columna en el <em>nombre de las filas</em>, de modo que tal columna abandona su <em>rol</em> de variable:</p>
+<div class="sourceCode" id="cb289"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## DATOS</span></span>
+<span></span>
+<span><span class="co"># Importando datos desde Excel</span></span>
 <span><span class="va">datos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"astilleros_48.xlsx"</span>, sheet <span class="op">=</span> <span class="st">"Datos"</span><span class="op">)</span></span>
 <span><span class="va">datos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">datos</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span> <span class="op">(</span><span class="va">datos</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">datos</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##   ASTILLERO             SEDE                IRE        
 ##  Length:48          Length:48          Min.   : 50.20  
 ##  Class :character   Class :character   1st Qu.: 70.39  
@@ -176,10 +196,9 @@
 <p>Comencemos con la primera pregunta de la AITM: <strong>¿hay diferencias significativas en el rendimiento energético medio de las naves según el astillero que las fabrica?</strong> La hipótesis nula del contraste afirma que <strong>no existen diferencias entre los IRE medios</strong> de las naves de los tres astilleros (KORRIGAN, SELENE y ARCTURUS). La hipótesis alternativa, en cambio, afirma que <strong>existe al menos una diferencia significativa</strong> entre dos de esas medias poblacionales.</p>
 <p>Antes de proceder al <em>análisis de la varianza</em> propiamente dicho, hemos de preparar nuestros datos mediante la localización de <em>missing values</em> y <em>outliers</em>. Los <em>outliers</em>, en el ANOVA, pueden tener una gran influencia (ya que se trabaja en <em>términos medios</em>) sobre los resultados, por lo que deben ser tratados convenientemente.</p>
 <p>Para localizar los casos concretos de <strong><em>missing values</em></strong>, aplicaremos la función auxiliar <code><a href="https://rdrr.io/pkg/MATrstars/man/explora_na.html">explora_na()</a></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a>, que ya introdujimos en el capítulo 5. Al pasarle el <em>data frame</em> “datos” y las variables de interés para este primer estudio (IRE y ASTILLERO), la función diagnostica gráficamente los <em>missing values</em>, lista los casos afectados y, con <code>accion = "eliminar"</code>, devuelve el <em>data frame</em> filtrado. Guardamos el resultado en una <strong>copia</strong> llamada “muestra”, con la que trabajaremos en adelante (para mantener la integridad del <em>data frame</em> original). En este ejemplo, los datos están completos, por lo que la función no eliminará ningún caso, pero se incluye en el código para mantener el procedimiento general:</p>
-<div class="sourceCode" id="cb290"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb291"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Missing values</span></span>
 <span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
 <span>  <span class="va">muestra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/explora_na.html">explora_na</a></span><span class="op">(</span></span>
 <span>    <span class="va">datos</span>,</span>
 <span>    variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">IRE</span>, <span class="va">ASTILLERO</span><span class="op">)</span>,</span>
@@ -188,7 +207,7 @@
 <span>    subtitulo <span class="op">=</span> <span class="st">"48 naves cargueras interestelares"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p>Una vez tratados los casos con valores perdidos o <em>missing values</em>, <strong>es necesario detectar la presencia de <em>outliers</em></strong> o casos atípicos en la muestra, que pudieran desvirtuar los resultados derivados del ANOVA. Para ello, aplicamos la función auxiliar <code><a href="https://rdrr.io/pkg/MATrstars/man/explora_outliers.html">explora_outliers()</a></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a> que ya se presentó en el capítulo 5. Al pasarle una sola variable métrica —en este caso IRE— la función detecta el caso univariante y aplica directamente la regla clásica de 1.5 veces el rango intercuartílico sobre ella. Con <code>accion = "eliminar"</code> la función devuelve un nuevo <em>data frame</em> sin los casos identificados como <em>outliers</em>, que llamaremos “<strong>muestra_so</strong>”:</p>
-<div class="sourceCode" id="cb291"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb292"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>matrstars.figura_num <span class="op">=</span> <span class="st">"8.3"</span>, matrstars.tabla_num <span class="op">=</span> <span class="st">"8.1"</span><span class="op">)</span></span>
 <span>  <span class="co"># Outliers</span></span>
 <span>  <span class="va">muestra_so</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/explora_outliers.html">explora_outliers</a></span><span class="op">(</span></span>
@@ -198,7 +217,7 @@
 <span>    titulo    <span class="op">=</span> <span class="st">"ÍNDICE DE RENDIMIENTO ENERGÉTICO"</span>,</span>
 <span>    subtitulo <span class="op">=</span> <span class="st">"48 naves cargueras interestelares"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-278-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-279-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 8.3</strong></p>
 </div>
@@ -234,16 +253,8 @@ aurora swift
 </div>
 <p>Las naves identificadas como <em>outliers</em> son “iron sovereign” (un viejo carguero de Korrigan con un IRE inusualmente bajo, posiblemente fruto de un desgaste excepcional de su cámara de combustión) y “aurora swift” (un prototipo de Selene con un IRE extraordinariamente alto, probablemente derivado de un calibrado experimental). Como ocurría con los <em>missing values</em>, el tratamiento de los <em>outliers</em> depende de la información que se tenga, existiendo varias alternativas (corrección del dato, estimación, etc.) Si no se tiene información fiable, y los <em>outliers</em> no representan una gran proporción respecto al total de casos, puede optarse por su eliminación de la muestra, como haremos en este ejemplo. El <em>data frame</em> “muestra_so” contiene los 46 casos restantes.</p>
 <p>Una vez preparados los datos, vamos a presentar los grupos de naves y sus rendimientos energéticos medios. Para ello, diseñaremos una tabla mediante <code><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars()</a></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a>, ya presentada en el capítulo 5 (véase también el <strong>Apéndice: Funciones auxiliares del paquete <code>MATrstars</code></strong> para su ficha completa). Antes, hemos de crear un pequeño <em>data frame</em>, llamado por ejemplo “tablamedias”, en el que cada caso o fila sea uno de los grupos en que queda dividida la muestra a partir de los niveles del factor “ASTILLERO”, y que contenga tres variables: el ASTILLERO de cada grupo o submuestra, su número de casos contenidos (variable “observaciones”), y los respectivos IRE medios (variable “media”):</p>
-<div class="sourceCode" id="cb292"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb293"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Visualizando número de frecuencias y medias de los grupos con dplyr:</span></span>
-<span></span>
-<span>  <span class="co"># Paquete MATrstars: funciones auxiliares del libro R-Stars.</span></span>
-<span>  <span class="co"># Si no está instalado, se instala desde GitHub (solo la primera vez).</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"MATrstars"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
-<span>    <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"teckel71/MATrstars"</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/teckel71/MATrstars">MATrstars</a></span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="va">tablamedias</span> <span class="op">&lt;-</span>  <span class="va">muestra_so</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>                    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ASTILLERO</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -305,13 +316,13 @@ SELENE
 <p><strong>Tabla 8.2.</strong> IRE. Medias por astillero.</p>
 </div>
 <p>Gráficamente, las tres submuestras de naves pueden caracterizarse, en cuanto al rendimiento energético (IRE), mediante dos tipos de gráficos: gráficos de densidad y gráficos de caja. Los gráficos serán construidos utilizando las facilidades del paquete <a href="https://ggplot2.tidyverse.org">ggplot2</a>. Además, combinaremos los gráficos en una composición utilizando el paquete <a href="https://patchwork.data-imaginist.com">patchwork</a>. El código es el siguiente:</p>
-<div class="sourceCode" id="cb293"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb294"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Graficando casos y medias.</span></span>
 <span></span>
 <span>  <span class="co"># Crear el gráfico de densidad</span></span>
 <span>  <span class="va">gdensidad</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span> <span class="va">muestra_so</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">IRE</span>, color <span class="op">=</span> <span class="va">ASTILLERO</span>, fill <span class="op">=</span> <span class="va">ASTILLERO</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">tablamedias</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">media</span>, color <span class="op">=</span> <span class="va">ASTILLERO</span><span class="op">)</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">tablamedias</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">media</span>, color <span class="op">=</span> <span class="va">ASTILLERO</span><span class="op">)</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Diagramas de Densidad por Grupo con Medias"</span>,</span>
 <span>         x <span class="op">=</span> <span class="st">"IRE (tn / unidad de especia)"</span>,</span>
 <span>         y <span class="op">=</span> <span class="st">"Densidad"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -319,31 +330,29 @@ SELENE
 <span>  </span>
 <span>  <span class="co"># Crear box-plot</span></span>
 <span>  <span class="va">gbox</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">muestra_so</span>,</span>
-<span>         map <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">ASTILLERO</span>,</span>
+<span>         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">ASTILLERO</span>,</span>
 <span>                    x <span class="op">=</span> <span class="va">IRE</span>,</span>
 <span>                    color <span class="op">=</span> <span class="va">ASTILLERO</span>,</span>
-<span>                    fill <span class="op">=</span> <span class="va">ASTILLERO</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                    fill <span class="op">=</span> <span class="va">ASTILLERO</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>outlier.shape <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>               alpha <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_summary.html">stat_summary</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="st">"mean"</span>,</span>
 <span>               geom <span class="op">=</span> <span class="st">"point"</span>,</span>
 <span>               size <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>               map <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">ASTILLERO</span><span class="op">)</span>,</span>
+<span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">ASTILLERO</span><span class="op">)</span>,</span>
 <span>               alpha <span class="op">=</span> <span class="fl">0.60</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>              size <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>              map <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">ASTILLERO</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>              <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">ASTILLERO</span><span class="op">)</span>,</span>
 <span>              alpha <span class="op">=</span> <span class="fl">0.40</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>tittle <span class="op">=</span><span class="st">"Diagramas de caja por Grupo con Medias"</span>,</span>
-<span>       xlab <span class="op">=</span> <span class="st">"IRE (tn / unidad de especia)"</span>,</span>
-<span>       ylab <span class="op">=</span> <span class="st">"Submuestras"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span><span class="st">"Diagramas de caja por Grupo con Medias"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"IRE (tn / unidad de especia)"</span>,</span>
+<span>       y <span class="op">=</span> <span class="st">"Astillero"</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># Combinar gráficos.</span></span>
 <span>  </span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
-<span>  </span>
 <span>  <span class="va">gdensidad</span> <span class="op">/</span> <span class="va">gbox</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-281-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-282-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 8.4</strong></p>
 </div>
@@ -351,7 +360,7 @@ SELENE
 <p>Las conclusiones a las que lleguemos con el <em>contraste F de ANOVA</em> serán válidas en la medida en que se cumplan las <strong>hipótesis de normalidad y homogeneidad en las varianzas</strong> de la variable dependiente o métrica (IRE), en los tres grupos o subpoblaciones en que queda dividida la población atendiendo los niveles o categorías del factor (ASTILLERO). Hemos de contrastar, pues, ambas hipótesis, a partir de la información de las tres submuestras que tenemos y que representan, respectivamente, a cada una de esas subpoblaciones.</p>
 <p>En cuanto a la hipótesis de <strong>normalidad</strong>, se pueden usar dos vías para verificar su cumplimiento: el análisis gráfico y la realización de contrastes estadísticos.</p>
 <p>El análisis gráfico puede llevarse a cabo mediante la realización <em>de gráficos QQ</em> de la variable IRE, a partir de las submuestras o grupos de naves en que queda fragmentada la muestra a partir de la variable ASTILLERO. Estos gráficos pueden generarse con la gramática del paquete <a href="https://ggplot2.tidyverse.org">ggplot2</a>:</p>
-<div class="sourceCode" id="cb294"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb295"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># PRERREQUISITOS / HIPÓTESIS ANOVA  </span></span>
 <span></span>
 <span>    <span class="co"># Normalidad / Gráfico QQ</span></span>
@@ -363,12 +372,12 @@ SELENE
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"IRE: QQ-PLOT"</span>,</span>
 <span>            subtitle <span class="op">=</span> <span class="st">"48 naves cargueras (sin outliers)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="va">.</span> <span class="op">~</span> <span class="va">ASTILLERO</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-282-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-283-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 8.5</strong></p>
 </div>
 <p>Los <em>gráficos QQ</em> muestran un buen ajuste de los puntos a la diagonal en los tres astilleros, lo que sugiere un comportamiento próximo a la Ley Normal de la variable IRE en las tres submuestras. Para extraer una conclusión de un modo más preciso, vamos a realizar el contraste de normalidad de <em>Shapiro-Wilk</em>:</p>
-<div class="sourceCode" id="cb295"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb296"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="co"># Normalidad: Shapiro-Wilk para cada grupo</span></span>
 <span>    <span class="va">normalidad</span> <span class="op">&lt;-</span> <span class="va">muestra_so</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ASTILLERO</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -435,20 +444,20 @@ NORMALIDAD
 <p><strong>Tabla 8.3</strong></p>
 </div>
 <p>En esta prueba, la hipótesis nula equivale al supuesto de normalidad. Para un 5% de significación estadística, un <strong>p-valor superior a 0,05 implicará el no-rechazo de la hipótesis nula de normalidad</strong>. En el ejemplo, los tres astilleros presentan p-valores claramente por encima de 0,05, por lo que <strong>podemos aceptar la existencia de normalidad en las tres subpoblaciones</strong>.</p>
-<p>En cuanto a la <strong>homogeneidad de las varianzas</strong>, contrastamos este supuesto mediante la prueba de <em>Bartlett</em>.</p>
-<div class="sourceCode" id="cb296"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span>    <span class="co"># Homogeneidad en las varianzas</span></span>
+<p>En cuanto a la <strong>homogeneidad de las varianzas</strong>, en lugar del clásico test de <em>Bartlett</em> utilizaremos la prueba de <strong><em>Levene</em></strong>. La razón es sencilla: el test de Bartlett es muy potente cuando se cumple estrictamente la normalidad, pero también muy sensible a desviaciones de ella; en cambio, Levene funciona bien incluso cuando la normalidad se cumple solo aproximadamente. Por eso es hoy la prueba recomendada en la mayoría de manuales aplicados. Está implementada en la función <code><a href="https://rdrr.io/pkg/car/man/leveneTest.html">leveneTest()</a></code> del paquete <a href="https://github.com/bprice2652/car_repo">car</a>:</p>
+<div class="sourceCode" id="cb297"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="co"># Homogeneidad en las varianzas: test de Levene</span></span>
 <span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/stats/bartlett.test.html">bartlett.test</a></span><span class="op">(</span><span class="va">muestra_so</span><span class="op">$</span><span class="va">IRE</span> <span class="op">~</span> <span class="va">muestra_so</span><span class="op">$</span><span class="va">ASTILLERO</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## 
-##  Bartlett test of homogeneity of variances
-## 
-## data:  muestra_so$IRE by muestra_so$ASTILLERO
-## Bartlett's K-squared = 0.86623, df = 2, p-value = 0.6485</code></pre>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/car/man/leveneTest.html">leveneTest</a></span><span class="op">(</span><span class="va">IRE</span> <span class="op">~</span> <span class="va">ASTILLERO</span>, data <span class="op">=</span> <span class="va">muestra_so</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## Levene's Test for Homogeneity of Variance (center = median)
+##       Df F value Pr(&gt;F)
+## group  2   0.778 0.4657
+##       43</code></pre>
 <p>El p-valor es claramente superior a 0,05; luego <strong>no se rechaza la hipótesis nula de homogeneidad de las varianzas de los grupos (subpoblaciones)</strong>.</p>
 <p>Puesto que se cumplen tanto la hipótesis de normalidad en las tres subpoblaciones como la de homogeneidad de las varianzas, <strong>los resultados del contraste <em>F de ANOVA</em> serán plenamente válidos</strong>.</p>
+<p><strong>Nota.</strong> Cuando la normalidad se cumple pero <strong>falla solo la homogeneidad de varianzas</strong>, existe una alternativa paramétrica al ANOVA clásico: el <strong><em>ANOVA de Welch</em></strong> (<code>oneway.test(..., var.equal = FALSE)</code>), que ajusta los grados de libertad para tener en cuenta las varianzas desiguales. Para las comparaciones múltiples posteriores en ese caso, se recurre habitualmente al test de <strong>Games-Howell</strong> (<code>{PMCMRplus}::gamesHowellTest()</code>). En este primer estudio no lo necesitamos, pero es una herramienta útil para tener presente.</p>
 <p>El contraste <em>F de ANOVA</em> de igualdad en las medias de la variable en estudio (IRE) de las distintas (sub)poblaciones (grupos de naves según el astillero fabricante) se realiza en R mediante la función <code><a href="https://rdrr.io/r/stats/aov.html">aov()</a></code>, que guardaremos, por ejemplo, como el objeto “Datos.aov”, y que se almacenará en forma resumida en la lista “summary_aov”, de un solo elemento. Este elemento, que contiene la solución resumida del contraste ANOVA, se convierte en un <em>data frame</em> (de nombre “aov_table”) con el objetivo de presentarlo como una tabla con <code><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars()</a></code>:</p>
-<div class="sourceCode" id="cb298"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb299"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Test F de ANOVA</span></span>
 <span></span>
 <span><span class="va">Datos.aov</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aov.html">aov</a></span><span class="op">(</span><span class="va">muestra_so</span><span class="op">$</span><span class="va">IRE</span> <span class="op">~</span> <span class="va">muestra_so</span><span class="op">$</span><span class="va">ASTILLERO</span><span class="op">)</span></span>
@@ -533,16 +542,48 @@ NA
 </div>
 <p>El valor del estadístico F de ANOVA es muy elevado, con un p-valor asociado prácticamente nulo. Como el p-valor es menor que 0,05, <strong>se rechaza la hipótesis nula de medias iguales</strong>; por lo que podremos afirmar (para una significación del 5%) que <strong>el astillero fabricante influye, en media, en el rendimiento energético de las naves cargueras</strong>.</p>
 </div>
+<div id="tamaño-del-efecto." class="section level3" number="8.2.4">
+<h3>
+<span class="header-section-number">8.2.4</span> Tamaño del efecto.<a class="anchor" aria-label="anchor" href="#tama%C3%B1o-del-efecto."><i class="fas fa-link"></i></a>
+</h3>
+<p>Que un contraste sea estadísticamente significativo no dice nada sobre la <strong>magnitud</strong> del efecto detectado. Con muestras grandes, incluso diferencias muy pequeñas pueden salir significativas; con muestras muy pequeñas, diferencias importantes pueden pasar desapercibidas. Por eso, además del p-valor, conviene reportar el <strong>tamaño del efecto</strong> (<em>effect size</em>), que cuantifica <em>cuánto</em> explica el factor de la variabilidad de la variable dependiente.</p>
+<p>En ANOVA, las dos medidas más habituales son:</p>
+<ul>
+<li><p><strong>Eta cuadrado (η²)</strong>: proporción de la varianza total de la variable dependiente que queda explicada por el factor. Se calcula como η² = SS~entre grupos~ / SS<sub>total</sub>. Es la medida clásica, aunque ligeramente sesgada al alza en muestras pequeñas.</p></li>
+<li><p><strong>Omega cuadrado (ω²)</strong>: versión ajustada de η², menos sesgada. Es la medida preferida en la literatura moderna.</p></li>
+</ul>
+<p>Los valores de referencia habitualmente usados <span class="citation">(<a href="bibliograf%C3%ADa.html#ref-Cohen1988">Cohen 1988</a>)</span> son: 0,01 → efecto <strong>pequeño</strong>; 0,06 → efecto <strong>medio</strong>; 0,14 → efecto <strong>grande</strong>.</p>
+<p>Ambas medidas pueden calcularse con el paquete <a href="https://easystats.github.io/effectsize/">effectsize</a>:</p>
+<div class="sourceCode" id="cb300"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="co"># Tamaño del efecto para el ANOVA</span></span>
+<span>    <span class="fu"><a href="https://easystats.github.io/effectsize/reference/eta_squared.html">eta_squared</a></span><span class="op">(</span><span class="va">Datos.aov</span>, partial <span class="op">=</span> <span class="cn">FALSE</span>, ci <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## # Effect Size for ANOVA (Type I)
+## 
+## Parameter            | Eta2 |       95% CI
+## ------------------------------------------
+## muestra_so$ASTILLERO | 0.70 | [0.57, 1.00]
+## 
+## - One-sided CIs: upper bound fixed at [1.00].</code></pre>
+<div class="sourceCode" id="cb302"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="fu"><a href="https://easystats.github.io/effectsize/reference/eta_squared.html">omega_squared</a></span><span class="op">(</span><span class="va">Datos.aov</span>, partial <span class="op">=</span> <span class="cn">FALSE</span>, ci <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## # Effect Size for ANOVA (Type I)
+## 
+## Parameter            | Omega2 |       95% CI
+## --------------------------------------------
+## muestra_so$ASTILLERO |   0.69 | [0.55, 1.00]
+## 
+## - One-sided CIs: upper bound fixed at [1.00].</code></pre>
+<p>El valor de η² es muy alto (por encima de 0,14), lo que indica un <strong>efecto grande</strong> del astillero sobre el rendimiento energético. El ω², algo más conservador, confirma la misma conclusión. Es decir: no solo hay diferencias significativas entre astilleros, sino que <strong>el astillero explica una parte sustancial de la variabilidad del IRE</strong>. La conclusión estadística tiene, por tanto, también una <strong>relevancia práctica</strong> importante.</p>
+</div>
 </div>
 <div id="comparaciones-múltiples." class="section level2" number="8.3">
 <h2>
 <span class="header-section-number">8.3</span> Comparaciones múltiples.<a class="anchor" aria-label="anchor" href="#comparaciones-m%C3%BAltiples."><i class="fas fa-link"></i></a>
 </h2>
-<p>Cuando el resultado del contraste <em>F de ANOVA</em> es de rechazo de la hipótesis nula, se presenta otra cuestión interesante. La hipótesis alternativa dice que existe al menos una diferencia entre las medias de dos grupos que es “importante”. Pero no tienen porque ser todas. Entonces, cabe preguntarse que diferencias concretas entre medias son estadísticamente significativas, y cuáles no. Para dilucidar esta cuestión se han desarrollado diversas pruebas de <strong>comparaciones múltiples</strong>. Una de ellas es la prueba <em>HSD de Tuckey</em>. Un modo de obtener los resultados de esta prueba es ejecutarla a partir de las funciones del paquete <a href="https://rvlenth.github.io/emmeans/">emmeans</a>. En concreto, los resultados de la prueba <em>HSD de</em> <em>Tuckey</em> se obtendrán aplicando la función <code><a href="https://rdrr.io/r/graphics/pairs.html">pairs()</a></code> a un objeto creado previamente con la función <code><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html">emmeans()</a></code>, al que hemos llamado, por ejemplo, “medias”, y que tiene como argumentos el nombre de nuestra solución del contraste ANOVA anterior y, entrecomillado, el nombre de la variable que actúa como factor que divide a la muestra en los tres grupos (submuestras) comparados (ASTILLERO). Los resultados se han guardado en el objeto “pares”, que posteriormente se ha transformado en un <em>data frame</em> para poder ser presentado como una tabla con <code><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars()</a></code>:</p>
-<div class="sourceCode" id="cb299"><pre class="downlit sourceCode r">
+<p>Cuando el resultado del contraste <em>F de ANOVA</em> es de rechazo de la hipótesis nula, se presenta otra cuestión interesante. La hipótesis alternativa dice que existe al menos una diferencia entre las medias de dos grupos que es “importante”. Pero no tienen porque ser todas. Entonces, cabe preguntarse que diferencias concretas entre medias son estadísticamente significativas, y cuáles no. Para dilucidar esta cuestión se han desarrollado diversas pruebas de <strong>comparaciones múltiples</strong>. Una de ellas es la prueba <em>HSD de Tukey</em>. Un modo de obtener los resultados de esta prueba es ejecutarla a partir de las funciones del paquete <a href="https://rvlenth.github.io/emmeans/">emmeans</a>. En concreto, los resultados de la prueba <em>HSD de</em> <em>Tukey</em> se obtendrán aplicando la función <code><a href="https://rdrr.io/r/graphics/pairs.html">pairs()</a></code> a un objeto creado previamente con la función <code><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html">emmeans()</a></code>, al que hemos llamado, por ejemplo, “medias”, y que tiene como argumentos el nombre de nuestra solución del contraste ANOVA anterior y, entrecomillado, el nombre de la variable que actúa como factor que divide a la muestra en los tres grupos (submuestras) comparados (ASTILLERO). Los resultados se han guardado en el objeto “pares”, que posteriormente se ha transformado en un <em>data frame</em> para poder ser presentado como una tabla con <code><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars()</a></code>:</p>
+<div class="sourceCode" id="cb304"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># COMPARACIONES MÚLTIPLES</span></span>
 <span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rvlenth.github.io/emmeans/">emmeans</a></span><span class="op">)</span></span>
 <span><span class="va">medias</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html">emmeans</a></span><span class="op">(</span><span class="va">Datos.aov</span>, <span class="st">"ASTILLERO"</span><span class="op">)</span></span>
 <span><span class="va">pares</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/pairs.html">pairs</a></span><span class="op">(</span><span class="va">medias</span><span class="op">)</span></span>
 <span><span class="va">pares_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">pares</span><span class="op">)</span></span>
@@ -647,10 +688,14 @@ KORRIGAN - SELENE
 <h2>
 <span class="header-section-number">8.4</span> ¿Y si no se cumplen las condiciones para realizar el contraste F de ANOVA?<a class="anchor" aria-label="anchor" href="#y-si-no-se-cumplen-las-condiciones-para-realizar-el-contraste-f-de-anova"><i class="fas fa-link"></i></a>
 </h2>
-<p>En el ejemplo anterior, todas las hipótesis necesarias para confiar en los resultados del contraste <em>F de ANOVA</em> y la prueba <em>HSD de Tuckey</em> se cumplieron sin dificultad: la normalidad de las tres subpoblaciones (medida a través de las submuestras) y la homogeneidad de sus varianzas. Pero no siempre será así. Veámoslo con la segunda pregunta del <em>Informe Crestfall</em>: <strong>¿hay diferencias significativas en la fiabilidad media de las naves según el astillero que las fabrica?</strong></p>
+<p>En el ejemplo anterior, todas las hipótesis necesarias para confiar en los resultados del contraste <em>F de ANOVA</em> y la prueba <em>HSD de Tukey</em> se cumplieron sin dificultad: la normalidad de las tres subpoblaciones (medida a través de las submuestras) y la homogeneidad de sus varianzas. Pero no siempre será así. Veámoslo con la segunda pregunta del <em>Informe Crestfall</em>: <strong>¿hay diferencias significativas en la fiabilidad media de las naves según el astillero que las fabrica?</strong></p>
+<div id="el-segundo-estudio-el-índice-de-incidencias-graves-iig." class="section level3" number="8.4.1">
+<h3>
+<span class="header-section-number">8.4.1</span> El segundo estudio: el Índice de Incidencias Graves (IIG).<a class="anchor" aria-label="anchor" href="#el-segundo-estudio-el-%C3%ADndice-de-incidencias-graves-iig."><i class="fas fa-link"></i></a>
+</h3>
 <p>La variable que mide la fiabilidad de cada nave es el <strong>Índice de Incidencias Graves (IIG)</strong>, que recoge el número de averías mayores que la nave ha registrado a lo largo de su vida operativa. La hipótesis nula del contraste afirma que el IIG medio es el mismo en los tres astilleros; la alternativa, que existe al menos una diferencia significativa.</p>
 <p>El procedimiento es el mismo del ejemplo anterior. Comenzamos por la detección de <em>missing values</em> y <em>outliers</em> en la variable IIG. Aplicamos de nuevo <code><a href="https://rdrr.io/pkg/MATrstars/man/explora_na.html">explora_na()</a></code>, ahora sobre las variables IIG y ASTILLERO, y guardamos el resultado en el <em>data frame</em> “muestra2”. Tampoco hay valores perdidos en IIG ni en ASTILLERO. En cuanto a los <em>outliers</em>, el boxplot global revela su presencia:</p>
-<div class="sourceCode" id="cb300"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb305"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Missing values</span></span>
 <span></span>
 <span>  <span class="va">muestra2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/explora_na.html">explora_na</a></span><span class="op">(</span></span>
@@ -661,7 +706,7 @@ KORRIGAN - SELENE
 <span>    subtitulo <span class="op">=</span> <span class="st">"48 naves cargueras interestelares"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p>Aplicamos de nuevo <code><a href="https://rdrr.io/pkg/MATrstars/man/explora_outliers.html">explora_outliers()</a></code>, esta vez sobre la variable IIG, con <code>accion = "eliminar"</code> para descartar los casos identificados como <em>outliers</em>. El resultado se guarda en el <em>data frame</em> “muestra2_so”:</p>
-<div class="sourceCode" id="cb301"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb306"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>matrstars.figura_num <span class="op">=</span> <span class="st">"8.6"</span>, matrstars.tabla_num <span class="op">=</span> <span class="st">"8.6"</span><span class="op">)</span></span>
 <span>  <span class="co"># Outliers</span></span>
 <span>  <span class="va">muestra2_so</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/explora_outliers.html">explora_outliers</a></span><span class="op">(</span></span>
@@ -671,7 +716,7 @@ KORRIGAN - SELENE
 <span>    titulo    <span class="op">=</span> <span class="st">"ÍNDICE DE INCIDENCIAS GRAVES"</span>,</span>
 <span>    subtitulo <span class="op">=</span> <span class="st">"48 naves cargueras interestelares"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-292-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-294-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 8.6</strong></p>
 </div>
@@ -707,7 +752,7 @@ trade wind
 </div>
 <p>Las naves identificadas como <em>outliers</em> son, en este caso, “iron sovereign” (Korrigan, con 16 averías acumuladas, fruto presumiblemente de la misma situación de desgaste excepcional que afectaba a su rendimiento) y “transit lane” (Arcturus, con 35 averías, una cifra excepcional posiblemente debida a un siniestro mayor en una de las primeras travesías de la nave). Ambas se eliminan de “muestra2_so”.</p>
 <p>Construimos a continuación la tabla de medias por astillero:</p>
-<div class="sourceCode" id="cb302"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb307"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">tablamedias2</span> <span class="op">&lt;-</span>  <span class="va">muestra2_so</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>                    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ASTILLERO</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>                    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span> <span class="op">(</span>observaciones <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">ASTILLERO</span><span class="op">)</span>,</span>
@@ -768,43 +813,43 @@ SELENE
 <p><strong>Tabla 8.7.</strong> IIG. Medias por astillero.</p>
 </div>
 <p>Y los gráficos de densidad y caja:</p>
-<div class="sourceCode" id="cb303"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb308"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">gdensidad2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span> <span class="va">muestra2_so</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">IIG</span>, color <span class="op">=</span> <span class="va">ASTILLERO</span>, fill <span class="op">=</span> <span class="va">ASTILLERO</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">tablamedias2</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">media</span>, color <span class="op">=</span> <span class="va">ASTILLERO</span><span class="op">)</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">tablamedias2</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">media</span>, color <span class="op">=</span> <span class="va">ASTILLERO</span><span class="op">)</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Diagramas de Densidad por Grupo con Medias"</span>,</span>
 <span>         x <span class="op">=</span> <span class="st">"IIG (nº de averías mayores)"</span>,</span>
 <span>         y <span class="op">=</span> <span class="st">"Densidad"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_grey</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="va">gbox2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">muestra2_so</span>,</span>
-<span>         map <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">ASTILLERO</span>,</span>
+<span>         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">ASTILLERO</span>,</span>
 <span>                    x <span class="op">=</span> <span class="va">IIG</span>,</span>
 <span>                    color <span class="op">=</span> <span class="va">ASTILLERO</span>,</span>
-<span>                    fill <span class="op">=</span> <span class="va">ASTILLERO</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                    fill <span class="op">=</span> <span class="va">ASTILLERO</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>outlier.shape <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>               alpha <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_summary.html">stat_summary</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="st">"mean"</span>,</span>
 <span>               geom <span class="op">=</span> <span class="st">"point"</span>,</span>
 <span>               size <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>               map <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">ASTILLERO</span><span class="op">)</span>,</span>
+<span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">ASTILLERO</span><span class="op">)</span>,</span>
 <span>               alpha <span class="op">=</span> <span class="fl">0.60</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>              size <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>              map <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">ASTILLERO</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>              <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">ASTILLERO</span><span class="op">)</span>,</span>
 <span>              alpha <span class="op">=</span> <span class="fl">0.40</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>tittle <span class="op">=</span><span class="st">"Diagramas de caja por Grupo con Medias"</span>,</span>
-<span>       xlab <span class="op">=</span> <span class="st">"IIG (nº de averías mayores)"</span>,</span>
-<span>       ylab <span class="op">=</span> <span class="st">"Submuestras"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span><span class="st">"Diagramas de caja por Grupo con Medias"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"IIG (nº de averías mayores)"</span>,</span>
+<span>       y <span class="op">=</span> <span class="st">"Astillero"</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="va">gdensidad2</span> <span class="op">/</span> <span class="va">gbox2</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-295-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-297-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 8.7</strong></p>
 </div>
 <p>Los gráficos ya anticipan dificultades. Las naves de <em>Selene Dynamics</em> presentan una distribución del IIG muy concentrada en valores próximos a cero (la inmensa mayoría de sus naves tienen ninguna o una sola avería en toda su vida operativa), lo que da lugar a una distribución claramente asimétrica. En cambio, las naves de <em>Arcturus Shipyards</em> presentan una distribución mucho más dispersa, con valores que van de 0 a 9 averías. Esta heterogeneidad en la forma y dispersión de las tres distribuciones es precisamente lo que hará peligrar las hipótesis del ANOVA.</p>
 <p>Procedemos al contraste de normalidad mediante el gráfico QQ y la prueba de <em>Shapiro-Wilk</em>:</p>
-<div class="sourceCode" id="cb304"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb309"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">muestra2_so</span>,</span>
 <span>           <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="va">IIG</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html">stat_qq</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -812,11 +857,11 @@ SELENE
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"IIG: QQ-PLOT"</span>,</span>
 <span>            subtitle <span class="op">=</span> <span class="st">"48 naves cargueras (sin outliers)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="va">.</span> <span class="op">~</span> <span class="va">ASTILLERO</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-296-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-298-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 8.8</strong></p>
 </div>
-<div class="sourceCode" id="cb305"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb310"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">normalidad2</span> <span class="op">&lt;-</span> <span class="va">muestra2_so</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ASTILLERO</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>shapiro_p_value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/shapiro.test.html">shapiro.test</a></span><span class="op">(</span><span class="va">IIG</span><span class="op">)</span><span class="op">$</span><span class="va">p.value</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -881,17 +926,18 @@ NO-NORMALIDAD
 <p><strong>Tabla 8.8</strong></p>
 </div>
 <p>A diferencia del caso del IRE, ahora la prueba de <em>Shapiro-Wilk</em> rechaza la hipótesis de normalidad para el grupo de <em>Selene Dynamics</em> (su p-valor es prácticamente nulo). Esta no-normalidad <strong>no se debe a la presencia de <em>outliers</em></strong> —ya los habíamos eliminado—, sino a una característica estructural de la subpoblación: las naves de Selene son, casi todas, sistemáticamente muy fiables, por lo que el IIG se acumula de manera asimétrica en torno a 0-1 averías. Ningún proceso de limpieza de la muestra podría corregir este hecho.</p>
-<p>Contrastamos a continuación la homogeneidad de las varianzas:</p>
-<div class="sourceCode" id="cb306"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span>    <span class="fu"><a href="https://rdrr.io/r/stats/bartlett.test.html">bartlett.test</a></span><span class="op">(</span><span class="va">muestra2_so</span><span class="op">$</span><span class="va">IIG</span> <span class="op">~</span> <span class="va">muestra2_so</span><span class="op">$</span><span class="va">ASTILLERO</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## 
-##  Bartlett test of homogeneity of variances
-## 
-## data:  muestra2_so$IIG by muestra2_so$ASTILLERO
-## Bartlett's K-squared = 25.891, df = 2, p-value = 2.387e-06</code></pre>
-<p>El p-valor de la prueba de <em>Bartlett</em> es prácticamente nulo, muy por debajo de 0,05. Se rechaza, por tanto, <strong>la hipótesis nula de homogeneidad de las varianzas de los grupos</strong>. De nuevo, esto tiene una interpretación natural: la varianza del IIG en las naves de Selene es muy pequeña (sus valores están concentrados en torno a cero), mientras que la varianza en las naves de Arcturus es mucho mayor.</p>
+<p>Contrastamos a continuación la homogeneidad de las varianzas, esta vez también con la prueba de Levene:</p>
+<div class="sourceCode" id="cb311"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="fu"><a href="https://rdrr.io/pkg/car/man/leveneTest.html">leveneTest</a></span><span class="op">(</span><span class="va">IIG</span> <span class="op">~</span> <span class="va">ASTILLERO</span>, data <span class="op">=</span> <span class="va">muestra2_so</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## Levene's Test for Homogeneity of Variance (center = median)
+##       Df F value    Pr(&gt;F)    
+## group  2  8.6212 0.0007107 ***
+##       43                      
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+<p>El p-valor de la prueba de <em>Levene</em> es prácticamente nulo, muy por debajo de 0,05. Se rechaza, por tanto, <strong>la hipótesis nula de homogeneidad de las varianzas de los grupos</strong>. De nuevo, esto tiene una interpretación natural: la varianza del IIG en las naves de Selene es muy pequeña (sus valores están concentrados en torno a cero), mientras que la varianza en las naves de Arcturus es mucho mayor.</p>
 <p>Puesto que se rechaza la hipótesis de normalidad en una de las subpoblaciones, y puesto que tampoco puede considerarse una dispersión similar en las tres subpoblaciones (varianzas homogéneas), <strong>los resultados de la prueba <em>F de ANOVA</em> perderían validez</strong>, y conviene optar por <strong>una alternativa robusta</strong>. No obstante, <strong>a modo ilustrativo</strong>, podemos calcularla:</p>
-<div class="sourceCode" id="cb308"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb313"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Datos.aov2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aov.html">aov</a></span><span class="op">(</span><span class="va">muestra2_so</span><span class="op">$</span><span class="va">IIG</span> <span class="op">~</span> <span class="va">muestra2_so</span><span class="op">$</span><span class="va">ASTILLERO</span><span class="op">)</span></span>
 <span><span class="va">summary_aov2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">Datos.aov2</span><span class="op">)</span></span>
 <span><span class="va">aov_table2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">summary_aov2</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
@@ -970,102 +1016,134 @@ NA
 <p><strong>Tabla 8.9.</strong> Resultados del ANOVA — IIG (solo ilustrativo)</p>
 </div>
 <p>Como no se cumplen las hipótesis del ANOVA, <strong>estos resultados no son fiables y no debemos basar nuestras conclusiones en ellos</strong>. Es necesario recurrir a técnicas robustas, puesto que el comportamiento de la variable analizada en las subpoblaciones (grupos) no se ajusta al necesario para poder aplicar los contrastes anteriores.</p>
-<p>Una prueba robusta que puede suplir al contraste F de ANOVA es la de <em>Kruskal-Wallis</em>. En esta prueba, la hipótesis nula vuelve a ser que no existen diferencias significativas entre las medias de la variable estudiada de las diferentes subpoblaciones (representadas por las correspondientes submuestras), mientras que la hipótesis alternativa apuesta por la existencia de al menos una diferencia significativa. Para aplicar la prueba de Kruskal-Wallis en R, puede recurrirse a la función <code><a href="https://rdrr.io/r/stats/kruskal.test.html">kruskal.test()</a></code> del paquete <a href="https://github.com/pgiraudoux/pgirmess">pgirmess</a>. Así, en nuestro ejemplo, tenemos:</p>
-<div class="sourceCode" id="cb309"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#Cuando se incumplen las hipotesis de ANOVA (test robusto)</span></span>
-<span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pgiraudoux/pgirmess">pgirmess</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">Datos.K</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/kruskal.test.html">kruskal.test</a></span><span class="op">(</span><span class="va">muestra2_so</span><span class="op">$</span><span class="va">IIG</span> <span class="op">~</span> <span class="va">muestra2_so</span><span class="op">$</span><span class="va">ASTILLERO</span><span class="op">)</span></span>
-<span><span class="va">Datos.K</span></span></code></pre></div>
+</div>
+<div id="alternativa-robusta-la-prueba-de-kruskal-wallis." class="section level3" number="8.4.2">
+<h3>
+<span class="header-section-number">8.4.2</span> Alternativa robusta: la prueba de Kruskal-Wallis.<a class="anchor" aria-label="anchor" href="#alternativa-robusta-la-prueba-de-kruskal-wallis."><i class="fas fa-link"></i></a>
+</h3>
+<p>Cuando las condiciones del ANOVA no se cumplen, la alternativa <strong>no paramétrica</strong> más habitual es la <strong>prueba de Kruskal-Wallis</strong>. Es importante entender <strong>qué contrasta exactamente</strong>: en lugar de trabajar sobre las medias de los grupos, esta prueba trabaja sobre los <strong>rangos</strong> de los datos. Sustituye los valores originales por sus rangos globales (del 1 al <em>n</em>, ordenando toda la muestra de menor a mayor) y compara los <strong>rangos medios</strong> entre grupos.</p>
+<p>La hipótesis nula es que los tres grupos proceden de la <strong>misma distribución</strong> (o equivalentemente, que sus rangos medios son iguales); la alternativa, que al menos un grupo tiene una tendencia central sistemáticamente diferente. En la práctica se interpreta como una comparación de tendencias centrales, pero <strong>conviene tener presente esta distinción</strong>: si las distribuciones tienen formas muy distintas (por ejemplo, asimetrías opuestas), el rechazo de la hipótesis nula no implica necesariamente diferencias de “medias” en el sentido estricto, sino diferencias globales de posición de las distribuciones.</p>
+<p>Para aplicar la prueba en R usamos la función <code><a href="https://rdrr.io/r/stats/kruskal.test.html">kruskal.test()</a></code> del paquete <code>{stats}</code> (viene con R base, no requiere activar <a href="https://github.com/pgiraudoux/pgirmess">pgirmess</a>):</p>
+<div class="sourceCode" id="cb314"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="co"># Prueba de Kruskal-Wallis</span></span>
+<span>    <span class="va">Datos.K</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/kruskal.test.html">kruskal.test</a></span><span class="op">(</span><span class="va">muestra2_so</span><span class="op">$</span><span class="va">IIG</span> <span class="op">~</span> <span class="va">muestra2_so</span><span class="op">$</span><span class="va">ASTILLERO</span><span class="op">)</span></span>
+<span>    <span class="va">Datos.K</span></span></code></pre></div>
 <pre><code>## 
 ##  Kruskal-Wallis rank sum test
 ## 
 ## data:  muestra2_so$IIG by muestra2_so$ASTILLERO
 ## Kruskal-Wallis chi-squared = 23.559, df = 2, p-value = 7.658e-06</code></pre>
-<p>Puede comprobarse cómo el <em>p-valor</em> es muy pequeño (menor a 0,05), por lo que hemos de rechazar la hipótesis nula de medias iguales y admitir que <strong>existen al menos dos grupos (subpoblaciones) en los que la diferencia entre el IIG medio es significativa</strong>.</p>
-<p>De nuevo, si se rechaza la hipótesis nula, cabe preguntarse cuáles son los grupos o subpoblaciones concretas cuyas medias del IIG son significativamente diferentes. <em>Kruskal</em> y <em>Wallis</em> desarrollaron también la versión robusta de la prueba <em>HSD de Tuckey</em>, que se incluye en <a href="https://github.com/pgiraudoux/pgirmess">pgirmess</a>, con la función <code><a href="https://rdrr.io/pkg/pgirmess/man/kruskalmc.html">kruskalmc()</a></code>. En el siguiente código se aplica la función, cuya solución se guarda en el objeto “Datos.kmc”. El elemento de la solución “dif.com”, que contiene las comparaciones entre las medias, se pasa a un <em>data frame</em> para poder ser mostrado como una tabla con <code><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars()</a></code>:</p>
-<div class="sourceCode" id="cb311"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span>  <span class="co"># Comparaciones múltiples</span></span>
+<p>Puede comprobarse cómo el <em>p-valor</em> es muy pequeño (menor a 0,05), por lo que <strong>se rechaza la hipótesis nula de igualdad de distribuciones</strong> y se admite que <strong>al menos uno de los astilleros presenta un comportamiento sistemáticamente diferente en cuanto al IIG</strong>.</p>
+</div>
+<div id="tamaño-del-efecto-versión-no-paramétrica." class="section level3" number="8.4.3">
+<h3>
+<span class="header-section-number">8.4.3</span> Tamaño del efecto (versión no paramétrica).<a class="anchor" aria-label="anchor" href="#tama%C3%B1o-del-efecto-versi%C3%B3n-no-param%C3%A9trica."><i class="fas fa-link"></i></a>
+</h3>
+<p>Al igual que hicimos en el primer estudio, conviene reportar el tamaño del efecto para valorar la relevancia práctica. La medida análoga a η² para Kruskal-Wallis es la <strong>eta² para KW</strong> (<span class="math inline">\(\eta^2_H\)</span>), que se calcula como <span class="math inline">\(\eta^2_H = (H - k + 1)/(n - k)\)</span>, donde <em>H</em> es el estadístico de Kruskal-Wallis, <em>k</em> el número de grupos y <em>n</em> el tamaño total. Se interpreta con los mismos umbrales que η² (0,01 pequeño; 0,06 medio; 0,14 grande). El paquete <a href="https://easystats.github.io/effectsize/">effectsize</a> la implementa:</p>
+<div class="sourceCode" id="cb316"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="co"># Tamaño del efecto para Kruskal-Wallis</span></span>
+<span>    <span class="fu"><a href="https://easystats.github.io/effectsize/reference/rank_epsilon_squared.html">rank_epsilon_squared</a></span><span class="op">(</span><span class="va">IIG</span> <span class="op">~</span> <span class="va">ASTILLERO</span>, data <span class="op">=</span> <span class="va">muestra2_so</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## Epsilon2 (rank) |       95% CI
+## ------------------------------
+## 0.52            | [0.41, 1.00]
+## 
+## - One-sided CIs: upper bound fixed at [1.00].</code></pre>
+<p>El tamaño del efecto es también claramente <strong>grande</strong>: el astillero explica una parte muy sustancial de la variabilidad del IIG en términos de rangos.</p>
+</div>
+<div id="comparaciones-múltiples-el-test-de-dunn." class="section level3" number="8.4.4">
+<h3>
+<span class="header-section-number">8.4.4</span> Comparaciones múltiples: el test de Dunn.<a class="anchor" aria-label="anchor" href="#comparaciones-m%C3%BAltiples-el-test-de-dunn."><i class="fas fa-link"></i></a>
+</h3>
+<p>Igual que hicimos con Tukey tras el ANOVA, ahora necesitamos identificar <strong>entre qué pares</strong> de astilleros existen diferencias significativas. La opción moderna y recomendada es el <strong>test de Dunn</strong>, que compara los rangos medios entre pares con <strong>p-valores explícitos ajustados por comparaciones múltiples</strong> (por defecto, corrección de Bonferroni; también admite Holm, Benjamini-Hochberg, etc.). Es la extensión natural de KW y sustituye ventajosamente a la función <code>kruskalmc()</code> del paquete <a href="https://github.com/pgiraudoux/pgirmess">pgirmess</a>, que se limitaba a devolver un veredicto binario sin p-valores. Está implementada en la función <code><a href="https://fishr-core-team.github.io/FSA/reference/dunnTest.html">dunnTest()</a></code> del paquete <a href="https://fishr-core-team.github.io/FSA/">FSA</a>:</p>
+<div class="sourceCode" id="cb318"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="co"># Comparaciones múltiples: test de Dunn</span></span>
+<span>    <span class="va">Datos.dunn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://fishr-core-team.github.io/FSA/reference/dunnTest.html">dunnTest</a></span><span class="op">(</span><span class="va">IIG</span> <span class="op">~</span> <span class="va">ASTILLERO</span>, data <span class="op">=</span> <span class="va">muestra2_so</span>,</span>
+<span>                           method <span class="op">=</span> <span class="st">"bonferroni"</span><span class="op">)</span></span>
 <span></span>
-<span>  <span class="va">Datos.kmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pgirmess/man/kruskalmc.html">kruskalmc</a></span><span class="op">(</span><span class="va">muestra2_so</span><span class="op">$</span><span class="va">IIG</span> <span class="op">~</span> <span class="va">muestra2_so</span><span class="op">$</span><span class="va">ASTILLERO</span><span class="op">)</span></span>
-<span></span>
-<span>  <span class="co"># Convertir los resultados a un data frame</span></span>
-<span></span>
-<span>  <span class="va">Datos.kmc.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">Datos.kmc</span><span class="op">$</span><span class="va">dif.com</span><span class="op">)</span></span>
-<span></span>
-<span>  <span class="va">Datos.kmc.df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars</a></span><span class="op">(</span>caption   <span class="op">=</span> <span class="st">"Kruskal-Wallis. Múltiples diferencias"</span>,</span>
-<span>                 col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Diferencias medias"</span>,</span>
-<span>                               <span class="st">"Diferencias críticas"</span>,</span>
-<span>                               <span class="st">"Significación"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>    <span class="va">Datos.dunn</span><span class="op">$</span><span class="va">res</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars</a></span><span class="op">(</span>caption   <span class="op">=</span> <span class="st">"Dunn. Comparaciones múltiples (Bonferroni)."</span>,</span>
+<span>                   col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Comparación"</span>, <span class="st">"Estadístico Z"</span>,</span>
+<span>                                 <span class="st">"p-valor sin ajustar"</span>, <span class="st">"p-valor ajustado"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
+Comparación
 </th>
 <th style="text-align:right;font-weight: bold;text-align: center;">
-Diferencias medias
+Estadístico Z
 </th>
 <th style="text-align:right;font-weight: bold;text-align: center;">
-Diferencias críticas
+p-valor sin ajustar
 </th>
-<th style="text-align:left;font-weight: bold;text-align: center;">
-Significación
+<th style="text-align:right;font-weight: bold;text-align: center;">
+p-valor ajustado
 </th>
 </tr></thead>
 <tbody>
 <tr>
 <td style="text-align:left;text-align: center;">
-ARCTURUS-KORRIGAN
+ARCTURUS - KORRIGAN
 </td>
 <td style="text-align:right;text-align: center;">
-0.7333333
+0.1527827
 </td>
 <td style="text-align:right;text-align: center;">
-11.73349
+0.8785696
 </td>
-<td style="text-align:left;text-align: center;">
-FALSE
+<td style="text-align:right;text-align: center;">
+1.0000000
 </td>
 </tr>
 <tr>
 <td style="text-align:left;text-align: center;">
-ARCTURUS-SELENE
+ARCTURUS - SELENE
 </td>
 <td style="text-align:right;text-align: center;">
-20.1083333
+4.2564050
 </td>
 <td style="text-align:right;text-align: center;">
-11.54870
+0.0000208
 </td>
-<td style="text-align:left;text-align: center;">
-TRUE
+<td style="text-align:right;text-align: center;">
+0.0000623
 </td>
 </tr>
 <tr>
 <td style="text-align:left;text-align: center;">
-KORRIGAN-SELENE
+KORRIGAN - SELENE
 </td>
 <td style="text-align:right;text-align: center;">
-19.3750000
+4.1011776
 </td>
 <td style="text-align:right;text-align: center;">
-11.54870
+0.0000411
 </td>
-<td style="text-align:left;text-align: center;">
-TRUE
+<td style="text-align:right;text-align: center;">
+0.0001233
 </td>
 </tr>
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 8.10.</strong> Kruskal-Wallis. Múltiples diferencias</p>
+<p><strong>Tabla 8.10.</strong> Dunn. Comparaciones múltiples (Bonferroni).</p>
 </div>
-<p>En la tabla generada se comprueba qué comparaciones por pares resultan estadísticamente significativas (para un 0,05 de significación). El <em>Informe Crestfall</em> concluye, así, que <strong>las naves de <em>Selene Dynamics</em> son significativamente más fiables que las de los otros dos astilleros</strong>, mientras que, entre <em>Korrigan Heavy Works</em> y <em>Arcturus Shipyards</em>, las diferencias de fiabilidad no resultan tan claras. Esta conclusión, obtenida mediante la técnica robusta apropiada al caso, sí puede ser incorporada con plenas garantías al informe que la AITM entregará a las empresas del sector.</p>
+<p>En la tabla generada se comprueba qué comparaciones por pares resultan estadísticamente significativas (para un 0,05 de significación) tras corregir por el número de comparaciones realizadas. El <em>Informe Crestfall</em> concluye, así, que <strong>las naves de <em>Selene Dynamics</em> son significativamente más fiables que las de los otros dos astilleros</strong>, mientras que, entre <em>Korrigan Heavy Works</em> y <em>Arcturus Shipyards</em>, las diferencias de fiabilidad no resultan tan claras. Esta conclusión, obtenida mediante la técnica robusta apropiada al caso, sí puede ser incorporada con plenas garantías al informe que la AITM entregará a las empresas del sector.</p>
 </div>
-<div id="materiales-para-realizar-las-prácticas-del-capítulo.-6" class="section level2" number="8.5">
+</div>
+<div id="cierre-del-informe-crestfall." class="section level2" number="8.5">
 <h2>
-<span class="header-section-number">8.5</span> Materiales para realizar las prácticas del capítulo.<a class="anchor" aria-label="anchor" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-6"><i class="fas fa-link"></i></a>
+<span class="header-section-number">8.5</span> <img src="figuras/star.svg" class="hicon"> Cierre del <em>Informe Crestfall</em>.<a class="anchor" aria-label="anchor" href="#cierre-del-informe-crestfall."><i class="fas fa-link"></i></a>
+</h2>
+<p>El doctor <em>Oren Crestfall</em> firma su informe con dos conclusiones nítidas y estadísticamente respaldadas:</p>
+<ul>
+<li><p>En <strong>rendimiento energético (IRE)</strong>, las diferencias entre astilleros son estadísticamente significativas, y de <strong>magnitud grande</strong> (η² y ω² por encima del umbral de 0,14). <strong>Selene Dynamics</strong> fabrica las naves energéticamente más eficientes; <strong>Arcturus Shipyards</strong> se sitúa en un nivel intermedio; y <strong>Korrigan Heavy Works</strong> ocupa la última posición.</p></li>
+<li><p>En <strong>fiabilidad (IIG)</strong>, la comparación exigió abandonar el ANOVA por incumplimiento de sus hipótesis y recurrir a Kruskal-Wallis. La conclusión es también clara: <strong>Selene Dynamics</strong> fabrica naves significativamente más fiables que las de los otros dos astilleros. Entre <em>Korrigan</em> y <em>Arcturus</em> no se detectan diferencias concluyentes.</p></li>
+</ul>
+<p>El <em>Informe Crestfall</em> sale de la AITM camino de los grandes operadores del sector. En un despacho poco iluminado, un magnate llamado <em>Arg-us Korp</em> lo lee con atención, subraya la palabra <strong>Selene</strong> y murmura: <em>“Interesante…”</em>.</p>
+</div>
+<div id="materiales-para-realizar-las-prácticas-del-capítulo.-6" class="section level2" number="8.6">
+<h2>
+<span class="header-section-number">8.6</span> Materiales para realizar las prácticas del capítulo.<a class="anchor" aria-label="anchor" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-6"><i class="fas fa-link"></i></a>
 </h2>
 <p>En esta sección se muestran los links de acceso a los diferentes materiales (<em>scripts</em>, datos…) necesarios para llevar a cabo los contenidos prácticos del capítulo.</p>
 <p><strong>Datos (en formato Microsoft (R) Excel (R)):</strong></p>
@@ -1091,11 +1169,20 @@ TRUE
 <li><a class="nav-link" href="#el-informe-crestfall."><span class="header-section-number">8.2.1</span> El Informe Crestfall.</a></li>
 <li><a class="nav-link" href="#preparaci%C3%B3n-de-los-datos.-3"><span class="header-section-number">8.2.2</span> Preparación de los datos.</a></li>
 <li><a class="nav-link" href="#el-primer-estudio-el-%C3%ADndice-de-rendimiento-energ%C3%A9tico-ire."><span class="header-section-number">8.2.3</span> El primer estudio: el Índice de Rendimiento Energético (IRE).</a></li>
+<li><a class="nav-link" href="#tama%C3%B1o-del-efecto."><span class="header-section-number">8.2.4</span> Tamaño del efecto.</a></li>
 </ul>
 </li>
 <li><a class="nav-link" href="#comparaciones-m%C3%BAltiples."><span class="header-section-number">8.3</span> Comparaciones múltiples.</a></li>
-<li><a class="nav-link" href="#y-si-no-se-cumplen-las-condiciones-para-realizar-el-contraste-f-de-anova"><span class="header-section-number">8.4</span> ¿Y si no se cumplen las condiciones para realizar el contraste F de ANOVA?</a></li>
-<li><a class="nav-link" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-6"><span class="header-section-number">8.5</span> Materiales para realizar las prácticas del capítulo.</a></li>
+<li>
+<a class="nav-link" href="#y-si-no-se-cumplen-las-condiciones-para-realizar-el-contraste-f-de-anova"><span class="header-section-number">8.4</span> ¿Y si no se cumplen las condiciones para realizar el contraste F de ANOVA?</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#el-segundo-estudio-el-%C3%ADndice-de-incidencias-graves-iig."><span class="header-section-number">8.4.1</span> El segundo estudio: el Índice de Incidencias Graves (IIG).</a></li>
+<li><a class="nav-link" href="#alternativa-robusta-la-prueba-de-kruskal-wallis."><span class="header-section-number">8.4.2</span> Alternativa robusta: la prueba de Kruskal-Wallis.</a></li>
+<li><a class="nav-link" href="#tama%C3%B1o-del-efecto-versi%C3%B3n-no-param%C3%A9trica."><span class="header-section-number">8.4.3</span> Tamaño del efecto (versión no paramétrica).</a></li>
+<li><a class="nav-link" href="#comparaciones-m%C3%BAltiples-el-test-de-dunn."><span class="header-section-number">8.4.4</span> Comparaciones múltiples: el test de Dunn.</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#cierre-del-informe-crestfall."><span class="header-section-number">8.5</span>  Cierre del Informe Crestfall.</a></li>
+<li><a class="nav-link" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-6"><span class="header-section-number">8.6</span> Materiales para realizar las prácticas del capítulo.</a></li>
 </ul>
 
       <div class="book-extra">
@@ -1112,7 +1199,7 @@ TRUE
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón Morán. It was last built on 2026-07-20.</p>
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón Morán. It was last built on 2026-07-21.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

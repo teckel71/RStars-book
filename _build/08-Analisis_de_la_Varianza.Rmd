@@ -13,7 +13,7 @@ options(matrstars.suppress_caption = TRUE)
 
 ## Introducción.
 
-El análisis de la varianza (ANOVA) puede considerarse una generalización del contraste de hipótesis de medias poblacionales iguales para el caso de poblaciones normales y con varianzas desconocidas, pero iguales. La generalización consiste en poder considerar más de dos poblaciones. La **hipótesis nula** será la que afirma que **las medias poblacionales de la variable métrica en estudio, para todas las poblaciones, son iguales**. La hipótesis alternativa, por su lado, afirmará que existe al menos dos poblaciones con medias diferentes. Como todo contraste, para llevarlo acabo hemos de tener una muestra representativa de cada población, y fijar un nivel de significación (usualmente 0.05).
+El análisis de la varianza (ANOVA) puede considerarse una generalización del contraste de hipótesis de medias poblacionales iguales para el caso de poblaciones normales y con varianzas desconocidas, pero iguales. La generalización consiste en poder considerar más de dos poblaciones. La **hipótesis nula** será la que afirma que **las medias poblacionales de la variable métrica en estudio, para todas las poblaciones, son iguales**. La hipótesis alternativa, por su lado, afirmará que existe al menos dos poblaciones con medias diferentes. Como todo contraste, para llevarlo a cabo hemos de tener una muestra representativa de cada población, y fijar un nivel de significación (usualmente 0.05).
 
 También se puede considerar el ANOVA como un **tipo especial de análisis de regresión**, en la que la variable dependiente es una variable métrica, y las variables explicativas son atributos o factores (en escala nominal u ordinal). La misión de los factores es clasificar a los casos que constituyen nuestra muestra en distintas submuestras, cada una representativa de una de las subpoblaciones cuyas medias en la variable en estudio se quiere comparar.
 
@@ -48,33 +48,51 @@ Ambas preguntas tienen la misma estructura: comparar las medias de una variable 
 
 Los datos están almacenados en el archivo de Microsoft Excel "[astilleros_48.xlsx](https://raw.githubusercontent.com/teckel71/RStars-book/main/download/astilleros_48.xlsx)", y el script con el código del ejemplo se halla contenido en el fichero "[anova_rstars.R](https://raw.githubusercontent.com/teckel71/RStars-book/main/download/anova_rstars.R)". Vamos a suponer que trabajaremos en un proyecto de RStudio al que denominaremos "anova".
 
-Una vez abierto el *script* en el editor de RStudio, comprobaremos que la primera parte del código está dedicada a la limpieza de la memoria (*Environment*) y a la importación de los datos. Para ello, activaremos el paquete `{readxl}` y utilizaremos la función `read_excel()`, indicando en los argumentos el archivo a explorar, y la *hoja* en la cual se encuentran los datos (hoja "Datos"). Los datos se almacenarán en el *data frame* "datos". En este *data frame*, la primera columna no es una verdadera variable, sino que se compone de los nombres de los casos o naves. Con una línea de código adicional transformaremos esa primera columna en el *nombre de las filas*, de modo que tal columna abandona su *rol* de variable. En definitiva, el código para importar los datos es:
+Comenzaremos a ejecutar el código del *script*. En primer lugar, el código se ocupa de **limpiar el *Global Environment* y cargar todos los paquetes necesarios**. Uno de ellos es `{MATrstars}`, un paquete propio del libro que reúne funciones auxiliares utilizadas a lo largo de los distintos capítulos. Como no está disponible en CRAN, se instala directamente desde GitHub la primera vez; en las siguientes ocasiones bastará con activarlo con `library(MATrstars)`. Los detalles del paquete y de las funciones que contiene se recogen en el **Apéndice: Funciones auxiliares del paquete `MATrstars`**.
 
-```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
-# Análisis ANOVA de un factor.
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+### ANOVA de un factor: El Informe Crestfall ###
 
+# Limpiando el Global Environment
 rm(list = ls())
 
-# DATOS
+# Cargando paquetes
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+library(car)          # test de Levene
+library(emmeans)      # comparaciones múltiples (Tukey)
+library(effectsize)   # tamaño del efecto (eta², omega²)
+library(FSA)          # comparaciones múltiples (Dunn)
 
-library (readxl)
+# Paquete MATrstars: funciones auxiliares del libro R-Stars.
+# Si no está instalado, se instala desde GitHub (solo la primera vez).
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
+}
+library(MATrstars)
+```
+
+A continuación importaremos los datos del archivo de Excel®. Con la función `read_excel()` del paquete `{readxl}` indicamos el archivo y la *hoja* donde se encuentran los datos (hoja "Datos"). El *data frame* resultante se llamará "datos". En este *data frame*, la primera columna no es una verdadera variable, sino que se compone de los nombres de los casos o naves. Con una línea de código adicional transformaremos esa primera columna en el *nombre de las filas*, de modo que tal columna abandona su *rol* de variable:
+
+```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
+## DATOS
+
+# Importando datos desde Excel
 datos <- read_excel("astilleros_48.xlsx", sheet = "Datos")
 datos <- data.frame(datos, row.names = 1)
-summary (datos)
+summary(datos)
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
-# Análisis ANOVA de un factor.
+## DATOS
 
-rm(list = ls())
-library (dplyr)
-
-# DATOS
-
-library (readxl)
+# Importando datos desde Excel
 datos <- read_excel("astilleros_48.xlsx", sheet = "Datos")
 datos <- data.frame(datos, row.names = 1)
-df <- select(datos, everything())
+df <- datos
 
 # Número de variables por bloque
 variables_por_bloque <- 3
@@ -84,9 +102,9 @@ for (i in seq(1, ncol(df), variables_por_bloque)) {
   print(summary(df[, i:min(i + variables_por_bloque - 1, ncol(df))]))
   cat("\n")
 }
-rm (i)
-rm (variables_por_bloque)
-rm (df)
+rm(i)
+rm(variables_por_bloque)
+rm(df)
 ```
 
 ### El primer estudio: el Índice de Rendimiento Energético (IRE).
@@ -100,7 +118,6 @@ Para localizar los casos concretos de ***missing values***, aplicaremos la funci
 ```{r, eval=FALSE, echo=TRUE}
   # Missing values
 
-  library (dplyr)
   muestra <- explora_na(
     datos,
     variables = c(IRE, ASTILLERO),
@@ -116,7 +133,6 @@ Para localizar los casos concretos de ***missing values***, aplicaremos la funci
 # no emitira grafico ni tabla, solo un mensaje. Usamos include=FALSE
 # para que el preprocesador de numeracion no reserve Figura ni Tabla en
 # este chunk.
-library(dplyr)
 muestra <- explora_na(
   datos,
   variables = c(IRE, ASTILLERO),
@@ -147,14 +163,6 @@ Una vez preparados los datos, vamos a presentar los grupos de naves y sus rendim
 ```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
   # Visualizando número de frecuencias y medias de los grupos con dplyr:
 
-  # Paquete MATrstars: funciones auxiliares del libro R-Stars.
-  # Si no está instalado, se instala desde GitHub (solo la primera vez).
-  if (!requireNamespace("MATrstars", quietly = TRUE)) {
-    if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
-    remotes::install_github("teckel71/MATrstars")
-  }
-  library(MATrstars)
-
   tablamedias <-  muestra_so %>%
                     group_by(ASTILLERO) %>%
                     summarise (observaciones = length(ASTILLERO),
@@ -167,14 +175,6 @@ Una vez preparados los datos, vamos a presentar los grupos de naves y sus rendim
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
   # Visualizando número de frecuencias y medias de los grupos con dplyr:
-
-  # Paquete MATrstars: funciones auxiliares del libro R-Stars.
-  # Si no está instalado, se instala desde GitHub (solo la primera vez).
-  if (!requireNamespace("MATrstars", quietly = TRUE)) {
-    if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
-    remotes::install_github("teckel71/MATrstars")
-  }
-  library(MATrstars)
 
   tablamedias <-  muestra_so %>%
                     group_by(ASTILLERO) %>%
@@ -199,7 +199,7 @@ Gráficamente, las tres submuestras de naves pueden caracterizarse, en cuanto al
   # Crear el gráfico de densidad
   gdensidad <- ggplot(data= muestra_so, aes(x = IRE, color = ASTILLERO, fill = ASTILLERO)) +
     geom_density(alpha = 0.3) +
-    geom_vline(data = tablamedias, aes(xintercept = media, color = ASTILLERO), linetype = "dashed", size = 1) +
+    geom_vline(data = tablamedias, aes(xintercept = media, color = ASTILLERO), linetype = "dashed", linewidth = 1) +
     labs(title = "Diagramas de Densidad por Grupo con Medias",
          x = "IRE (tn / unidad de especia)",
          y = "Densidad") +
@@ -207,28 +207,26 @@ Gráficamente, las tres submuestras de naves pueden caracterizarse, en cuanto al
   
   # Crear box-plot
   gbox <- ggplot(data = muestra_so,
-         map = (aes(y = ASTILLERO,
+         aes(y = ASTILLERO,
                     x = IRE,
                     color = ASTILLERO,
-                    fill = ASTILLERO))) +
+                    fill = ASTILLERO)) +
   geom_boxplot(outlier.shape = NA,
                alpha = 0.3) +
   stat_summary(fun = "mean",
                geom = "point",
                size = 3,
-               map = aes(col = ASTILLERO),
+               aes(col = ASTILLERO),
                alpha = 0.60) +
   geom_jitter(width = 0.1,
               size = 1,
-              map = (aes(col = ASTILLERO)),
+              aes(col = ASTILLERO),
               alpha = 0.40) +
-  labs(tittle ="Diagramas de caja por Grupo con Medias",
-       xlab = "IRE (tn / unidad de especia)",
-       ylab = "Submuestras")
+  labs(title ="Diagramas de caja por Grupo con Medias",
+       x = "IRE (tn / unidad de especia)",
+       y = "Astillero")
 
   # Combinar gráficos.
-  
-  library(patchwork)
   
   gdensidad / gbox
 ```
@@ -309,17 +307,19 @@ En el código anterior, se crea un pequeño *data frame* denominado "normalidad"
 
 En esta prueba, la hipótesis nula equivale al supuesto de normalidad. Para un 5% de significación estadística, un **p-valor superior a 0,05 implicará el no-rechazo de la hipótesis nula de normalidad**. En el ejemplo, los tres astilleros presentan p-valores claramente por encima de 0,05, por lo que **podemos aceptar la existencia de normalidad en las tres subpoblaciones**.
 
-En cuanto a la **homogeneidad de las varianzas**, contrastamos este supuesto mediante la prueba de *Bartlett*.
+En cuanto a la **homogeneidad de las varianzas**, en lugar del clásico test de *Bartlett* utilizaremos la prueba de ***Levene***. La razón es sencilla: el test de Bartlett es muy potente cuando se cumple estrictamente la normalidad, pero también muy sensible a desviaciones de ella; en cambio, Levene funciona bien incluso cuando la normalidad se cumple solo aproximadamente. Por eso es hoy la prueba recomendada en la mayoría de manuales aplicados. Está implementada en la función `leveneTest()` del paquete `{car}`:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-    # Homogeneidad en las varianzas
+    # Homogeneidad en las varianzas: test de Levene
 
-    bartlett.test(muestra_so$IRE ~ muestra_so$ASTILLERO)
+    leveneTest(IRE ~ ASTILLERO, data = muestra_so)
 ```
 
 El p-valor es claramente superior a 0,05; luego **no se rechaza la hipótesis nula de homogeneidad de las varianzas de los grupos (subpoblaciones)**.
 
 Puesto que se cumplen tanto la hipótesis de normalidad en las tres subpoblaciones como la de homogeneidad de las varianzas, **los resultados del contraste *F de ANOVA* serán plenamente válidos**.
+
+**Nota.** Cuando la normalidad se cumple pero **falla solo la homogeneidad de varianzas**, existe una alternativa paramétrica al ANOVA clásico: el ***ANOVA de Welch*** (`oneway.test(..., var.equal = FALSE)`), que ajusta los grados de libertad para tener en cuenta las varianzas desiguales. Para las comparaciones múltiples posteriores en ese caso, se recurre habitualmente al test de **Games-Howell** (`{PMCMRplus}::gamesHowellTest()`). En este primer estudio no lo necesitamos, pero es una herramienta útil para tener presente.
 
 El contraste *F de ANOVA* de igualdad en las medias de la variable en estudio (IRE) de las distintas (sub)poblaciones (grupos de naves según el astillero fabricante) se realiza en R mediante la función `aov()`, que guardaremos, por ejemplo, como el objeto "Datos.aov", y que se almacenará en forma resumida en la lista "summary_aov", de un solo elemento. Este elemento, que contiene la solución resumida del contraste ANOVA, se convierte en un *data frame* (de nombre "aov_table") con el objetivo de presentarlo como una tabla con `kable_rstars()`:
 
@@ -368,14 +368,35 @@ summary_aov <- summary(Datos.aov)
 
 El valor del estadístico F de ANOVA es muy elevado, con un p-valor asociado prácticamente nulo. Como el p-valor es menor que 0,05, **se rechaza la hipótesis nula de medias iguales**; por lo que podremos afirmar (para una significación del 5%) que **el astillero fabricante influye, en media, en el rendimiento energético de las naves cargueras**.
 
+### Tamaño del efecto.
+
+Que un contraste sea estadísticamente significativo no dice nada sobre la **magnitud** del efecto detectado. Con muestras grandes, incluso diferencias muy pequeñas pueden salir significativas; con muestras muy pequeñas, diferencias importantes pueden pasar desapercibidas. Por eso, además del p-valor, conviene reportar el **tamaño del efecto** (*effect size*), que cuantifica *cuánto* explica el factor de la variabilidad de la variable dependiente.
+
+En ANOVA, las dos medidas más habituales son:
+
+-   **Eta cuadrado (η²)**: proporción de la varianza total de la variable dependiente que queda explicada por el factor. Se calcula como η² = SS\~entre grupos\~ / SS~total~. Es la medida clásica, aunque ligeramente sesgada al alza en muestras pequeñas.
+
+-   **Omega cuadrado (ω²)**: versión ajustada de η², menos sesgada. Es la medida preferida en la literatura moderna.
+
+Los valores de referencia habitualmente usados [@Cohen1988] son: 0,01 → efecto **pequeño**; 0,06 → efecto **medio**; 0,14 → efecto **grande**.
+
+Ambas medidas pueden calcularse con el paquete `{effectsize}`:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+    # Tamaño del efecto para el ANOVA
+    eta_squared(Datos.aov, partial = FALSE, ci = 0.95)
+    omega_squared(Datos.aov, partial = FALSE, ci = 0.95)
+```
+
+El valor de η² es muy alto (por encima de 0,14), lo que indica un **efecto grande** del astillero sobre el rendimiento energético. El ω², algo más conservador, confirma la misma conclusión. Es decir: no solo hay diferencias significativas entre astilleros, sino que **el astillero explica una parte sustancial de la variabilidad del IRE**. La conclusión estadística tiene, por tanto, también una **relevancia práctica** importante.
+
 ## Comparaciones múltiples.
 
-Cuando el resultado del contraste *F de ANOVA* es de rechazo de la hipótesis nula, se presenta otra cuestión interesante. La hipótesis alternativa dice que existe al menos una diferencia entre las medias de dos grupos que es "importante". Pero no tienen porque ser todas. Entonces, cabe preguntarse que diferencias concretas entre medias son estadísticamente significativas, y cuáles no. Para dilucidar esta cuestión se han desarrollado diversas pruebas de **comparaciones múltiples**. Una de ellas es la prueba *HSD de Tuckey*. Un modo de obtener los resultados de esta prueba es ejecutarla a partir de las funciones del paquete `{emmeans}`. En concreto, los resultados de la prueba *HSD de* *Tuckey* se obtendrán aplicando la función `pairs()` a un objeto creado previamente con la función `emmeans()`, al que hemos llamado, por ejemplo, "medias", y que tiene como argumentos el nombre de nuestra solución del contraste ANOVA anterior y, entrecomillado, el nombre de la variable que actúa como factor que divide a la muestra en los tres grupos (submuestras) comparados (ASTILLERO). Los resultados se han guardado en el objeto "pares", que posteriormente se ha transformado en un *data frame* para poder ser presentado como una tabla con `kable_rstars()`:
+Cuando el resultado del contraste *F de ANOVA* es de rechazo de la hipótesis nula, se presenta otra cuestión interesante. La hipótesis alternativa dice que existe al menos una diferencia entre las medias de dos grupos que es "importante". Pero no tienen porque ser todas. Entonces, cabe preguntarse que diferencias concretas entre medias son estadísticamente significativas, y cuáles no. Para dilucidar esta cuestión se han desarrollado diversas pruebas de **comparaciones múltiples**. Una de ellas es la prueba *HSD de Tukey*. Un modo de obtener los resultados de esta prueba es ejecutarla a partir de las funciones del paquete `{emmeans}`. En concreto, los resultados de la prueba *HSD de* *Tukey* se obtendrán aplicando la función `pairs()` a un objeto creado previamente con la función `emmeans()`, al que hemos llamado, por ejemplo, "medias", y que tiene como argumentos el nombre de nuestra solución del contraste ANOVA anterior y, entrecomillado, el nombre de la variable que actúa como factor que divide a la muestra en los tres grupos (submuestras) comparados (ASTILLERO). Los resultados se han guardado en el objeto "pares", que posteriormente se ha transformado en un *data frame* para poder ser presentado como una tabla con `kable_rstars()`:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
 # COMPARACIONES MÚLTIPLES
 
-library(emmeans)
 medias <- emmeans(Datos.aov, "ASTILLERO")
 pares <- pairs(medias)
 pares_df <- as.data.frame(pares)
@@ -392,7 +413,6 @@ pares_df %>%
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 # COMPARACIONES MÚLTIPLES
 
-library(emmeans)
 medias <- emmeans(Datos.aov, "ASTILLERO")
 pares <- pairs(medias)
 pares_df <- as.data.frame(pares)
@@ -416,7 +436,9 @@ En la tabla generada, cada fila recoge la diferencia entre el IRE medio de las n
 
 ## ¿Y si no se cumplen las condiciones para realizar el contraste F de ANOVA?
 
-En el ejemplo anterior, todas las hipótesis necesarias para confiar en los resultados del contraste *F de ANOVA* y la prueba *HSD de Tuckey* se cumplieron sin dificultad: la normalidad de las tres subpoblaciones (medida a través de las submuestras) y la homogeneidad de sus varianzas. Pero no siempre será así. Veámoslo con la segunda pregunta del *Informe Crestfall*: **¿hay diferencias significativas en la fiabilidad media de las naves según el astillero que las fabrica?**
+En el ejemplo anterior, todas las hipótesis necesarias para confiar en los resultados del contraste *F de ANOVA* y la prueba *HSD de Tukey* se cumplieron sin dificultad: la normalidad de las tres subpoblaciones (medida a través de las submuestras) y la homogeneidad de sus varianzas. Pero no siempre será así. Veámoslo con la segunda pregunta del *Informe Crestfall*: **¿hay diferencias significativas en la fiabilidad media de las naves según el astillero que las fabrica?**
+
+### El segundo estudio: el Índice de Incidencias Graves (IIG).
 
 La variable que mide la fiabilidad de cada nave es el **Índice de Incidencias Graves (IIG)**, que recoge el número de averías mayores que la nave ha registrado a lo largo de su vida operativa. La hipótesis nula del contraste afirma que el IIG medio es el mismo en los tres astilleros; la alternativa, que existe al menos una diferencia significativa.
 
@@ -497,31 +519,31 @@ Y los gráficos de densidad y caja:
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
   gdensidad2 <- ggplot(data= muestra2_so, aes(x = IIG, color = ASTILLERO, fill = ASTILLERO)) +
     geom_density(alpha = 0.3) +
-    geom_vline(data = tablamedias2, aes(xintercept = media, color = ASTILLERO), linetype = "dashed", size = 1) +
+    geom_vline(data = tablamedias2, aes(xintercept = media, color = ASTILLERO), linetype = "dashed", linewidth = 1) +
     labs(title = "Diagramas de Densidad por Grupo con Medias",
          x = "IIG (nº de averías mayores)",
          y = "Densidad") +
     theme_grey()
   
   gbox2 <- ggplot(data = muestra2_so,
-         map = (aes(y = ASTILLERO,
+         aes(y = ASTILLERO,
                     x = IIG,
                     color = ASTILLERO,
-                    fill = ASTILLERO))) +
+                    fill = ASTILLERO)) +
   geom_boxplot(outlier.shape = NA,
                alpha = 0.3) +
   stat_summary(fun = "mean",
                geom = "point",
                size = 3,
-               map = aes(col = ASTILLERO),
+               aes(col = ASTILLERO),
                alpha = 0.60) +
   geom_jitter(width = 0.1,
               size = 1,
-              map = (aes(col = ASTILLERO)),
+              aes(col = ASTILLERO),
               alpha = 0.40) +
-  labs(tittle ="Diagramas de caja por Grupo con Medias",
-       xlab = "IIG (nº de averías mayores)",
-       ylab = "Submuestras")
+  labs(title ="Diagramas de caja por Grupo con Medias",
+       x = "IIG (nº de averías mayores)",
+       y = "Astillero")
   
   gdensidad2 / gbox2
 ```
@@ -587,13 +609,13 @@ Procedemos al contraste de normalidad mediante el gráfico QQ y la prueba de *Sh
 
 A diferencia del caso del IRE, ahora la prueba de *Shapiro-Wilk* rechaza la hipótesis de normalidad para el grupo de *Selene Dynamics* (su p-valor es prácticamente nulo). Esta no-normalidad **no se debe a la presencia de *outliers*** —ya los habíamos eliminado—, sino a una característica estructural de la subpoblación: las naves de Selene son, casi todas, sistemáticamente muy fiables, por lo que el IIG se acumula de manera asimétrica en torno a 0-1 averías. Ningún proceso de limpieza de la muestra podría corregir este hecho.
 
-Contrastamos a continuación la homogeneidad de las varianzas:
+Contrastamos a continuación la homogeneidad de las varianzas, esta vez también con la prueba de Levene:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-    bartlett.test(muestra2_so$IIG ~ muestra2_so$ASTILLERO)
+    leveneTest(IIG ~ ASTILLERO, data = muestra2_so)
 ```
 
-El p-valor de la prueba de *Bartlett* es prácticamente nulo, muy por debajo de 0,05. Se rechaza, por tanto, **la hipótesis nula de homogeneidad de las varianzas de los grupos**. De nuevo, esto tiene una interpretación natural: la varianza del IIG en las naves de Selene es muy pequeña (sus valores están concentrados en torno a cero), mientras que la varianza en las naves de Arcturus es mucho mayor.
+El p-valor de la prueba de *Levene* es prácticamente nulo, muy por debajo de 0,05. Se rechaza, por tanto, **la hipótesis nula de homogeneidad de las varianzas de los grupos**. De nuevo, esto tiene una interpretación natural: la varianza del IIG en las naves de Selene es muy pequeña (sus valores están concentrados en torno a cero), mientras que la varianza en las naves de Arcturus es mucho mayor.
 
 Puesto que se rechaza la hipótesis de normalidad en una de las subpoblaciones, y puesto que tampoco puede considerarse una dispersión similar en las tres subpoblaciones (varianzas homogéneas), **los resultados de la prueba *F de ANOVA* perderían validez**, y conviene optar por **una alternativa robusta**. No obstante, **a modo ilustrativo**, podemos calcularla:
 
@@ -632,59 +654,73 @@ aov_table2 <- as.data.frame(summary_aov2[[1]])
 
 Como no se cumplen las hipótesis del ANOVA, **estos resultados no son fiables y no debemos basar nuestras conclusiones en ellos**. Es necesario recurrir a técnicas robustas, puesto que el comportamiento de la variable analizada en las subpoblaciones (grupos) no se ajusta al necesario para poder aplicar los contrastes anteriores.
 
-Una prueba robusta que puede suplir al contraste F de ANOVA es la de *Kruskal-Wallis*. En esta prueba, la hipótesis nula vuelve a ser que no existen diferencias significativas entre las medias de la variable estudiada de las diferentes subpoblaciones (representadas por las correspondientes submuestras), mientras que la hipótesis alternativa apuesta por la existencia de al menos una diferencia significativa. Para aplicar la prueba de Kruskal-Wallis en R, puede recurrirse a la función `kruskal.test()` del paquete `{pgirmess}`. Así, en nuestro ejemplo, tenemos:
+### Alternativa robusta: la prueba de Kruskal-Wallis.
+
+Cuando las condiciones del ANOVA no se cumplen, la alternativa **no paramétrica** más habitual es la **prueba de Kruskal-Wallis**. Es importante entender **qué contrasta exactamente**: en lugar de trabajar sobre las medias de los grupos, esta prueba trabaja sobre los **rangos** de los datos. Sustituye los valores originales por sus rangos globales (del 1 al *n*, ordenando toda la muestra de menor a mayor) y compara los **rangos medios** entre grupos.
+
+La hipótesis nula es que los tres grupos proceden de la **misma distribución** (o equivalentemente, que sus rangos medios son iguales); la alternativa, que al menos un grupo tiene una tendencia central sistemáticamente diferente. En la práctica se interpreta como una comparación de tendencias centrales, pero **conviene tener presente esta distinción**: si las distribuciones tienen formas muy distintas (por ejemplo, asimetrías opuestas), el rechazo de la hipótesis nula no implica necesariamente diferencias de "medias" en el sentido estricto, sino diferencias globales de posición de las distribuciones.
+
+Para aplicar la prueba en R usamos la función `kruskal.test()` del paquete `{stats}` (viene con R base, no requiere activar `{pgirmess}`):
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-#Cuando se incumplen las hipotesis de ANOVA (test robusto)
-
-library(pgirmess)
-
-Datos.K <- kruskal.test(muestra2_so$IIG ~ muestra2_so$ASTILLERO)
-Datos.K
+    # Prueba de Kruskal-Wallis
+    Datos.K <- kruskal.test(muestra2_so$IIG ~ muestra2_so$ASTILLERO)
+    Datos.K
 ```
 
-Puede comprobarse cómo el *p-valor* es muy pequeño (menor a 0,05), por lo que hemos de rechazar la hipótesis nula de medias iguales y admitir que **existen al menos dos grupos (subpoblaciones) en los que la diferencia entre el IIG medio es significativa**.
+Puede comprobarse cómo el *p-valor* es muy pequeño (menor a 0,05), por lo que **se rechaza la hipótesis nula de igualdad de distribuciones** y se admite que **al menos uno de los astilleros presenta un comportamiento sistemáticamente diferente en cuanto al IIG**.
 
-De nuevo, si se rechaza la hipótesis nula, cabe preguntarse cuáles son los grupos o subpoblaciones concretas cuyas medias del IIG son significativamente diferentes. *Kruskal* y *Wallis* desarrollaron también la versión robusta de la prueba *HSD de Tuckey*, que se incluye en `{pgirmess}`, con la función `kruskalmc()`. En el siguiente código se aplica la función, cuya solución se guarda en el objeto "Datos.kmc". El elemento de la solución "dif.com", que contiene las comparaciones entre las medias, se pasa a un *data frame* para poder ser mostrado como una tabla con `kable_rstars()`:
+### Tamaño del efecto (versión no paramétrica).
+
+Al igual que hicimos en el primer estudio, conviene reportar el tamaño del efecto para valorar la relevancia práctica. La medida análoga a η² para Kruskal-Wallis es la **eta² para KW** ($\eta^2_H$), que se calcula como $\eta^2_H = (H - k + 1)/(n - k)$, donde *H* es el estadístico de Kruskal-Wallis, *k* el número de grupos y *n* el tamaño total. Se interpreta con los mismos umbrales que η² (0,01 pequeño; 0,06 medio; 0,14 grande). El paquete `{effectsize}` la implementa:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+    # Tamaño del efecto para Kruskal-Wallis
+    rank_epsilon_squared(IIG ~ ASTILLERO, data = muestra2_so)
+```
+
+El tamaño del efecto es también claramente **grande**: el astillero explica una parte muy sustancial de la variabilidad del IIG en términos de rangos.
+
+### Comparaciones múltiples: el test de Dunn.
+
+Igual que hicimos con Tukey tras el ANOVA, ahora necesitamos identificar **entre qué pares** de astilleros existen diferencias significativas. La opción moderna y recomendada es el **test de Dunn**, que compara los rangos medios entre pares con **p-valores explícitos ajustados por comparaciones múltiples** (por defecto, corrección de Bonferroni; también admite Holm, Benjamini-Hochberg, etc.). Es la extensión natural de KW y sustituye ventajosamente a la función `kruskalmc()` del paquete `{pgirmess}`, que se limitaba a devolver un veredicto binario sin p-valores. Está implementada en la función `dunnTest()` del paquete `{FSA}`:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
-  # Comparaciones múltiples
+    # Comparaciones múltiples: test de Dunn
+    Datos.dunn <- dunnTest(IIG ~ ASTILLERO, data = muestra2_so,
+                           method = "bonferroni")
 
-  Datos.kmc <- kruskalmc(muestra2_so$IIG ~ muestra2_so$ASTILLERO)
-
-  # Convertir los resultados a un data frame
-
-  Datos.kmc.df <- as.data.frame(Datos.kmc$dif.com)
-
-  Datos.kmc.df %>%
-    kable_rstars(caption   = "Kruskal-Wallis. Múltiples diferencias",
-                 col.names = c("Diferencias medias",
-                               "Diferencias críticas",
-                               "Significación"))
+    Datos.dunn$res %>%
+      kable_rstars(caption   = "Dunn. Comparaciones múltiples (Bonferroni).",
+                   col.names = c("Comparación", "Estadístico Z",
+                                 "p-valor sin ajustar", "p-valor ajustado"))
 ```
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
-  # Comparaciones múltiples
-
-  Datos.kmc <- kruskalmc(muestra2_so$IIG ~ muestra2_so$ASTILLERO)
-
-  # Convertir los resultados a un data frame
-
-  Datos.kmc.df <- as.data.frame(Datos.kmc$dif.com)
-
-  Datos.kmc.df %>%
-    kable_rstars(
-                 col.names = c("Diferencias medias",
-                               "Diferencias críticas",
-                               "Significación"))
+    Datos.dunn <- dunnTest(IIG ~ ASTILLERO, data = muestra2_so,
+                           method = "bonferroni")
+    Datos.dunn$res %>%
+      kable_rstars(
+                   col.names = c("Comparación", "Estadístico Z",
+                                 "p-valor sin ajustar", "p-valor ajustado"))
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 8.10.** Kruskal-Wallis. Múltiples diferencias
+**Tabla 8.10.** Dunn. Comparaciones múltiples (Bonferroni).
 :::
 
 
-En la tabla generada se comprueba qué comparaciones por pares resultan estadísticamente significativas (para un 0,05 de significación). El *Informe Crestfall* concluye, así, que **las naves de *Selene Dynamics* son significativamente más fiables que las de los otros dos astilleros**, mientras que, entre *Korrigan Heavy Works* y *Arcturus Shipyards*, las diferencias de fiabilidad no resultan tan claras. Esta conclusión, obtenida mediante la técnica robusta apropiada al caso, sí puede ser incorporada con plenas garantías al informe que la AITM entregará a las empresas del sector.
+En la tabla generada se comprueba qué comparaciones por pares resultan estadísticamente significativas (para un 0,05 de significación) tras corregir por el número de comparaciones realizadas. El *Informe Crestfall* concluye, así, que **las naves de *Selene Dynamics* son significativamente más fiables que las de los otros dos astilleros**, mientras que, entre *Korrigan Heavy Works* y *Arcturus Shipyards*, las diferencias de fiabilidad no resultan tan claras. Esta conclusión, obtenida mediante la técnica robusta apropiada al caso, sí puede ser incorporada con plenas garantías al informe que la AITM entregará a las empresas del sector.
+
+## ![](figuras/star.svg){.hicon} Cierre del *Informe Crestfall*.
+
+El doctor *Oren Crestfall* firma su informe con dos conclusiones nítidas y estadísticamente respaldadas:
+
+-   En **rendimiento energético (IRE)**, las diferencias entre astilleros son estadísticamente significativas, y de **magnitud grande** (η² y ω² por encima del umbral de 0,14). **Selene Dynamics** fabrica las naves energéticamente más eficientes; **Arcturus Shipyards** se sitúa en un nivel intermedio; y **Korrigan Heavy Works** ocupa la última posición.
+
+-   En **fiabilidad (IIG)**, la comparación exigió abandonar el ANOVA por incumplimiento de sus hipótesis y recurrir a Kruskal-Wallis. La conclusión es también clara: **Selene Dynamics** fabrica naves significativamente más fiables que las de los otros dos astilleros. Entre *Korrigan* y *Arcturus* no se detectan diferencias concluyentes.
+
+El *Informe Crestfall* sale de la AITM camino de los grandes operadores del sector. En un despacho poco iluminado, un magnate llamado *Arg-us Korp* lo lee con atención, subraya la palabra **Selene** y murmura: *"Interesante..."*.
 
 ## Materiales para realizar las prácticas del capítulo.
 

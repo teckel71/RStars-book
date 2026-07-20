@@ -181,7 +181,7 @@ mercancías.</p></li>
 la primera parte del código está dedicada a la limpieza de la memoria
 (<em>Environment</em>). Además, se cargan los paquetes que harán falta para
 ejecutar el código:</p>
-<div class="sourceCode" id="cb397"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb404"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#### Analisis de Tablas de Contingencia Bidimensionales ########################</span></span>
 <span><span class="co">################################################################################</span></span>
 <span></span>
@@ -204,7 +204,7 @@ nombre <code>custom_shading()</code>, que será utilizada posteriormente para
 colorear, según la significación estadística, la representación de los
 residuos en los gráficos de asociación realizados mediante la función
 <code><a href="https://rdrr.io/pkg/vcd/man/assoc.html">assoc()</a></code> del paquete <code>{vcd}</code>:</p>
-<div class="sourceCode" id="cb398"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb405"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#### Función: cambio de color de residuos en Gráficos vcd de Asociación ########</span></span>
 <span></span>
 <span><span class="co"># Definir una función de sombreado personalizada</span></span>
@@ -227,7 +227,7 @@ sino que se compone de los nombres de los casos o empresas. Con una
 línea de código adicional transformaremos esa primera columna en el
 <em>nombre de las filas</em>, de modo que tal columna abandona su papel como
 variable. En definitiva, el código para importar los datos es:</p>
-<div class="sourceCode" id="cb399"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb406"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># DATOS</span></span>
 <span></span>
 <span>  <span class="co"># Importando datos</span></span>
@@ -241,7 +241,7 @@ values</em>. Si existen casos con datos faltantes, se eliminarán.</p>
 <p>Además, se renombran los niveles de la variable “GALAXIA” con las
 funciones <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> y <code><a href="https://dplyr.tidyverse.org/reference/case_match.html">case_match()</a></code>, ya que los nombres originales son muy
 extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
-<div class="sourceCode" id="cb400"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb407"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="co"># Seleccionando variables para el analisis.</span></span>
 <span>    <span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="va">interestelar_300</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">GALAXIA</span>,</span>
@@ -249,24 +249,24 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
 <span>             <span class="va">EFLO</span><span class="op">)</span></span>
 <span>    <span class="va">seleccion_df_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary</a></span><span class="op">(</span><span class="va">seleccion</span><span class="op">)</span></span>
 <span>    <span class="va">seleccion_df_graph</span></span></code></pre></div>
-<div id="ompynbqwlj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="heoorbkqwx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#ompynbqwlj table {
+#heoorbkqwx table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ompynbqwlj thead, #ompynbqwlj tbody, #ompynbqwlj tfoot, #ompynbqwlj tr, #ompynbqwlj td, #ompynbqwlj th {
+#heoorbkqwx thead, #heoorbkqwx tbody, #heoorbkqwx tfoot, #heoorbkqwx tr, #heoorbkqwx td, #heoorbkqwx th {
   border-style: none;
 }
 
-#ompynbqwlj p {
+#heoorbkqwx p {
   margin: 0;
   padding: 0;
 }
 
-#ompynbqwlj .gt_table {
+#heoorbkqwx .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -292,12 +292,12 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   border-left-color: #D3D3D3;
 }
 
-#ompynbqwlj .gt_caption {
+#heoorbkqwx .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ompynbqwlj .gt_title {
+#heoorbkqwx .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -309,7 +309,7 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   border-bottom-width: 0;
 }
 
-#ompynbqwlj .gt_subtitle {
+#heoorbkqwx .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -321,7 +321,7 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   border-top-width: 0;
 }
 
-#ompynbqwlj .gt_heading {
+#heoorbkqwx .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -333,13 +333,13 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   border-right-color: #D3D3D3;
 }
 
-#ompynbqwlj .gt_bottom_border {
+#heoorbkqwx .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 0px;
   border-bottom-color: #D3D3D3;
 }
 
-#ompynbqwlj .gt_col_headings {
+#heoorbkqwx .gt_col_headings {
   border-top-style: solid;
   border-top-width: 0px;
   border-top-color: #D3D3D3;
@@ -354,7 +354,7 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   border-right-color: #D3D3D3;
 }
 
-#ompynbqwlj .gt_col_heading {
+#heoorbkqwx .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -374,7 +374,7 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   overflow-x: hidden;
 }
 
-#ompynbqwlj .gt_column_spanner_outer {
+#heoorbkqwx .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -386,15 +386,15 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   padding-right: 4px;
 }
 
-#ompynbqwlj .gt_column_spanner_outer:first-child {
+#heoorbkqwx .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ompynbqwlj .gt_column_spanner_outer:last-child {
+#heoorbkqwx .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ompynbqwlj .gt_column_spanner {
+#heoorbkqwx .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -406,11 +406,11 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   width: 100%;
 }
 
-#ompynbqwlj .gt_spanner_row {
+#heoorbkqwx .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ompynbqwlj .gt_group_heading {
+#heoorbkqwx .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -436,7 +436,7 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   text-align: left;
 }
 
-#ompynbqwlj .gt_empty_group_heading {
+#heoorbkqwx .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -451,15 +451,15 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   vertical-align: middle;
 }
 
-#ompynbqwlj .gt_from_md > :first-child {
+#heoorbkqwx .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ompynbqwlj .gt_from_md > :last-child {
+#heoorbkqwx .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ompynbqwlj .gt_row {
+#heoorbkqwx .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -478,7 +478,7 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   overflow-x: hidden;
 }
 
-#ompynbqwlj .gt_stub {
+#heoorbkqwx .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -491,7 +491,7 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   padding-right: 5px;
 }
 
-#ompynbqwlj .gt_stub_row_group {
+#heoorbkqwx .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -505,15 +505,15 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   vertical-align: top;
 }
 
-#ompynbqwlj .gt_row_group_first td {
+#heoorbkqwx .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ompynbqwlj .gt_row_group_first th {
+#heoorbkqwx .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ompynbqwlj .gt_summary_row {
+#heoorbkqwx .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -523,16 +523,16 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   padding-right: 5px;
 }
 
-#ompynbqwlj .gt_first_summary_row {
+#heoorbkqwx .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ompynbqwlj .gt_first_summary_row.thick {
+#heoorbkqwx .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ompynbqwlj .gt_last_summary_row {
+#heoorbkqwx .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -542,7 +542,7 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#ompynbqwlj .gt_grand_summary_row {
+#heoorbkqwx .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -552,7 +552,7 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   padding-right: 5px;
 }
 
-#ompynbqwlj .gt_first_grand_summary_row {
+#heoorbkqwx .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -562,7 +562,7 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   border-top-color: #D3D3D3;
 }
 
-#ompynbqwlj .gt_last_grand_summary_row_top {
+#heoorbkqwx .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -572,11 +572,11 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#ompynbqwlj .gt_striped {
+#heoorbkqwx .gt_striped {
   background-color: #FAFAFA;
 }
 
-#ompynbqwlj .gt_table_body {
+#heoorbkqwx .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -585,7 +585,7 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#ompynbqwlj .gt_footnotes {
+#heoorbkqwx .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -599,7 +599,7 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   border-right-color: #D3D3D3;
 }
 
-#ompynbqwlj .gt_footnote {
+#heoorbkqwx .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -608,7 +608,7 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   padding-right: 5px;
 }
 
-#ompynbqwlj .gt_sourcenotes {
+#heoorbkqwx .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -622,7 +622,7 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   border-right-color: #D3D3D3;
 }
 
-#ompynbqwlj .gt_sourcenote {
+#heoorbkqwx .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -630,72 +630,72 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
   padding-right: 5px;
 }
 
-#ompynbqwlj .gt_left {
+#heoorbkqwx .gt_left {
   text-align: left;
 }
 
-#ompynbqwlj .gt_center {
+#heoorbkqwx .gt_center {
   text-align: center;
 }
 
-#ompynbqwlj .gt_right {
+#heoorbkqwx .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ompynbqwlj .gt_font_normal {
+#heoorbkqwx .gt_font_normal {
   font-weight: normal;
 }
 
-#ompynbqwlj .gt_font_bold {
+#heoorbkqwx .gt_font_bold {
   font-weight: bold;
 }
 
-#ompynbqwlj .gt_font_italic {
+#heoorbkqwx .gt_font_italic {
   font-style: italic;
 }
 
-#ompynbqwlj .gt_super {
+#heoorbkqwx .gt_super {
   font-size: 65%;
 }
 
-#ompynbqwlj .gt_footnote_marks {
+#heoorbkqwx .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ompynbqwlj .gt_asterisk {
+#heoorbkqwx .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ompynbqwlj .gt_indent_1 {
+#heoorbkqwx .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ompynbqwlj .gt_indent_2 {
+#heoorbkqwx .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ompynbqwlj .gt_indent_3 {
+#heoorbkqwx .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ompynbqwlj .gt_indent_4 {
+#heoorbkqwx .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ompynbqwlj .gt_indent_5 {
+#heoorbkqwx .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ompynbqwlj .katex-display {
+#heoorbkqwx .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ompynbqwlj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#heoorbkqwx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -770,7 +770,7 @@ ANTIGUA, MADURA and RENOVADA
 <p><strong>Tabla 11.1</strong></p>
 </div>
 <p>Para el diagnóstico y, en su caso, filtrado de los <em>missing values</em>, aplicamos la función auxiliar <code><a href="https://rdrr.io/pkg/MATrstars/man/explora_na.html">explora_na()</a></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a> que ya se presentó en el capítulo 5. Como el <em>data frame</em> “seleccion” contiene únicamente las tres variables del análisis, no es necesario especificar el argumento <code>variables</code>. A continuación, con <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> y <code><a href="https://dplyr.tidyverse.org/reference/case_match.html">case_match()</a></code> se recodifican los niveles de GALAXIA:</p>
-<div class="sourceCode" id="cb401"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb408"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="co"># Diagnóstico y filtrado de missing values.</span></span>
 <span>    <span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/explora_na.html">explora_na</a></span><span class="op">(</span></span>
 <span>      <span class="va">seleccion</span>,</span>
@@ -828,7 +828,7 @@ construye una tabla de contingencia mediante la formulación de una tabla
 de doble entrada. En nuestro ejemplo, a la tabla de contingencia la
 hemos denominado, por ejemplo, “tab.GA.FJ”. Luego, la hemos presentado
 con un formato de tabla elaborado con la función <code><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars()</a></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a> presentado en el capítulo 5, complementada con <code><a href="https://rdrr.io/pkg/kableExtra/man/add_header_above.html">add_header_above()</a></code> y <code><a href="https://rdrr.io/pkg/kableExtra/man/column_spec.html">column_spec()</a></code> de <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a> para el encabezado agrupado y la negrita de la primera columna:</p>
-<div class="sourceCode" id="cb402"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb409"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># TABLA DE CONTINGENCIA GALAXIA FJUR</span></span>
 <span></span>
 <span> <span class="va">tab.GA.FJ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">seleccion</span>, <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">GALAXIA</span>, <span class="va">FJUR</span><span class="op">)</span><span class="op">)</span></span>
@@ -1002,7 +1002,7 @@ un análisis formal de asociación.</p>
 <code><a href="https://rdrr.io/pkg/vcd/man/mosaic.html">mosaic()</a></code> de la librería <code>{vcd}</code>, con lo que se percibirá mejor la
 magnitud de las frecuencias conjuntas (celdas de la tabla). A mayor
 frecuencia, mayor área del rectángulo correspondiente:</p>
-<div class="sourceCode" id="cb403"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb410"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Representación gráfica de la tabla con mosaico (paquete vcd)</span></span>
 <span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/vcd/man/mosaic.html">mosaic</a></span><span class="op">(</span><span class="va">tab.GA.FJ</span>,</span>
@@ -1033,7 +1033,7 @@ del título y subtítulo. En conjunto, el código genera un mosaico claro,
 bien rotulado y con un sombreado estético basado en la información de la
 propia tabla.</p>
 <p>En nuestro caso, el resultado es:</p>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-376-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-379-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.2</strong></p>
 </div>
@@ -1066,7 +1066,7 @@ títulos, ejes claros y etiquetas informativas. Finalmente, la expresión
 y <code><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html">plot_annotation()</a></code> añade un título general, logrando una presentación
 conjunta y coherente de las distribuciones marginales de las dos
 variables:</p>
-<div class="sourceCode" id="cb404"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb411"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>   <span class="co"># Representando frecuencias de categorias en factores</span></span>
 <span></span>
 <span>    <span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">seleccion</span>, mapping<span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span> <span class="va">GALAXIA</span>, fill <span class="op">=</span> <span class="va">FJUR</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1083,7 +1083,7 @@ variables:</p>
 <span></span>
 <span>    <span class="op">(</span><span class="va">g1</span> <span class="op">+</span> <span class="va">g2</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Frecuencias Marginales."</span>,</span>
 <span>                  theme <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-377-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-380-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.3</strong></p>
 </div>
@@ -1162,7 +1162,7 @@ distribución conjunta difiere significativamente de la esperada. El
 siguiente código ejecuta el test y extrae los <strong>residuos estandarizados
 ajustados</strong>, útiles para identificar qué celdas contribuyen más a la
 posible asociación detectada:</p>
-<div class="sourceCode" id="cb405"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb412"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Prueba_asoc_Pearson</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/chisq.test.html">chisq.test</a></span><span class="op">(</span><span class="va">tab.GA.FJ</span><span class="op">)</span></span>
 <span><span class="va">Prueba_asoc_Pearson</span></span></code></pre></div>
 <pre><code>## 
@@ -1170,7 +1170,7 @@ posible asociación detectada:</p>
 ## 
 ## data:  tab.GA.FJ
 ## X-squared = 18.209, df = 8, p-value = 0.01971</code></pre>
-<div class="sourceCode" id="cb407"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb414"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Residuos_std</span> <span class="op">&lt;-</span> <span class="va">Prueba_asoc_Pearson</span><span class="op">$</span><span class="va">stdres</span></span></code></pre></div>
 <p>El resultado de la prueba ofrece un estadístico (<span class="math inline">\(\chi^2\)</span> = 18.209) con
 8 grados de libertad y un <strong>p-valor de 0.0197</strong>, inferior al nivel
@@ -1190,7 +1190,7 @@ mediante un esquema de colores personalizado. Para ello, utilizamos la
 función <code>custom_shading()</code>, definida previamente, que se aplica mediante
 el argumento <code>gp=</code> para asignar a cada barra un color en función de su
 residuo.</p>
-<div class="sourceCode" id="cb408"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb415"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/vcd/man/assoc.html">assoc</a></span><span class="op">(</span><span class="va">tab.GA.FJ</span>,</span>
 <span>      main <span class="op">=</span> <span class="st">"Galaxia y Forma Jurídica"</span>,</span>
 <span>      sub <span class="op">=</span> <span class="st">"Residuos de Pearson Tipificados. Naranja: significativos con sig. = 0.05"</span>,</span>
@@ -1200,7 +1200,7 @@ residuo.</p>
 <span>                           gp_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>      main_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">16</span><span class="op">)</span>,</span>
 <span>      sub_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-379-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-382-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.4</strong></p>
 </div>
@@ -1378,7 +1378,7 @@ en CG y SAG. Este patrón paralelo entre filas sugiere que el estado de
 la flota no depende de la forma jurídica, anticipando un escenario de
 <strong>independencia</strong> entre ambas variables.</p>
 <p><strong>2. Visualización en <em>mosaico</em> de la tabla.</strong></p>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-381-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-384-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.5</strong></p>
 </div>
@@ -1393,7 +1393,7 @@ apenas varía entre tipos de empresa. Visualmente, este gráfico refuerza
 la idea de que <strong>no existe una relación clara entre FJUR y EFLO</strong>,
 anticipando un escenario de independencia entre ambas variables.</p>
 <p><strong>3. Frecuencias marginales.</strong></p>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-382-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-385-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.6</strong></p>
 </div>
@@ -1426,7 +1426,7 @@ por el azar, y no existe evidencia estadística de que ciertos tipos de
 empresa presenten flotas más antiguas, maduras o renovadas en mayor
 proporción que otros.</p>
 <p><strong>5. Gráfico de asociación (residuos ajustados).</strong></p>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-384-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-387-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.7</strong></p>
 </div>
@@ -1580,7 +1580,7 @@ mercancías.</p></li>
 la primera parte del código está dedicada a la limpieza de la memoria
 (<em>Environment</em>). Además, se cargan los paquetes que harán falta para
 ejecutar el código:</p>
-<div class="sourceCode" id="cb410"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb417"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#### Modelos log-lineales para Tablas de Contingencia Multidimensionales #######</span></span>
 <span><span class="co">################################################################################</span></span>
 <span></span>
@@ -1656,7 +1656,7 @@ instrucción <code>gt_plt_summary(seleccion)</code> genera un resumen visual rá
 del contenido de estas variables, permitiendo comprobar de forma
 inmediata su estructura y distribución antes de continuar con el
 análisis:</p>
-<div class="sourceCode" id="cb411"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb418"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># DATOS</span></span>
 <span></span>
 <span><span class="co">## Importando datos</span></span>
@@ -1672,24 +1672,24 @@ análisis:</p>
 <span>                <span class="va">EFLO</span><span class="op">)</span></span>
 <span><span class="va">seleccion_df_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary</a></span><span class="op">(</span><span class="va">seleccion</span><span class="op">)</span></span>
 <span><span class="va">seleccion_df_graph</span></span></code></pre></div>
-<div id="vrwmayinhb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="uftoybwoah" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#vrwmayinhb table {
+#uftoybwoah table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#vrwmayinhb thead, #vrwmayinhb tbody, #vrwmayinhb tfoot, #vrwmayinhb tr, #vrwmayinhb td, #vrwmayinhb th {
+#uftoybwoah thead, #uftoybwoah tbody, #uftoybwoah tfoot, #uftoybwoah tr, #uftoybwoah td, #uftoybwoah th {
   border-style: none;
 }
 
-#vrwmayinhb p {
+#uftoybwoah p {
   margin: 0;
   padding: 0;
 }
 
-#vrwmayinhb .gt_table {
+#uftoybwoah .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1715,12 +1715,12 @@ análisis:</p>
   border-left-color: #D3D3D3;
 }
 
-#vrwmayinhb .gt_caption {
+#uftoybwoah .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#vrwmayinhb .gt_title {
+#uftoybwoah .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -1732,7 +1732,7 @@ análisis:</p>
   border-bottom-width: 0;
 }
 
-#vrwmayinhb .gt_subtitle {
+#uftoybwoah .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1744,7 +1744,7 @@ análisis:</p>
   border-top-width: 0;
 }
 
-#vrwmayinhb .gt_heading {
+#uftoybwoah .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -1756,13 +1756,13 @@ análisis:</p>
   border-right-color: #D3D3D3;
 }
 
-#vrwmayinhb .gt_bottom_border {
+#uftoybwoah .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 0px;
   border-bottom-color: #D3D3D3;
 }
 
-#vrwmayinhb .gt_col_headings {
+#uftoybwoah .gt_col_headings {
   border-top-style: solid;
   border-top-width: 0px;
   border-top-color: #D3D3D3;
@@ -1777,7 +1777,7 @@ análisis:</p>
   border-right-color: #D3D3D3;
 }
 
-#vrwmayinhb .gt_col_heading {
+#uftoybwoah .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -1797,7 +1797,7 @@ análisis:</p>
   overflow-x: hidden;
 }
 
-#vrwmayinhb .gt_column_spanner_outer {
+#uftoybwoah .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -1809,15 +1809,15 @@ análisis:</p>
   padding-right: 4px;
 }
 
-#vrwmayinhb .gt_column_spanner_outer:first-child {
+#uftoybwoah .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vrwmayinhb .gt_column_spanner_outer:last-child {
+#uftoybwoah .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vrwmayinhb .gt_column_spanner {
+#uftoybwoah .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1829,11 +1829,11 @@ análisis:</p>
   width: 100%;
 }
 
-#vrwmayinhb .gt_spanner_row {
+#uftoybwoah .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#vrwmayinhb .gt_group_heading {
+#uftoybwoah .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1859,7 +1859,7 @@ análisis:</p>
   text-align: left;
 }
 
-#vrwmayinhb .gt_empty_group_heading {
+#uftoybwoah .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1874,15 +1874,15 @@ análisis:</p>
   vertical-align: middle;
 }
 
-#vrwmayinhb .gt_from_md > :first-child {
+#uftoybwoah .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vrwmayinhb .gt_from_md > :last-child {
+#uftoybwoah .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vrwmayinhb .gt_row {
+#uftoybwoah .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -1901,7 +1901,7 @@ análisis:</p>
   overflow-x: hidden;
 }
 
-#vrwmayinhb .gt_stub {
+#uftoybwoah .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -1914,7 +1914,7 @@ análisis:</p>
   padding-right: 5px;
 }
 
-#vrwmayinhb .gt_stub_row_group {
+#uftoybwoah .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1928,15 +1928,15 @@ análisis:</p>
   vertical-align: top;
 }
 
-#vrwmayinhb .gt_row_group_first td {
+#uftoybwoah .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#vrwmayinhb .gt_row_group_first th {
+#uftoybwoah .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#vrwmayinhb .gt_summary_row {
+#uftoybwoah .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1946,16 +1946,16 @@ análisis:</p>
   padding-right: 5px;
 }
 
-#vrwmayinhb .gt_first_summary_row {
+#uftoybwoah .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#vrwmayinhb .gt_first_summary_row.thick {
+#uftoybwoah .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#vrwmayinhb .gt_last_summary_row {
+#uftoybwoah .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1965,7 +1965,7 @@ análisis:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#vrwmayinhb .gt_grand_summary_row {
+#uftoybwoah .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1975,7 +1975,7 @@ análisis:</p>
   padding-right: 5px;
 }
 
-#vrwmayinhb .gt_first_grand_summary_row {
+#uftoybwoah .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1985,7 +1985,7 @@ análisis:</p>
   border-top-color: #D3D3D3;
 }
 
-#vrwmayinhb .gt_last_grand_summary_row_top {
+#uftoybwoah .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1995,11 +1995,11 @@ análisis:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#vrwmayinhb .gt_striped {
+#uftoybwoah .gt_striped {
   background-color: #FAFAFA;
 }
 
-#vrwmayinhb .gt_table_body {
+#uftoybwoah .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2008,7 +2008,7 @@ análisis:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#vrwmayinhb .gt_footnotes {
+#uftoybwoah .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2022,7 +2022,7 @@ análisis:</p>
   border-right-color: #D3D3D3;
 }
 
-#vrwmayinhb .gt_footnote {
+#uftoybwoah .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2031,7 +2031,7 @@ análisis:</p>
   padding-right: 5px;
 }
 
-#vrwmayinhb .gt_sourcenotes {
+#uftoybwoah .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2045,7 +2045,7 @@ análisis:</p>
   border-right-color: #D3D3D3;
 }
 
-#vrwmayinhb .gt_sourcenote {
+#uftoybwoah .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2053,72 +2053,72 @@ análisis:</p>
   padding-right: 5px;
 }
 
-#vrwmayinhb .gt_left {
+#uftoybwoah .gt_left {
   text-align: left;
 }
 
-#vrwmayinhb .gt_center {
+#uftoybwoah .gt_center {
   text-align: center;
 }
 
-#vrwmayinhb .gt_right {
+#uftoybwoah .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vrwmayinhb .gt_font_normal {
+#uftoybwoah .gt_font_normal {
   font-weight: normal;
 }
 
-#vrwmayinhb .gt_font_bold {
+#uftoybwoah .gt_font_bold {
   font-weight: bold;
 }
 
-#vrwmayinhb .gt_font_italic {
+#uftoybwoah .gt_font_italic {
   font-style: italic;
 }
 
-#vrwmayinhb .gt_super {
+#uftoybwoah .gt_super {
   font-size: 65%;
 }
 
-#vrwmayinhb .gt_footnote_marks {
+#uftoybwoah .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#vrwmayinhb .gt_asterisk {
+#uftoybwoah .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#vrwmayinhb .gt_indent_1 {
+#uftoybwoah .gt_indent_1 {
   text-indent: 5px;
 }
 
-#vrwmayinhb .gt_indent_2 {
+#uftoybwoah .gt_indent_2 {
   text-indent: 10px;
 }
 
-#vrwmayinhb .gt_indent_3 {
+#uftoybwoah .gt_indent_3 {
   text-indent: 15px;
 }
 
-#vrwmayinhb .gt_indent_4 {
+#uftoybwoah .gt_indent_4 {
   text-indent: 20px;
 }
 
-#vrwmayinhb .gt_indent_5 {
+#uftoybwoah .gt_indent_5 {
   text-indent: 25px;
 }
 
-#vrwmayinhb .katex-display {
+#uftoybwoah .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#vrwmayinhb div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#uftoybwoah div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2218,7 +2218,7 @@ cada una como un atributo categórico. Este flujo prepara un conjunto de
 datos consistente, depurado y listo para construir la tabla de
 contingencia tridimensional y avanzar hacia el ajuste de los modelos
 log-lineales.</p>
-<div class="sourceCode" id="cb412"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb419"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Diagnóstico y filtrado de missing values.</span></span>
 <span><span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/explora_na.html">explora_na</a></span><span class="op">(</span></span>
 <span>  <span class="va">seleccion</span>,</span>
@@ -2264,7 +2264,7 @@ procedimiento <code><a href="https://rdrr.io/r/stats/step.html">step()</a></code
 aunque sus coeficientes contengan valores no finitos, porque opera
 sobre la <strong>desvianza</strong> (que es 0 por construcción para el saturado, un
 valor perfectamente finito) y no sobre los coeficientes.</p>
-<div class="sourceCode" id="cb413"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb420"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Construir tabla original</span></span>
 <span><span class="va">tab0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/xtabs.html">xtabs</a></span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">+</span> <span class="va">FJUR</span> <span class="op">+</span> <span class="va">EFLO</span>, data <span class="op">=</span> <span class="va">seleccion</span><span class="op">)</span></span>
 <span></span>
@@ -2338,12 +2338,12 @@ Los argumentos <code>main_gp</code> y <code>sub_gp</code> ajustan el tamaño de 
 principal y secundario, de modo que el gráfico sea claro y equilibrado.
 En conjunto, esta visualización facilita identificar relaciones
 estructurales antes de pasar al ajuste de los modelos log-lineales.</p>
-<div class="sourceCode" id="cb414"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb421"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Mostrar tabla</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/pander/man/pander.html">pander</a></span><span class="op">(</span><span class="st">"Tabla de contingencia GALAXIA × FJUR × EFLO"</span><span class="op">)</span></span></code></pre></div>
 <p>Tabla de contingencia GALAXIA × FJUR × EFLO</p>
-<div class="sourceCode" id="cb415"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb422"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/pander/man/pander.html">pander</a></span><span class="op">(</span><span class="va">tab0</span>, style<span class="op">=</span> <span class="st">"rmarkdown"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-sm"><tbody>
 <tr class="odd">
@@ -2486,7 +2486,7 @@ estructurales antes de pasar al ajuste de los modelos log-lineales.</p>
 <div style="text-align: center;">
 <p><strong>Tabla 11.6</strong></p>
 </div>
-<div class="sourceCode" id="cb416"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb423"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Representación gráfica de la tabla con mosaico</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/vcd/man/mosaic.html">mosaic</a></span><span class="op">(</span><span class="va">tab0</span>,</span>
 <span>       main <span class="op">=</span> <span class="st">"Galaxia, Forma Jurídica y Antigüedad media de la flota"</span>,</span>
@@ -2496,7 +2496,7 @@ estructurales antes de pasar al ajuste de los modelos log-lineales.</p>
 <span>                            gp_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>       main_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">16</span><span class="op">)</span>,</span>
 <span>       sub_gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-392-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-395-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.8</strong></p>
 </div>
@@ -2576,14 +2576,14 @@ GALAXIA, EFLO y FJUR). El siguiente código ajusta este modelo a la tabla
 <code>tab0</code> y captura la lista devuelta por <code><a href="https://rdrr.io/pkg/MATrstars/man/generar_solucion.html">generar_solucion()</a></code> en el
 objeto <code>solucion_modelo_indep</code>, además de dibujar el mosaico de residuos
 correspondiente:</p>
-<div class="sourceCode" id="cb417"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb424"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Modelo de independencia (solo efectos principales, sin interacciones)</span></span>
 <span><span class="va">modelo_indep</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/loglm.html">loglm</a></span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">+</span> <span class="va">EFLO</span> <span class="op">+</span> <span class="va">FJUR</span>,</span>
 <span>                            data   <span class="op">=</span> <span class="va">tab0</span>,</span>
 <span>                            fitted <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">solucion_modelo_indep</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/generar_solucion.html">generar_solucion</a></span><span class="op">(</span><span class="va">modelo_indep</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-393-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-396-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.9</strong></p>
 </div>
@@ -2621,7 +2621,7 @@ conjunta de la distribución de las empresas intergalácticas.</p>
 acceder al primer elemento de la lista solucion_modelo_indep, que
 contiene las pruebas de validez del modelo (ratio de verosimilitud y
 chi-cuadrado de Pearson), mediante:</p>
-<div class="sourceCode" id="cb418"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb425"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_indep</span><span class="op">$</span><span class="va">Informacion</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -2690,7 +2690,7 @@ relevantes que justifican avanzar hacia modelos con interacciones.</strong></p>
 parámetros o <strong>coeficientes estimados</strong> del modelo, que en este caso
 corresponden solo a efectos directos o principales. Para obtener la
 tabla ejecutaremos:</p>
-<div class="sourceCode" id="cb419"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb426"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_indep</span><span class="op">$</span><span class="va">Coeficientes</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -3005,7 +3005,7 @@ atributos y sus interacciones son los más importantes (modelo
 <em>redundante</em>).</p>
 <p>Para su estimación, simplemente se sustituyen los signos “+” del modelo
 anterior por los signos “*”. El modelo se denominará “modelo_sat”:</p>
-<div class="sourceCode" id="cb420"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb427"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Modelo Saturado.</span></span>
 <span></span>
 <span><span class="va">modelo_sat</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/loglm.html">loglm</a></span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">*</span> <span class="va">EFLO</span> <span class="op">*</span> <span class="va">FJUR</span>,</span>
@@ -3013,14 +3013,14 @@ anterior por los signos “*”. El modelo se denominará “modelo_sat”:</p>
 <span>                          fitted <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">solucion_modelo_sat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/generar_solucion.html">generar_solucion</a></span><span class="op">(</span><span class="va">modelo_sat</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-396-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-399-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.10</strong></p>
 </div>
 <p>El gráfico de mosaico muestra que, obviamente, todos los residuos son 0,
 ya que coinciden las frecuencias observadas y las estimadas por el
 modelo. En cuanto a la tabla de validación:</p>
-<div class="sourceCode" id="cb421"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb428"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_sat</span><span class="op">$</span><span class="va">Informacion</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -3079,7 +3079,7 @@ punto de vista del <em>análisis estructural</em>, el modelo saturado no es muy
 los que son poco importantes. Por último, mostraremos la tabla con los
 coeficientes estimados, correspondientes tanto a los efectos principales
 o directos como a las interacciones:</p>
-<div class="sourceCode" id="cb422"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb429"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_sat</span><span class="op">$</span><span class="va">Coeficientes</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -3938,7 +3938,7 @@ número máximo de iteraciones (<code>steps</code>, con valor por defecto <code>
 óptima según el AIC, más simple que el modelo saturado pero
 suficientemente expresiva para captar los patrones esenciales de
 asociación entre los factores:</p>
-<div class="sourceCode" id="cb423"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb430"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Elección del modelo final.</span></span>
 <span></span>
 <span><span class="va">modelo_def</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/step_loglm_backward.html">step_loglm_backward</a></span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">*</span> <span class="va">EFLO</span> <span class="op">*</span> <span class="va">FJUR</span>,</span>
@@ -3985,9 +3985,9 @@ interacciones triples entre los tres factores.</p>
 <p>Luego, se pasa el modelo a la función <code>generar_solución()</code> para obtener
 los resultados (el gráfico de mosaico y las dos tablas). El gráfico
 obtenido es:</p>
-<div class="sourceCode" id="cb425"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb432"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_def</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/generar_solucion.html">generar_solucion</a></span><span class="op">(</span><span class="va">modelo_def</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-400-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-403-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.11</strong></p>
 </div>
@@ -4014,7 +4014,7 @@ modelo final proporciona una representación parsimoniosa y
 estadísticamente coherente de las dependencias esenciales entre los
 factores analizados.</p>
 <p>En cuanto a la tabla de validación:</p>
-<div class="sourceCode" id="cb426"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb433"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_def</span><span class="op">$</span><span class="va">Informacion</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -4079,7 +4079,7 @@ concluimos que <strong>no es necesario añadir interacciones adicionales</strong
 que la especificación elegida representa correctamente la estructura de
 dependencias presente en la tabla de contingencia tridimensional.</p>
 <p>En lo que se refiere a los coeficientes estimados del modelo:</p>
-<div class="sourceCode" id="cb427"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb434"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_def</span><span class="op">$</span><span class="va">Coeficientes</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -4461,7 +4461,7 @@ conocido de los apartados anteriores.</p></li>
 la primera parte del código está dedicada a la limpieza de la memoria
 (<em>Environment</em>). Además, se cargan los paquetes que harán falta para
 ejecutar el código:</p>
-<div class="sourceCode" id="cb428"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb435"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#### Análisis de Correspondencias Simple. Universo R-Stars ####################</span></span>
 <span><span class="co">################################################################################</span></span>
 <span></span>
@@ -4487,7 +4487,7 @@ categóricas</strong> que intervendrán en el análisis: GALAXIA y FJUR. Se
 comprueban los posibles <em>missing values</em> con <code><a href="https://docs.ropensci.org/visdat/reference/vis_miss.html">vis_miss()</a></code>, y se
 recodifican los nombres de las galaxias para facilitar la lectura de
 los gráficos:</p>
-<div class="sourceCode" id="cb429"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb436"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># DATOS</span></span>
 <span></span>
 <span>  <span class="co"># Importando datos</span></span>
@@ -4502,24 +4502,24 @@ los gráficos:</p>
 <span>                    <span class="va">FJUR</span><span class="op">)</span></span>
 <span>    <span class="va">seleccion_df_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary</a></span><span class="op">(</span><span class="va">seleccion</span><span class="op">)</span></span>
 <span>    <span class="va">seleccion_df_graph</span></span></code></pre></div>
-<div id="yyxxxuwidp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="nitwlhmkgy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#yyxxxuwidp table {
+#nitwlhmkgy table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#yyxxxuwidp thead, #yyxxxuwidp tbody, #yyxxxuwidp tfoot, #yyxxxuwidp tr, #yyxxxuwidp td, #yyxxxuwidp th {
+#nitwlhmkgy thead, #nitwlhmkgy tbody, #nitwlhmkgy tfoot, #nitwlhmkgy tr, #nitwlhmkgy td, #nitwlhmkgy th {
   border-style: none;
 }
 
-#yyxxxuwidp p {
+#nitwlhmkgy p {
   margin: 0;
   padding: 0;
 }
 
-#yyxxxuwidp .gt_table {
+#nitwlhmkgy .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -4545,12 +4545,12 @@ los gráficos:</p>
   border-left-color: #D3D3D3;
 }
 
-#yyxxxuwidp .gt_caption {
+#nitwlhmkgy .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#yyxxxuwidp .gt_title {
+#nitwlhmkgy .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -4562,7 +4562,7 @@ los gráficos:</p>
   border-bottom-width: 0;
 }
 
-#yyxxxuwidp .gt_subtitle {
+#nitwlhmkgy .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -4574,7 +4574,7 @@ los gráficos:</p>
   border-top-width: 0;
 }
 
-#yyxxxuwidp .gt_heading {
+#nitwlhmkgy .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -4586,13 +4586,13 @@ los gráficos:</p>
   border-right-color: #D3D3D3;
 }
 
-#yyxxxuwidp .gt_bottom_border {
+#nitwlhmkgy .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 0px;
   border-bottom-color: #D3D3D3;
 }
 
-#yyxxxuwidp .gt_col_headings {
+#nitwlhmkgy .gt_col_headings {
   border-top-style: solid;
   border-top-width: 0px;
   border-top-color: #D3D3D3;
@@ -4607,7 +4607,7 @@ los gráficos:</p>
   border-right-color: #D3D3D3;
 }
 
-#yyxxxuwidp .gt_col_heading {
+#nitwlhmkgy .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -4627,7 +4627,7 @@ los gráficos:</p>
   overflow-x: hidden;
 }
 
-#yyxxxuwidp .gt_column_spanner_outer {
+#nitwlhmkgy .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -4639,15 +4639,15 @@ los gráficos:</p>
   padding-right: 4px;
 }
 
-#yyxxxuwidp .gt_column_spanner_outer:first-child {
+#nitwlhmkgy .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#yyxxxuwidp .gt_column_spanner_outer:last-child {
+#nitwlhmkgy .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#yyxxxuwidp .gt_column_spanner {
+#nitwlhmkgy .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -4659,11 +4659,11 @@ los gráficos:</p>
   width: 100%;
 }
 
-#yyxxxuwidp .gt_spanner_row {
+#nitwlhmkgy .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#yyxxxuwidp .gt_group_heading {
+#nitwlhmkgy .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4689,7 +4689,7 @@ los gráficos:</p>
   text-align: left;
 }
 
-#yyxxxuwidp .gt_empty_group_heading {
+#nitwlhmkgy .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -4704,15 +4704,15 @@ los gráficos:</p>
   vertical-align: middle;
 }
 
-#yyxxxuwidp .gt_from_md > :first-child {
+#nitwlhmkgy .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#yyxxxuwidp .gt_from_md > :last-child {
+#nitwlhmkgy .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#yyxxxuwidp .gt_row {
+#nitwlhmkgy .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -4731,7 +4731,7 @@ los gráficos:</p>
   overflow-x: hidden;
 }
 
-#yyxxxuwidp .gt_stub {
+#nitwlhmkgy .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -4744,7 +4744,7 @@ los gráficos:</p>
   padding-right: 5px;
 }
 
-#yyxxxuwidp .gt_stub_row_group {
+#nitwlhmkgy .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4758,15 +4758,15 @@ los gráficos:</p>
   vertical-align: top;
 }
 
-#yyxxxuwidp .gt_row_group_first td {
+#nitwlhmkgy .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#yyxxxuwidp .gt_row_group_first th {
+#nitwlhmkgy .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#yyxxxuwidp .gt_summary_row {
+#nitwlhmkgy .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4776,16 +4776,16 @@ los gráficos:</p>
   padding-right: 5px;
 }
 
-#yyxxxuwidp .gt_first_summary_row {
+#nitwlhmkgy .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#yyxxxuwidp .gt_first_summary_row.thick {
+#nitwlhmkgy .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#yyxxxuwidp .gt_last_summary_row {
+#nitwlhmkgy .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4795,7 +4795,7 @@ los gráficos:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#yyxxxuwidp .gt_grand_summary_row {
+#nitwlhmkgy .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4805,7 +4805,7 @@ los gráficos:</p>
   padding-right: 5px;
 }
 
-#yyxxxuwidp .gt_first_grand_summary_row {
+#nitwlhmkgy .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4815,7 +4815,7 @@ los gráficos:</p>
   border-top-color: #D3D3D3;
 }
 
-#yyxxxuwidp .gt_last_grand_summary_row_top {
+#nitwlhmkgy .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4825,11 +4825,11 @@ los gráficos:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#yyxxxuwidp .gt_striped {
+#nitwlhmkgy .gt_striped {
   background-color: #FAFAFA;
 }
 
-#yyxxxuwidp .gt_table_body {
+#nitwlhmkgy .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4838,7 +4838,7 @@ los gráficos:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#yyxxxuwidp .gt_footnotes {
+#nitwlhmkgy .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4852,7 +4852,7 @@ los gráficos:</p>
   border-right-color: #D3D3D3;
 }
 
-#yyxxxuwidp .gt_footnote {
+#nitwlhmkgy .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -4861,7 +4861,7 @@ los gráficos:</p>
   padding-right: 5px;
 }
 
-#yyxxxuwidp .gt_sourcenotes {
+#nitwlhmkgy .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4875,7 +4875,7 @@ los gráficos:</p>
   border-right-color: #D3D3D3;
 }
 
-#yyxxxuwidp .gt_sourcenote {
+#nitwlhmkgy .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -4883,72 +4883,72 @@ los gráficos:</p>
   padding-right: 5px;
 }
 
-#yyxxxuwidp .gt_left {
+#nitwlhmkgy .gt_left {
   text-align: left;
 }
 
-#yyxxxuwidp .gt_center {
+#nitwlhmkgy .gt_center {
   text-align: center;
 }
 
-#yyxxxuwidp .gt_right {
+#nitwlhmkgy .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#yyxxxuwidp .gt_font_normal {
+#nitwlhmkgy .gt_font_normal {
   font-weight: normal;
 }
 
-#yyxxxuwidp .gt_font_bold {
+#nitwlhmkgy .gt_font_bold {
   font-weight: bold;
 }
 
-#yyxxxuwidp .gt_font_italic {
+#nitwlhmkgy .gt_font_italic {
   font-style: italic;
 }
 
-#yyxxxuwidp .gt_super {
+#nitwlhmkgy .gt_super {
   font-size: 65%;
 }
 
-#yyxxxuwidp .gt_footnote_marks {
+#nitwlhmkgy .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#yyxxxuwidp .gt_asterisk {
+#nitwlhmkgy .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#yyxxxuwidp .gt_indent_1 {
+#nitwlhmkgy .gt_indent_1 {
   text-indent: 5px;
 }
 
-#yyxxxuwidp .gt_indent_2 {
+#nitwlhmkgy .gt_indent_2 {
   text-indent: 10px;
 }
 
-#yyxxxuwidp .gt_indent_3 {
+#nitwlhmkgy .gt_indent_3 {
   text-indent: 15px;
 }
 
-#yyxxxuwidp .gt_indent_4 {
+#nitwlhmkgy .gt_indent_4 {
   text-indent: 20px;
 }
 
-#yyxxxuwidp .gt_indent_5 {
+#nitwlhmkgy .gt_indent_5 {
   text-indent: 25px;
 }
 
-#yyxxxuwidp .katex-display {
+#nitwlhmkgy .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#yyxxxuwidp div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#nitwlhmkgy div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -5011,7 +5011,7 @@ SLG, SAG and CG
 las dos variables categóricas necesarias para el análisis de
 correspondencias simple: <strong>GALAXIA</strong> (5 categorías) y <strong>FJUR</strong> (3
 categorías). Ambas aparecen completas, sin valores perdidos:</p>
-<div class="sourceCode" id="cb430"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb437"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Diagnóstico y filtrado de missing values.</span></span>
 <span></span>
 <span>    <span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/explora_na.html">explora_na</a></span><span class="op">(</span></span>
@@ -5034,7 +5034,7 @@ categorías). Ambas aparecen completas, sin valores perdidos:</p>
 <p>Confirmado que no hay valores perdidos y renombradas las categorías de
 GALAXIA, construimos la <strong>tabla de contingencia</strong> de partida, sobre la
 cual se aplicará el análisis:</p>
-<div class="sourceCode" id="cb431"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb438"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># TABLA DE CONTINGENCIA (GALAXIA X FJUR)</span></span>
 <span></span>
 <span>  <span class="va">tab.GA.FJ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">seleccion</span>, <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">GALAXIA</span>, <span class="va">FJUR</span><span class="op">)</span><span class="op">)</span></span>
@@ -5201,7 +5201,7 @@ recoge la información de las <strong>dimensiones</strong> (autovalores, porcent
 de inercia principal y porcentaje acumulado), la segunda desglosa la
 información de las <strong>filas</strong> (categorías de GALAXIA) y la tercera
 desglosa la información de las <strong>columnas</strong> (categorías de FJUR):</p>
-<div class="sourceCode" id="cb432"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb439"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ANALISIS DE CORRESPONDENCIAS SIMPLE</span></span>
 <span></span>
 <span>  <span class="co"># Cálculo del análisis con la función CA() de {FactoMineR}</span></span>
@@ -5235,7 +5235,7 @@ esa dimensión; valores bajos indican una representación pobre. La
 suma del coseno cuadrado en todas las dimensiones no triviales es 1.</p></li>
 </ul>
 <p>El código para construir las tres tablas es:</p>
-<div class="sourceCode" id="cb433"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb440"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Tabla 1: Inercia principal por dimensión</span></span>
 <span></span>
 <span>    <span class="va">TableEigenCA</span> <span class="op">&lt;-</span> <span class="va">EigenCA</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -5293,7 +5293,7 @@ suma del coseno cuadrado en todas las dimensiones no triviales es 1.</p></li>
 <span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">TableCols</span></span></code></pre></div>
 <p>La primera tabla resume la <strong>descomposición de la inercia</strong> entre las
 dimensiones extraídas:</p>
-<div class="sourceCode" id="cb434"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb441"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -5367,7 +5367,7 @@ respecto a sus asociaciones.</p>
 <p>La segunda tabla, correspondiente al factor GALAXIA, permite
 identificar qué categorías contribuyen más a la inercia y qué tan bien
 están representadas en cada dimensión:</p>
-<div class="sourceCode" id="cb435"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb442"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -5509,7 +5509,7 @@ respectivamente), mientras que <strong>Andrómeda</strong>, <strong>Triángulo</
 Láctea</strong> encuentran mejor representación en la <strong>Dimensión 2</strong> (cos²
 entre 0.68 y 0.86 en el segundo eje).</p>
 <p>La tercera tabla recoge la información análoga para el factor FJUR:</p>
-<div class="sourceCode" id="cb436"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb443"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -5623,7 +5623,7 @@ grado extremo), habría que ponderar con especial atención la posición
 de las categorías en la primera dimensión a la hora de establecer
 conclusiones. Para crear este gráfico de contribuciones puede
 recurrirse a la función <code><a href="https://rdrr.io/pkg/factoextra/man/eigenvalue.html">fviz_screeplot()</a></code> del paquete <a href="https://github.com/kassambara/factoextra">factoextra</a>:</p>
-<div class="sourceCode" id="cb437"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb444"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># GRÁFICOS DEL ANÁLISIS DE CORRESPONDENCIAS</span></span>
 <span></span>
 <span>  <span class="co"># Gráfico de contribuciones de las dimensiones a la Inercia Total</span></span>
@@ -5640,7 +5640,7 @@ recurrirse a la función <code><a href="https://rdrr.io/pkg/factoextra/man/eigen
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">gcontrib</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-414-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-417-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.12</strong></p>
 </div>
@@ -5658,7 +5658,7 @@ uniformidad; las barras que la superan corresponden a las categorías
 que “explican” más ese eje. A continuación se construyen los cuatro
 gráficos (filas y columnas × dimensiones 1 y 2) y se disponen
 conjuntamente con <a href="https://patchwork.data-imaginist.com">patchwork</a>:</p>
-<div class="sourceCode" id="cb438"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb445"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Contribución de las categorías (filas y columnas) a las dimensiones</span></span>
 <span></span>
 <span>    <span class="va">grow_dim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_contrib.html">fviz_contrib</a></span><span class="op">(</span><span class="va">acinterestelar</span>,</span>
@@ -5697,7 +5697,7 @@ conjuntamente con <a href="https://patchwork.data-imaginist.com">patchwork</a>:<
 <span>                                    plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">gcontribs</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-415-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-418-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.13</strong></p>
 </div>
@@ -5730,7 +5730,7 @@ tamaño del texto en el gráfico.</p></li>
 <p>Es especialmente relevante la elección de <code>map = "symmetric"</code>, ya que
 permite interpretar las cercanías entre categorías de uno y otro factor
 de forma coherente:</p>
-<div class="sourceCode" id="cb439"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb446"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Gráfico bidimensional (biplot simétrico) de categorías</span></span>
 <span></span>
 <span>    <span class="va">gbiplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_ca.html">fviz_ca_biplot</a></span><span class="op">(</span><span class="va">acinterestelar</span>,</span>
@@ -5745,7 +5745,7 @@ de forma coherente:</p>
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">gbiplot</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-416-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-419-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.14</strong></p>
 </div>
@@ -5777,7 +5777,7 @@ prueba ji-cuadrado.</p>
 <p>Para una presentación más compacta que combine el gráfico de
 contribuciones y el biplot, puede recurrirse nuevamente al paquete
 <a href="https://patchwork.data-imaginist.com">patchwork</a>:</p>
-<div class="sourceCode" id="cb440"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb447"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Presentación compacta: contribuciones + biplot</span></span>
 <span></span>
 <span>    <span class="va">gcombinado</span> <span class="op">&lt;-</span> <span class="va">gcontrib</span> <span class="op">/</span> <span class="va">gbiplot</span></span>
@@ -5790,7 +5790,7 @@ contribuciones y el biplot, puede recurrirse nuevamente al paquete
 <span>                                    plot.caption <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">gcombinado</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-417-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-420-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.15</strong></p>
 </div>
@@ -5866,7 +5866,7 @@ aquí</a>)</p></li>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón Morán. It was last built on 2026-07-20.</p>
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón Morán. It was last built on 2026-07-21.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
