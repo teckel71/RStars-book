@@ -98,8 +98,8 @@ orden <- c(1:ncol(seleccion_so))
 autovalor <- componentes$sdev^2
 autovalores <- data.frame(orden, autovalor)
 
-autograph <- ggplot(data = autovalores, map = (aes(x = orden,
-                                                   y = autovalor))) +
+autograph <- ggplot(data = autovalores, aes(x = orden,
+                                                   y = autovalor)) +
              geom_bar(stat = "identity",
                       colour = "red",
                       fill = "orange",
@@ -124,8 +124,8 @@ autovalores <- autovalores %>%
 checkcp <- ifelse(autovalores$autovalor >= 1, "CP", "NCP")
 checkcp
              
-vacumgraph <- ggplot(data = autovalores, map = (aes(x = orden,
-                                                    y = variacum))) +
+vacumgraph <- ggplot(data = autovalores, aes(x = orden,
+                                                    y = variacum)) +
               geom_bar(stat = "identity",
                        aes(fill = checkcp),
                        colour = "red",
@@ -167,7 +167,7 @@ scores_top10 <- scores_df %>%
   slice(1:10)
 
 scores_top10 %>%
-  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, sin outliers)",
+  kable_rstars(caption   = "Puntuaciones empresas TMI (Top-10, sin outliers)",
                col.names = c("Empresa",
                              "Puntuación",
                              "I. Diversif.",
@@ -186,7 +186,7 @@ scores_all_top10 <- scores_all_df %>%
   slice(1:10)
 
 scores_all_top10 %>%
-  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, con outliers)",
+  kable_rstars(caption   = "Puntuaciones empresas TMI (Top-10, con outliers)",
                col.names = c("Empresa",
                              "Puntuación",
                              "I. Diversif.",
@@ -226,7 +226,7 @@ scores3_top10 <- scores3_df %>%
   slice(1:10)
 
 scores3_top10 %>%
-  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, Hubert)",
+  kable_rstars(caption   = "Puntuaciones empresas TMI (Top-10, Hubert)",
                col.names = c("Empresa",
                              "Puntuación",
                              "I. Diversif.",

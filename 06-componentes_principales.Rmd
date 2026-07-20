@@ -40,47 +40,17 @@ Vamos a considerar el caso del sector del "Transporte Interestelar". Tenemos una
 
 ![[Arg-Us Korp.]{.smallcaps}](figuras/Arg-Us%20Korp.jpg){.d-block .mx-auto width="500"}
 
-Hay varias variables disponibles que pueden ser interpretadas como *indicadores* de la preparación de las diferentes compañías de transporte para afrontar el futuro, como por ejemplo:
+Entre las variables disponibles en la base de datos, la base de datos interestelar contiene varios indicadores que podrían reflejar la preparación de una empresa para afrontar el futuro: gasto en I+D, edad de la flota, gastos de capital, solvencia, beneficio por año-luz, diversificación, fidelización, digitalización...
 
-1.  **IMD (Gasto en I+D)**
+Tras consultar con su equipo de analistas, *Korp* ha seleccionado tres de ellos, los que considera más relevantes para su estrategia de adquisición:
 
-    -   Justificación: Una inversión alta en investigación y desarrollo indica que la empresa está preparándose para innovaciones tecnológicas, lo que le permitirá mejorar su eficiencia, reducir costos y mantenerse competitiva en el futuro.
+-   **IDIVERSE (Índice de Diversificación):** empresas con operaciones diversificadas tienen mayor resiliencia ante cambios del mercado, ya que no dependen de una única fuente de ingresos ni de un solo tipo de carga.
 
-2.  **IDIG (Índice de Digitalización)**
+-   **IFIDE (Índice de Fidelización):** un alto nivel de fidelización indica relaciones sólidas con los clientes, lo que proporciona estabilidad de ingresos y ventajas competitivas a largo plazo.
 
-    -   Justificación: La digitalización es un factor clave en la eficiencia operativa y la adaptabilidad a nuevas tecnologías. Un alto IDIG sugiere que la empresa está invirtiendo en automatización, software avanzado y optimización de procesos.
+-   **IDIG (Índice de Digitalización):** la digitalización es clave en la eficiencia operativa y la adaptabilidad tecnológica. Un IDIG elevado sugiere inversión en automatización, software avanzado y optimización de procesos.
 
-3.  **EFLO (Edad Media de la Flota)**
-
-    -   Justificación: Contar con una flota renovada significa menor riesgo de fallas mecánicas, menores costos de mantenimiento y mayor eficiencia en las operaciones, lo que permite mantener ventajas competitivas a largo plazo.
-
-4.  **CAPEX (Gastos de Capital)**
-
-    -   Justificación: Empresas que invierten en infraestructura y equipamiento moderno están mejor preparadas para el crecimiento y la adaptación a nuevas demandas del mercado.
-
-5.  **IDIVERSE (Índice de Diversificación)**
-
-    -   Justificación: Empresas con operaciones diversificadas tienen mayor resiliencia ante cambios del mercado, ya que no dependen de una única fuente de ingresos o de un solo tipo de carga.
-
-6.  **RUTAS (Número de Rutas Atendidas)**
-
-    -   Justificación: La expansión de rutas refleja una empresa con visión de crecimiento y acceso a mercados emergentes, lo que fortalece su sostenibilidad a largo plazo.
-
-7.  **SOLVENCIA**
-
-    -   Justificación: Empresas con una solvencia alta tienen mayor capacidad de enfrentar crisis económicas o períodos de baja demanda sin comprometer su estabilidad financiera.
-
-8.  **BMAL (Beneficio Medio por Año Luz)**
-
-    -   Justificación: Un alto BMAL indica eficiencia en la operación y rentabilidad sostenible, lo que contribuye a la capacidad de la empresa para reinvertir y mejorar su competitividad.
-
-9.  **IFIDE (Índice de Fidelización)**
-
-    -   Justificación: Un alto nivel de fidelización sugiere que la empresa ha construido relaciones sólidas con sus clientes, lo que le proporciona estabilidad de ingresos y ventajas competitivas a futuro.
-
-Estos indicadores reflejan la capacidad de innovación, estabilidad financiera, expansión de mercado y eficiencia operativa de las empresas, factores esenciales para su sostenibilidad en el tiempo y preparación para los desafíos futuros.
-
-De entre ellas, *Korp* ha seleccionado **IDIVERSE**, **IFIDE** e **IDIG** como aspectos que le importan especialmente. Aun así, su equipo sabe que su jefe quiere una respuesta precisa. Un nombre de una empresa.
+Aun así, su equipo sabe que Korp quiere una respuesta precisa. Un nombre de una empresa.
 
 Así, el equipo ha pensado en crear un *ranking* de compañías basándose en estos tres indicadores. Pero, si tienen 3 variables, ¿cómo combinar su análisis para obtener un solo *ranking* de modo objetivo? ¿Cómo ponderar las tres variables?
 
@@ -147,7 +117,7 @@ Básicamente, en el código anterior se han almacenado los datos de la hoja de c
 
 El siguiente paso consistirá en localizar los posibles ***missing values***, ya que para obtener componentes principales es necesario que todos los casos posean dato en todas las variables del análisis. Ante la existencia de *missing values*, se puede actuar de varios modos. Por ejemplo, **se puede intentar obtener el conjunto de valores que no están disponibles por otro canal de información,** o recurrir **a alguna estimación**. En caso de que esto sea difícil, se puede optar, simplemente, por **eliminar** estos casos, en especial cuando representan un porcentaje muy reducido respecto al total de observaciones. En nuestro ejemplo supondremos que hemos optado por esta última vía.
 
-Para diagnosticarlos y eliminarlos en un solo paso, recurrimos a la función auxiliar `explora_na()` del paquete `{MATrstars}`, presentada en el capítulo anterior. Aplicada al *data frame* "seleccion" —que contiene únicamente las tres variables del análisis— y con `accion = "eliminar"`, la función localiza gráficamente los *missing values*, muestra la tabla de casos afectados y devuelve el *data frame* filtrado. Como en "seleccion" solo hay ya las variables del análisis, no es necesario especificar el argumento `variables`:
+Para diagnosticarlos y eliminarlos en un solo paso, recurrimos a la función auxiliar `explora_na()` del paquete `{MATrstars}`, presentada en el capítulo anterior. Aplicada al *data frame* "seleccion" —que contiene únicamente las tres variables del análisis— y con `accion = "eliminar"`, la función localiza gráficamente los *missing values*, muestra la tabla de casos afectados y devuelve el *data frame* filtrado. Como "seleccion" solo contiene las variables del análisis, no es necesario especificar el argumento `variables`:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
 # Diagnóstico y filtrado de missing values.
@@ -163,15 +133,15 @@ Del gráfico y de la tabla anteriores se desprende que existen 2 *missing values
 
 Por otro lado, la técnica de componentes principales **es muy sensible a la existencia de *outliers***. En concreto, las observaciones atípicas pueden afectar a los resultados a través de tres vías:
 
-- **Distorsión de las componentes principales:** pueden influir en la dirección de las componentes principales, haciendo que estas se ajusten más a los valores atípicos que a la mayoría de los datos. Esto puede llevar a una interpretación incorrecta de las relaciones entre las variables.
+-   **Distorsión de las componentes principales:** pueden influir en la dirección de las componentes principales, haciendo que estas se ajusten más a los valores atípicos que a la mayoría de los datos. Esto puede llevar a una interpretación incorrecta de las relaciones entre las variables.
 
-- **Afectación a las cargas de las variables:** estas cargas son relevantes porque indican la importancia relativa de cada variable original en la formación de la componente, es decir, cuánto contribuye o se correlaciona una variable específica con una componente principal.
+-   **Afectación a las cargas de las variables:** estas cargas son relevantes porque indican la importancia relativa de cada variable original en la formación de la componente, es decir, cuánto contribuye o se correlaciona una variable específica con una componente principal.
 
-- **Modificación de la varianza explicada:** pueden *inflar* la varianza total de los datos, lo que puede afectar a la proporción de varianza explicada por cada componente principal. Esto puede ocasionar una selección incorrecta del número de componentes a retener.
+-   **Modificación de la varianza explicada:** pueden *inflar* la varianza total de los datos, lo que puede afectar a la proporción de varianza explicada por cada componente principal. Esto puede ocasionar una selección incorrecta del número de componentes a retener.
 
 En consecuencia, deberán ser identificados y, en su caso, eliminados. Para realizar este proceso, y dado que en nuestro análisis contamos con tres variables métricas, "resumiremos" el valor que toma cada empresa en el conjunto de las variables mediante el cálculo de la ***distancia de Mahalanobis***, sobre la que aplicaremos posteriormente la regla clásica de 1.5 veces el rango intercuartílico para identificar los casos atípicos.
 
-Todo este flujo (cálculo de Mahalanobis, construcción del *boxplot*, identificación de los *outliers* y creación de un nuevo *data frame* sin ellos) se realiza en una sola llamada mediante la función auxiliar `explora_outliers()` del paquete `{MATrstars}` que ya se presentó en el capítulo anterior. Cuando se le pasa un *data frame* con varias variables métricas —como es aquí el caso—, la función detecta el caso multivariante y calcula internamente la distancia de Mahalanobis. Como en "seleccion" solo hay ya las tres variables del análisis, no es necesario especificar el argumento `variables`. El resultado del filtrado se almacena en un nuevo *data frame* llamado "seleccion_so":
+Todo este flujo (cálculo de Mahalanobis, construcción del *boxplot*, identificación de los *outliers* y creación de un nuevo *data frame* sin ellos) se realiza en una sola llamada mediante la función auxiliar `explora_outliers()` del paquete `{MATrstars}` que ya se presentó en el capítulo anterior. Cuando se le pasa un *data frame* con varias variables métricas —como es aquí el caso—, la función detecta el caso multivariante y calcula internamente la distancia de Mahalanobis. Como "seleccion" solo contiene las tres variables del análisis, no es necesario especificar el argumento `variables`. El resultado del filtrado se almacena en un nuevo *data frame* llamado "seleccion_so":
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
 # Diagnóstico y filtrado de outliers.
@@ -306,8 +276,8 @@ orden <- c(1:ncol(seleccion_so))
 autovalor <- componentes$sdev^2
 autovalores <- data.frame(orden, autovalor)
 
-autograph <- ggplot(data = autovalores, map = (aes(x = orden,
-                                                   y = autovalor))) +
+autograph <- ggplot(data = autovalores, aes(x = orden,
+                                                   y = autovalor)) +
              geom_bar(stat = "identity",
                       colour = "red",
                       fill = "orange",
@@ -327,7 +297,7 @@ autograph <- ggplot(data = autovalores, map = (aes(x = orden,
 autograph
 ```
 
-Respecto al gráfico, conviene recordar que, al ser de barras, si no se quieren representar las frecuencias sino los valores que toma una variable (en este caso, “autovalor”) para cada valor de la otra variable (en este caso, “orden”); en el `geom_bar()` habrá que añadir el argumento `stat =` con el valor “identity”. Además, se utiliza el elemento `scale_x_continuous()` para pesonalizar la escala del eje x, y que se divida dicho eje en tantos tramos como componentes hay.
+Respecto al gráfico, conviene recordar que, al ser de barras, si no se quieren representar las frecuencias sino los valores que toma una variable (en este caso, “autovalor”) para cada valor de la otra variable (en este caso, “orden”); en el `geom_bar()` habrá que añadir el argumento `stat =` con el valor “identity”. Además, se utiliza el elemento `scale_x_continuous()` para personalizar la escala del eje x, y que se divida dicho eje en tantos tramos como componentes hay.
 
 En el gráfico obtenido, las componentes cuyas barras atraviesan la línea que pasa por el valor "1" son las que deberían ser retenidas, ya que son las componentes que resumen de modo suficiente la información ofrecida sobre el comportamiento de los casos por las variables originales. En este caso, basta con retener solo la primera componente (por lo tanto, solo contamos con una **componente principal**). Este es un resultado favorable cara a nuestro propósito, ya que nos indica que podemos usar como indicador solo una componente, la primera, y con ella resumiremos suficientemente las tres variables originales. Por tanto, es un buen indicador, en ese sentido.
 
@@ -340,8 +310,8 @@ autovalores <- autovalores %>%
 checkcp <- ifelse(autovalores$autovalor >= 1, "CP", "NCP")
 checkcp
              
-vacumgraph <- ggplot(data = autovalores, map = (aes(x = orden,
-                                                    y = variacum))) +
+vacumgraph <- ggplot(data = autovalores, aes(x = orden,
+                                                    y = variacum)) +
               geom_bar(stat = "identity",
                        aes(fill = checkcp),
                        colour = "red",
@@ -383,7 +353,7 @@ combinado <- combinado +
 combinado
 ```
 
-Un a vez confirmado el hecho de que la primera componente es suficiente para contar con un buen indicador de "preparación de las diferentes compañías de transporte para afrontar el futuro", considerando los aspectos de *digitalización*, *diversificación* y *fidelización* de clientes, pasaremos a estudiar qué casos concretos ofrecen mejores (mayores) valores en el indicador, para lo cual hemos de calcular sus puntuaciones.
+Una vez confirmado el hecho de que la primera componente es suficiente para contar con un buen indicador de "preparación de las diferentes compañías de transporte para afrontar el futuro", considerando los aspectos de *digitalización*, *diversificación* y *fidelización* de clientes, pasaremos a estudiar qué casos concretos ofrecen mejores (mayores) valores en el indicador, para lo cual hemos de calcular sus puntuaciones.
 
 ## ![](figuras/pie-chart.svg){.hicon} Puntuaciones de los casos (scores).
 
@@ -399,7 +369,7 @@ scores_top10 <- scores_df %>%
   slice(1:10)
 
 scores_top10 %>%
-  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, sin outliers)",
+  kable_rstars(caption   = "Puntuaciones empresas TMI (Top-10, sin outliers)",
                col.names = c("Empresa",
                              "Puntuación",
                              "I. Diversif.",
@@ -419,7 +389,7 @@ scores_top10 <- scores_df %>%
   slice(1:10)
   
 scores_top10 %>%
-  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, sin outliers)",
+  kable_rstars(caption   = "Puntuaciones empresas TMI (Top-10, sin outliers)",
                col.names = c("Empresa",
                              "Puntuación",
                              "I. Diversif.",
@@ -446,7 +416,7 @@ scores_all_top10 <- scores_all_df %>%
   slice(1:10)
 
 scores_all_top10 %>%
-  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, con outliers)",
+  kable_rstars(caption   = "Puntuaciones empresas TMI (Top-10, con outliers)",
                col.names = c("Empresa",
                              "Puntuación",
                              "I. Diversif.",
@@ -467,7 +437,7 @@ scores_all_top10 <- scores_all_df %>%
   slice(1:10)
 
 scores_all_top10 %>%
-  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, con outliers)",
+  kable_rstars(caption   = "Puntuaciones empresas TMI (Top-10, con outliers)",
                col.names = c("Empresa",
                              "Puntuación",
                              "I. Diversif.",
@@ -479,7 +449,7 @@ scores_all_top10 %>%
 
 Vemos como el *ranking* cambia radicalmente, y pasa a estar encabezado por las compañías ***Arrakis Freight***, ***Chakotay Cargo Systems*** e ***Hyperdrive Express***. Si un análisis particularizado de estas empresas por parte del equipo encargado del estudio da como resultado que sus datos son correctos, serían, seguramente, las candidatas para ser adquiridas por el magnate *Arg-Us Korp*.
 
-## ![](figuras/paperclip.svg){.hicon} Puntuaciones de los casos (scores).
+## ![](figuras/paperclip.svg){.hicon} Efecto de los *outliers* en las puntuaciones.
 
 Cabe hacerse una pregunta antes de cerrar esta historia. ¿Qué hubiera ocurrido si se hubieran calculado las componentes sin eliminar los *outliers* previamente? ¿Hubieran cambiado los resultados? ¿era tan relevante el efecto de estos casos sobre los resultados, como comentamos al comienzo del tema, en la parte teórica?
 
@@ -502,7 +472,7 @@ scores2_top10 <- scores2_df %>%
   slice(1:10)
 
 scores2_top10 %>%
-  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, outliers en cálculo)",
+  kable_rstars(caption   = "Puntuaciones empresas TMI (Top-10, outliers en cálculo)",
                col.names = c("Empresa",
                              "Puntuación",
                              "I. Diversif.",
@@ -556,7 +526,7 @@ scores3_top10 <- scores3_df %>%
   slice(1:10)
 
 scores3_top10 %>%
-  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, Hubert)",
+  kable_rstars(caption   = "Puntuaciones empresas TMI (Top-10, Hubert)",
                col.names = c("Empresa",
                              "Puntuación",
                              "I. Diversif.",
@@ -598,7 +568,7 @@ scores3_top10 <- scores3_df %>%
   slice(1:10)
 
 scores3_top10 %>%
-  kable_rstars(caption   = "Puntuaciones emporesas TMI (Top-10, Hubert)",
+  kable_rstars(caption   = "Puntuaciones empresas TMI (Top-10, Hubert)",
                col.names = c("Empresa",
                              "Puntuación",
                              "I. Diversif.",
@@ -607,9 +577,16 @@ scores3_top10 %>%
                digits    = c(3, 3, 3, 3)) %>%
   column_spec(1, bold = TRUE, extra_css = "text-align: left;")
 ```
-En la tabla se comprueba que existen leves variaciones con respecto a las clasificaciones anteriores. A destacar la inclusión en el *top-10* de *Ripley Interestellar Freight*, y la desparición de  *Kamino Movers*.
 
-¿cuál de los 3 ránkings elegirías tú?
+En la tabla se comprueba que existen leves variaciones con respecto a las clasificaciones anteriores. A destacar la inclusión en el *top-10* de *Ripley Interestellar Freight*, y la desaparición de *Kamino Movers*.
+
+### ![](figuras/star.svg){.hicon} La decisión de *Arg-Us Korp*. {.unnumbered}
+
+¿Cuál de los tres rankings elegiríamos? La elección no es trivial, y depende de la confianza que tengamos en la calidad de los datos. Si creemos que los *outliers* son errores o casos irrelevantes para la comparación, el ranking sin ellos (método clásico) es la opción más limpia. Si preferimos no descartar ninguna observación, el método robusto de Hubert ofrece una protección natural contra la distorsión, sin necesidad de eliminar casos.
+
+En cualquiera de los tres rankings, una empresa aparece consistentemente en las primeras posiciones: ***Home One Cargo***. Su combinación de alta diversificación, fuerte fidelización de clientes y nivel de digitalización avanzado la sitúa como la candidata más sólida para afrontar el futuro del sector.
+
+Cuentan las crónicas que *Arg-us Korp* —siguiendo los consejos de su equipo de analistas, armados con R y un buen análisis de componentes principales— **adquirió *Home One Cargo*** pocas semanas después. El precio de la operación no se ha hecho público, pero los analistas del sector coinciden en que fue una compra inteligente. Korp, fiel a su estilo, cerró la reunión de adquisición antes de que nadie más pudiera hablar.
 
 ## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo.
 

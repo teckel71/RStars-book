@@ -142,65 +142,14 @@
 <div style="text-align: center;">
 <p><strong>Figura 6.3.</strong> <span class="smallcaps">Arg-Us Korp.</span></p>
 </div>
-<p>Hay varias variables disponibles que pueden ser interpretadas como <em>indicadores</em> de la preparación de las diferentes compañías de transporte para afrontar el futuro, como por ejemplo:</p>
-<ol style="list-style-type: decimal">
-<li>
-<p><strong>IMD (Gasto en I+D)</strong></p>
+<p>Entre las variables disponibles en la base de datos, la base de datos interestelar contiene varios indicadores que podrían reflejar la preparación de una empresa para afrontar el futuro: gasto en I+D, edad de la flota, gastos de capital, solvencia, beneficio por año-luz, diversificación, fidelización, digitalización…</p>
+<p>Tras consultar con su equipo de analistas, <em>Korp</em> ha seleccionado tres de ellos, los que considera más relevantes para su estrategia de adquisición:</p>
 <ul>
-<li>Justificación: Una inversión alta en investigación y desarrollo indica que la empresa está preparándose para innovaciones tecnológicas, lo que le permitirá mejorar su eficiencia, reducir costos y mantenerse competitiva en el futuro.</li>
+<li><p><strong>IDIVERSE (Índice de Diversificación):</strong> empresas con operaciones diversificadas tienen mayor resiliencia ante cambios del mercado, ya que no dependen de una única fuente de ingresos ni de un solo tipo de carga.</p></li>
+<li><p><strong>IFIDE (Índice de Fidelización):</strong> un alto nivel de fidelización indica relaciones sólidas con los clientes, lo que proporciona estabilidad de ingresos y ventajas competitivas a largo plazo.</p></li>
+<li><p><strong>IDIG (Índice de Digitalización):</strong> la digitalización es clave en la eficiencia operativa y la adaptabilidad tecnológica. Un IDIG elevado sugiere inversión en automatización, software avanzado y optimización de procesos.</p></li>
 </ul>
-</li>
-<li>
-<p><strong>IDIG (Índice de Digitalización)</strong></p>
-<ul>
-<li>Justificación: La digitalización es un factor clave en la eficiencia operativa y la adaptabilidad a nuevas tecnologías. Un alto IDIG sugiere que la empresa está invirtiendo en automatización, software avanzado y optimización de procesos.</li>
-</ul>
-</li>
-<li>
-<p><strong>EFLO (Edad Media de la Flota)</strong></p>
-<ul>
-<li>Justificación: Contar con una flota renovada significa menor riesgo de fallas mecánicas, menores costos de mantenimiento y mayor eficiencia en las operaciones, lo que permite mantener ventajas competitivas a largo plazo.</li>
-</ul>
-</li>
-<li>
-<p><strong>CAPEX (Gastos de Capital)</strong></p>
-<ul>
-<li>Justificación: Empresas que invierten en infraestructura y equipamiento moderno están mejor preparadas para el crecimiento y la adaptación a nuevas demandas del mercado.</li>
-</ul>
-</li>
-<li>
-<p><strong>IDIVERSE (Índice de Diversificación)</strong></p>
-<ul>
-<li>Justificación: Empresas con operaciones diversificadas tienen mayor resiliencia ante cambios del mercado, ya que no dependen de una única fuente de ingresos o de un solo tipo de carga.</li>
-</ul>
-</li>
-<li>
-<p><strong>RUTAS (Número de Rutas Atendidas)</strong></p>
-<ul>
-<li>Justificación: La expansión de rutas refleja una empresa con visión de crecimiento y acceso a mercados emergentes, lo que fortalece su sostenibilidad a largo plazo.</li>
-</ul>
-</li>
-<li>
-<p><strong>SOLVENCIA</strong></p>
-<ul>
-<li>Justificación: Empresas con una solvencia alta tienen mayor capacidad de enfrentar crisis económicas o períodos de baja demanda sin comprometer su estabilidad financiera.</li>
-</ul>
-</li>
-<li>
-<p><strong>BMAL (Beneficio Medio por Año Luz)</strong></p>
-<ul>
-<li>Justificación: Un alto BMAL indica eficiencia en la operación y rentabilidad sostenible, lo que contribuye a la capacidad de la empresa para reinvertir y mejorar su competitividad.</li>
-</ul>
-</li>
-<li>
-<p><strong>IFIDE (Índice de Fidelización)</strong></p>
-<ul>
-<li>Justificación: Un alto nivel de fidelización sugiere que la empresa ha construido relaciones sólidas con sus clientes, lo que le proporciona estabilidad de ingresos y ventajas competitivas a futuro.</li>
-</ul>
-</li>
-</ol>
-<p>Estos indicadores reflejan la capacidad de innovación, estabilidad financiera, expansión de mercado y eficiencia operativa de las empresas, factores esenciales para su sostenibilidad en el tiempo y preparación para los desafíos futuros.</p>
-<p>De entre ellas, <em>Korp</em> ha seleccionado <strong>IDIVERSE</strong>, <strong>IFIDE</strong> e <strong>IDIG</strong> como aspectos que le importan especialmente. Aun así, su equipo sabe que su jefe quiere una respuesta precisa. Un nombre de una empresa.</p>
+<p>Aun así, su equipo sabe que Korp quiere una respuesta precisa. Un nombre de una empresa.</p>
 <p>Así, el equipo ha pensado en crear un <em>ranking</em> de compañías basándose en estos tres indicadores. Pero, si tienen 3 variables, ¿cómo combinar su análisis para obtener un solo <em>ranking</em> de modo objetivo? ¿Cómo ponderar las tres variables?</p>
 <p>La respuesta ha venido al comprobar que las tres variables guardan entre sí unas correlaciones relativamente altas (en valor absoluto). Es decir: aportan una información bastante parecida sobre cada una de las empresas de la selección. Esto es importante porque, si en gran medida comparten información “redundante”, pueden ser, seguramente, “resumidas” en un solo indicador, cuyo valor o puntuación para cada caso (empresa) podría servir para establecer el ranking de compañías candidatas a ser adquiridas.</p>
 <p>El método para obtener este indicador a partir de las tres variables originales se llama <strong><em>Análisis de Componentes Principales</em></strong> <strong>(PCA)</strong>, y puede ser fácilmente desarrollado con unas líneas de código de R. Ese indicador, que es la clave de toda la estrategia, será la primera “componente” del PCA, una combinación lineal de las tres variables originales; siempre y cuando su poder para “retener” la información global ofrecida por esas tres variables sea lo suficientemente alto.</p>
@@ -245,24 +194,24 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">IDIVERSE</span>, <span class="va">IFIDE</span>, <span class="va">IDIG</span><span class="op">)</span></span>
 <span><span class="va">seleccion_df_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary</a></span><span class="op">(</span><span class="va">seleccion</span><span class="op">)</span></span>
 <span><span class="va">seleccion_df_graph</span></span></code></pre></div>
-<div id="rsypopufjh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="nqcuehfqaw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#rsypopufjh table {
+#nqcuehfqaw table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#rsypopufjh thead, #rsypopufjh tbody, #rsypopufjh tfoot, #rsypopufjh tr, #rsypopufjh td, #rsypopufjh th {
+#nqcuehfqaw thead, #nqcuehfqaw tbody, #nqcuehfqaw tfoot, #nqcuehfqaw tr, #nqcuehfqaw td, #nqcuehfqaw th {
   border-style: none;
 }
 
-#rsypopufjh p {
+#nqcuehfqaw p {
   margin: 0;
   padding: 0;
 }
 
-#rsypopufjh .gt_table {
+#nqcuehfqaw .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -288,12 +237,12 @@
   border-left-color: #D3D3D3;
 }
 
-#rsypopufjh .gt_caption {
+#nqcuehfqaw .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#rsypopufjh .gt_title {
+#nqcuehfqaw .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -305,7 +254,7 @@
   border-bottom-width: 0;
 }
 
-#rsypopufjh .gt_subtitle {
+#nqcuehfqaw .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -317,7 +266,7 @@
   border-top-width: 0;
 }
 
-#rsypopufjh .gt_heading {
+#nqcuehfqaw .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -329,13 +278,13 @@
   border-right-color: #D3D3D3;
 }
 
-#rsypopufjh .gt_bottom_border {
+#nqcuehfqaw .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 0px;
   border-bottom-color: #D3D3D3;
 }
 
-#rsypopufjh .gt_col_headings {
+#nqcuehfqaw .gt_col_headings {
   border-top-style: solid;
   border-top-width: 0px;
   border-top-color: #D3D3D3;
@@ -350,7 +299,7 @@
   border-right-color: #D3D3D3;
 }
 
-#rsypopufjh .gt_col_heading {
+#nqcuehfqaw .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -370,7 +319,7 @@
   overflow-x: hidden;
 }
 
-#rsypopufjh .gt_column_spanner_outer {
+#nqcuehfqaw .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -382,15 +331,15 @@
   padding-right: 4px;
 }
 
-#rsypopufjh .gt_column_spanner_outer:first-child {
+#nqcuehfqaw .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#rsypopufjh .gt_column_spanner_outer:last-child {
+#nqcuehfqaw .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#rsypopufjh .gt_column_spanner {
+#nqcuehfqaw .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -402,11 +351,11 @@
   width: 100%;
 }
 
-#rsypopufjh .gt_spanner_row {
+#nqcuehfqaw .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#rsypopufjh .gt_group_heading {
+#nqcuehfqaw .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -432,7 +381,7 @@
   text-align: left;
 }
 
-#rsypopufjh .gt_empty_group_heading {
+#nqcuehfqaw .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -447,15 +396,15 @@
   vertical-align: middle;
 }
 
-#rsypopufjh .gt_from_md > :first-child {
+#nqcuehfqaw .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#rsypopufjh .gt_from_md > :last-child {
+#nqcuehfqaw .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#rsypopufjh .gt_row {
+#nqcuehfqaw .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -474,7 +423,7 @@
   overflow-x: hidden;
 }
 
-#rsypopufjh .gt_stub {
+#nqcuehfqaw .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -487,7 +436,7 @@
   padding-right: 5px;
 }
 
-#rsypopufjh .gt_stub_row_group {
+#nqcuehfqaw .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -501,15 +450,15 @@
   vertical-align: top;
 }
 
-#rsypopufjh .gt_row_group_first td {
+#nqcuehfqaw .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#rsypopufjh .gt_row_group_first th {
+#nqcuehfqaw .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#rsypopufjh .gt_summary_row {
+#nqcuehfqaw .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -519,16 +468,16 @@
   padding-right: 5px;
 }
 
-#rsypopufjh .gt_first_summary_row {
+#nqcuehfqaw .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#rsypopufjh .gt_first_summary_row.thick {
+#nqcuehfqaw .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#rsypopufjh .gt_last_summary_row {
+#nqcuehfqaw .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -538,7 +487,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#rsypopufjh .gt_grand_summary_row {
+#nqcuehfqaw .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -548,7 +497,7 @@
   padding-right: 5px;
 }
 
-#rsypopufjh .gt_first_grand_summary_row {
+#nqcuehfqaw .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -558,7 +507,7 @@
   border-top-color: #D3D3D3;
 }
 
-#rsypopufjh .gt_last_grand_summary_row_top {
+#nqcuehfqaw .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -568,11 +517,11 @@
   border-bottom-color: #D3D3D3;
 }
 
-#rsypopufjh .gt_striped {
+#nqcuehfqaw .gt_striped {
   background-color: #FAFAFA;
 }
 
-#rsypopufjh .gt_table_body {
+#nqcuehfqaw .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -581,7 +530,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#rsypopufjh .gt_footnotes {
+#nqcuehfqaw .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -595,7 +544,7 @@
   border-right-color: #D3D3D3;
 }
 
-#rsypopufjh .gt_footnote {
+#nqcuehfqaw .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -604,7 +553,7 @@
   padding-right: 5px;
 }
 
-#rsypopufjh .gt_sourcenotes {
+#nqcuehfqaw .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -618,7 +567,7 @@
   border-right-color: #D3D3D3;
 }
 
-#rsypopufjh .gt_sourcenote {
+#nqcuehfqaw .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -626,72 +575,72 @@
   padding-right: 5px;
 }
 
-#rsypopufjh .gt_left {
+#nqcuehfqaw .gt_left {
   text-align: left;
 }
 
-#rsypopufjh .gt_center {
+#nqcuehfqaw .gt_center {
   text-align: center;
 }
 
-#rsypopufjh .gt_right {
+#nqcuehfqaw .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#rsypopufjh .gt_font_normal {
+#nqcuehfqaw .gt_font_normal {
   font-weight: normal;
 }
 
-#rsypopufjh .gt_font_bold {
+#nqcuehfqaw .gt_font_bold {
   font-weight: bold;
 }
 
-#rsypopufjh .gt_font_italic {
+#nqcuehfqaw .gt_font_italic {
   font-style: italic;
 }
 
-#rsypopufjh .gt_super {
+#nqcuehfqaw .gt_super {
   font-size: 65%;
 }
 
-#rsypopufjh .gt_footnote_marks {
+#nqcuehfqaw .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#rsypopufjh .gt_asterisk {
+#nqcuehfqaw .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#rsypopufjh .gt_indent_1 {
+#nqcuehfqaw .gt_indent_1 {
   text-indent: 5px;
 }
 
-#rsypopufjh .gt_indent_2 {
+#nqcuehfqaw .gt_indent_2 {
   text-indent: 10px;
 }
 
-#rsypopufjh .gt_indent_3 {
+#nqcuehfqaw .gt_indent_3 {
   text-indent: 15px;
 }
 
-#rsypopufjh .gt_indent_4 {
+#nqcuehfqaw .gt_indent_4 {
   text-indent: 20px;
 }
 
-#rsypopufjh .gt_indent_5 {
+#nqcuehfqaw .gt_indent_5 {
   text-indent: 25px;
 }
 
-#rsypopufjh .katex-display {
+#nqcuehfqaw .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#rsypopufjh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#nqcuehfqaw div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -755,7 +704,7 @@
 </div>
 <p>Básicamente, en el código anterior se han almacenado los datos de la hoja de cálculo en el <em>data frame</em> “interestelar_100”. Luego, se ha creado un nuevo <em>data frame</em> más reducido con las únicas variables del análisis que vamos a realizar (IDIVERSE, IFIDE e IDIG), al que hemos llamado “seleccion”. Estas tres variables han sido exploradas a traves de una tabla gráfica a partir de la función <code><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary()</a></code> del paquete <a href="https://github.com/jthomasmock/gtExtras">gtExtras</a>.</p>
 <p>El siguiente paso consistirá en localizar los posibles <strong><em>missing values</em></strong>, ya que para obtener componentes principales es necesario que todos los casos posean dato en todas las variables del análisis. Ante la existencia de <em>missing values</em>, se puede actuar de varios modos. Por ejemplo, <strong>se puede intentar obtener el conjunto de valores que no están disponibles por otro canal de información,</strong> o recurrir <strong>a alguna estimación</strong>. En caso de que esto sea difícil, se puede optar, simplemente, por <strong>eliminar</strong> estos casos, en especial cuando representan un porcentaje muy reducido respecto al total de observaciones. En nuestro ejemplo supondremos que hemos optado por esta última vía.</p>
-<p>Para diagnosticarlos y eliminarlos en un solo paso, recurrimos a la función auxiliar <code><a href="https://rdrr.io/pkg/MATrstars/man/explora_na.html">explora_na()</a></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a>, presentada en el capítulo anterior. Aplicada al <em>data frame</em> “seleccion” —que contiene únicamente las tres variables del análisis— y con <code>accion = "eliminar"</code>, la función localiza gráficamente los <em>missing values</em>, muestra la tabla de casos afectados y devuelve el <em>data frame</em> filtrado. Como en “seleccion” solo hay ya las variables del análisis, no es necesario especificar el argumento <code>variables</code>:</p>
+<p>Para diagnosticarlos y eliminarlos en un solo paso, recurrimos a la función auxiliar <code><a href="https://rdrr.io/pkg/MATrstars/man/explora_na.html">explora_na()</a></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a>, presentada en el capítulo anterior. Aplicada al <em>data frame</em> “seleccion” —que contiene únicamente las tres variables del análisis— y con <code>accion = "eliminar"</code>, la función localiza gráficamente los <em>missing values</em>, muestra la tabla de casos afectados y devuelve el <em>data frame</em> filtrado. Como “seleccion” solo contiene las variables del análisis, no es necesario especificar el argumento <code>variables</code>:</p>
 <div class="sourceCode" id="cb226"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>matrstars.figura_num <span class="op">=</span> <span class="st">"6.4"</span>, matrstars.tabla_num <span class="op">=</span> <span class="st">"6.2"</span><span class="op">)</span></span>
 <span><span class="co"># Diagnóstico y filtrado de missing values.</span></span>
@@ -825,7 +774,7 @@ NA
 <li><p><strong>Modificación de la varianza explicada:</strong> pueden <em>inflar</em> la varianza total de los datos, lo que puede afectar a la proporción de varianza explicada por cada componente principal. Esto puede ocasionar una selección incorrecta del número de componentes a retener.</p></li>
 </ul>
 <p>En consecuencia, deberán ser identificados y, en su caso, eliminados. Para realizar este proceso, y dado que en nuestro análisis contamos con tres variables métricas, “resumiremos” el valor que toma cada empresa en el conjunto de las variables mediante el cálculo de la <strong><em>distancia de Mahalanobis</em></strong>, sobre la que aplicaremos posteriormente la regla clásica de 1.5 veces el rango intercuartílico para identificar los casos atípicos.</p>
-<p>Todo este flujo (cálculo de Mahalanobis, construcción del <em>boxplot</em>, identificación de los <em>outliers</em> y creación de un nuevo <em>data frame</em> sin ellos) se realiza en una sola llamada mediante la función auxiliar <code><a href="https://rdrr.io/pkg/MATrstars/man/explora_outliers.html">explora_outliers()</a></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a> que ya se presentó en el capítulo anterior. Cuando se le pasa un <em>data frame</em> con varias variables métricas —como es aquí el caso—, la función detecta el caso multivariante y calcula internamente la distancia de Mahalanobis. Como en “seleccion” solo hay ya las tres variables del análisis, no es necesario especificar el argumento <code>variables</code>. El resultado del filtrado se almacena en un nuevo <em>data frame</em> llamado “seleccion_so”:</p>
+<p>Todo este flujo (cálculo de Mahalanobis, construcción del <em>boxplot</em>, identificación de los <em>outliers</em> y creación de un nuevo <em>data frame</em> sin ellos) se realiza en una sola llamada mediante la función auxiliar <code><a href="https://rdrr.io/pkg/MATrstars/man/explora_outliers.html">explora_outliers()</a></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a> que ya se presentó en el capítulo anterior. Cuando se le pasa un <em>data frame</em> con varias variables métricas —como es aquí el caso—, la función detecta el caso multivariante y calcula internamente la distancia de Mahalanobis. Como “seleccion” solo contiene las tres variables del análisis, no es necesario especificar el argumento <code>variables</code>. El resultado del filtrado se almacena en un nuevo <em>data frame</em> llamado “seleccion_so”:</p>
 <div class="sourceCode" id="cb227"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>matrstars.figura_num <span class="op">=</span> <span class="st">"6.5"</span>, matrstars.tabla_num <span class="op">=</span> <span class="st">"6.3"</span><span class="op">)</span></span>
 <span><span class="co"># Diagnóstico y filtrado de outliers.</span></span>
@@ -1287,8 +1236,8 @@ IDIG
 <span><span class="va">autovalor</span> <span class="op">&lt;-</span> <span class="va">componentes</span><span class="op">$</span><span class="va">sdev</span><span class="op">^</span><span class="fl">2</span></span>
 <span><span class="va">autovalores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">orden</span>, <span class="va">autovalor</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">autograph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">autovalores</span>, map <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">orden</span>,</span>
-<span>                                                   y <span class="op">=</span> <span class="va">autovalor</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="va">autograph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">autovalores</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">orden</span>,</span>
+<span>                                                   y <span class="op">=</span> <span class="va">autovalor</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>             <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span>,</span>
 <span>                      colour <span class="op">=</span> <span class="st">"red"</span>,</span>
 <span>                      fill <span class="op">=</span> <span class="st">"orange"</span>,</span>
@@ -1310,7 +1259,7 @@ IDIG
 <div style="text-align: center;">
 <p><strong>Figura 6.7</strong></p>
 </div>
-<p>Respecto al gráfico, conviene recordar que, al ser de barras, si no se quieren representar las frecuencias sino los valores que toma una variable (en este caso, “autovalor”) para cada valor de la otra variable (en este caso, “orden”); en el <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar()</a></code> habrá que añadir el argumento <code>stat =</code> con el valor “identity”. Además, se utiliza el elemento <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous()</a></code> para pesonalizar la escala del eje x, y que se divida dicho eje en tantos tramos como componentes hay.</p>
+<p>Respecto al gráfico, conviene recordar que, al ser de barras, si no se quieren representar las frecuencias sino los valores que toma una variable (en este caso, “autovalor”) para cada valor de la otra variable (en este caso, “orden”); en el <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar()</a></code> habrá que añadir el argumento <code>stat =</code> con el valor “identity”. Además, se utiliza el elemento <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous()</a></code> para personalizar la escala del eje x, y que se divida dicho eje en tantos tramos como componentes hay.</p>
 <p>En el gráfico obtenido, las componentes cuyas barras atraviesan la línea que pasa por el valor “1” son las que deberían ser retenidas, ya que son las componentes que resumen de modo suficiente la información ofrecida sobre el comportamiento de los casos por las variables originales. En este caso, basta con retener solo la primera componente (por lo tanto, solo contamos con una <strong>componente principal</strong>). Este es un resultado favorable cara a nuestro propósito, ya que nos indica que podemos usar como indicador solo una componente, la primera, y con ella resumiremos suficientemente las tres variables originales. Por tanto, es un buen indicador, en ese sentido.</p>
 <p>Un gráfico complementario útil es el que muestra, para cada componente, el porcentaje de varianza total (comunalidad) acumulada al ir reteniendo las sucesivas componentes, un resultado que ya se obtuvo anteriormente en forma de tabla:</p>
 <div class="sourceCode" id="cb234"><pre class="downlit sourceCode r">
@@ -1321,8 +1270,8 @@ IDIG
 <span><span class="va">checkcp</span></span></code></pre></div>
 <pre><code>## [1] "CP"  "NCP" "NCP"</code></pre>
 <div class="sourceCode" id="cb236"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vacumgraph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">autovalores</span>, map <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">orden</span>,</span>
-<span>                                                    y <span class="op">=</span> <span class="va">variacum</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="va">vacumgraph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">autovalores</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">orden</span>,</span>
+<span>                                                    y <span class="op">=</span> <span class="va">variacum</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>              <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span>,</span>
 <span>                       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">checkcp</span><span class="op">)</span>,</span>
 <span>                       colour <span class="op">=</span> <span class="st">"red"</span>,</span>
@@ -1365,7 +1314,7 @@ IDIG
 <div style="text-align: center;">
 <p><strong>Figura 6.9</strong></p>
 </div>
-<p>Un a vez confirmado el hecho de que la primera componente es suficiente para contar con un buen indicador de “preparación de las diferentes compañías de transporte para afrontar el futuro”, considerando los aspectos de <em>digitalización</em>, <em>diversificación</em> y <em>fidelización</em> de clientes, pasaremos a estudiar qué casos concretos ofrecen mejores (mayores) valores en el indicador, para lo cual hemos de calcular sus puntuaciones.</p>
+<p>Una vez confirmado el hecho de que la primera componente es suficiente para contar con un buen indicador de “preparación de las diferentes compañías de transporte para afrontar el futuro”, considerando los aspectos de <em>digitalización</em>, <em>diversificación</em> y <em>fidelización</em> de clientes, pasaremos a estudiar qué casos concretos ofrecen mejores (mayores) valores en el indicador, para lo cual hemos de calcular sus puntuaciones.</p>
 </div>
 <div id="puntuaciones-de-los-casos-scores." class="section level2" number="6.7">
 <h2>
@@ -1382,7 +1331,7 @@ IDIG
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">scores_top10</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars</a></span><span class="op">(</span>caption   <span class="op">=</span> <span class="st">"Puntuaciones emporesas TMI (Top-10, sin outliers)"</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars</a></span><span class="op">(</span>caption   <span class="op">=</span> <span class="st">"Puntuaciones empresas TMI (Top-10, sin outliers)"</span>,</span>
 <span>               col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Empresa"</span>,</span>
 <span>                             <span class="st">"Puntuación"</span>,</span>
 <span>                             <span class="st">"I. Diversif."</span>,</span>
@@ -1582,7 +1531,7 @@ dagobah freightlines
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 6.6.</strong> Puntuaciones emporesas TMI (Top-10, sin outliers)</p>
+<p><strong>Tabla 6.6.</strong> Puntuaciones empresas TMI (Top-10, sin outliers)</p>
 </div>
 <p>De la tabla y gráfico anteriores podemos concluir que las empresas más preparadas para afrontar el futuro, según nuestro indicador (primera componente del análisis PCA) son, por este orden, <em>Shuttlepod Movers</em>, <em>Kamino Movers</em> e <em>Ícarus Star Transport</em>.</p>
 <p>¿Seguro?</p>
@@ -1598,7 +1547,7 @@ dagobah freightlines
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">scores_all_top10</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars</a></span><span class="op">(</span>caption   <span class="op">=</span> <span class="st">"Puntuaciones emporesas TMI (Top-10, con outliers)"</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars</a></span><span class="op">(</span>caption   <span class="op">=</span> <span class="st">"Puntuaciones empresas TMI (Top-10, con outliers)"</span>,</span>
 <span>               col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Empresa"</span>,</span>
 <span>                             <span class="st">"Puntuación"</span>,</span>
 <span>                             <span class="st">"I. Diversif."</span>,</span>
@@ -1798,13 +1747,13 @@ sith transport corp.
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 6.7.</strong> Puntuaciones emporesas TMI (Top-10, con outliers)</p>
+<p><strong>Tabla 6.7.</strong> Puntuaciones empresas TMI (Top-10, con outliers)</p>
 </div>
 <p>Vemos como el <em>ranking</em> cambia radicalmente, y pasa a estar encabezado por las compañías <strong><em>Arrakis Freight</em></strong>, <strong><em>Chakotay Cargo Systems</em></strong> e <strong><em>Hyperdrive Express</em></strong>. Si un análisis particularizado de estas empresas por parte del equipo encargado del estudio da como resultado que sus datos son correctos, serían, seguramente, las candidatas para ser adquiridas por el magnate <em>Arg-Us Korp</em>.</p>
 </div>
-<div id="puntuaciones-de-los-casos-scores.-1" class="section level2" number="6.8">
+<div id="efecto-de-los-outliers-en-las-puntuaciones." class="section level2" number="6.8">
 <h2>
-<span class="header-section-number">6.8</span> <img src="figuras/paperclip.svg" class="hicon"> Puntuaciones de los casos (scores).<a class="anchor" aria-label="anchor" href="#puntuaciones-de-los-casos-scores.-1"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.8</span> <img src="figuras/paperclip.svg" class="hicon"> Efecto de los <em>outliers</em> en las puntuaciones.<a class="anchor" aria-label="anchor" href="#efecto-de-los-outliers-en-las-puntuaciones."><i class="fas fa-link"></i></a>
 </h2>
 <p>Cabe hacerse una pregunta antes de cerrar esta historia. ¿Qué hubiera ocurrido si se hubieran calculado las componentes sin eliminar los <em>outliers</em> previamente? ¿Hubieran cambiado los resultados? ¿era tan relevante el efecto de estos casos sobre los resultados, como comentamos al comienzo del tema, en la parte teórica?</p>
 <p>En R, el código es fácil de adaptar: basta con sustituir el <em>data frame</em> “seleccion_so” por el <em>data frame</em> “seleccion”, desde el apartado del cálculo de componentes hasta la formación del primer <em>ranking</em> basado en las puntuaciones de las compañías en la primera componente.</p>
@@ -2001,7 +1950,7 @@ kamino movers
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 6.8.</strong> Puntuaciones emporesas TMI (Top-10, outliers en cálculo)</p>
+<p><strong>Tabla 6.8.</strong> Puntuaciones empresas TMI (Top-10, outliers en cálculo)</p>
 </div>
 <p>Como puede repararse, los cambios, en este caso, no parecen ser relevantes. Solo a partir de la séptima posición se registran cambios en el orden de las empresas.</p>
 <p>No obstante, hay una tercera vía para proceder al análisis de componentes principales que nos libera de la necesidad de tener que decidir si es conveniente incluir en el cálculo los <em>outliers</em> o no: la utilización de <strong>técnicas robustas</strong>.</p>
@@ -2045,7 +1994,7 @@ kamino movers
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">scores3_top10</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars</a></span><span class="op">(</span>caption   <span class="op">=</span> <span class="st">"Puntuaciones emporesas TMI (Top-10, Hubert)"</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars</a></span><span class="op">(</span>caption   <span class="op">=</span> <span class="st">"Puntuaciones empresas TMI (Top-10, Hubert)"</span>,</span>
 <span>               col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Empresa"</span>,</span>
 <span>                             <span class="st">"Puntuación"</span>,</span>
 <span>                             <span class="st">"I. Diversif."</span>,</span>
@@ -2257,10 +2206,17 @@ io star transport
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 6.9.</strong> Puntuaciones emporesas TMI (Top-10, Hubert)</p>
+<p><strong>Tabla 6.9.</strong> Puntuaciones empresas TMI (Top-10, Hubert)</p>
 </div>
-<p>En la tabla se comprueba que existen leves variaciones con respecto a las clasificaciones anteriores. A destacar la inclusión en el <em>top-10</em> de <em>Ripley Interestellar Freight</em>, y la desparición de <em>Kamino Movers</em>.</p>
-<p>¿cuál de los 3 ránkings elegirías tú?</p>
+<p>En la tabla se comprueba que existen leves variaciones con respecto a las clasificaciones anteriores. A destacar la inclusión en el <em>top-10</em> de <em>Ripley Interestellar Freight</em>, y la desaparición de <em>Kamino Movers</em>.</p>
+<div id="la-decisión-de-arg-us-korp." class="section level3 unnumbered">
+<h3>
+<img src="figuras/star.svg" class="hicon"> La decisión de <em>Arg-Us Korp</em>.<a class="anchor" aria-label="anchor" href="#la-decisi%C3%B3n-de-arg-us-korp."><i class="fas fa-link"></i></a>
+</h3>
+<p>¿Cuál de los tres rankings elegiríamos? La elección no es trivial, y depende de la confianza que tengamos en la calidad de los datos. Si creemos que los <em>outliers</em> son errores o casos irrelevantes para la comparación, el ranking sin ellos (método clásico) es la opción más limpia. Si preferimos no descartar ninguna observación, el método robusto de Hubert ofrece una protección natural contra la distorsión, sin necesidad de eliminar casos.</p>
+<p>En cualquiera de los tres rankings, una empresa aparece consistentemente en las primeras posiciones: <strong><em>Home One Cargo</em></strong>. Su combinación de alta diversificación, fuerte fidelización de clientes y nivel de digitalización avanzado la sitúa como la candidata más sólida para afrontar el futuro del sector.</p>
+<p>Cuentan las crónicas que <em>Arg-us Korp</em> —siguiendo los consejos de su equipo de analistas, armados con R y un buen análisis de componentes principales— <strong>adquirió <em>Home One Cargo</em></strong> pocas semanas después. El precio de la operación no se ha hecho público, pero los analistas del sector coinciden en que fue una compra inteligente. Korp, fiel a su estilo, cerró la reunión de adquisición antes de que nadie más pudiera hablar.</p>
+</div>
 </div>
 <div id="materiales-para-realizar-las-prácticas-del-capítulo.-4" class="section level2" number="6.10">
 <h2>
@@ -2291,8 +2247,10 @@ io star transport
 <li><a class="nav-link" href="#c%C3%A1lculo-de-componentes."><span class="header-section-number">6.5</span>  Cálculo de componentes.</a></li>
 <li><a class="nav-link" href="#retenci%C3%B3n-de-componentes."><span class="header-section-number">6.6</span>  Retención de componentes.</a></li>
 <li><a class="nav-link" href="#puntuaciones-de-los-casos-scores."><span class="header-section-number">6.7</span>  Puntuaciones de los casos (scores).</a></li>
-<li><a class="nav-link" href="#puntuaciones-de-los-casos-scores.-1"><span class="header-section-number">6.8</span>  Puntuaciones de los casos (scores).</a></li>
-<li><a class="nav-link" href="#utilizaci%C3%B3n-de-t%C3%A9cnicas-robustas-m%C3%A9todo-de-hubert."><span class="header-section-number">6.9</span>  Utilización de técnicas robustas: método de Hubert.</a></li>
+<li><a class="nav-link" href="#efecto-de-los-outliers-en-las-puntuaciones."><span class="header-section-number">6.8</span>  Efecto de los outliers en las puntuaciones.</a></li>
+<li>
+<a class="nav-link" href="#utilizaci%C3%B3n-de-t%C3%A9cnicas-robustas-m%C3%A9todo-de-hubert."><span class="header-section-number">6.9</span>  Utilización de técnicas robustas: método de Hubert.</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#la-decisi%C3%B3n-de-arg-us-korp."> La decisión de Arg-Us Korp.</a></li></ul>
+</li>
 <li><a class="nav-link" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-4"><span class="header-section-number">6.10</span>  Materiales para realizar las prácticas del capítulo.</a></li>
 </ul>
 
