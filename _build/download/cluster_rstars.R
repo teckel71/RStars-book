@@ -69,13 +69,17 @@ fviz_dist(d, lab_size = 8)  # Del paquete {factoextra}
 # Método de Ward.
 cluster_j<-hclust(d, method="ward.D2")
 
-fviz_dend(cluster_j,
+d1<-fviz_dend(cluster_j,
           cex = 0.6,
+          lwd = 0.2,
           rect = FALSE,
           labels_track_height = 5.5) +
   labs(title = "Empresas TMI.",
        subtitle = "Método de Ward. Variables originales tipificadas.") +
-  theme_grey()
+  theme_grey() +
+  theme(legend.position = "none")
+d1$layers[[1]]$aes_params$linewidth <- 0.2
+d1
 
 # Método de obtención de número de grupos (k) del Ancho de Silueta.
 p <- fviz_nbclust(
@@ -88,8 +92,9 @@ p <- fviz_nbclust(
 p
 
 ngrupos = 5   # números de conglomerados decidido! #############################
-fviz_dend(cluster_j,
+d2<-fviz_dend(cluster_j,
           cex = 0.6,
+          lwd = 0.2,
           k = ngrupos, # número de conglomerados que se ha decidido formar!
           k_colors = "black",
           labels_track_height = 5.5,
@@ -98,7 +103,10 @@ fviz_dend(cluster_j,
           rect_fill = TRUE) +
   labs(title = "Empresas TMI.",
        subtitle = "Método de Ward. Variables originales tipificadas.") +
-  theme_grey()
+  theme_grey() +
+  theme(legend.position = "none")
+d2$layers[[1]]$aes_params$linewidth <- 0.2
+d2
 
 ## CARACTERIZACIÓN Y COMPOSICIÓN DE GRUPOS.
 
@@ -149,7 +157,7 @@ tablamedias %>%
     for (i in seq_along(variables)) {
     var1 <- variables[[i]]
     grafico <- ggplot(data= tablamedias,
-                      map = (aes_string(y = var1, x = "whatcluster_j"))) +
+                      aes_string(y = var1, x = "whatcluster_j")) +
                geom_bar(stat = "identity",
                         colour = "red",
                         fill = "orange",
@@ -211,7 +219,7 @@ tablamedias %>%
       var1 <- combinaciones[[i]][1]
       var2 <- combinaciones[[i]][2]
       grafico <- ggplot(seleccion,
-                        map = aes_string(x = var1,
+                        aes_string(x = var1,
                                          y = var2,
                                          color = "whatcluster_j")) +
                  geom_point() +

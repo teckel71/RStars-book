@@ -63,57 +63,29 @@ explora_outliers(
 zseleccion <- scale(seleccion)
 zseleccion <- as.matrix(zseleccion)  # dbscan espera matriz/numérico
 
-# 2) Determinación de minPts y eps
-minPts0 <- 6  # regla general: 2*p (p=3)
-ruido_obj <- 0.20 # proporción objetivo de ruido (p. ej., 0.10, 0.20, 0.30)
-tol_ruido <- 0.02 # tolerancia (±2 p.p.)
-max_iter  <- 30   # tope de iteraciones
+# 2) Parámetro minPts (regla empírica: 2*p, con p = 3 variables)
+minPts0 <- 6
 
-# 3) Rango inicial inteligente para eps usando kNN (k = minPts0-1)
-knn_d <- kNNdist(zseleccion, k = minPts0 - 1)
+# 3) Curva kNN para elegir eps por el método del codo
+knn_d    <- kNNdist(zseleccion, k = minPts0 - 1)
 d_sorted <- sort(as.numeric(knn_d))
+df_knn   <- data.frame(punto = seq_along(d_sorted), distancia = d_sorted)
 
-eps_lo <- max(min(d_sorted) * 0.9, 1e-6)      # límite inferior
-eps_hi <- max(d_sorted) * 1.5                  # límite superior amplio
+# Gráfico de la curva kNN
+ggplot(df_knn, aes(x = punto, y = distancia)) +
+  geom_line(color = "steelblue", linewidth = 1) +
+  labs(title = "Curva kNN para determinación de eps",
+       subtitle = paste("k =", minPts0 - 1, "vecinos"),
+       x = "Puntos ordenados por distancia",
+       y = paste("Distancia al", minPts0 - 1, "vecino más cercano")) +
+  theme_minimal(base_size = 13)
 
-# 4) Función auxiliar: calcula proporción de ruido para un eps
-noise_rate <- function(eps) {
-  fit <- dbscan::dbscan(zseleccion, eps = eps, minPts = minPts0)
-  mean(fit$cluster == 0)
-}
+# 4) Valor de eps elegido en el codo de la curva kNN
+eps_final <- 0.55
 
-# 5) Búsqueda binaria para acercarnos a ruido_obj
-tested <- data.frame(eps = numeric(0), ruido = numeric(0))
-
-for (i in seq_len(max_iter)) {
-  eps_mid <- (eps_lo + eps_hi) / 2
-  r_mid   <- noise_rate(eps_mid)
-  tested  <- rbind(tested, data.frame(eps = eps_mid, ruido = r_mid))
-  
-  if (abs(r_mid - ruido_obj) <= tol_ruido) break
-  if (r_mid > ruido_obj) {
-    # demasiado ruido -> aumentar eps para unir vecindarios y reducir ruido
-    eps_lo <- eps_mid
-  } else {
-    # poco ruido -> disminuir eps para ser más estricto
-    eps_hi <- eps_mid
-  }
-}
-
-# 6) Elegimos el eps con ruido más cercano a la diana
-ix_best   <- which.min(abs(tested$ruido - ruido_obj))
-eps_final <- tested$eps[ix_best]
-ruido_est <- tested$ruido[ix_best]
-
-# 7) Modelo final
+# 5) Modelo DBSCAN definitivo
 modelo_db <- dbscan::dbscan(zseleccion, eps = eps_final, minPts = minPts0)
 modelo_db
-
-# 8) Resumen rápido
-cat("\n---\n",
-    "eps_final =", round(eps_final, 3), 
-    "| ruido_obj =", scales::percent(ruido_obj),
-    "| ruido_logrado =", scales::percent(ruido_est), "\n")
 
 table(Cluster = modelo_db$cluster)
 
@@ -150,7 +122,7 @@ graficos.centroides <- list()
 for (i in seq_along(variables)) {
   var1 <- variables[[i]]
   grafico <- ggplot(data= tablamedias,
-                    map = (aes_string(y = var1, x = "whatcluster_dbs"))) +
+                    aes_string(y = var1, x = "whatcluster_dbs")) +
     geom_bar(stat = "identity",
              colour = "red",
              fill = "orange",
@@ -186,7 +158,7 @@ for (i in seq_along(combinaciones)) {
   var1 <- combinaciones[[i]][1]
   var2 <- combinaciones[[i]][2]
   grafico <- ggplot(seleccion,
-                    map = aes_string(x = var1,
+                    aes_string(x = var1,
                                      y = var2,
                                      color = "whatcluster_dbs")) +
     geom_point() +

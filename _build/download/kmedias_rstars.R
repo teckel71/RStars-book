@@ -12,7 +12,6 @@ library(visdat)
 library (cluster)
 library (ClusterR)
 library (patchwork)
-library (pgirmess)
 
 # Paquete MATrstars: funciones auxiliares del libro R-Stars.
 # Contiene, entre otras, las funciones create_patchwork() y kable_rstars(),
@@ -139,7 +138,7 @@ ggplot(df_sil, aes(x = k, y = Silhouette)) +
   for (i in seq_along(variables)) {
     var1 <- variables[[i]]
     grafico <- ggplot(data= tablamedias,
-                      map = (aes_string(y = var1, x = "whatcluster_k"))) +
+                      aes_string(y = var1, x = "whatcluster_k")) +
       geom_bar(stat = "identity",
                colour = "red",
                fill = "orange",
@@ -159,78 +158,6 @@ ggplot(df_sil, aes(x = k, y = Silhouette)) +
     print(grupos.graficos.centroides[[n]])
   }
 
-  # ¿Diferencias entre centroides estadísticamente significativas?
-
-    # Vector de nombre de variables excluyendo la variable no deseada
-      variables <- setdiff(names(seleccion_so), "whatcluster_k")
-
-    # Inicializar listas para almacenar gráficos y tablas
-      graficos_kw <- list()
-      tablas_kw <- list()
-
-  # Bucle para generar gráficos
-    for (i in seq_along(variables)) {
-         variable <- variables[i]
-  
-    # Crear el gráfico
-      p <- ggplot(data = seleccion_so,
-                  aes_string(x = "whatcluster_k",
-                             y = variable,
-                             fill = "whatcluster_k")) +
-           geom_boxplot(outlier.shape = NA) +
-           stat_summary(fun = "mean",
-                        geom = "point",
-                        size = 3,
-                        col = "red") +
-           stat_summary(fun = "mean",
-                        geom = "line",
-                        col = "red",
-                        aes(group = TRUE)) +   
-           geom_jitter(width = 0.1,
-                       size = 1,
-                       col = "red",
-                       alpha = 0.40) +
-           ggtitle(paste(variable, ". Comparación de grupos."),
-                   subtitle = "Empresas TMI.") +
-           ylab("Valor")
-  
-    # Almacenar el gráfico en la lista
-      graficos_kw[[i]] <- p
-    }
-
-    # Crear composiciones de gráficos.
-            gruposgraficos_kw <- create_patchwork(graficos_kw)    
-
-            for (i in seq_along(gruposgraficos_kw)) {
-              print(gruposgraficos_kw[[i]])
-            }   
-      
-    # Realizar el análisis de Kruskal-Wallis  y llevar resultados a tablas
-            
-      tablas_kw <- list()
-      for (i in seq_along(variables)) {
-         variable <- variables[i]
-         datos_kmc <- kruskalmc(as.formula(paste(variable, "~ whatcluster_k")),
-                                data = seleccion_so)
-              
-         tabla <- datos_kmc$dif.com %>%
-         kable_rstars(caption   = paste("k-medias. Diferencias de Centroides", variable),
-                      col.names = c("Diferencias centros",
-                                    "Diferencias críticas",
-                                    "Significación"),
-                      digits    = c(3, 3, NA))
-              
-       # Almacenar la tabla en la lista
-              
-         tablas_kw[[i]] <- tabla
-       }
-            
-       # Mostrar tablas almacenadas
-            
-       for (i in seq_along(tablas_kw)) {
-            print(tablas_kw[[i]])
-            }
-
 # GRÁFICOS Variable vs Variable
 
   # Lista de variables excluyendo la variable no deseada
@@ -247,7 +174,7 @@ ggplot(df_sil, aes(x = k, y = Silhouette)) +
          var1 <- combinaciones[[i]][1]
          var2 <- combinaciones[[i]][2]
          grafico <- ggplot(seleccion_so,
-                           map = aes_string(x = var1,
+                           aes_string(x = var1,
                                             y = var2,
                                             color = "whatcluster_k")) +
          geom_point() +
