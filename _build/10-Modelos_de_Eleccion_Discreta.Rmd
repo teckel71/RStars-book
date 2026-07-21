@@ -186,6 +186,7 @@ rm(list = ls())
 library(readxl)
 library(dplyr)
 library(ggplot2)
+library(gtExtras)
 library(aod)       # Para el contraste de Wald sobre factores
 
 if (!requireNamespace("MATrstars", quietly = TRUE)) {
@@ -208,16 +209,31 @@ En esta ocasión se incorpora un paquete nuevo, `{aod}`, que proporciona la func
 A continuación, se importan los datos desde el archivo Excel:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-LICENCIAS <- read_excel("licencias_100.xlsx", sheet = "Datos")
-LICENCIAS <- as.data.frame(LICENCIAS, row.names = 1)
+# Importando datos desde Excel
+LICENCIAS <- read_excel("licencias_100.xlsx",
+                        sheet = "Datos")
+LICENCIAS <- data.frame(LICENCIAS, row.names = 1)
 ```
+
+Podemos obtener un resumen visual de las variables con `gt_plt_summary()`:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+# Resumen visual de las variables
+licencias_graph <- gt_plt_summary(LICENCIAS)
+licencias_graph
+```
+
+::: {style="text-align: center;"}
+**Tabla 10.1**
+:::
+
 
 ### ![](figuras/pie-chart.svg) Detección de valores perdidos.
 
 Como paso previo a cualquier análisis, comprobamos la presencia de valores perdidos (*missing values*) en la base de datos mediante la función `explora_na()` del paquete `{MATrstars}`:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, fig.width=8, fig.height=4}
-options(matrstars.figura_num = "10.2", matrstars.tabla_num = "10.1")
+options(matrstars.figura_num = "10.2", matrstars.tabla_num = "10.2")
 LICENCIAS <- explora_na(
   LICENCIAS,
   accion    = "eliminar",
@@ -309,7 +325,7 @@ LICENCIAS %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.2.** Medias por grupo de licencia
+**Tabla 10.3.** Medias por grupo de licencia
 :::
 
 
@@ -438,7 +454,7 @@ salida$or
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.3.** Odd ratios
+**Tabla 10.4.** Odd ratios
 :::
 
 
@@ -475,7 +491,7 @@ salida$conf
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.4.** Matriz de confusión
+**Tabla 10.5.** Matriz de confusión
 :::
 
 
@@ -495,7 +511,7 @@ salida_test$conf
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.5.** Matriz de confusión
+**Tabla 10.6.** Matriz de confusión
 :::
 
 
@@ -553,7 +569,7 @@ simulacion$table
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.6.** Predicciones por escenario
+**Tabla 10.7.** Predicciones por escenario
 :::
 
 
@@ -581,7 +597,7 @@ salida_red$coef
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.7.** Modelo Logit Binomial
+**Tabla 10.8.** Modelo Logit Binomial
 :::
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
@@ -589,7 +605,7 @@ salida_red$gof
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.8.** Bondad del ajuste
+**Tabla 10.9.** Bondad del ajuste
 :::
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
@@ -597,7 +613,7 @@ salida_red$or
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.9.** Odd ratios
+**Tabla 10.10.** Odd ratios
 :::
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
@@ -605,7 +621,7 @@ salida_red$conf
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.10.** Matriz de confusión
+**Tabla 10.11.** Matriz de confusión
 :::
 
 
@@ -627,7 +643,7 @@ salida_red_test$conf
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 10.11.** Matriz de confusión
+**Tabla 10.12.** Matriz de confusión
 :::
 
 

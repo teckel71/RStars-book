@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>12 Técnicas de Mapeado Perceptual: Escalado Multidimensional. | R-Stars: La Guía</title>
+<meta name="author" content="Miguel-Ángel Tarancón Morán">
+<meta name="description" content="Figura 12.1. ¿Cómo nos ven? El mapa de las percepciones.  12.1 Introducción: los mapas perceptuales. En capítulos anteriores hemos utilizado diversas técnicas para describir, clasificar o explicar...">
+<meta name="generator" content="bookdown 0.46 with bs4_book()">
+<meta property="og:title" content="12 Técnicas de Mapeado Perceptual: Escalado Multidimensional. | R-Stars: La Guía">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://teckel71.github.io/RStars-book/técnicas-de-mapeado-perceptual-escalado-multidimensional..html">
+<meta property="og:image" content="https://teckel71.github.io/RStars-book/figuras/Portada_v3-2.jpg">
+<meta property="og:description" content="Figura 12.1. ¿Cómo nos ven? El mapa de las percepciones.  12.1 Introducción: los mapas perceptuales. En capítulos anteriores hemos utilizado diversas técnicas para describir, clasificar o explicar...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="12 Técnicas de Mapeado Perceptual: Escalado Multidimensional. | R-Stars: La Guía">
+<meta name="twitter:description" content="Figura 12.1. ¿Cómo nos ven? El mapa de las percepciones.  12.1 Introducción: los mapas perceptuales. En capítulos anteriores hemos utilizado diversas técnicas para describir, clasificar o explicar...">
+<meta name="twitter:image" content="https://teckel71.github.io/RStars-book/figuras/Portada_v3-2.jpg">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><link href="libs/Source_Serif_4-0.4.10/font.css" rel="stylesheet">
+<link href="libs/JetBrains_Mono-0.4.10/font.css" rel="stylesheet">
+<link href="libs/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
+<script src="libs/bs3compat-0.10.0/transition.js"></script><script src="libs/bs3compat-0.10.0/tabs.js"></script><script src="libs/bs3compat-0.10.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+          margin-bottom: 0em;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">R-Stars: La Guía</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html"></a></li>
+<li><a class="" href="prefacio.html">Prefacio</a></li>
+<li><a class="" href="introducci%C3%B3n..html"><span class="header-section-number">1</span> Introducción.</a></li>
+<li><a class="" href="almacenando-y-manipulando-datos..html"><span class="header-section-number">2</span> Almacenando y manipulando datos.</a></li>
+<li><a class="" href="gr%C3%A1ficos..html"><span class="header-section-number">3</span> Gráficos.</a></li>
+<li><a class="" href="estad%C3%ADstica-descriptiva..html"><span class="header-section-number">4</span> Estadística descriptiva.</a></li>
+<li><a class="" href="an%C3%A1lisis-previo-de-datos..html"><span class="header-section-number">5</span> Análisis previo de datos.</a></li>
+<li><a class="" href="componentes-principales..html"><span class="header-section-number">6</span> Componentes principales.</a></li>
+<li><a class="" href="an%C3%A1lisis-cl%C3%BAster..html"><span class="header-section-number">7</span> Análisis Clúster.</a></li>
+<li><a class="" href="an%C3%A1lisis-de-la-varianza..html"><span class="header-section-number">8</span> Análisis de la varianza.</a></li>
+<li><a class="" href="an%C3%A1lisis-de-regresi%C3%B3n-lineal-m%C3%BAltiple..html"><span class="header-section-number">9</span> Análisis de Regresión Lineal Múltiple.</a></li>
+<li><a class="" href="modelos-de-elecci%C3%B3n-discreta..html"><span class="header-section-number">10</span> Modelos de Elección Discreta.</a></li>
+<li><a class="" href="an%C3%A1lisis-de-datos-cualitativos..html"><span class="header-section-number">11</span> Análisis de Datos Cualitativos.</a></li>
+<li><a class="active" href="t%C3%A9cnicas-de-mapeado-perceptual-escalado-multidimensional..html"><span class="header-section-number">12</span> Técnicas de Mapeado Perceptual: Escalado Multidimensional.</a></li>
+<li><a class="" href="bibliograf%C3%ADa.html">Bibliografía</a></li>
+<li><a class="" href="ap%C3%A9ndice-bases-de-datos-utilizadas-en-el-libro..html">Apéndice: Bases de datos utilizadas en el libro.</a></li>
+<li><a class="" href="ap%C3%A9ndice-funciones-auxiliares-del-paquete-matrstars..html">Apéndice: Funciones auxiliares del paquete MATrstars.</a></li>
+<li><a class="" href="ap%C3%A9ndice-gu%C3%ADa-friki-del-universo-r-stars..html">Apéndice: Guía friki del universo R-Stars.</a></li>
+<li><a class="" href="licencia.html">Licencia</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="técnicas-de-mapeado-perceptual-escalado-multidimensional." class="section level1" number="12">
+<h1>
+<span class="header-section-number">12</span> Técnicas de Mapeado Perceptual: Escalado Multidimensional.<a class="anchor" aria-label="anchor" href="#t%C3%A9cnicas-de-mapeado-perceptual-escalado-multidimensional."><i class="fas fa-link"></i></a>
+</h1>
+<div class="inline-figure"><img src="figuras/mirandano_indeciso.jpg" style="width:100.0%"></div>
+<div style="text-align: center;">
+<p><strong>Figura 12.1.</strong> <span class="smallcaps">¿Cómo nos ven? El mapa de las percepciones.</span></p>
+</div>
+<div id="introducción-los-mapas-perceptuales." class="section level2" number="12.1">
+<h2>
+<span class="header-section-number">12.1</span> <img src="figuras/book.svg" class="hicon"> Introducción: los mapas perceptuales.<a class="anchor" aria-label="anchor" href="#introducci%C3%B3n-los-mapas-perceptuales."><i class="fas fa-link"></i></a>
+</h2>
+<p>En capítulos anteriores hemos utilizado diversas técnicas para describir, clasificar o explicar el comportamiento de un conjunto de variables. Todas ellas comparten un rasgo: parten de datos objetivos —cifras de ventas, ratios financieros, índices de satisfacción— y aplican procedimientos estadísticos para extraer conclusiones. Sin embargo, en el ámbito de la estrategia empresarial y el marketing, existe una pregunta que los datos objetivos, por sí solos, no responden: <strong>¿cómo perciben los clientes nuestro servicio en relación con los de la competencia?</strong></p>
+<p>Esta pregunta es esencialmente <strong>subjetiva</strong>, y para abordarla necesitamos una herramienta capaz de traducir las percepciones humanas en una representación visual interpretable. Esa herramienta es el <strong>mapa perceptual</strong>.</p>
+<p>Un mapa perceptual es una <strong>representación gráfica de las percepciones</strong> que tienen los clientes (o cualquier grupo de evaluadores) sobre las <strong>relaciones entre un conjunto de casos</strong> —productos, servicios, marcas, empresas— en un espacio de pocas dimensiones (habitualmente dos). Su objetivo es revelar las <strong>estructuras ocultas</strong> que subyacen en los datos de percepción: qué casos se consideran similares, cuáles se perciben como diferentes, y qué ejes o dimensiones latentes organizan esas percepciones en la mente de los encuestados.</p>
+<p>Los mapas perceptuales permiten responder a interrogantes fundamentales para la toma de decisiones empresariales:</p>
+<ul>
+<li><p>¿Quiénes son nuestros <strong>competidores</strong> más directos, desde el punto de vista del cliente?</p></li>
+<li><p>¿Cuál es nuestra <strong>posición en el mercado</strong> respecto a la competencia?</p></li>
+<li><p>¿Cómo podemos <strong>reposicionar</strong> nuestra marca o servicio?</p></li>
+<li><p>¿A qué <strong>segmento</strong> debemos dirigir nuestros esfuerzos?</p></li>
+<li><p>¿Cuáles son nuestras <strong>fortalezas y debilidades</strong> percibidas?</p></li>
+<li><p>¿Existe algún <strong>nicho</strong> de mercado no cubierto?</p></li>
+</ul>
+<p>Para construir estos mapas a partir de datos de percepción, se han desarrollado diversas técnicas estadísticas, entre las cuales destaca la familia de métodos conocida como <strong>Escalado Multidimensional</strong> (EMD).</p>
+</div>
+<div id="escalado-multidimensional-concepto-y-tipos." class="section level2" number="12.2">
+<h2>
+<span class="header-section-number">12.2</span> <img src="figuras/book.svg" class="hicon"> Escalado Multidimensional: concepto y tipos.<a class="anchor" aria-label="anchor" href="#escalado-multidimensional-concepto-y-tipos."><i class="fas fa-link"></i></a>
+</h2>
+<p>El <strong>Escalado Multidimensional</strong> (<em>Multidimensional Scaling</em>, MDS) es una técnica que permite descubrir estructuras o patrones dentro de una <strong>matriz de proximidades</strong> entre casos. Su objetivo es doble:</p>
+<ol style="list-style-type: decimal">
+<li><p>Determinar la <strong>dimensión del modelo</strong> (el número de ejes) que proporcione un ajuste satisfactorio.</p></li>
+<li><p>Obtener las <strong>coordenadas de los casos</strong> en esas dimensiones, de manera que las distancias entre los puntos en el mapa reflejen fielmente las proximidades percibidas: cuanto más cercanos sean dos puntos, más similares serán las opiniones de los encuestados sobre esos dos casos.</p></li>
+</ol>
+<p>Una ventaja importante del EMD frente a otras técnicas multivariantes (como el análisis factorial o el análisis de correspondencias) es que los <strong>resultados no dependen de los juicios del investigador</strong> sobre qué variables o características incluir. No es necesario presentar a los encuestados una lista predefinida de atributos: las dimensiones que emergen del análisis proceden directamente de los <strong>juicios globales de los encuestados sobre la similitud entre los casos</strong>.</p>
+<p>Dicho esto, en la práctica aplicada es frecuente que los datos de partida no sean juicios directos de similitud, sino <strong>valoraciones de los casos en un conjunto de atributos</strong> (por ejemplo, mediante escalas Likert). En estos casos, la matriz de proximidades se <strong>deriva</strong> de los datos de valoración, como veremos más adelante.</p>
+<div id="proximidades-y-distancias." class="section level3" number="12.2.1">
+<h3>
+<span class="header-section-number">12.2.1</span> Proximidades y distancias.<a class="anchor" aria-label="anchor" href="#proximidades-y-distancias."><i class="fas fa-link"></i></a>
+</h3>
+<p>El concepto central del EMD es la <strong>proximidad</strong> entre dos casos: un valor que indica cuán similares o diferentes los perciben los encuestados. Cuando se habla de proximidad en este contexto, nos referimos a una «distancia perceptual» entre los casos.</p>
+<p>El procedimiento más directo para obtener datos de proximidad es <strong>preguntar a las personas</strong> acerca del parecido que perciben entre cada par de casos. Sin embargo, este enfoque resulta costoso cuando el número de casos es elevado (con <span class="math inline">\(n\)</span> casos hay <span class="math inline">\(n(n-1)/2\)</span> pares distintos), y en la práctica se recurre con frecuencia a un procedimiento indirecto: pedir a los encuestados que <strong>valoren cada caso en una serie de atributos</strong> mediante una escala tipo Likert, y calcular después la distancia entre los perfiles de valoración.</p>
+<p>Formalmente, la <strong>matriz de proximidades</strong> <span class="math inline">\(\Delta\)</span> recoge las distancias entre todos los pares de casos:</p>
+<p><span class="math display">\[
+\Delta = \begin{pmatrix} \delta_{11} &amp; \cdots &amp; \delta_{1j} &amp; \cdots &amp; \delta_{1n} \\ \vdots &amp; &amp; \vdots &amp; &amp; \vdots \\ \delta_{i1} &amp; \cdots &amp; \delta_{ij} &amp; \cdots &amp; \delta_{in} \\ \vdots &amp; &amp; \vdots &amp; &amp; \vdots \\ \delta_{n1} &amp; \cdots &amp; \delta_{nj} &amp; \cdots &amp; \delta_{nn} \end{pmatrix}
+\]</span></p>
+<p>donde <span class="math inline">\(\delta_{ij}\)</span> representa la proximidad (distancia) entre el caso <span class="math inline">\(i\)</span> y el caso <span class="math inline">\(j\)</span>. Esta matriz es simétrica (<span class="math inline">\(\delta_{ij} = \delta_{ji}\)</span>) y tiene ceros en la diagonal (<span class="math inline">\(\delta_{ii} = 0\)</span>).</p>
+</div>
+<div id="la-matriz-de-dimensiones." class="section level3" number="12.2.2">
+<h3>
+<span class="header-section-number">12.2.2</span> La matriz de dimensiones.<a class="anchor" aria-label="anchor" href="#la-matriz-de-dimensiones."><i class="fas fa-link"></i></a>
+</h3>
+<p>El objetivo del EMD es encontrar, a partir de <span class="math inline">\(\Delta\)</span>, una <strong>matriz de coordenadas</strong> <span class="math inline">\(X\)</span> que represente cada caso como un punto en un espacio de <span class="math inline">\(p\)</span> dimensiones:</p>
+<p><span class="math display">\[
+X = \begin{pmatrix} x_{11} &amp; \cdots &amp; x_{1j} &amp; \cdots &amp; x_{1p} \\ \vdots &amp; &amp; \vdots &amp; &amp; \vdots \\ x_{i1} &amp; \cdots &amp; x_{ij} &amp; \cdots &amp; x_{ip} \\ \vdots &amp; &amp; \vdots &amp; &amp; \vdots \\ x_{n1} &amp; \cdots &amp; x_{nj} &amp; \cdots &amp; x_{np} \end{pmatrix}
+\]</span></p>
+<p>La fila <span class="math inline">\(i\)</span> recoge las puntuaciones (coordenadas) del caso <span class="math inline">\(i\)</span> en cada una de las <span class="math inline">\(p\)</span> dimensiones. Estas coordenadas deben generar distancias entre los puntos que sean lo más coherentes posible con las proximidades originales de la matriz <span class="math inline">\(\Delta\)</span>.</p>
+</div>
+<div id="emd-métrico-y-no-métrico." class="section level3" number="12.2.3">
+<h3>
+<span class="header-section-number">12.2.3</span> EMD métrico y no métrico.<a class="anchor" aria-label="anchor" href="#emd-m%C3%A9trico-y-no-m%C3%A9trico."><i class="fas fa-link"></i></a>
+</h3>
+<p>La diferencia entre ambos tipos radica en el <strong>nivel de exigencia</strong> con que se pide que las distancias en el mapa reproduzcan las proximidades originales:</p>
+<ul>
+<li><p><strong>EMD métrico (clásico):</strong> exige que las distancias en el mapa sean <strong>proporcionales</strong> a las proximidades originales. Es decir, si la distancia entre A y B es el doble que la distancia entre C y D en los datos, también debe serlo en el mapa. Se utiliza cuando las proximidades están medidas en una escala de razón o intervalo, con significado métrico preciso.</p></li>
+<li><p><strong>EMD no métrico (ordinal):</strong> exige únicamente que las distancias en el mapa preserven el <strong>orden</strong> de las proximidades originales. Si A y B están más cerca que C y D en los datos, también deben estarlo en el mapa, pero no importa cuánto más cerca. Basta con que se respete la ordenación, no las magnitudes exactas.</p></li>
+</ul>
+<p>El EMD no métrico es el más utilizado en Ciencias Sociales y en investigación de mercados, porque los datos de encuesta (escalas Likert, valoraciones ordinales) no tienen un significado métrico estricto: la diferencia entre un 4 y un 5 en una escala de satisfacción no es necesariamente la misma que la diferencia entre un 6 y un 7. Al trabajar solo con el orden, el EMD no métrico es más robusto frente a esta limitación.</p>
+<p>En este capítulo nos centraremos en el <strong>EMD no métrico</strong>, que es el más adecuado cuando los datos proceden de encuestas con escalas Likert.</p>
+</div>
+</div>
+<div id="el-algoritmo-smacof-y-el-stress." class="section level2" number="12.3">
+<h2>
+<span class="header-section-number">12.3</span> <img src="figuras/book.svg" class="hicon"> El algoritmo SMACOF y el Stress.<a class="anchor" aria-label="anchor" href="#el-algoritmo-smacof-y-el-stress."><i class="fas fa-link"></i></a>
+</h2>
+<div id="smacof." class="section level3" number="12.3.1">
+<h3>
+<span class="header-section-number">12.3.1</span> SMACOF.<a class="anchor" aria-label="anchor" href="#smacof."><i class="fas fa-link"></i></a>
+</h3>
+<p>Para pasar de la matriz de proximidades a la matriz de coordenadas, se han desarrollado diversos algoritmos. Uno de los más utilizados en EMD no métrico es <strong>SMACOF</strong> (<em>Scaling by Majorizing a Complicated Function</em>), implementado en el paquete <code>{smacof}</code> de R.</p>
+<p>SMACOF busca iterativamente las coordenadas de los casos que minimizan una medida de desajuste denominada <strong>Stress</strong>. El proceso es conceptualmente sencillo: parte de una configuración inicial (habitualmente aleatoria o basada en un análisis de componentes principales) y la va refinando en sucesivas iteraciones hasta que el Stress deja de mejorar apreciablemente.</p>
+</div>
+<div id="el-stress-como-medida-de-bondad-del-ajuste." class="section level3" number="12.3.2">
+<h3>
+<span class="header-section-number">12.3.2</span> El Stress como medida de bondad del ajuste.<a class="anchor" aria-label="anchor" href="#el-stress-como-medida-de-bondad-del-ajuste."><i class="fas fa-link"></i></a>
+</h3>
+<p>El <strong>Stress</strong> cuantifica la discrepancia entre las proximidades originales y las distancias obtenidas en la configuración MDS. Su valor oscila entre 0 (ajuste perfecto: las distancias en el mapa reproducen exactamente el orden de las proximidades) y valores positivos que indican grados crecientes de desajuste.</p>
+<p>Kruskal (1964) propuso la siguiente escala orientativa para interpretar el Stress:</p>
+<div class="inline-table"><table class="table table-sm">
+<thead><tr class="header">
+<th align="center">Stress</th>
+<th align="left">Calidad de la representación</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(&gt; 0{,}20\)</span></td>
+<td align="left">Pobre</td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(0{,}10 - 0{,}20\)</span></td>
+<td align="left">Razonable</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(0{,}05 - 0{,}10\)</span></td>
+<td align="left">Buena</td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(0{,}025 - 0{,}05\)</span></td>
+<td align="left">Excelente</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(0 - 0{,}025\)</span></td>
+<td align="left">Perfecta</td>
+</tr>
+</tbody>
+</table></div>
+<div style="text-align: center;">
+<p><strong>Tabla 12.1</strong></p>
+</div>
+<p>La elección del número de dimensiones <span class="math inline">\(p\)</span> se basa en un equilibrio entre parsimonia (pocas dimensiones, fáciles de interpretar) y calidad del ajuste (Stress bajo). La herramienta visual para esta decisión es el <strong>gráfico de codo</strong> (<em>scree plot</em>) del Stress: se representan los valores del Stress obtenidos para <span class="math inline">\(p = 1, 2, 3, \ldots\)</span> y se busca el punto a partir del cual añadir una dimensión más produce una mejora marginal reducida.</p>
+</div>
+<div id="el-diagrama-de-shepard." class="section level3" number="12.3.3">
+<h3>
+<span class="header-section-number">12.3.3</span> El diagrama de Shepard.<a class="anchor" aria-label="anchor" href="#el-diagrama-de-shepard."><i class="fas fa-link"></i></a>
+</h3>
+<p>Además del Stress, disponemos de una herramienta visual para evaluar la calidad del ajuste: el <strong>diagrama de Shepard</strong>. Este gráfico enfrenta en el eje horizontal las proximidades originales y en el eje vertical las distancias obtenidas en la configuración MDS. Si el ajuste es bueno, los puntos se alinearán sobre una función <strong>monótona creciente</strong> (en el caso no métrico) o sobre una línea recta (en el caso métrico).</p>
+<p>El diagrama de Shepard permite detectar visualmente casos problemáticos: pares de casos cuya distancia en el mapa no se corresponde con su proximidad original (puntos muy alejados de la tendencia general).</p>
+</div>
+</div>
+<div id="práctica-el-mapa-perceptual-del-sector-interestelar." class="section level2" number="12.4">
+<h2>
+<span class="header-section-number">12.4</span> <img src="figuras/pie-chart.svg"> Práctica: el mapa perceptual del sector interestelar.<a class="anchor" aria-label="anchor" href="#pr%C3%A1ctica-el-mapa-perceptual-del-sector-interestelar."><i class="fas fa-link"></i></a>
+</h2>
+<div id="la-imagen-del-sector." class="section level3" number="12.4.1">
+<h3>
+<span class="header-section-number">12.4.1</span> <img src="figuras/star.svg" class="hicon"> La imagen del sector.<a class="anchor" aria-label="anchor" href="#la-imagen-del-sector."><i class="fas fa-link"></i></a>
+</h3>
+<p>La <strong>Asociación Sectorial de Transporte Interestelar (ASTI)</strong> ha detectado una tendencia preocupante entre las pequeñas y medianas empresas que contratan servicios de transporte de mercancías: muchos clientes consideran que «todas las compañías navieras son iguales» y eligen transportista basándose casi exclusivamente en el precio. Esto está erosionando los márgenes de todo el sector y dificultando que las compañías con mejor servicio puedan diferenciarse.</p>
+<p>Para combatir esta dinámica, la ASTI ha encargado a la consultora <em>Data-Evidence</em> un estudio que responda a dos preguntas clave: <strong>¿cómo perciben realmente los clientes a las distintas compañías del sector?</strong> y <strong>¿existen dimensiones latentes de diferenciación que el sector no está comunicando adecuadamente?</strong></p>
+<p>El equipo de <em>Data-Evidence</em> diseña un cuestionario con seis atributos clave del servicio de transporte de mercancías —fiabilidad, puntualidad, seguridad de la carga, relación calidad-precio, atención al cliente e innovación tecnológica— y recoge las valoraciones de 30 clientes frecuentes (pequeñas empresas que contratan servicios de transporte interestelar) sobre 15 de las principales compañías del sector, utilizando una escala Likert de 1 (muy deficiente) a 7 (excelente). Con estos datos, construirá un <strong>mapa perceptual</strong> mediante Escalado Multidimensional No-Métrico.</p>
+</div>
+<div id="preparación-de-los-datos.-6" class="section level3" number="12.4.2">
+<h3>
+<span class="header-section-number">12.4.2</span> <img src="figuras/pie-chart.svg"> Preparación de los datos.<a class="anchor" aria-label="anchor" href="#preparaci%C3%B3n-de-los-datos.-6"><i class="fas fa-link"></i></a>
+</h3>
+<p>Para llevar a cabo la práctica, necesitamos dos archivos en la carpeta de nuestro proyecto:</p>
+<ul>
+<li><p>El archivo de datos <strong>percepcion_interestelar.xlsx</strong>, que contiene tres hojas: un aviso sobre la naturaleza ficticia de los datos, la descripción de las variables y los datos agregados (medias por empresa).</p></li>
+<li><p>El <em>script</em> <strong>emd_rstars.R</strong>, con el código que iremos ejecutando paso a paso.</p></li>
+</ul>
+<p>Como es habitual, la primera parte del <em>script</em> está dedicada a la limpieza de la memoria y a la carga de los paquetes necesarios:</p>
+<div class="sourceCode" id="cb451"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Limpiando el Global Environment</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># Cargando paquetes</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggrepel.slowkow.com/">ggrepel</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jthomasmock/gtExtras">gtExtras</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">smacof</span><span class="op">)</span>       <span class="co"># Algoritmo SMACOF para EMD</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/kassambara/factoextra">factoextra</a></span><span class="op">)</span>   <span class="co"># Visualización de la matriz de distancias</span></span>
+<span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"MATrstars"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span>  <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"teckel71/MATrstars"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/teckel71/MATrstars">MATrstars</a></span><span class="op">)</span></span></code></pre></div>
+<p>En esta ocasión se incorpora un paquete nuevo, <code>{smacof}</code>, que implementa el algoritmo SMACOF para Escalado Multidimensional. Su función principal, <code><a href="https://rdrr.io/pkg/smacof/man/smacofSym.html">mds()</a></code>, recibe una matriz de distancias y devuelve la configuración óptima en el número de dimensiones solicitado. Además, utilizamos <a href="https://github.com/kassambara/factoextra">factoextra</a> para la visualización de la matriz de distancias y <a href="https://ggrepel.slowkow.com/">ggrepel</a> para evitar el solapamiento de etiquetas en los gráficos.</p>
+<p>A continuación, se importan los datos desde el archivo Excel. La hoja “Datos” contiene las valoraciones medias de cada empresa en cada uno de los seis atributos. Las 15 compañías seleccionadas para el estudio pertenecen al universo de 300 empresas de la Base de Datos Interestelar, y presentan perfiles muy diversos: desde grandes corporaciones con flota renovada como <em>Arrakis Freight</em> o <em>Excalibur Freight Systems</em>, hasta compañías pequeñas con flota antigua como <em>Sandworm Freight</em> o <em>First Order Cargo</em>, pasando por empresas de tamaño medio con flota madura como <em>Shuttlepod Movers</em> o <em>Defiant Cargo</em>:</p>
+<div class="sourceCode" id="cb452"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Importando datos desde Excel</span></span>
+<span><span class="va">PERCEPCION</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"percepcion_interestelar.xlsx"</span>,</span>
+<span>                         sheet <span class="op">=</span> <span class="st">"Datos"</span><span class="op">)</span></span>
+<span><span class="va">PERCEPCION</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">PERCEPCION</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p>El <em>data frame</em> resultante tiene 15 filas (una por empresa) y 6 columnas (una por atributo), con los nombres de las empresas como nombres de fila. Las valoraciones oscilan entre 1 y 7, como corresponde a la escala Likert utilizada en la encuesta. Podemos obtener un resumen visual de las variables con <code><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary()</a></code>:</p>
+<div class="sourceCode" id="cb453"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Resumen visual de las variables</span></span>
+<span><span class="va">percepcion_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary</a></span><span class="op">(</span><span class="va">PERCEPCION</span><span class="op">)</span></span>
+<span><span class="va">percepcion_graph</span></span></code></pre></div>
+<div id="anwhdjvgji" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+#anwhdjvgji table {
+  font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#anwhdjvgji thead, #anwhdjvgji tbody, #anwhdjvgji tfoot, #anwhdjvgji tr, #anwhdjvgji td, #anwhdjvgji th {
+  border-style: none;
+}
+
+#anwhdjvgji p {
+  margin: 0;
+  padding: 0;
+}
+
+#anwhdjvgji .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 3px;
+  border-top-color: #FFFFFF;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#anwhdjvgji .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#anwhdjvgji .gt_title {
+  color: #333333;
+  font-size: 24px;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#anwhdjvgji .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#anwhdjvgji .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#anwhdjvgji .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 0px;
+  border-bottom-color: #D3D3D3;
+}
+
+#anwhdjvgji .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 0px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#anwhdjvgji .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 80%;
+  font-weight: bolder;
+  text-transform: uppercase;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#anwhdjvgji .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 80%;
+  font-weight: bolder;
+  text-transform: uppercase;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#anwhdjvgji .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#anwhdjvgji .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#anwhdjvgji .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#anwhdjvgji .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#anwhdjvgji .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 80%;
+  font-weight: bolder;
+  text-transform: uppercase;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#anwhdjvgji .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 80%;
+  font-weight: bolder;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#anwhdjvgji .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#anwhdjvgji .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#anwhdjvgji .gt_row {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #F6F7F7;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#anwhdjvgji .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 80%;
+  font-weight: bolder;
+  text-transform: uppercase;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#anwhdjvgji .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#anwhdjvgji .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#anwhdjvgji .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#anwhdjvgji .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#anwhdjvgji .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#anwhdjvgji .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#anwhdjvgji .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#anwhdjvgji .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#anwhdjvgji .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#anwhdjvgji .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#anwhdjvgji .gt_striped {
+  background-color: #FAFAFA;
+}
+
+#anwhdjvgji .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#anwhdjvgji .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#anwhdjvgji .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#anwhdjvgji .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#anwhdjvgji .gt_sourcenote {
+  font-size: 12px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#anwhdjvgji .gt_left {
+  text-align: left;
+}
+
+#anwhdjvgji .gt_center {
+  text-align: center;
+}
+
+#anwhdjvgji .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#anwhdjvgji .gt_font_normal {
+  font-weight: normal;
+}
+
+#anwhdjvgji .gt_font_bold {
+  font-weight: bold;
+}
+
+#anwhdjvgji .gt_font_italic {
+  font-style: italic;
+}
+
+#anwhdjvgji .gt_super {
+  font-size: 65%;
+}
+
+#anwhdjvgji .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#anwhdjvgji .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#anwhdjvgji .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#anwhdjvgji .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#anwhdjvgji .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#anwhdjvgji .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#anwhdjvgji .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#anwhdjvgji .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#anwhdjvgji div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<div class="inline-table"><table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading">
+<td colspan="7" class="gt_heading gt_title gt_font_normal" style>PERCEPCION</td>
+    </tr>
+<tr class="gt_heading">
+<td colspan="7" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>15 rows x 6 cols</td>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="type"></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="name">Column</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="value">Plot Overview</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="n_missing">Missing</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mean">Mean</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Median">Median</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="SD">SD</th>
+    </tr>
+</thead>
+<tbody class="gt_table_body">
+<tr>
+<td headers="type" class="gt_row gt_left"><svg aria-hidden="true" role="img" viewbox="0 0 640 512" style="height:20px;width:25px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#f18e2c;overflow:visible;position:relative;"><path d="M576 0c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V32c0-17.7 14.3-32 32-32zM448 96c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V128c0-17.7 14.3-32 32-32zM352 224V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V224c0-17.7 14.3-32 32-32s32 14.3 32 32zM192 288c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V320c0-17.7 14.3-32 32-32zM96 416v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V416c0-17.7 14.3-32 32-32s32 14.3 32 32z"></path></svg></td>
+<td headers="name" class="gt_row gt_left" style="font-weight: bold;">FIABILIDAD</td>
+<td headers="value" class="gt_row gt_center">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="141.73pt" height="34.02pt" viewbox="0 0 141.73 34.02"><g class="svglite"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }    .svglite g.glyphgroup path {      fill: inherit;      stroke: none;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg=="><rect x="0.00" y="0.00" width="141.73" height="34.02"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg==)"><rect x="0.00" y="0.00" width="141.73" height="34.02" style="stroke-width: 0.00; stroke: none;"></rect></g><defs><clippath id="cpMS4wMHwxNDAuNzR8MS4wMHwyMi42Mw=="><rect x="1.00" y="1.00" width="139.74" height="21.63"></rect></clippath></defs><g clip-path="url(#cpMS4wMHwxNDAuNzR8MS4wMHwyMi42Mw==)"><rect x="7.35" y="22.63" width="21.17" height="0.00" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="28.52" y="13.97" width="21.17" height="8.65" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="49.69" y="13.97" width="21.17" height="8.65" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="70.87" y="1.00" width="21.17" height="21.63" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="92.04" y="5.32" width="21.17" height="17.30" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="113.21" y="13.97" width="21.17" height="8.65" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><circle cx="27.74" cy="18.30" r="0.46" style="stroke-width: 0.71; stroke: none;"></circle><circle cx="27.74" cy="18.30" r="0.46" style="stroke-width: 0.71; stroke: none;"></circle><line x1="87.80" y1="22.63" x2="87.80" y2="1.00" style="stroke-width: 1.07; stroke-linecap: butt;"></line></g><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg==)"><polyline points="1.00,22.63 140.74,22.63 " style="stroke-width: 0.75;"></polyline><polyline points="28.69,25.46 28.69,22.63 " style="stroke-width: 0.75;"></polyline><polyline points="124.06,25.46 124.06,22.63 " style="stroke-width: 0.75;"></polyline><text x="28.69" y="33.56" text-anchor="middle" style='font-size: 6.00px; font-family: "Arial";' textlength="21.73px" lengthadjust="spacingAndGlyphs">3.8 auto</text><text x="124.06" y="33.56" text-anchor="middle" style='font-size: 6.00px; font-family: "Arial";' textlength="21.73px" lengthadjust="spacingAndGlyphs">6.4 auto</text></g></g></svg>
+</td>
+<td headers="n_missing" class="gt_row gt_right">0.0%</td>
+<td headers="Mean" class="gt_row gt_right">5.3</td>
+<td headers="Median" class="gt_row gt_right">5.4</td>
+<td headers="SD" class="gt_row gt_right">0.7</td>
+</tr>
+<tr>
+<td headers="type" class="gt_row gt_left gt_striped"><svg aria-hidden="true" role="img" viewbox="0 0 640 512" style="height:20px;width:25px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#f18e2c;overflow:visible;position:relative;"><path d="M576 0c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V32c0-17.7 14.3-32 32-32zM448 96c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V128c0-17.7 14.3-32 32-32zM352 224V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V224c0-17.7 14.3-32 32-32s32 14.3 32 32zM192 288c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V320c0-17.7 14.3-32 32-32zM96 416v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V416c0-17.7 14.3-32 32-32s32 14.3 32 32z"></path></svg></td>
+<td headers="name" class="gt_row gt_left gt_striped" style="font-weight: bold;">PUNTUALIDAD</td>
+<td headers="value" class="gt_row gt_center gt_striped">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="141.73pt" height="34.02pt" viewbox="0 0 141.73 34.02"><g class="svglite"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }    .svglite g.glyphgroup path {      fill: inherit;      stroke: none;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg=="><rect x="0.00" y="0.00" width="141.73" height="34.02"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg==)"><rect x="0.00" y="0.00" width="141.73" height="34.02" style="stroke-width: 0.00; stroke: none;"></rect></g><defs><clippath id="cpMS4wMHwxNDAuNzR8MS4wMHwyMi42Mw=="><rect x="1.00" y="1.00" width="139.74" height="21.63"></rect></clippath></defs><g clip-path="url(#cpMS4wMHwxNDAuNzR8MS4wMHwyMi42Mw==)"><rect x="7.35" y="18.30" width="25.41" height="4.33" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="32.76" y="1.00" width="25.41" height="21.63" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="58.16" y="1.00" width="25.41" height="21.63" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="83.57" y="13.97" width="25.41" height="8.65" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="108.98" y="13.97" width="25.41" height="8.65" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><circle cx="26.96" cy="18.30" r="0.46" style="stroke-width: 0.71; stroke: none;"></circle><circle cx="26.96" cy="18.30" r="0.46" style="stroke-width: 0.71; stroke: none;"></circle><line x1="67.56" y1="22.63" x2="67.56" y2="1.00" style="stroke-width: 1.07; stroke-linecap: butt;"></line></g><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg==)"><polyline points="1.00,22.63 140.74,22.63 " style="stroke-width: 0.75;"></polyline><polyline points="27.93,25.46 27.93,22.63 " style="stroke-width: 0.75;"></polyline><polyline points="125.27,25.46 125.27,22.63 " style="stroke-width: 0.75;"></polyline><text x="27.93" y="33.56" text-anchor="middle" style='font-size: 6.00px; font-family: "Arial";' textlength="21.73px" lengthadjust="spacingAndGlyphs">2.4 auto</text><text x="125.27" y="33.56" text-anchor="middle" style='font-size: 6.00px; font-family: "Arial";' textlength="21.73px" lengthadjust="spacingAndGlyphs">6.3 auto</text></g></g></svg>
+</td>
+<td headers="n_missing" class="gt_row gt_right gt_striped">0.0%</td>
+<td headers="Mean" class="gt_row gt_right gt_striped">4.1</td>
+<td headers="Median" class="gt_row gt_right gt_striped">4.0</td>
+<td headers="SD" class="gt_row gt_right gt_striped">1.1</td>
+</tr>
+<tr>
+<td headers="type" class="gt_row gt_left"><svg aria-hidden="true" role="img" viewbox="0 0 640 512" style="height:20px;width:25px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#f18e2c;overflow:visible;position:relative;"><path d="M576 0c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V32c0-17.7 14.3-32 32-32zM448 96c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V128c0-17.7 14.3-32 32-32zM352 224V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V224c0-17.7 14.3-32 32-32s32 14.3 32 32zM192 288c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V320c0-17.7 14.3-32 32-32zM96 416v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V416c0-17.7 14.3-32 32-32s32 14.3 32 32z"></path></svg></td>
+<td headers="name" class="gt_row gt_left" style="font-weight: bold;">SEGURIDAD</td>
+<td headers="value" class="gt_row gt_center">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="141.73pt" height="34.02pt" viewbox="0 0 141.73 34.02"><g class="svglite"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }    .svglite g.glyphgroup path {      fill: inherit;      stroke: none;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg=="><rect x="0.00" y="0.00" width="141.73" height="34.02"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg==)"><rect x="0.00" y="0.00" width="141.73" height="34.02" style="stroke-width: 0.00; stroke: none;"></rect></g><defs><clippath id="cpMS4wMHwxNDAuNzR8MS4wMHwyMi42Mw=="><rect x="1.00" y="1.00" width="139.74" height="21.63"></rect></clippath></defs><g clip-path="url(#cpMS4wMHwxNDAuNzR8MS4wMHwyMi42Mw==)"><rect x="7.35" y="1.00" width="63.52" height="21.63" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="70.87" y="8.21" width="63.52" height="14.42" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><circle cx="7.43" cy="20.22" r="0.46" style="stroke-width: 0.71; stroke: none;"></circle><circle cx="7.43" cy="20.22" r="0.46" style="stroke-width: 0.71; stroke: none;"></circle><line x1="45.17" y1="22.63" x2="45.17" y2="1.00" style="stroke-width: 1.07; stroke-linecap: butt;"></line></g><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg==)"><polyline points="1.00,22.63 140.74,22.63 " style="stroke-width: 0.75;"></polyline><polyline points="8.65,25.46 8.65,22.63 " style="stroke-width: 0.75;"></polyline><polyline points="131.52,25.46 131.52,22.63 " style="stroke-width: 0.75;"></polyline><text x="8.65" y="33.56" text-anchor="middle" style='font-size: 6.00px; font-family: "Arial";' textlength="21.73px" lengthadjust="spacingAndGlyphs">2.8 auto</text><text x="131.52" y="33.56" text-anchor="middle" style='font-size: 6.00px; font-family: "Arial";' textlength="21.73px" lengthadjust="spacingAndGlyphs">6.4 auto</text></g></g></svg>
+</td>
+<td headers="n_missing" class="gt_row gt_right">0.0%</td>
+<td headers="Mean" class="gt_row gt_right">4.5</td>
+<td headers="Median" class="gt_row gt_right">3.9</td>
+<td headers="SD" class="gt_row gt_right">1.3</td>
+</tr>
+<tr>
+<td headers="type" class="gt_row gt_left gt_striped"><svg aria-hidden="true" role="img" viewbox="0 0 640 512" style="height:20px;width:25px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#f18e2c;overflow:visible;position:relative;"><path d="M576 0c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V32c0-17.7 14.3-32 32-32zM448 96c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V128c0-17.7 14.3-32 32-32zM352 224V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V224c0-17.7 14.3-32 32-32s32 14.3 32 32zM192 288c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V320c0-17.7 14.3-32 32-32zM96 416v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V416c0-17.7 14.3-32 32-32s32 14.3 32 32z"></path></svg></td>
+<td headers="name" class="gt_row gt_left gt_striped" style="font-weight: bold;">PRECIO</td>
+<td headers="value" class="gt_row gt_center gt_striped">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="141.73pt" height="34.02pt" viewbox="0 0 141.73 34.02"><g class="svglite"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }    .svglite g.glyphgroup path {      fill: inherit;      stroke: none;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg=="><rect x="0.00" y="0.00" width="141.73" height="34.02"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg==)"><rect x="0.00" y="0.00" width="141.73" height="34.02" style="stroke-width: 0.00; stroke: none;"></rect></g><defs><clippath id="cpMS4wMHwxNDAuNzR8MS4wMHwyMi42Mw=="><rect x="1.00" y="1.00" width="139.74" height="21.63"></rect></clippath></defs><g clip-path="url(#cpMS4wMHwxNDAuNzR8MS4wMHwyMi42Mw==)"><rect x="7.35" y="17.82" width="31.76" height="4.81" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="39.11" y="15.42" width="31.76" height="7.21" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="70.87" y="1.00" width="31.76" height="21.63" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="102.63" y="20.22" width="31.76" height="2.40" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><circle cx="24.63" cy="20.22" r="0.46" style="stroke-width: 0.71; stroke: none;"></circle><circle cx="24.63" cy="20.22" r="0.46" style="stroke-width: 0.71; stroke: none;"></circle><line x1="93.63" y1="22.63" x2="93.63" y2="1.00" style="stroke-width: 1.07; stroke-linecap: butt;"></line></g><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg==)"><polyline points="1.00,22.63 140.74,22.63 " style="stroke-width: 0.75;"></polyline><polyline points="25.52,25.46 25.52,22.63 " style="stroke-width: 0.75;"></polyline><polyline points="114.44,25.46 114.44,22.63 " style="stroke-width: 0.75;"></polyline><text x="25.52" y="33.56" text-anchor="middle" style='font-size: 6.00px; font-family: "Arial";' textlength="21.73px" lengthadjust="spacingAndGlyphs">1.8 auto</text><text x="114.44" y="33.56" text-anchor="middle" style='font-size: 6.00px; font-family: "Arial";' textlength="21.73px" lengthadjust="spacingAndGlyphs">6.5 auto</text></g></g></svg>
+</td>
+<td headers="n_missing" class="gt_row gt_right gt_striped">0.0%</td>
+<td headers="Mean" class="gt_row gt_right gt_striped">4.7</td>
+<td headers="Median" class="gt_row gt_right gt_striped">5.4</td>
+<td headers="SD" class="gt_row gt_right gt_striped">1.5</td>
+</tr>
+<tr>
+<td headers="type" class="gt_row gt_left"><svg aria-hidden="true" role="img" viewbox="0 0 640 512" style="height:20px;width:25px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#f18e2c;overflow:visible;position:relative;"><path d="M576 0c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V32c0-17.7 14.3-32 32-32zM448 96c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V128c0-17.7 14.3-32 32-32zM352 224V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V224c0-17.7 14.3-32 32-32s32 14.3 32 32zM192 288c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V320c0-17.7 14.3-32 32-32zM96 416v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V416c0-17.7 14.3-32 32-32s32 14.3 32 32z"></path></svg></td>
+<td headers="name" class="gt_row gt_left" style="font-weight: bold;">ATENCION</td>
+<td headers="value" class="gt_row gt_center">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="141.73pt" height="34.02pt" viewbox="0 0 141.73 34.02"><g class="svglite"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }    .svglite g.glyphgroup path {      fill: inherit;      stroke: none;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg=="><rect x="0.00" y="0.00" width="141.73" height="34.02"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg==)"><rect x="0.00" y="0.00" width="141.73" height="34.02" style="stroke-width: 0.00; stroke: none;"></rect></g><defs><clippath id="cpMS4wMHwxNDAuNzR8MS4wMHwyMi42Mw=="><rect x="1.00" y="1.00" width="139.74" height="21.63"></rect></clippath></defs><g clip-path="url(#cpMS4wMHwxNDAuNzR8MS4wMHwyMi42Mw==)"><rect x="7.35" y="18.30" width="12.70" height="4.33" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="20.05" y="22.63" width="12.70" height="0.00" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="32.76" y="1.00" width="12.70" height="21.63" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="45.46" y="1.00" width="12.70" height="21.63" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="58.16" y="18.30" width="12.70" height="4.33" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="70.87" y="22.63" width="12.70" height="0.00" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="83.57" y="18.30" width="12.70" height="4.33" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="96.27" y="18.30" width="12.70" height="4.33" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="108.98" y="22.63" width="12.70" height="0.00" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="121.68" y="18.30" width="12.70" height="4.33" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><circle cx="18.33" cy="18.30" r="0.46" style="stroke-width: 0.71; stroke: none;"></circle><circle cx="18.33" cy="18.30" r="0.46" style="stroke-width: 0.71; stroke: none;"></circle><line x1="46.84" y1="22.63" x2="46.84" y2="1.00" style="stroke-width: 1.07; stroke-linecap: butt;"></line></g><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg==)"><polyline points="1.00,22.63 140.74,22.63 " style="stroke-width: 0.75;"></polyline><polyline points="19.36,25.46 19.36,22.63 " style="stroke-width: 0.75;"></polyline><polyline points="121.92,25.46 121.92,22.63 " style="stroke-width: 0.75;"></polyline><text x="19.36" y="33.56" text-anchor="middle" style='font-size: 6.00px; font-family: "Arial";' textlength="21.73px" lengthadjust="spacingAndGlyphs">3.2 auto</text><text x="121.92" y="33.56" text-anchor="middle" style='font-size: 6.00px; font-family: "Arial";' textlength="21.73px" lengthadjust="spacingAndGlyphs">6.7 auto</text></g></g></svg>
+</td>
+<td headers="n_missing" class="gt_row gt_right">0.0%</td>
+<td headers="Mean" class="gt_row gt_right">4.5</td>
+<td headers="Median" class="gt_row gt_right">4.1</td>
+<td headers="SD" class="gt_row gt_right">0.9</td>
+</tr>
+<tr>
+<td headers="type" class="gt_row gt_left gt_striped"><svg aria-hidden="true" role="img" viewbox="0 0 640 512" style="height:20px;width:25px;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#f18e2c;overflow:visible;position:relative;"><path d="M576 0c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V32c0-17.7 14.3-32 32-32zM448 96c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V128c0-17.7 14.3-32 32-32zM352 224V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V224c0-17.7 14.3-32 32-32s32 14.3 32 32zM192 288c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V320c0-17.7 14.3-32 32-32zM96 416v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V416c0-17.7 14.3-32 32-32s32 14.3 32 32z"></path></svg></td>
+<td headers="name" class="gt_row gt_left gt_striped" style="font-weight: bold;">INNOVACION</td>
+<td headers="value" class="gt_row gt_center gt_striped">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="141.73pt" height="34.02pt" viewbox="0 0 141.73 34.02"><g class="svglite"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }    .svglite g.glyphgroup path {      fill: inherit;      stroke: none;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg=="><rect x="0.00" y="0.00" width="141.73" height="34.02"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg==)"><rect x="0.00" y="0.00" width="141.73" height="34.02" style="stroke-width: 0.00; stroke: none;"></rect></g><defs><clippath id="cpMS4wMHwxNDAuNzR8MS4wMHwyMi42Mw=="><rect x="1.00" y="1.00" width="139.74" height="21.63"></rect></clippath></defs><g clip-path="url(#cpMS4wMHwxNDAuNzR8MS4wMHwyMi42Mw==)"><rect x="7.35" y="1.00" width="42.35" height="21.63" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="49.69" y="1.00" width="42.35" height="21.63" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><rect x="92.04" y="11.81" width="42.35" height="10.82" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8BB87;"></rect><circle cx="28.70" cy="19.02" r="0.46" style="stroke-width: 0.71; stroke: none;"></circle><circle cx="28.70" cy="19.02" r="0.46" style="stroke-width: 0.71; stroke: none;"></circle><line x1="52.59" y1="22.63" x2="52.59" y2="1.00" style="stroke-width: 1.07; stroke-linecap: butt;"></line></g><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwzNC4wMg==)"><polyline points="1.00,22.63 140.74,22.63 " style="stroke-width: 0.75;"></polyline><polyline points="29.69,25.46 29.69,22.63 " style="stroke-width: 0.75;"></polyline><polyline points="128.17,25.46 128.17,22.63 " style="stroke-width: 0.75;"></polyline><text x="29.69" y="33.56" text-anchor="middle" style='font-size: 6.00px; font-family: "Arial";' textlength="21.73px" lengthadjust="spacingAndGlyphs">1.9 auto</text><text x="128.17" y="33.56" text-anchor="middle" style='font-size: 6.00px; font-family: "Arial";' textlength="21.73px" lengthadjust="spacingAndGlyphs">6.2 auto</text></g></g></svg>
+</td>
+<td headers="n_missing" class="gt_row gt_right gt_striped">0.0%</td>
+<td headers="Mean" class="gt_row gt_right gt_striped">3.4</td>
+<td headers="Median" class="gt_row gt_right gt_striped">2.9</td>
+<td headers="SD" class="gt_row gt_right gt_striped">1.5</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div style="text-align: center;">
+<p><strong>Tabla 12.2</strong></p>
+</div>
+</div>
+<div id="exploración-descriptiva-de-los-perfiles." class="section level3" number="12.4.3">
+<h3>
+<span class="header-section-number">12.4.3</span> <img src="figuras/pie-chart.svg"> Exploración descriptiva de los perfiles.<a class="anchor" aria-label="anchor" href="#exploraci%C3%B3n-descriptiva-de-los-perfiles."><i class="fas fa-link"></i></a>
+</h3>
+<p>Antes de calcular proximidades, conviene examinar los perfiles de valoración de las compañías. Un gráfico de <strong>coordenadas paralelas</strong> permite visualizar simultáneamente los seis atributos para cada empresa, revelando patrones de similitud a simple vista.</p>
+<p>Para construir este gráfico con <a href="https://ggplot2.tidyverse.org">ggplot2</a> necesitamos que los datos estén en formato <em>largo</em> (una fila por cada combinación empresa-atributo), mientras que nuestro <em>data frame</em> está en formato <em>ancho</em> (una fila por empresa, una columna por atributo). La función <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer()</a></code> del paquete <a href="https://tidyr.tidyverse.org">tidyr</a> realiza esta transformación: toma todas las columnas excepto la que le indiquemos (en este caso, <code>EMPRESA</code>), y las apila en dos nuevas columnas: una con el nombre del atributo (<code>Atributo</code>) y otra con su valor numérico (<code>Valoracion</code>). Así, un <em>data frame</em> de 15 filas × 6 columnas se convierte en uno de 90 filas × 3 columnas, que es el formato que <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> necesita para trazar una línea por empresa a lo largo de los seis atributos:</p>
+<div class="sourceCode" id="cb454"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Añadimos el nombre de la empresa (que está en los rownames) como columna,</span></span>
+<span><span class="co"># y convertimos de formato ancho a largo con pivot_longer()</span></span>
+<span><span class="va">perfiles_long</span> <span class="op">&lt;-</span> <span class="va">PERCEPCION</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>EMPRESA <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">PERCEPCION</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="op">-</span><span class="va">EMPRESA</span>, names_to <span class="op">=</span> <span class="st">"Atributo"</span>, values_to <span class="op">=</span> <span class="st">"Valoracion"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">perfiles_long</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Atributo</span>, y <span class="op">=</span> <span class="va">Valoracion</span>,</span>
+<span>                          group <span class="op">=</span> <span class="va">EMPRESA</span>, color <span class="op">=</span> <span class="va">EMPRESA</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">0.7</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Perfiles de valoración de las compañías"</span>,</span>
+<span>       subtitle <span class="op">=</span> <span class="st">"Coordenadas paralelas — 6 atributos, escala Likert 1-7"</span>,</span>
+<span>       x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"Valoración media"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title    <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>,</span>
+<span>        plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span>
+<span>        axis.text.x   <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">30</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>        legend.position <span class="op">=</span> <span class="st">"right"</span>,</span>
+<span>        legend.title  <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>        legend.text   <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">7</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-428-1.png" alt="" width="960"></div>
+<div style="text-align: center;">
+<p><strong>Figura 12.2</strong></p>
+</div>
+<p>El gráfico ya permite intuir la existencia de grupos de empresas con perfiles similares. Se aprecia, por ejemplo, que las compañías con flota renovada (<em>Arrakis Freight</em>, <em>Excalibur Freight Systems</em>, <em>Kaiju Haulage Co.</em>) comparten un perfil característico: valoraciones altas en atención, fiabilidad, innovación y seguridad, pero bajas en precio (son percibidas como caras). En el extremo opuesto, compañías como <em>Sandworm Freight</em> o <em>First Order Cargo</em> muestran el patrón inverso. Sin embargo, la maraña de líneas resulta difícil de interpretar con 15 compañías. Precisamente para eso sirve el mapa perceptual: para proyectar toda esta información en un espacio bidimensional más fácil de leer.</p>
+</div>
+<div id="cálculo-de-la-matriz-de-proximidades." class="section level3" number="12.4.4">
+<h3>
+<span class="header-section-number">12.4.4</span> <img src="figuras/pie-chart.svg"> Cálculo de la matriz de proximidades.<a class="anchor" aria-label="anchor" href="#c%C3%A1lculo-de-la-matriz-de-proximidades."><i class="fas fa-link"></i></a>
+</h3>
+<p>El primer paso del EMD consiste en construir la <strong>matriz de proximidades</strong> entre los casos. Puesto que nuestros datos son valoraciones en escala Likert (no juicios directos de similitud), calculamos las distancias euclídeas entre los perfiles de cada par de empresas. La función <code><a href="https://rdrr.io/r/stats/dist.html">dist()</a></code> de R realiza este cálculo tomando las filas del <em>data frame</em> como los casos (empresas) y las columnas como las variables (atributos):</p>
+<div class="sourceCode" id="cb455"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">proximidades</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/dist.html">dist</a></span><span class="op">(</span><span class="va">PERCEPCION</span><span class="op">)</span></span></code></pre></div>
+<p>El resultado es un objeto de clase <code>dist</code> que contiene las <span class="math inline">\(15 \times 14 / 2 = 105\)</span> distancias entre todos los pares de empresas. Podemos visualizar esta matriz como un <strong>mapa de calor</strong>, donde los tonos anaranjados indican proximidad (empresas percibidas como similares) y los tonos azulados indican distancia (empresas percibidas como diferentes):</p>
+<div class="sourceCode" id="cb456"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/dist.html">fviz_dist</a></span><span class="op">(</span><span class="va">proximidades</span>, lab_size <span class="op">=</span> <span class="fl">6</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Matriz de distancias entre compañías"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-430-1.png" alt="" width="768"></div>
+<div style="text-align: center;">
+<p><strong>Figura 12.3</strong></p>
+</div>
+<p>El mapa de calor revela patrones interesantes. Compañías como <em>Shuttlepod Movers</em> y <em>Defiant Cargo</em> presentan tonos anaranjados muy intensos entre sí, lo que indica que los clientes las perciben de manera muy similar. Lo mismo ocurre entre <em>Starfighter Logistics</em> y <em>Endor Express</em>. En el extremo opuesto, <em>Sandworm Freight</em> destaca por su fila y columna dominadas por tonos azulados: es la compañía más «peculiar» del grupo, la que los clientes perciben como más diferente del resto. También se aprecian bloques de color anaranjado entre las grandes empresas de flota renovada (<em>Arrakis Freight</em>, <em>Excalibur Freight Systems</em>, <em>Kaiju Haulage Co.</em>), confirmando que los clientes las perciben como un grupo homogéneo. Pero interpretar una matriz de <span class="math inline">\(15 \times 15\)</span> colores no es inmediato: el mapa perceptual nos dará una representación mucho más intuitiva de estas relaciones.</p>
+</div>
+<div id="selección-del-número-de-dimensiones." class="section level3" number="12.4.5">
+<h3>
+<span class="header-section-number">12.4.5</span> <img src="figuras/pie-chart.svg"> Selección del número de dimensiones.<a class="anchor" aria-label="anchor" href="#selecci%C3%B3n-del-n%C3%BAmero-de-dimensiones."><i class="fas fa-link"></i></a>
+</h3>
+<p>Antes de construir el mapa perceptual, debemos decidir cuántas dimensiones utilizar. Aunque nuestro objetivo final es un mapa bidimensional (el más fácil de interpretar), necesitamos verificar que dos dimensiones son suficientes para representar fielmente las proximidades entre las compañías.</p>
+<p>Para ello, ejecutamos el EMD no métrico con <span class="math inline">\(p = 1, 2, 3, 4, 5\)</span> y <span class="math inline">\(6\)</span> dimensiones y registramos el Stress de cada solución. La función <code><a href="https://rdrr.io/pkg/smacof/man/smacofSym.html">mds()</a></code> del paquete <code>{smacof}</code> recibe la matriz de distancias, el número de dimensiones (<code>ndim</code>) y el tipo de escalado (<code>type = "ordinal"</code> para el caso no métrico):</p>
+<div class="sourceCode" id="cb457"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dimensiones_max</span> <span class="op">&lt;-</span> <span class="fl">6</span></span>
+<span><span class="va">stress_valores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="va">dimensiones_max</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">p</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">dimensiones_max</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">solucion_p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/smacof/man/smacofSym.html">mds</a></span><span class="op">(</span><span class="va">proximidades</span>, ndim <span class="op">=</span> <span class="va">p</span>, type <span class="op">=</span> <span class="st">"ordinal"</span><span class="op">)</span></span>
+<span>  <span class="va">stress_valores</span><span class="op">[</span><span class="va">p</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">solucion_p</span><span class="op">$</span><span class="va">stress</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">df_stress</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Dimensiones <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">dimensiones_max</span>,</span>
+<span>                        Stress      <span class="op">=</span> <span class="va">stress_valores</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb458"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars</a></span><span class="op">(</span><span class="va">df_stress</span>, <span class="op">)</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Dimensiones
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Stress
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:right;text-align: center;">
+1
+</td>
+<td style="text-align:right;text-align: center;">
+0.0421696
+</td>
+</tr>
+<tr>
+<td style="text-align:right;text-align: center;">
+2
+</td>
+<td style="text-align:right;text-align: center;">
+0.0196138
+</td>
+</tr>
+<tr>
+<td style="text-align:right;text-align: center;">
+3
+</td>
+<td style="text-align:right;text-align: center;">
+0.0037604
+</td>
+</tr>
+<tr>
+<td style="text-align:right;text-align: center;">
+4
+</td>
+<td style="text-align:right;text-align: center;">
+0.0023779
+</td>
+</tr>
+<tr>
+<td style="text-align:right;text-align: center;">
+5
+</td>
+<td style="text-align:right;text-align: center;">
+0.0009621
+</td>
+</tr>
+<tr>
+<td style="text-align:right;text-align: center;">
+6
+</td>
+<td style="text-align:right;text-align: center;">
+0.0000000
+</td>
+</tr>
+</tbody>
+</table></div>
+<div style="text-align: center;">
+<p><strong>Tabla 12.3.</strong> Stress por número de dimensiones</p>
+</div>
+<p>El <strong>gráfico de codo</strong> representa estos valores y permite identificar visualmente el número de dimensiones más adecuado:</p>
+<div class="sourceCode" id="cb459"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">df_stress</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Dimensiones</span>, y <span class="op">=</span> <span class="va">Stress</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#2C3E50"</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#E74C3C"</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">Stress</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>, vjust <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, size <span class="op">=</span> <span class="fl">3.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0.05</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"grey50"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html">annotate</a></span><span class="op">(</span><span class="st">"text"</span>, x <span class="op">=</span> <span class="fl">5.5</span>, y <span class="op">=</span> <span class="fl">0.055</span>,</span>
+<span>           label <span class="op">=</span> <span class="st">"Umbral 0,05 (bueno)"</span>, color <span class="op">=</span> <span class="st">"grey50"</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">dimensiones_max</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title    <span class="op">=</span> <span class="st">"Selección de dimensiones: gráfico de codo del Stress"</span>,</span>
+<span>       subtitle <span class="op">=</span> <span class="st">"EMD No-Métrico (SMACOF) — tipo ordinal"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"Número de dimensiones (p)"</span>, y <span class="op">=</span> <span class="st">"Stress"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title    <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>,</span>
+<span>        plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-433-1.png" alt="" width="672"></div>
+<div style="text-align: center;">
+<p><strong>Figura 12.4</strong></p>
+</div>
+<p>El gráfico muestra que el Stress desciende marcadamente al pasar de una a dos dimensiones, y que a partir de dos dimensiones la mejora es progresivamente menor. Según la escala de Kruskal, el Stress obtenido con dos dimensiones se sitúa en el rango de calidad buena o excelente, lo que confirma que <strong>dos dimensiones son suficientes</strong> para representar adecuadamente las proximidades perceptuales.</p>
+</div>
+<div id="la-solución-en-dos-dimensiones." class="section level3" number="12.4.6">
+<h3>
+<span class="header-section-number">12.4.6</span> <img src="figuras/pie-chart.svg"> La solución en dos dimensiones.<a class="anchor" aria-label="anchor" href="#la-soluci%C3%B3n-en-dos-dimensiones."><i class="fas fa-link"></i></a>
+</h3>
+<p>Ajustamos el EMD no métrico con <span class="math inline">\(p = 2\)</span> dimensiones:</p>
+<div class="sourceCode" id="cb460"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">solucion</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/smacof/man/smacofSym.html">mds</a></span><span class="op">(</span><span class="va">proximidades</span>, ndim <span class="op">=</span> <span class="fl">2</span>, type <span class="op">=</span> <span class="st">"ordinal"</span><span class="op">)</span></span>
+<span><span class="va">solucion</span></span></code></pre></div>
+<pre><code>## 
+## Call:
+## mds(delta = proximidades, ndim = 2, type = "ordinal")
+## 
+## Model: Symmetric SMACOF 
+## Number of objects: 15 
+## Stress-1 value: 0.02 
+## Number of iterations: 20</code></pre>
+<p>El resumen del objeto <code>solucion</code> muestra el valor del Stress y el número de iteraciones que ha necesitado el algoritmo SMACOF para converger. Las coordenadas de las 15 empresas en las dos dimensiones se almacenan en <code>solucion$conf</code>:</p>
+<div class="sourceCode" id="cb462"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">coordenadas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">solucion</span><span class="op">$</span><span class="va">conf</span><span class="op">)</span></span>
+<span><span class="va">coordenadas</span><span class="op">$</span><span class="va">EMPRESA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">coordenadas</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">solucion</span><span class="op">$</span><span class="va">conf</span>, <span class="fl">4</span><span class="op">)</span>,</span>
+<span>             <span class="op">)</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+D1
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+D2
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;">
+arrakis freight
+</td>
+<td style="text-align:right;text-align: center;">
+-1.1718
+</td>
+<td style="text-align:right;text-align: center;">
+-0.2889
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+excalibur freight systems
+</td>
+<td style="text-align:right;text-align: center;">
+-1.1296
+</td>
+<td style="text-align:right;text-align: center;">
+0.0797
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+kaiju haulage co.
+</td>
+<td style="text-align:right;text-align: center;">
+-1.0581
+</td>
+<td style="text-align:right;text-align: center;">
+-0.1057
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+mothership movers
+</td>
+<td style="text-align:right;text-align: center;">
+-0.4822
+</td>
+<td style="text-align:right;text-align: center;">
+0.1825
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+corellian freightworks
+</td>
+<td style="text-align:right;text-align: center;">
+-0.5177
+</td>
+<td style="text-align:right;text-align: center;">
+0.2925
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+shuttlepod movers
+</td>
+<td style="text-align:right;text-align: center;">
+0.1442
+</td>
+<td style="text-align:right;text-align: center;">
+-0.0251
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+defiant cargo
+</td>
+<td style="text-align:right;text-align: center;">
+0.2253
+</td>
+<td style="text-align:right;text-align: center;">
+0.0121
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+ragnar freight lines
+</td>
+<td style="text-align:right;text-align: center;">
+0.1302
+</td>
+<td style="text-align:right;text-align: center;">
+0.1224
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+rebel alliance transport
+</td>
+<td style="text-align:right;text-align: center;">
+0.3663
+</td>
+<td style="text-align:right;text-align: center;">
+-0.2313
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+prometheus transport
+</td>
+<td style="text-align:right;text-align: center;">
+0.3642
+</td>
+<td style="text-align:right;text-align: center;">
+0.0202
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+dark star haulage
+</td>
+<td style="text-align:right;text-align: center;">
+0.5826
+</td>
+<td style="text-align:right;text-align: center;">
+-0.1160
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+starfighter logistics
+</td>
+<td style="text-align:right;text-align: center;">
+0.5496
+</td>
+<td style="text-align:right;text-align: center;">
+-0.0130
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+endor express
+</td>
+<td style="text-align:right;text-align: center;">
+0.4842
+</td>
+<td style="text-align:right;text-align: center;">
+0.0661
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+first order cargo
+</td>
+<td style="text-align:right;text-align: center;">
+0.6190
+</td>
+<td style="text-align:right;text-align: center;">
+-0.0582
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+sandworm freight
+</td>
+<td style="text-align:right;text-align: center;">
+0.8937
+</td>
+<td style="text-align:right;text-align: center;">
+0.0626
+</td>
+</tr>
+</tbody>
+</table></div>
+<div style="text-align: center;">
+<p><strong>Tabla 12.4.</strong> Coordenadas de las empresas en 2 dimensiones</p>
+</div>
+</div>
+<div id="diagrama-de-shepard." class="section level3" number="12.4.7">
+<h3>
+<span class="header-section-number">12.4.7</span> <img src="figuras/pie-chart.svg"> Diagrama de Shepard.<a class="anchor" aria-label="anchor" href="#diagrama-de-shepard."><i class="fas fa-link"></i></a>
+</h3>
+<p>Para evaluar visualmente la calidad del ajuste, construimos el <strong>diagrama de Shepard</strong>. En el eje horizontal se representan las proximidades originales (las distancias euclídeas calculadas a partir de los perfiles Likert) y en el vertical, las distancias obtenidas en la configuración bidimensional. Si el EMD ha funcionado correctamente, los puntos deben seguir una tendencia <strong>monótona creciente</strong>: a mayor proximidad original, mayor distancia en el mapa.</p>
+<p>Para construir el diagrama con <a href="https://ggplot2.tidyverse.org">ggplot2</a>, extraemos del objeto <code>solucion</code> las tres series que lo componen: las proximidades originales (<code>delta</code>), las distancias en la configuración (<code>confdist</code>) y las disparidades ajustadas (<code>dhat</code>), que son los valores de la función de transformación monótona:</p>
+<div class="sourceCode" id="cb463"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Extraemos los datos del diagrama de Shepard desde el objeto solucion</span></span>
+<span><span class="va">shepard_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  delta    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">solucion</span><span class="op">$</span><span class="va">delta</span><span class="op">)</span>,</span>
+<span>  confdist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">solucion</span><span class="op">$</span><span class="va">confdist</span><span class="op">)</span>,</span>
+<span>  dhat     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">solucion</span><span class="op">$</span><span class="va">dhat</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># Eliminamos la diagonal (distancia de cada caso consigo mismo = 0)</span></span>
+<span><span class="va">shepard_data</span> <span class="op">&lt;-</span> <span class="va">shepard_data</span><span class="op">[</span><span class="va">shepard_data</span><span class="op">$</span><span class="va">delta</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span></span>
+<span><span class="co"># Ordenamos por delta para trazar la línea escalonada correctamente</span></span>
+<span><span class="va">shepard_data</span> <span class="op">&lt;-</span> <span class="va">shepard_data</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="va">shepard_data</span><span class="op">$</span><span class="va">delta</span><span class="op">)</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">shepard_data</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta</span>, y <span class="op">=</span> <span class="va">confdist</span><span class="op">)</span>,</span>
+<span>             color <span class="op">=</span> <span class="st">"#E74C3C"</span>, size <span class="op">=</span> <span class="fl">1.5</span>, alpha <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_step</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta</span>, y <span class="op">=</span> <span class="va">dhat</span><span class="op">)</span>,</span>
+<span>            color <span class="op">=</span> <span class="st">"#2C3E50"</span>, linewidth <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Diagrama de Shepard"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"Proximidades originales (distancias observadas)"</span>,</span>
+<span>       y <span class="op">=</span> <span class="st">"Distancias en la configuración MDS"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-436-1.png" alt="" width="576"></div>
+<div style="text-align: center;">
+<p><strong>Figura 12.5</strong></p>
+</div>
+<p>La línea escalonada es la <strong>función de transformación monótona</strong> que el algoritmo ha encontrado para relacionar las proximidades con las distancias. En el EMD no métrico, esta función no necesita ser lineal: solo necesita ser no decreciente. Los puntos rojos representan los 105 pares de empresas: cuanto más cerca estén de la línea, mejor es el ajuste para ese par concreto. Los puntos alejados de la tendencia general señalan pares de empresas cuya distancia en el mapa no se corresponde bien con su proximidad original.</p>
+</div>
+<div id="el-mapa-perceptual." class="section level3" number="12.4.8">
+<h3>
+<span class="header-section-number">12.4.8</span> <img src="figuras/pie-chart.svg"> El mapa perceptual.<a class="anchor" aria-label="anchor" href="#el-mapa-perceptual."><i class="fas fa-link"></i></a>
+</h3>
+<p>Estamos en condiciones de construir el mapa perceptual, que es la representación visual de las coordenadas obtenidas. Las empresas cercanas en el mapa son percibidas de forma similar por los clientes; las lejanas, de forma diferente:</p>
+<div class="sourceCode" id="cb464"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">coordenadas</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">D1</span>, y <span class="op">=</span> <span class="va">D2</span>, label <span class="op">=</span> <span class="va">EMPRESA</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#E74C3C"</span>, size <span class="op">=</span> <span class="fl">3</span>, alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html">geom_label_repel</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span>, color <span class="op">=</span> <span class="st">"black"</span>, alpha <span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span>                   max.overlaps <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"grey70"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"grey70"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title    <span class="op">=</span> <span class="st">"SECTOR INTERESTELAR DE TRANSPORTE DE MERCANCÍAS"</span>,</span>
+<span>       subtitle <span class="op">=</span> <span class="st">"Mapa perceptual — Configuración de opiniones de clientes"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"Dimensión 1"</span>, y <span class="op">=</span> <span class="st">"Dimensión 2"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title    <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span>,</span>
+<span>        plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-437-1.png" alt="" width="864"></div>
+<div style="text-align: center;">
+<p><strong>Figura 12.6</strong></p>
+</div>
+<p>El mapa confirma y enriquece lo que el mapa de calor ya apuntaba. Las grandes compañías con flota renovada (<em>Arrakis Freight</em>, <em>Excalibur Freight Systems</em>, <em>Kaiju Haulage Co.</em>) se agrupan en la zona izquierda del mapa, claramente separadas del resto. Las compañías con flota antigua (<em>Sandworm Freight</em>, <em>First Order Cargo</em>, <em>Dark Star Haulage</em>, <em>Endor Express</em>, <em>Starfighter Logistics</em>) ocupan la zona derecha. Entre ambos grupos, las compañías con flota madura (<em>Shuttlepod Movers</em>, <em>Defiant Cargo</em>, <em>Ragnar Freight Lines</em>, <em>Prometheus Transport</em>, <em>Rebel Alliance Transport</em>) se sitúan en posiciones intermedias, coherente con la intuición de que son percibidas como un punto medio. Nótese también cómo las empresas que en el mapa de calor aparecían con tonos anaranjados intensos entre sí (<em>Shuttlepod Movers</em> y <em>Defiant Cargo</em>, por ejemplo) están ahora efectivamente muy próximas en el mapa, y cómo <em>Sandworm Freight</em> — la compañía más «azulada» del mapa de calor — ocupa el extremo derecho, aislada de las demás.</p>
+<p>Pero las dimensiones en sí mismas no tienen un significado predeterminado: el EMD nos dice <em>dónde</em> se sitúan las empresas, pero no <em>por qué</em> están ahí. Para responder a esta segunda pregunta, necesitamos interpretar las dimensiones.</p>
+</div>
+<div id="interpretación-de-las-dimensiones." class="section level3" number="12.4.9">
+<h3>
+<span class="header-section-number">12.4.9</span> <img src="figuras/pie-chart.svg"> Interpretación de las dimensiones.<a class="anchor" aria-label="anchor" href="#interpretaci%C3%B3n-de-las-dimensiones."><i class="fas fa-link"></i></a>
+</h3>
+<p>Para averiguar qué representan las dos dimensiones extraídas por el EMD, calculamos la <strong>correlación</strong> entre cada atributo original y las coordenadas de los casos en cada dimensión. Los atributos con mayor correlación (en valor absoluto) con una dimensión nos indican qué está midiendo ese eje:</p>
+<div class="sourceCode" id="cb465"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">correlaciones</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">PERCEPCION</span>, <span class="va">solucion</span><span class="op">$</span><span class="va">conf</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">correlaciones</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Dim.1"</span>, <span class="st">"Dim.2"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">correlaciones</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>             <span class="op">)</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Dim.1
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Dim.2
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;">
+FIABILIDAD
+</td>
+<td style="text-align:right;text-align: center;">
+-0.702
+</td>
+<td style="text-align:right;text-align: center;">
+0.441
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+PUNTUALIDAD
+</td>
+<td style="text-align:right;text-align: center;">
+-0.969
+</td>
+<td style="text-align:right;text-align: center;">
+-0.207
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+SEGURIDAD
+</td>
+<td style="text-align:right;text-align: center;">
+-0.916
+</td>
+<td style="text-align:right;text-align: center;">
+0.309
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+PRECIO
+</td>
+<td style="text-align:right;text-align: center;">
+0.986
+</td>
+<td style="text-align:right;text-align: center;">
+0.063
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+ATENCION
+</td>
+<td style="text-align:right;text-align: center;">
+-0.927
+</td>
+<td style="text-align:right;text-align: center;">
+-0.155
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+INNOVACION
+</td>
+<td style="text-align:right;text-align: center;">
+-0.980
+</td>
+<td style="text-align:right;text-align: center;">
+-0.112
+</td>
+</tr>
+</tbody>
+</table></div>
+<div style="text-align: center;">
+<p><strong>Tabla 12.5.</strong> Correlaciones atributos-dimensiones</p>
+</div>
+<p>La tabla de correlaciones permite identificar el significado de cada eje. Para facilitar la lectura, podemos superponer los atributos como <strong>vectores</strong> sobre el mapa perceptual. La dirección del vector indica con qué dimensiones se asocia el atributo; su longitud, la intensidad de esa asociación.</p>
+<p>El código que construye este gráfico combina dos capas de datos (empresas y atributos) en un mismo <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code>. Las correlaciones son valores entre -1 y 1, pero las coordenadas de las empresas tienen otra escala, así que necesitamos un <strong>factor de escala</strong> que adapte la longitud de los vectores al rango del gráfico. Lo calculamos como el 80% del valor máximo absoluto de las coordenadas: de este modo, los vectores son lo bastante largos para ser visibles sin salirse del gráfico. Cada vector parte del origen (0, 0) y llega hasta el punto <code>(correlación × factor_escala)</code>, y se remata con una flecha cuyo tamaño se indica mediante <code>arrow(length = unit(0.2, "cm"))</code>, donde <code><a href="https://rdrr.io/r/grid/unit.html">unit()</a></code> es una función de <code>{grid}</code> que especifica longitudes en unidades físicas (en este caso, 0,2 centímetros para la punta de la flecha):</p>
+<div class="sourceCode" id="cb466"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df_cor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">correlaciones</span><span class="op">)</span></span>
+<span><span class="va">df_cor</span><span class="op">$</span><span class="va">Atributo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">df_cor</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Factor de escala: adapta los vectores (correlaciones en -1,1) al rango</span></span>
+<span><span class="co"># de las coordenadas de las empresas, para que sean visibles en el gráfico</span></span>
+<span><span class="va">factor_escala</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">coordenadas</span><span class="op">$</span><span class="va">D1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">coordenadas</span><span class="op">$</span><span class="va">D2</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fl">0.8</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="co"># Capa 1: puntos y etiquetas de las empresas</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">coordenadas</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">D1</span>, y <span class="op">=</span> <span class="va">D2</span><span class="op">)</span>,</span>
+<span>             color <span class="op">=</span> <span class="st">"#E74C3C"</span>, size <span class="op">=</span> <span class="fl">3</span>, alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html">geom_label_repel</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">coordenadas</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">D1</span>, y <span class="op">=</span> <span class="va">D2</span>, label <span class="op">=</span> <span class="va">EMPRESA</span><span class="op">)</span>,</span>
+<span>                   size <span class="op">=</span> <span class="fl">2.5</span>, color <span class="op">=</span> <span class="st">"black"</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>                   max.overlaps <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="co"># Capa 2: vectores de atributos (flechas desde el origen)</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html">geom_segment</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">df_cor</span>,</span>
+<span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">0</span>, y <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>                   xend <span class="op">=</span> <span class="va">Dim.1</span> <span class="op">*</span> <span class="va">factor_escala</span>,</span>
+<span>                   yend <span class="op">=</span> <span class="va">Dim.2</span> <span class="op">*</span> <span class="va">factor_escala</span><span class="op">)</span>,</span>
+<span>               arrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html">arrow</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="st">"cm"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>               color <span class="op">=</span> <span class="st">"#7B99AD"</span>, linewidth <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_text</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">df_cor</span>,</span>
+<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Dim.1</span> <span class="op">*</span> <span class="va">factor_escala</span> <span class="op">*</span> <span class="fl">1.1</span>,</span>
+<span>                y <span class="op">=</span> <span class="va">Dim.2</span> <span class="op">*</span> <span class="va">factor_escala</span> <span class="op">*</span> <span class="fl">1.1</span>,</span>
+<span>                label <span class="op">=</span> <span class="va">Atributo</span><span class="op">)</span>,</span>
+<span>            color <span class="op">=</span> <span class="st">"#4A6B82"</span>, fontface <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">3.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="co"># Ejes de referencia</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"grey70"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"grey70"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title    <span class="op">=</span> <span class="st">"MAPA PERCEPTUAL CON VECTORES DE ATRIBUTOS"</span>,</span>
+<span>       subtitle <span class="op">=</span> <span class="st">"Dirección y longitud indican correlación con cada dimensión"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"Dimensión 1"</span>, y <span class="op">=</span> <span class="st">"Dimensión 2"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title    <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">13</span><span class="op">)</span>,</span>
+<span>        plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-439-1.png" alt="" width="864"></div>
+<div style="text-align: center;">
+<p><strong>Figura 12.7</strong></p>
+</div>
+<p>Este es el gráfico central del análisis, y su lectura permite al equipo de <em>Data-Evidence</em> interpretar las dimensiones latentes y extraer conclusiones sobre la estructura competitiva del sector.</p>
+<p>La <strong>Dimensión 1</strong> (eje horizontal) es la que mayor variabilidad recoge, y separa las compañías esencialmente por un eje de <strong>calidad percibida frente a precio</strong>. Los vectores de INNOVACION, ATENCION, PUNTUALIDAD, SEGURIDAD y FIABILIDAD apuntan hacia la izquierda, donde se sitúan las compañías mejor valoradas en estos atributos (<em>Arrakis Freight</em>, <em>Excalibur Freight Systems</em>, <em>Kaiju Haulage Co.</em>). El vector de PRECIO apunta en la dirección opuesta (hacia la derecha), donde están las compañías percibidas como más económicas pero con peor servicio (<em>Sandworm Freight</em>, <em>First Order Cargo</em>). Esta dimensión refleja, por tanto, un continuo que va de «caro pero excelente» a «económico pero deficiente».</p>
+<p>La <strong>Dimensión 2</strong> (eje vertical) introduce un matiz adicional: FIABILIDAD y SEGURIDAD apuntan hacia arriba, mientras que PUNTUALIDAD y ATENCION lo hacen ligeramente hacia abajo. Esto distingue, dentro de las compañías de calidad similar, entre aquellas que destacan por la seguridad e integridad de la carga (zona superior: <em>Corellian Freightworks</em>, <em>Mothership Movers</em>) y las que destacan más por la puntualidad y la atención al cliente (zona inferior: <em>Arrakis Freight</em>, <em>Kaiju Haulage Co.</em>).</p>
+</div>
+<div id="ampliación-la-solución-en-tres-dimensiones." class="section level3" number="12.4.10">
+<h3>
+<span class="header-section-number">12.4.10</span> <img src="figuras/pie-chart.svg"> Ampliación: la solución en tres dimensiones.<a class="anchor" aria-label="anchor" href="#ampliaci%C3%B3n-la-soluci%C3%B3n-en-tres-dimensiones."><i class="fas fa-link"></i></a>
+</h3>
+<p>El gráfico de codo mostró que dos dimensiones proporcionan un ajuste satisfactorio. Sin embargo, puede resultar instructivo explorar qué aporta una <strong>tercera dimensión</strong> al análisis. Si el Stress mejora apreciablemente al pasar de dos a tres dimensiones, esa tercera dimensión podría recoger un matiz perceptual que los dos primeros ejes no capturan.</p>
+<p>Ajustamos el EMD no métrico con <span class="math inline">\(p = 3\)</span> y examinamos las coordenadas y las correlaciones:</p>
+<div class="sourceCode" id="cb467"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">solucion_3d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/smacof/man/smacofSym.html">mds</a></span><span class="op">(</span><span class="va">proximidades</span>, ndim <span class="op">=</span> <span class="fl">3</span>, type <span class="op">=</span> <span class="st">"ordinal"</span><span class="op">)</span></span>
+<span><span class="va">solucion_3d</span></span></code></pre></div>
+<pre><code>## 
+## Call:
+## mds(delta = proximidades, ndim = 3, type = "ordinal")
+## 
+## Model: Symmetric SMACOF 
+## Number of objects: 15 
+## Stress-1 value: 0.004 
+## Number of iterations: 12</code></pre>
+<div class="sourceCode" id="cb469"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">coordenadas_3d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">solucion_3d</span><span class="op">$</span><span class="va">conf</span><span class="op">)</span></span>
+<span><span class="va">coordenadas_3d</span><span class="op">$</span><span class="va">EMPRESA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">coordenadas_3d</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">solucion_3d</span><span class="op">$</span><span class="va">conf</span>, <span class="fl">4</span><span class="op">)</span>,</span>
+<span>             <span class="op">)</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+D1
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+D2
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+D3
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;">
+arrakis freight
+</td>
+<td style="text-align:right;text-align: center;">
+-1.1476
+</td>
+<td style="text-align:right;text-align: center;">
+-0.3087
+</td>
+<td style="text-align:right;text-align: center;">
+-0.0364
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+excalibur freight systems
+</td>
+<td style="text-align:right;text-align: center;">
+-1.0982
+</td>
+<td style="text-align:right;text-align: center;">
+0.0553
+</td>
+<td style="text-align:right;text-align: center;">
+0.1821
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+kaiju haulage co.
+</td>
+<td style="text-align:right;text-align: center;">
+-1.0417
+</td>
+<td style="text-align:right;text-align: center;">
+-0.0640
+</td>
+<td style="text-align:right;text-align: center;">
+-0.1013
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+mothership movers
+</td>
+<td style="text-align:right;text-align: center;">
+-0.4759
+</td>
+<td style="text-align:right;text-align: center;">
+0.1833
+</td>
+<td style="text-align:right;text-align: center;">
+-0.0604
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+corellian freightworks
+</td>
+<td style="text-align:right;text-align: center;">
+-0.5202
+</td>
+<td style="text-align:right;text-align: center;">
+0.3039
+</td>
+<td style="text-align:right;text-align: center;">
+-0.0568
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+shuttlepod movers
+</td>
+<td style="text-align:right;text-align: center;">
+0.1139
+</td>
+<td style="text-align:right;text-align: center;">
+-0.0083
+</td>
+<td style="text-align:right;text-align: center;">
+0.0844
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+defiant cargo
+</td>
+<td style="text-align:right;text-align: center;">
+0.1998
+</td>
+<td style="text-align:right;text-align: center;">
+0.0321
+</td>
+<td style="text-align:right;text-align: center;">
+0.1089
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+ragnar freight lines
+</td>
+<td style="text-align:right;text-align: center;">
+0.1178
+</td>
+<td style="text-align:right;text-align: center;">
+0.0741
+</td>
+<td style="text-align:right;text-align: center;">
+-0.1510
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+rebel alliance transport
+</td>
+<td style="text-align:right;text-align: center;">
+0.3658
+</td>
+<td style="text-align:right;text-align: center;">
+-0.2414
+</td>
+<td style="text-align:right;text-align: center;">
+-0.1195
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+prometheus transport
+</td>
+<td style="text-align:right;text-align: center;">
+0.3728
+</td>
+<td style="text-align:right;text-align: center;">
+0.0528
+</td>
+<td style="text-align:right;text-align: center;">
+0.0039
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+dark star haulage
+</td>
+<td style="text-align:right;text-align: center;">
+0.6053
+</td>
+<td style="text-align:right;text-align: center;">
+-0.1353
+</td>
+<td style="text-align:right;text-align: center;">
+0.0974
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+starfighter logistics
+</td>
+<td style="text-align:right;text-align: center;">
+0.5700
+</td>
+<td style="text-align:right;text-align: center;">
+-0.0084
+</td>
+<td style="text-align:right;text-align: center;">
+0.0828
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+endor express
+</td>
+<td style="text-align:right;text-align: center;">
+0.4967
+</td>
+<td style="text-align:right;text-align: center;">
+0.0941
+</td>
+<td style="text-align:right;text-align: center;">
+0.1335
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+first order cargo
+</td>
+<td style="text-align:right;text-align: center;">
+0.6352
+</td>
+<td style="text-align:right;text-align: center;">
+-0.0583
+</td>
+<td style="text-align:right;text-align: center;">
+0.1167
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+sandworm freight
+</td>
+<td style="text-align:right;text-align: center;">
+0.8063
+</td>
+<td style="text-align:right;text-align: center;">
+0.0289
+</td>
+<td style="text-align:right;text-align: center;">
+-0.2843
+</td>
+</tr>
+</tbody>
+</table></div>
+<div style="text-align: center;">
+<p><strong>Tabla 12.6.</strong> Coordenadas en 3 dimensiones</p>
+</div>
+<div class="sourceCode" id="cb470"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">correlaciones_3d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">PERCEPCION</span>, <span class="va">solucion_3d</span><span class="op">$</span><span class="va">conf</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">correlaciones_3d</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Dim.1"</span>, <span class="st">"Dim.2"</span>, <span class="st">"Dim.3"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/kable_rstars.html">kable_rstars</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">correlaciones_3d</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>             <span class="op">)</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;font-weight: bold;text-align: center;">
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Dim.1
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Dim.2
+</th>
+<th style="text-align:right;font-weight: bold;text-align: center;">
+Dim.3
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;text-align: center;">
+FIABILIDAD
+</td>
+<td style="text-align:right;text-align: center;">
+-0.696
+</td>
+<td style="text-align:right;text-align: center;">
+0.491
+</td>
+<td style="text-align:right;text-align: center;">
+0.490
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+PUNTUALIDAD
+</td>
+<td style="text-align:right;text-align: center;">
+-0.966
+</td>
+<td style="text-align:right;text-align: center;">
+-0.196
+</td>
+<td style="text-align:right;text-align: center;">
+-0.008
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+SEGURIDAD
+</td>
+<td style="text-align:right;text-align: center;">
+-0.924
+</td>
+<td style="text-align:right;text-align: center;">
+0.308
+</td>
+<td style="text-align:right;text-align: center;">
+-0.201
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+PRECIO
+</td>
+<td style="text-align:right;text-align: center;">
+0.984
+</td>
+<td style="text-align:right;text-align: center;">
+0.047
+</td>
+<td style="text-align:right;text-align: center;">
+-0.099
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+ATENCION
+</td>
+<td style="text-align:right;text-align: center;">
+-0.920
+</td>
+<td style="text-align:right;text-align: center;">
+-0.152
+</td>
+<td style="text-align:right;text-align: center;">
+0.211
+</td>
+</tr>
+<tr>
+<td style="text-align:left;text-align: center;">
+INNOVACION
+</td>
+<td style="text-align:right;text-align: center;">
+-0.984
+</td>
+<td style="text-align:right;text-align: center;">
+-0.104
+</td>
+<td style="text-align:right;text-align: center;">
+-0.101
+</td>
+</tr>
+</tbody>
+</table></div>
+<div style="text-align: center;">
+<p><strong>Tabla 12.7.</strong> Correlaciones atributos-dimensiones (3D)</p>
+</div>
+<p>La tabla de correlaciones en tres dimensiones nos permite identificar qué atributo o atributos recoge la tercera dimensión, es decir, qué aspecto de la percepción no quedaba adecuadamente representado con solo dos ejes.</p>
+<p>Con tres dimensiones, existen tres combinaciones posibles de pares de ejes: D1-D2, D1-D3 y D2-D3. Cada combinación genera un mapa perceptual que muestra una proyección distinta de las posiciones de las compañías. Podemos reunir los tres mapas en una composición con <code><a href="https://rdrr.io/pkg/MATrstars/man/create_patchwork.html">create_patchwork()</a></code> para compararlos simultáneamente:</p>
+<div class="sourceCode" id="cb471"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Función auxiliar para generar cada mapa</span></span>
+<span><span class="va">mapa_2d</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">datos</span>, <span class="va">dim_x</span>, <span class="va">dim_y</span>, <span class="va">titulo</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">datos</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">.data</span><span class="op">[[</span><span class="va">dim_x</span><span class="op">]</span><span class="op">]</span>, y <span class="op">=</span> <span class="va">.data</span><span class="op">[[</span><span class="va">dim_y</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                    label <span class="op">=</span> <span class="va">EMPRESA</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#E74C3C"</span>, size <span class="op">=</span> <span class="fl">2</span>, alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html">geom_label_repel</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span>, color <span class="op">=</span> <span class="st">"black"</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>                     max.overlaps <span class="op">=</span> <span class="fl">20</span>, label.padding <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"grey70"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"grey70"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="va">titulo</span>,</span>
+<span>         x <span class="op">=</span> <span class="va">dim_x</span>, y <span class="op">=</span> <span class="va">dim_y</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">g_12</span> <span class="op">&lt;-</span> <span class="fu">mapa_2d</span><span class="op">(</span><span class="va">coordenadas_3d</span>, <span class="st">"D1"</span>, <span class="st">"D2"</span>, <span class="st">"Dimensión 1 vs Dimensión 2"</span><span class="op">)</span></span>
+<span><span class="va">g_13</span> <span class="op">&lt;-</span> <span class="fu">mapa_2d</span><span class="op">(</span><span class="va">coordenadas_3d</span>, <span class="st">"D1"</span>, <span class="st">"D3"</span>, <span class="st">"Dimensión 1 vs Dimensión 3"</span><span class="op">)</span></span>
+<span><span class="va">g_23</span> <span class="op">&lt;-</span> <span class="fu">mapa_2d</span><span class="op">(</span><span class="va">coordenadas_3d</span>, <span class="st">"D2"</span>, <span class="st">"D3"</span>, <span class="st">"Dimensión 2 vs Dimensión 3"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pw_mapas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MATrstars/man/create_patchwork.html">create_patchwork</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">g_12</span>, <span class="va">g_13</span>, <span class="va">g_23</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">p</span> <span class="kw">in</span> <span class="va">pw_mapas</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-442-1.png" alt="" width="1344"></div>
+<p>La lectura conjunta de los tres paneles revela información que el mapa bidimensional no podía mostrar por sí solo:</p>
+<ul>
+<li><p><strong>Panel D1–D2</strong> (arriba a la izquierda): reproduce la estructura principal del análisis bidimensional. Los grupos de compañías (RENOVADA a la izquierda, ANTIGUA a la derecha, MADURA en el centro) se mantienen estables, lo que indica que las dos primeras dimensiones son robustas.</p></li>
+<li><p><strong>Panel D1–D3</strong> (arriba a la derecha): la tercera dimensión reorganiza verticalmente a las compañías. El cambio más llamativo afecta a las compañías de flota antigua: <em>Endor Express</em>, <em>First Order Cargo</em>, <em>Starfighter Logistics</em> y <em>Dark Star Haulage</em>, que en el plano D1-D2 aparecían como un grupo relativamente compacto, se separan ahora en el eje D3. Esto indica que, aunque todas sean percibidas como «económicas», los clientes detectan diferencias entre ellas que la tercera dimensión captura — probablemente relacionadas con el atributo que muestre mayor correlación con D3 en la tabla de correlaciones.</p></li>
+<li><p><strong>Panel D2–D3</strong> (abajo a la izquierda): al prescindir de la primera dimensión (la de mayor variabilidad), este plano aísla los matices más finos de la percepción. Aquí se aprecia cómo compañías que en los otros paneles se solapaban (por compartir valores similares en D1) se diferencian en las dimensiones secundarias. Es el panel más útil para detectar sutilezas que el mapa principal no muestra.</p></li>
+</ul>
+</div>
+</div>
+<div id="cierre-el-informe-de-data-evidence." class="section level2" number="12.5">
+<h2>
+<span class="header-section-number">12.5</span> <img src="figuras/star.svg" class="hicon"> Cierre: el informe de <em>Data-Evidence</em>.<a class="anchor" aria-label="anchor" href="#cierre-el-informe-de-data-evidence."><i class="fas fa-link"></i></a>
+</h2>
+<p>El equipo de <em>Data-Evidence</em> presenta su mapa perceptual ante la Asamblea General de la ASTI con tres conclusiones principales:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>El sector no es percibido como homogéneo: existen grupos de posicionamiento claramente diferenciados.</strong> Lejos de la percepción generalizada de que «todas las navieras son iguales», el mapa revela al menos tres perfiles perceptuales distintos, organizados en torno a dos dimensiones latentes que los clientes utilizan intuitivamente para evaluar a las compañías. Las grandes corporaciones con flota renovada (<em>Arrakis Freight</em>, <em>Excalibur Freight Systems</em>, <em>Kaiju Haulage Co.</em>) se agrupan en una zona del mapa claramente diferenciada de las compañías de flota antigua, y a su vez de las empresas con flota madura que ocupan posiciones intermedias.</p></li>
+<li><p><strong>Las dimensiones latentes del mapa perceptual revelan los ejes de diferenciación que el sector debería comunicar.</strong> Los atributos que más peso tienen en la configuración del mapa señalan las palancas de diferenciación más eficaces. Las compañías que deseen reposicionarse deben trabajar sobre los atributos que definen estas dimensiones.</p></li>
+<li><p><strong>El mapa identifica oportunidades de nicho.</strong> Las zonas del espacio perceptual con baja densidad de competidores representan posiciones de mercado no cubiertas. Una compañía que logre ubicarse en una de estas zonas tendría una ventaja competitiva perceptual sobre las demás.</p></li>
+</ol>
+<p>Cuentan las crónicas que, tras la presentación, varias compañías del sector solicitaron a <em>Data-Evidence</em> estudios de reposicionamiento individuales. Que <em>Tasha Tachybaptus</em>, CEO de <em>Shuttlepod Movers</em>, tomó nota de la posición de su empresa en el mapa y comentó que «ahora entiendo por qué nos comparan con <em>Defiant Cargo</em>, y también por qué no nos comparan con <em>Arrakis</em>». Y que <em>Arg-us Korp</em>, que no aparecía en el estudio pero había leído con atención el informe, murmuró: <em>«Interesante… si yo estuviera en ese mapa, ¿dónde me colocaría?»</em>.</p>
+</div>
+<div id="materiales-para-realizar-las-prácticas-del-capítulo.-10" class="section level2" number="12.6">
+<h2>
+<span class="header-section-number">12.6</span> <img src="figuras/arrow-down-circle.svg" class="hicon"> Materiales para realizar las prácticas del capítulo.<a class="anchor" aria-label="anchor" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-10"><i class="fas fa-link"></i></a>
+</h2>
+<p>En esta sección se muestran los links de acceso a los diferentes materiales (<em>scripts</em>, datos…) necesarios para llevar a cabo los contenidos prácticos del capítulo.</p>
+<p><strong>Datos (en formato Microsoft (R) Excel (R)):</strong></p>
+<ul>
+<li>percepcion_interestelar.xlsx (<a href="https://raw.githubusercontent.com/teckel71/RStars-book/main/download/percepcion_interestelar.xlsx">obtener aquí</a>)</li>
+</ul>
+<p><strong>Scripts:</strong></p>
+<ul>
+<li>emd_rstars.R (<a href="https://raw.githubusercontent.com/teckel71/RStars-book/main/download/emd_rstars.R">obtener aquí</a>)</li>
+</ul>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="an%C3%A1lisis-de-datos-cualitativos..html"><span class="header-section-number">11</span> Análisis de Datos Cualitativos.</a></div>
+<div class="next"><a href="bibliograf%C3%ADa.html">Bibliografía</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#t%C3%A9cnicas-de-mapeado-perceptual-escalado-multidimensional."><span class="header-section-number">12</span> Técnicas de Mapeado Perceptual: Escalado Multidimensional.</a></li>
+<li><a class="nav-link" href="#introducci%C3%B3n-los-mapas-perceptuales."><span class="header-section-number">12.1</span>  Introducción: los mapas perceptuales.</a></li>
+<li>
+<a class="nav-link" href="#escalado-multidimensional-concepto-y-tipos."><span class="header-section-number">12.2</span>  Escalado Multidimensional: concepto y tipos.</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#proximidades-y-distancias."><span class="header-section-number">12.2.1</span> Proximidades y distancias.</a></li>
+<li><a class="nav-link" href="#la-matriz-de-dimensiones."><span class="header-section-number">12.2.2</span> La matriz de dimensiones.</a></li>
+<li><a class="nav-link" href="#emd-m%C3%A9trico-y-no-m%C3%A9trico."><span class="header-section-number">12.2.3</span> EMD métrico y no métrico.</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#el-algoritmo-smacof-y-el-stress."><span class="header-section-number">12.3</span>  El algoritmo SMACOF y el Stress.</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#smacof."><span class="header-section-number">12.3.1</span> SMACOF.</a></li>
+<li><a class="nav-link" href="#el-stress-como-medida-de-bondad-del-ajuste."><span class="header-section-number">12.3.2</span> El Stress como medida de bondad del ajuste.</a></li>
+<li><a class="nav-link" href="#el-diagrama-de-shepard."><span class="header-section-number">12.3.3</span> El diagrama de Shepard.</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#pr%C3%A1ctica-el-mapa-perceptual-del-sector-interestelar."><span class="header-section-number">12.4</span>  Práctica: el mapa perceptual del sector interestelar.</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#la-imagen-del-sector."><span class="header-section-number">12.4.1</span>  La imagen del sector.</a></li>
+<li><a class="nav-link" href="#preparaci%C3%B3n-de-los-datos.-6"><span class="header-section-number">12.4.2</span>  Preparación de los datos.</a></li>
+<li><a class="nav-link" href="#exploraci%C3%B3n-descriptiva-de-los-perfiles."><span class="header-section-number">12.4.3</span>  Exploración descriptiva de los perfiles.</a></li>
+<li><a class="nav-link" href="#c%C3%A1lculo-de-la-matriz-de-proximidades."><span class="header-section-number">12.4.4</span>  Cálculo de la matriz de proximidades.</a></li>
+<li><a class="nav-link" href="#selecci%C3%B3n-del-n%C3%BAmero-de-dimensiones."><span class="header-section-number">12.4.5</span>  Selección del número de dimensiones.</a></li>
+<li><a class="nav-link" href="#la-soluci%C3%B3n-en-dos-dimensiones."><span class="header-section-number">12.4.6</span>  La solución en dos dimensiones.</a></li>
+<li><a class="nav-link" href="#diagrama-de-shepard."><span class="header-section-number">12.4.7</span>  Diagrama de Shepard.</a></li>
+<li><a class="nav-link" href="#el-mapa-perceptual."><span class="header-section-number">12.4.8</span>  El mapa perceptual.</a></li>
+<li><a class="nav-link" href="#interpretaci%C3%B3n-de-las-dimensiones."><span class="header-section-number">12.4.9</span>  Interpretación de las dimensiones.</a></li>
+<li><a class="nav-link" href="#ampliaci%C3%B3n-la-soluci%C3%B3n-en-tres-dimensiones."><span class="header-section-number">12.4.10</span>  Ampliación: la solución en tres dimensiones.</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#cierre-el-informe-de-data-evidence."><span class="header-section-number">12.5</span>  Cierre: el informe de Data-Evidence.</a></li>
+<li><a class="nav-link" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-10"><span class="header-section-number">12.6</span>  Materiales para realizar las prácticas del capítulo.</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón Morán. It was last built on 2026-07-21.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

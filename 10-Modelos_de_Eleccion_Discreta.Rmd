@@ -177,6 +177,7 @@ rm(list = ls())
 library(readxl)
 library(dplyr)
 library(ggplot2)
+library(gtExtras)
 library(aod)       # Para el contraste de Wald sobre factores
 
 if (!requireNamespace("MATrstars", quietly = TRUE)) {
@@ -199,8 +200,18 @@ En esta ocasión se incorpora un paquete nuevo, `{aod}`, que proporciona la func
 A continuación, se importan los datos desde el archivo Excel:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-LICENCIAS <- read_excel("licencias_100.xlsx", sheet = "Datos")
-LICENCIAS <- as.data.frame(LICENCIAS, row.names = 1)
+# Importando datos desde Excel
+LICENCIAS <- read_excel("licencias_100.xlsx",
+                        sheet = "Datos")
+LICENCIAS <- data.frame(LICENCIAS, row.names = 1)
+```
+
+Podemos obtener un resumen visual de las variables con `gt_plt_summary()`:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+# Resumen visual de las variables
+licencias_graph <- gt_plt_summary(LICENCIAS)
+licencias_graph
 ```
 
 ### ![](figuras/pie-chart.svg) Detección de valores perdidos.

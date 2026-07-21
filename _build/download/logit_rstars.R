@@ -19,6 +19,7 @@ rm(list = ls())
 library(readxl)
 library(dplyr)
 library(ggplot2)
+library(gtExtras)
 library(aod)       # Para el contraste de Wald sobre factores
 
 # Paquete MATrstars: funciones auxiliares del libro R-Stars.
@@ -36,11 +37,14 @@ library(MATrstars)
 # 1. CARGA Y PREPARACIÓN DE DATOS
 # ══════════════════════════════════════════════════════════════════════════════
 
-LICENCIAS <- read_excel("licencias_100.xlsx", sheet = "Datos")
-LICENCIAS <- as.data.frame(LICENCIAS, row.names = 1)
+# Importando datos desde Excel
+LICENCIAS <- read_excel("licencias_100.xlsx",
+                        sheet = "Datos")
+LICENCIAS <- data.frame(LICENCIAS, row.names = 1)
 
-summary(LICENCIAS)
-str(LICENCIAS)
+# Resumen visual de las variables
+licencias_graph <- gt_plt_summary(LICENCIAS)
+licencias_graph
 
 
 # 1a. Detección y tratamiento de valores perdidos

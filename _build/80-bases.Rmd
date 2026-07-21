@@ -4,7 +4,7 @@ options(matrstars.suppress_caption = TRUE)
 
 # Apéndice: Bases de datos utilizadas en el libro. {.unnumbered}
 
-A lo largo del libro se utilizan **cuatro bases de datos**, todas ellas ambientadas en el universo *R-Stars* (véase el apéndice correspondiente). Se distribuyen como ficheros de Excel con una estructura homogénea de tres hojas: una hoja `Inicio` con una breve descripción de la base y un aviso legal, una hoja `Variables` con la definición y las unidades de cada variable, y una hoja `Datos` con los registros propiamente dichos.
+A lo largo del libro se utilizan **cinco bases de datos**, todas ellas ambientadas en el universo *R-Stars* (véase el apéndice correspondiente). Se distribuyen como ficheros de Excel con una estructura homogénea de tres hojas: una hoja `Inicio` con una breve descripción de la base y un aviso legal, una hoja `Variables` con la definición y las unidades de cada variable, y una hoja `Datos` con los registros propiamente dichos.
 
 En este apéndice se documenta el contenido de las tres bases, indicando para cada variable su **nombre**, una **descripción** breve, sus **unidades** de medida y su **tipo** desde el punto de vista estadístico. Para el tipo se emplean cuatro categorías:
 
@@ -139,9 +139,34 @@ Contiene información sobre **100 compañías** del sector del transporte intere
 :::
 
 
+## `percepcion_interestelar`. {.unnumbered}
+
+### Descripción general. {.unnumbered}
+
+Contiene las **valoraciones medias** que 30 clientes frecuentes (pequeñas empresas que contratan servicios de transporte de mercancías) han otorgado a **15 compañías** del sector interestelar en **6 atributos de servicio**, utilizando una escala Likert de 1 (muy deficiente) a 7 (excelente). La encuesta fue diseñada por la consultora *Data-Evidence* por encargo de la Asociación Sectorial de Transporte Interestelar (ASTI), con el objetivo de construir un mapa perceptual del sector. Las 15 compañías están extraídas de `interestelar_300` y cubren los tres estados de flota (`RENOVADA`, `MADURA` y `ANTIGUA`), con tamaños y perfiles operativos muy diversos. Los valores de percepción son coherentes con las características financieras y operativas que las compañías presentan en la base principal. Se utiliza en el capítulo 12 (técnicas de mapeado perceptual: Escalado Multidimensional).
+
+**Estructura**: 15 filas × 7 columnas.
+
+### Variables. {.unnumbered}
+
+| Variable | Descripción | Unidades | Tipo |
+|----|----|----|----|
+| `EMPRESA` | Nombre comercial de la compañía valorada. | Texto | Identificador |
+| `FIABILIDAD` | Percepción de fiabilidad general de la compañía como transportista de mercancías. | Escala Likert 1–7 | Métrica |
+| `PUNTUALIDAD` | Percepción de puntualidad en las entregas y cumplimiento de plazos. | Escala Likert 1–7 | Métrica |
+| `SEGURIDAD` | Percepción de seguridad en el transporte de la mercancía (integridad de la carga). | Escala Likert 1–7 | Métrica |
+| `PRECIO` | Percepción de buena relación calidad-precio del servicio de transporte. | Escala Likert 1–7 | Métrica |
+| `ATENCION` | Percepción de calidad de la atención al cliente y gestión de incidencias. | Escala Likert 1–7 | Métrica |
+| `INNOVACION` | Percepción de innovación tecnológica en los procesos logísticos. | Escala Likert 1–7 | Métrica |
+
+::: {style="text-align: center;"}
+**Tabla 80.5**
+:::
+
+
 ## Nota sobre carga y uso de las bases. {.unnumbered}
 
-Las cuatro bases se distribuyen como ficheros `.xlsx`. Para cargarlas en R desde los *scripts* del libro se utiliza la función `readxl::read_excel()`, indicando explícitamente la hoja `Datos`. Un ejemplo típico de carga —adaptable a cualquiera de las cuatro bases— es el siguiente:
+Las cinco bases se distribuyen como ficheros `.xlsx`. Para cargarlas en R desde los *scripts* del libro se utiliza la función `readxl::read_excel()`, indicando explícitamente la hoja `Datos`. Un ejemplo típico de carga —adaptable a cualquiera de las cinco bases— es el siguiente:
 
 ```{r, eval=FALSE, echo=TRUE}
 library(readxl)

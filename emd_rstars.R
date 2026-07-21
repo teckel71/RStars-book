@@ -1,0 +1,312 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# ESCALADO MULTIDIMENSIONAL NO-MÉTRICO — Mapa perceptual del sector interestelar
+# ══════════════════════════════════════════════════════════════════════════════
+# Script de práctica del capítulo 12 del libro R-Stars.
+#
+# Objetivo: construir un mapa perceptual de 15 compañías de transporte
+# interestelar de mercancías a partir de las valoraciones de 30 clientes
+# sobre 6 atributos de servicio, utilizando Escalado Multidimensional
+# No-Métrico (EMD-NM).
+# ══════════════════════════════════════════════════════════════════════════════
+
+
+# Limpiando el Global Environment
+
+rm(list = ls())
+
+
+# Cargando paquetes
+
+library(readxl)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(ggrepel)
+library(gtExtras)
+library(patchwork)
+library(smacof)       # Algoritmo SMACOF para EMD
+library(factoextra)   # Visualización de la matriz de distancias
+
+# Paquete MATrstars: funciones auxiliares del libro R-Stars.
+# Si el paquete no está instalado, se instala desde GitHub (una sola vez).
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
+}
+library(MATrstars)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 1. CARGA Y EXPLORACIÓN DE LOS DATOS
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Los datos proceden de una encuesta a 30 clientes (pequeñas empresas) que
+# valoraron a 15 compañías de transporte interestelar de mercancías en
+# 6 atributos de servicio (escala Likert 1-7).
+# La hoja "Datos" contiene las medias agregadas por empresa.
+
+# Importando datos desde Excel
+PERCEPCION <- read_excel("percepcion_interestelar.xlsx",
+                         sheet = "Datos")
+PERCEPCION <- data.frame(PERCEPCION, row.names = 1)
+
+# Resumen visual de las variables
+percepcion_graph <- gt_plt_summary(PERCEPCION)
+percepcion_graph
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 2. EXPLORACIÓN DESCRIPTIVA DE LOS PERFILES
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Tabla con las valoraciones medias de cada empresa en cada atributo
+
+kable_rstars(round(PERCEPCION, 2),
+             caption = "Valoraciones medias por empresa y atributo (Likert 1-7)")
+
+
+# Visualización de los perfiles como gráfico de coordenadas paralelas:
+# cada línea es una empresa, cada eje un atributo
+
+perfiles_long <- PERCEPCION %>%
+  mutate(EMPRESA = rownames(PERCEPCION)) %>%
+  pivot_longer(cols = -EMPRESA, names_to = "Atributo", values_to = "Valoracion")
+
+ggplot(perfiles_long, aes(x = Atributo, y = Valoracion,
+                          group = EMPRESA, color = EMPRESA)) +
+  geom_line(linewidth = 0.7, alpha = 0.7) +
+  geom_point(size = 2) +
+  labs(title = "Perfiles de valoración de las compañías",
+       subtitle = "Coordenadas paralelas — 6 atributos, escala Likert 1-7",
+       x = NULL, y = "Valoración media") +
+  theme_minimal() +
+  theme(plot.title    = element_text(face = "bold", size = 12),
+        plot.subtitle = element_text(size = 10),
+        axis.text.x   = element_text(angle = 30, hjust = 1),
+        legend.position = "right",
+        legend.title  = element_blank(),
+        legend.text   = element_text(size = 7))
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 3. CÁLCULO DE LA MATRIZ DE PROXIMIDADES (DISTANCIAS)
+# ══════════════════════════════════════════════════════════════════════════════
+
+# La función dist() calcula la distancia euclídea entre las filas del data
+# frame (entre empresas), usando como coordenadas sus valoraciones en los
+# 6 atributos. Cuanto mayor es la distancia, más diferentes son las empresas
+# en la percepción de los clientes.
+
+proximidades <- dist(PERCEPCION)
+
+# Visualización de la matriz de distancias como mapa de calor
+
+fviz_dist(proximidades, lab_size = 6) +
+  ggtitle("Matriz de distancias entre compañías") +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 4. SELECCIÓN DEL NÚMERO DE DIMENSIONES: GRÁFICO DE CODO DEL STRESS
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Ejecutamos el EMD-NM para p = 1, 2, 3, 4, 5 y 6, y representamos el
+# Stress en función de p.
+
+dimensiones_max <- 6
+stress_valores <- numeric(dimensiones_max)
+
+for (p in 1:dimensiones_max) {
+  solucion_p <- mds(proximidades, ndim = p, type = "ordinal")
+  stress_valores[p] <- solucion_p$stress
+}
+
+# Data frame para el gráfico
+df_stress <- data.frame(Dimensiones = 1:dimensiones_max,
+                        Stress      = stress_valores)
+
+ggplot(df_stress, aes(x = Dimensiones, y = Stress)) +
+  geom_line(color = "#2C3E50", linewidth = 1) +
+  geom_point(color = "#E74C3C", size = 3) +
+  geom_text(aes(label = round(Stress, 4)), vjust = -1, size = 3.5) +
+  geom_hline(yintercept = 0.05, linetype = "dashed", color = "grey50") +
+  annotate("text", x = 5.5, y = 0.055,
+           label = "Umbral 0,05 (bueno)", color = "grey50", size = 3) +
+  scale_x_continuous(breaks = 1:dimensiones_max) +
+  labs(title    = "Selección de dimensiones: gráfico de codo del Stress",
+       subtitle = "EMD No-Métrico (SMACOF) — tipo ordinal",
+       x = "Número de dimensiones (p)", y = "Stress") +
+  theme_minimal() +
+  theme(plot.title    = element_text(face = "bold", size = 12),
+        plot.subtitle = element_text(size = 10))
+
+# Tabla con los valores de Stress
+kable_rstars(df_stress, caption = "Stress por número de dimensiones")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 5. SOLUCIÓN EN DOS DIMENSIONES
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Ajustamos el EMD-NM con p = 2 dimensiones
+
+solucion <- mds(proximidades, ndim = 2, type = "ordinal")
+solucion
+
+# Coordenadas de los casos en las dos dimensiones
+coordenadas <- as.data.frame(solucion$conf)
+coordenadas$EMPRESA <- rownames(coordenadas)
+
+kable_rstars(round(solucion$conf, 4),
+             caption = "Coordenadas de las empresas en 2 dimensiones")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 6. DIAGRAMA DE SHEPARD
+# ══════════════════════════════════════════════════════════════════════════════
+
+# El diagrama de Shepard compara las distancias originales (proximidades)
+# con las distancias obtenidas en la solución MDS. Si el ajuste es bueno,
+# los puntos se alinearán sobre una función monótona creciente.
+
+# Extraemos los datos del diagrama desde el objeto solucion
+shepard_data <- data.frame(
+  delta    = as.vector(solucion$delta),
+  confdist = as.vector(solucion$confdist),
+  dhat     = as.vector(solucion$dhat)
+)
+shepard_data <- shepard_data[shepard_data$delta > 0, ]
+shepard_data <- shepard_data[order(shepard_data$delta), ]
+
+ggplot(shepard_data) +
+  geom_point(aes(x = delta, y = confdist),
+             color = "#E74C3C", size = 1.5, alpha = 0.6) +
+  geom_step(aes(x = delta, y = dhat),
+            color = "#2C3E50", linewidth = 0.8) +
+  labs(title = "Diagrama de Shepard",
+       x = "Proximidades originales (distancias observadas)",
+       y = "Distancias en la configuración MDS") +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", size = 12))
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 7. MAPA PERCEPTUAL (GRÁFICO BIDIMENSIONAL)
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Las empresas cercanas en el mapa son percibidas de forma similar por los
+# clientes; las lejanas, de forma diferente.
+
+ggplot(coordenadas, aes(x = D1, y = D2, label = EMPRESA)) +
+  geom_point(color = "#E74C3C", size = 3, alpha = 0.8) +
+  geom_label_repel(size = 3, color = "black", alpha = 0.6,
+                   max.overlaps = 20) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "grey70") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "grey70") +
+  labs(title    = "SECTOR INTERESTELAR DE TRANSPORTE DE MERCANCÍAS",
+       subtitle = "Mapa perceptual — Configuración de opiniones de clientes",
+       x = "Dimensión 1", y = "Dimensión 2") +
+  theme_minimal() +
+  theme(plot.title    = element_text(face = "bold", size = 14),
+        plot.subtitle = element_text(size = 10))
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 8. INTERPRETACIÓN DE LAS DIMENSIONES
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Correlaciones entre cada atributo original y las coordenadas en cada
+# dimensión. Los atributos más correlacionados con una dimensión nos dan
+# su significado.
+
+correlaciones <- cor(PERCEPCION, solucion$conf)
+colnames(correlaciones) <- c("Dim.1", "Dim.2")
+
+kable_rstars(round(correlaciones, 3),
+             caption = "Correlaciones atributos-dimensiones")
+
+# Mapa perceptual con vectores de atributos superpuestos
+
+df_cor <- as.data.frame(correlaciones)
+df_cor$Atributo <- rownames(df_cor)
+
+factor_escala <- max(abs(coordenadas$D1), abs(coordenadas$D2)) * 0.8
+
+ggplot() +
+  # Puntos de las empresas
+  geom_point(data = coordenadas, aes(x = D1, y = D2),
+             color = "#E74C3C", size = 3, alpha = 0.8) +
+  geom_label_repel(data = coordenadas, aes(x = D1, y = D2, label = EMPRESA),
+                   size = 2.5, color = "black", alpha = 0.5,
+                   max.overlaps = 20) +
+  # Vectores de los atributos
+  geom_segment(data = df_cor,
+               aes(x = 0, y = 0,
+                   xend = Dim.1 * factor_escala,
+                   yend = Dim.2 * factor_escala),
+               arrow = arrow(length = unit(0.2, "cm")),
+               color = "#7B99AD", linewidth = 0.8) +
+  geom_text(data = df_cor,
+            aes(x = Dim.1 * factor_escala * 1.1,
+                y = Dim.2 * factor_escala * 1.1,
+                label = Atributo),
+            color = "#4A6B82", fontface = "bold", size = 3.5) +
+  # Ejes de referencia
+  geom_hline(yintercept = 0, linetype = "dashed", color = "grey70") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "grey70") +
+  labs(title    = "MAPA PERCEPTUAL CON VECTORES DE ATRIBUTOS",
+       subtitle = "Dirección y longitud indican correlación con cada dimensión",
+       x = "Dimensión 1", y = "Dimensión 2") +
+  theme_minimal() +
+  theme(plot.title    = element_text(face = "bold", size = 13),
+        plot.subtitle = element_text(size = 10))
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 9. ANÁLISIS COMPLEMENTARIO: SOLUCIÓN EN 3 DIMENSIONES
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Si el Stress en 2D no es suficientemente bajo, puede explorarse la solución
+# en 3 dimensiones para capturar matices que dos ejes no recogen.
+
+solucion_3d <- mds(proximidades, ndim = 3, type = "ordinal")
+solucion_3d
+
+coordenadas_3d <- as.data.frame(solucion_3d$conf)
+coordenadas_3d$EMPRESA <- rownames(coordenadas_3d)
+
+kable_rstars(round(solucion_3d$conf, 4),
+             caption = "Coordenadas en 3 dimensiones")
+
+# Correlaciones en 3D
+correlaciones_3d <- cor(PERCEPCION, solucion_3d$conf)
+colnames(correlaciones_3d) <- c("Dim.1", "Dim.2", "Dim.3")
+kable_rstars(round(correlaciones_3d, 3),
+             caption = "Correlaciones atributos-dimensiones (3D)")
+
+
+# Mapas perceptuales 2 a 2 (D1-D2, D1-D3, D2-D3) reunidos en un patchwork.
+# Se omiten los vectores de atributos para mantener la legibilidad en los
+# paneles reducidos.
+
+# Función auxiliar para generar cada mapa
+mapa_2d <- function(datos, dim_x, dim_y, titulo) {
+  ggplot(datos, aes(x = .data[[dim_x]], y = .data[[dim_y]],
+                    label = EMPRESA)) +
+    geom_point(color = "#E74C3C", size = 2, alpha = 0.8) +
+    geom_label_repel(size = 2, color = "black", alpha = 0.5,
+                     max.overlaps = 20, label.padding = 0.15) +
+    geom_hline(yintercept = 0, linetype = "dashed", color = "grey70") +
+    geom_vline(xintercept = 0, linetype = "dashed", color = "grey70") +
+    labs(title = titulo,
+         x = dim_x, y = dim_y) +
+    theme_minimal() +
+    theme(plot.title = element_text(face = "bold", size = 10))
+}
+
+g_12 <- mapa_2d(coordenadas_3d, "D1", "D2", "Dimensión 1 vs Dimensión 2")
+g_13 <- mapa_2d(coordenadas_3d, "D1", "D3", "Dimensión 1 vs Dimensión 3")
+g_23 <- mapa_2d(coordenadas_3d, "D2", "D3", "Dimensión 2 vs Dimensión 3")
+
+pw_mapas <- create_patchwork(list(g_12, g_13, g_23))
+for (p in pw_mapas) print(p)
