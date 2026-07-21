@@ -11,7 +11,8 @@ library (gtExtras)
 library (visdat)
 library (patchwork)
 library (broom) # para augment()
-library (lmtest)
+library (lmtest)    # para resettest, bptest, coeftest
+library (sandwich)   # errores estándar robustos (HC)
 
 # Paquete MATrstars: funciones auxiliares del libro R-Stars.
 # Contiene, entre otras, las funciones kable_rstars(), presenta_modelo() y
@@ -160,7 +161,7 @@ seleccion_so$EFLO <- as.factor(seleccion_so$EFLO)
     xlab("Casos (ordenados por |residuo|)") +
     ylab("Residuos")
   
-  g_hresid <- ggplot(data = series_ecuaDEF, map = aes(x = residuos)) +
+  g_hresid <- ggplot(data = series_ecuaDEF, aes(x = residuos)) +
     geom_density(colour = "red", fill = "orange", alpha = 0.6) +
     ggtitle("BMAL empresas TMI.", subtitle = "Densidad Residuos")+
     xlab("Residuos") +
@@ -233,6 +234,12 @@ seleccion_so$EFLO <- as.factor(seleccion_so$EFLO)
                    digits    = 3)
 
     tabla_check
+
+# Estimación con errores estándar robustos (HC1, tipo White).
+# Los coeficientes NO cambian; solo se corrigen los errores estándar,
+# los estadísticos t y los p-valores para tener en cuenta la heteroscedasticidad.
+    robust_ecuaDEF <- coeftest(ecuaDEF, vcov = vcovHC(ecuaDEF, type = "HC1"))
+    robust_ecuaDEF
 
 # SIMULACIÓN
     

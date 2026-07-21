@@ -1,5 +1,25 @@
 # Análisis de Regresión Lineal Múltiple.
 
+```{r, include=FALSE}
+# Carga anticipada de paquetes (necesarios antes de la sección de preparación de datos).
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(gtExtras)
+library(visdat)
+library(knitr)
+library(kableExtra)
+library(patchwork)
+library(broom)
+library(lmtest)
+library(sandwich)
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
+}
+library(MATrstars)
+```
+
 ![[Recorriendo la nube de puntos...]{.smallcaps}](figuras/09%20nube.jpg){width="100%"}
 
 ## ![](figuras/book.svg){.hicon} Introducción.
@@ -52,11 +72,11 @@ $$
 y=X\beta+u
 $$
 
-Donde *y* es un vector (nx1), *X* una matriz (nxk), $\beta$ un vector (kx1), y *u* un vestor (nx1).
+Donde *y* es un vector (nx1), *X* una matriz (nxk), $\beta$ un vector (kx1), y *u* un vector (nx1).
 
 En el MBR, la perturbación aleatoria *u* debe cumplir con una serie de **hipótesis básicas**: normalidad en su comportamiento, esperanza nula, homoscedasticidad o varianza constante, y ausencia de autocorrelación (covarianza nula entre diferentes elementos del vector de la perturbación). Estas hipótesis, junto a las de permanencia estructural (valores de los elementos de $\beta$ constantes a lo largo de la muestra), no endogeneidad o regresores no-estocásticos (covarianza nula entre la matriz *X* y el vector *u*), y rango pleno (las columnas de la matriz X o variables explicativas no han de ser combinaciones lineales unas de otras); permiten que el MBR pueda ser estimado por el método de mínimos cuadrados ordinarios (MCO), obteniendo estimadores con las mejores propiedades: **insesgadez, eficiencia, consistencia**.
 
-En la medida en que alguna o algunas de las hipótesis básicas no se cumplan, la calidad de los estimadores MCO perderan calidad, en el sentido de no gozar de las propiedades deseables, desde un punto de vista inferencial. En tal caso, podrán aplicarse otros métodos de estimación, diversos métodos econométricos, o asumir que los estimadores carecen de algunas de las propiedades deseables.
+En la medida en que alguna o algunas de las hipótesis básicas no se cumplan, los estimadores MCO perderán calidad, en el sentido de no gozar de las propiedades deseables, desde un punto de vista inferencial. En tal caso, podrán aplicarse otros métodos de estimación, diversos métodos econométricos, o asumir que los estimadores carecen de algunas de las propiedades deseables.
 
 El modelo estimado será:
 
@@ -72,13 +92,13 @@ Tras estas breves notas formales del MBR, pasaremos a construir un modelo que in
 
 ### ![](figuras/star.svg){.hicon} Renovarse o morir.
 
-*Dixilaliza* es una empresa especializada en ofrecer soluciones de alta tecnología a las empresas del sector del transporte espacial. En los últimos años, ha desarrollado una serie de herramientas basadas en la Inteligencia Artificial de tercera generación para optimizar la gestión de las grandes travesías interestelares: determinación de rutas, puntos de regarga de *especia*, balances energéticos, etc.
+*Dixitaliza* es una empresa especializada en ofrecer soluciones de alta tecnología a las empresas del sector del transporte espacial. En los últimos años, ha desarrollado una serie de herramientas basadas en la Inteligencia Artificial de tercera generación para optimizar la gestión de las grandes travesías interestelares: determinación de rutas, puntos de recarga de *especia*, balances energéticos, etc.
 
 En este contexto, *Dixitaliza* ha encargado un estudio a la consultora *Data-Evidence* sobre la conveniencia de que las empresas de transporte interestelar de mercancías renueven sus flotas adoptando su soluciones tecnológicas, a fin de maximizar el rendimiento económico.
 
 ![[Renovación de flota en Vader & Co.]{.smallcaps}](figuras/09 Vader.jpg){width="100%"}
 
-EL equipo de *Data-Evidence*, aprovechando los datos publicados por la *Agencia Interplanetaria de Transporte de Mercancías*, se ha decantado por estimar un modelo econométrico como soporte al planteamiento de diversos escenarios con diferentes grados de renovación tecnológica de su flota, en el que se pueda evaluar, en una empresa media del sector, el impacto que, sobre su rendimiento económico, tiene tal inversión.
+El equipo de *Data-Evidence*, aprovechando los datos publicados por la *Agencia Interplanetaria de Transporte de Mercancías*, se ha decantado por estimar un modelo econométrico como soporte al planteamiento de diversos escenarios con diferentes grados de renovación tecnológica de su flota, en el que se pueda evaluar, en una empresa media del sector, el impacto que, sobre su rendimiento económico, tiene tal inversión.
 
 ### ![](figuras/pie-chart.svg) Planteamiento inicial del modelo.
 
@@ -88,7 +108,7 @@ En coherencia con el objetivo del modelo, variable dependiente del modelo es el 
 
 2.  **BMAL capta eficiencia operativa, no solo escala:** Mientras que medidas tradicionales (beneficio total, rentabilidad financiera, ROE, ROA, etc.) mezclan conceptos como el tamaño del balance, la estructura de capital, los efectos de apalancamiento y la eficiencia operativa; el indicador BMAL es primariamente operativo. Realmente captura la eficiencia del uso de la flota, la eficacia en planificación de rutas, la capacidad de generar beneficios ajustados a la distancia producida, la eficiencia energética y de mantenimiento de las naves y la calidad tecnológica de la flota. En sectores como el transporte interplanetario o interestelar, donde el “kilómetro recorrido” no tiene un precio lineal (por la variabilidad del espacio-tiempo, túneles de salto, costos de energía, riesgos de tormentas gravitacionales, etc.), una métrica como BMAL es muy informativa.
 
-En el modelo se utiliza su transformación logarítmica natural (ln(RES)) con el fin de:
+En el modelo se utiliza su transformación logarítmica natural (ln(BMAL)) con el fin de:
 
 -   Estabilizar la varianza (reducir heterocedasticidad).
 
@@ -100,17 +120,36 @@ Es necesario tener en cuenta que, previamente, es necesario comprobar que no exi
 
 Como variables explicativas, se consideran las siguientes:
 
--   **Estado de la flota (EFLO)**: Es la variable sobre la que se centra el estudio. La variable EFLO es categórica y clasifica a las empresas según el grado de modernización de su flota (“Renovada”, “Madura”, “Antigua”). Su inclusión en el modelo responde a la hipótesis de que el **estado tecnológico de la flota** es un factor **determinante de la eficiencia operativa**, ya que condiciona el consumo energético, el coste de mantenimiento, la frecuencia de averías y la fiabilidad de los motores de curvatura o de salto. Una flota madura o renovada suele incorporar mejoras tecnológicas que reducen el coste por parsec recorrido y aumentan la capacidad de generar beneficios ajustados a distancia. EFLO sintetiza este componente tecnológico y organizativo, permitiendo evaluar su impacto sobre el rendimiento operativo. Es razonable esperar que flotas más modernas se asocien a mayores niveles de BMAL, una relación que el modelo puede confirmar empíricamente.
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+vars_modelo <- data.frame(
+  Variable = c("EFLO", "DIST", "IDIVERSE", "ACTIVO", "LIQUIDEZ"),
+  Descripcion = c(
+    "Estado tecnológico de la flota (Antigua / Madura / Renovada)",
+    "Distancia total anual recorrida (años luz)",
+    "Índice de diversificación de servicios",
+    "Volumen de activos totales (miles de PAVOs)",
+    "Ratio de liquidez (Activo corriente / Pasivo corriente)"
+  ),
+  Signo = c("+", "\u2212", "+", "+", "+/\u2212"),
+  Justificacion = c(
+    "Flotas modernas: menor desgaste, mayor eficiencia energética",
+    "Mayor distancia: más costes operativos por unidad recorrida",
+    "Diversificación: economías de alcance, estabilidad de ingresos",
+    "Mayor escala: economías de escala, mejor infraestructura",
+    "Liquidez adecuada: continuidad operativa sin restricciones"
+  )
+)
 
--   **Distancia total anual recorrida (DIST)**: La distancia recorrida es un determinante esencial del rendimiento operativo en el transporte interestelar, pues condiciona tanto la carga de trabajo como la estructura de costes asociada a la actividad. Rutas más extensas requieren un mayor consumo energético, incrementan la probabilidad de incidencias técnicas y elevan los costes de mantenimiento y desgaste de la flota. Por ello, aunque las empresas que recorren más distancia pueden generar mayores ingresos, ese incremento no siempre se traduce proporcionalmente en eficiencia económica. Incluir la distancia en el modelo permite capturar cómo el aumento de actividad física influye en la productividad ajustada por unidad de recorrido, reflejada en BMAL.
+vars_modelo %>%
+  kable_rstars(caption = "Variables explicativas del modelo y signo esperado",
+               col.names = c("Variable", "Descripción", "Signo esperado",
+                             "Justificación económica"))
+```
 
--   **Índice de diversificación de servicios (IDIVERSE)**: La diversificación estratégica reduce la exposición a riesgos derivados de la volatilidad de la demanda intersistémica o de fallos operativos en rutas concretas. Empresas con mayor diversificación tienden a estabilizar su flujo de ingresos, aprovechar mejor su flota y distribuir costes fijos entre distintas actividades, lo que puede elevar su eficiencia global. No obstante, la diversificación también puede generar sobrecostes organizativos o ineficiencias si no está bien gestionada. Incluir IDIVERSE permite valorar si la diversificación contribuye realmente al rendimiento operativo por distancia recorrida o si, por el contrario, introduce complejidades que reducen BMAL.
-
--   **Volumen de los activos totales (ACTIVO)**: El activo total refleja la escala y capacidad productiva de la empresa: mayor número de naves, infraestructura logística más desarrollada, tecnología de salto más avanzada o bases operativas mejor equipadas. Un incremento del activo puede asociarse a economías de escala, mayor eficiencia energética y capacidad para optimizar rutas, todo lo cual puede traducirse en un mayor rendimiento por unidad de distancia recorrida. No obstante, un aumento excesivo del activo también puede generar costes fijos sobredimensionados. Su inclusión permite medir hasta qué punto la escala de la empresa contribuye de forma eficiente al rendimiento operativo.
-
--   **Ratio de liquidez (LIQUIDEZ)**: La liquidez captura la capacidad de la empresa para hacer frente a sus obligaciones operativas de corto plazo, algo especialmente relevante en un sector con elevados costes energéticos y de mantenimiento. Empresas con liquidez insuficiente pueden enfrentarse a restricciones financieras que limiten sus operaciones, reduzcan su margen de maniobra para gestionar imprevistos o les impidan acometer inversiones rápidas en reparación y optimización de la flota. Por el contrario, niveles moderados y saludables de liquidez facilitan la continuidad operativa y la eficiencia en la gestión de rutas. Incluir este ratio permite analizar si la solvencia de corto plazo influye en la productividad ajustada.
+La variable central del estudio es **EFLO**, sobre la que se centra el encargo de *Dixitaliza*. El resto de variables controlan los efectos de la escala (ACTIVO, DIST), la estrategia (IDIVERSE) y la posición financiera (LIQUIDEZ), que podrían confundir la relación entre renovación tecnológica y rendimiento si no se incluyen en el modelo.
 
 Por tanto, el modelo teórico adoptado se especifica como:
+
 
 $$
 \ln(BMAL_i) = \beta_0 
@@ -140,7 +179,7 @@ Vamos a trabajar en un proyecto de nombre, por ejemplo, "regresion". En la carpe
 
 -   El script con el código que vamos a ir ejecutando se llama "regresion_rstars.R".
 
-Una vez abierto el *script* en el editor de RStudio , comprobaremos que la primera parte del código está dedicada a la limpieza de la memoria (*Environment*). Además, se cargan los paquetes que harán falta para ejecutar el código:
+Una vez abierto el *script* en el editor de RStudio , comprobaremos que la primera parte del código está dedicada a la limpieza de la memoria (*Global Environment*). Además, se cargan los paquetes que harán falta para ejecutar el código:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 ### REGRESIÓN MÚLTIPLE. Empresas TMI. ###
@@ -158,7 +197,8 @@ library (knitr)
 library (kableExtra)
 library (patchwork)
 library (broom) # para augment()
-library (lmtest)
+library (lmtest)    # para resettest, bptest, coeftest
+library (sandwich)   # errores estándar robustos (HC)
 ```
 
 A continuación, se han integrado distintas funciones que serán operativamente útiles a la hora de obtener resultados. Estas funciones son:
@@ -336,17 +376,7 @@ Hay otras informaciones importantes a la hora de valorar la especificación (ini
 
 Para poder hacer esto con este modelo inicial estimado, o con cualquier otra estimación, vamos a aplicar la función `presenta_modelo()` del paquete `{MATrstars}` (véase el **Apéndice: Funciones auxiliares del paquete `MATrstars`** para su ficha completa). Esta función recibe como input la estimación lineal de un modelo, y devuelve como output tres tablas contenidas en una *lista*: la primera es una *versión* del `summary()`, la segunda es una tabla con otras informaciones adicionales, como el valor del *Criterio de Información de Akaike* (AIC), y la tercera contiene los valores del *factor de inflación de la varianza* (VIF) de las variables del modelo. Las tres tablas se generan con la función `kable_rstars()`, que ya hemos utilizado en apartados anteriores para aplicar de manera uniforme el estilo tipográfico habitual del libro.
 
-```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
-  # Paquete MATrstars: funciones auxiliares del libro R-Stars.
-  # Si no está instalado, se instala desde GitHub (solo la primera vez).
-  if (!requireNamespace("MATrstars", quietly = TRUE)) {
-    if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
-    remotes::install_github("teckel71/MATrstars")
-  }
-  library(MATrstars)
-```
-
-Después, basta con aplicar la función al modelo estimado inicial *(ecua_0)*, guardando las tres tablas generadas en la lista cuyo nombre determinaremos (en nuestro caso, *modelo_0*). Las tablas serán visualizadas:
+Basta con aplicar la función al modelo estimado inicial *(ecua_0)*, guardando las tres tablas generadas en la lista cuyo nombre determinaremos (en nuestro caso, *modelo_0*). Las tablas serán visualizadas:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
   modelo_0 <- presenta_modelo(ecua0)
@@ -455,8 +485,7 @@ Para facilitar esta tarea, recurriremos a la función `augment()` del paquete `{
            residuos = .resid,
            cooksd = .cooksd)
   series_ecuaDEF$ORDEN = c(1:nrow(series_ecuaDEF))
-library(dplyr)
-df <- select(series_ecuaDEF, everything())
+df <- series_ecuaDEF
 
 # Número de variables por bloque
 variables_por_bloque <- 3
@@ -513,7 +542,7 @@ g_real_pred <- ggplot(series_ecuaDEF) +
   xlab("Casos (ordenados por |residuo|)") +
   ylab("Residuos")
 
-  g_hresid <- ggplot(data = series_ecuaDEF, map = aes(x = residuos)) +
+  g_hresid <- ggplot(data = series_ecuaDEF, aes(x = residuos)) +
     geom_density(colour = "red", fill = "orange", alpha = 0.6) +
     ggtitle("BMAL empresas TMI.", subtitle = "Densidad Residuos")+
     xlab("Residuos") +
@@ -571,7 +600,7 @@ g_real_pred <- ggplot(series_ecuaDEF) +
   xlab("Casos (ordenados por |residuo|)") +
   ylab("Residuos")
 
-  g_hresid <- ggplot(data = series_ecuaDEF, map = aes(x = residuos)) +
+  g_hresid <- ggplot(data = series_ecuaDEF, aes(x = residuos)) +
     geom_density(colour = "red", fill = "orange", alpha = 0.6) +
     ggtitle("BMAL empresas TMI.", subtitle = "Densidad Residuos")+
     xlab("Residuos") +
@@ -600,7 +629,12 @@ A partir de los gráficos se puede concluir:
 
 4.  Gráfico de la **distancia de Cook:** El gráfico de la distancia de Cook muestra la influencia individual de cada observación sobre los coeficientes del modelo. La mayoría de los casos se encuentran muy por debajo del umbral crítico estándar (4/n), lo que indica que no existe un número significativo de observaciones con influencia excesiva. Algunos casos presentan valores algo más elevados, pero ninguno destaca de manera alarmante ni parece comprometer la estabilidad del modelo. Esto sugiere que los coeficientes estimados no están dominados por puntos atípicos influyentes y que los resultados son robustos desde la perspectiva de influencia.
 
-Es importante recalcar que la *distancia de Cook* y la *presencia de outliers* están relacionadas, pero **no son lo mismo**. La *distancia de Cook* identifica **observaciones influyentes**, es decir, casos que cambian de forma notable los coeficientes del modelo si se eliminan, normalmente porque **tienen valores extremos en las variables explicativas (alto leverage)**. Un *outlier*, en cambio, es una observación atípica, incluida la variable dependiente en su detección, a la que corresponde en el modelo, frecuentemente, un residuo inusualmente grande. Un caso puede ser *outlier* sin ser influyente, y ser influyente sin ser *outlier*. Por ello, no debe eliminarse automáticamente una observación con alta *distancia de Cook*.
+Es importante recalcar que la *distancia de Cook* y la *presencia de outliers* están relacionadas, pero **no son lo mismo**:
+
+-   Un **outlier** es una empresa con un valor inusual —un residuo grande—: el modelo se equivoca mucho al predecir su BMAL.
+-   Un caso con **alta distancia de Cook** es una empresa **influyente**: si la eliminásemos, los coeficientes del modelo cambiarían sustancialmente.
+
+Un punto puede tener un residuo grande sin ser influyente (porque está rodeado de muchas empresas similares que "anclan" la recta), y viceversa: un punto puede tener un residuo pequeño pero estar en una posición tan "solitaria" en el espacio de las variables explicativas que "arrastra" toda la recta hacia sí. Por ello, no debe eliminarse automáticamente una observación con alta distancia de Cook: es una señal para investigar, no para descartar.
 
 En cuanto a la tabla con los casos con valores de la *distancia de Cook* más relevantes:
 
@@ -733,7 +767,52 @@ No afecta ni a la insesgadez ni a la consistencia de los estimadores MCO. Solo a
 
 El contraste Breusch–Pagan indica claramente que los residuos no tienen varianza constante, es decir, existe heteroscedasticidad. En tales condiciones, los estimadores de mínimos cuadrados ordinarios siguen siendo insesgados y consistentes; pero dejan de ser eficientes: ya no son los de mínima varianza entre los lineales insesgados. Así, los contrastes t y F pueden ser incorrectos (tienden a subestimar o sobreestimar la significación). La solución al problema suele pasar por usar **errores estándar robustos** a heteroscedasticidad.
 
-Si el modelo supera razonablemente la fase de contraste de las hipótesis básicas; podría ser utilizado para los objetivos planteados en la investigación: análisis estructural, previsión, simulación. En la siguiente sección, abordaremos un ejercicio de simulación.
+Si el modelo supera razonablemente la fase de contraste de las hipótesis básicas; podría ser utilizado para los objetivos planteados en la investigación: análisis estructural, previsión, simulación.
+
+**Nota sobre autocorrelación.** En datos de corte transversal, la autocorrelación de la perturbación aleatoria no suele ser problemática, a diferencia de lo que ocurre con datos de series temporales. No obstante, si los datos tienen algún orden natural (por ejemplo, están ordenados por tamaño de empresa), puede verificarse su ausencia mediante el **test de Durbin-Watson** (`lmtest::dwtest()`).
+
+### ![](figuras/pie-chart.svg) Estimación con errores estándar robustos a heteroscedasticidad.
+
+El contraste de Breusch-Pagan ha revelado la presencia de **heteroscedasticidad**: la varianza de la perturbación no es constante a lo largo de las observaciones. Como ya se mencionó, los estimadores MCO siguen siendo insesgados y consistentes, pero **dejan de ser eficientes**, y los contrastes t y F pueden dar resultados incorrectos (significaciones que no lo son, o al revés).
+
+La solución estándar en econometría aplicada moderna es utilizar **errores estándar robustos a heteroscedasticidad** (errores **HC**, propuestos por White, 1980). No se re-estima el modelo: los coeficientes estimados son los mismos. Lo que cambia son los **errores estándar** de esos coeficientes, y en consecuencia los estadísticos *t* y los *p-valores* asociados. De este modo, la inferencia se corrige sin alterar la estimación. En R, los errores HC se obtienen con los paquetes `{sandwich}` y `{lmtest}`:
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+    # Estimación con errores estándar robustos (HC1, tipo White)
+    robust_ecuaDEF <- coeftest(ecuaDEF, vcov = vcovHC(ecuaDEF, type = "HC1"))
+    robust_ecuaDEF
+```
+
+Comparemos ahora los resultados del modelo con errores estándar **convencionales** (MCO) y con errores estándar **robustos** (HC1):
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+    # Tabla comparativa MCO vs HC1
+    coefs_mco <- summary(ecuaDEF)$coefficients
+    coefs_hc1 <- robust_ecuaDEF
+
+    comparativa_ee <- data.frame(
+      Variable      = rownames(coefs_mco),
+      Coeficiente   = round(coefs_mco[, 1], 4),
+      EE_MCO        = round(coefs_mco[, 2], 4),
+      pvalor_MCO    = round(coefs_mco[, 4], 4),
+      EE_HC1        = round(coefs_hc1[, 2], 4),
+      pvalor_HC1    = round(coefs_hc1[, 4], 4)
+    )
+    row.names(comparativa_ee) <- NULL
+
+    comparativa_ee %>%
+      kable_rstars(caption   = "Comparación MCO vs errores robustos HC1",
+                   col.names = c("Variable", "Coeficiente",
+                                 "EE (MCO)", "p-valor (MCO)",
+                                 "EE (HC1)", "p-valor (HC1)"),
+                   digits    = 4)
+```
+
+La tabla permite verificar si los errores estándar robustos confirman o matizan las conclusiones extraídas con los errores convencionales. Si los p-valores apenas cambian, la heteroscedasticidad detectada tiene escasa influencia práctica sobre la inferencia. Si algún coeficiente cambia de significativo a no significativo (o viceversa), la estimación con errores robustos es la que debe prevalecer.
+
+**Nota importante.** Los errores estándar robustos solo afectan a la **inferencia** (errores estándar, estadísticos t, p-valores), no a los **coeficientes estimados** ni a las **predicciones** del modelo. El modelo `ecuaDEF` sigue siendo exactamente el mismo; lo que cambia es nuestra evaluación de la precisión de sus coeficientes. Por ello, la sección de simulación que viene a continuación sigue utilizando `ecuaDEF` para generar predicciones, ya que los valores predichos son idénticos con o sin corrección HC.
+
+En la siguiente sección, abordaremos un ejercicio de simulación.
 
 ## ![](figuras/pie-chart.svg) Utilización del modelo estimado: simulación.
 
@@ -860,6 +939,18 @@ Y el resultado será:
 ```
 
 Los resultados del segundo ejercicio muestran con gran claridad el **enorme impacto que tiene el grado de renovación tecnológica de la flota sobre el rendimiento económico BMAL**, exactamente en la línea del objetivo de *Dixitaliza*. Una empresa con flota antigua obtiene un BMAL estimado de apenas 165,9 unidades por cada 1.000 años luz; si pasa a una flota madura, su capacidad de generación de beneficio se multiplica por más de 4, alcanzando 698,7 (+532,8 respecto al escenario antiguo). El salto es aún más notable cuando la flota es renovada, donde el BMAL se sitúa en 1878,2, es decir, 1.712,3 unidades más que con flota antigua y 1.179,5 más que con flota madura. Estas diferencias representan incrementos porcentuales de enorme magnitud (≈ +320% al pasar de antigua a madura, y ≈ +1.030% al pasar de antigua a renovada), lo que evidencia que la modernización tecnológica no solo mejora la eficiencia operativa sino que **transforma radicalmente la rentabilidad de una empresa media del sector**. Para *Dixitaliza*, estos resultados constituyen una demostración empírica sólida del valor económico de sus soluciones tecnológicas: **invertir en renovar la flota no es un coste, sino una palanca directa y masiva de creación de beneficios**.
+
+## ![](figuras/star.svg){.hicon} Cierre del estudio *Data-Evidence*.
+
+El equipo de *Data-Evidence* entrega su informe a *Dixitaliza* con tres conclusiones principales:
+
+1.  **El estado tecnológico de la flota (EFLO) tiene un impacto estadísticamente significativo y económicamente masivo sobre el rendimiento operativo** (medido por BMAL). Pasar de flota "Antigua" a "Renovada" multiplica el beneficio esperado por año-luz por un factor superior a 10, manteniendo constantes el resto de variables.
+
+2.  **El modelo estimado es robusto**: supera los contrastes de forma funcional, y la corrección con errores estándar robustos a heteroscedasticidad confirma la significación de los coeficientes clave. La capacidad explicativa (R² ajustado ≈ 97%) es excepcionalmente elevada.
+
+3.  **La distancia recorrida y la diversificación de servicios son los otros factores relevantes**: la primera con un efecto negativo (más kilómetros → menor rendimiento unitario), la segunda con un efecto positivo (más diversificación → mayor eficiencia global).
+
+Con este informe en la mano, *Dixitaliza* lanza su campaña de renovación tecnológica dirigida a las empresas del sector con flotas antiguas. El eslogan —"*Renueva tu flota, multiplica tu beneficio*"— no es un mero recurso publicitario: es una conclusión respaldada por un modelo econométrico sólido.
 
 ## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo.
 
