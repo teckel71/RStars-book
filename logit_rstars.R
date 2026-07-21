@@ -9,7 +9,7 @@
 # ══════════════════════════════════════════════════════════════════════════════
 
 
-# Limpiando el Environment de objetos
+# Limpiando el Global Environment
 
 rm(list = ls())
 
