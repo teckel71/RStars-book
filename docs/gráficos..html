@@ -114,28 +114,28 @@
 <p>Una imagen vale más que mil palabras.</p>
 <p>En el análisis de datos, las representaciones gráficas no son un adorno, sino el <strong>lenguaje común</strong> entre datos, analistas y decisores.</p>
 <p>Un buen gráfico puede condensar miles de observaciones en <strong>patrones perceptibles de un vistazo</strong>, revelando tendencias, rupturas, relaciones y valores atípicos que las tablas suelen ocultar.</p>
-<p>En la fase exploratoria del análisis de datos, orienta hipótesis y elecciones de modelos; en la validación comprueba supuestos y diagnostica errores; y en la comunicación transforma resultados complejos en evidencia comprensible y accionable.</p>
-<p>Su fuerza descansa en cómo aprovechan la percepción humana —posición, longitud, forma, color— para reducir la carga cognitiva y evitar interpretaciones equívocas. Por ello, dominar el diseño con intención, elegir el tipo de gráfico adecuado a cada pregunta y aplicar principios de claridad, comparabilidad y honestidad es tan crucial como cualquier técnica estadística.</p>
+<p>En la fase exploratoria del análisis, el gráfico orienta las hipótesis y la elección de los modelos; en la de validación, permite comprobar supuestos y diagnosticar errores; y en la de comunicación, convierte resultados complejos en evidencia comprensible y útil para actuar.</p>
+<p>Esa fuerza descansa en el modo en que las representaciones gráficas aprovechan la percepción humana —posición, longitud, forma, color— para aligerar la carga cognitiva y prevenir interpretaciones equívocas. De ahí que diseñar con intención, escoger el tipo de gráfico que conviene a cada pregunta y respetar los principios de claridad, comparabilidad y honestidad resulte tan decisivo como dominar cualquier técnica estadística.</p>
 <p>Este capítulo recorre ese camino: del boceto exploratorio a la visualización final que informa, persuade y, sobre todo, ayuda a decidir mejor.</p>
 </div>
-<div id="tidyverse-para-gráficos-ggplot2." class="section level2" number="3.2">
+<div id="el-tidyverse-para-gráficos-ggplot2." class="section level2" number="3.2">
 <h2>
-<span class="header-section-number">3.2</span> <img src="figuras/pie-chart.svg" class="hicon"> Tidyverse para gráficos: ggplot2.<a class="anchor" aria-label="anchor" href="#tidyverse-para-gr%C3%A1ficos-ggplot2."><i class="fas fa-link"></i></a>
+<span class="header-section-number">3.2</span> <img src="figuras/pie-chart.svg" class="hicon"> El <em>Tidyverse</em> para gráficos: <code>{ggplot2}</code>.<a class="anchor" aria-label="anchor" href="#el-tidyverse-para-gr%C3%A1ficos-ggplot2."><i class="fas fa-link"></i></a>
 </h2>
-<p>R, en su instalación básica (paquete <code>{base}</code>), cuenta con funciones destinadas a crear gráficos y, de este modo, visualizar nuestros datos a fin de generar información y extraer conclusiones de un modo sencillo.</p>
-<p>No obstante, estas funciones, a veces, se quedan “cortas”, o requieren de un complejo y/o extenso código. Esta es la razón por la que en el <em>Tidyverse</em> se incluyó un paquete específico destinado a la construcción de gráficos de un modo flexible y amigable. Recordemos que el <em>Tidyverse</em> es un conjunto de paquetes con una filosofía común, como es el uso de ciertas estructuras gramaticales, que facilitan muchas de las tareas y análisis que podrían hacerse con el lenguaje R estándar.</p>
-<p>Este paquete destinado a la producción de gráficos es <a href="https://ggplot2.tidyverse.org">ggplot2</a>, que proporciona unas herramientas muy flexibles para visualizar conjuntos de datos. A continuación, se expondrán los fundamentos de la sintaxis de <a href="https://ggplot2.tidyverse.org">ggplot2</a> y se indicará cómo construir algunos de los gráficos más habituales.</p>
-<p>Para ilustrar la creación de gráficos, vamos a suponer que trabajamos dentro de un proyecto que hemos creado previamente, de nombre “explora”. Dentro de la carpeta del proyecto guardaremos el <em>script</em> llamado “ggplot2_rstars.R” y el archivo de <em>Microsoft® Excel®</em> llamado “interestelar_100.xlsx”. Para descargar los ficheros, ve al final de este capítulo y pincha en los enlaces.</p>
-<p>Si abrimos “interestelar_100.xlsx”, comprobaremos que se compone de tres hojas. La primera muestra un aviso sobre el uso exclusivo que se debe dar a los datos incorporados; la segunda recoge la descripción de las variables consideradas; y la tercera (hoja “Datos”) guarda los datos que debemos <strong>importar</strong> desde R-Studio. Estos datos se corresponden con diferentes variables económico-financieras y de diversa índole de una muestra de empresas que se dedican al transporte de mercancías interestelar.</p>
-<p>Vamos a abrir nuestro script “ggplot2_rstars.R” con <code>File → Open File…</code> (o haciendo click en el archivo correspondiente en la ventana inferior derecha de RStudio, pestaña “Files”). Este script contiene el programa que vamos a ir ejecutando en la práctica.</p>
-<p>Tras abrir el <em>script</em> “ggplot2_rstars.R” en el editor de R-Studio, observaremos que la primera línea / instrucción es:</p>
+<p>R, en su instalación básica, cuenta con funciones destinadas a crear gráficos y, de este modo, visualizar nuestros datos para generar información y extraer conclusiones con sencillez.</p>
+<p>Con todo, esas funciones se quedan a veces cortas o exigen un código extenso y complejo. Por esa razón, el <em>Tidyverse</em> incorporó un paquete específico para construir gráficos de forma flexible y amigable. Recordemos que el <em>Tidyverse</em> es aquel conjunto de paquetes que comparten una misma filosofía —el uso de ciertas estructuras gramaticales comunes— y que simplifican buena parte de las tareas y análisis que podrían acometerse con el lenguaje R estándar.</p>
+<p>Ese paquete es <a href="https://ggplot2.tidyverse.org">ggplot2</a>, que pone a nuestra disposición herramientas muy versátiles para visualizar conjuntos de datos. En las páginas que siguen expondremos los fundamentos de su sintaxis y veremos cómo construir algunos de los gráficos más habituales.</p>
+<p>Para ilustrar la creación de gráficos, supongamos que trabajamos dentro del proyecto “explora” que creamos anteriormente. En su carpeta guardaremos el <em>script</em> “ggplot2_rstars.R” y el archivo de Microsoft® Excel® “interestelar_100.xlsx”, cuyos enlaces de descarga figuran en la sección final del capítulo.</p>
+<p>Si abrimos “interestelar_100.xlsx”, comprobaremos que consta de tres hojas: la primera recoge un aviso sobre el uso exclusivo que debe darse a los datos; la segunda describe las variables consideradas; y la tercera (hoja “Datos”) contiene la información que vamos a <strong>importar</strong> desde RStudio. Se trata de variables económico-financieras y de otra índole, referidas a una muestra de empresas dedicadas al transporte interestelar de mercancías.</p>
+<p>Abramos ahora el script “ggplot2_rstars.R” con <code>File → Open File…</code> (o haciendo clic sobre el archivo en la ventana inferior derecha de RStudio, pestaña “Files”). Este script contiene el programa que iremos ejecutando a lo largo de la práctica.</p>
+<p>Una vez abierto el <em>script</em> en el editor de RStudio, observaremos que su primera instrucción es:</p>
 <div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Generando gráficos con {ggplot2}</span></span>
 <span></span>
 <span><span class="co"># Limpiando el Global Environment</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>La instrucción tiene como objeto limpiar el <em>Global Environment</em> (memoria) de objetos de anteriores sesiones de trabajo.</p>
-<p>Luego, si queremos despreocuparnos de la carga de los paquetes que utilizaremos en el script, podemos activarlos ahora:</p>
+<p>Esta instrucción persigue limpiar el <em>Global Environment</em> (la memoria) de los objetos que hayan quedado de sesiones de trabajo anteriores.</p>
+<p>A continuación, si preferimos despreocuparnos más adelante de la carga de los paquetes que necesitaremos, podemos activarlos todos de una vez:</p>
 <div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Cargando paquetes</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
@@ -144,7 +144,7 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jthomasmock/gtExtras">gtExtras</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/daattali/ggExtra">ggExtra</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggrepel.slowkow.com/">ggrepel</a></span><span class="op">)</span></span></code></pre></div>
-<p>Recuerda que, si alguno de los paquetes no está instalado en la máquina, dará error. Entonces, habrá que instalarlo (véase la sección 1.7) y volver a ejecutar el bloque de código anterior.</p>
+<p>Recordemos que, si alguno de los paquetes no estuviera instalado en la máquina, R nos devolvería un error. En tal caso habrá que instalarlo (véase la sección 1.7) y volver a ejecutar el bloque de código anterior.</p>
 <p>Para importar los datos que hay en la hoja “Datos” del archivo de Microsoft® Excel® “interestelar_100.xlsx”, ejecutaremos el código:</p>
 <div class="sourceCode" id="cb125"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Importando datos desde Excel</span></span>
@@ -152,29 +152,29 @@
 <span>                               sheet <span class="op">=</span> <span class="st">"Datos"</span>,</span>
 <span>                               na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"n.d."</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">interestelar_100</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">interestelar_100</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p>Podemos observar cómo en el <em>Global Environment</em> ya aparece un objeto <em>data frame</em> denominado “interestelar_100”, que contiene 104 filas (una por empresa) y 28 variables. Podemos listar las variables de modo visual con la función <code><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary()</a></code> del paquete <a href="https://github.com/jthomasmock/gtExtras">gtExtras</a>:</p>
+<p>En el <em>Global Environment</em> aparece ya un objeto de tipo <em>data frame</em>, denominado “interestelar_100”, que contiene 104 filas (una por empresa) y 28 variables. Podemos listarlas de forma visual con la función <code><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary()</a></code> del paquete <a href="https://github.com/jthomasmock/gtExtras">gtExtras</a>:</p>
 <div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># visualizando el data frame de modo elegante con {gtExtras}</span></span>
 <span><span class="va">datos_df_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary</a></span><span class="op">(</span><span class="va">interestelar_100</span><span class="op">)</span></span>
 <span><span class="va">datos_df_graph</span></span></code></pre></div>
-<div id="gyhwgexvfy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="smhngrgbgi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#gyhwgexvfy table {
+#smhngrgbgi table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#gyhwgexvfy thead, #gyhwgexvfy tbody, #gyhwgexvfy tfoot, #gyhwgexvfy tr, #gyhwgexvfy td, #gyhwgexvfy th {
+#smhngrgbgi thead, #smhngrgbgi tbody, #smhngrgbgi tfoot, #smhngrgbgi tr, #smhngrgbgi td, #smhngrgbgi th {
   border-style: none;
 }
 
-#gyhwgexvfy p {
+#smhngrgbgi p {
   margin: 0;
   padding: 0;
 }
 
-#gyhwgexvfy .gt_table {
+#smhngrgbgi .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -200,12 +200,12 @@
   border-left-color: #D3D3D3;
 }
 
-#gyhwgexvfy .gt_caption {
+#smhngrgbgi .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#gyhwgexvfy .gt_title {
+#smhngrgbgi .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -217,7 +217,7 @@
   border-bottom-width: 0;
 }
 
-#gyhwgexvfy .gt_subtitle {
+#smhngrgbgi .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -229,7 +229,7 @@
   border-top-width: 0;
 }
 
-#gyhwgexvfy .gt_heading {
+#smhngrgbgi .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -241,13 +241,13 @@
   border-right-color: #D3D3D3;
 }
 
-#gyhwgexvfy .gt_bottom_border {
+#smhngrgbgi .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 0px;
   border-bottom-color: #D3D3D3;
 }
 
-#gyhwgexvfy .gt_col_headings {
+#smhngrgbgi .gt_col_headings {
   border-top-style: solid;
   border-top-width: 0px;
   border-top-color: #D3D3D3;
@@ -262,7 +262,7 @@
   border-right-color: #D3D3D3;
 }
 
-#gyhwgexvfy .gt_col_heading {
+#smhngrgbgi .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -282,7 +282,7 @@
   overflow-x: hidden;
 }
 
-#gyhwgexvfy .gt_column_spanner_outer {
+#smhngrgbgi .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -294,15 +294,15 @@
   padding-right: 4px;
 }
 
-#gyhwgexvfy .gt_column_spanner_outer:first-child {
+#smhngrgbgi .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#gyhwgexvfy .gt_column_spanner_outer:last-child {
+#smhngrgbgi .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#gyhwgexvfy .gt_column_spanner {
+#smhngrgbgi .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -314,11 +314,11 @@
   width: 100%;
 }
 
-#gyhwgexvfy .gt_spanner_row {
+#smhngrgbgi .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#gyhwgexvfy .gt_group_heading {
+#smhngrgbgi .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -344,7 +344,7 @@
   text-align: left;
 }
 
-#gyhwgexvfy .gt_empty_group_heading {
+#smhngrgbgi .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -359,15 +359,15 @@
   vertical-align: middle;
 }
 
-#gyhwgexvfy .gt_from_md > :first-child {
+#smhngrgbgi .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#gyhwgexvfy .gt_from_md > :last-child {
+#smhngrgbgi .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#gyhwgexvfy .gt_row {
+#smhngrgbgi .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -386,7 +386,7 @@
   overflow-x: hidden;
 }
 
-#gyhwgexvfy .gt_stub {
+#smhngrgbgi .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -399,7 +399,7 @@
   padding-right: 5px;
 }
 
-#gyhwgexvfy .gt_stub_row_group {
+#smhngrgbgi .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -413,15 +413,15 @@
   vertical-align: top;
 }
 
-#gyhwgexvfy .gt_row_group_first td {
+#smhngrgbgi .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#gyhwgexvfy .gt_row_group_first th {
+#smhngrgbgi .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#gyhwgexvfy .gt_summary_row {
+#smhngrgbgi .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -431,16 +431,16 @@
   padding-right: 5px;
 }
 
-#gyhwgexvfy .gt_first_summary_row {
+#smhngrgbgi .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#gyhwgexvfy .gt_first_summary_row.thick {
+#smhngrgbgi .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#gyhwgexvfy .gt_last_summary_row {
+#smhngrgbgi .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -450,7 +450,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#gyhwgexvfy .gt_grand_summary_row {
+#smhngrgbgi .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -460,7 +460,7 @@
   padding-right: 5px;
 }
 
-#gyhwgexvfy .gt_first_grand_summary_row {
+#smhngrgbgi .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -470,7 +470,7 @@
   border-top-color: #D3D3D3;
 }
 
-#gyhwgexvfy .gt_last_grand_summary_row_top {
+#smhngrgbgi .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -480,11 +480,11 @@
   border-bottom-color: #D3D3D3;
 }
 
-#gyhwgexvfy .gt_striped {
+#smhngrgbgi .gt_striped {
   background-color: #FAFAFA;
 }
 
-#gyhwgexvfy .gt_table_body {
+#smhngrgbgi .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -493,7 +493,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#gyhwgexvfy .gt_footnotes {
+#smhngrgbgi .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -507,7 +507,7 @@
   border-right-color: #D3D3D3;
 }
 
-#gyhwgexvfy .gt_footnote {
+#smhngrgbgi .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -516,7 +516,7 @@
   padding-right: 5px;
 }
 
-#gyhwgexvfy .gt_sourcenotes {
+#smhngrgbgi .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -530,7 +530,7 @@
   border-right-color: #D3D3D3;
 }
 
-#gyhwgexvfy .gt_sourcenote {
+#smhngrgbgi .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -538,72 +538,72 @@
   padding-right: 5px;
 }
 
-#gyhwgexvfy .gt_left {
+#smhngrgbgi .gt_left {
   text-align: left;
 }
 
-#gyhwgexvfy .gt_center {
+#smhngrgbgi .gt_center {
   text-align: center;
 }
 
-#gyhwgexvfy .gt_right {
+#smhngrgbgi .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#gyhwgexvfy .gt_font_normal {
+#smhngrgbgi .gt_font_normal {
   font-weight: normal;
 }
 
-#gyhwgexvfy .gt_font_bold {
+#smhngrgbgi .gt_font_bold {
   font-weight: bold;
 }
 
-#gyhwgexvfy .gt_font_italic {
+#smhngrgbgi .gt_font_italic {
   font-style: italic;
 }
 
-#gyhwgexvfy .gt_super {
+#smhngrgbgi .gt_super {
   font-size: 65%;
 }
 
-#gyhwgexvfy .gt_footnote_marks {
+#smhngrgbgi .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#gyhwgexvfy .gt_asterisk {
+#smhngrgbgi .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#gyhwgexvfy .gt_indent_1 {
+#smhngrgbgi .gt_indent_1 {
   text-indent: 5px;
 }
 
-#gyhwgexvfy .gt_indent_2 {
+#smhngrgbgi .gt_indent_2 {
   text-indent: 10px;
 }
 
-#gyhwgexvfy .gt_indent_3 {
+#smhngrgbgi .gt_indent_3 {
   text-indent: 15px;
 }
 
-#gyhwgexvfy .gt_indent_4 {
+#smhngrgbgi .gt_indent_4 {
   text-indent: 20px;
 }
 
-#gyhwgexvfy .gt_indent_5 {
+#smhngrgbgi .gt_indent_5 {
   text-indent: 25px;
 }
 
-#gyhwgexvfy .katex-display {
+#smhngrgbgi .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#gyhwgexvfy div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#smhngrgbgi div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -961,7 +961,7 @@ ANTIGUA, MADURA and RENOVADA
 <h2>
 <span class="header-section-number">3.3</span> <img src="figuras/pie-chart.svg" class="hicon"> La estructura de un gráfico con <code>{ggplot2}</code>.<a class="anchor" aria-label="anchor" href="#la-estructura-de-un-gr%C3%A1fico-con-ggplot2."><i class="fas fa-link"></i></a>
 </h2>
-<p>Antes de construir nuestro primer gráfico, conviene entender la lógica que sigue <a href="https://ggplot2.tidyverse.org">ggplot2</a>. Todo gráfico se construye combinando tres ingredientes básicos:</p>
+<p>Antes de construir nuestro primer gráfico conviene entender la lógica que sigue <a href="https://ggplot2.tidyverse.org">ggplot2</a>: todo gráfico se levanta combinando tres ingredientes básicos.</p>
 <p><strong>1. Datos y mapeo estético</strong> (<code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> + <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>). Se indica el <em>data frame</em> de origen y se asignan variables a los ejes y a otros atributos visuales (color, tamaño, forma…). Todo atributo que <em>dependa del valor de una variable</em> debe ir dentro de <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>. Los atributos <em>fijos</em> (un color concreto, un tamaño fijo) van <em>fuera</em> de <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>.</p>
 <p><strong>2. Geometría</strong> (<code>geom_*()</code>). Se elige el tipo de representación: puntos (<code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point()</a></code>), barras (<code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar()</a></code>), cajas (<code><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot()</a></code>), etc. Un gráfico puede contener varias capas geométricas superpuestas.</p>
 <p><strong>3. Personalización</strong>. Se refinan títulos (<code><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle()</a></code>, <code><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab()</a></code>, <code><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab()</a></code>), escalas de color (<code>scale_fill_*()</code>, <code>scale_color_*()</code>), temas (<code>theme_*()</code>) y otros ajustes.</p>
@@ -970,7 +970,7 @@ ANTIGUA, MADURA and RENOVADA
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mi_dataframe</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">variable_x</span>, y <span class="op">=</span> <span class="va">variable_y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_tipo</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Título"</span>, x <span class="op">=</span> <span class="st">"Eje X"</span>, y <span class="op">=</span> <span class="st">"Eje Y"</span><span class="op">)</span></span></code></pre></div>
-<p>Con esta estructura en mente, veamos los tipos de gráficos más habituales.</p>
+<p>Con esta estructura en mente, recorramos los tipos de gráficos más habituales.</p>
 </div>
 <div id="gráficos-de-una-variable." class="section level2" number="3.4">
 <h2>
@@ -980,18 +980,18 @@ ANTIGUA, MADURA and RENOVADA
 <h3>
 <span class="header-section-number">3.4.1</span> <img src="figuras/key.svg" class="hicon"> Histograma.<a class="anchor" aria-label="anchor" href="#histograma."><i class="fas fa-link"></i></a>
 </h3>
-<p>Uno de los gráficos indispensables para tener una idea de la distribución de frecuencias que siguen los casos con relación a una variable métrica es el <strong>histograma</strong>. Vamos a construir un histograma para la variable LIQUIDEZ, que recoge la ratio de liquidez, calculada como cociente entre el activo corriente y el pasivo corriente, y que mide la capacidad de la empresa para hacer frente a sus deudas a corto plazo con activos a corto plazo. Para algunos sectores se acepta que un valor adecuado de la ratio oscila entre 1,5 y 2 (menos de 1,5 puede indicar tensiones de caja, mientras que más de 2 puede ser un síntoma de capital ocioso).</p>
+<p>El <strong>histograma</strong> es uno de los gráficos indispensables para hacerse una idea de cómo se distribuyen los casos en relación con una variable métrica. Construyamos uno para la variable LIQUIDEZ, que recoge la ratio de liquidez —cociente entre el activo corriente y el pasivo corriente— y que mide la capacidad de la empresa para atender sus deudas a corto plazo con activos a corto plazo. En algunos sectores se considera adecuado un valor de la ratio situado entre 1,5 y 2: por debajo de 1,5 pueden aparecer tensiones de caja, mientras que por encima de 2 cabe sospechar capital ocioso.</p>
 <p>El código será:</p>
 <div class="sourceCode" id="cb128"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Histograma</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LIQUIDEZ</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>Observemos la estructura: <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> recibe el <em>data frame</em> y el mapeo estético (<code>aes(x = LIQUIDEZ)</code> indica que el eje x depende de los valores de LIQUIDEZ). A continuación, <code><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram()</a></code> indica que la geometría es un histograma. El resultado es:</p>
+<p>Observemos la estructura: <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> recibe el <em>data frame</em> y el mapeo estético, donde <code>aes(x = LIQUIDEZ)</code> señala que el eje x depende de los valores de LIQUIDEZ. Después, <code><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram()</a></code> fija la geometría. El resultado es:</p>
 <div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-96-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 3.2</strong></p>
 </div>
-<p>Uno de los aspectos que nos puede interesar modificar es el número de intervalos en los que queda dividido el rango de valores que puede tomar la variable (“grosor” de las barras), o <em>bins</em>. Por defecto, el número es 30. Para reducirlo a 20, por ejemplo, añadiremos en la línea del <em>geom</em> el argumento <code>bins =</code>:</p>
+<p>Un aspecto que quizá nos interese modificar es el número de intervalos —o <em>bins</em>— en que se divide el rango de valores de la variable, lo que equivale a regular el “grosor” de las barras. R emplea 30 de forma predeterminada. Para reducirlo a 20, por ejemplo, añadiremos el argumento <code>bins =</code> en la línea del <em>geom</em>:</p>
 <div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LIQUIDEZ</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
@@ -999,12 +999,12 @@ ANTIGUA, MADURA and RENOVADA
 <div style="text-align: center;">
 <p><strong>Figura 3.3</strong></p>
 </div>
-<p>A veces es difícil determinar el número adecuado de intervalos. Puede optarse, por ejemplo, por el método de <em>Sturges</em>, que sugiere que este número sea calculado como el máximo entre 1 y el número k redondeado hacia arriba:</p>
+<p>No siempre resulta fácil determinar cuántos intervalos conviene emplear. Una posibilidad es acogerse a la regla de <em>Sturges</em>, que propone calcular su número, <em>k</em>, como el logaritmo en base 2 del tamaño muestral más uno, redondeando el resultado hacia arriba:</p>
 <p><span class="math display">\[
 k = \left\lceil \log_{2}(n) + 1 \right\rceil
 \]</span></p>
 <p>donde <em>n</em> es el tamaño muestral.</p>
-<p>Así, utilizando la función <code><a href="https://rdrr.io/r/grDevices/nclass.html">nclass.Sturges()</a></code> del paquete <code>{base}</code>:</p>
+<p>Así, empleando la función <code><a href="https://rdrr.io/r/grDevices/nclass.html">nclass.Sturges()</a></code> del paquete <code>{grDevices}</code>:</p>
 <div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Nº de bins según Sturges (con NA/Inf fuera)</span></span>
 <span><span class="va">nbins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/nclass.html">nclass.Sturges</a></span><span class="op">(</span><span class="va">interestelar_100</span><span class="op">$</span><span class="va">LIQUIDEZ</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/is.finite.html">is.finite</a></span><span class="op">(</span><span class="va">interestelar_100</span><span class="op">$</span><span class="va">LIQUIDEZ</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
@@ -1014,8 +1014,8 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <div style="text-align: center;">
 <p><strong>Figura 3.4</strong></p>
 </div>
-<p><em>Sturges</em> propone tan solo 8 intervalos de valores.</p>
-<p>A continuación, vamos a modificar el color de las barras. Para el borde de estas, se utiliza el argumento <code>colour =</code>; y, para el relleno, <code>fill =</code>. Como estos colores son <em>fijos</em> (no dependen de ninguna variable), van <strong>fuera</strong> de <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>. Además, vamos a mejorar la presentación del gráfico añadiéndole un título y un subtítulo, y unas etiquetas en los ejes:</p>
+<p>La regla de <em>Sturges</em> propone, en este caso, tan solo 8 intervalos.</p>
+<p>Modifiquemos ahora el color de las barras: el argumento <code>colour =</code> se ocupa del borde y <code>fill =</code>, del relleno. Como ambos colores son <em>fijos</em> —no dependen de ninguna variable—, se escriben <strong>fuera</strong> de <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>. Aprovecharemos además para mejorar la presentación del gráfico con un título, un subtítulo y sendas etiquetas en los ejes:</p>
 <div class="sourceCode" id="cb131"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LIQUIDEZ</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="va">nbins</span>, colour <span class="op">=</span> <span class="st">"red"</span>, fill <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1026,7 +1026,7 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <div style="text-align: center;">
 <p><strong>Figura 3.5</strong></p>
 </div>
-<p>Puede ser que nos interese diferenciar los casos según grupos preestablecidos. Por ejemplo, entre las variables de nuestro <em>data frame</em> “interestelar_100”, existe una variable categórica denominada EFLO, que clasifica a las empresas, según la antigüedad media de su flota, en “ANTIGUA”, “MADURA” o “RENOVADA”. Lo que vamos a hacer es crear, en el mismo gráfico, un histograma del ratio de liquidez para cada categoría de EFLO. Para ello, habrá que incluir esta variable categórica <strong>dentro de <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code></strong>, ya que el color de relleno de cada barra depende del valor que toma la variable EFLO para cada caso:</p>
+<p>Puede ocurrir que nos interese diferenciar los casos según grupos preestablecidos. Entre las variables del <em>data frame</em> “interestelar_100” figura una de naturaleza categórica, EFLO, que clasifica a las empresas en “ANTIGUA”, “MADURA” o “RENOVADA” según la antigüedad media de su flota. Representemos entonces, en un mismo gráfico, un histograma de la ratio de liquidez para cada categoría de EFLO. Habrá que incluir esa variable <strong>dentro de <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code></strong>, puesto que el color de relleno de cada barra depende ahora del valor que EFLO toma en cada caso:</p>
 <div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LIQUIDEZ</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="va">nbins</span>, colour <span class="op">=</span> <span class="st">"red"</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">EFLO</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1038,13 +1038,13 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <div style="text-align: center;">
 <p><strong>Figura 3.6</strong></p>
 </div>
-<p>Como puede verificarse, se superponen los tres histogramas, con tres colores diferentes, dependiendo de la categoría de EFLO. Además, aparece, al lado derecho del gráfico, una leyenda que detalla qué color se asocia a cada uno de los grupos de empresas. La función <code><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_brewer()</a></code> nos permite personalizar la paleta de colores a utilizar (para ver las paletas disponibles, podemos consultar <a href="https://ggplot2-book.org/scales-colour">esta sección</a> de <span class="citation">(<a href="bibliograf%C3%ADa.html#ref-ggplot22021">Wickham 2021</a>)</span>).</p>
+<p>Como puede verificarse, los tres histogramas se superponen con colores distintos según la categoría de EFLO y, a la derecha del gráfico, surge una leyenda que indica qué color corresponde a cada grupo de empresas. La función <code><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_brewer()</a></code> nos permite escoger la paleta de colores; las disponibles pueden consultarse en <a href="https://ggplot2-book.org/scales-colour">esta sección</a> de <span class="citation">(<a href="bibliograf%C3%ADa.html#ref-ggplot22021">Wickham 2021</a>)</span>.</p>
 </div>
 <div id="gráfico-de-densidad." class="section level3" number="3.4.2">
 <h3>
 <span class="header-section-number">3.4.2</span> <img src="figuras/key.svg" class="hicon"> Gráfico de densidad.<a class="anchor" aria-label="anchor" href="#gr%C3%A1fico-de-densidad."><i class="fas fa-link"></i></a>
 </h3>
-<p>Un gráfico parecido al histograma es el de <strong>densidad</strong>. Un gráfico de densidad estima la función de densidad de probabilidad empírica de la variable representada. En realidad, podemos considerarlo como un histograma “suavizado”. Probemos a ejecutar este código:</p>
+<p>Muy próximo al histograma se encuentra el gráfico de <strong>densidad</strong>, que estima la función de densidad de probabilidad empírica de la variable representada. Cabe entenderlo, en el fondo, como un histograma “suavizado”. Probemos a ejecutar este código:</p>
 <div class="sourceCode" id="cb133"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LIQUIDEZ</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"red"</span>, fill <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1055,8 +1055,8 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <div style="text-align: center;">
 <p><strong>Figura 3.7</strong></p>
 </div>
-<p>En el código se observa la utilización del tipo de gráfico <code><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density()</a></code>. Además, desaparece el número de intervalos o <em>bins</em>, y se puede dotar a la función de densidad estimada de un color en su borde (<code>colour=</code>), y de un color de relleno (<code>fill=</code>).</p>
-<p>Como en el caso del histograma, se puede crear una función de densidad estimada para cada grupo de empresas (según la variable EFLO), incluyendo <code>fill=</code> dentro del correspondiente <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>:</p>
+<p>El <em>geom</em> empleado es ahora <code><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density()</a></code>. Desaparece, como es lógico, el número de intervalos o <em>bins</em>, y la función de densidad estimada puede recibir un color de borde (<code>colour =</code>) y otro de relleno (<code>fill =</code>).</p>
+<p>Igual que sucedía con el histograma, podemos estimar una función de densidad para cada grupo de empresas definido por EFLO sin más que trasladar <code>fill =</code> al interior del <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code> correspondiente:</p>
 <div class="sourceCode" id="cb134"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LIQUIDEZ</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">EFLO</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"red"</span>, alpha <span class="op">=</span> <span class="fl">0.70</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1068,35 +1068,35 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <div style="text-align: center;">
 <p><strong>Figura 3.8</strong></p>
 </div>
-<p>El argumento <code>alpha=</code> es un número de 0 a 1 que gradúa el grado de transparencia / opacidad de los rellenos. Al aplicarlo, las funciones de densidad superpuestas se pueden ver unas a través de otras.</p>
+<p>El argumento <code>alpha =</code> admite un valor entre 0 y 1 que regula la transparencia de los rellenos. Gracias a él, las funciones de densidad superpuestas pueden verse unas a través de otras.</p>
 </div>
 <div id="gráfico-de-caja-o-box-plot." class="section level3" number="3.4.3">
 <h3>
 <span class="header-section-number">3.4.3</span> <img src="figuras/key.svg" class="hicon"> Gráfico de caja o <em>Box-Plot</em>.<a class="anchor" aria-label="anchor" href="#gr%C3%A1fico-de-caja-o-box-plot."><i class="fas fa-link"></i></a>
 </h3>
-<p>Un tipo muy interesante de gráfico es el de “caja” (<strong><em>box-plot</em></strong>), que informa de la dispersión de una variable. Fijémonos en el siguiente código:</p>
+<p>Otro tipo de gráfico de enorme interés es el de caja o <strong><em>box-plot</em></strong>, que informa sobre la dispersión de una variable. Fijémonos en el siguiente código:</p>
 <div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">""</span>, y <span class="op">=</span> <span class="va">LIQUIDEZ</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill<span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"RATIO DE LIQUIDEZ"</span>, subtitle <span class="op">=</span> <span class="st">"Transporte Interestelar"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Ratio de liquidez"</span><span class="op">)</span></span></code></pre></div>
-<p>Puede observarse cómo en el mapeo se fija la variable que va a determinar las coordenadas del eje “y”. El <em>geom</em> o tipo de gráfico es <code><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot()</a></code>. Las últimas líneas configuran los títulos del gráfico y del eje “y”. El resultado de ejecutar el código es el siguiente gráfico:</p>
+<p>Como puede observarse, el mapeo fija la variable que determinará las coordenadas del eje “y”. El <em>geom</em> es, en este caso, <code><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot()</a></code>. Las últimas líneas configuran los títulos del gráfico y del eje “y”. Al ejecutar el código obtenemos:</p>
 <div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-104-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 3.9</strong></p>
 </div>
-<p><strong>Nota:</strong> Es necesario añadir en el eje “x” una variable “vacía” (<code>x = ""</code>), y en el nombre de dicho eje también un campo vacío, para evitar que en dicho eje salga una escala y el título “x”.</p>
-<p>El gráfico se caracteriza por una “caja” (rectángulo) central. Esta caja está limitada por el primer y tercer cuartil, luego recoge el 50% de los casos con una ratio de liquidez superior al 25% de los casos con menor ratio, y por debajo del 25% de los casos con la ratio más alta. Así, la altura de la caja es la diferencia entre los cuartiles tercero y primero, que es lo que se denomina “rango intercuartílico” (<em>IQR</em> por las siglas en inglés). La caja, a su vez, está dividida en dos zonas por una línea horizontal, que es la <strong>mediana</strong> de la distribución: la ratio de liquidez que divide a la muestra en dos grupos con el mismo número de elementos, uno con los casos de mayor ratio de liquidez, y otro con los casos de menor ratio.</p>
-<p>Por encima y por debajo de la caja se disponen dos segmentos (llamados “bigotes”). Estos “bigotes” recogen los casos con valores en la variable inferiores al primer cuartil (comenzando por la base de la caja, hacia abajo), o superiores al tercer cuartil (comenzando por el techo de la caja, hacia arriba); y que están a menos de <strong>1.5 veces</strong> la altura de la caja. Los casos con valores de la ratio de liquidez inferiores al primer cuartil (por abajo) y superiores al tercero (por arriba), que están alejados de la caja en más de 1.5 veces la altura de esta, se indican con puntos, y se corresponden con los casos conocidos como <strong>casos atípicos</strong> o <strong><em>outliers</em></strong>. La identificación de los <em>outliers</em> es una fase muy importante a la hora de aplicar algunas técnicas estadísticas.</p>
-<p>En esta práctica, comprobamos cómo, en el caso de la ratio de liquidez (LIQUIDEZ), no existen <em>outliers</em>, es decir, casos que presentan ratios anormalmente elevadas o bajas.</p>
-<p>En cambio, vamos a representar ahora la variable RES (resultado del ejercicio o beneficio neto):</p>
+<p><strong>Nota:</strong> conviene asignar al eje “x” una variable “vacía” (<code>x = ""</code>) y dejar también en blanco su etiqueta, para que no aparezcan ni una escala ni el título “x” en ese eje.</p>
+<p>El gráfico se articula en torno a una “caja” central de forma rectangular, delimitada por el primer y el tercer cuartil. Dentro de ella queda, por tanto, el 50% central de los casos: quedan fuera el 25% con la ratio más baja, por debajo, y el 25% con la ratio más alta, por encima. La altura de la caja es la diferencia entre el tercer cuartil y el primero, magnitud conocida como “rango intercuartílico” (<em>IQR</em>, por sus siglas en inglés). Una línea horizontal divide además la caja en dos zonas: se trata de la <strong>mediana</strong> de la distribución, es decir, la ratio de liquidez que parte la muestra en dos mitades con idéntico número de casos, una por encima y otra por debajo.</p>
+<p>Por encima y por debajo de la caja se extienden dos segmentos, los llamados “bigotes”. Estos abarcan los casos situados fuera de la caja —por debajo del primer cuartil o por encima del tercero— siempre que disten de ella menos de <strong>1,5 veces</strong> su altura. Los casos que quedan más allá de ese límite se representan mediante puntos y son los que conocemos como <strong>casos atípicos</strong> o <strong><em>outliers</em></strong>. Su identificación constituye una fase muy relevante antes de aplicar determinadas técnicas estadísticas.</p>
+<p>En nuestro caso comprobamos que la ratio de liquidez (LIQUIDEZ) no presenta <em>outliers</em>: ninguna empresa arroja un valor anormalmente alto o bajo.</p>
+<p>Representemos ahora, en cambio, la variable RES (resultado del ejercicio o beneficio neto):</p>
 <div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-105-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 3.10</strong></p>
 </div>
-<p>En esta ocasión apreciamos cómo existen 4 empresas <em>outliers</em>, es decir, compañías con resultados atípicamente elevados (superiores al tercer cuartil más 1,5 veces el rango intercuartílico del resultado del beneficio neto). Dos de las empresas superan, como beneficio neto o resultado del ejercicio, el millón de PAVOs.</p>
-<p><a href="https://ggplot2.tidyverse.org">ggplot2</a> permite <strong>integrar en el gráfico medidas estadísticas</strong> y otros cálculos. Por ejemplo, en el box-plot se representa el valor de la mediana; pero no el de la media. Si queremos incluir el valor de la media, podemos calcularlo e integrarlo con la función <code><a href="https://ggplot2.tidyverse.org/reference/stat_summary.html">stat_summary()</a></code>. El argumento <code>fun = "mean"</code> indica que la medida a calcular y representar es la media aritmética, el argumento <code>geom = "point"</code> el tipo de gráfico para representar esa medida (un punto):</p>
+<p>En esta ocasión sí aparecen 4 empresas <em>outliers</em>: compañías con resultados atípicamente elevados, por encima del tercer cuartil más 1,5 veces el rango intercuartílico. Dos de ellas superan el millón de PAVOs de beneficio neto.</p>
+<p><a href="https://ggplot2.tidyverse.org">ggplot2</a> permite <strong>incorporar al gráfico medidas estadísticas</strong> y otros cálculos. El <em>box-plot</em>, por ejemplo, muestra la mediana, pero no la media. Si queremos que también aparezca esta última, podemos calcularla e integrarla mediante la función <code><a href="https://ggplot2.tidyverse.org/reference/stat_summary.html">stat_summary()</a></code>: el argumento <code>fun = "mean"</code> indica que la medida por calcular es la media aritmética y <code>geom = "point"</code>, que se representará como un punto:</p>
 <div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">""</span>, y <span class="op">=</span> <span class="va">RES</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1111,8 +1111,8 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <div style="text-align: center;">
 <p><strong>Figura 3.11</strong></p>
 </div>
-<p>Se aprecia cómo el valor del <em>resultado del ejercicio medio</em> se ha insertado como un punto azul oscuro grueso dentro del gráfico de caja (tiene un valor algo superior a la <em>mediana</em>).</p>
-<p>Vamos a refinar el <em>box-plot</em> anterior. Por ejemplo, quizá nos pueda interesar crear un <em>box-plot</em> para cada grupo de empresas según la antigüedad de su flota (variable EFLO):</p>
+<p>El <em>resultado medio del ejercicio</em> se ha incorporado al gráfico de caja como un punto azul oscuro de buen tamaño, situado algo por encima de la <em>mediana</em>.</p>
+<p>Refinemos el <em>box-plot</em> anterior. Quizá nos convenga, por ejemplo, disponer de una caja para cada grupo de empresas según la antigüedad de su flota (variable EFLO):</p>
 <div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">EFLO</span>, y <span class="op">=</span> <span class="va">RES</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">EFLO</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1132,9 +1132,9 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <div style="text-align: center;">
 <p><strong>Figura 3.12</strong></p>
 </div>
-<p>Para construir una caja por categoría de la variable EFLO, se ha incluido, en el mapeo, el eje x con dicha variable. Como, además, queremos que cada caja sea de un color diferente, hemos hecho que los colores de estas dependan de la variable EFLO; añadiendo en el <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code> del <code>geom_boxplot</code> la característica <code>fill=</code>. También se ha incluido <code><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_brewer()</a></code> para aplicar una paleta de colores.</p>
-<p>El primer bloque de <code><a href="https://ggplot2.tidyverse.org/reference/stat_summary.html">stat_summary()</a></code> puntea la media de RES para cada grupo. El segundo bloque une esos puntos con una línea, permitiendo comparar visualmente las medias. El argumento <code>aes(group = TRUE)</code> obliga a que la línea conecte todos los promedios, ignorando el agrupamiento por EFLO.</p>
-<p>Como última extensión, a veces conviene visualizar la posición de cada caso individual. Una opción es utilizar una capa <code><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter()</a></code>, que distribuye los puntos con un ligero desplazamiento lateral aleatorio para evitar solapamientos. Para que los <em>outliers</em> del <em>boxplot</em> no se dupliquen con los del <em>jitter</em>, se indica <code>outlier.shape = NA</code>:</p>
+<p>Para obtener una caja por categoría de EFLO hemos asignado esa variable al eje x dentro del mapeo. Y como además queremos que cada caja luzca un color distinto, hemos hecho depender el relleno de la propia EFLO, añadiendo la característica <code>fill =</code> en el <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code> de <code><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot()</a></code>. La función <code><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_brewer()</a></code> se encarga, como ya sabemos, de aplicar la paleta de colores.</p>
+<p>El primer bloque de <code><a href="https://ggplot2.tidyverse.org/reference/stat_summary.html">stat_summary()</a></code> marca con un punto la media de RES de cada grupo. El segundo une esos puntos mediante una línea, lo que facilita comparar visualmente los promedios. El argumento <code>aes(group = TRUE)</code> es el que obliga a la línea a enlazarlos todos, ignorando el agrupamiento por EFLO.</p>
+<p>Como última extensión, en ocasiones interesa visualizar la posición de cada caso individual. Podemos lograrlo con una capa <code><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter()</a></code>, que reparte los puntos aplicándoles un ligero desplazamiento lateral aleatorio para evitar solapamientos. Y para que los <em>outliers</em> del <em>box-plot</em> no se dupliquen con los del <em>jitter</em>, indicamos <code>outlier.shape = NA</code>:</p>
 <div class="sourceCode" id="cb138"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">EFLO</span>, y <span class="op">=</span> <span class="va">RES</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">EFLO</span><span class="op">)</span>, outlier.shape <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1158,13 +1158,13 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <div style="text-align: center;">
 <p><strong>Figura 3.13</strong></p>
 </div>
-<p>El <code><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter()</a></code> muestra, dentro de cada caja, la nube de casos individuales (incluidos los <em>outliers</em>). Las características de estos puntos (amplitud del desplazamiento lateral, tamaño, color, opacidad) se controlan con los argumentos <code>width=</code>, <code>size=</code>, <code>col=</code> y <code>alpha=</code>.</p>
+<p><code><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter()</a></code> muestra, sobre cada caja, la nube de casos individuales, <em>outliers</em> incluidos. Las características de esos puntos —amplitud del desplazamiento lateral, tamaño, color y opacidad— se controlan con los argumentos <code>width =</code>, <code>size =</code>, <code>col =</code> y <code>alpha =</code>.</p>
 </div>
 <div id="gráfico-de-violín." class="section level3" number="3.4.4">
 <h3>
 <span class="header-section-number">3.4.4</span> <img src="figuras/key.svg" class="hicon"> Gráfico de violín.<a class="anchor" aria-label="anchor" href="#gr%C3%A1fico-de-viol%C3%ADn."><i class="fas fa-link"></i></a>
 </h3>
-<p>El gráfico de <strong>violín</strong> combina las ventajas del boxplot (mostrar la mediana y los cuartiles) con las del gráfico de densidad (mostrar la forma completa de la distribución). Cada “violín” es una función de densidad espejada, cuyo ancho en cada punto indica la frecuencia relativa de los datos en ese valor. Es especialmente útil cuando la distribución es bimodal o tiene formas que un boxplot no puede revelar:</p>
+<p>El gráfico de <strong>violín</strong> reúne las ventajas del <em>box-plot</em> —la mediana y los cuartiles— con las del gráfico de densidad —la forma completa de la distribución—. Cada “violín” es una función de densidad reflejada como en un espejo, cuya anchura en cada punto refleja la frecuencia relativa de los datos en ese valor. Resulta especialmente útil cuando la distribución es bimodal o adopta formas que un <em>box-plot</em> no alcanza a revelar:</p>
 <div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">EFLO</span>, y <span class="op">=</span> <span class="va">LIQUIDEZ</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">EFLO</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1182,13 +1182,13 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <div style="text-align: center;">
 <p><strong>Figura 3.14</strong></p>
 </div>
-<p>En el código, <code><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin()</a></code> dibuja la silueta de la distribución, y sobre ella se superpone un <code><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot()</a></code> estrecho (argumento <code>width = 0.15</code>) que aporta la referencia de la mediana y los cuartiles. El punto azul oscuro marca la media. De este modo, el violín ofrece lo mejor de ambos mundos: la información del boxplot y la forma de la distribución.</p>
+<p>En el código, <code><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin()</a></code> dibuja la silueta de la distribución y sobre ella se superpone un <code><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot()</a></code> estrecho (argumento <code>width = 0.15</code>) que aporta la referencia de la mediana y los cuartiles, mientras que el punto azul oscuro señala la media. El violín reúne así ambas lecturas en una sola imagen: el resumen numérico del <em>box-plot</em> y el perfil completo de la distribución.</p>
 </div>
 <div id="gráfico-de-barras." class="section level3" number="3.4.5">
 <h3>
 <span class="header-section-number">3.4.5</span> <img src="figuras/key.svg" class="hicon"> Gráfico de barras.<a class="anchor" aria-label="anchor" href="#gr%C3%A1fico-de-barras."><i class="fas fa-link"></i></a>
 </h3>
-<p>El <strong>gráfico de barras</strong> es la representación básica para variables <strong>categóricas</strong>. <a href="https://ggplot2.tidyverse.org">ggplot2</a> ofrece dos funciones: <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar()</a></code>, que cuenta automáticamente las frecuencias de cada categoría; y <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col()</a></code>, que usa valores ya calculados. Vamos a representar el número de empresas por tipo de flota (EFLO):</p>
+<p>El <strong>gráfico de barras</strong> es la representación básica de las variables <strong>categóricas</strong>. <a href="https://ggplot2.tidyverse.org">ggplot2</a> ofrece dos funciones para construirlo: <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar()</a></code>, que cuenta por sí sola las frecuencias de cada categoría, y <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col()</a></code>, que parte de valores ya calculados. Representemos el número de empresas por tipo de flota (EFLO):</p>
 <div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">EFLO</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">EFLO</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1201,7 +1201,7 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <div style="text-align: center;">
 <p><strong>Figura 3.15</strong></p>
 </div>
-<p><code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar()</a></code> cuenta automáticamente cuántos casos hay en cada categoría de EFLO y representa esa frecuencia como la altura de la barra. Si quisiéramos representar valores ya calculados (por ejemplo, el resultado medio por galaxia), usaríamos <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col()</a></code>:</p>
+<p><code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar()</a></code> cuenta cuántos casos hay en cada categoría de EFLO y traduce esa frecuencia en la altura de la barra. Cuando los valores vienen ya calculados —el resultado medio por galaxia, pongamos por caso—, recurriremos a <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col()</a></code>:</p>
 <div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calcular el resultado medio por galaxia</span></span>
 <span><span class="va">res_por_galaxia</span> <span class="op">&lt;-</span> <span class="va">interestelar_100</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -1221,7 +1221,7 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <div style="text-align: center;">
 <p><strong>Figura 3.16</strong></p>
 </div>
-<p>En este ejemplo, <code><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder()</a></code> ordena las barras de menor a mayor valor del resultado medio, y <code><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip()</a></code> gira el gráfico para que las barras sean horizontales, facilitando la lectura de los nombres de las galaxias.</p>
+<p>En este ejemplo, <code><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder()</a></code> dispone las barras de menor a mayor resultado medio y <code><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip()</a></code> gira el gráfico para situarlas en horizontal, lo que facilita la lectura de los nombres de las galaxias.</p>
 </div>
 </div>
 <div id="gráficos-de-dos-variables." class="section level2" number="3.5">
@@ -1232,8 +1232,8 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <h3>
 <span class="header-section-number">3.5.1</span> <img src="figuras/key.svg" class="hicon"> Gráfico de dispersión o <em>scatterplot</em>.<a class="anchor" aria-label="anchor" href="#gr%C3%A1fico-de-dispersi%C3%B3n-o-scatterplot."><i class="fas fa-link"></i></a>
 </h3>
-<p>Pasamos ahora a comentar un tipo de gráfico muy común cuando trabajamos con dos variables métricas: los <strong>gráficos de dispersión</strong> (o <strong><em>scatterplots</em></strong>). En este tipo de gráficos, cada variable ocupa un eje (x o y), y los puntos internos al gráfico representan los diversos casos u observaciones.</p>
-<p>Como ejemplo, vamos a crear un gráfico de dispersión que represente las empresas de transporte de mercancías interestelar en función de su ratio de liquidez (LIQUIDEZ) y del resultado del ejercicio (RES). El código es el siguiente:</p>
+<p>Abordamos ahora un tipo de gráfico muy frecuente cuando trabajamos con dos variables métricas: el <strong>gráfico de dispersión</strong> o <strong><em>scatterplot</em></strong>. En él, cada variable ocupa uno de los ejes y cada punto del interior representa un caso u observación.</p>
+<p>Creemos, a modo de ejemplo, un gráfico de dispersión que sitúe a las empresas de transporte interestelar de mercancías en función de su ratio de liquidez (LIQUIDEZ) y de su resultado del ejercicio (RES). El código es el siguiente:</p>
 <div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LIQUIDEZ</span>, y <span class="op">=</span> <span class="va">RES</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"red"</span>, size <span class="op">=</span> <span class="fl">2</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1246,7 +1246,7 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <div style="text-align: center;">
 <p><strong>Figura 3.17</strong></p>
 </div>
-<p>Vamos a refinar el gráfico algo más. En primer lugar, puede ser interesante <strong>distinguir entre los tipos de empresas</strong>, según la antigüedad de sus flotas (variable EFLO). Para ello, podemos poner el color de los puntos en función de esa variable:</p>
+<p>Refinemos algo más el gráfico. Puede resultar interesante, en primer lugar, <strong>distinguir los tipos de empresas</strong> según la antigüedad de sus flotas (variable EFLO), para lo cual haremos depender de esa variable el color de los puntos:</p>
 <div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LIQUIDEZ</span>, y <span class="op">=</span> <span class="va">RES</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">EFLO</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1258,8 +1258,8 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <div style="text-align: center;">
 <p><strong>Figura 3.18</strong></p>
 </div>
-<p>En los dos gráficos anteriores pueden observarse puntos (casos) candidatos a ser <em>outliers</em> particularmente para el caso de la variable RES (beneficio neto o resultado del ejercicio), como ya se pudo advertir al construir los <em>boxplots</em>.</p>
-<p>Por otro lado, podría ser interesante complementar el gráfico con información sobre las dos variables por separado, es decir, con <strong>información sobre las distribuciones marginales</strong>. Existe un paquete complementario a <a href="https://ggplot2.tidyverse.org">ggplot2</a>, llamado <a href="https://github.com/daattali/ggExtra">ggExtra</a>, que puede ayudar fácilmente a este cometido. El segundo paso consistirá en <strong>asignar</strong> nuestro <em>scatterplot</em>, diseñado con la función <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code>, a un objeto con el nombre que queramos, por ejemplo, “scatter_plus”. Luego, ese objeto, que contiene nuestro gráfico, entrará como argumento en la función de <a href="https://github.com/daattali/ggExtra">ggExtra</a> llamada <code><a href="https://rdrr.io/pkg/ggExtra/man/ggMarginal.html">ggMarginal()</a></code>, como se muestra en el siguiente código:</p>
+<p>En los dos gráficos anteriores se distinguen puntos —casos— candidatos a <em>outliers</em>, sobre todo en lo que respecta a la variable RES (beneficio neto o resultado del ejercicio), tal como ya advertimos al construir los <em>box-plots</em>.</p>
+<p>Por otro lado, podría convenirnos completar el gráfico con información sobre cada una de las dos variables por separado, esto es, sobre sus <strong>distribuciones marginales</strong>. Para ello contamos con <a href="https://github.com/daattali/ggExtra">ggExtra</a>, un paquete complementario de <a href="https://ggplot2.tidyverse.org">ggplot2</a>. El procedimiento consta de dos pasos. El primero consiste en <strong>asignar</strong> el <em>scatterplot</em> diseñado con <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> a un objeto con el nombre que prefiramos, por ejemplo “scatter_plus”. En el segundo, ese objeto pasa a ser el argumento de la función <code><a href="https://rdrr.io/pkg/ggExtra/man/ggMarginal.html">ggMarginal()</a></code>, de <a href="https://github.com/daattali/ggExtra">ggExtra</a>, tal como muestra el siguiente código:</p>
 <div class="sourceCode" id="cb144"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scatter_plus</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>,</span>
 <span>                       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LIQUIDEZ</span>, y <span class="op">=</span> <span class="va">RES</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1271,13 +1271,13 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/ggExtra/man/ggMarginal.html">ggMarginal</a></span><span class="op">(</span><span class="va">scatter_plus</span>, type <span class="op">=</span> <span class="st">"histogram"</span>, groupColour <span class="op">=</span> <span class="cn">T</span>,</span>
 <span>           groupFill <span class="op">=</span> <span class="cn">T</span>, position <span class="op">=</span> <span class="st">"identity"</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
-<p>Con el código anterior, apreciamos cómo se añaden los histogramas de cada variable, LIQUIDEZ y RES, en los márgenes del gráfico:</p>
+<p>El resultado es la aparición, en los márgenes del gráfico, de los histogramas de ambas variables, LIQUIDEZ y RES:</p>
 <div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-116-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 3.19</strong></p>
 </div>
-<p>Conviene apuntar que el argumento <code>position = "identity"</code> hace que las barras del histograma estén perfectamente alineadas con los datos del gráfico de dispersión, sin ningún tipo de desplazamiento.</p>
-<p>Adicionalmente, los diámetros de los puntos de los diversos casos podrían contener también información, haciéndolos proporcionales a una tercera variable. Por ejemplo, podrían ser proporcionales al nivel de solvencia (variable SOLVENCIA). Para ello, la característica <code>size=</code> pasa a incluirse dentro de <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>, debido a que el diámetro de cada punto ya no es un parámetro fijo, sino que depende de la magnitud de la variable SOLVENCIA:</p>
+<p>Conviene apuntar que el argumento <code>position = "identity"</code> mantiene las barras de los histogramas perfectamente alineadas con los datos del gráfico de dispersión, sin desplazamiento alguno.</p>
+<p>El tamaño de los puntos puede aportar, además, una información adicional si lo hacemos proporcional a una tercera variable: el nivel de solvencia (variable SOLVENCIA), por ejemplo. Bastará con trasladar la característica <code>size =</code> al interior de <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>, ya que el diámetro de cada punto deja de ser un parámetro fijo para depender de la magnitud que SOLVENCIA alcanza en cada caso:</p>
 <div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scatter_plus</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>,</span>
 <span>                       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LIQUIDEZ</span>, y <span class="op">=</span> <span class="va">RES</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1293,7 +1293,7 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <div style="text-align: center;">
 <p><strong>Figura 3.20</strong></p>
 </div>
-<p>Finalmente, podría ser útil añadir una etiqueta (<em>label</em>) a cada punto, para <strong>identificar el caso concreto</strong> al que representa. Para ello, el paquete <a href="https://ggrepel.slowkow.com/">ggrepel</a> ofrece la función <code><a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html">geom_label_repel()</a></code>, que coloca automáticamente las etiquetas evitando solapamientos:</p>
+<p>Por último, quizá nos resulte útil añadir una etiqueta (<em>label</em>) a cada punto para <strong>identificar el caso concreto</strong> que representa. El paquete <a href="https://ggrepel.slowkow.com/">ggrepel</a> nos ofrece con este fin la función <code><a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html">geom_label_repel()</a></code>, que sitúa las etiquetas de manera automática evitando que se solapen:</p>
 <div class="sourceCode" id="cb146"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scatter_plus</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>,</span>
 <span>                       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LIQUIDEZ</span>, y <span class="op">=</span> <span class="va">RES</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1319,15 +1319,15 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <div style="text-align: center;">
 <p><strong>Figura 3.21</strong></p>
 </div>
-<p>La función <code><a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html">geom_label_repel()</a></code> omite automáticamente las etiquetas que se solaparían excesivamente (controlable con <code>max.overlaps</code>). Otros argumentos útiles son <code>box.padding</code> (aire alrededor de cada etiqueta), <code>point.padding</code> (aire alrededor del punto ancla) y <code>force</code> (intensidad de repulsión entre etiquetas).</p>
+<p>La función descarta por sí sola aquellas etiquetas que se solaparían en exceso, comportamiento que regula el argumento <code>max.overlaps</code>. Otros argumentos de interés son <code>box.padding</code> (el aire que rodea a cada etiqueta), <code>point.padding</code> (el que rodea al punto de anclaje) y <code>force</code> (la intensidad de la repulsión entre etiquetas).</p>
 </div>
 </div>
 <div id="paneles-múltiples-faceting." class="section level2" number="3.6">
 <h2>
 <span class="header-section-number">3.6</span> <img src="figuras/pie-chart.svg" class="hicon"> Paneles múltiples: <em>faceting</em>.<a class="anchor" aria-label="anchor" href="#paneles-m%C3%BAltiples-faceting."><i class="fas fa-link"></i></a>
 </h2>
-<p>Una de las funcionalidades más potentes de <a href="https://ggplot2.tidyverse.org">ggplot2</a> es la posibilidad de crear <strong>paneles múltiples</strong> (<em>facets</em>) a partir de una o varias variables categóricas. En lugar de superponer grupos en un mismo gráfico (lo que a veces lo hace difícil de leer), se crea un gráfico independiente para cada categoría, todos con las mismas escalas, lo que facilita enormemente la comparación.</p>
-<p>La función principal es <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap()</a></code>, que distribuye los paneles en una retícula. Por ejemplo, para crear un histograma de LIQUIDEZ separado por tipo de flota:</p>
+<p>Una de las prestaciones más potentes de <a href="https://ggplot2.tidyverse.org">ggplot2</a> es la posibilidad de generar <strong>paneles múltiples</strong> (<em>facets</em>) a partir de una o varias variables categóricas. En lugar de superponer los grupos en una misma imagen —lo que en ocasiones dificulta su lectura—, se dibuja un gráfico independiente para cada categoría, todos ellos con idénticas escalas, lo que facilita enormemente la comparación.</p>
+<p>La función principal es <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap()</a></code>, que reparte los paneles en una retícula. Veamos cómo obtener un histograma de LIQUIDEZ separado por tipo de flota. Recuperamos aquí el objeto <code>nbins</code>, que calculamos con la regla de <em>Sturges</em> al construir nuestro primer histograma y que sigue alojado en el <em>Global Environment</em>; si hubiéramos limpiado la memoria entretanto, bastaría con volver a ejecutar aquella línea antes que esta:</p>
 <div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LIQUIDEZ</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="va">nbins</span>, fill <span class="op">=</span> <span class="st">"orange"</span>, colour <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1340,8 +1340,8 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <div style="text-align: center;">
 <p><strong>Figura 3.22</strong></p>
 </div>
-<p>La fórmula <code>~ EFLO</code> indica la variable que define los paneles. Si quisiéramos paneles definidos por dos variables (por ejemplo, EFLO y GALAXIA), usaríamos <code>facet_grid(EFLO ~ GALAXIA)</code>, que crea una cuadrícula con una dimensión por variable.</p>
-<p>El <em>faceting</em> puede aplicarse a cualquier tipo de gráfico. Veamos un ejemplo con el gráfico de dispersión:</p>
+<p>La fórmula <code>~ EFLO</code> señala la variable que define los paneles. Si quisiéramos definirlos a partir de dos variables —EFLO y GALAXIA, por ejemplo—, recurriríamos a <code>facet_grid(EFLO ~ GALAXIA)</code>, que construye una cuadrícula con una dimensión por variable.</p>
+<p>El <em>faceting</em> puede aplicarse a cualquier tipo de gráfico. Veámoslo sobre el gráfico de dispersión:</p>
 <div class="sourceCode" id="cb148"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">interestelar_100</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">LIQUIDEZ</span>, y <span class="op">=</span> <span class="va">RES</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">EFLO</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1354,13 +1354,13 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
 <div style="text-align: center;">
 <p><strong>Figura 3.23</strong></p>
 </div>
-<p>Cada panel contiene solo los casos de una categoría de EFLO, lo que permite apreciar con claridad la relación entre LIQUIDEZ y RES dentro de cada grupo, sin la confusión que puede generar la superposición de colores en un único gráfico.</p>
+<p>Cada panel recoge únicamente los casos de una categoría de EFLO, de modo que la relación entre LIQUIDEZ y RES se aprecia con nitidez dentro de cada grupo, sin la confusión que puede generar la superposición de colores en una sola imagen.</p>
 </div>
 <div id="materiales-para-realizar-las-prácticas-del-capítulo.-1" class="section level2" number="3.7">
 <h2>
 <span class="header-section-number">3.7</span> <img src="figuras/arrow-down-circle.svg" class="hicon"> Materiales para realizar las prácticas del capítulo.<a class="anchor" aria-label="anchor" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-1"><i class="fas fa-link"></i></a>
 </h2>
-<p>En esta sección se muestran los links de acceso a los diferentes materiales (<em>scripts</em>, datos…) necesarios para llevar a cabo los contenidos prácticos del capítulo.</p>
+<p>En esta sección se recogen los enlaces de acceso a los distintos materiales (<em>scripts</em>, datos…) necesarios para desarrollar los contenidos prácticos del capítulo.</p>
 <p><strong>Datos (en formato Microsoft® Excel®):</strong></p>
 <ul>
 <li>interestelar_100.xlsx (<a href="https://raw.githubusercontent.com/teckel71/RStars-book/main/download/interestelar_100.xlsx">obtener aquí</a>)</li>
@@ -1379,7 +1379,7 @@ k = \left\lceil \log_{2}(n) + 1 \right\rceil
       <ul class="nav navbar-nav">
 <li><a class="nav-link" href="#gr%C3%A1ficos."><span class="header-section-number">3</span> Gráficos.</a></li>
 <li><a class="nav-link" href="#el-valor-de-las-im%C3%A1genes."><span class="header-section-number">3.1</span>  El valor de las imágenes.</a></li>
-<li><a class="nav-link" href="#tidyverse-para-gr%C3%A1ficos-ggplot2."><span class="header-section-number">3.2</span>  Tidyverse para gráficos: ggplot2.</a></li>
+<li><a class="nav-link" href="#el-tidyverse-para-gr%C3%A1ficos-ggplot2."><span class="header-section-number">3.2</span>  El Tidyverse para gráficos: {ggplot2}.</a></li>
 <li><a class="nav-link" href="#la-estructura-de-un-gr%C3%A1fico-con-ggplot2."><span class="header-section-number">3.3</span>  La estructura de un gráfico con {ggplot2}.</a></li>
 <li>
 <a class="nav-link" href="#gr%C3%A1ficos-de-una-variable."><span class="header-section-number">3.4</span>  Gráficos de una variable.</a><ul class="nav navbar-nav">

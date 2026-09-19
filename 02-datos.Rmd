@@ -14,7 +14,7 @@ Como vimos en el capítulo 1, tras ejecutar un sencillo script (o al escribir in
 
 -   Asignaciones.
 
-Las expresiones realizan acciones sobre **objetos** de R. Los objetos en R son entes que tienen ciertas características, *metadatos*, llamados atributos. No todos los objetos tienen los mismos atributos y, ni tan siquiera, todos los objetos tienen atributos que los caractericen.
+Las expresiones actúan sobre **objetos** de R. Un objeto es una entidad que puede llevar asociadas ciertas características o *metadatos*, a los que llamamos atributos. Ni todos los objetos comparten los mismos atributos ni todos ellos cuentan necesariamente con atributos que los caractericen.
 
 Los objetos más importantes en R son ciertas estructuras o *contenedores* diseñados para almacenar elementos:
 
@@ -28,49 +28,49 @@ Los objetos más importantes en R son ciertas estructuras o *contenedores* dise�
 
 -   Factores.
 
-Los elementos almacenados en los objetos se dividen en *clases*. Entre las diferentes clases, destacan las clases referidas a **datos**, que pueden ser de diferentes *modos*: logical (verdadero/falso), numeric (números) o character (cadena de texto). El modo numeric puede ser, a la vez, de tipo integer (número entero) o double (número real). En el caso de logical y carácter, modo y tipo coinciden.
+Los elementos almacenados en los objetos se agrupan en *clases*. Entre ellas destacan las referidas a **datos**, que pueden presentar distintos *modos*: `logical` (verdadero/falso), `numeric` (números) o `character` (cadena de texto). El modo `numeric` admite, además, dos tipos: `integer` (número entero) y `double` (número real). En los modos `logical` y `character`, modo y tipo coinciden.
 
-Vamos a profundizar un poco en algunas de estos contenedores de datos. Vamos a suponer que trabajamos en el proyecto que creamos en el capítulo anterior (proyecto "explora"), y que vamos a editar el script que también creamos en tal capítulo (script "explorando.R", que se encontrará ubicado en la carpeta del proyecto "explora").
+Profundicemos un poco en algunos de estos contenedores. Para ello, situémonos en el proyecto que creamos en el capítulo anterior (proyecto "explora") y retomemos el script que preparamos allí mismo (script "explorando.R", alojado en la carpeta de dicho proyecto).
 
 ### ![](figuras/key.svg){.hicon} Vectores.
 
-Los **vectores**, son conjuntos de elementos **de la misma clase**. Vamos a definir por ejemplo el vector x = (1,3,5,8). Para ello, vamos a escribir en nuestro script:
+Los **vectores** son conjuntos de elementos **de la misma clase**. Definamos, por ejemplo, el vector x = (1,3,5,8). Para ello escribiremos en nuestro script:
 
 ```{r, eval=TRUE, echo=TRUE, warning=FALSE}
 x <- c(1,3,5,8)
 ```
 
-Ejecutamos la línea (situando el cursor en algún lugar de ella, dentro del script; y pulsando a la vez las teclas `Control + Enter` o pinchando con el ratón en el botón `Run` del editor). Ya tenemos nuestro primer objeto de tipo *vector* en memoria. Por cierto, lo que hemos hecho es una **asignación**, que se escribe con una flecha creada mediante los signos "\<" y "-". Hemos asignado a un vector llamado "x" los elementos 1, 3, 5 y 8.
+Ejecutamos la línea situando el cursor en cualquier punto de ella, dentro del script, y pulsando a la vez las teclas `Control + Enter` (o haciendo clic en el botón `Run` del editor). Ya tenemos en memoria nuestro primer objeto de tipo *vector*. Conviene reparar en que acabamos de realizar una **asignación**: una flecha formada por los signos "\<" y "-" traslada al vector llamado "x" los elementos 1, 3, 5 y 8.
 
-Para ver el vector simplemente escribimos en la consola (o en el script) el nombre del vector, "x". El resultado será:
+Para ver su contenido basta con escribir en la consola (o en el script) el nombre del vector, "x". El resultado será:
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 x
 ```
 
-Además, si miramos en la ventana superior-derecha de R-Studio, veremos que en el ***Global Environment*** se muestra nuestro vector y que, además, se nos informa de que tiene *modo* *numérico*. El *Global Environment* nos informa de los objetos que R tiene en memoria:
+Si además dirigimos la mirada a la ventana superior derecha de RStudio, comprobaremos que el ***Global Environment*** —la ventana que recoge los objetos que R mantiene en memoria— muestra nuestro vector e indica que su *modo* es *numérico*:
 
 ![Nuestro vector en memoria.](figuras/Imagen2_01.png){.d-block .mx-auto width="100%"}
 
-Si queremos obtener un vector de números consecutivos del 2 al 6, basta con ejecutar en la "consola" (o escribir y ejecutar en el script):
+Si lo que buscamos es un vector de números consecutivos del 2 al 6, basta con ejecutar en la consola (o escribir y ejecutar en el script):
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 y <- c(2:6)
 ```
 
-Al escribir el nombre del vector "y" en la "consola" obtendremos:
+Al escribir el nombre del vector "y" en la consola obtendremos:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 y
 ```
 
-Si queremos saber la longitud de un vector, usaremos la *función* `length()`. Por ejemplo, `length(y)` nos devolverá el valor 5. Escribamos en el script y ejecutemos:
+Para conocer la longitud de un vector recurriremos a la *función* `length()`. Así, `length(y)` devolverá el valor 5, pues "y" contiene cinco elementos. Escribamos en el script y ejecutemos:
 
 ```{r, eval=TRUE, echo=TRUE, message= FALSE, warning=FALSE}
 length(y)
 ```
 
-Un vector puede incluir, además de números, caracteres o grupos de caracteres alfanuméricos; siempre entrecomillados (lo fundamental es que sean elementos de la misma clase). Por ejemplo, el vector "genero" (¡no pongamos tildes o podemos tener problemas!). Así, si ejecutamos estas dos líneas de código:
+Un vector puede albergar, además de números, caracteres o cadenas alfanuméricas, siempre entrecomilladas (lo esencial es que todos los elementos pertenezcan a la misma clase). Sirva de ejemplo el vector "genero" (¡evitemos las tildes al nombrar los objetos o podemos encontrarnos con problemas!). Si ejecutamos estas dos líneas de código:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
 genero<-c("Mujer","Hombre")
@@ -84,31 +84,31 @@ genero<-c("Mujer","Hombre")
 genero
 ```
 
-Podemos obtener la clase de los elementos almacenados en nuestro vector con la función `class()`:
+La función `class()` nos indica la clase de los elementos almacenados en el vector:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 class(genero)
 ```
 
-Si falta un dato en un vector, habrá que escribir "NA" (not available). Por ejemplo, si falta el tercer dato de este vector "z", este vector se escribirá como:
+Cuando falta un dato en un vector, escribiremos "NA" (*not available*, no disponible). Por ejemplo, si no dispusiéramos del tercer dato del vector "Z", lo definiríamos así:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 Z <- c(1,2,NA,2,8)
 ```
 
-Para **seleccionar un elemento** concreto de un vector, indicaremos entre corchetes la posición en la que se encuentra. Por ejemplo, refiriéndonos al vector "x", para obtener el valor de su tercer elemento, haremos:
+Para **seleccionar un elemento** concreto de un vector indicaremos, entre corchetes, la posición que ocupa. Así, para recuperar el valor del tercer elemento del vector "x" haremos:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 x[3]
 ```
 
-Si queremos que se nos muestren los elementos del vector x del 2º al 4º:
+Si lo que queremos es mostrar los elementos del vector "x" comprendidos entre el 2º y el 4º:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 x[2:4]
 ```
 
-Por último, si queremos sacar en pantalla los elementos 1º y 4º, tendremos que incluir una "c" seguida de un paréntesis que recoja el orden de los elementos que queremos seleccionar:
+Por último, para mostrar en pantalla elementos salteados —el 1º y el 4º, pongamos por caso— recurriremos, dentro de los corchetes, a la función `c()`, que recoge las posiciones seleccionadas:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 x[c(1,4)]
@@ -116,7 +116,7 @@ x[c(1,4)]
 
 ### ![](figuras/key.svg){.hicon} Matrices.
 
-Las **matrices**, internamente en R, son vectores; pero con dos atributos adicionales: número de filas y número de columnas. Se definen mediante la función matrix(). Por ejemplo, para definir la matriz "a":
+Las **matrices** son, internamente, vectores a los que R añade dos atributos: el número de filas y el número de columnas. Se definen mediante la función `matrix()`. Por ejemplo, para construir la matriz "a":
 
 $$
 \begin{pmatrix}
@@ -124,16 +124,18 @@ $$
     2 & 5 & 8 \\
     3 & 6 & 9
 \end{pmatrix}
-$$ Tendremos que escribir:
+$$
+
+Tendremos que escribir:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 a <- matrix(c(1,2,3,4,5,6,7,8,9),nrow=3)
 a
 ```
 
-El número de filas de la matriz (y por tanto, el número de columnas) se fija con el argumento `nrow =` . También podríamos fijar el número de columnas, con `ncol =` .
+El número de filas se fija con el argumento `nrow =`; como el total de elementos es conocido, al indicar las filas queda determinado también el número de columnas. De forma equivalente, podríamos haber fijado las columnas con `ncol =`.
 
-Como vemos, por defecto, R va "cortando" el vector por columnas (si lo preferimos, lo puede hacer también por filas, añadiendo a la función `matrix()` el argumento `by row = true`; pero, en nuestro ejemplo, obtendríamos la matriz traspuesta a la que queremos almacenar).
+Como vemos, R "corta" el vector por columnas de forma predeterminada. Si lo preferimos, puede hacerlo por filas añadiendo a `matrix()` el argumento `byrow = TRUE`, si bien en nuestro ejemplo eso nos devolvería la traspuesta de la matriz que pretendemos almacenar.
 
 Las dimensiones (número de filas y de columnas) de la matriz pueden obtenerse mediante la función `dim()`:
 
@@ -141,9 +143,9 @@ Las dimensiones (número de filas y de columnas) de la matriz pueden obtenerse m
 dim(a)
 ```
 
-3 filas y 3 columnas.
+Esto es, 3 filas y 3 columnas.
 
-Si queremos seleccionar elementos concretos de una matriz, lo haremos utilizando corchetes para indicar filas y columnas. Hemos de tener en cuenta que, trabajando con matrices, siempre tenemos $$rango de filas, rango de columnas$$ Si se deja en blanco el espacio entre el corchete inicial y la coma, esto querrá decir que consideramos todas las filas. Y si no insertamos nada entre la coma y el corchete de cierre, esto significará que consideramos todas las columnas. A continuación tenemos varios ejemplos de código, con el resultado obtenido en la consola:
+Para seleccionar elementos concretos de una matriz emplearemos de nuevo los corchetes, esta vez con dos posiciones separadas por una coma: `[rango de filas, rango de columnas]`. Si dejamos en blanco el espacio situado entre el corchete de apertura y la coma, estaremos indicando que nos interesan todas las filas; y si no escribimos nada entre la coma y el corchete de cierre, que nos quedamos con todas las columnas. Veamos varios ejemplos de código, acompañados del resultado que devuelve la consola:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 a[2,3]
@@ -152,35 +154,35 @@ a[,c(1,3)]
 a[c(1,3),]
 ```
 
-Tanto para vectores como para matrices, funcionan las operaciones suma y diferencia sin más complicaciones. En el caso del producto, sin embargo, hay que tener en cuenta que, por ejemplo, a\*a devuelve la multiplicación elemento a elemento, es decir:
+Tanto en vectores como en matrices, la suma y la diferencia funcionan sin mayor complicación. El producto, en cambio, merece una advertencia: la expresión `a*a` no realiza el producto matricial, sino la multiplicación elemento a elemento:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
 a*a
 ```
 
-Devuelve la multiplicación elemento a elemento (en este caso, el cuadrado de cada número, al multiplicar la matriz a por sí misma):
+El resultado es, en este caso, el cuadrado de cada número, pues multiplicamos la matriz "a" por sí misma:
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 a*a
 ```
 
-Para hacer el verdadero producto matricial deberá introducirse:
+Para obtener el verdadero producto matricial deberemos escribir:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 a%*%a
 ```
 
-### ![](figuras/key.svg){.hicon} Data frames.
+### ![](figuras/key.svg){.hicon} *Data frames*.
 
-Un ***data frame*** es un objeto que almacena datos organizados mediante la clase `data.frame`. Esta organización consiste en que, por filas, se disponen los diferentes casos o sujetos; mientras que por columnas se posicionan las variables. Así:
+Un ***data frame*** es un objeto que almacena datos con la estructura propia de la clase `data.frame`: en las filas se disponen los distintos casos o sujetos y, en las columnas, las variables. De ahí se derivan algunos rasgos característicos:
 
--   Es similar a una matriz en el sentido de que tiene dos dimensiones. Podemos acceder a sus elementos con corchetes, tenemos nombres de filas y columnas, y podemos operar con ellas.
+-   Se asemeja a una matriz, pues también tiene dos dimensiones: podemos acceder a sus elementos con corchetes, disponemos de nombres para filas y columnas, y podemos operar con sus datos.
 
 -   Cada columna tiene un nombre, de manera que podemos acceder a una columna concreta con el símbolo **`$`**. Todas las columnas (variables) son vectores con la misma longitud.
 
 -   Cada columna puede ser un vector numérico, factor, de tipo carácter o lógico.
 
-Por ejemplo, vamos a crear el *data frame* **"datos"**, con tres variables: "peso", "altura", y "color de ojos", llamadas "Peso", "Altura" y "Cl.ojos", respectivamente; para 3 individuos o casos. Una opción es crear primero las tres variables como vectores, y luego crear el *data frame* mediante la función `dataframe()`:
+Construyamos, por ejemplo, el *data frame* **"datos"**, con tres variables —"peso", "altura" y "color de ojos", a las que llamaremos "Peso", "Altura" y "Cl.ojos"— referidas a 3 individuos o casos. Una posibilidad consiste en definir primero las tres variables como vectores y reunirlas después mediante la función `data.frame()`:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 Peso<-c(68,75,88)
@@ -189,13 +191,13 @@ Cl.ojos<-c("azules","marrones","marrones")
 datos<-data.frame(Peso,Altura,Cl.ojos)
 ```
 
-Si ahora ejecutamos una línea con el nombre de nuestro *data frame*, lo obtendremos como resultado en la consola:
+Si ahora ejecutamos una línea con el nombre de nuestro *data frame*, la consola nos devolverá su contenido:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 datos
 ```
 
-Para obtener los nombres de las variables (es decir, el nombre de cada columna) teclearemos la función:
+Para conocer los nombres de las variables (esto es, el de cada columna) recurriremos a la función `names()`:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
 names(datos)
@@ -207,26 +209,26 @@ Obteniéndose:
 names(datos)
 ```
 
-Para obtener solo los datos de la columna (variable) color de ojos teclearemos datos\$Cl.ojos:
+Para obtener únicamente los datos de la columna (variable) color de ojos escribiremos `datos$Cl.ojos`:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 datos$Cl.ojos
 ```
 
-Y para obtener los datos de peso: datos\$Peso:
+Y para los de peso, `datos$Peso`:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 datos$Peso
 ```
 
-Para saber el número de filas y de columnas de una hoja de datos utilizaremos las funciones `nrow()` y `ncol()`:
+Para conocer el número de filas y de columnas de una hoja de datos utilizaremos las funciones `nrow()` y `ncol()`:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 nrow(datos)
 ncol(datos)
 ```
 
-Para seleccionar elementos de un data frame, se pueden seguir las mismas reglas que para la selección de elementos de una matriz (con el número de cada fila, que es cada individuo; y el número de cada columna, que es cada variable. Para elegir una variable, no obstante, ya hemos visto que es posible usar su nombre; aunque precedido del nombre del data frame y el signo `$`. Por ejemplo, si ejecutamos:
+Para seleccionar elementos de un *data frame* podemos seguir las mismas reglas que en las matrices: el número de la fila identifica al individuo y el de la columna, a la variable. Para elegir una variable disponemos, además, de la vía que ya conocemos: su nombre precedido del nombre del *data frame* y del signo `$`. Así, si ejecutamos:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 datos[,2]
@@ -237,7 +239,7 @@ Obtenemos el mismo resultado.
 
 ### ![](figuras/key.svg){.hicon} Factores.
 
-En R, un factor es un tipo especial de objeto que se usa para representar datos categóricos. Es decir, datos que no son números continuos sino que pertenecen a un conjunto limitado de categorías (también llamadas niveles). Por ejemplo, anteriormente creamos el vector "Cl.ojos". Es un vector tipo carácter; pero, para R, aún no es factor.
+En R, un **factor** es un tipo especial de objeto destinado a representar datos categóricos: datos que no son magnitudes continuas, sino que pertenecen a un conjunto limitado de categorías, también llamadas *niveles*. Pensemos en el vector "Cl.ojos" que creamos hace un momento: se trata de un vector de tipo carácter que, para R, todavía no es un factor.
 
 Para convertirlo en un objeto de la clase "factor", podemos ejecutar:
 
@@ -245,20 +247,20 @@ Para convertirlo en un objeto de la clase "factor", podemos ejecutar:
 Cl.ojosF <- factor(Cl.ojos)
 ```
 
-En el Global Environment vemos que se ha creado el objeto "Cl.ojosF", de tipo factor. Si representamos ambos objetos:
+En el *Global Environment* aparece ya el objeto "Cl.ojosF", de tipo factor. Si mostramos ambos objetos:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 Cl.ojos
 Cl.ojosF
 ```
 
-Vemos como "Cl.ojosF" no es un vector de elementos tipo carácter; sino algo más: es una variable cuyos elementos pueden tomar dos valores categóricos (que pueden estar en el vector una vez, o estar repetidos, o no estar), categorías o niveles, que son "azules" y "marrones".
+Comprobamos que "Cl.ojosF" es algo más que un vector de elementos de tipo carácter: es una variable cuyos elementos solo pueden adoptar dos valores categóricos —los niveles "azules" y "marrones"—, que podrán aparecer una vez, repetirse o incluso no llegar a aparecer.
 
 ¿Por qué es necesario, a veces, transformar los datos "categóricos" en "factores"?
 
--   Ahorro de memoria: internamente, en lugar de guardar “marrones” muchas veces, guarda un número que representa la categoría (ej. 1 = marrones, 2 = azules).
+-   Ahorro de memoria: internamente, en lugar de almacenar "marrones" muchas veces, R guarda un número que representa a esa categoría (por ejemplo, 1 = marrones, 2 = azules).
 
--   Orden y niveles: puedes definir si las categorías del factor están en escala ordinal. Por ejemplo, supongamos que tenemos las siguientes categorías de calificaciones: "Suspenso", "Aprobado", "Notable", "Sobresaliente". Si las guardamos como factor en escala ordinal, R puede saber que Suspenso \< Aprobado \< Notable \< Sobresaliente, lo que te permitirá hacer comparaciones, ordenar, etc.
+-   Orden y niveles: podemos indicar si las categorías siguen una escala ordinal. Supongamos que manejamos las calificaciones "Suspenso", "Aprobado", "Notable" y "Sobresaliente". Si las guardamos como factor ordenado, R sabrá que Suspenso \< Aprobado \< Notable \< Sobresaliente, lo que nos permitirá comparar, ordenar, etc.
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 notas <- factor(
@@ -269,13 +271,13 @@ notas <- factor(
 notas
 ```
 
--   Modelos estadísticos: muchos métodos de R tratan automáticamente a los factores como variables cualitativas y hacen análisis adecuados (tablas de contingencia, regresiones categóricas, etc.).
+-   Modelos estadísticos: numerosos métodos de R reconocen automáticamente los factores como variables cualitativas y les aplican el tratamiento adecuado (tablas de contingencia, regresiones con variables categóricas, etc.).
 
-En síntesis, Un factor en R es como una etiqueta inteligente para categorías, que permite trabajar con datos cualitativos de forma más organizada y útil para análisis.
+En síntesis, un factor es una suerte de etiqueta inteligente para las categorías, que permite trabajar con datos cualitativos de forma más ordenada y más provechosa para el análisis.
 
 ### ![](figuras/key.svg){.hicon} Listas.
 
-Por último, una lista es un tipo de objeto que puede contener cualquier cosa dentro:
+Por último, una **lista** es un tipo de objeto capaz de albergar en su interior prácticamente cualquier cosa:
 
 -   números
 
@@ -289,7 +291,7 @@ Por último, una lista es un tipo de objeto que puede contener cualquier cosa de
 
 -   otras listas
 
-Es decir, es como una caja organizadora con muchos compartimentos, y en cada compartimento puedes guardar un objeto distinto, tengan la naturaleza que tengan. Por ejemplo, vamos a crear la lista "mi_lista":
+Podemos imaginarla como una caja organizadora con muchos compartimentos, en cada uno de los cuales cabe un objeto distinto, sea cual sea su naturaleza. Creemos, por ejemplo, la lista "mi_lista":
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 mi_lista <- list(
@@ -302,7 +304,7 @@ mi_lista <- list(
 mi_lista
 ```
 
-Esta lista está almacenada en el Global Environment. Si queremos visualizar solo el tercer elemento podemos hacerlo invocando a su posición (con corchetes dobles), o bien a su nombre:
+La lista queda almacenada en el *Global Environment*. Si solo queremos ver su tercer elemento, podemos referirnos a él por su nombre o por la posición que ocupa, en este caso con corchetes dobles:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 mi_lista$notas
@@ -310,21 +312,21 @@ mi_lista[[3]]
 
 ```
 
-Las listas son las estructuras de almacenamiento más flexibles de R, y son muy utilizadas para organizar y empaquetar resultados complejos.
+Las listas son las estructuras de almacenamiento más flexibles de R y se emplean con frecuencia para organizar y empaquetar resultados complejos.
 
 En la práctica, la estructura con la que más trabajaremos a lo largo del libro es el ***data frame***: cada columna es un vector (numérico o factor) y cada fila un caso de la muestra. Además, cuando apliquemos técnicas estadísticas, los resultados de los modelos se devolverán habitualmente empaquetados en **listas**, ya que contienen elementos de distinta naturaleza (coeficientes, residuos, estadísticos de bondad de ajuste, etc.). De este modo, los cinco tipos de objetos que acabamos de presentar no son compartimentos estancos: conviven y se complementan en cualquier análisis real.
 
 ## ![](figuras/pie-chart.svg){.hicon} Importando datos.
 
-Lo más frecuente es que no tecleemos los datos, como hemos hecho hasta ahora; sino que los importemos a R desde algún contenedor externo (archivo de texto, hoja de cálculo, base de datos...). Nosotros vamos a importar nuestros datos desde Microsoft® Excel®. Vamos a cerrar el script que hemos estado construyendo en los apartados anteriores (para conservarlo hay que guardarlo antes), aunque vamos a seguir trabajando en el mismo proyecto (que habíamos llamado "explora"). Iremos a la carpeta del proyecto y guardaremos en ella los dos archivos de esta práctica (obtén el enlace a los archivos en la sección final del capítulo):
+Lo habitual no es teclear los datos, como hemos hecho hasta ahora, sino importarlos a R desde algún contenedor externo: un archivo de texto, una hoja de cálculo, una base de datos... En nuestro caso los traeremos desde Microsoft® Excel®. Cerremos, pues, el script que hemos ido construyendo en los apartados anteriores (recordemos guardarlo antes si queremos conservarlo), sin salir del proyecto "explora" en el que venimos trabajando. Acto seguido iremos a la carpeta del proyecto y guardaremos en ella los dos archivos de esta práctica, cuyos enlaces de descarga figuran en la sección final del capítulo:
 
 -   Un archivo de Microsoft® Excel® llamado "interestelar_100.xlsx"
 
 -   Un script con las instrucciones que vamos a mostrar a continuación, y que se llama "explora_rstars.R"
 
-Si abrimos el archivo de Microsoft® Excel® "interestelar_100.xlsx", comprobaremos que se compone de tres hojas. La primera muestra un aviso sobre el uso exclusivo que se debe dar a los datos incorporados; la segunda recoge la descripción de las variables consideradas; y la tercera (hoja "Datos") guarda los datos que debemos **importar** desde R-Studio. Estos datos se corresponden con diferentes variables económico-financieras y de diverso índole de una muestra de empresas que se dedican al transporte de mercancías interestelar.
+Si abrimos el archivo de Microsoft® Excel® "interestelar_100.xlsx", comprobaremos que consta de tres hojas: la primera recoge un aviso sobre el uso exclusivo que debe darse a los datos; la segunda describe las variables consideradas; y la tercera (hoja "Datos") contiene la información que vamos a **importar** desde RStudio. Se trata de variables económico-financieras y de otra índole, referidas a una muestra de empresas dedicadas al transporte interestelar de mercancías.
 
-Vamos a abrir nuestro script "explora_rstars.R" con `File → Open File…` (o haciendo click en el archivo correspondiente en la ventana inferior derecha de RStudio, pestaña "Files"). Este script contiene el programa que vamos a ir ejecutando en la práctica.
+Abramos ahora el script "explora_rstars.R" con `File → Open File…` (o haciendo clic sobre el archivo en la ventana inferior derecha de RStudio, pestaña "Files"). Este script contiene el programa que iremos ejecutando a lo largo de la práctica.
 
 La primera línea / instrucción en los scripts suele ser:
 
@@ -335,9 +337,9 @@ La primera línea / instrucción en los scripts suele ser:
 rm(list = ls())
 ```
 
-La instrucción tiene como objeto **limpiar el *Global Environment*** (memoria) de objetos de anteriores sesiones de trabajo.
+Esta instrucción persigue **limpiar el *Global Environment*** (la memoria) de los objetos que hayan quedado de sesiones de trabajo anteriores.
 
-Luego, pueden **cargarse los paquetes que harán falta para ejecutar el código**, si bien se puden cargar en cualquier parte del script (aunque siempre antes de ejecutar una línea que requiera de algún elemento incluido en uno de estos paquetes).
+A continuación suelen **cargarse los paquetes necesarios para ejecutar el código**. En rigor, pueden cargarse en cualquier punto del script, siempre que sea antes de ejecutar una línea que requiera alguno de los elementos que contienen.
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 # Cargando paquetes
@@ -345,9 +347,9 @@ library(readxl)
 library(gtExtras)
 ```
 
-Obviamente, para cargar o activar un paquete, previamente debe de haber sido instalado en la máquina donde estamos trabajando. Si no hemos instalado antes los paquetes `{readxl}` y `{gtExtras}`, tendremos que instalarlos siguiendo el procedimiento descrito en la sección de *Paquetes* del capítulo anterior (sección 1.7), o nos dará error.
+Naturalmente, para cargar o activar un paquete este debe haberse instalado antes en la máquina en la que trabajamos. Si aún no hemos instalado `{readxl}` y `{gtExtras}`, habrá que hacerlo siguiendo el procedimiento descrito en la sección de *Paquetes* del capítulo anterior (sección 1.7); de lo contrario, R nos devolverá un error.
 
-Para importar los datos localizados en el archivo de Microsoft® Excel® "interestelar_100.xlsx" el código que podemos usar es:
+Para importar los datos alojados en el archivo de Microsoft® Excel® "interestelar_100.xlsx", el código que podemos emplear es:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 # DATOS
@@ -357,9 +359,9 @@ interestelar_100 <- read_excel("interestelar_100.xlsx", sheet = "Datos", na = c(
 
 La función encargada de importar los datos es `read_excel()`, del paquete `{readxl}`.
 
-Una cuestión importante a tener en cuenta es que, si hay valores perdidos que, en la hoja de cálculo vienen indicados en las celdas mediante algún tipo de anotación, como por ejemplo, "n.d." (no disponible); deberá incluirse el argumento `na =` para informar de las anotaciones en las celdas que deben traducirse como valores faltantes. Si las celdas sin dato aparecieran en la hoja de cálculo siempre en blanco, este argumento no haría falta.
+Conviene detenerse en un detalle importante. Si la hoja de cálculo señala los valores perdidos mediante alguna anotación —"n.d." (no disponible), por ejemplo—, debemos incluir el argumento `na =` para indicar a R qué contenidos de las celdas ha de traducir como valores faltantes. Si las celdas sin dato estuvieran siempre en blanco, este argumento resultaría innecesario.
 
-Volviendo a nuestro ejemplo, podemos observar cómo en el *Global Environment* ya aparece un objeto. Este objeto es una estructura de datos tipo *data frame*, se llama "interestelar_100" y contiene 104 filas (una por empresa) y 29 columnas, una por cada una de las variables almacenadas en el archivo de Microsoft® Excel®. De estas variables, cinco son de tipo cualitativo, formadas por cadenas de caracteres.
+Volviendo a nuestro ejemplo, en el *Global Environment* aparece ya un objeto: una estructura de datos de tipo *data frame*, llamada "interestelar_100", que contiene 104 filas (una por empresa) y 29 columnas, una por cada variable almacenada en el archivo de Microsoft® Excel®. Cinco de esas variables son de naturaleza cualitativa y están formadas por cadenas de caracteres.
 
 Puede explorarse el contenido del *data frame* y los principales estadísticos con la función `summary()`:
 
@@ -385,15 +387,15 @@ rm (variables_por_bloque)
 rm (df)
 ```
 
-Veremos cómo aparecen 29 variables con algunos estadísticos básicos.
+Veremos desfilar las 29 variables acompañadas de algunos estadísticos básicos.
 
-R ha considerado a la primera columna como una variable de tipo cualitativo (atributo). En realidad no es una variable, sino el nombre de los individuos o casos. Para evitar que R tome los nombres de los casos como una variable, podemos redefinir nuestro *data frame* diciéndole que considere esa primera columna como los *nombres de los individuos o filas*:
+Observemos que R ha interpretado la primera columna como una variable cualitativa (un atributo) cuando, en realidad, no es una variable, sino el nombre de los individuos o casos. Para evitarlo, podemos redefinir el *data frame* indicándole que tome esa primera columna como los *nombres de las filas*:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 interestelar_100 <- data.frame(interestelar_100, row.names = 1)
 ```
 
-En la línea anterior hemos asignado al data frame "interestelar_100" los propios datos de "interestelar_100"; pero indicando que la primera columna de datos no es una variable; sino el nombre de los casos. Si hacemos ahora el `summary()`:
+En la línea anterior hemos asignado al *data frame* "interestelar_100" sus propios datos, pero advirtiendo a R de que la primera columna no es una variable, sino el nombre de los casos. Si repetimos ahora el `summary()`:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 summary (interestelar_100)
@@ -416,16 +418,16 @@ rm (variables_por_bloque)
 rm (df)
 ```
 
-Vemos que ya no aparece "NOMBRE" como variable, y en el *Global Environment* ya aparece el data frame "interestelar_100" con 100 observaciones (casos), pero con 28 variables (una menos).
+Comprobamos que "NOMBRE" ha dejado de figurar como variable: en el *Global Environment*, el *data frame* "interestelar_100" conserva sus 104 observaciones (casos), pero ahora cuenta con 28 variables, una menos que antes.
 
-Un modo visualmente más elegante de explorar el contenido del data frame es la utilización de la función `gt_plt_summary()` del paquete `{gtExtras}`:
+Una forma visualmente más elegante de explorar el contenido del *data frame* consiste en emplear la función `gt_plt_summary()` del paquete `{gtExtras}`:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 # visualizando el data frame de modo elegante con {gtExtras}
 datos_df_graph <- gt_plt_summary(interestelar_100)
 ```
 
-Este código asigna al nombre "datos_df_graph" (o al que queramos) un gráfico/tabla con las variables que contiene el data frame (en este caso, "datos", añadiendo características y medidas básicas de las diferentes variables (según sea su tipología). Podremos ver este gráfico/tabla evocando a su nombre:
+El código asigna al nombre "datos_df_graph" (o al que prefiramos) una tabla gráfica con las variables que contiene el *data frame* —en este caso, "interestelar_100"—, junto con sus características y algunas medidas básicas, que varían según la tipología de cada variable. Bastará con invocar ese nombre para visualizarla:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 datos_df_graph
@@ -439,23 +441,23 @@ datos_df_graph <- gt_plt_summary(interestelar_100)
 datos_df_graph
 ```
 
-Antes de seguir con la manipulación de nuestros datos, es preciso decir que existen otros muchos formatos de datos que pueden ser importados. Por ejemplo, con el paquete `{readr}` se pueden importar datos de archivos de texto de tipo tabular (por ejemplo, archivos \*.csv). Con el paquete `{haven}` se pueden capturar los datos almacenados en archivos de SPSS® (.sav), Stata® (.dta), SAS® (.sas7bdat), etc. Finamente, se pueden capturar datos almacenados en páginas web (archivos en formato JSON o XML, o en tablas HTML)) o en bases de datos gestionadas mediante diversos sistemas (SQLite, MySQL, MariaDB, PostgreSQL, Oracle®).
+Antes de seguir manipulando nuestros datos, conviene recordar que R admite muchos otros formatos de importación. El paquete `{readr}`, por ejemplo, lee archivos de texto de tipo tabular (como los \*.csv). El paquete `{haven}` recupera los datos almacenados en archivos de SPSS® (.sav), Stata® (.dta) o SAS® (.sas7bdat), entre otros. Y también es posible capturar información procedente de páginas web (archivos JSON o XML, o tablas HTML) o de bases de datos gestionadas con diversos sistemas (SQLite, MySQL, MariaDB, PostgreSQL, Oracle®).
 
-## ![](figuras/pie-chart.svg){.hicon} {dplyr}.
+## ![](figuras/pie-chart.svg){.hicon} El paquete `{dplyr}`.
 
-### ![](figuras/key.svg){.hicon} El Tidyverse. Cargando {dplyr}.
+### ![](figuras/key.svg){.hicon} El *Tidyverse*. Cargando `{dplyr}`.
 
-El ***Tidyverse*** es un conjunto de paquetes / librerías con una filosofía común, como es el uso de ciertas estructuras gramaticales, que facilitan muchas de las tareas y análisis que podrían hacerse con el lenguaje R estándar. Una buena obra para profundizar en el Tidyverse es @Wickham2017R.
+El ***Tidyverse*** es un conjunto de paquetes que comparten una misma filosofía —el uso de ciertas estructuras gramaticales comunes— y que simplifican buena parte de las tareas y análisis que podrían acometerse con el lenguaje R estándar. Una obra excelente para profundizar en el *Tidyverse* es @Wickham2017R.
 
-Uno de esos paquetes es `{dplyr}`, que proporciona una gramática más sencilla que la del lenguaje R convencional para **manipular** los objetos de estructuras de datos conocidos como ***data frames***.
+Uno de esos paquetes es `{dplyr}`, que ofrece una gramática más sencilla que la del lenguaje R convencional para **manipular** las estructuras de datos conocidas como ***data frames***.
 
-Los data frames, como ya sabemos, son estructuras en las que se almacenan datos de modo que, por columnas, se disponen las variables del análisis; y por filas los casos que conforman la muestra / población.
+Los *data frames*, como ya sabemos, son estructuras que almacenan los datos disponiendo las variables del análisis en columnas y los casos que conforman la muestra o población en filas.
 
-Vamos a suponer que trabajamos dentro del proyecto que hemos creado previamente, de nombre "explora" (ver capítulo 1), y que seguimos con el script "explora_rstars.R", con el que importamos los datos del archivo de Microsoft® Excel® "interestelar_100.xlsx", que contenía información sobre 104 empresas de transporte de mercancías a escala interestelar.
+Supongamos que seguimos trabajando dentro del proyecto "explora" que creamos anteriormente (véase el capítulo 1) y que continuamos con el script "explora_rstars.R", con el que importamos los datos del archivo de Microsoft® Excel® "interestelar_100.xlsx", que reunía información sobre 104 empresas de transporte interestelar de mercancías.
 
-Suponemos que hemos ejecutado la primera parte del script (importación de datos con corrección de la columna de nombres de las filas), al *data frame* interestelar_100, que está almacenado en el *Global Environment.*
+Damos por hecho, por tanto, que ya hemos ejecutado la primera parte del script —la importación de los datos y la corrección de la columna con los nombres de las filas— y que el *data frame* "interestelar_100" se encuentra almacenado en el *Global Environment*.
 
-Vamos a continuar desde este punto. A continuación, cargaremos el paquete `{dplyr}` (si no está instalado, instálalo como se indicó en la sección 1.7):
+Retomemos el trabajo desde ese punto cargando el paquete `{dplyr}` (si aún no está instalado, procedamos como se indicó en la sección 1.7):
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ## dplyr
@@ -464,7 +466,7 @@ library (dplyr)
 
 ```
 
-Para entender mejor la **sintaxis** que siguen las funciones o instrucciones a las que da acceso `{dplyr}`, hay que tener en cuenta lo siguiente:
+Para comprender mejor la **sintaxis** de las funciones a las que da acceso `{dplyr}`, conviene retener tres ideas:
 
 -   El primer argumento que tiene una función de `{dplyr}` es el *data frame* con el que se va a trabajar.
 
@@ -472,13 +474,13 @@ Para entender mejor la **sintaxis** que siguen las funciones o instrucciones a l
 
 -   El valor de retorno es un **nuevo** *data frame*.
 
-En los siguientes subapartados practicaremos con algunas de las principales funciones que aporta `{dplyr}`.
+En los siguientes subapartados practicaremos con algunas de sus funciones principales.
 
-### ![](figuras/key.svg){.hicon} Seleccionando columnas de un data frame.
+### ![](figuras/key.svg){.hicon} Seleccionando columnas de un *data frame*.
 
 La función clave de `{dplyr}` para seleccionar una o varias columnas (variables) de un *data frame* es la función `select()`.
 
-Así, vamos a imaginar por ejemplo que queremos eliminar de nuestro *data frame* la variable (de tipo "carácter") FJUR (forma jurídica de la empresa). Podremos ejecutar la asignación:
+Imaginemos, por ejemplo, que queremos eliminar de nuestro *data frame* la variable FJUR (forma jurídica de la empresa), de tipo carácter. Bastará con ejecutar la siguiente asignación:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 
@@ -508,9 +510,9 @@ rm (variables_por_bloque)
 rm (df)
 ```
 
-Podemos verificar que, en el *Global Environment,* el *data frame* ha pasado a tener una variable menos (27), ya que hemos eliminado la variable FJUR. Es decir, con el guión "-" se pueden eliminar directamente variables de un *data frame*.
+En el *Global Environment* podemos verificar que el *data frame* ha pasado a tener una variable menos (27), pues hemos prescindido de FJUR. Como vemos, basta anteponer el guion "-" al nombre de una variable para eliminarla.
 
-Ahora, suponemos que queremos visualizar las variables del *data frame* "interestelar_100": ACTIVO, FPIOS, LIQUIDEZ. Para ello, ejecutaremos el código:
+Supongamos ahora que solo deseamos visualizar tres variables del *data frame* "interestelar_100": ACTIVO, FPIOS y LIQUIDEZ. Para ello ejecutaremos:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 select(interestelar_100, ACTIVO, FPIOS, LIQUIDEZ)
@@ -535,7 +537,7 @@ rm(columnas_por_bloque)
 
 (**Nota:** solo mostramos aquí los 10 primeros casos del *data frame*).
 
-Como no hemos asignado el resultado de la función a ningún "nombre", R simplemente muestra el resultado en pantalla; pero no guarda ningún objeto en el *Global Environment*. Si asignamos un `select()` a un "nombre", se creará un *data frame* con ese nombre, y las variables seleccionadas:
+Como no hemos asignado el resultado de la función a ningún nombre, R se limita a mostrarlo en pantalla, sin guardar objeto alguno en el *Global Environment*. Si, por el contrario, asignamos el `select()` a un nombre, se creará un *data frame* que lo llevará y que contendrá las variables seleccionadas:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 
@@ -563,11 +565,11 @@ rm (variables_por_bloque)
 rm (df)
 ```
 
-Podemos comprobar cómo en el *Global Environment* hay otro objeto *data frame* llamado "interestelar_100A", con 4 variables (y los mismos 104 casos).
+Podemos comprobar que en el *Global Environment* figura otro *data frame*, llamado "interestelar_100A", con 3 variables y los mismos 104 casos.
 
 ### ![](figuras/key.svg){.hicon} Ordenando casos de un *data frame*.
 
-Además de seleccionar determinados casos u observaciones (filas) de un *data frame*, con las funciones de `{dplyr}` también se pueden ordenar estos casos a partir de los valores de ciertas variables (columnas). La función a utilizar es `arrange()`. Esta función, por defecto, ordena los casos de modo **ascendente**. Por ejemplo, crearemos el data frame "interestelar_100C" con variables RENECO, EFLO y ACTIVO, con los casos ordenados de modo ascendente según el valor de RENECO:
+Además de seleccionar columnas, las funciones de `{dplyr}` permiten ordenar los casos (filas) de un *data frame* según los valores de ciertas variables. La encargada de ello es `arrange()`, que ordena de modo **ascendente** salvo que se le indique lo contrario. Creemos, por ejemplo, el *data frame* "interestelar_100C" con las variables RENECO, EFLO y ACTIVO, y con los casos ordenados de menor a mayor valor de RENECO:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 # Ordenando casos
@@ -595,7 +597,7 @@ rm(columnas_por_bloque)
 
 (**Nota:** solo mostramos aquí los 10 primeros casos del *data frame*).
 
-En cambio, para ordenar de modo descendente, hay que utilizar el argumento `desc()`:
+Para ordenar de modo descendente, en cambio, envolveremos el nombre de la variable en la función `desc()`:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 interestelar_100D <- arrange(interestelar_100C, desc(RENECO))
@@ -620,7 +622,7 @@ rm(columnas_por_bloque)
 
 (**Nota:** solo mostramos aquí los 10 primeros casos del *data frame*).
 
-En el supuesto de que, en relación con una variable, hubiera varios casos con el mismo valor, podría añadirse otro criterio de ordenación con otra variable, que afectaría a tales casos para deshacer el "empate". Por ejemplo, vamos a ordenar las empresas según la variable EFLO (categorización de la antigüedad promedio de la flota, con categorías: ANTIGUA, MADURA, RENOVADA). Al ser una variable categórica, los casos se ordenarán por orden alfabético según la categoría a la que pertenecen. Para ordenar los casos pertenecientes a una misma categoría de EFLO, utilizaremos, de nuevo RENECO (en orden de valor descendente):
+Cuando varios casos comparten el mismo valor en una variable, podemos añadir una segunda variable como criterio de desempate. Ordenemos, por ejemplo, las empresas según EFLO (categorización de la antigüedad promedio de la flota, con las categorías ANTIGUA, MADURA y RENOVADA). Al tratarse de una variable categórica, los casos se dispondrán por orden alfabético de la categoría a la que pertenecen; y, dentro de cada una de ellas, los ordenaremos de nuevo por RENECO, esta vez de mayor a menor:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 interestelar_100E <- arrange(interestelar_100C, EFLO, desc(RENECO))
@@ -644,7 +646,7 @@ rm(columnas_por_bloque)
 rm(i)
 ```
 
-(**Nota:** solo mostramos aquí los 10 primeros casos del *data frame.* Una vez concluidos los casos con categoría de EFLO "ANTIGUA", comenzarían a aparecer los de categoría "MADURA", desde el caso con posición 52, exactamente).
+(**Nota:** solo mostramos aquí los 10 primeros casos del *data frame*. Una vez agotados los casos con categoría "ANTIGUA" en EFLO, comenzarían a aparecer los de categoría "MADURA", concretamente a partir de la posición 52).
 
 ### ![](figuras/key.svg){.hicon} El operador *pipe*.
 
@@ -672,7 +674,7 @@ La segunda versión se lee de un modo mucho más natural: "toma `interestelar_10
 
 ### ![](figuras/key.svg){.hicon} Seleccionando casos de un *data frame*.
 
-Además de seleccionar variables, con `{dplyr}` también se pueden seleccionar casos que cumplan ciertas condiciones. La función para realizar este cometido es `filter()`. Por ejemplo, si queremos seleccionar las empresas con un resultado (variable RES) mayor o igual a 500 miles de PAVOs y presentar en pantalla el valor de RES y RENECO, la instrucción será:
+Además de seleccionar variables, `{dplyr}` permite quedarse con los casos que cumplen ciertas condiciones. De este cometido se encarga la función `filter()`. Si, por ejemplo, queremos retener las empresas con un resultado (variable RES) mayor o igual a 500 miles de PAVOs y mostrar en pantalla los valores de RES y RENECO, la instrucción será:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 # Seleccionando casos
@@ -696,7 +698,7 @@ rm(df)
 rm(columnas_por_bloque)
 ```
 
-Se pueden incluir varias condiciones en un mismo filtro. Por ejemplo, vamos a construir un nuevo *data frame* llamado "interestelar_100B" con las empresas que posean un resultado mayor o igual a 500 miles de PAVOs y una rentabilidad económica (variable RENECO) inferior al 40%, y que contenga las variables RES, RENECO y ACTIVO:
+Un mismo filtro admite varias condiciones. Construyamos un nuevo *data frame*, "interestelar_100B", que recoja las variables RES, RENECO y ACTIVO de aquellas empresas con un resultado mayor o igual a 500 miles de PAVOs y una rentabilidad económica (variable RENECO) inferior al 40%:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 interestelar_100B <-select(filter(interestelar_100,
@@ -723,9 +725,9 @@ rm(df)
 rm(columnas_por_bloque)
 ```
 
-En el *Global Environment* aparecerá el *data frame* "interestelar_100B" con solo un caso: la empresa que cumple con ambas condiciones, introducidas mediante el operador lógico relacional "**&**", que es el equivalente a la conjunción "y" o, dicho de otro modo, la intersección. Otro operador lógico relacional muy utilizado es la barra vertical "**\|**", que es el equivalente a la conjunción "o", es decir, la unión.
+En el *Global Environment* aparecerá el *data frame* "interestelar_100B" con un único caso: la empresa que satisface ambas condiciones, enlazadas mediante el operador lógico "**&**", equivalente a la conjunción "y" o, dicho de otro modo, a la intersección. El otro operador lógico de uso frecuente es la barra vertical "**\|**", que equivale a la conjunción "o", esto es, a la unión.
 
-Los filtros más usuales son \>, \<, \>=, \<=, == (igual, ojo, con dos símbolos de igualdad seguidos) y != (no igual).
+Por su parte, los operadores de comparación más habituales al construir las condiciones son \>, \<, \>=, \<=, == (igual: atención, con dos símbolos de igualdad seguidos) y != (distinto).
 
 ### ![](figuras/key.svg){.hicon} Seleccionando casos por posición: `slice()`.
 
@@ -752,22 +754,24 @@ interestelar_100 %>%
   select(RENECO, RES, ACTIVO)
 ```
 
+(**Nota:** mostramos aquí únicamente el resultado de la primera instrucción y, para facilitar la lectura, solo tres de sus variables).
+
 ### ![](figuras/key.svg){.hicon} Cambiando el nombre de las variables de un *data frame*.
 
-`{dplyr}` cuenta con una función que cambia fácilmente el nombre de una variable o columna de un *data frame*: la función `rename()`. Por ejemplo, si queremos cambiar el nombre de la variable SOLVENCIA por SOLVE, simplemente ejecutaremos:
+`{dplyr}` dispone de una función que permite cambiar con comodidad el nombre de una variable o columna de un *data frame*: `rename()`. Si queremos sustituir el nombre SOLVENCIA por SOLVE, bastará con ejecutar:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 # Renombrando variables
 interestelar_100 <- rename(interestelar_100, SOLVE = SOLVENCIA)
 ```
 
-Podemos comprobar en el *Global* *Environment*, despegando el *data frame* "interestelar_100", cómo ya no aparece la variable SOLVENCIA; pero sí SOLVE en su lugar (obviamente, con los mismos datos). Es necesario tener en cuenta que en el **lado izquierdo** de la igualdad hay que poner el **nuevo nombre**, y en la derecha el antiguo. Además, en el mismo `rename()` se pueden cambiar los nombres de **varias variables**, separando las igualdades correspondientes con comas.
+Si desplegamos el *data frame* "interestelar_100" en el *Global Environment*, comprobaremos que la variable SOLVENCIA ha desaparecido y que en su lugar figura SOLVE, naturalmente con los mismos datos. Conviene retener el orden: a la **izquierda** de la igualdad se escribe el **nombre nuevo** y, a la derecha, el antiguo. Un mismo `rename()` puede cambiar el nombre de **varias variables**, separando con comas las igualdades correspondientes.
 
 ### ![](figuras/key.svg){.hicon} Añadiendo variables como transformación de otras variables en un *data frame*.
 
-El paquete `{dplyr}` también permite añadir a un *data frame* variables que son el resultado de **someter a otras variables a diversas transformaciones**. La función para realizar este cometido es `mutate()`.
+El paquete `{dplyr}` permite además incorporar al *data frame* variables nuevas, obtenidas al **transformar las variables ya existentes**. De ello se ocupa la función `mutate()`.
 
-Así, por ejemplo, imaginemos que necesitamos calcular una variable como el cociente entre los resultados obtenidos y el activo. A esta nueva variable la denominaremos RATIO. El código será:
+Imaginemos que necesitamos calcular el cociente entre el resultado obtenido y el activo. Llamaremos RATIO a esta nueva variable, y el código será:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 # Añadiendo variables como transformacion de otras variables
@@ -795,7 +799,7 @@ rm (variables_por_bloque)
 rm (df)
 ```
 
-En la transformación de variables mediante la función `mutate()`, se pueden utilizar **funciones integradas en otros paquetes** de R. Por ejemplo, si queremos calcular la variable ACTIVOS_ACUM como la variable que recoge los activos acumulados de las empresas, comenzando por la empresa con menor activo, podríamos utilizar la función `cumsum()` del paquete `{base}`, y hacer:
+Dentro de `mutate()` podemos apoyarnos en **funciones procedentes de otros paquetes** de R. Si, por ejemplo, queremos construir la variable ACTIVOS_ACUM, que recoge el activo acumulado de las empresas empezando por la de menor tamaño, recurriremos a la función `cumsum()` del paquete `{base}`:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 interestelar_100 <- arrange(interestelar_100, ACTIVO)
@@ -803,7 +807,7 @@ interestelar_100 <- mutate (interestelar_100, ACTIVOS_ACUM = cumsum(ACTIVO))
 select(interestelar_100, ACTIVO, ACTIVOS_ACUM)
 ```
 
-Podemos verificar cómo se ha integrado en el *data frame* la variable ACTIVOS_ACUM:
+Podemos verificar que la variable ACTIVOS_ACUM se ha integrado ya en el *data frame*:
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
 interestelar_100 <- arrange(interestelar_100, ACTIVO)
@@ -823,9 +827,9 @@ rm(columnas_por_bloque)
 rm(i)
 ```
 
-(**Nota:** solo mostramos aquí los 10 primeros casos del *data frame)*
+(**Nota:** solo mostramos aquí los 10 primeros casos del *data frame*).
 
-Un último ejemplo de adición de una variable que es transformación de otras. En este caso, crearemos la variable DIM (dimensión), que es **categórica** (los datos son conjuntos de caracteres). Esta variable tomará valor "ALTA" para las empresas con un valor de la variable ACTIVO mayor o igual que 216 miles de PAVOs, "MEDIA" para las empresas con un ACTIVO menor que 216 miles de PAVOs y mayor o igual que 54 miles de PAVOs, y "REDUCIDA" para las que tengan un valor en la variable ACTIVO menor que 54 miles de PAVOs. Para calcular automáticamente esta nueva variable categórica, utilizaremos la función de `{base}` llamada `cut()`. De este modo, haremos:
+Veamos un último ejemplo de variable creada a partir de otras. Construiremos ahora DIM (dimensión), una variable **categórica**, cuyos valores son cadenas de caracteres. DIM tomará el valor "ALTA" en las empresas con un ACTIVO mayor o igual que 216 miles de PAVOs; "MEDIA" en aquellas cuyo ACTIVO sea menor que 216 miles de PAVOs y mayor o igual que 54 miles de PAVOs; y "REDUCIDA" en las que no alcancen los 54 miles de PAVOs. Para obtener esta clasificación de forma automática emplearemos la función `cut()`, del paquete `{base}`:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 interestelar_100 <- mutate(interestelar_100,
@@ -835,7 +839,7 @@ interestelar_100 <- mutate(interestelar_100,
 select(interestelar_100, ACTIVO, DIM)
 ```
 
-Podemos advertir cómo la función `cut()`, que incluimos dentro de nuestra función de `{dplyr}` `mutate()`, tiene, a su vez, varios argumentos: la variable numérica de referencia (ACTIVO); el argumento `breaks =`, en el que decimos los intervalos en que quedarán divididos los casos (uno, de menos infinito a 54, otro de 54 a 216, y otro de 216 a más infinito), y `labels =`, que es el valor que tomará la variable creada (DIM) según el intervalo en el que se sitúe cada caso de la muestra:
+Reparemos en que `cut()`, anidada dentro del `mutate()` de `{dplyr}`, recibe a su vez varios argumentos: la variable numérica de referencia (ACTIVO); `breaks =`, donde fijamos los cortes que delimitan los intervalos en que se repartirán los casos (de menos infinito a 54, de 54 a 216 y de 216 a más infinito); y `labels =`, que recoge la etiqueta que adoptará la nueva variable DIM según el intervalo en el que caiga cada caso de la muestra:
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
 interestelar_100 <- mutate(interestelar_100,
@@ -858,9 +862,9 @@ rm(i)
 
 ```
 
-(**Nota:** solo mostramos aquí los 10 primeros casos del *data frame)*
+(**Nota:** solo mostramos aquí los 10 primeros casos del *data frame*).
 
-Este mismo código puede escribirse de un modo más legible utilizando el operador *pipe* `%>%` que ya presentamos al comienzo de la sección:
+Este mismo código gana legibilidad si recurrimos al operador *pipe* `%>%` que presentamos unas páginas atrás:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 interestelar_100 <- interestelar_100 %>%
@@ -875,14 +879,14 @@ La lectura es ahora secuencial: "toma `interestelar_100`, crea la variable DIM c
 
 ### ![](figuras/key.svg){.hicon} Extrayendo y sintetizando información de las variables de un *data frame*.
 
-Otra posibilidad que permite `{dplyr}` es extraer y sintetizar mediante *medidas* la información de las variables contenidas en un *data frame*. Para ello, nos ayudaremos de la función `summarise()`. Como ejemplo, calculemos la *rentabilidad financiera* media de las 20 empresas:
+`{dplyr}` ofrece también la posibilidad de extraer y sintetizar, mediante *medidas*, la información de las variables que alberga un *data frame*. De ello se encarga la función `summarise()`. A modo de ejemplo, calculemos la *rentabilidad financiera* media de las 104 empresas:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 #Extrayendo información de las variables de un data frame
 summarise(interestelar_100, RENFIN_media = mean(RENFIN)) 
 ```
 
-A veces, es de gran utilidad combinar `summarise()` con `group_by()`, que extrae la información dividiendo el conjunto de casos por grupos definidos por una de las variables. Para ilustrarlo, vamos a utilizar la variable recién creada DIM para hacer tres grupos de empresas, tras lo cual calcularemos la media de las rentabilidades para cada grupo:
+En muchas ocasiones resulta muy útil combinar `summarise()` con `group_by()`, que divide previamente el conjunto de casos en grupos definidos por una de las variables. Para ilustrarlo aprovecharemos la recién creada DIM: formaremos tres grupos de empresas y calcularemos después la rentabilidad media de cada uno:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 interestelar_100 %>%
@@ -890,15 +894,15 @@ interestelar_100 %>%
   summarise(RENFIN_media = mean(RENFIN))
 ```
 
-Hemos utilizado el operador *pipe* `%>%` para concatenar diferentes instrucciones de `{dplyr}`: primero agrupar casos, y luego calcular las medias de cada grupo. Es decir, en este caso se podría "traducir" la línea de código como: "Toma el *data frame*"interestelar_100", divide sus casos en grupos según el valor de la variable DIM, y para cada grupo calcula la media de la variable RENFIN". Es de destacar que hay elementos que tienen como valor categórico en DIM "NA" (es decir, no hay dato). Esto se debe a que, cuando se creo DIM, había una empresa sin valor de ACTIVO (exactamente, "Vega Transport").
+Hemos empleado el operador *pipe* `%>%` para encadenar dos instrucciones de `{dplyr}`: primero agrupar los casos y después calcular la media de cada grupo. El código podría "traducirse" así: "toma el *data frame* "interestelar_100", reparte sus casos en grupos según el valor de la variable DIM y, para cada grupo, calcula la media de RENFIN". Merece la pena reparar en que aparece un grupo cuyo valor de DIM es "NA", esto es, sin dato: se debe a que, al crear DIM, una empresa —en concreto, "Vega Transport"— carecía de valor en ACTIVO.
 
 ## ![](figuras/pie-chart.svg){.hicon}![](figuras/key.svg){.hicon} Exportando datos.
 
-Antes de concluir el capítulo, vamos a tratar brevemente el aspecto de la exportación de datos.
+Antes de concluir el capítulo, dediquemos unas líneas a la exportación de datos.
 
-R cuenta con un **formato propio de datos**, que se traduce en archivos de extensión "RData", y que puede incluir cualquier objeto de R. Vamos a exportar el *data frame* "interestelar_100" como el archivo de datos de R "interestelar_100.RData". Posteriormente, borraremos el *data frame* del *Global Environment* y recuperaremos los datos cargando ese archivo "interestelar_100.RData".
+R dispone de un **formato propio de datos**, con extensión ".RData", capaz de albergar cualquier objeto del programa. Exportaremos el *data frame* "interestelar_100" a un archivo de este tipo, "interestelar_100.RData"; después lo borraremos del *Global Environment* y recuperaremos la información volviendo a cargar ese mismo archivo.
 
-Para exportar el *data frame* "interestelar_100" al archivo de formato R, "interestelar_100.RData", utilizaremos la función `save()`:
+Para la exportación utilizaremos la función `save()`:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ## Exportación de datos
@@ -907,7 +911,7 @@ Para exportar el *data frame* "interestelar_100" al archivo de formato R, "inter
 save(interestelar_100, file = "interestelar_100.RData")
 ```
 
-Puede comprobarse cómo se ha generado el archivo correspondiente en la carpeta de proyecto. Para comprobar que la exportación es correcta, vamos a borrar del *Global* *Environment* el *data frame* "interestelar_100" con la función `rm()` (remove). Después, cargaremos el archivo "interestelar_100.RData" con la función `load()`. Como resultado, podremos comprobar que tenemos un nuevo *data frame* "interestelar_100" que es exactamente igual al que teníamos al principio:
+En la carpeta del proyecto puede verse ya el archivo generado. Para asegurarnos de que la exportación ha sido correcta, borraremos del *Global Environment* el *data frame* "interestelar_100" con la función `rm()` (de *remove*) y volveremos a cargarlo desde el archivo "interestelar_100.RData" mediante la función `load()`. El resultado será un *data frame* "interestelar_100" idéntico al de partida:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 # Borrando el data frame interestelar_100
@@ -941,9 +945,9 @@ rm (variables_por_bloque)
 rm (df)
 ```
 
-Por supuesto, hay más formatos en los que se pueden exportar datos desde R. Por ejemplo, **a un archivo de Microsoft® Excel®**. Un modo de hacerlo es haciendo uso de la función `write_xlsx()` del paquete {writexl}. Para que en la hoja de cálculo resultante se incluyan los nombres de las filas (empresas), hemos tenido previamente que crear un vector con el nombre de estas (vector "NOMBRE"), mediante la función `row.names()`, y unir ese vector al *data frame* "interestelar_100", a modo de primera columna, creando un nuevo finalmente un *data frame* llamado "interestelar_100n", para lo que se ha utilizado la función `cbind()`, que permite **pegar columnas de datos** que tengan un mismo número de filas.
+R admite, por supuesto, otros formatos de exportación. Podemos guardar los datos, por ejemplo, **en un archivo de Microsoft® Excel®**, para lo que utilizaremos la función `write_xlsx()` del paquete `{writexl}`. Ahora bien, para que la hoja de cálculo resultante incluya los nombres de las filas (las empresas), antes hay que dar dos pasos: crear con `row.names()` un vector que los recoja (vector "NOMBRE") y añadir ese vector al *data frame* "interestelar_100" como primera columna, lo que da lugar a un nuevo *data frame*, "interestelar_100n". De esta última operación se ocupa la función `cbind()`, que **pega columnas de datos** siempre que compartan el mismo número de filas.
 
-Como resultado de todo el código, se ha obtenido el archivo de Microsoft® Excel® "interestelar_100_new.xlsx":
+El resultado de todo el código es el archivo de Microsoft® Excel® "interestelar_100_new.xlsx":
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 # Exportando el data frame interestelar_100 a Microsoft (R) Excel (R)
@@ -961,9 +965,9 @@ La base de datos completa del proyecto R-Stars contiene datos económicos, finan
 
 ## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo.
 
-En esta sección se muestran los links de acceso a los diferentes materiales (*scripts*, datos...) necesarios para llevar a cabo los contenidos prácticos del capítulo.
+En esta sección se recogen los enlaces de acceso a los distintos materiales (*scripts*, datos...) necesarios para desarrollar los contenidos prácticos del capítulo.
 
-**Datos (en formato Microsoft® Excel®:**
+**Datos (en formato Microsoft® Excel®):**
 
 -   interestelar_100.xlsx ([obtener aquí](https://raw.githubusercontent.com/teckel71/RStars-book/main/download/interestelar_100.xlsx))
 

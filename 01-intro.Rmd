@@ -6,7 +6,7 @@
 
 Vivimos rodeados de datos. Las administraciones públicas los recopilan para diseñar políticas; las empresas los generan en cada transacción; los mercados financieros los emiten segundo a segundo. Pero los datos, por sí solos, no son más que registros en bruto: cifras de ventas, cotizaciones, respuestas a una encuesta, indicadores macroeconómicos. Su verdadero valor aparece cuando somos capaces de transformarlos en **información** que sirva de base para la **toma de decisiones**.
 
-Esta necesidad de convertir datos en conocimiento útil está presente en prácticamente todas las facetas de la actividad humana. Y de manera muy especial en la **Economía**, entendida como la ciencia que se ocupa de la asignación y administración de recursos limitados. Un gestor público necesita saber si una política de empleo está funcionando; una empresa necesita anticipar la demanda; un investigador necesita contrastar si una teoría sobre el comportamiento de los mercados se sostiene frente a la evidencia empírica. En todos estos casos, el punto de partida son datos, y el objetivo es extraer de ellos información fiable.
+Esta necesidad de convertir datos en conocimiento útil recorre prácticamente todas las facetas de la actividad humana, y de manera muy especial la **Economía**, entendida como la ciencia que se ocupa de la asignación y administración de recursos limitados. Un gestor público quiere saber si una política de empleo está funcionando; una empresa aspira a anticipar la demanda; un investigador busca contrastar si una teoría sobre el comportamiento de los mercados se sostiene frente a la evidencia empírica. En todos estos casos el punto de partida son datos, y el objetivo, extraer de ellos información fiable.
 
 ### ![](figuras/key.svg){.hicon} La Estadística como ciencia instrumental.
 
@@ -30,87 +30,89 @@ Este libro se sitúa precisamente en ese terreno: la **analítica de datos econ�
 
 Para llevar a cabo esta analítica se necesita una infraestructura básica. Además de los propios datos y de los conocimientos metodológicos, resulta imprescindible contar con un **software** adecuado que permita procesar el flujo de datos, aplicar las técnicas de análisis pertinentes y presentar los resultados de forma clara.
 
-En los últimos tiempos se ha producido una evolución del hardware sin precedentes, lo que ha dado soporte al desarrollo de un potente software dedicado al análisis de datos. Este software se concreta en aplicaciones y plataformas diversas: SPSS®, Stata, SAS®... Y también en lenguajes de programación orientados al análisis estadístico y matemático, como pueden ser Python, Matlab, Julia o... R.
+En los últimos tiempos, la evolución del hardware no ha tenido precedentes, y ello ha dado soporte al desarrollo de un software potente dedicado al análisis de datos. Ese software se concreta en aplicaciones y plataformas diversas —SPSS®, Stata®, SAS®...— y también en lenguajes de programación orientados al análisis estadístico y matemático, como Python, Matlab®, Julia o... R.
 
 En nuestro caso, la herramienta elegida es **R**.
 
 ## ![](figuras/key.svg){.hicon}![](images/clipboard-2401404524.png) ¿Qué es R y cómo nos ayuda a analizar datos?
 
-R no es solo una aplicación al uso. Es todo un **lenguaje de programación**, orientado principalmente a la analítica de datos, sobre todo desde una perspectiva estadística. R es un proyecto de GNU, por lo que los usuarios son libres de modificarlo y extenderlo. Se distribuye como software libre bajo la licencia GNU y es multiplataforma, lo que ha facilitado su difusión y la existencia de una comunidad muy activa de usuarios y desarrolladores.
+R no es una aplicación al uso, sino todo un **lenguaje de programación** orientado principalmente a la analítica de datos, sobre todo desde una perspectiva estadística. Se trata de un proyecto de GNU, de modo que los usuarios son libres de modificarlo y extenderlo. Se distribuye como software libre bajo licencia GNU y es multiplataforma, rasgos que han facilitado su difusión y el surgimiento de una comunidad muy activa de usuarios y desarrolladores.
 
 R nos ofrece un ecosistema idóneo para cubrir todas las etapas de un proyecto de analítica de datos: desde la importación y depuración de los datos, pasando por su exploración gráfica y descriptiva, hasta la estimación de modelos y la presentación de resultados. A lo largo de este libro, R será nuestra herramienta de trabajo en cada una de estas etapas.
 
-## ![](images/clipboard-1383707725.png)![](figuras/pie-chart.svg){.hicon} Instalación de R y R-Studio.
+## ![](images/clipboard-1383707725.png)![](figuras/pie-chart.svg){.hicon} Instalación de R y RStudio.
 
-Como ya se ha mencionado, R es un software o lenguaje de uso y difusión gratuitos, bajo licencia GNU. El modo de instalar R es sencillo: basta con ir a la web [*CRAN*](https://cran.r-project.org/) (*Comprehensive R Archive Network*) y descargar la última versión disponible en el sistema operativo del que se sea usuario (en este manual, Microsoft® Windows®). Se ejecutará el archivo descargado, y se completará la instalación.
+Como ya se ha mencionado, R es un lenguaje de uso y difusión gratuitos, amparado por la licencia GNU. Instalarlo resulta sencillo: basta con acudir a la web de [CRAN](https://cran.r-project.org/) (*Comprehensive R Archive Network*), descargar la última versión disponible para nuestro sistema operativo (en este manual, Microsoft® Windows®) y ejecutar el archivo descargado, que completará la instalación.
 
-Una limitación de R es la interfaz o IDE (entorno de desarrollo integrado) que incorpora. Es decir, el "software" con el que se interactúa con el lenguaje R. Esta IDE es muy poco amigable. Para superar esta limitación, existen IDEs alternativas, entre las que destaca RStudio, desarrollada por Posit® Software. Esta IDE es gratuita. De nuevo, simplemente tendremos que ir a la web de[RStudio](https://posit.co/download/rstudio-desktop/) y descargar e instalar la versión gratuita.
+R arrastra, eso sí, una limitación: el IDE (entorno de desarrollo integrado) que incorpora, es decir, el programa a través del cual interactuamos con el lenguaje, resulta muy poco amigable. Para salvar este inconveniente existen IDE alternativos, entre los que destaca RStudio, desarrollado por Posit® Software. También es gratuito, así que de nuevo bastará con visitar la web de [RStudio](https://posit.co/download/rstudio-desktop/) y descargar e instalar la versión libre de coste.
 
 ## ![](images/clipboard-1383707725.png)![](figuras/pie-chart.svg){.hicon} R y RStudio. Comienzo: Proyectos.
 
-Tras instalar R y su IDE RStudio, podremos comenzar a trabajar. Para ello, abriremos RStudio pulsando en el icono correspondiente. Aparecerá la siguiente ventana:
+Con R y su IDE RStudio ya instalados, podemos ponernos manos a la obra. Abriremos RStudio pulsando en el icono correspondiente y aparecerá la siguiente ventana:
 
 ![[IDE de RStudio.]{.smallcaps}](figuras/Imagen1_01.png){.d-block .mx-auto width="100%"}
 
-La parte izquierda de la ventana es la **consola**. La consola es la sección de RStudio donde podemos manejar R mediante la introducción de código. Por ejemplo, podemos escribir `2+2` después del cursor (signo "\>"), y pulsar Enter. La propia consola nos devolverá el valor 4:
+La parte izquierda de la ventana es la **consola**: la sección de RStudio desde la que manejamos R introduciendo código directamente. Escribamos, por ejemplo, `2+2` después del cursor (signo "\>") y pulsemos `Enter`. La propia consola nos devolverá el valor 4:
 
 ```{r,eval=TRUE, echo=TRUE}
 2+2
 ```
 
-De todos modos, la forma más eficiente de trabajar es mediante "proyectos" y "scripts".
+Con todo, la forma más eficiente de trabajar es mediante **proyectos** y **scripts**.
 
-Un **proyecto** básicamente viene asociado a la carpeta donde R trabajará, buscando los datos que sean sus "inputs", y, en su caso, enviando sus resultados u "outputs". Dicho de otro modo, es una carpeta más de nuestro sistema de carpetas o directorios; pero a la que dotamos de una característica especial: ser un proyecto de R. Si abrimos desde RStudio el proyecto, estaremos diciendo a R que, por defecto, preferentemente busque todos los archivos e inputs (datos, etc.) que necesite en esa carpeta de proyecto; y que, en su caso, guarde en tal carpeta los outputs que genere.
+Un **proyecto** se asocia, en esencia, a la carpeta en la que R trabajará: allí buscará los datos que le sirven de *input* y allí depositará, llegado el caso, los resultados u *output*. Dicho de otro modo, es una carpeta más de nuestro sistema de directorios, pero dotada de una característica especial: la de ser un proyecto de R. Al abrirlo desde RStudio le estamos indicando al programa que busque de forma preferente en esa carpeta todos los archivos que necesite y que guarde en ella lo que vaya generando.
 
-Para crear un nuevo proyecto, seguiremos la instrucción `File → New Project`, luego se nos preguntará si se crea el proyecto en una nueva carpeta o en una ya existente. Vamos a crearlo, por ejemplo, en el disco extraíble D, carpeta R, subcarpeta "explora", que ya está creada. Nos saldrá una ventana para buscar la carpeta y, cuando la encontremos, pulsaremos `Open` y `Create Project`. Ya tendremos creado nuestro proyecto. Si nos vamos al explorador de Windows®, y buscamos la carpeta "explora", encontraremos que en tal carpeta aparece un archivo de nombre "explora", con un icono de un cubo con una "R". Ese archivo lo que está haciendo es actuar como un "faro" que le dice a R que, cuando trabajemos en el proyecto "explora", todos los archivos de datos necesarios estarán en esa carpeta (también llamada "explora", porque el proyecto adopta el nombre de la carpeta donde lo localizamos). Y que, si nuestro trabajo aporta algún fichero de "output", también se depositará en esa carpeta del proyecto.
+Para crear un proyecto nuevo seguiremos la ruta `File → New Project`. El programa nos preguntará entonces si deseamos crearlo en una carpeta nueva o en una ya existente. Situémoslo, por ejemplo, en el disco extraíble D, carpeta R, subcarpeta "explora", que ya tenemos preparada. Aparecerá una ventana para localizar la carpeta y, una vez encontrada, pulsaremos `Open` y `Create Project`. El proyecto ya está creado.
 
-En futuras sesiones, si queremos trabajar en el mismo proyecto, en lugar de seguir la ruta `File → New Project`, tendremos que hacer `File → Open Project`.
+Si ahora abrimos el explorador de Windows® y buscamos la carpeta "explora", veremos en ella un archivo del mismo nombre, identificado con el icono de un cubo con una "R". Ese archivo actúa como un faro: le indica a R que, mientras trabajemos en el proyecto "explora", encontrará en esa carpeta todos los datos que necesite y que en ella deberá depositar los ficheros de salida que produzca. Y sí, el proyecto se llama igual que la carpeta, porque adopta su nombre.
+
+En sesiones posteriores, para retomar el mismo proyecto ya no recurriremos a `File → New Project`, sino a `File → Open Project`.
 
 ## ![](images/clipboard-1383707725.png)![](figuras/pie-chart.svg){.hicon} Scripts.
 
-En cuanto a los **scripts**, son programas o rutinas donde varias instrucciones se ejecutan secuencialmente. Para crear un script, se seguirá la ruta Fi`le → New File → R Script`. Y si el script lo guardamos, ¿dónde lo hará? Pues en la carpeta "explora", que es la del proyecto en el que estamos trabajando.
+Los **scripts**, por su parte, son programas o rutinas en los que varias instrucciones se ejecutan de forma secuencial. Para crear uno seguiremos la ruta `File → New File → R Script`. ¿Y dónde se guardará? En la carpeta "explora", la del proyecto en el que estamos trabajando.
 
-Informáticamente, un script es simplemente un archivo de texto plano. Se puede modificar con cualquier editor de texto. Afortunadamente, para no estar entrando y saliendo de R-Studio, esta interfaz incorpora un **editor** de scripts, lo cual es muy cómodo.
+Desde el punto de vista informático, un script no es más que un archivo de texto plano, modificable con cualquier editor. Afortunadamente, para no tener que entrar y salir de RStudio continuamente, el propio IDE incorpora un **editor** de scripts, lo que resulta muy cómodo.
 
-Vemos cómo ahora, a la izquierda de RStudio, ha aparecido, en la parte superior, una nueva ventana, pasando la consola a ocupar la parte inferior. Es la ventana del "editor":
+Observaremos que en la parte izquierda de RStudio ha surgido una ventana nueva, situada arriba, que desplaza la consola hacia abajo. Es la ventana del **editor**:
 
 ![[El editor de Scripts de RStudio.]{.smallcaps}](figuras/Imagen1_02.png){.d-block .mx-auto width="100%"}
 
-Igual que con los proyectos, podemos crear desde RStudio un script nuevo, o abrir uno preexistente; y modificarlo, ejecutarlo, o volverlo a guardar.
+Al igual que ocurre con los proyectos, desde RStudio podemos crear un script nuevo o abrir uno ya existente para modificarlo, ejecutarlo y volver a guardarlo.
 
-Vamos a comenzar a escribir nuestro script. Si queremos hacer un comentario que no ejecute ninguna instrucción, éste irá precedido del símbolo almohadilla o *hashtag* "\#". Luego, vamos a ordenar a R que haga la operación de suma: 2+2. Escribimos, por tanto, en el editor:
+Empecemos a escribir nuestro script. Cuando queramos introducir un comentario que no ejecute instrucción alguna, lo precederemos del símbolo almohadilla o *hashtag* "\#". A continuación pediremos a R que realice la suma 2+2. Escribimos, por tanto, en el editor:
 
 ```{r, eval=FALSE, echo=TRUE}
 #Ejemplo de Script
 2+2  #este script hace una simple suma.
 ```
 
-Si pulsamos `Control + Mayúsculas + ENTER` o al desplegable de `Source → Source with Echo`, se ejecutará el script (para ejecutar solo la línea donde está el cursor, pulsaremos `Control + ENTER` o el botón de `Run`; y para ejecutar varias líneas, hemos de sombrearlas y pulsar `Control + ENTER` o el botón de `Run`). En la consola aparecerá:
+El script se ejecutará si pulsamos `Control + Mayúsculas + ENTER` o si acudimos al desplegable `Source → Source with Echo`. Para ejecutar únicamente la línea en la que se encuentra el cursor bastará con `Control + ENTER` o con el botón `Run`; y si queremos ejecutar varias líneas, las seleccionaremos previamente y emplearemos esas mismas opciones. En la consola aparecerá:
 
 ```{r, eval=TRUE, echo=FALSE}
 #Ejemplo de Script
 2+2  #este script hace una simple suma.
 ```
 
-Podemos guardar el script con `File → Save As…` ¿Dónde se guardará por defecto? Pues en la carpeta "explora", que es la de nuestro proyecto. Una vez nuestro script ya tiene nombre, podemos ir guardándolo de vez en cuando pulsando simplemente en el botón del "disquete" del editor. Vamos a llamarlo, por ejemplo, "explorando". Si vamos, en el explorador de Windows®, a nuestra carpeta de proyecto, veremos que hay un archivo de texto llamado "explorando" con extensión ".R" (explorando.R). Este script lo podremos ejecutar cuantas veces queramos sin tener que escribir nada, o reescribirlo si vemos que no funciona o que necesitamos hacer modificaciones. Esa es la ventaja de trabajar con scripts.
+Guardaremos el script con `File → Save As…`; y, de nuevo, el destino predeterminado será la carpeta "explora", la de nuestro proyecto. Llamémoslo, por ejemplo, "explorando". Una vez que el script tiene nombre, podremos ir guardando los avances con solo pulsar el botón del "disquete" del editor. Si acudimos a la carpeta del proyecto desde el explorador de Windows®, encontraremos un archivo de texto llamado "explorando" con extensión ".R" (explorando.R). Podremos ejecutarlo cuantas veces queramos sin necesidad de teclear nada, o reescribirlo si no funciona como esperábamos o si necesitamos introducir cambios. Ahí reside, precisamente, la ventaja de trabajar con scripts.
 
-Para recuperar un script en una nueva sesión de trabajo simplemente tenemos que seguir las instrucciones `File → Open File…` y seleccionarlo.
+Para recuperar un script en una nueva sesión de trabajo basta con seguir la ruta `File → Open File…` y seleccionarlo.
 
 ## ![](images/clipboard-1383707725.png)![](figuras/pie-chart.svg){.hicon} Funciones.
 
-R trabaja con datos y funciones, principalmente. Pero, ¿qué es una **función**?
+R trabaja fundamentalmente con datos y funciones. Pero ¿qué es exactamente una **función**?
 
-Una función es un conjunto o **sistema de instrucciones** que convierten unos datos de entrada o **inputs** en otros datos de salida, resultados, u **outputs**. Una función puede ser muy sencilla o ser verdaderamente compleja. Por otro lado, no todas las funciones están integradas en "paquetes"; sino que el usuario puede crear sus propias funciones (por ejemplo, escribiéndolas en un script) y ejecutarlas.
+Una función es un conjunto o **sistema de instrucciones** que convierte unos datos de entrada o **inputs** en unos datos de salida o **outputs**. Puede ser muy sencilla o realmente compleja. Y no todas vienen integradas en paquetes: el propio usuario puede crear las suyas —escribiéndolas, por ejemplo, en un script— y ejecutarlas.
 
 Las partes básicas de una función son:
 
--   **Entradas, inputs o argumentos:** son las diversas informaciones necesarias para realizar el procedimiento de la función. Los argumentos pueden ser introducidos por el usuario, o pueden venir dados por defecto, lo que quiere decir que, si el usuario no dota de valor a un argumento, este tomará automáticamente un valor prestablecido.
+-   **Entradas, *inputs* o argumentos:** son las informaciones necesarias para llevar a cabo el procedimiento. Los argumentos puede introducirlos el usuario o venir dados por defecto, lo que significa que, si no les asignamos ningún valor, tomarán automáticamente uno preestablecido.
 
--   **Cuerpo:** está formado por un conjunto de instrucciones que transforman los *inputs* o entradas en los *outputs* o salidas. Si el cuerpo de la función está formado por varias instrucciones, éstas deben escribirse entre llaves `{ }`.
+-   **Cuerpo:** lo forma el conjunto de instrucciones que transforman las entradas en salidas. Cuando comprende varias instrucciones, estas deben escribirse entre llaves `{ }`.
 
--   **Salidas:** son los resultados u *output* de la función. Si una función ofrece como salida varios tipos de *objetos,* estos objetos suelen ser almacenados en una estructura de almacenaje de *lista*.
+-   **Salidas:** son los resultados u *outputs* de la función. Cuando una función devuelve objetos de distinta naturaleza, estos suelen empaquetarse en una estructura de almacenamiento de tipo *lista*.
 
-Como ejemplo, vamos a integrar en nuestro script una función, llamada "suma". Esta función requerirá de dos entradas o argumentos (dos números cualesquiera), y ofrecerá, como resultado, salida u output; la suma de tales entradas. El código es:
+A modo de ejemplo, incorporemos a nuestro script una función llamada "suma". Recibirá dos entradas o argumentos —dos números cualesquiera— y devolverá como resultado la suma de ambos. El código es:
 
 ```{r, eval=TRUE, echo=TRUE}
 suma <- function(x, y) {
@@ -119,55 +121,55 @@ suma <- function(x, y) {
 }
 ```
 
-Ahora, una vez ejecutado el código anterior; si queremos sumar, por ejemplo, los números 12 y 16, solo tendremos que teclear en la consola, o escribir en el script y hacer run, a la línea:
+Una vez ejecutado el código anterior, para sumar los números 12 y 16 solo tendremos que teclear en la consola —o escribir en el script y ejecutar— la línea:
 
 ```{r, eval=TRUE, echo=TRUE}
 suma(x=12, y=16)
 ```
 
-## ![](images/clipboard-1383707725.png)![](figuras/pie-chart.svg){.hicon} Paquetes (packages).
+## ![](images/clipboard-1383707725.png)![](figuras/pie-chart.svg){.hicon} Paquetes (*packages*).
 
-R es un lenguaje de programación en torno al cual se ha desarrollado una cantidad casi inimaginable de recursos: funciones, bases de datos, utilidades... Tal es la cantidad de recursos, que no sería operativo abrir R (directamente, o a través de una IDE, como RStudio) y tener inmediatamente todos esos recursos activos y preparados para ser utilizados. Además, R debería ser actualizado de un modo casi constante.
+En torno a R se ha desarrollado una cantidad casi inimaginable de recursos: funciones, bases de datos, utilidades... Son tantos que no resultaría operativo abrir el programa (directamente o a través de un IDE como RStudio) y encontrarlos todos activos y listos para su uso. Además, ello obligaría a actualizar R de forma casi constante.
 
-Por todo ello, todos los recursos disponibles están organizados mediante "paquetes" ("packages" en inglés). Un **paquete** es una colección de funciones y/o un conjunto de datos desarrollados por la comunidad de R. Estos incrementan el potencial de R ampliando sus capacidades básicas, o añadiendo otras nuevas.
+De ahí que los recursos disponibles se organicen en **paquetes** (*packages*, en inglés). Un paquete es una colección de funciones o un conjunto de datos desarrollados por la comunidad de R, que multiplican el potencial del lenguaje ampliando sus capacidades básicas o incorporando otras nuevas.
 
-De hecho, cuando abrimos R, algunos de estos paquetes, que se han instalado junto al propio lenguaje, se activan. Pero solo algunos. Un ejemplo es el paquete `{base}` o el paquete `{stats}` [@R-base].
+De hecho, al abrir R se activan algunos de estos paquetes, instalados junto al propio lenguaje. Solo algunos, eso sí: es el caso de `{base}` o de `{stats}` [@R-base].
 
-La mayor parte de los paquetes disponibles no forman parte, por "defecto", en la misma instalación de R. Se encuentran en diversos servidores llamados repositorios. El más importante, es [CRAN](https://cran.r-project.org/), que es el "repositorio oficial" y que alberga más de 10.000 paquetes. Pero existen otros repositorios, a destacar, por ejemplo, GitHub.
+La mayor parte de los paquetes disponibles no forma parte de la instalación básica de R, sino que reside en diversos servidores denominados repositorios. El más importante es [CRAN](https://cran.r-project.org/), el repositorio oficial, que alberga más de 20.000 paquetes, si bien existen otros, entre los que destaca GitHub.
 
-Para **instalar** un paquete en nuestra máquina que esté albergado en CRAN, un modo sencillo es, dentro de R-Studio, pulsar en la ventana inferior / izquierda sobre la pestaña "Packages", y sobre el botón "Install". Emergerá entonces una ventana donde hay un campo para escribir el nombre del paquete (al comenzar a escribirlo, el propio R-Studio te sugerirá los paquetes disponibles). Esto equivale a usar (bien directamente en la consola, o bien como línea de código insertada en un script) la instrucción `install.packages()`, con el nombre del paquete entre comillas (si son varios, pues irán separados por comas.
+Un modo sencillo de **instalar** en nuestra máquina un paquete alojado en CRAN consiste en acudir, dentro de RStudio, a la ventana inferior derecha, pulsar sobre la pestaña "Packages" y, después, sobre el botón "Install". Emergerá una ventana con un campo para escribir el nombre del paquete; al empezar a teclearlo, el propio RStudio nos irá sugiriendo los que están disponibles. Esta operación equivale a emplear la instrucción `install.packages()` —bien directamente en la consola, bien como una línea más de un script— con el nombre del paquete entrecomillado; si son varios, los separaremos con comas.
 
-Una vez se tiene instalado el paquete, ya no habrá que volver a instalarlo para utilizarlo; sino **activarlo**. De hecho, todos los paquetes que no se encuentran por defecto en la propia instalación de R, deben ser activados para poder usar sus funcionalidades y/o datos. Para hacerlo, se debe utilizar la instrucción `library()`, y el nombre del paquete dentro del paréntesis.
+Una vez instalado el paquete, no habrá que repetir la operación cada vez que queramos utilizarlo: bastará con **activarlo**. En efecto, todos los paquetes que no vienen de serie en la instalación de R deben activarse antes de poder usar sus funcionalidades o sus datos. Para ello recurriremos a la instrucción `library()`, con el nombre del paquete dentro del paréntesis.
 
-Del nombre de esta instrucción surge la confusión común de tomar como sinónimos las palabras "paquete" y "librería" en el entorno de R. Si nos referimos a estas colecciones de funcionalidades y/o datos; lo correcto es "paquete", ya que "librería" tiene más que ver con la organización informática de un software.
+Del nombre de esta instrucción nace una confusión frecuente: la de tomar como sinónimos los términos "paquete" y "librería" en el entorno de R. Cuando nos referimos a estas colecciones de funcionalidades o datos, lo correcto es hablar de paquetes, pues el término "librería" alude más bien a la organización informática interna de un software.
 
 ## ![](images/clipboard-1383707725.png)![](figuras/pie-chart.svg){.hicon} Help! (sistema de ayuda).
 
-A veces podemos albergar dudas sobre la correcta utilización de las funcionalidades y herramientas que nos proporciona un paquete. Hay varias fuentes de ayuda para intentar encontrar respuesta a las cuestiones que se nos plantean.
+Es habitual albergar dudas sobre el uso correcto de las funcionalidades y herramientas que nos proporciona un paquete. Por fortuna, disponemos de varias fuentes de ayuda a las que acudir en busca de respuesta.
 
-Una opción, para obtener información general sobre un paquete, es utilizar la función `help()`, con el argumento "package". Por ejemplo:
+Para obtener información general sobre un paquete podemos utilizar la función `help()` con el argumento `package =`. Por ejemplo:
 
 ```{r, eval=TRUE, echo=TRUE}
 help(package="base")
 ```
 
-Observaremos como en la ventana inferior / izquierda de R-Studio nos saldrá la información correspondiente. De hecho, en tal ventana existe una pestaña **"Help"** para obtener la ayuda sin teclear código.
+La información aparecerá en la ventana inferior derecha de RStudio. De hecho, esa misma ventana cuenta con una pestaña **"Help"** que nos permite consultar la ayuda sin necesidad de teclear código.
 
-Además, cada función puede ser consultada individualmente mediante `help("nombre de la función")` o `help(function, package = "package")` si el paquete no ha sido cargado. Estas instrucciones nos mostrarán la descripción de la función y sus argumentos acompañados de ejemplos de utilización. Por ejemplo:
+Cada función puede consultarse además de forma individual mediante `help("nombre de la función")` o, si el paquete todavía no se ha cargado, `help(function, package = "package")`. Estas instrucciones nos mostrarán la descripción de la función y de sus argumentos, acompañada de ejemplos de uso. Por ejemplo:
 
 ```{r, eval=FALSE, echo=TRUE}
 help("rm", package="base")
 ```
 
-La instrucción anterior nos aporta la documentación sobre la función `rm()` del paquete `{base}` de R (nota: este paquete se activa por defecto al abrir R o R-Studio; por lo que el segundo argumento, con el nombre del paquete que contiene la instrucción no es necesario).
+La instrucción anterior nos muestra la documentación de la función `rm()`, del paquete `{base}` de R. Conviene señalar que este paquete se activa por defecto al abrir R o RStudio, de manera que el segundo argumento —el que indica el paquete que contiene la función— resulta innecesario.
 
-Otra opción para mostrar información de ayuda es la exploración de las "viñetas" (vignettes). Las **viñetas** son documentos que muestran de un modo más detallado las funcionalidades de un paquete. La información de las viñetas de un paquete están disponibles en el archivo "documentation". Puede obtenerse una lista de las viñetas de nuestros paquetes instalados con la función `browseVignettes()`. Si solo queremos consultar las viñetas de un paquete concreto pasaremos como argumento a la función el nombre del mismo: `browseVignettes(package = "packagename")`. En ambos casos, una ventana del navegador se abrirá para que podamos fácilmente explorar el documento.
+Otra vía consiste en explorar las **viñetas** (*vignettes*): documentos que detallan con mayor profundidad las funcionalidades de un paquete y que se incluyen en su documentación. Podemos obtener la lista de las viñetas de todos nuestros paquetes instalados con la función `browseVignettes()`. Y si solo nos interesan las de un paquete concreto, le pasaremos su nombre como argumento: `browseVignettes(package = "packagename")`. En ambos casos se abrirá una ventana del navegador que nos permitirá explorar cómodamente el documento.
 
-Si optamos por permanecer en la consola, la instrucción `vignette()` nos mostrará una lista de viñetas, `vignette(package = "packagename")` las viñetas incluidas en el paquete, y una vez identificada la viñeta de interés podremos consultarla mediante `vignette("vignettename")`.
+Si preferimos no abandonar la consola, la instrucción `vignette()` nos mostrará una lista de viñetas y `vignette(package = "packagename")`, las incluidas en un paquete determinado. Una vez identificada la que nos interesa, la consultaremos con `vignette("vignettename")`.
 
 ## ![](figuras/book.svg){.hicon} ¿Y ahora?
 
-Ya tenemos R instalado, sabemos crear proyectos, escribir scripts, definir funciones, instalar y activar paquetes, y consultar la ayuda. Con esta infraestructura estamos listos para empezar a trabajar con datos. En el siguiente capítulo aprenderemos a importar datos desde fuentes externas y a manejar las estructuras que R utiliza para almacenarlos y manipularlos.
+Ya tenemos R instalado y sabemos crear proyectos, escribir scripts, definir funciones, instalar y activar paquetes y consultar la ayuda. Con esta infraestructura estamos listos para empezar a trabajar con datos: en el siguiente capítulo aprenderemos a importarlos desde fuentes externas y a manejar las estructuras que R emplea para almacenarlos y manipularlos.
 
 ## ![](figuras/star.svg){.hicon} El universo R-Stars.
 

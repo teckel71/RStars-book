@@ -19,27 +19,27 @@ En el análisis de datos, las representaciones gráficas no son un adorno, sino 
 
 Un buen gráfico puede condensar miles de observaciones en **patrones perceptibles de un vistazo**, revelando tendencias, rupturas, relaciones y valores atípicos que las tablas suelen ocultar.
 
-En la fase exploratoria del análisis de datos, orienta hipótesis y elecciones de modelos; en la validación comprueba supuestos y diagnostica errores; y en la comunicación transforma resultados complejos en evidencia comprensible y accionable.
+En la fase exploratoria del análisis, el gráfico orienta las hipótesis y la elección de los modelos; en la de validación, permite comprobar supuestos y diagnosticar errores; y en la de comunicación, convierte resultados complejos en evidencia comprensible y útil para actuar.
 
-Su fuerza descansa en cómo aprovechan la percepción humana —posición, longitud, forma, color— para reducir la carga cognitiva y evitar interpretaciones equívocas. Por ello, dominar el diseño con intención, elegir el tipo de gráfico adecuado a cada pregunta y aplicar principios de claridad, comparabilidad y honestidad es tan crucial como cualquier técnica estadística.
+Esa fuerza descansa en el modo en que las representaciones gráficas aprovechan la percepción humana —posición, longitud, forma, color— para aligerar la carga cognitiva y prevenir interpretaciones equívocas. De ahí que diseñar con intención, escoger el tipo de gráfico que conviene a cada pregunta y respetar los principios de claridad, comparabilidad y honestidad resulte tan decisivo como dominar cualquier técnica estadística.
 
 Este capítulo recorre ese camino: del boceto exploratorio a la visualización final que informa, persuade y, sobre todo, ayuda a decidir mejor.
 
-## ![](figuras/pie-chart.svg){.hicon} Tidyverse para gráficos: ggplot2.
+## ![](figuras/pie-chart.svg){.hicon} El *Tidyverse* para gráficos: `{ggplot2}`.
 
-R, en su instalación básica (paquete `{base}`), cuenta con funciones destinadas a crear gráficos y, de este modo, visualizar nuestros datos a fin de generar información y extraer conclusiones de un modo sencillo.
+R, en su instalación básica, cuenta con funciones destinadas a crear gráficos y, de este modo, visualizar nuestros datos para generar información y extraer conclusiones con sencillez.
 
-No obstante, estas funciones, a veces, se quedan "cortas", o requieren de un complejo y/o extenso código. Esta es la razón por la que en el *Tidyverse* se incluyó un paquete específico destinado a la construcción de gráficos de un modo flexible y amigable. Recordemos que el *Tidyverse* es un conjunto de paquetes con una filosofía común, como es el uso de ciertas estructuras gramaticales, que facilitan muchas de las tareas y análisis que podrían hacerse con el lenguaje R estándar.
+Con todo, esas funciones se quedan a veces cortas o exigen un código extenso y complejo. Por esa razón, el *Tidyverse* incorporó un paquete específico para construir gráficos de forma flexible y amigable. Recordemos que el *Tidyverse* es aquel conjunto de paquetes que comparten una misma filosofía —el uso de ciertas estructuras gramaticales comunes— y que simplifican buena parte de las tareas y análisis que podrían acometerse con el lenguaje R estándar.
 
-Este paquete destinado a la producción de gráficos es `{ggplot2}`, que proporciona unas herramientas muy flexibles para visualizar conjuntos de datos. A continuación, se expondrán los fundamentos de la sintaxis de `{ggplot2}` y se indicará cómo construir algunos de los gráficos más habituales.
+Ese paquete es `{ggplot2}`, que pone a nuestra disposición herramientas muy versátiles para visualizar conjuntos de datos. En las páginas que siguen expondremos los fundamentos de su sintaxis y veremos cómo construir algunos de los gráficos más habituales.
 
-Para ilustrar la creación de gráficos, vamos a suponer que trabajamos dentro de un proyecto que hemos creado previamente, de nombre "explora". Dentro de la carpeta del proyecto guardaremos el *script* llamado "ggplot2_rstars.R" y el archivo de *Microsoft® Excel®* llamado "interestelar_100.xlsx". Para descargar los ficheros, ve al final de este capítulo y pincha en los enlaces.
+Para ilustrar la creación de gráficos, supongamos que trabajamos dentro del proyecto "explora" que creamos anteriormente. En su carpeta guardaremos el *script* "ggplot2_rstars.R" y el archivo de Microsoft® Excel® "interestelar_100.xlsx", cuyos enlaces de descarga figuran en la sección final del capítulo.
 
-Si abrimos "interestelar_100.xlsx", comprobaremos que se compone de tres hojas. La primera muestra un aviso sobre el uso exclusivo que se debe dar a los datos incorporados; la segunda recoge la descripción de las variables consideradas; y la tercera (hoja "Datos") guarda los datos que debemos **importar** desde R-Studio. Estos datos se corresponden con diferentes variables económico-financieras y de diversa índole de una muestra de empresas que se dedican al transporte de mercancías interestelar.
+Si abrimos "interestelar_100.xlsx", comprobaremos que consta de tres hojas: la primera recoge un aviso sobre el uso exclusivo que debe darse a los datos; la segunda describe las variables consideradas; y la tercera (hoja "Datos") contiene la información que vamos a **importar** desde RStudio. Se trata de variables económico-financieras y de otra índole, referidas a una muestra de empresas dedicadas al transporte interestelar de mercancías.
 
-Vamos a abrir nuestro script "ggplot2_rstars.R" con `File → Open File…` (o haciendo click en el archivo correspondiente en la ventana inferior derecha de RStudio, pestaña "Files"). Este script contiene el programa que vamos a ir ejecutando en la práctica.
+Abramos ahora el script "ggplot2_rstars.R" con `File → Open File…` (o haciendo clic sobre el archivo en la ventana inferior derecha de RStudio, pestaña "Files"). Este script contiene el programa que iremos ejecutando a lo largo de la práctica.
 
-Tras abrir el *script* "ggplot2_rstars.R" en el editor de R-Studio, observaremos que la primera línea / instrucción es:
+Una vez abierto el *script* en el editor de RStudio, observaremos que su primera instrucción es:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ## Generando gráficos con {ggplot2}
@@ -48,9 +48,9 @@ Tras abrir el *script* "ggplot2_rstars.R" en el editor de R-Studio, observaremos
 rm(list = ls())
 ```
 
-La instrucción tiene como objeto limpiar el *Global Environment* (memoria) de objetos de anteriores sesiones de trabajo.
+Esta instrucción persigue limpiar el *Global Environment* (la memoria) de los objetos que hayan quedado de sesiones de trabajo anteriores.
 
-Luego, si queremos despreocuparnos de la carga de los paquetes que utilizaremos en el script, podemos activarlos ahora:
+A continuación, si preferimos despreocuparnos más adelante de la carga de los paquetes que necesitaremos, podemos activarlos todos de una vez:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 # Cargando paquetes
@@ -62,7 +62,7 @@ library(ggExtra)
 library(ggrepel)
 ```
 
-Recuerda que, si alguno de los paquetes no está instalado en la máquina, dará error. Entonces, habrá que instalarlo (véase la sección 1.7) y volver a ejecutar el bloque de código anterior.
+Recordemos que, si alguno de los paquetes no estuviera instalado en la máquina, R nos devolvería un error. En tal caso habrá que instalarlo (véase la sección 1.7) y volver a ejecutar el bloque de código anterior.
 
 Para importar los datos que hay en la hoja "Datos" del archivo de Microsoft® Excel® "interestelar_100.xlsx", ejecutaremos el código:
 
@@ -74,7 +74,7 @@ interestelar_100 <- read_excel("interestelar_100.xlsx",
 interestelar_100 <- data.frame(interestelar_100, row.names = 1)
 ```
 
-Podemos observar cómo en el *Global Environment* ya aparece un objeto *data frame* denominado "interestelar_100", que contiene 104 filas (una por empresa) y 28 variables. Podemos listar las variables de modo visual con la función `gt_plt_summary()` del paquete `{gtExtras}`:
+En el *Global Environment* aparece ya un objeto de tipo *data frame*, denominado "interestelar_100", que contiene 104 filas (una por empresa) y 28 variables. Podemos listarlas de forma visual con la función `gt_plt_summary()` del paquete `{gtExtras}`:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 # visualizando el data frame de modo elegante con {gtExtras}
@@ -89,7 +89,7 @@ datos_df_graph
 
 ## ![](figuras/pie-chart.svg){.hicon} La estructura de un gráfico con `{ggplot2}`.
 
-Antes de construir nuestro primer gráfico, conviene entender la lógica que sigue `{ggplot2}`. Todo gráfico se construye combinando tres ingredientes básicos:
+Antes de construir nuestro primer gráfico conviene entender la lógica que sigue `{ggplot2}`: todo gráfico se levanta combinando tres ingredientes básicos.
 
 **1. Datos y mapeo estético** (`ggplot()` + `aes()`). Se indica el *data frame* de origen y se asignan variables a los ejes y a otros atributos visuales (color, tamaño, forma…). Todo atributo que *dependa del valor de una variable* debe ir dentro de `aes()`. Los atributos *fijos* (un color concreto, un tamaño fijo) van *fuera* de `aes()`.
 
@@ -105,13 +105,13 @@ ggplot(data = mi_dataframe, aes(x = variable_x, y = variable_y)) +
   labs(title = "Título", x = "Eje X", y = "Eje Y")
 ```
 
-Con esta estructura en mente, veamos los tipos de gráficos más habituales.
+Con esta estructura en mente, recorramos los tipos de gráficos más habituales.
 
 ## ![](figuras/pie-chart.svg){.hicon} Gráficos de una variable.
 
 ### ![](figuras/key.svg){.hicon} Histograma.
 
-Uno de los gráficos indispensables para tener una idea de la distribución de frecuencias que siguen los casos con relación a una variable métrica es el **histograma**. Vamos a construir un histograma para la variable LIQUIDEZ, que recoge la ratio de liquidez, calculada como cociente entre el activo corriente y el pasivo corriente, y que mide la capacidad de la empresa para hacer frente a sus deudas a corto plazo con activos a corto plazo. Para algunos sectores se acepta que un valor adecuado de la ratio oscila entre 1,5 y 2 (menos de 1,5 puede indicar tensiones de caja, mientras que más de 2 puede ser un síntoma de capital ocioso).
+El **histograma** es uno de los gráficos indispensables para hacerse una idea de cómo se distribuyen los casos en relación con una variable métrica. Construyamos uno para la variable LIQUIDEZ, que recoge la ratio de liquidez —cociente entre el activo corriente y el pasivo corriente— y que mide la capacidad de la empresa para atender sus deudas a corto plazo con activos a corto plazo. En algunos sectores se considera adecuado un valor de la ratio situado entre 1,5 y 2: por debajo de 1,5 pueden aparecer tensiones de caja, mientras que por encima de 2 cabe sospechar capital ocioso.
 
 El código será:
 
@@ -121,7 +121,7 @@ ggplot(data = interestelar_100, aes(x = LIQUIDEZ)) +
        geom_histogram()
 ```
 
-Observemos la estructura: `ggplot()` recibe el *data frame* y el mapeo estético (`aes(x = LIQUIDEZ)` indica que el eje x depende de los valores de LIQUIDEZ). A continuación, `geom_histogram()` indica que la geometría es un histograma. El resultado es:
+Observemos la estructura: `ggplot()` recibe el *data frame* y el mapeo estético, donde `aes(x = LIQUIDEZ)` señala que el eje x depende de los valores de LIQUIDEZ. Después, `geom_histogram()` fija la geometría. El resultado es:
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
 # Histograma
@@ -134,7 +134,7 @@ ggplot(data = interestelar_100, aes(x = LIQUIDEZ)) +
 :::
 
 
-Uno de los aspectos que nos puede interesar modificar es el número de intervalos en los que queda dividido el rango de valores que puede tomar la variable ("grosor" de las barras), o *bins*. Por defecto, el número es 30. Para reducirlo a 20, por ejemplo, añadiremos en la línea del *geom* el argumento `bins =`:
+Un aspecto que quizá nos interese modificar es el número de intervalos —o *bins*— en que se divide el rango de valores de la variable, lo que equivale a regular el "grosor" de las barras. R emplea 30 de forma predeterminada. Para reducirlo a 20, por ejemplo, añadiremos el argumento `bins =` en la línea del *geom*:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ggplot(data = interestelar_100, aes(x = LIQUIDEZ)) +
@@ -146,7 +146,7 @@ ggplot(data = interestelar_100, aes(x = LIQUIDEZ)) +
 :::
 
 
-A veces es difícil determinar el número adecuado de intervalos. Puede optarse, por ejemplo, por el método de *Sturges*, que sugiere que este número sea calculado como el máximo entre 1 y el número k redondeado hacia arriba:
+No siempre resulta fácil determinar cuántos intervalos conviene emplear. Una posibilidad es acogerse a la regla de *Sturges*, que propone calcular su número, *k*, como el logaritmo en base 2 del tamaño muestral más uno, redondeando el resultado hacia arriba:
 
 $$
 k = \left\lceil \log_{2}(n) + 1 \right\rceil
@@ -154,7 +154,7 @@ $$
 
 donde *n* es el tamaño muestral.
 
-Así, utilizando la función `nclass.Sturges()` del paquete `{base}`:
+Así, empleando la función `nclass.Sturges()` del paquete `{grDevices}`:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 # Nº de bins según Sturges (con NA/Inf fuera)
@@ -168,9 +168,9 @@ ggplot(data = interestelar_100, aes(x = LIQUIDEZ)) +
 :::
 
 
-*Sturges* propone tan solo 8 intervalos de valores.
+La regla de *Sturges* propone, en este caso, tan solo 8 intervalos.
 
-A continuación, vamos a modificar el color de las barras. Para el borde de estas, se utiliza el argumento `colour =`; y, para el relleno, `fill =`. Como estos colores son *fijos* (no dependen de ninguna variable), van **fuera** de `aes()`. Además, vamos a mejorar la presentación del gráfico añadiéndole un título y un subtítulo, y unas etiquetas en los ejes:
+Modifiquemos ahora el color de las barras: el argumento `colour =` se ocupa del borde y `fill =`, del relleno. Como ambos colores son *fijos* —no dependen de ninguna variable—, se escriben **fuera** de `aes()`. Aprovecharemos además para mejorar la presentación del gráfico con un título, un subtítulo y sendas etiquetas en los ejes:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ggplot(data = interestelar_100, aes(x = LIQUIDEZ)) +
@@ -185,7 +185,7 @@ ggplot(data = interestelar_100, aes(x = LIQUIDEZ)) +
 :::
 
 
-Puede ser que nos interese diferenciar los casos según grupos preestablecidos. Por ejemplo, entre las variables de nuestro *data frame* "interestelar_100", existe una variable categórica denominada EFLO, que clasifica a las empresas, según la antigüedad media de su flota, en "ANTIGUA", "MADURA" o "RENOVADA". Lo que vamos a hacer es crear, en el mismo gráfico, un histograma del ratio de liquidez para cada categoría de EFLO. Para ello, habrá que incluir esta variable categórica **dentro de `aes()`**, ya que el color de relleno de cada barra depende del valor que toma la variable EFLO para cada caso:
+Puede ocurrir que nos interese diferenciar los casos según grupos preestablecidos. Entre las variables del *data frame* "interestelar_100" figura una de naturaleza categórica, EFLO, que clasifica a las empresas en "ANTIGUA", "MADURA" o "RENOVADA" según la antigüedad media de su flota. Representemos entonces, en un mismo gráfico, un histograma de la ratio de liquidez para cada categoría de EFLO. Habrá que incluir esa variable **dentro de `aes()`**, puesto que el color de relleno de cada barra depende ahora del valor que EFLO toma en cada caso:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ggplot(data = interestelar_100, aes(x = LIQUIDEZ)) +
@@ -201,11 +201,11 @@ ggplot(data = interestelar_100, aes(x = LIQUIDEZ)) +
 :::
 
 
-Como puede verificarse, se superponen los tres histogramas, con tres colores diferentes, dependiendo de la categoría de EFLO. Además, aparece, al lado derecho del gráfico, una leyenda que detalla qué color se asocia a cada uno de los grupos de empresas. La función `scale_fill_brewer()` nos permite personalizar la paleta de colores a utilizar (para ver las paletas disponibles, podemos consultar [esta sección](https://ggplot2-book.org/scales-colour) de [@ggplot22021]).
+Como puede verificarse, los tres histogramas se superponen con colores distintos según la categoría de EFLO y, a la derecha del gráfico, surge una leyenda que indica qué color corresponde a cada grupo de empresas. La función `scale_fill_brewer()` nos permite escoger la paleta de colores; las disponibles pueden consultarse en [esta sección](https://ggplot2-book.org/scales-colour) de [@ggplot22021].
 
 ### ![](figuras/key.svg){.hicon} Gráfico de densidad.
 
-Un gráfico parecido al histograma es el de **densidad**. Un gráfico de densidad estima la función de densidad de probabilidad empírica de la variable representada. En realidad, podemos considerarlo como un histograma "suavizado". Probemos a ejecutar este código:
+Muy próximo al histograma se encuentra el gráfico de **densidad**, que estima la función de densidad de probabilidad empírica de la variable representada. Cabe entenderlo, en el fondo, como un histograma "suavizado". Probemos a ejecutar este código:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ggplot(data = interestelar_100, aes(x = LIQUIDEZ)) +
@@ -220,9 +220,9 @@ ggplot(data = interestelar_100, aes(x = LIQUIDEZ)) +
 :::
 
 
-En el código se observa la utilización del tipo de gráfico `geom_density()`. Además, desaparece el número de intervalos o *bins*, y se puede dotar a la función de densidad estimada de un color en su borde (`colour=`), y de un color de relleno (`fill=`).
+El *geom* empleado es ahora `geom_density()`. Desaparece, como es lógico, el número de intervalos o *bins*, y la función de densidad estimada puede recibir un color de borde (`colour =`) y otro de relleno (`fill =`).
 
-Como en el caso del histograma, se puede crear una función de densidad estimada para cada grupo de empresas (según la variable EFLO), incluyendo `fill=` dentro del correspondiente `aes()`:
+Igual que sucedía con el histograma, podemos estimar una función de densidad para cada grupo de empresas definido por EFLO sin más que trasladar `fill =` al interior del `aes()` correspondiente:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ggplot(data = interestelar_100, aes(x = LIQUIDEZ)) +
@@ -238,11 +238,11 @@ ggplot(data = interestelar_100, aes(x = LIQUIDEZ)) +
 :::
 
 
-El argumento `alpha=` es un número de 0 a 1 que gradúa el grado de transparencia / opacidad de los rellenos. Al aplicarlo, las funciones de densidad superpuestas se pueden ver unas a través de otras.
+El argumento `alpha =` admite un valor entre 0 y 1 que regula la transparencia de los rellenos. Gracias a él, las funciones de densidad superpuestas pueden verse unas a través de otras.
 
 ### ![](figuras/key.svg){.hicon} Gráfico de caja o *Box-Plot*.
 
-Un tipo muy interesante de gráfico es el de "caja" (***box-plot***), que informa de la dispersión de una variable. Fijémonos en el siguiente código:
+Otro tipo de gráfico de enorme interés es el de caja o ***box-plot***, que informa sobre la dispersión de una variable. Fijémonos en el siguiente código:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 ggplot(data = interestelar_100, aes(x = "", y = LIQUIDEZ)) +
@@ -252,7 +252,7 @@ ggplot(data = interestelar_100, aes(x = "", y = LIQUIDEZ)) +
   ylab("Ratio de liquidez")
 ```
 
-Puede observarse cómo en el mapeo se fija la variable que va a determinar las coordenadas del eje "y". El *geom* o tipo de gráfico es `geom_boxplot()`. Las últimas líneas configuran los títulos del gráfico y del eje "y". El resultado de ejecutar el código es el siguiente gráfico:
+Como puede observarse, el mapeo fija la variable que determinará las coordenadas del eje "y". El *geom* es, en este caso, `geom_boxplot()`. Las últimas líneas configuran los títulos del gráfico y del eje "y". Al ejecutar el código obtenemos:
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
 ggplot(data = interestelar_100, aes(x = "", y = LIQUIDEZ)) +
@@ -267,15 +267,15 @@ ggplot(data = interestelar_100, aes(x = "", y = LIQUIDEZ)) +
 :::
 
 
-**Nota:** Es necesario añadir en el eje "x" una variable "vacía" (`x = ""`), y en el nombre de dicho eje también un campo vacío, para evitar que en dicho eje salga una escala y el título "x".
+**Nota:** conviene asignar al eje "x" una variable "vacía" (`x = ""`) y dejar también en blanco su etiqueta, para que no aparezcan ni una escala ni el título "x" en ese eje.
 
-El gráfico se caracteriza por una "caja" (rectángulo) central. Esta caja está limitada por el primer y tercer cuartil, luego recoge el 50% de los casos con una ratio de liquidez superior al 25% de los casos con menor ratio, y por debajo del 25% de los casos con la ratio más alta. Así, la altura de la caja es la diferencia entre los cuartiles tercero y primero, que es lo que se denomina "rango intercuartílico" (*IQR* por las siglas en inglés). La caja, a su vez, está dividida en dos zonas por una línea horizontal, que es la **mediana** de la distribución: la ratio de liquidez que divide a la muestra en dos grupos con el mismo número de elementos, uno con los casos de mayor ratio de liquidez, y otro con los casos de menor ratio.
+El gráfico se articula en torno a una "caja" central de forma rectangular, delimitada por el primer y el tercer cuartil. Dentro de ella queda, por tanto, el 50% central de los casos: quedan fuera el 25% con la ratio más baja, por debajo, y el 25% con la ratio más alta, por encima. La altura de la caja es la diferencia entre el tercer cuartil y el primero, magnitud conocida como "rango intercuartílico" (*IQR*, por sus siglas en inglés). Una línea horizontal divide además la caja en dos zonas: se trata de la **mediana** de la distribución, es decir, la ratio de liquidez que parte la muestra en dos mitades con idéntico número de casos, una por encima y otra por debajo.
 
-Por encima y por debajo de la caja se disponen dos segmentos (llamados "bigotes"). Estos "bigotes" recogen los casos con valores en la variable inferiores al primer cuartil (comenzando por la base de la caja, hacia abajo), o superiores al tercer cuartil (comenzando por el techo de la caja, hacia arriba); y que están a menos de **1.5 veces** la altura de la caja. Los casos con valores de la ratio de liquidez inferiores al primer cuartil (por abajo) y superiores al tercero (por arriba), que están alejados de la caja en más de 1.5 veces la altura de esta, se indican con puntos, y se corresponden con los casos conocidos como **casos atípicos** o ***outliers***. La identificación de los *outliers* es una fase muy importante a la hora de aplicar algunas técnicas estadísticas.
+Por encima y por debajo de la caja se extienden dos segmentos, los llamados "bigotes". Estos abarcan los casos situados fuera de la caja —por debajo del primer cuartil o por encima del tercero— siempre que disten de ella menos de **1,5 veces** su altura. Los casos que quedan más allá de ese límite se representan mediante puntos y son los que conocemos como **casos atípicos** o ***outliers***. Su identificación constituye una fase muy relevante antes de aplicar determinadas técnicas estadísticas.
 
-En esta práctica, comprobamos cómo, en el caso de la ratio de liquidez (LIQUIDEZ), no existen *outliers*, es decir, casos que presentan ratios anormalmente elevadas o bajas.
+En nuestro caso comprobamos que la ratio de liquidez (LIQUIDEZ) no presenta *outliers*: ninguna empresa arroja un valor anormalmente alto o bajo.
 
-En cambio, vamos a representar ahora la variable RES (resultado del ejercicio o beneficio neto):
+Representemos ahora, en cambio, la variable RES (resultado del ejercicio o beneficio neto):
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
 ggplot(data = interestelar_100, aes(x = "", y = RES)) +
@@ -290,9 +290,9 @@ ggplot(data = interestelar_100, aes(x = "", y = RES)) +
 :::
 
 
-En esta ocasión apreciamos cómo existen 4 empresas *outliers*, es decir, compañías con resultados atípicamente elevados (superiores al tercer cuartil más 1,5 veces el rango intercuartílico del resultado del beneficio neto). Dos de las empresas superan, como beneficio neto o resultado del ejercicio, el millón de PAVOs.
+En esta ocasión sí aparecen 4 empresas *outliers*: compañías con resultados atípicamente elevados, por encima del tercer cuartil más 1,5 veces el rango intercuartílico. Dos de ellas superan el millón de PAVOs de beneficio neto.
 
-`{ggplot2}` permite **integrar en el gráfico medidas estadísticas** y otros cálculos. Por ejemplo, en el box-plot se representa el valor de la mediana; pero no el de la media. Si queremos incluir el valor de la media, podemos calcularlo e integrarlo con la función `stat_summary()`. El argumento `fun = "mean"` indica que la medida a calcular y representar es la media aritmética, el argumento `geom = "point"` el tipo de gráfico para representar esa medida (un punto):
+`{ggplot2}` permite **incorporar al gráfico medidas estadísticas** y otros cálculos. El *box-plot*, por ejemplo, muestra la mediana, pero no la media. Si queremos que también aparezca esta última, podemos calcularla e integrarla mediante la función `stat_summary()`: el argumento `fun = "mean"` indica que la medida por calcular es la media aritmética y `geom = "point"`, que se representará como un punto:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ggplot(data = interestelar_100, aes(x = "", y = RES)) +
@@ -311,9 +311,9 @@ ggplot(data = interestelar_100, aes(x = "", y = RES)) +
 :::
 
 
-Se aprecia cómo el valor del *resultado del ejercicio medio* se ha insertado como un punto azul oscuro grueso dentro del gráfico de caja (tiene un valor algo superior a la *mediana*).
+El *resultado medio del ejercicio* se ha incorporado al gráfico de caja como un punto azul oscuro de buen tamaño, situado algo por encima de la *mediana*.
 
-Vamos a refinar el *box-plot* anterior. Por ejemplo, quizá nos pueda interesar crear un *box-plot* para cada grupo de empresas según la antigüedad de su flota (variable EFLO):
+Refinemos el *box-plot* anterior. Quizá nos convenga, por ejemplo, disponer de una caja para cada grupo de empresas según la antigüedad de su flota (variable EFLO):
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ggplot(data = interestelar_100, aes(x = EFLO, y = RES)) +
@@ -337,11 +337,11 @@ ggplot(data = interestelar_100, aes(x = EFLO, y = RES)) +
 :::
 
 
-Para construir una caja por categoría de la variable EFLO, se ha incluido, en el mapeo, el eje x con dicha variable. Como, además, queremos que cada caja sea de un color diferente, hemos hecho que los colores de estas dependan de la variable EFLO; añadiendo en el `aes()` del `geom_boxplot` la característica `fill=`. También se ha incluido `scale_fill_brewer()` para aplicar una paleta de colores.
+Para obtener una caja por categoría de EFLO hemos asignado esa variable al eje x dentro del mapeo. Y como además queremos que cada caja luzca un color distinto, hemos hecho depender el relleno de la propia EFLO, añadiendo la característica `fill =` en el `aes()` de `geom_boxplot()`. La función `scale_fill_brewer()` se encarga, como ya sabemos, de aplicar la paleta de colores.
 
-El primer bloque de `stat_summary()` puntea la media de RES para cada grupo. El segundo bloque une esos puntos con una línea, permitiendo comparar visualmente las medias. El argumento `aes(group = TRUE)` obliga a que la línea conecte todos los promedios, ignorando el agrupamiento por EFLO.
+El primer bloque de `stat_summary()` marca con un punto la media de RES de cada grupo. El segundo une esos puntos mediante una línea, lo que facilita comparar visualmente los promedios. El argumento `aes(group = TRUE)` es el que obliga a la línea a enlazarlos todos, ignorando el agrupamiento por EFLO.
 
-Como última extensión, a veces conviene visualizar la posición de cada caso individual. Una opción es utilizar una capa `geom_jitter()`, que distribuye los puntos con un ligero desplazamiento lateral aleatorio para evitar solapamientos. Para que los *outliers* del *boxplot* no se dupliquen con los del *jitter*, se indica `outlier.shape = NA`:
+Como última extensión, en ocasiones interesa visualizar la posición de cada caso individual. Podemos lograrlo con una capa `geom_jitter()`, que reparte los puntos aplicándoles un ligero desplazamiento lateral aleatorio para evitar solapamientos. Y para que los *outliers* del *box-plot* no se dupliquen con los del *jitter*, indicamos `outlier.shape = NA`:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ggplot(data = interestelar_100, aes(x = EFLO, y = RES)) +
@@ -370,11 +370,11 @@ ggplot(data = interestelar_100, aes(x = EFLO, y = RES)) +
 :::
 
 
-El `geom_jitter()` muestra, dentro de cada caja, la nube de casos individuales (incluidos los *outliers*). Las características de estos puntos (amplitud del desplazamiento lateral, tamaño, color, opacidad) se controlan con los argumentos `width=`, `size=`, `col=` y `alpha=`.
+`geom_jitter()` muestra, sobre cada caja, la nube de casos individuales, *outliers* incluidos. Las características de esos puntos —amplitud del desplazamiento lateral, tamaño, color y opacidad— se controlan con los argumentos `width =`, `size =`, `col =` y `alpha =`.
 
 ### ![](figuras/key.svg){.hicon} Gráfico de violín.
 
-El gráfico de **violín** combina las ventajas del boxplot (mostrar la mediana y los cuartiles) con las del gráfico de densidad (mostrar la forma completa de la distribución). Cada "violín" es una función de densidad espejada, cuyo ancho en cada punto indica la frecuencia relativa de los datos en ese valor. Es especialmente útil cuando la distribución es bimodal o tiene formas que un boxplot no puede revelar:
+El gráfico de **violín** reúne las ventajas del *box-plot* —la mediana y los cuartiles— con las del gráfico de densidad —la forma completa de la distribución—. Cada "violín" es una función de densidad reflejada como en un espejo, cuya anchura en cada punto refleja la frecuencia relativa de los datos en ese valor. Resulta especialmente útil cuando la distribución es bimodal o adopta formas que un *box-plot* no alcanza a revelar:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ggplot(data = interestelar_100, aes(x = EFLO, y = LIQUIDEZ)) +
@@ -396,11 +396,11 @@ ggplot(data = interestelar_100, aes(x = EFLO, y = LIQUIDEZ)) +
 :::
 
 
-En el código, `geom_violin()` dibuja la silueta de la distribución, y sobre ella se superpone un `geom_boxplot()` estrecho (argumento `width = 0.15`) que aporta la referencia de la mediana y los cuartiles. El punto azul oscuro marca la media. De este modo, el violín ofrece lo mejor de ambos mundos: la información del boxplot y la forma de la distribución.
+En el código, `geom_violin()` dibuja la silueta de la distribución y sobre ella se superpone un `geom_boxplot()` estrecho (argumento `width = 0.15`) que aporta la referencia de la mediana y los cuartiles, mientras que el punto azul oscuro señala la media. El violín reúne así ambas lecturas en una sola imagen: el resumen numérico del *box-plot* y el perfil completo de la distribución.
 
 ### ![](figuras/key.svg){.hicon} Gráfico de barras.
 
-El **gráfico de barras** es la representación básica para variables **categóricas**. `{ggplot2}` ofrece dos funciones: `geom_bar()`, que cuenta automáticamente las frecuencias de cada categoría; y `geom_col()`, que usa valores ya calculados. Vamos a representar el número de empresas por tipo de flota (EFLO):
+El **gráfico de barras** es la representación básica de las variables **categóricas**. `{ggplot2}` ofrece dos funciones para construirlo: `geom_bar()`, que cuenta por sí sola las frecuencias de cada categoría, y `geom_col()`, que parte de valores ya calculados. Representemos el número de empresas por tipo de flota (EFLO):
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ggplot(data = interestelar_100, aes(x = EFLO)) +
@@ -417,7 +417,7 @@ ggplot(data = interestelar_100, aes(x = EFLO)) +
 :::
 
 
-`geom_bar()` cuenta automáticamente cuántos casos hay en cada categoría de EFLO y representa esa frecuencia como la altura de la barra. Si quisiéramos representar valores ya calculados (por ejemplo, el resultado medio por galaxia), usaríamos `geom_col()`:
+`geom_bar()` cuenta cuántos casos hay en cada categoría de EFLO y traduce esa frecuencia en la altura de la barra. Cuando los valores vienen ya calculados —el resultado medio por galaxia, pongamos por caso—, recurriremos a `geom_col()`:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 # Calcular el resultado medio por galaxia
@@ -441,15 +441,15 @@ ggplot(data = res_por_galaxia, aes(x = reorder(GALAXIA, RES_medio),
 :::
 
 
-En este ejemplo, `reorder()` ordena las barras de menor a mayor valor del resultado medio, y `coord_flip()` gira el gráfico para que las barras sean horizontales, facilitando la lectura de los nombres de las galaxias.
+En este ejemplo, `reorder()` dispone las barras de menor a mayor resultado medio y `coord_flip()` gira el gráfico para situarlas en horizontal, lo que facilita la lectura de los nombres de las galaxias.
 
 ## ![](figuras/pie-chart.svg){.hicon} Gráficos de dos variables.
 
 ### ![](figuras/key.svg){.hicon} Gráfico de dispersión o *scatterplot*.
 
-Pasamos ahora a comentar un tipo de gráfico muy común cuando trabajamos con dos variables métricas: los **gráficos de dispersión** (o ***scatterplots***). En este tipo de gráficos, cada variable ocupa un eje (x o y), y los puntos internos al gráfico representan los diversos casos u observaciones.
+Abordamos ahora un tipo de gráfico muy frecuente cuando trabajamos con dos variables métricas: el **gráfico de dispersión** o ***scatterplot***. En él, cada variable ocupa uno de los ejes y cada punto del interior representa un caso u observación.
 
-Como ejemplo, vamos a crear un gráfico de dispersión que represente las empresas de transporte de mercancías interestelar en función de su ratio de liquidez (LIQUIDEZ) y del resultado del ejercicio (RES). El código es el siguiente:
+Creemos, a modo de ejemplo, un gráfico de dispersión que sitúe a las empresas de transporte interestelar de mercancías en función de su ratio de liquidez (LIQUIDEZ) y de su resultado del ejercicio (RES). El código es el siguiente:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 ggplot(data = interestelar_100, aes(x = LIQUIDEZ, y = RES)) +
@@ -476,7 +476,7 @@ ggplot(data = interestelar_100, aes(x = LIQUIDEZ, y = RES)) +
 :::
 
 
-Vamos a refinar el gráfico algo más. En primer lugar, puede ser interesante **distinguir entre los tipos de empresas**, según la antigüedad de sus flotas (variable EFLO). Para ello, podemos poner el color de los puntos en función de esa variable:
+Refinemos algo más el gráfico. Puede resultar interesante, en primer lugar, **distinguir los tipos de empresas** según la antigüedad de sus flotas (variable EFLO), para lo cual haremos depender de esa variable el color de los puntos:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ggplot(data = interestelar_100, aes(x = LIQUIDEZ, y = RES)) +
@@ -492,9 +492,9 @@ ggplot(data = interestelar_100, aes(x = LIQUIDEZ, y = RES)) +
 :::
 
 
-En los dos gráficos anteriores pueden observarse puntos (casos) candidatos a ser *outliers* particularmente para el caso de la variable RES (beneficio neto o resultado del ejercicio), como ya se pudo advertir al construir los *boxplots*.
+En los dos gráficos anteriores se distinguen puntos —casos— candidatos a *outliers*, sobre todo en lo que respecta a la variable RES (beneficio neto o resultado del ejercicio), tal como ya advertimos al construir los *box-plots*.
 
-Por otro lado, podría ser interesante complementar el gráfico con información sobre las dos variables por separado, es decir, con **información sobre las distribuciones marginales**. Existe un paquete complementario a `{ggplot2}`, llamado `{ggExtra}`, que puede ayudar fácilmente a este cometido. El segundo paso consistirá en **asignar** nuestro *scatterplot*, diseñado con la función `ggplot()`, a un objeto con el nombre que queramos, por ejemplo, "scatter_plus". Luego, ese objeto, que contiene nuestro gráfico, entrará como argumento en la función de `{ggExtra}` llamada `ggMarginal()`, como se muestra en el siguiente código:
+Por otro lado, podría convenirnos completar el gráfico con información sobre cada una de las dos variables por separado, esto es, sobre sus **distribuciones marginales**. Para ello contamos con `{ggExtra}`, un paquete complementario de `{ggplot2}`. El procedimiento consta de dos pasos. El primero consiste en **asignar** el *scatterplot* diseñado con `ggplot()` a un objeto con el nombre que prefiramos, por ejemplo "scatter_plus". En el segundo, ese objeto pasa a ser el argumento de la función `ggMarginal()`, de `{ggExtra}`, tal como muestra el siguiente código:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 scatter_plus <- ggplot(data = interestelar_100,
@@ -509,7 +509,7 @@ ggMarginal(scatter_plus, type = "histogram", groupColour = T,
            groupFill = T, position = "identity", alpha = 0.5)
 ```
 
-Con el código anterior, apreciamos cómo se añaden los histogramas de cada variable, LIQUIDEZ y RES, en los márgenes del gráfico:
+El resultado es la aparición, en los márgenes del gráfico, de los histogramas de ambas variables, LIQUIDEZ y RES:
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
 scatter_plus <- ggplot(data = interestelar_100,
@@ -529,9 +529,9 @@ ggMarginal(scatter_plus, type = "histogram", groupColour = T,
 :::
 
 
-Conviene apuntar que el argumento `position = "identity"` hace que las barras del histograma estén perfectamente alineadas con los datos del gráfico de dispersión, sin ningún tipo de desplazamiento.
+Conviene apuntar que el argumento `position = "identity"` mantiene las barras de los histogramas perfectamente alineadas con los datos del gráfico de dispersión, sin desplazamiento alguno.
 
-Adicionalmente, los diámetros de los puntos de los diversos casos podrían contener también información, haciéndolos proporcionales a una tercera variable. Por ejemplo, podrían ser proporcionales al nivel de solvencia (variable SOLVENCIA). Para ello, la característica `size=` pasa a incluirse dentro de `aes()`, debido a que el diámetro de cada punto ya no es un parámetro fijo, sino que depende de la magnitud de la variable SOLVENCIA:
+El tamaño de los puntos puede aportar, además, una información adicional si lo hacemos proporcional a una tercera variable: el nivel de solvencia (variable SOLVENCIA), por ejemplo. Bastará con trasladar la característica `size =` al interior de `aes()`, ya que el diámetro de cada punto deja de ser un parámetro fijo para depender de la magnitud que SOLVENCIA alcanza en cada caso:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 scatter_plus <- ggplot(data = interestelar_100,
@@ -551,7 +551,7 @@ ggMarginal(scatter_plus, type = "histogram", groupColour = T,
 :::
 
 
-Finalmente, podría ser útil añadir una etiqueta (*label*) a cada punto, para **identificar el caso concreto** al que representa. Para ello, el paquete `{ggrepel}` ofrece la función `geom_label_repel()`, que coloca automáticamente las etiquetas evitando solapamientos:
+Por último, quizá nos resulte útil añadir una etiqueta (*label*) a cada punto para **identificar el caso concreto** que representa. El paquete `{ggrepel}` nos ofrece con este fin la función `geom_label_repel()`, que sitúa las etiquetas de manera automática evitando que se solapen:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 scatter_plus <- ggplot(data = interestelar_100,
@@ -581,13 +581,13 @@ ggMarginal(scatter_plus, type = "histogram", groupColour = T,
 :::
 
 
-La función `geom_label_repel()` omite automáticamente las etiquetas que se solaparían excesivamente (controlable con `max.overlaps`). Otros argumentos útiles son `box.padding` (aire alrededor de cada etiqueta), `point.padding` (aire alrededor del punto ancla) y `force` (intensidad de repulsión entre etiquetas).
+La función descarta por sí sola aquellas etiquetas que se solaparían en exceso, comportamiento que regula el argumento `max.overlaps`. Otros argumentos de interés son `box.padding` (el aire que rodea a cada etiqueta), `point.padding` (el que rodea al punto de anclaje) y `force` (la intensidad de la repulsión entre etiquetas).
 
 ## ![](figuras/pie-chart.svg){.hicon} Paneles múltiples: *faceting*.
 
-Una de las funcionalidades más potentes de `{ggplot2}` es la posibilidad de crear **paneles múltiples** (*facets*) a partir de una o varias variables categóricas. En lugar de superponer grupos en un mismo gráfico (lo que a veces lo hace difícil de leer), se crea un gráfico independiente para cada categoría, todos con las mismas escalas, lo que facilita enormemente la comparación.
+Una de las prestaciones más potentes de `{ggplot2}` es la posibilidad de generar **paneles múltiples** (*facets*) a partir de una o varias variables categóricas. En lugar de superponer los grupos en una misma imagen —lo que en ocasiones dificulta su lectura—, se dibuja un gráfico independiente para cada categoría, todos ellos con idénticas escalas, lo que facilita enormemente la comparación.
 
-La función principal es `facet_wrap()`, que distribuye los paneles en una retícula. Por ejemplo, para crear un histograma de LIQUIDEZ separado por tipo de flota:
+La función principal es `facet_wrap()`, que reparte los paneles en una retícula. Veamos cómo obtener un histograma de LIQUIDEZ separado por tipo de flota. Recuperamos aquí el objeto `nbins`, que calculamos con la regla de *Sturges* al construir nuestro primer histograma y que sigue alojado en el *Global Environment*; si hubiéramos limpiado la memoria entretanto, bastaría con volver a ejecutar aquella línea antes que esta:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ggplot(data = interestelar_100, aes(x = LIQUIDEZ)) +
@@ -604,9 +604,9 @@ ggplot(data = interestelar_100, aes(x = LIQUIDEZ)) +
 :::
 
 
-La fórmula `~ EFLO` indica la variable que define los paneles. Si quisiéramos paneles definidos por dos variables (por ejemplo, EFLO y GALAXIA), usaríamos `facet_grid(EFLO ~ GALAXIA)`, que crea una cuadrícula con una dimensión por variable.
+La fórmula `~ EFLO` señala la variable que define los paneles. Si quisiéramos definirlos a partir de dos variables —EFLO y GALAXIA, por ejemplo—, recurriríamos a `facet_grid(EFLO ~ GALAXIA)`, que construye una cuadrícula con una dimensión por variable.
 
-El *faceting* puede aplicarse a cualquier tipo de gráfico. Veamos un ejemplo con el gráfico de dispersión:
+El *faceting* puede aplicarse a cualquier tipo de gráfico. Veámoslo sobre el gráfico de dispersión:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ggplot(data = interestelar_100, aes(x = LIQUIDEZ, y = RES)) +
@@ -623,11 +623,11 @@ ggplot(data = interestelar_100, aes(x = LIQUIDEZ, y = RES)) +
 :::
 
 
-Cada panel contiene solo los casos de una categoría de EFLO, lo que permite apreciar con claridad la relación entre LIQUIDEZ y RES dentro de cada grupo, sin la confusión que puede generar la superposición de colores en un único gráfico.
+Cada panel recoge únicamente los casos de una categoría de EFLO, de modo que la relación entre LIQUIDEZ y RES se aprecia con nitidez dentro de cada grupo, sin la confusión que puede generar la superposición de colores en una sola imagen.
 
 ## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo.
 
-En esta sección se muestran los links de acceso a los diferentes materiales (*scripts*, datos...) necesarios para llevar a cabo los contenidos prácticos del capítulo.
+En esta sección se recogen los enlaces de acceso a los distintos materiales (*scripts*, datos...) necesarios para desarrollar los contenidos prácticos del capítulo.
 
 **Datos (en formato Microsoft® Excel®):**
 

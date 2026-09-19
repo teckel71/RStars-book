@@ -208,17 +208,62 @@ ggplot(data = datos, aes(x = SALARIO)) +
   xlab("Salario (cientos de PAVOs)") +
   ylab("Densidad")
 
+## MEDIDAS DE CONCENTRACIÓN
+
+# Salarios ordenados de menor a mayor
+salarios <- sort(datos$SALARIO)
+
+# Proporción acumulada de trabajadores (p) y de masa salarial (q)
+p <- (1:N) / N
+q <- cumsum(salarios) / sum(salarios)
+
+# Reparto de la masa salarial entre tramos de la plantilla
+tramos <- data.frame(
+  Tramo = c("25% peor pagado", "50% peor pagado", "25% mejor pagado"),
+  Masa  = c(q[round(0.25 * N)],
+            q[round(0.50 * N)],
+            1 - q[round(0.75 * N)])
+)
+
+tramos %>%
+  kable(caption = "Reparto de la masa salarial. Shuttlepod Movers",
+        col.names = c("Tramo de la plantilla", "Masa salarial percibida"),
+        digits = c(NA, 3)) %>%
+  kable_styling(full_width = F,
+                bootstrap_options = c("striped", "bordered", "condensed"),
+                position = "center",
+                font_size = 11) %>%
+  row_spec(0, bold = T, align = "c") %>%
+  row_spec(1:nrow(tramos), bold = F, align = "c")
+
+# Curva de Lorenz
+lorenz <- data.frame(p = c(0, p), q = c(0, q))
+
+ggplot(data = lorenz, aes(x = p, y = q)) +
+  geom_ribbon(aes(ymin = q, ymax = p), fill = "orange", alpha = 0.4) +
+  geom_abline(intercept = 0, slope = 1,
+              colour = "darkblue", linetype = "dashed", linewidth = 1) +
+  geom_line(colour = "red", linewidth = 1) +
+  ggtitle("CURVA DE LORENZ DEL SALARIO",
+          subtitle = "trabajadores de Shuttlepod Movers") +
+  xlab("Proporción acumulada de trabajadores") +
+  ylab("Proporción acumulada de masa salarial")
+
+# Índice de Gini
+gini <- sum(p[-N] - q[-N]) / sum(p[-N])
+gini
+
 # Tabla resumen de medidas descriptivas
 resumen <- data.frame(
   Medida = c("Media aritmética", "Mediana", "Moda",
              "Cuartil 1 (Q1)", "Cuartil 3 (Q3)", "Rango intercuartílico (IQR)",
              "Varianza", "Desviación típica", "Cuasivarianza",
              "Coef. de variación", "Coef. de asimetría (Fisher)",
-             "Coef. de curtosis (Fisher)"),
+             "Coef. de curtosis (Fisher)", "Índice de Gini"),
   Valor = round(c(media, mediana, as.numeric(moda),
                   cuartiles[1], cuartiles[3], cuartiles[3] - cuartiles[1],
                   varianza, desv, cuasivarianza,
-                  cvariacion, asimetria, curtosis), 3)
+                  cvariacion, asimetria, curtosis, gini), 3)
 )
 
 resumen %>%
