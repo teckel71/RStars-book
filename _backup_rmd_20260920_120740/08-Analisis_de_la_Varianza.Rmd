@@ -1,38 +1,24 @@
-```{r matrstars-numerado-setup-cap8, include=FALSE}
-options(matrstars.suppress_caption = TRUE)
-```
-
 # Análisis de la varianza.
 
-![](figuras/08%20anova%20astilleros.jpg){width="100%"}
+![[Astillero interestelar en órbita estacionaria.]{.smallcaps}](figuras/08%20anova%20astilleros.jpg){width="100%"}
 
-::: {style="text-align: center;"}
-**Figura 8.1.** [Astillero interestelar en órbita estacionaria.]{.smallcaps}
-:::
-
-
-## Introducción. {#c08-introduccion}
+## Introducción.
 
 El análisis de la varianza (ANOVA) puede considerarse una generalización del contraste de hipótesis de medias poblacionales iguales para el caso de poblaciones normales y con varianzas desconocidas, pero iguales. La generalización consiste en poder considerar más de dos poblaciones. La **hipótesis nula** será la que afirma que **las medias poblacionales de la variable métrica en estudio, para todas las poblaciones, son iguales**. La hipótesis alternativa, por su lado, afirmará que existe al menos dos poblaciones con medias diferentes. Como todo contraste, para llevarlo a cabo hemos de tener una muestra representativa de cada población, y fijar un nivel de significación (usualmente 0.05).
 
 También se puede considerar el ANOVA como un **tipo especial de análisis de regresión**, en la que la variable dependiente es una variable métrica, y las variables explicativas son atributos o factores (en escala nominal u ordinal). La misión de los factores es clasificar a los casos que constituyen nuestra muestra en distintas submuestras, cada una representativa de una de las subpoblaciones cuyas medias en la variable en estudio se quiere comparar.
 
-## ANOVA de un solo factor. {#c08-anova-de-un-solo-factor}
+## ANOVA de un solo factor.
 
 Aunque se pueden realizar ANOVAs con más de un atributo o factor, en este ejemplo nos ceñiremos al caso más simple, en el que solo hay un atributo o factor que se ocupa de distribuir los casos de la muestra entre los distintos grupos o submuestras (a partir de la categoría o nivel que toma cada caso).
 
-### El Informe *Crestfall*. {#c08-el-informe-crestfall}
+### El Informe *Crestfall*.
 
 Todas las naves del sector del transporte interestelar de mercancías se propulsan con un mismo combustible: la *especia*. Sin embargo, no todas las naves se construyen igual. El diseño, los materiales, los sistemas de navegación y los protocolos de mantenimiento son responsabilidad de los grandes **astilleros interestelares**: las compañías que diseñan, fabrican y suministran los cargueros que luego operan las distintas empresas de transporte. La calidad y las prestaciones de las naves dependen, en buena medida, del astillero del que proceden.
 
 La *Agencia Interplanetaria de Transporte de Mercancías* (AITM) realiza, cada cierto tiempo, estudios comparativos entre los principales astilleros del sector. El estudio que reproduciremos en este capítulo lleva a cabo dicha comparación entre los tres grandes astilleros activos en el momento: **Korrigan Heavy Works**, **Selene Dynamics** y **Arcturus Shipyards**. La investigación está dirigida por el doctor *Oren Crestfall*, analista técnico de la agencia, por lo que el informe que recoge sus resultados se conoce como *Informe Crestfall*.
 
-![](figuras/08%20anova%20planos.jpg){width="100%"}
-
-::: {style="text-align: center;"}
-**Figura 8.2.** [Planos de diversos modelos de cargueros de mercancías.]{.smallcaps}
-:::
-
+![[Planos de diversos modelos de cargueros de mercancías.]{.smallcaps}](figuras/08%20anova%20planos.jpg){width="100%"}
 
 En el estudio se han seleccionado **48 naves cargueras**, 16 de cada uno de los tres astilleros, con independencia de cuál sea la empresa de transporte que las opera actualmente. Sobre cada nave se ha registrado, entre otras variables, su **Índice de Rendimiento Energético (IRE)** —toneladas de carga útil transportadas por unidad de especia consumida en la ruta estándar de referencia Sol–Centauri B— y su **Índice de Incidencias Graves (IIG)** —número de averías mayores registradas a lo largo de su vida operativa—. El factor que clasifica las naves es, por tanto, el **ASTILLERO** fabricante.
 
@@ -44,7 +30,7 @@ La AITM se plantea dos preguntas:
 
 Ambas preguntas tienen la misma estructura: comparar las medias de una variable métrica entre tres grupos definidos por un factor. El contraste natural es, pues, el ANOVA. Pero como veremos a lo largo del capítulo, las dos preguntas requerirán técnicas distintas: la primera podrá responderse con el ANOVA en sentido estricto; la segunda, no, y deberá responderse con una técnica robusta.
 
-### Preparación de los datos. {#c08-preparacion-de-los-datos}
+### Preparación de los datos.
 
 Los datos están almacenados en el archivo de Microsoft Excel "[astilleros_48.xlsx](https://raw.githubusercontent.com/teckel71/RStars-book/main/download/astilleros_48.xlsx)", y el script con el código del ejemplo se halla contenido en el fichero "[anova_rstars.R](https://raw.githubusercontent.com/teckel71/RStars-book/main/download/anova_rstars.R)". Vamos a suponer que trabajaremos en un proyecto de RStudio al que denominaremos "anova".
 
@@ -107,7 +93,7 @@ rm(variables_por_bloque)
 rm(df)
 ```
 
-### El primer estudio: el Índice de Rendimiento Energético (IRE). {#c08-el-primer-estudio-el-endice-de-rendimiento}
+### El primer estudio: el Índice de Rendimiento Energético (IRE).
 
 Comencemos con la primera pregunta de la AITM: **¿hay diferencias significativas en el rendimiento energético medio de las naves según el astillero que las fabrica?** La hipótesis nula del contraste afirma que **no existen diferencias entre los IRE medios** de las naves de los tres astilleros (KORRIGAN, SELENE y ARCTURUS). La hipótesis alternativa, en cambio, afirma que **existe al menos una diferencia significativa** entre dos de esas medias poblacionales.
 
@@ -145,7 +131,6 @@ muestra <- explora_na(
 Una vez tratados los casos con valores perdidos o *missing values*, **es necesario detectar la presencia de *outliers*** o casos atípicos en la muestra, que pudieran desvirtuar los resultados derivados del ANOVA. Para ello, aplicamos la función auxiliar `explora_outliers()` del paquete `{MATrstars}` que ya se presentó en el capítulo 5. Al pasarle una sola variable métrica —en este caso IRE— la función detecta el caso univariante y aplica directamente la regla clásica de 1.5 veces el rango intercuartílico sobre ella. Con `accion = "eliminar"` la función devuelve un nuevo *data frame* sin los casos identificados como *outliers*, que llamaremos "**muestra_so**":
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
-options(matrstars.figura_num = "8.3", matrstars.tabla_num = "8.1")
   # Outliers
   muestra_so <- explora_outliers(
     muestra,
@@ -182,14 +167,9 @@ Una vez preparados los datos, vamos a presentar los grupos de naves y sus rendim
                                media = mean(IRE))
 
   tablamedias %>%
-    kable_rstars(
+    kable_rstars(caption   = "IRE. Medias por astillero.",
                  col.names = c("Astillero", "Observaciones", "IRE medio"))
 ```
-
-::: {style="text-align: center;"}
-**Tabla 8.2.** IRE. Medias por astillero.
-:::
-
 
 Gráficamente, las tres submuestras de naves pueden caracterizarse, en cuanto al rendimiento energético (IRE), mediante dos tipos de gráficos: gráficos de densidad y gráficos de caja. Los gráficos serán construidos utilizando las facilidades del paquete `{ggplot2}`. Además, combinaremos los gráficos en una composición utilizando el paquete `{patchwork}`. El código es el siguiente:
 
@@ -231,11 +211,6 @@ Gráficamente, las tres submuestras de naves pueden caracterizarse, en cuanto al
   gdensidad / gbox
 ```
 
-::: {style="text-align: center;"}
-**Figura 8.4**
-:::
-
-
 Cada grupo o submuestra "representa" a una subpoblación, según el astillero fabricante. El ANOVA lo que intenta determinar es si, observadas las diferencias en las medias muestrales de la variable en estudio (aquí, IRE), esas diferencias pueden considerarse o no estadísticamente significativas a nivel poblacional. En realidad, la hipótesis nula a contrastar es que ninguna de las diferencias entre las medias de la variable de las subpoblaciones es estadísticamente significativa; mientras que la hipótesis alternativa es que existe al menos una diferencia significativa entre las medias de las subpoblaciones. En definitiva, la **hipótesis nula** a contrastar sugiere **que no existen diferencias entre los rendimientos energéticos medios de los grupos** (subpoblaciones) de naves (discriminadas por el astillero que las fabrica). De ser así, el factor ASTILLERO no tendría una influencia estadísticamente significativa sobre el valor medio de la variable IRE.
 
 Las conclusiones a las que lleguemos con el *contraste F de ANOVA* serán válidas en la medida en que se cumplan las **hipótesis de normalidad y homogeneidad en las varianzas** de la variable dependiente o métrica (IRE), en los tres grupos o subpoblaciones en que queda dividida la población atendiendo los niveles o categorías del factor (ASTILLERO). Hemos de contrastar, pues, ambas hipótesis, a partir de la información de las tres submuestras que tenemos y que representan, respectivamente, a cada una de esas subpoblaciones.
@@ -257,11 +232,6 @@ El análisis gráfico puede llevarse a cabo mediante la realización *de gráfic
             subtitle = "48 naves cargueras (sin outliers)") +
     facet_grid(. ~ ASTILLERO)
 ```
-
-::: {style="text-align: center;"}
-**Figura 8.5**
-:::
-
 
 Los *gráficos QQ* muestran un buen ajuste de los puntos a la diagonal en los tres astilleros, lo que sugiere un comportamiento próximo a la Ley Normal de la variable IRE en las tres submuestras. Para extraer una conclusión de un modo más preciso, vamos a realizar el contraste de normalidad de *Shapiro-Wilk*:
 
@@ -294,16 +264,11 @@ En el código anterior, se crea un pequeño *data frame* denominado "normalidad"
                             "NO-NORMALIDAD"))
 
     tablashapiro <- normalidad %>%
-    kable_rstars(
+    kable_rstars(caption   = "Normalidad (Shapiro-Wilks).",
                  col.names = c("Astillero", "p-valor", "Conclusión"))
 
     tablashapiro
 ```
-
-::: {style="text-align: center;"}
-**Tabla 8.3**
-:::
-
 
 En esta prueba, la hipótesis nula equivale al supuesto de normalidad. Para un 5% de significación estadística, un **p-valor superior a 0,05 implicará el no-rechazo de la hipótesis nula de normalidad**. En el ejemplo, los tres astilleros presentan p-valores claramente por encima de 0,05, por lo que **podemos aceptar la existencia de normalidad en las tres subpoblaciones**.
 
@@ -353,7 +318,7 @@ summary_aov <- summary(Datos.aov)
 
   # Convertir la tabla en una tabla de kable
   aov_table %>%
-    kable_rstars(
+    kable_rstars(caption   = "Resultados del ANOVA",
                  col.names = c("Grados Libertad",
                                "Suma cuadrados",
                                "Media suma cuadrados",
@@ -361,14 +326,9 @@ summary_aov <- summary(Datos.aov)
                                "p-valor"))
 ```
 
-::: {style="text-align: center;"}
-**Tabla 8.4.** Resultados del ANOVA
-:::
-
-
 El valor del estadístico F de ANOVA es muy elevado, con un p-valor asociado prácticamente nulo. Como el p-valor es menor que 0,05, **se rechaza la hipótesis nula de medias iguales**; por lo que podremos afirmar (para una significación del 5%) que **el astillero fabricante influye, en media, en el rendimiento energético de las naves cargueras**.
 
-### Tamaño del efecto. {#c08-tamano-del-efecto}
+### Tamaño del efecto.
 
 Que un contraste sea estadísticamente significativo no dice nada sobre la **magnitud** del efecto detectado. Con muestras grandes, incluso diferencias muy pequeñas pueden salir significativas; con muestras muy pequeñas, diferencias importantes pueden pasar desapercibidas. Por eso, además del p-valor, conviene reportar el **tamaño del efecto** (*effect size*), que cuantifica *cuánto* explica el factor de la variabilidad de la variable dependiente.
 
@@ -390,7 +350,7 @@ Ambas medidas pueden calcularse con el paquete `{effectsize}`:
 
 El valor de η² es muy alto (por encima de 0,14), lo que indica un **efecto grande** del astillero sobre el rendimiento energético. El ω², algo más conservador, confirma la misma conclusión. Es decir: no solo hay diferencias significativas entre astilleros, sino que **el astillero explica una parte sustancial de la variabilidad del IRE**. La conclusión estadística tiene, por tanto, también una **relevancia práctica** importante.
 
-## Comparaciones múltiples. {#c08-comparaciones-multiples}
+## Comparaciones múltiples.
 
 Cuando el resultado del contraste *F de ANOVA* es de rechazo de la hipótesis nula, se presenta otra cuestión interesante. La hipótesis alternativa dice que existe al menos una diferencia entre las medias de dos grupos que es "importante". Pero no tienen porque ser todas. Entonces, cabe preguntarse que diferencias concretas entre medias son estadísticamente significativas, y cuáles no. Para dilucidar esta cuestión se han desarrollado diversas pruebas de **comparaciones múltiples**. Una de ellas es la prueba *HSD de Tukey*. Un modo de obtener los resultados de esta prueba es ejecutarla a partir de las funciones del paquete `{emmeans}`. En concreto, los resultados de la prueba *HSD de* *Tukey* se obtendrán aplicando la función `pairs()` a un objeto creado previamente con la función `emmeans()`, al que hemos llamado, por ejemplo, "medias", y que tiene como argumentos el nombre de nuestra solución del contraste ANOVA anterior y, entrecomillado, el nombre de la variable que actúa como factor que divide a la muestra en los tres grupos (submuestras) comparados (ASTILLERO). Los resultados se han guardado en el objeto "pares", que posteriormente se ha transformado en un *data frame* para poder ser presentado como una tabla con `kable_rstars()`:
 
@@ -418,7 +378,7 @@ pares <- pairs(medias)
 pares_df <- as.data.frame(pares)
 
 pares_df %>%
-  kable_rstars(
+  kable_rstars(caption   = "Resultados comparaciones múltiples",
                col.names = c("Grupos",
                              "Diferencia estimada",
                              "Desviación Típica",
@@ -427,18 +387,13 @@ pares_df %>%
                              "p-valor"))
 ```
 
-::: {style="text-align: center;"}
-**Tabla 8.5.** Resultados comparaciones múltiples
-:::
-
-
 En la tabla generada, cada fila recoge la diferencia entre el IRE medio de las naves incluidas en las submuestras de los distintos astilleros. En la última columna, se muestran los *p-valores.* La hipótesis nula implica que la diferencia entre los IRE medios de los dos grupos implicados son tan pequeñas que pueden considerarse nulas. Por tanto, p-valores muy pequeños (menores que 0,05) implican un rechazo de esta hipótesis, y la admisión de que esas diferencias son significativamente distintas a 0, o sea, "importantes". En el ejemplo se observa que las tres comparaciones por pares arrojan p-valores muy pequeños, lo que indica que **las diferencias en el IRE medio entre los tres astilleros son todas estadísticamente significativas**. En particular, las naves construidas por *Selene Dynamics* presentan un rendimiento energético medio claramente superior al de las naves construidas por *Arcturus Shipyards*, y este, a su vez, es superior al de las naves construidas por *Korrigan Heavy Works*. La AITM puede, por tanto, afirmar con sólido respaldo estadístico que el astillero fabricante es un factor relevante a la hora de explicar las diferencias de rendimiento energético entre las naves del sector.
 
-## ¿Y si no se cumplen las condiciones para realizar el contraste F de ANOVA? {#c08-y-si-no-se-cumplen-las-condiciones-para}
+## ¿Y si no se cumplen las condiciones para realizar el contraste F de ANOVA?
 
 En el ejemplo anterior, todas las hipótesis necesarias para confiar en los resultados del contraste *F de ANOVA* y la prueba *HSD de Tukey* se cumplieron sin dificultad: la normalidad de las tres subpoblaciones (medida a través de las submuestras) y la homogeneidad de sus varianzas. Pero no siempre será así. Veámoslo con la segunda pregunta del *Informe Crestfall*: **¿hay diferencias significativas en la fiabilidad media de las naves según el astillero que las fabrica?**
 
-### El segundo estudio: el Índice de Incidencias Graves (IIG). {#c08-el-segundo-estudio-el-endice-de-incidencias}
+### El segundo estudio: el Índice de Incidencias Graves (IIG).
 
 La variable que mide la fiabilidad de cada nave es el **Índice de Incidencias Graves (IIG)**, que recoge el número de averías mayores que la nave ha registrado a lo largo de su vida operativa. La hipótesis nula del contraste afirma que el IIG medio es el mismo en los tres astilleros; la alternativa, que existe al menos una diferencia significativa.
 
@@ -472,7 +427,6 @@ muestra2 <- explora_na(
 Aplicamos de nuevo `explora_outliers()`, esta vez sobre la variable IIG, con `accion = "eliminar"` para descartar los casos identificados como *outliers*. El resultado se guarda en el *data frame* "muestra2_so":
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
-options(matrstars.figura_num = "8.6", matrstars.tabla_num = "8.6")
   # Outliers
   muestra2_so <- explora_outliers(
     muestra2,
@@ -505,14 +459,9 @@ Construimos a continuación la tabla de medias por astillero:
                                media = mean(IIG))
 
   tablamedias2 %>%
-    kable_rstars(
+    kable_rstars(caption   = "IIG. Medias por astillero.",
                  col.names = c("Astillero", "Observaciones", "IIG medio"))
 ```
-
-::: {style="text-align: center;"}
-**Tabla 8.7.** IIG. Medias por astillero.
-:::
-
 
 Y los gráficos de densidad y caja:
 
@@ -548,11 +497,6 @@ Y los gráficos de densidad y caja:
   gdensidad2 / gbox2
 ```
 
-::: {style="text-align: center;"}
-**Figura 8.7**
-:::
-
-
 Los gráficos ya anticipan dificultades. Las naves de *Selene Dynamics* presentan una distribución del IIG muy concentrada en valores próximos a cero (la inmensa mayoría de sus naves tienen ninguna o una sola avería en toda su vida operativa), lo que da lugar a una distribución claramente asimétrica. En cambio, las naves de *Arcturus Shipyards* presentan una distribución mucho más dispersa, con valores que van de 0 a 9 averías. Esta heterogeneidad en la forma y dispersión de las tres distribuciones es precisamente lo que hará peligrar las hipótesis del ANOVA.
 
 Procedemos al contraste de normalidad mediante el gráfico QQ y la prueba de *Shapiro-Wilk*:
@@ -566,11 +510,6 @@ Procedemos al contraste de normalidad mediante el gráfico QQ y la prueba de *Sh
             subtitle = "48 naves cargueras (sin outliers)") +
     facet_grid(. ~ ASTILLERO)
 ```
-
-::: {style="text-align: center;"}
-**Figura 8.8**
-:::
-
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
     normalidad2 <- muestra2_so %>%
@@ -596,16 +535,11 @@ Procedemos al contraste de normalidad mediante el gráfico QQ y la prueba de *Sh
                             "NO-NORMALIDAD"))
 
     tablashapiro2 <- normalidad2 %>%
-    kable_rstars(
+    kable_rstars(caption   = "Normalidad del IIG (Shapiro-Wilks).",
                  col.names = c("Astillero", "p-valor", "Conclusión"))
 
     tablashapiro2
 ```
-
-::: {style="text-align: center;"}
-**Tabla 8.8**
-:::
-
 
 A diferencia del caso del IRE, ahora la prueba de *Shapiro-Wilk* rechaza la hipótesis de normalidad para el grupo de *Selene Dynamics* (su p-valor es prácticamente nulo). Esta no-normalidad **no se debe a la presencia de *outliers*** —ya los habíamos eliminado—, sino a una característica estructural de la subpoblación: las naves de Selene son, casi todas, sistemáticamente muy fiables, por lo que el IIG se acumula de manera asimétrica en torno a 0-1 averías. Ningún proceso de limpieza de la muestra podría corregir este hecho.
 
@@ -639,7 +573,7 @@ summary_aov2 <- summary(Datos.aov2)
 aov_table2 <- as.data.frame(summary_aov2[[1]])
 
   aov_table2 %>%
-    kable_rstars(
+    kable_rstars(caption   = "Resultados del ANOVA — IIG (solo ilustrativo)",
                  col.names = c("Grados Libertad",
                                "Suma cuadrados",
                                "Media suma cuadrados",
@@ -647,14 +581,9 @@ aov_table2 <- as.data.frame(summary_aov2[[1]])
                                "p-valor"))
 ```
 
-::: {style="text-align: center;"}
-**Tabla 8.9.** Resultados del ANOVA — IIG (solo ilustrativo)
-:::
-
-
 Como no se cumplen las hipótesis del ANOVA, **estos resultados no son fiables y no debemos basar nuestras conclusiones en ellos**. Es necesario recurrir a técnicas robustas, puesto que el comportamiento de la variable analizada en las subpoblaciones (grupos) no se ajusta al necesario para poder aplicar los contrastes anteriores.
 
-### Alternativa robusta: la prueba de Kruskal-Wallis. {#c08-alternativa-robusta-la-prueba-de-kruskal}
+### Alternativa robusta: la prueba de Kruskal-Wallis.
 
 Cuando las condiciones del ANOVA no se cumplen, la alternativa **no paramétrica** más habitual es la **prueba de Kruskal-Wallis**. Es importante entender **qué contrasta exactamente**: en lugar de trabajar sobre las medias de los grupos, esta prueba trabaja sobre los **rangos** de los datos. Sustituye los valores originales por sus rangos globales (del 1 al *n*, ordenando toda la muestra de menor a mayor) y compara los **rangos medios** entre grupos.
 
@@ -670,7 +599,7 @@ Para aplicar la prueba en R usamos la función `kruskal.test()` del paquete `{st
 
 Puede comprobarse cómo el *p-valor* es muy pequeño (menor a 0,05), por lo que **se rechaza la hipótesis nula de igualdad de distribuciones** y se admite que **al menos uno de los astilleros presenta un comportamiento sistemáticamente diferente en cuanto al IIG**.
 
-### Tamaño del efecto (versión no paramétrica). {#c08-tamano-del-efecto-version-no-parametrica}
+### Tamaño del efecto (versión no paramétrica).
 
 Al igual que hicimos en el primer estudio, conviene reportar el tamaño del efecto para valorar la relevancia práctica. La medida análoga a η² para Kruskal-Wallis es la **eta² para KW** ($\eta^2_H$), que se calcula como $\eta^2_H = (H - k + 1)/(n - k)$, donde *H* es el estadístico de Kruskal-Wallis, *k* el número de grupos y *n* el tamaño total. Se interpreta con los mismos umbrales que η² (0,01 pequeño; 0,06 medio; 0,14 grande). El paquete `{effectsize}` la implementa:
 
@@ -681,7 +610,7 @@ Al igual que hicimos en el primer estudio, conviene reportar el tamaño del efec
 
 El tamaño del efecto es también claramente **grande**: el astillero explica una parte muy sustancial de la variabilidad del IIG en términos de rangos.
 
-### Comparaciones múltiples: el test de Dunn. {#c08-comparaciones-multiples-el-test-de-dunn}
+### Comparaciones múltiples: el test de Dunn.
 
 Igual que hicimos con Tukey tras el ANOVA, ahora necesitamos identificar **entre qué pares** de astilleros existen diferencias significativas. La opción moderna y recomendada es el **test de Dunn**, que compara los rangos medios entre pares con **p-valores explícitos ajustados por comparaciones múltiples** (por defecto, corrección de Bonferroni; también admite Holm, Benjamini-Hochberg, etc.). Es la extensión natural de KW y sustituye ventajosamente a la función `kruskalmc()` del paquete `{pgirmess}`, que se limitaba a devolver un veredicto binario sin p-valores. Está implementada en la función `dunnTest()` del paquete `{FSA}`:
 
@@ -700,19 +629,14 @@ Igual que hicimos con Tukey tras el ANOVA, ahora necesitamos identificar **entre
     Datos.dunn <- dunnTest(IIG ~ ASTILLERO, data = muestra2_so,
                            method = "bonferroni")
     Datos.dunn$res %>%
-      kable_rstars(
+      kable_rstars(caption   = "Dunn. Comparaciones múltiples (Bonferroni).",
                    col.names = c("Comparación", "Estadístico Z",
                                  "p-valor sin ajustar", "p-valor ajustado"))
 ```
 
-::: {style="text-align: center;"}
-**Tabla 8.10.** Dunn. Comparaciones múltiples (Bonferroni).
-:::
-
-
 En la tabla generada se comprueba qué comparaciones por pares resultan estadísticamente significativas (para un 0,05 de significación) tras corregir por el número de comparaciones realizadas. El *Informe Crestfall* concluye, así, que **las naves de *Selene Dynamics* son significativamente más fiables que las de los otros dos astilleros**, mientras que, entre *Korrigan Heavy Works* y *Arcturus Shipyards*, las diferencias de fiabilidad no resultan tan claras. Esta conclusión, obtenida mediante la técnica robusta apropiada al caso, sí puede ser incorporada con plenas garantías al informe que la AITM entregará a las empresas del sector.
 
-## ![](figuras/star.svg){.hicon} Cierre del *Informe Crestfall*. {#c08-cierre-del-informe-crestfall}
+## ![](figuras/star.svg){.hicon} Cierre del *Informe Crestfall*.
 
 El doctor *Oren Crestfall* firma su informe con dos conclusiones nítidas y estadísticamente respaldadas:
 
@@ -722,7 +646,7 @@ El doctor *Oren Crestfall* firma su informe con dos conclusiones nítidas y esta
 
 El *Informe Crestfall* sale de la AITM camino de los grandes operadores del sector. En un despacho poco iluminado, un magnate llamado *Arg-us Korp* lo lee con atención, subraya la palabra **Selene** y murmura: *"Interesante..."*.
 
-## Materiales para realizar las prácticas del capítulo. {#c08-materiales-para-realizar-las-practicas-del}
+## Materiales para realizar las prácticas del capítulo.
 
 En esta sección se muestran los links de acceso a los diferentes materiales (*scripts*, datos...) necesarios para llevar a cabo los contenidos prácticos del capítulo.
 

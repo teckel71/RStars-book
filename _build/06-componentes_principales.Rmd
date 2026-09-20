@@ -11,7 +11,7 @@ options(matrstars.suppress_caption = TRUE)
 :::
 
 
-## ![](figuras/book.svg){.hicon} Introducción.
+## ![](figuras/book.svg){.hicon} Introducción. {#c06-introduccion}
 
 A veces, menos es más. Esta es la filosofía que subyace a las **técnicas de reducción de la dimensión** de la información.
 
@@ -21,7 +21,7 @@ Las técnicas de reducción de la dimensión de la información tratan, precisam
 
 La principal técnica de reducción de la dimensión de la información es la de **componentes principales,** y es la que se expondrá y ejemplificará en el resto del capítulo. Pero antes, es preciso concretar la relación entre dos conceptos muy presentes en esta técnica: información y varianza.
 
-## ![](figuras/book.svg){.hicon} Información y varianza.
+## ![](figuras/book.svg){.hicon} Información y varianza. {#c06-informacion-y-varianza}
 
 En el apartado anterior hemos hablado de la posibilidad de que algunas variables compartan "información" sobre el comportamiento de los casos que constituyen nuestra muestra u objeto de estudio. Pero, ¿qué es, en este contexto, la "información"?
 
@@ -48,7 +48,7 @@ Una medida de la dispersión de una variable usualmente utilizada es la **varian
 
 En el ejemplo, puede observarse cómo la variable 3 es la que mayor varianza tiene, luego la variable 2, y la variable 1 tiene una varianza de 0 (y no posee información sobre las 20 empresas). Esta comparación de varianzas es válida siempre y cuando las tres variables estén expresadas en las mismas unidades, ya que la varianza es una medida de dispersión absoluta. Por ello, para poder comparar, hemos añadido también en el ejemplo una medida de dispersión relativa: el coeficiente de variación. Podemos comprobar cómo el mayor coeficiente de variación pertenece a la variable 3 (que es la que tiene una mayor cantidad de información), luego la variable 2 (que cuenta con menor cantidad de información), y por último la variable 1, con un coeficiente de 0 (no contiene información sobre las empresas).
 
-## ![](figuras/star.svg){.hicon} La elección de *Arg-Us Korp*.
+## ![](figuras/star.svg){.hicon} La elección de *Arg-Us Korp*. {#c06-la-eleccion-de-arg-us-korp}
 
 Vamos a considerar el caso del sector del "Transporte Interestelar". Tenemos una selección de 104 empresas o compañías. El "magnate" de los negocios a escala interplanetaria, *Arg-us* *Korp* en la imagen), está de compras: quiere adquirir una de las empresas que mejor proyección a futuro en el sector tenga.
 
@@ -77,7 +77,7 @@ La respuesta ha venido al comprobar que las tres variables guardan entre sí una
 
 El método para obtener este indicador a partir de las tres variables originales se llama ***Análisis de Componentes Principales*** **(PCA)**, y puede ser fácilmente desarrollado con unas líneas de código de R. Ese indicador, que es la clave de toda la estrategia, será la primera "componente" del PCA, una combinación lineal de las tres variables originales; siempre y cuando su poder para "retener" la información global ofrecida por esas tres variables sea lo suficientemente alto.
 
-## ![](figuras/pie-chart.svg){.hicon} Preparación previa de datos.
+## ![](figuras/pie-chart.svg){.hicon} Preparación previa de datos. {#c06-preparacion-previa-de-datos}
 
 Vamos a suponer que trabajamos dentro de un **proyecto** que hemos creado previamente, de nombre **"componentes"**. Dentro de la carpeta del proyecto guardaremos estos dos elementos:
 
@@ -181,7 +181,7 @@ seleccion_so <- explora_outliers(
 
 El gráfico y la tabla anteriores confirman que hay 13 empresas que se comportan como *outliers*, considerando conjuntamente las tres variables del análisis. El *data frame* "seleccion_so" contiene los 89 casos restantes (los que **no** son *outliers* y no contenían *missing values*). Con él es con el que se procederá al cálculo de las componentes.
 
-## ![](figuras/pie-chart.svg){.hicon} Cálculo de componentes.
+## ![](figuras/pie-chart.svg){.hicon} Cálculo de componentes. {#c06-calculo-de-componentes}
 
 La **condición previa** para el **cálculo de componentes** es que las variables originales del análisis contengan información redundante, es decir, que en buena medida tengan una capacidad para diferenciar a los casos (empresas) parecida. Esto se verifica con la existencia de **altas correlaciones**, en valor absoluto, entre ellas (al menos, entre *algunas*). Por tanto, hemos de calcular la matriz de correlaciones correspondiente. Un modo gráfico visualmente efectivo es utilizar las posibilidades que nos ofrece el paquete `{GGally}`, mediante la función `ggpairs()`:
 
@@ -300,7 +300,7 @@ $$
 
 Puede observarse que, en cuanto a la primera componente, que es la que especialmente nos interesa como *indicador* de la "preparación de las diferentes compañías de transporte para afrontar el futuro", las 3 cargas tienen signo positivo, lo que implica que, cuanto mayores sean los valores de una empresa en las variables **IDIVERSE** (*índice de diversificación*), **IFIDE** (*índice de fidelidad*) e **IDIG** (*índice de digitalización*), mayor será el valor del indicador y, por tanto, su preparación. Además, como las variables fueron tipificadas, los valores de las cargas son comparables. De este modo, vemos cómo, dentro de la primera componente, que es la que adoptamos como indicador, la mayor importancia la tiene **IDIVERSE**, seguido de **IDIG** y, por último, **IFIDE**.
 
-## ![](figuras/pie-chart.svg){.hicon} Retención de componentes.
+## ![](figuras/pie-chart.svg){.hicon} Retención de componentes. {#c06-retencion-de-componentes}
 
 La etapa de retención de componentes consiste en decidir cuántas de las componentes generadas (recordemos que, en un principio, se calculan tantas componentes como variables originales) consideramos que resumen de un modo aceptable la información contenida en las variables originales. Estas **componentes "retenidas" se convertirán en las componentes principales**.
 
@@ -411,7 +411,7 @@ combinado
 
 Una vez confirmado el hecho de que la primera componente es suficiente para contar con un buen indicador de "preparación de las diferentes compañías de transporte para afrontar el futuro", considerando los aspectos de *digitalización*, *diversificación* y *fidelización* de clientes, pasaremos a estudiar qué casos concretos ofrecen mejores (mayores) valores en el indicador, para lo cual hemos de calcular sus puntuaciones.
 
-## ![](figuras/pie-chart.svg){.hicon} Puntuaciones de los casos (scores).
+## ![](figuras/pie-chart.svg){.hicon} Puntuaciones de los casos (scores). {#c06-puntuaciones-de-los-casos-scores}
 
 Para obtener las puntuaciones de cada caso (empresa) en el indicador de "preparación de las diferentes compañías de transporte para afrontar el futuro" (y que es nuestra componente principal, que a su vez coincide con la primera componente), simplemente debemos tener en cuenta que tales puntuaciones están guardadas en la matriz “x” del objeto `prcomp()` creado. Vamos a renombrar a las primera columna (componente) de esta matriz como “scores” y vamos a recolocar las filas (empresas) de mayor a menor valor de la puntuación (lo que se consigue mediante la función `arrange()` del paquete `{dplyr}`. Finalmente, mostraremos en una tabla el *ranking* de las 10 mejores empresas (según sus puntuaciones en el indicador), "cortando" el *data frame* con la función `slice()`:
 
@@ -515,7 +515,7 @@ scores_all_top10 %>%
 
 Vemos como el *ranking* cambia radicalmente, y pasa a estar encabezado por las compañías ***Arrakis Freight***, ***Chakotay Cargo Systems*** e ***Hyperdrive Express***. Si un análisis particularizado de estas empresas por parte del equipo encargado del estudio da como resultado que sus datos son correctos, serían, seguramente, las candidatas para ser adquiridas por el magnate *Arg-Us Korp*.
 
-## ![](figuras/paperclip.svg){.hicon} Efecto de los *outliers* en las puntuaciones.
+## ![](figuras/paperclip.svg){.hicon} Efecto de los *outliers* en las puntuaciones. {#c06-efecto-de-los-outliers-en-las-puntuaciones}
 
 Cabe hacerse una pregunta antes de cerrar esta historia. ¿Qué hubiera ocurrido si se hubieran calculado las componentes sin eliminar los *outliers* previamente? ¿Hubieran cambiado los resultados? ¿era tan relevante el efecto de estos casos sobre los resultados, como comentamos al comienzo del tema, en la parte teórica?
 
@@ -557,7 +557,7 @@ Como puede repararse, los cambios, en este caso, no parecen ser relevantes. Solo
 
 No obstante, hay una tercera vía para proceder al análisis de componentes principales que nos libera de la necesidad de tener que decidir si es conveniente incluir en el cálculo los *outliers* o no: la utilización de **técnicas robustas**.
 
-## ![](figuras/paperclip.svg){.hicon} Utilización de técnicas robustas: método de Hubert.
+## ![](figuras/paperclip.svg){.hicon} Utilización de técnicas robustas: método de Hubert. {#c06-utilizacion-de-tecnicas-robustas-metodo-de}
 
 La presencia de *outliers*, según comentamos, puede distorsionar los resultados del análisis. Esto se debe, en esencia, a los efectos que estos elementos tienen en el cálculo de *la matriz de varianzas-covarianzas de las variables originales*, básica en el cálculo de componentes. Este efecto se manifiesta, por ejemplo, en un incremento *artificial* de las varianzas, debido a la mayor dispersión inducida por los *outliers*.
 
@@ -656,7 +656,7 @@ scores3_top10 %>%
 
 En la tabla se comprueba que existen leves variaciones con respecto a las clasificaciones anteriores. A destacar la inclusión en el *top-10* de *Ripley Interestellar Freight*, y la desaparición de *Kamino Movers*.
 
-### ![](figuras/star.svg){.hicon} La decisión de *Arg-Us Korp*. {.unnumbered}
+### ![](figuras/star.svg){.hicon} La decisión de *Arg-Us Korp*. {#c06-la-decision-de-arg-us-korp .unnumbered}
 
 ¿Cuál de los tres rankings elegiríamos? La elección no es trivial, y depende de la confianza que tengamos en la calidad de los datos. Si creemos que los *outliers* son errores o casos irrelevantes para la comparación, el ranking sin ellos (método clásico) es la opción más limpia. Si preferimos no descartar ninguna observación, el método robusto de Hubert ofrece una protección natural contra la distorsión, sin necesidad de eliminar casos.
 
@@ -664,7 +664,7 @@ En cualquiera de los tres rankings, una empresa aparece consistentemente en las 
 
 Cuentan las crónicas que *Arg-us Korp* —siguiendo los consejos de su equipo de analistas, armados con R y un buen análisis de componentes principales— **adquirió *Home One Cargo*** pocas semanas después. El precio de la operación no se ha hecho público, pero los analistas del sector coinciden en que fue una compra inteligente. Korp, fiel a su estilo, cerró la reunión de adquisición antes de que nadie más pudiera hablar.
 
-## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo.
+## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo. {#c06-materiales-para-realizar-las-practicas-del}
 
 En esta sección se muestran los links de acceso a los diferentes materiales (*scripts*, datos...) necesarios para llevar a cabo los contenidos prácticos del capítulo.
 

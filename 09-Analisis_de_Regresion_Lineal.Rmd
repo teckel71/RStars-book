@@ -22,7 +22,7 @@ library(MATrstars)
 
 ![[Recorriendo la nube de puntos...]{.smallcaps}](figuras/09%20nube.jpg){width="100%"}
 
-## ![](figuras/book.svg){.hicon} Introducción.
+## ![](figuras/book.svg){.hicon} Introducción. {#c09-introduccion}
 
 El análisis de regresión (lineal) múltiple es una de las técnicas de análisis de dependencias más profusamente utilizadas. En el modelo de regresión múltiple la variable dependiente tiene escala métrica. Las variables explicativas pueden ser métricas o ser atributos (factores).
 
@@ -88,9 +88,9 @@ Y el **error o residuo** será, para cada observación, $\hat{u}_i=y_i-\hat{y}_i
 
 Tras estas breves notas formales del MBR, pasaremos a construir un modelo que intentará explicar el comportamiento de la rentabilidad económica de un grupo de empresas en función de una serie de variables aleatorias.
 
-## ![](figuras/pie-chart.svg) Especificación del MBR. Datos de corte transversal.
+## ![](figuras/pie-chart.svg) Especificación del MBR. Datos de corte transversal. {#c09-especificacion-del-mbr-datos-de-corte}
 
-### ![](figuras/star.svg){.hicon} Renovarse o morir.
+### ![](figuras/star.svg){.hicon} Renovarse o morir. {#c09-renovarse-o-morir}
 
 *Dixitaliza* es una empresa especializada en ofrecer soluciones de alta tecnología a las empresas del sector del transporte espacial. En los últimos años, ha desarrollado una serie de herramientas basadas en la Inteligencia Artificial de tercera generación para optimizar la gestión de las grandes travesías interestelares: determinación de rutas, puntos de recarga de *especia*, balances energéticos, etc.
 
@@ -100,7 +100,7 @@ En este contexto, *Dixitaliza* ha encargado un estudio a la consultora *Data-Evi
 
 El equipo de *Data-Evidence*, aprovechando los datos publicados por la *Agencia Interplanetaria de Transporte de Mercancías*, se ha decantado por estimar un modelo econométrico como soporte al planteamiento de diversos escenarios con diferentes grados de renovación tecnológica de su flota, en el que se pueda evaluar, en una empresa media del sector, el impacto que, sobre su rendimiento económico, tiene tal inversión.
 
-### ![](figuras/pie-chart.svg) Planteamiento inicial del modelo.
+### ![](figuras/pie-chart.svg) Planteamiento inicial del modelo. {#c09-planteamiento-inicial-del-modelo}
 
 En coherencia con el objetivo del modelo, variable dependiente del modelo es el **Beneficio Medio por cada 1.000 años luz recorridos (BMAL)**. Esta variable puede ser considerada como un indicador especialmente adecuado para medir el rendimiento económico operativo de las empresas de transporte interestelar de mercancías. Su utilización como variable dependiente en el modelo de regresión múltiple está sólidamente justificada tanto desde un punto de vista conceptual como empírico, por varias razones:
 
@@ -171,7 +171,7 @@ donde:
 -   $EFLO_{ij}$ es un conjunto de variables dicotómicas que capturan el estado tecnológico de la flota, tomando como base una categoría omitida;
 -   $u_i$ es la perturbación aleatoria del modelo.
 
-### ![](figuras/pie-chart.svg) Preparación de los datos.
+### ![](figuras/pie-chart.svg) Preparación de los datos. {#c09-preparacion-de-los-datos}
 
 Vamos a trabajar en un proyecto de nombre, por ejemplo, "regresion". En la carpeta de este proyecto hemos de guardar estos dos elementos:
 
@@ -308,7 +308,7 @@ seleccion_so$EFLO <- as.factor(seleccion_so$EFLO)
 
 Una vez preparados los datos, se pasará a la etapa de especificación y estimación del modelo de regresión lineal.
 
-### ![](figuras/pie-chart.svg) Especificación y estimación inicial del modelo.
+### ![](figuras/pie-chart.svg) Especificación y estimación inicial del modelo. {#c09-especificacion-y-estimacion-inicial-del}
 
 El modelo básico de regresión lineal, estimado mediante el método de mínimos cuadrados ordinarios (MCO), se obtendrá mediante la función `lm()`. Los resultados los guardaremos en un objeto de nombre, por ejemplo, “ecua0”. Luego, se realizará un `summary()` para ver dicha estimación.
 
@@ -454,7 +454,7 @@ Desde el punto de vista de los resultados, ambos modelos presentan prácticament
 
 Una vez decidida la especificación (final) del modelo, es necesario desarrollar la **etapa de contrastación de las hipótesis básicas del modelo básico de regresión lineal**, con la intención de determinar el grado en que los estimadores obtenidos mediante *mínimos cuadrados ordinarios* **(MCO)** gozan de buenas propiedades, o si es necesario aplicar métodos de estimación alternativos, métodos econométricos específicos, o incluso re-especificar el modelo).
 
-## ![](figuras/pie-chart.svg) Contraste del modelo básico de regresión lineal.
+## ![](figuras/pie-chart.svg) Contraste del modelo básico de regresión lineal. {#c09-contraste-del-modelo-basico-de-regresion}
 
 Antes de pasar a aplicar las pruebas específicas para evaluar el grado de las hipótesis que sustentan al modelo básico de regresión lineal, es conveniente generar varios gráficos de gran utilidad.
 
@@ -771,7 +771,7 @@ Si el modelo supera razonablemente la fase de contraste de las hipótesis básic
 
 **Nota sobre autocorrelación.** En datos de corte transversal, la autocorrelación de la perturbación aleatoria no suele ser problemática, a diferencia de lo que ocurre con datos de series temporales. No obstante, si los datos tienen algún orden natural (por ejemplo, están ordenados por tamaño de empresa), puede verificarse su ausencia mediante el **test de Durbin-Watson** (`lmtest::dwtest()`).
 
-### ![](figuras/pie-chart.svg) Estimación con errores estándar robustos a heteroscedasticidad.
+### ![](figuras/pie-chart.svg) Estimación con errores estándar robustos a heteroscedasticidad. {#c09-estimacion-con-errores-estandar-robustos-a}
 
 El contraste de Breusch-Pagan ha revelado la presencia de **heteroscedasticidad**: la varianza de la perturbación no es constante a lo largo de las observaciones. Como ya se mencionó, los estimadores MCO siguen siendo insesgados y consistentes, pero **dejan de ser eficientes**, y los contrastes t y F pueden dar resultados incorrectos (significaciones que no lo son, o al revés).
 
@@ -814,7 +814,7 @@ La tabla permite verificar si los errores estándar robustos confirman o matizan
 
 En la siguiente sección, abordaremos un ejercicio de simulación.
 
-## ![](figuras/pie-chart.svg) Utilización del modelo estimado: simulación.
+## ![](figuras/pie-chart.svg) Utilización del modelo estimado: simulación. {#c09-utilizacion-del-modelo-estimado-simulacion}
 
 Una vez que el modelo ha sido especificado, estimado, validado y ha superado todas las fases de contraste, se encuentra plenamente preparado para la fase final: su utilización analítica y práctica. Un modelo de regresión no es únicamente un ejercicio estadístico; su verdadera utilidad surge cuando se emplea para informar decisiones, explorar escenarios alternativos y comprender la estructura económica del fenómeno estudiado. Entre las aplicaciones más habituales destacan la previsión, la simulación y el análisis estructural, cada una con objetivos distintos pero complementarios.
 
@@ -940,7 +940,7 @@ Y el resultado será:
 
 Los resultados del segundo ejercicio muestran con gran claridad el **enorme impacto que tiene el grado de renovación tecnológica de la flota sobre el rendimiento económico BMAL**, exactamente en la línea del objetivo de *Dixitaliza*. Una empresa con flota antigua obtiene un BMAL estimado de apenas 165,9 unidades por cada 1.000 años luz; si pasa a una flota madura, su capacidad de generación de beneficio se multiplica por más de 4, alcanzando 698,7 (+532,8 respecto al escenario antiguo). El salto es aún más notable cuando la flota es renovada, donde el BMAL se sitúa en 1878,2, es decir, 1.712,3 unidades más que con flota antigua y 1.179,5 más que con flota madura. Estas diferencias representan incrementos porcentuales de enorme magnitud (≈ +320% al pasar de antigua a madura, y ≈ +1.030% al pasar de antigua a renovada), lo que evidencia que la modernización tecnológica no solo mejora la eficiencia operativa sino que **transforma radicalmente la rentabilidad de una empresa media del sector**. Para *Dixitaliza*, estos resultados constituyen una demostración empírica sólida del valor económico de sus soluciones tecnológicas: **invertir en renovar la flota no es un coste, sino una palanca directa y masiva de creación de beneficios**.
 
-## ![](figuras/star.svg){.hicon} Cierre del estudio *Data-Evidence*.
+## ![](figuras/star.svg){.hicon} Cierre del estudio *Data-Evidence*. {#c09-cierre-del-estudio-data-evidence}
 
 El equipo de *Data-Evidence* entrega su informe a *Dixitaliza* con tres conclusiones principales:
 
@@ -952,7 +952,7 @@ El equipo de *Data-Evidence* entrega su informe a *Dixitaliza* con tres conclusi
 
 Con este informe en la mano, *Dixitaliza* lanza su campaña de renovación tecnológica dirigida a las empresas del sector con flotas antiguas. El eslogan —"*Renueva tu flota, multiplica tu beneficio*"— no es un mero recurso publicitario: es una conclusión respaldada por un modelo econométrico sólido.
 
-## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo.
+## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo. {#c09-materiales-para-realizar-las-practicas-del}
 
 En esta sección se muestran los links de acceso a los diferentes materiales (*scripts*, datos...) necesarios para llevar a cabo los contenidos prácticos del capítulo.
 

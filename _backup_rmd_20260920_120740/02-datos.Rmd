@@ -1,17 +1,8 @@
-```{r matrstars-numerado-setup-cap2, include=FALSE}
-options(matrstars.suppress_caption = TRUE)
-```
-
 # Almacenando y manipulando datos.
 
-![](figuras/02%20robots.jpg){width="100%"}
+![[¡Datos, datos!]{.smallcaps}](figuras/02%20robots.jpg){width="100%"}
 
-::: {style="text-align: center;"}
-**Figura 2.1.** [¡Datos, datos!]{.smallcaps}
-:::
-
-
-## ![](figuras/book.svg){.hicon} Objetos. Datos. {#c02-objetos-datos}
+## ![](figuras/book.svg){.hicon} Objetos. Datos.
 
 Como vimos en el capítulo 1, tras ejecutar un sencillo script (o al escribir instrucciones directamente desde la consola), R es interactivo: responde a las entradas que recibe. Las entradas o **expresiones** pueden ser, básicamente:
 
@@ -41,7 +32,7 @@ Los elementos almacenados en los objetos se agrupan en *clases*. Entre ellas des
 
 Profundicemos un poco en algunos de estos contenedores. Para ello, situémonos en el proyecto que creamos en el capítulo anterior (proyecto "explora") y retomemos el script que preparamos allí mismo (script "explorando.R", alojado en la carpeta de dicho proyecto).
 
-### ![](figuras/key.svg){.hicon} Vectores. {#c02-vectores}
+### ![](figuras/key.svg){.hicon} Vectores.
 
 Los **vectores** son conjuntos de elementos **de la misma clase**. Definamos, por ejemplo, el vector x = (1,3,5,8). Para ello escribiremos en nuestro script:
 
@@ -59,12 +50,7 @@ x
 
 Si además dirigimos la mirada a la ventana superior derecha de RStudio, comprobaremos que el ***Global Environment*** —la ventana que recoge los objetos que R mantiene en memoria— muestra nuestro vector e indica que su *modo* es *numérico*:
 
-![](figuras/Imagen2_01.png){.d-block .mx-auto width="100%"}
-
-::: {style="text-align: center;"}
-**Figura 2.2.** [Nuestro vector en memoria.]{.smallcaps}
-:::
-
+![Nuestro vector en memoria.](figuras/Imagen2_01.png){.d-block .mx-auto width="100%"}
 
 Si lo que buscamos es un vector de números consecutivos del 2 al 6, basta con ejecutar en la consola (o escribir y ejecutar en el script):
 
@@ -128,7 +114,7 @@ Por último, para mostrar en pantalla elementos salteados —el 1º y el 4º, po
 x[c(1,4)]
 ```
 
-### ![](figuras/key.svg){.hicon} Matrices. {#c02-matrices}
+### ![](figuras/key.svg){.hicon} Matrices.
 
 Las **matrices** son, internamente, vectores a los que R añade dos atributos: el número de filas y el número de columnas. Se definen mediante la función `matrix()`. Por ejemplo, para construir la matriz "a":
 
@@ -186,7 +172,7 @@ Para obtener el verdadero producto matricial deberemos escribir:
 a%*%a
 ```
 
-### ![](figuras/key.svg){.hicon} *Data frames*. {#c02-data-frames}
+### ![](figuras/key.svg){.hicon} *Data frames*.
 
 Un ***data frame*** es un objeto que almacena datos con la estructura propia de la clase `data.frame`: en las filas se disponen los distintos casos o sujetos y, en las columnas, las variables. De ahí se derivan algunos rasgos característicos:
 
@@ -251,7 +237,7 @@ datos$Altura
 
 Obtenemos el mismo resultado.
 
-### ![](figuras/key.svg){.hicon} Factores. {#c02-factores}
+### ![](figuras/key.svg){.hicon} Factores.
 
 En R, un **factor** es un tipo especial de objeto destinado a representar datos categóricos: datos que no son magnitudes continuas, sino que pertenecen a un conjunto limitado de categorías, también llamadas *niveles*. Pensemos en el vector "Cl.ojos" que creamos hace un momento: se trata de un vector de tipo carácter que, para R, todavía no es un factor.
 
@@ -289,7 +275,7 @@ notas
 
 En síntesis, un factor es una suerte de etiqueta inteligente para las categorías, que permite trabajar con datos cualitativos de forma más ordenada y más provechosa para el análisis.
 
-### ![](figuras/key.svg){.hicon} Listas. {#c02-listas}
+### ![](figuras/key.svg){.hicon} Listas.
 
 Por último, una **lista** es un tipo de objeto capaz de albergar en su interior prácticamente cualquier cosa:
 
@@ -330,7 +316,7 @@ Las listas son las estructuras de almacenamiento más flexibles de R y se emplea
 
 En la práctica, la estructura con la que más trabajaremos a lo largo del libro es el ***data frame***: cada columna es un vector (numérico o factor) y cada fila un caso de la muestra. Además, cuando apliquemos técnicas estadísticas, los resultados de los modelos se devolverán habitualmente empaquetados en **listas**, ya que contienen elementos de distinta naturaleza (coeficientes, residuos, estadísticos de bondad de ajuste, etc.). De este modo, los cinco tipos de objetos que acabamos de presentar no son compartimentos estancos: conviven y se complementan en cualquier análisis real.
 
-## ![](figuras/pie-chart.svg){.hicon} Importando datos. {#c02-importando-datos}
+## ![](figuras/pie-chart.svg){.hicon} Importando datos.
 
 Lo habitual no es teclear los datos, como hemos hecho hasta ahora, sino importarlos a R desde algún contenedor externo: un archivo de texto, una hoja de cálculo, una base de datos... En nuestro caso los traeremos desde Microsoft® Excel®. Cerremos, pues, el script que hemos ido construyendo en los apartados anteriores (recordemos guardarlo antes si queremos conservarlo), sin salir del proyecto "explora" en el que venimos trabajando. Acto seguido iremos a la carpeta del proyecto y guardaremos en ella los dos archivos de esta práctica, cuyos enlaces de descarga figuran en la sección final del capítulo:
 
@@ -455,16 +441,11 @@ datos_df_graph <- gt_plt_summary(interestelar_100)
 datos_df_graph
 ```
 
-::: {style="text-align: center;"}
-**Tabla 2.1**
-:::
-
-
 Antes de seguir manipulando nuestros datos, conviene recordar que R admite muchos otros formatos de importación. El paquete `{readr}`, por ejemplo, lee archivos de texto de tipo tabular (como los \*.csv). El paquete `{haven}` recupera los datos almacenados en archivos de SPSS® (.sav), Stata® (.dta) o SAS® (.sas7bdat), entre otros. Y también es posible capturar información procedente de páginas web (archivos JSON o XML, o tablas HTML) o de bases de datos gestionadas con diversos sistemas (SQLite, MySQL, MariaDB, PostgreSQL, Oracle®).
 
-## ![](figuras/pie-chart.svg){.hicon} El paquete `{dplyr}`. {#c02-el-paquete-dplyr}
+## ![](figuras/pie-chart.svg){.hicon} El paquete `{dplyr}`.
 
-### ![](figuras/key.svg){.hicon} El *Tidyverse*. Cargando `{dplyr}`. {#c02-el-tidyverse-cargando-dplyr}
+### ![](figuras/key.svg){.hicon} El *Tidyverse*. Cargando `{dplyr}`.
 
 El ***Tidyverse*** es un conjunto de paquetes que comparten una misma filosofía —el uso de ciertas estructuras gramaticales comunes— y que simplifican buena parte de las tareas y análisis que podrían acometerse con el lenguaje R estándar. Una obra excelente para profundizar en el *Tidyverse* es @Wickham2017R.
 
@@ -495,7 +476,7 @@ Para comprender mejor la **sintaxis** de las funciones a las que da acceso `{dpl
 
 En los siguientes subapartados practicaremos con algunas de sus funciones principales.
 
-### ![](figuras/key.svg){.hicon} Seleccionando columnas de un *data frame*. {#c02-seleccionando-columnas-de-un-data-frame}
+### ![](figuras/key.svg){.hicon} Seleccionando columnas de un *data frame*.
 
 La función clave de `{dplyr}` para seleccionar una o varias columnas (variables) de un *data frame* es la función `select()`.
 
@@ -586,7 +567,7 @@ rm (df)
 
 Podemos comprobar que en el *Global Environment* figura otro *data frame*, llamado "interestelar_100A", con 3 variables y los mismos 104 casos.
 
-### ![](figuras/key.svg){.hicon} Ordenando casos de un *data frame*. {#c02-ordenando-casos-de-un-data-frame}
+### ![](figuras/key.svg){.hicon} Ordenando casos de un *data frame*.
 
 Además de seleccionar columnas, las funciones de `{dplyr}` permiten ordenar los casos (filas) de un *data frame* según los valores de ciertas variables. La encargada de ello es `arrange()`, que ordena de modo **ascendente** salvo que se le indique lo contrario. Creemos, por ejemplo, el *data frame* "interestelar_100C" con las variables RENECO, EFLO y ACTIVO, y con los casos ordenados de menor a mayor valor de RENECO:
 
@@ -667,7 +648,7 @@ rm(i)
 
 (**Nota:** solo mostramos aquí los 10 primeros casos del *data frame*. Una vez agotados los casos con categoría "ANTIGUA" en EFLO, comenzarían a aparecer los de categoría "MADURA", concretamente a partir de la posición 52).
 
-### ![](figuras/key.svg){.hicon} El operador *pipe*. {#c02-el-operador-pipe}
+### ![](figuras/key.svg){.hicon} El operador *pipe*.
 
 Ahora que conocemos `select()` y `arrange()`, podemos apreciar un problema: cuando necesitamos combinar varias operaciones, el código anidado se vuelve difícil de leer. El **operador *pipe*** `%>%`, proporcionado por el paquete `{magrittr}` (que se carga automáticamente con `{dplyr}`), resuelve este problema permitiendo **encadenar** operaciones de forma legible: toma el resultado de la expresión a su izquierda y lo pasa como primer argumento de la función a su derecha. Así, en lugar de anidar funciones —lo que obliga a leer "de dentro hacia fuera"—, el código se lee de izquierda a derecha y de arriba abajo, como una secuencia de pasos.
 
@@ -691,7 +672,7 @@ La segunda versión se lee de un modo mucho más natural: "toma `interestelar_10
 
 **Nota:** Desde la versión 4.1, R incorpora un *pipe* nativo, `|>`, que funciona de forma muy similar a `%>%`. En este libro utilizaremos `%>%` por ser el más habitual en el ecosistema *tidyverse*, pero es posible encontrar `|>` en documentación y código más reciente.
 
-### ![](figuras/key.svg){.hicon} Seleccionando casos de un *data frame*. {#c02-seleccionando-casos-de-un-data-frame}
+### ![](figuras/key.svg){.hicon} Seleccionando casos de un *data frame*.
 
 Además de seleccionar variables, `{dplyr}` permite quedarse con los casos que cumplen ciertas condiciones. De este cometido se encarga la función `filter()`. Si, por ejemplo, queremos retener las empresas con un resultado (variable RES) mayor o igual a 500 miles de PAVOs y mostrar en pantalla los valores de RES y RENECO, la instrucción será:
 
@@ -748,7 +729,7 @@ En el *Global Environment* aparecerá el *data frame* "interestelar_100B" con un
 
 Por su parte, los operadores de comparación más habituales al construir las condiciones son \>, \<, \>=, \<=, == (igual: atención, con dos símbolos de igualdad seguidos) y != (distinto).
 
-### ![](figuras/key.svg){.hicon} Seleccionando casos por posición: `slice()`. {#c02-seleccionando-casos-por-posicion-slice}
+### ![](figuras/key.svg){.hicon} Seleccionando casos por posición: `slice()`.
 
 Mientras que `filter()` selecciona casos según una **condición lógica**, la función `slice()` selecciona casos por su **posición** (número de fila). Por ejemplo, para obtener los 5 primeros casos del *data frame*:
 
@@ -775,7 +756,7 @@ interestelar_100 %>%
 
 (**Nota:** mostramos aquí únicamente el resultado de la primera instrucción y, para facilitar la lectura, solo tres de sus variables).
 
-### ![](figuras/key.svg){.hicon} Cambiando el nombre de las variables de un *data frame*. {#c02-cambiando-el-nombre-de-las-variables-de-un}
+### ![](figuras/key.svg){.hicon} Cambiando el nombre de las variables de un *data frame*.
 
 `{dplyr}` dispone de una función que permite cambiar con comodidad el nombre de una variable o columna de un *data frame*: `rename()`. Si queremos sustituir el nombre SOLVENCIA por SOLVE, bastará con ejecutar:
 
@@ -786,7 +767,7 @@ interestelar_100 <- rename(interestelar_100, SOLVE = SOLVENCIA)
 
 Si desplegamos el *data frame* "interestelar_100" en el *Global Environment*, comprobaremos que la variable SOLVENCIA ha desaparecido y que en su lugar figura SOLVE, naturalmente con los mismos datos. Conviene retener el orden: a la **izquierda** de la igualdad se escribe el **nombre nuevo** y, a la derecha, el antiguo. Un mismo `rename()` puede cambiar el nombre de **varias variables**, separando con comas las igualdades correspondientes.
 
-### ![](figuras/key.svg){.hicon} Añadiendo variables como transformación de otras variables en un *data frame*. {#c02-anadiendo-variables-como-transformacion-de}
+### ![](figuras/key.svg){.hicon} Añadiendo variables como transformación de otras variables en un *data frame*.
 
 El paquete `{dplyr}` permite además incorporar al *data frame* variables nuevas, obtenidas al **transformar las variables ya existentes**. De ello se ocupa la función `mutate()`.
 
@@ -896,7 +877,7 @@ interestelar_100 %>% select(ACTIVO, DIM)
 
 La lectura es ahora secuencial: "toma `interestelar_100`, crea la variable DIM con `cut()` y guarda el resultado". En la segunda línea: "toma `interestelar_100` y muestra las variables ACTIVO y DIM".
 
-### ![](figuras/key.svg){.hicon} Extrayendo y sintetizando información de las variables de un *data frame*. {#c02-extrayendo-y-sintetizando-informacion-de-las}
+### ![](figuras/key.svg){.hicon} Extrayendo y sintetizando información de las variables de un *data frame*.
 
 `{dplyr}` ofrece también la posibilidad de extraer y sintetizar, mediante *medidas*, la información de las variables que alberga un *data frame*. De ello se encarga la función `summarise()`. A modo de ejemplo, calculemos la *rentabilidad financiera* media de las 104 empresas:
 
@@ -915,7 +896,7 @@ interestelar_100 %>%
 
 Hemos empleado el operador *pipe* `%>%` para encadenar dos instrucciones de `{dplyr}`: primero agrupar los casos y después calcular la media de cada grupo. El código podría "traducirse" así: "toma el *data frame* "interestelar_100", reparte sus casos en grupos según el valor de la variable DIM y, para cada grupo, calcula la media de RENFIN". Merece la pena reparar en que aparece un grupo cuyo valor de DIM es "NA", esto es, sin dato: se debe a que, al crear DIM, una empresa —en concreto, "Vega Transport"— carecía de valor en ACTIVO.
 
-## ![](figuras/pie-chart.svg){.hicon}![](figuras/key.svg){.hicon} Exportando datos. {#c02-exportando-datos}
+## ![](figuras/pie-chart.svg){.hicon}![](figuras/key.svg){.hicon} Exportando datos.
 
 Antes de concluir el capítulo, dediquemos unas líneas a la exportación de datos.
 
@@ -978,11 +959,11 @@ write_xlsx(interestelar_100n, path = "interestelar_100_new.xlsx")
 #Fin del script :)
 ```
 
-## ![](figuras/star.svg){.hicon} Las variables de la base de datos del proyecto R-Stars. {#c02-las-variables-de-la-base-de-datos-del}
+## ![](figuras/star.svg){.hicon} Las variables de la base de datos del proyecto R-Stars.
 
 La base de datos completa del proyecto R-Stars contiene datos económicos, financieros y operativos de 300 empresas de transporte interestelar de mercancías, recogidos en unas 30 variables. La ficha detallada de cada variable —nombre, tipo de datos, distribución, valores ausentes y número estimado de *outliers*— puede consultarse en el **Apéndice: Bases de datos utilizadas en el libro** al final del libro.
 
-## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo. {#c02-materiales-para-realizar-las-practicas-del}
+## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo.
 
 En esta sección se recogen los enlaces de acceso a los distintos materiales (*scripts*, datos...) necesarios para desarrollar los contenidos prácticos del capítulo.
 

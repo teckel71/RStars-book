@@ -1,17 +1,8 @@
-```{r matrstars-numerado-setup-cap7, include=FALSE}
-options(matrstars.suppress_caption = TRUE)
-```
-
 # Análisis Clúster.
 
-![](figuras/07%20naves%20en%20cluster.jpg){width="100%"}
+![[Grupos de cargueros en travesía.]{.smallcaps}](figuras/07%20naves%20en%20cluster.jpg){width="100%"}
 
-::: {style="text-align: center;"}
-**Figura 7.1.** [Grupos de cargueros en travesía.]{.smallcaps}
-:::
-
-
-## ![](figuras/book.svg){.hicon} Introducción. {#c07-introduccion}
+## ![](figuras/book.svg){.hicon} Introducción.
 
 El análisis de conglomerados —o análisis de clústeres (AC)— agrupa casos con características similares en función de un conjunto de variables clasificadoras. El objetivo es que:
 
@@ -33,7 +24,7 @@ $$
 
 Esta distancia es muy sensible a la escala de las variables clasificadoras. Para evitar este inconveniente, se trabaja con las variables previamente **tipificadas**.
 
-### ![](figuras/key.svg){.hicon} Clasificación de los métodos de análisis clúster. {#c07-clasificacion-de-los-metodos-de-analisis}
+### ![](figuras/key.svg){.hicon} Clasificación de los métodos de análisis clúster.
 
 En la literatura actual [@Kaufman&Rousseeuw1990; @Xu&Wunsch2005; @Jain2010; @Aggarwal2015], los métodos de análisis clúster se clasifican en cinco grandes familias:
 
@@ -75,7 +66,7 @@ comparativa <- data.frame(
 )
 
 comparativa %>%
-  kable(
+  kable(caption = "Comparativa de los tres métodos de análisis clúster tratados en el capítulo.",
         col.names = c("Método", "¿Fija el nº de grupos?", "Tamaño típico de muestra",
                       "Tratamiento de outliers", "Forma de los clústeres", "Ámbito preferente")) %>%
   kable_styling(full_width = FALSE,
@@ -86,30 +77,15 @@ comparativa %>%
   row_spec(1:nrow(comparativa), align = "c")
 ```
 
-::: {style="text-align: center;"}
-**Tabla 7.1.** Comparativa de los tres métodos de análisis clúster tratados en el capítulo.
-:::
-
-
 Estos tres métodos serán ilustrados con un mismo hilo conductor: el ***Informe Bluebird***, que abarca tres encargos consecutivos que la Agencia Interplanetaria de Transporte de Mercancías (AITM) realiza a la doctora Xelia Bluebird.
 
-## ![](figuras/star.svg){.hicon} El Informe *Bluebird*. {#c07-el-informe-bluebird}
+## ![](figuras/star.svg){.hicon} El Informe *Bluebird*.
 
-![](figuras/aitm.jpg){width="100%"}
-
-::: {style="text-align: center;"}
-**Figura 7.2.** [Agencia Interplanetaria del Transporte de Mercancías.]{.smallcaps}
-:::
-
+![[Agencia Interplanetaria del Transporte de Mercancías.]{.smallcaps}](figuras/aitm.jpg){width="100%"}
 
 La *Agencia Interplanetaria de Transporte de Mercancías* (AITM) tiene entre sus cometidos el estudio del sector desde una perspectiva de segmentación. La doctora ***Xelia Bluebird*** (en la imagen), investigadora sénior de la agencia, es la responsable del informe anual de segmentación empresarial que lleva su nombre. Este año, el ***Informe Bluebird*** abarca tres encargos distintos, pero complementarios:
 
-![](figuras/Bluebird.jpg){width="100%"}
-
-::: {style="text-align: center;"}
-**Figura 7.3.** [Xelia Bluebird, investigadora de la AITM.]{.smallcaps}
-:::
-
+![[Xelia Bluebird, investigadora de la AITM.]{.smallcaps}](figuras/Bluebird.jpg){width="100%"}
 
 -   **Encargo 1 — Panel de candidatas premium (25 empresas).** Tras la reciente compra de *Home One Cargo* por *Arg-us Korp*, la AITM ha seleccionado un panel de **25 empresas top** para ofrecerles un programa de consultoría personalizada. Bluebird debe agrupar estas 25 candidatas en un número reducido de perfiles y ubicar en qué grupo queda encuadrada *Home One Cargo* junto a otras empresas de referencia. Al ser una muestra pequeña, donde nos interesa clasificar **todos los casos** —incluidos los eventuales *outliers*—, se aplicará un **método jerárquico** (algoritmo de Ward).
 
@@ -119,7 +95,7 @@ La *Agencia Interplanetaria de Transporte de Mercancías* (AITM) tiene entre sus
 
 En las tres variables clasificadoras coinciden los tres encargos: los índices de **fidelización de clientes (IFIDE)**, **diversificación del negocio (IDIVERSE)** y **digitalización de la compañía (IDIG)**. Al final del capítulo, en la sección de síntesis, compararemos los resultados de las tres técnicas.
 
-## ![](figuras/book.svg){.hicon} ![](figuras/pie-chart.svg){.hicon} Encargo 1: análisis jerárquico (método de Ward). {#c07-encargo-1-analisis-jerarquico-metodo-de-ward}
+## ![](figuras/book.svg){.hicon} ![](figuras/pie-chart.svg){.hicon} Encargo 1: análisis jerárquico (método de Ward).
 
 En los **métodos jerárquicos aglomerativos**, se van formando sucesivamente grupos como agrupación de otros grupos precedentes, hasta llegar a un único grupo que recoge a todos los individuos; tomando el proceso una **estructura piramidal**. Estos métodos son especialmente adecuados cuando hay un número reducido de casos y se quieren clasificar **todos los casos** —incluidos los *outliers*—, así como cuando se desconoce a priori el número de grupos a formar.
 
@@ -131,7 +107,7 @@ Entre los métodos jerárquicos aglomerativos más extendidos figuran:
 
 En la práctica, el **método de Ward** es uno de los más utilizados porque proporciona grupos muy homogéneos. Será el que apliquemos al panel de 25 candidatas premium.
 
-### ![](figuras/pie-chart.svg) Preparación de los datos. {#c07-preparacion-de-los-datos}
+### ![](figuras/pie-chart.svg) Preparación de los datos.
 
 Dado que son pocos los casos (empresas) a segmentar, vamos a utilizar un método jerárquico de agrupación de casos. En concreto, utilizaremos el **método de Ward**.
 
@@ -187,11 +163,6 @@ seleccion_df_graph <- gt_plt_summary(seleccion)
 seleccion_df_graph
 ```
 
-::: {style="text-align: center;"}
-**Tabla 7.2**
-:::
-
-
 Para el diagnóstico y, en su caso, filtrado de los *missing values* aplicamos la función auxiliar `explora_na()` del paquete `{MATrstars}` que ya se presentó en el capítulo 5:
 
 ```{r, eval=FALSE, echo=TRUE}
@@ -225,7 +196,6 @@ El siguiente paso es la **identificación de *outliers***. Como en el análisis 
 Todo este proceso —cálculo de Mahalanobis, *boxplot* de la distancia, identificación de los casos atípicos y presentación en una tabla— se realiza en una sola llamada mediante la función auxiliar `explora_outliers()` del paquete `{MATrstars}` que ya se presentó en el capítulo 5. Cuando se le pasa un *data frame* con varias variables métricas, la función detecta el caso multivariante y calcula internamente la distancia de Mahalanobis. Como en "seleccion" solo hay ya las tres variables del análisis, no es necesario especificar el argumento `variables`. Además, en esta ocasión usamos `accion = "documentar"` porque **no** queremos eliminar los *outliers*, sino solo identificarlos:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
-options(matrstars.figura_num = "7.4", matrstars.tabla_num = "7.3")
 # Diagnóstico de outliers.
 explora_outliers(
   seleccion,
@@ -241,7 +211,7 @@ Estas empresas cuentan con un valor atípico en la distancia de Mahalanobis, lo 
 
 La siguiente etapa se refiere a la aplicación propia del análisis clúster al grupo de 25 compañías que toman valores para las tres variables incluidas en el análisis.
 
-### ![](figuras/pie-chart.svg) Aplicación del método de *Ward*. {#c07-aplicacion-del-metodo-de-ward}
+### ![](figuras/pie-chart.svg) Aplicación del método de *Ward*.
 
 Los métodos de agrupación usualmente se basan en la **distancia euclídea**. Como la distancia euclídea es sensible a las unidades de medida de las diferentes variables clasificadoras, es preciso trabajar con las **variables tipificadas**, lo que lograremos creando, por ejemplo, un *data frame* “zseleccion” con la función `scale()`. Luego, aplicaremos el método elegido a este *data frame,* en lugar de al *data frame* que contiene los datos originales sin tipificar:
 
@@ -263,11 +233,6 @@ d <- dist(zseleccion)
 fviz_dist(d, lab_size = 8)  # Del paquete {factoextra}
 ```
 
-::: {style="text-align: center;"}
-**Figura 7.5**
-:::
-
-
 Los casos con intersecciones en tonos anaranjados tenderán a agruparse con mayor facilidad (o a agruparse antes); mientras que los casos cuyas intersecciones están en tonos azulados tenderán a pertenecer a grupos diferentes (o a agruparse más tarde). Cabe destacar los colores azulados asociados a las empresas *Chakotay Cargo Systems*, *Home One Cargo*, que precisamente eran las dos compañías identificadas más claramente como *outliers*.
 
 Vamos a realizar el análisis clúster jerárquico mediante uno de los métodos más habituales, el de ***Ward***, como es común en las aplicaciones prácticas, ya que este método proporciona grupos muy homogéneos (mínima varianza). La función a utilizar es `hclust()`. La solución la guardaremos en el objeto (lista) que hemos llamado, por ejemplo, “cluster_j”. Luego se visualizará el ***dendograma*** construido con la función `fviz_dend()` del paquete `{factoextra}`, que permite personalizar el gráfico con una gramática similar a la utilizada con los gráficos del paquete `{ggplot2}`:
@@ -288,11 +253,6 @@ d1<-fviz_dend(cluster_j,
 d1$layers[[1]]$aes_params$linewidth <- 0.2
 d1
 ```
-
-::: {style="text-align: center;"}
-**Figura 7.6**
-:::
-
 
 Los argumentos utilizados son: `cex = 0.6` (tamaño del texto de las etiquetas), `lwd = 0.5` (grosor de las líneas del dendrograma; el valor por defecto suele ser demasiado grueso en versiones recientes), `rect = FALSE` (sin rectángulos alrededor de los clústeres, que se añadirán luego), y `labels_track_height = 5.5` (espacio reservado para las etiquetas). Con `labs()` se añaden título y subtítulo, con `theme_grey()` un tema visual gris, y con `theme(legend.position = "none")` se oculta una leyenda espuria de "lwd" que puede aparecer en versiones recientes de `{ggplot2}`.
 
@@ -339,11 +299,6 @@ p <- fviz_nbclust(
 p
 ```
 
-::: {style="text-align: center;"}
-**Figura 7.7**
-:::
-
-
 El método aconseja una división de los casos en 8 grupos o conglomerados diferentes. Sin embargo, parece un número excesivo si se quieren caracterizar posteriormente los grupos e incidir en sus diferencias. Un segundo número de grupos apropiado según el método es 2; pero podría ocurrir lo contrario que el caso anterior: sería un valor demasiado bajo, lo que provocaría que tan solo se distinguiese un grupo con los dos outliers de otro con los 23 casos restantes. Así, el investigador puede decidir qué número de grupos parece equilibrado y se ajusta a sus intereses. En este ejemplo, **un número de grupos razonable podría ser 5**, que contaría con el aval de mantener individualizadas a 2 de las empresas etiquetadas como *outliers*.
 
 Si se acepta esta opción, se podrá visualizar de nuevo el dendograma coloreando los grupos formados, con el código siguiente (debe modificarse el código para igualar el argumento `k =` al número de grupos seleccionado):
@@ -366,11 +321,6 @@ d2<-fviz_dend(cluster_j,
 d2$layers[[1]]$aes_params$linewidth <- 0.2
 d2
 ```
-
-::: {style="text-align: center;"}
-**Figura 7.8**
-:::
-
 
 Los argumentos añadidos son: `k = 5` (número de clústeres decidido), `k_colors = "black"` (color negro para las etiquetas), `rect = TRUE` (dibujar rectángulos delimitando los grupos), `rect_border = "npg"` (paleta de colores del *Nature Publishing Group*) y `rect_fill = TRUE` (rectángulos rellenos).
 
@@ -406,7 +356,7 @@ seleccion$whatcluster_j <- whatcluster_j
 
 El bloque anterior re-etiqueta los grupos de `cutree()` para que sus identificadores (1, 2, …, k) sigan el orden visual de izquierda→derecha del dendrograma. Los pasos clave son: `cutree()` asigna un id (arbitrario) a cada caso; `cluster_j$order` da el orden visual de los casos; `tapply(pos, cl, min)` obtiene la posición más a la izquierda de cada clúster; y `setNames()` construye un "diccionario" que traduce los ids antiguos a los nuevos, ordenados de izquierda a derecha. Finalmente, se guarda el factor `whatcluster_j` en el *data frame* "seleccion" (que contiene las variables **no** tipificadas, para facilitar la caracterización posterior en las unidades originales).
 
-### ![](figuras/pie-chart.svg) Caracterización de los grupos o conglomerados. {#c07-caracterizacion-de-los-grupos-o-conglomerados}
+### ![](figuras/pie-chart.svg) Caracterización de los grupos o conglomerados.
 
 Una vez incorporado el grupo de pertenencia de cada empresa al *data frame* "seleccion", se podrán calcular y almacenar las medias de cada grupo de las distintas variables originales, usando las funciones `by_group()` y `summarise()` de `{dplyr}`. Toda la información se asigna al *data frame* “tablamedias” para poder representarla en una tabla mediante `kable_rstars()` del paquete `{MATrstars}` presentado en el capítulo 5:
 
@@ -447,7 +397,7 @@ tablamedias <- seleccion %>%
                                       Idig = mean(IDIG))
 
 tablamedias %>%
-  kable_rstars(
+  kable_rstars(caption   = "Método de Ward. 5 grupos. Medias de variables",
                col.names = c("Clúster",
                              "Observaciones",
                              "I. Diversif.",
@@ -455,11 +405,6 @@ tablamedias %>%
                              "I. Digitalizac."),
                digits    = c(0, 0, 3, 3, 3))
 ```
-
-::: {style="text-align: center;"}
-**Tabla 7.4.** Método de Ward. 5 grupos. Medias de variables
-:::
-
 
 Obviamente, también se podrían comparar las medias de los grupos, para cada variable, con un simple gráfico de barras. A fin de crear un método que valga para cualquier número de variables, realizaremos la tarea con un bucle. El código es el siguiente:
 
@@ -504,11 +449,6 @@ Con esta función, crearemos la lista de composiciones de gráficos denominada, 
        print(grupos.graficos.centroides[[n]])
   }
 ```
-
-::: {style="text-align: center;"}
-**Figura 7.9**
-:::
-
 
 Como solo hay 3 variables originales en el análisis; "grupos.graficos.centroides" solo cuenta con un elemento o composición, que contiene tres gráficos (valores medios de IDIVERSE, IFIDE e IDIG, por conglomerado).
 
@@ -560,7 +500,7 @@ for (n in 1:numclusters){
       tabla <- seleccion %>%
       filter(whatcluster_j == as.character(n)) %>%
       select(IDIVERSE, IFIDE, IDIG) %>%
-      kable_rstars(
+      kable_rstars(caption   = paste("Método de Ward. Grupo ", n, "."),
                    col.names = c("I. Diversificación",
                                  "I. Fidelización",
                                  "I. Digitalización"),
@@ -569,44 +509,11 @@ for (n in 1:numclusters){
 }
   # Presentar las tablas
 tablascompo[[1]]
-```
-
-::: {style="text-align: center;"}
-**Tabla 7.5**
-:::
-
-```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 tablascompo[[2]]
-```
-
-::: {style="text-align: center;"}
-**Tabla 7.6**
-:::
-
-```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 tablascompo[[3]]
-```
-
-::: {style="text-align: center;"}
-**Tabla 7.7**
-:::
-
-```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 tablascompo[[4]]
-```
-
-::: {style="text-align: center;"}
-**Tabla 7.8**
-:::
-
-```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 tablascompo[[5]]
 ```
-
-::: {style="text-align: center;"}
-**Tabla 7.9**
-:::
-
 
 Para representar los grupos gráficamente, tenemos la dificultad de contar con más de dos variables clasificadoras. Una idea es **generar todas las combinaciones de variables posibles** y los correspondientes gráficos de dispersión con los casos coloreados de modo diferente según el grupo de pertenencia. Finalmente, esos gráficos se presentan de modo compacto utilizando de nuevo la función `create_patchwork()` del paquete `{MATrstars}`, ya empleada antes, para hacer mediante `{patchwork}` composiciones de 2x2 gráficos.
 
@@ -658,16 +565,11 @@ Una vez generados los gráficos de todas las combinaciones de variables (6 gráf
     }
 ```
 
-::: {style="text-align: center;"}
-**Figura 7.10**
-:::
-
-
 Los gráficos de dispersión ratifican los cuatro perfiles: los clústeres 1 y 2 se sitúan en la parte baja del eje de diversificación, con las empresas más tradicionales; el clúster 3 reúne a las compañías equilibradas y en fase de modernización; y los clústeres 4 (*Chakotay Cargo Systems*) y 5 (*Home One Cargo*), pese a formar cada uno una empresa aislada, muestran comportamientos muy distintos entre sí: la primera es una empresa muy diversificada y con alta fidelidad; la segunda destaca por su altísima digitalización. En cuanto a las relaciones entre las variables, se aprecia una correlación positiva leve entre diversificación y fidelidad, algo más marcada en los grupos avanzados; la digitalización no siempre acompaña a la diversificación, salvo en los perfiles más maduros; y la fidelidad no depende directamente del grado de digitalización, sino que refleja otros factores como la calidad del servicio y la trayectoria de la empresa.
 
 **Cierre del Encargo 1 (informe Bluebird).** El panel de 25 candidatas premium queda encuadrado en cinco perfiles nítidos. *Home One Cargo* ha resultado ser una empresa singular: un perfil altamente digitalizado, pero de diversificación moderada. La AITM concluye que la reciente adquisición por parte de *Arg-us Korp* aporta al grupo del magnate una compañía de perfil tecnológicamente avanzado y especializado, que difícilmente hubiera podido encontrarse dentro del segmento medio del sector.
 
-## ![](figuras/book.svg){.hicon} ![](figuras/pie-chart.svg){.hicon} Encargo 2: análisis de partición (k-medias). {#c07-encargo-2-analisis-de-particion-k-medias}
+## ![](figuras/book.svg){.hicon} ![](figuras/pie-chart.svg){.hicon} Encargo 2: análisis de partición (k-medias).
 
 Los **métodos de partición** —cuyo representante más habitual es ***k-medias***— se aplican cuando hay un elevado número de casos y el objetivo es descubrir **tipologías o perfiles característicos** de individuos, más que clasificar casos concretos. Se identifican patrones de subpoblaciones a partir de la muestra. Por eso conviene detectar y eliminar los *outliers* previamente, ya que estos métodos son sensibles a su presencia.
 
@@ -685,7 +587,7 @@ Trabajaremos, como en el ejemplo de clúster jerarquizado, en el proyecto llamad
 
 Si abrimos el archivo de Microsoft® Excel®, "interestelar_300.xlsx", comprobaremos que tiene la misma estructura y "hojas" que nos encontramos en "interestelar_25.xlsx"; pero extendido a 300 empresas o compañías.
 
-### ![](figuras/pie-chart.svg) Preparación de los datos. {#c07-preparacion-de-los-datos-2}
+### ![](figuras/pie-chart.svg) Preparación de los datos.
 
 La primera parte del script es semejante a la del *script* de la parte de "clúster jerárquico", *cluster_rstars.R*. Solo cambia en los siguientes aspectos:
 
@@ -736,11 +638,6 @@ seleccion_df_graph <- gt_plt_summary(seleccion)
 seleccion_df_graph
 ```
 
-::: {style="text-align: center;"}
-**Tabla 7.10**
-:::
-
-
 Para el diagnóstico y, en su caso, filtrado de los *missing values*, aplicamos de nuevo la función auxiliar `explora_na()` del paquete `{MATrstars}`:
 
 ```{r, eval=FALSE, echo=TRUE}
@@ -772,7 +669,6 @@ Aunque se ha incluido el código para identificar y eliminar los casos con ***mi
 Para la detección de ***outliers***, se aplica también la función auxiliar `explora_outliers()` del paquete `{MATrstars}`, análoga a la usada en el análisis clúster jerárquico. Con `accion = "eliminar"` la función devuelve un nuevo *data frame* sin los casos identificados, que en el resto del análisis será el que utilicemos:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
-options(matrstars.figura_num = "7.11", matrstars.tabla_num = "7.11")
 # Diagnóstico y filtrado de outliers.
 seleccion_so <- explora_outliers(
   seleccion,
@@ -784,7 +680,7 @@ seleccion_so <- explora_outliers(
 
 La tabla anterior recoge los 26 casos identificados como *outliers*. En esta ocasión, y a diferencia del caso del análisis jerárquico, sí los eliminamos, ya que lo que deseamos no es agrupar casos concretos, sino identificar patrones que caractericen a la mayor parte de las empresas. El *data frame* "seleccion_so" contiene los 274 casos restantes con las tres variables del análisis.
 
-### ![](figuras/pie-chart.svg) Determinación del número de grupos o clústeres a formar. {#c07-determinacion-del-numero-de-grupos-o}
+### ![](figuras/pie-chart.svg) Determinación del número de grupos o clústeres a formar.
 
 Una vez preparados los datos, vamos a proceder a aplicar la técnica de formación de conglomerados no-jerárquica de **k-medias**. Primero, y puesto que se basa en el cálculo de las distancias euclídeas entre casos, procederemos a tipificar los valores de las variables, utilizando la función `scale()`, y creando el data frame "zseleccion_so". Después, calcularemos la matriz de distancias **d**:
 
@@ -872,14 +768,9 @@ ggplot(df_sil, aes(x = k, y = Silhouette)) +
   theme_minimal(base_size = 13)
 ```
 
-::: {style="text-align: center;"}
-**Figura 7.12**
-:::
-
-
 El número de clústeres aconsejado por el gráfico es k=2 (primer punto, el más alto). No obstante, dos grupos puede aportar poco detalle en cuanto a la identificación de patrones de empresa diferentes. La segunda opción, según el gráfico, es la de **7 grupos**. Es la que adoptaremos.
 
-### ![](figuras/pie-chart.svg) Aplicación del método de k-medias con determinación de semillas *kmeans++*. {#c07-aplicacion-del-metodo-de-k-medias-con}
+### ![](figuras/pie-chart.svg) Aplicación del método de k-medias con determinación de semillas *kmeans++*.
 
 Una vez decidido el número de grupos (en el ejemplo, 7), se aplica (de nuevo) el método de ***k-medias***, en la versión de la función `KMeans_rcpp()` del paquete `{ClusterR}`, que permite obtener las "semillas" (centroides iniciales) mediante el algoritmo *kmeans++*, que ofrece buenos resultados frente a otras posibilidades de obtención de "semillas", como la generación puramente aleatoria. La solución final se guarda en el objeto “cluster_k”:
 
@@ -904,7 +795,7 @@ Dentro de la solución, el vector con el grupo de pertenencia de cada empresa se
   seleccion_so$whatcluster_k <- as.factor(cluster_k$clusters)
 ```
 
-### ![](figuras/pie-chart.svg) Caracterización de los grupos o conglomerados. {#c07-caracterizacion-de-los-grupos-o-conglomerados-2}
+### ![](figuras/pie-chart.svg) Caracterización de los grupos o conglomerados.
 
 A continuación vamos a **caracterizar los grupos** formados en función de las medias de las variables originales (coordenadas de los *centroides*). Así, se podrán mostrar en pantalla las medias de cada grupo de las distintas variables originales, usando las funciones `by_group()` y `summarise()` de `{dplyr}`. Toda la información se asigna al *data frame* “tablamedias”; para poder, posteriormente, representarla en una tabla mediante las facilidades que ofrecen los paquetes `{knitr}` y `{kableExtra}`:
 
@@ -941,7 +832,7 @@ A continuación vamos a **caracterizar los grupos** formados en función de las 
               Idig = mean(IDIG))
 
     tablamedias %>%
-    kable_rstars(
+    kable_rstars(caption   = "Método de k-medias. 7 grupos. Medias de variables",
                  col.names = c("Clúster",
                                "Observaciones",
                                "I. Diversif.",
@@ -949,11 +840,6 @@ A continuación vamos a **caracterizar los grupos** formados en función de las 
                                "I. Digitalizac."),
                  digits    = c(NA, 0, 3, 3, 3))
 ```
-
-::: {style="text-align: center;"}
-**Tabla 7.12.** Método de k-medias. 7 grupos. Medias de variables
-:::
-
 
 Obviamente, también se podrían comparar las medias de los grupos, para cada variable, con un gráfico de barras. El código es el siguiente:
 
@@ -994,11 +880,6 @@ Para hacer composiciones de 4 gráficos (que en este caso será solo una, dado q
     print(grupos.graficos.centroides[[n]])
   }
 ```
-
-::: {style="text-align: center;"}
-**Figura 7.13**
-:::
-
 
 La lista "grupos.graficos.centroides" almacena las composiciones de 4 (o menos) gráficos generadas. En este ejemplo, solo tiene un elemento, que es mostrado al ejecutar el bucle de presentación de composiciones.
 
@@ -1059,16 +940,11 @@ Una vez almacenados los elementos anteriores, procederemos a crear los gráficos
     }
 ```
 
-::: {style="text-align: center;"}
-**Figura 7.14**
-:::
-
-
 Los gráficos de dispersión muestran con claridad la estructura espacial de los siete clústeres y su correspondencia con los niveles de **diversificación**, **fidelización** y **digitalización** de las empresas. Los grupos 4 y 5 se concentran en la zona inferior izquierda de los diagramas, caracterizados por los valores más bajos en todas las variables —empresas con escasa diversificación y digitalización, y menor fidelidad de clientes—, mientras que el grupo 6 se sitúa de forma destacada en el extremo superior derecho, evidenciando su liderazgo tecnológico y su alta diversificación. Los grupos 1 y 7 se ubican en posiciones intermedias, aunque algo más desplazados hacia niveles medios-altos de fidelidad y diversificación, lo que los perfila como empresas con potencial de crecimiento. Finalmente, los grupos 2 y 3, más concentrados en la parte superior central, presentan altos niveles de fidelización y moderada digitalización, pero con menor dispersión en diversificación, lo que sugiere estrategias más focalizadas.
 
 En conjunto, los diagramas reflejan relaciones positivas entre las tres variables, especialmente entre diversificación y digitalización (IDIVERSE–IDIG), donde se observa un patrón casi lineal: las empresas más diversificadas tienden también a estar más digitalizadas. La relación entre fidelización y digitalización (IFIDE–IDIG) es más dispersa, aunque se vislumbra una pendiente positiva: la digitalización parece acompañarse de cierta mejora en la fidelidad de los clientes. En cambio, la asociación fidelidad–diversificación (IFIDE–IDIVERSE) resulta más compleja, con un grupo principal en torno a valores medios-altos de fidelización independientemente de la diversificación, lo que podría indicar que la fidelidad no depende directamente de la amplitud del negocio, sino de otros factores como la calidad del servicio o la relación cliente–empresa.
 
-## ![](figuras/book.svg){.hicon} ![](figuras/pie-chart.svg){.hicon} Encargo 3: análisis basado en densidad (DBSCAN). {#c07-encargo-3-analisis-basado-en-densidad-dbscan}
+## ![](figuras/book.svg){.hicon} ![](figuras/pie-chart.svg){.hicon} Encargo 3: análisis basado en densidad (DBSCAN).
 
 El método **DBSCAN** —acrónimo de *Density-Based Spatial Clustering of Applications with Noise*— pertenece a la familia de algoritmos de agrupación basados en densidad.
 
@@ -1092,11 +968,6 @@ Los dos **hiperparámetros clave** de la técnica son:
 |------------------------|------------------------|------------------------|
 | `eps` | Radio máximo para considerar vecindad | Si es muy grande, fusiona clústeres distintos. Si es muy pequeño, genera exceso de ruido. |
 | `minPts` | Número mínimo de puntos para formar un clúster denso | Valores típicos entre 4 y 10 según el tamaño de muestra. |
-
-::: {style="text-align: center;"}
-**Tabla 7.13**
-:::
-
 
 Como **ventajas** frente a los métodos *jerárquicos* y de *k-medias* podemos destacar:
 
@@ -1122,7 +993,7 @@ En el ejemplo práctico volveremos a utilizar la misma muestra de 300 empresas d
 
 Trabajaremos dentro del proyecto denominado "cluster", donde guardaremos los dos archivos necesarios para esta práctica: el archivo de datos en formato Microsoft® Excel® (interestelar_300.xlsx) y el *script* de R denominado *dbscan_rstars.R*. En la última sección del capítulo se facilitan los enlaces a ambos materiales.
 
-### ![](figuras/pie-chart.svg) Preparación de los datos. {#c07-preparacion-de-los-datos-3}
+### ![](figuras/pie-chart.svg) Preparación de los datos.
 
 La primera parte del script reproduce esencialmente el mismo esquema que en el ejemplo de *k-medias*: limpieza del *Global Environment*, activación de paquetes (con carga del paquete `{MATrstars}` para disponer de la función `create_patchwork()`), importación de los datos, selección y presentación de las variables del análisis, tratamiento de *missing values* e identificación de *outliers*:
 
@@ -1238,7 +1109,6 @@ seleccion <- explora_na(
 En la detección de *outliers*, se han calculado las *distancias de Mahalanobis* y se han identificado los casos atípicos mediante la regla clásica de 1.5·IQR (26 observaciones). Todo el bloque se ejecuta en una sola llamada a `explora_outliers()`, con `accion = "documentar"` porque en el análisis DBSCAN mantendremos las 300 observaciones:
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
-options(matrstars.figura_num = "7.15", matrstars.tabla_num = "7.14")
 explora_outliers(
   seleccion,
   accion    = "documentar",
@@ -1249,7 +1119,7 @@ explora_outliers(
 
 A partir de aquí iniciaremos un procedimiento de análisis diferente. *DBSCAN* es una técnica robusta frente a los *outliers*, ya que estos no afectan a la formación de los clústeres, sino que el propio algoritmo los identifica y clasifica como "ruido". Por tanto, mantendremos las 300 observaciones en el análisis.
 
-### ![](figuras/pie-chart.svg) Aplicación de la técnica. {#c07-aplicacion-de-la-tecnica}
+### ![](figuras/pie-chart.svg) Aplicación de la técnica.
 
 Antes de calcular distancias, es imprescindible que todas las variables estén en la **misma escala**. Si no lo hacemos, aquellas con un rango numérico más amplio dominarán el cálculo de distancias y distorsionarán la formación de los grupos. Para evitarlo, aplicamos una **tipificación estándar (z-score)** a cada variable: restamos su media y dividimos entre su desviación típica.
 
@@ -1305,11 +1175,6 @@ ggplot(df_knn, aes(x = punto, y = distancia)) +
   theme_minimal(base_size = 13)
 ```
 
-::: {style="text-align: center;"}
-**Figura 7.16**
-:::
-
-
 Observando el gráfico, el codo se sitúa aproximadamente en torno al valor **eps ≈ 0,55** (donde la curva deja de ser prácticamente plana y comienza a crecer con fuerza). Este valor será el que utilizaremos para el ajuste final de DBSCAN:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
@@ -1331,7 +1196,7 @@ seleccion$whatcluster_dbs <- as.factor(modelo_db$cluster)
 
 El resultado muestra el número de clústeres detectados y la cantidad de casos por clúster. El **clúster 0** contiene los puntos clasificados como *ruido* (no pertenecen a ninguna región densa). La instrucción final añade una columna `whatcluster_dbs` al *data frame* `seleccion` con la etiqueta de clúster asignada a cada empresa, para poder caracterizar los grupos a continuación.
 
-### ![](figuras/pie-chart.svg) Caracterización de los clústeres o grupos formados. {#c07-caracterizacion-de-los-clusteres-o-grupos}
+### ![](figuras/pie-chart.svg) Caracterización de los clústeres o grupos formados.
 
 Una vez obtenidos los clústeres, y asignados los elementos (teniendo en cuenta que el *grupo 0* no es realmente un clúster; sino que reúne a los casos considerados atípicos, *ouliers* o *ruido*), puede aplicarse el mismo código que se empleó en el caso de *k-medias* a la hora de caracterizar tales grupos (omitimos por no extender el código la prueba de comparaciones múltiples de *Kruskal-Wallis*):
 
@@ -1437,7 +1302,7 @@ tablamedias <- seleccion %>%
                                       Idig = mean(IDIG))
 
 tablamedias %>%
-  kable_rstars(
+  kable_rstars(caption   = "Método DBSCAN. Medias de variables (Grupo 0 = Ruido)",
                col.names = c("Clúster",
                              "Observaciones",
                              "I. Diversif.",
@@ -1445,11 +1310,6 @@ tablamedias %>%
                              "I. Digitalizac."),
                digits    = c(0, 0, 3, 3, 3))
 ```
-
-::: {style="text-align: center;"}
-**Tabla 7.15.** Método DBSCAN. Medias de variables (Grupo 0 = Ruido)
-:::
-
 
 Además, obtenemos los gráficos de las medias de los clústeres y de dispersión de las variables 2 a 2:
 
@@ -1485,13 +1345,7 @@ grupos.graficos.centroides <- create_patchwork(graficos.centroides)
 for (n in 1:length(grupos.graficos.centroides)){
   print(grupos.graficos.centroides[[n]])
 }
-```
 
-::: {style="text-align: center;"}
-**Figura 7.17**
-:::
-
-```{r, eval=TRUE, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 # GRÁFICOS Variable vs Variable
 
 # Lista de variables excluyendo la variable no deseada
@@ -1529,11 +1383,6 @@ for (n in 1:length(gruposgraficos)){
   print(gruposgraficos[[n]])
 }
 ```
-
-::: {style="text-align: center;"}
-**Figura 7.18**
-:::
-
 
 Se deja al lector, como ejercicio práctico, la interpretación de estos gráficos a fin de caracterizar los clústeres identificados (ha de tenerse en cuenta que el grupo 0 no es un clúster, sino que recoge los elementos *ruido*, y por tanto, su interpretación carece de sentido, al menos en términos de valores medios de las variables).
 
@@ -1584,7 +1433,7 @@ seleccion_out <- seleccion %>%
   select(whatcluster_dbs, MAHALANOBIS, IDIVERSE, IFIDE, IDIG)
 
 seleccion_out %>%
-  kable_rstars(
+  kable_rstars(caption   = "¿Outliers son ruido? (Grupo 0 = Ruido)",
                col.names = c("Caso",
                              "Observaciones",
                              "Grupo (0=ruido)",
@@ -1595,16 +1444,11 @@ seleccion_out %>%
                digits    = c(NA, 0, 3, 3, 3))
 ```
 
-::: {style="text-align: center;"}
-**Tabla 7.16.** ¿Outliers son ruido? (Grupo 0 = Ruido)
-:::
-
-
 La tabla revela un resultado matizado: de las **26 empresas identificadas como *outliers*** por la regla de Mahalanobis, **22 han sido efectivamente clasificadas como ruido** por *DBSCAN*, mientras que **4 casos han quedado integrados en alguno de los clústeres densos**. Esto sucede cuando un caso, pese a ser atípico en el conjunto multivariante, se encuentra lo suficientemente cerca de una región densa como para pertenecer al vecindario de sus puntos núcleo (dicho de otro modo: es un *outlier* estadístico, pero no un *outlier* de densidad). Por otro lado, *DBSCAN* ha ido más allá y ha clasificado también como *ruido* algunas empresas que la regla clásica de Mahalanobis no había identificado como atípicas: se trata de casos que, aun sin ser extremos en distancia, se encuentran en regiones poco densas del espacio de variables.
 
 Este cruce ilustra que **ambos criterios responden a definiciones distintas de anomalía**: uno geométrico (basado en distancias respecto al centroide global), y otro topológico (basado en densidad local). Su combinación aporta una imagen más rica del comportamiento atípico dentro del sector.
 
-## ![](figuras/star.svg){.hicon} Cierre del Informe *Bluebird*: comparación de los tres métodos. {#c07-cierre-del-informe-bluebird-comparacion-de}
+## ![](figuras/star.svg){.hicon} Cierre del Informe *Bluebird*: comparación de los tres métodos.
 
 La doctora Bluebird ha completado los tres encargos con los siguientes resultados:
 
@@ -1618,7 +1462,7 @@ La doctora Bluebird ha completado los tres encargos con los siguientes resultado
 
 Con estos resultados en la mano, la doctora *Xelia Bluebird* firma el informe y lo remite al Consejo de la AITM. Cuentan las malas lenguas que, al conocer el resultado del Encargo 1, *Arg-us Korp* enarcó una ceja y murmuró: *"Sabía que había hecho una buena compra"*.
 
-## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo. {#c07-materiales-para-realizar-las-practicas-del}
+## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo.
 
 En esta sección se muestran los links de acceso a los diferentes materiales (*scripts*, datos...) necesarios para llevar a cabo los contenidos prácticos del capítulo.
 

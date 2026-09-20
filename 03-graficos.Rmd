@@ -2,7 +2,7 @@
 
 ![[El valor de las imágenes.]{.smallcaps}](figuras/03%20gráficos.jpg){width="100%"}
 
-## ![](figuras/book.svg){.hicon} El valor de las imágenes.
+## ![](figuras/book.svg){.hicon} El valor de las imágenes. {#c03-el-valor-de-las-imagenes}
 
 Una imagen vale más que mil palabras.
 
@@ -16,7 +16,7 @@ Esa fuerza descansa en el modo en que las representaciones gráficas aprovechan 
 
 Este capítulo recorre ese camino: del boceto exploratorio a la visualización final que informa, persuade y, sobre todo, ayuda a decidir mejor.
 
-## ![](figuras/pie-chart.svg){.hicon} El *Tidyverse* para gráficos: `{ggplot2}`.
+## ![](figuras/pie-chart.svg){.hicon} El *Tidyverse* para gráficos: `{ggplot2}`. {#c03-el-tidyverse-para-graficos-ggplot2}
 
 R, en su instalación básica, cuenta con funciones destinadas a crear gráficos y, de este modo, visualizar nuestros datos para generar información y extraer conclusiones con sencillez.
 
@@ -73,7 +73,7 @@ datos_df_graph <- gt_plt_summary(interestelar_100)
 datos_df_graph
 ```
 
-## ![](figuras/pie-chart.svg){.hicon} La estructura de un gráfico con `{ggplot2}`.
+## ![](figuras/pie-chart.svg){.hicon} La estructura de un gráfico con `{ggplot2}`. {#c03-la-estructura-de-un-grafico-con-ggplot2}
 
 Antes de construir nuestro primer gráfico conviene entender la lógica que sigue `{ggplot2}`: todo gráfico se levanta combinando tres ingredientes básicos.
 
@@ -93,9 +93,9 @@ ggplot(data = mi_dataframe, aes(x = variable_x, y = variable_y)) +
 
 Con esta estructura en mente, recorramos los tipos de gráficos más habituales.
 
-## ![](figuras/pie-chart.svg){.hicon} Gráficos de una variable.
+## ![](figuras/pie-chart.svg){.hicon} Gráficos de una variable. {#c03-graficos-de-una-variable}
 
-### ![](figuras/key.svg){.hicon} Histograma.
+### ![](figuras/key.svg){.hicon} Histograma. {#c03-histograma}
 
 El **histograma** es uno de los gráficos indispensables para hacerse una idea de cómo se distribuyen los casos en relación con una variable métrica. Construyamos uno para la variable LIQUIDEZ, que recoge la ratio de liquidez —cociente entre el activo corriente y el pasivo corriente— y que mide la capacidad de la empresa para atender sus deudas a corto plazo con activos a corto plazo. En algunos sectores se considera adecuado un valor de la ratio situado entre 1,5 y 2: por debajo de 1,5 pueden aparecer tensiones de caja, mientras que por encima de 2 cabe sospechar capital ocioso.
 
@@ -164,7 +164,7 @@ ggplot(data = interestelar_100, aes(x = LIQUIDEZ)) +
 
 Como puede verificarse, los tres histogramas se superponen con colores distintos según la categoría de EFLO y, a la derecha del gráfico, surge una leyenda que indica qué color corresponde a cada grupo de empresas. La función `scale_fill_brewer()` nos permite escoger la paleta de colores; las disponibles pueden consultarse en [esta sección](https://ggplot2-book.org/scales-colour) de [@ggplot22021].
 
-### ![](figuras/key.svg){.hicon} Gráfico de densidad.
+### ![](figuras/key.svg){.hicon} Gráfico de densidad. {#c03-grafico-de-densidad}
 
 Muy próximo al histograma se encuentra el gráfico de **densidad**, que estima la función de densidad de probabilidad empírica de la variable representada. Cabe entenderlo, en el fondo, como un histograma "suavizado". Probemos a ejecutar este código:
 
@@ -191,7 +191,7 @@ ggplot(data = interestelar_100, aes(x = LIQUIDEZ)) +
 
 El argumento `alpha =` admite un valor entre 0 y 1 que regula la transparencia de los rellenos. Gracias a él, las funciones de densidad superpuestas pueden verse unas a través de otras.
 
-### ![](figuras/key.svg){.hicon} Gráfico de caja o *Box-Plot*.
+### ![](figuras/key.svg){.hicon} Gráfico de caja o *Box-Plot*. {#c03-grafico-de-caja-o-box-plot}
 
 Otro tipo de gráfico de enorme interés es el de caja o ***box-plot***, que informa sobre la dispersión de una variable. Fijémonos en el siguiente código:
 
@@ -298,7 +298,7 @@ ggplot(data = interestelar_100, aes(x = EFLO, y = RES)) +
 
 `geom_jitter()` muestra, sobre cada caja, la nube de casos individuales, *outliers* incluidos. Las características de esos puntos —amplitud del desplazamiento lateral, tamaño, color y opacidad— se controlan con los argumentos `width =`, `size =`, `col =` y `alpha =`.
 
-### ![](figuras/key.svg){.hicon} Gráfico de violín.
+### ![](figuras/key.svg){.hicon} Gráfico de violín. {#c03-grafico-de-violin}
 
 El gráfico de **violín** reúne las ventajas del *box-plot* —la mediana y los cuartiles— con las del gráfico de densidad —la forma completa de la distribución—. Cada "violín" es una función de densidad reflejada como en un espejo, cuya anchura en cada punto refleja la frecuencia relativa de los datos en ese valor. Resulta especialmente útil cuando la distribución es bimodal o adopta formas que un *box-plot* no alcanza a revelar:
 
@@ -319,7 +319,7 @@ ggplot(data = interestelar_100, aes(x = EFLO, y = LIQUIDEZ)) +
 
 En el código, `geom_violin()` dibuja la silueta de la distribución y sobre ella se superpone un `geom_boxplot()` estrecho (argumento `width = 0.15`) que aporta la referencia de la mediana y los cuartiles, mientras que el punto azul oscuro señala la media. El violín reúne así ambas lecturas en una sola imagen: el resumen numérico del *box-plot* y el perfil completo de la distribución.
 
-### ![](figuras/key.svg){.hicon} Gráfico de barras.
+### ![](figuras/key.svg){.hicon} Gráfico de barras. {#c03-grafico-de-barras}
 
 El **gráfico de barras** es la representación básica de las variables **categóricas**. `{ggplot2}` ofrece dos funciones para construirlo: `geom_bar()`, que cuenta por sí sola las frecuencias de cada categoría, y `geom_col()`, que parte de valores ya calculados. Representemos el número de empresas por tipo de flota (EFLO):
 
@@ -354,9 +354,9 @@ ggplot(data = res_por_galaxia, aes(x = reorder(GALAXIA, RES_medio),
 
 En este ejemplo, `reorder()` dispone las barras de menor a mayor resultado medio y `coord_flip()` gira el gráfico para situarlas en horizontal, lo que facilita la lectura de los nombres de las galaxias.
 
-## ![](figuras/pie-chart.svg){.hicon} Gráficos de dos variables.
+## ![](figuras/pie-chart.svg){.hicon} Gráficos de dos variables. {#c03-graficos-de-dos-variables}
 
-### ![](figuras/key.svg){.hicon} Gráfico de dispersión o *scatterplot*.
+### ![](figuras/key.svg){.hicon} Gráfico de dispersión o *scatterplot*. {#c03-grafico-de-dispersion-o-scatterplot}
 
 Abordamos ahora un tipo de gráfico muy frecuente cuando trabajamos con dos variables métricas: el **gráfico de dispersión** o ***scatterplot***. En él, cada variable ocupa uno de los ejes y cada punto del interior representa un caso u observación.
 
@@ -469,7 +469,7 @@ ggMarginal(scatter_plus, type = "histogram", groupColour = T,
 
 La función descarta por sí sola aquellas etiquetas que se solaparían en exceso, comportamiento que regula el argumento `max.overlaps`. Otros argumentos de interés son `box.padding` (el aire que rodea a cada etiqueta), `point.padding` (el que rodea al punto de anclaje) y `force` (la intensidad de la repulsión entre etiquetas).
 
-## ![](figuras/pie-chart.svg){.hicon} Paneles múltiples: *faceting*.
+## ![](figuras/pie-chart.svg){.hicon} Paneles múltiples: *faceting*. {#c03-paneles-multiples-faceting}
 
 Una de las prestaciones más potentes de `{ggplot2}` es la posibilidad de generar **paneles múltiples** (*facets*) a partir de una o varias variables categóricas. En lugar de superponer los grupos en una misma imagen —lo que en ocasiones dificulta su lectura—, se dibuja un gráfico independiente para cada categoría, todos ellos con idénticas escalas, lo que facilita enormemente la comparación.
 
@@ -501,7 +501,7 @@ ggplot(data = interestelar_100, aes(x = LIQUIDEZ, y = RES)) +
 
 Cada panel recoge únicamente los casos de una categoría de EFLO, de modo que la relación entre LIQUIDEZ y RES se aprecia con nitidez dentro de cada grupo, sin la confusión que puede generar la superposición de colores en una sola imagen.
 
-## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo.
+## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo. {#c03-materiales-para-realizar-las-practicas-del}
 
 En esta sección se recogen los enlaces de acceso a los distintos materiales (*scripts*, datos...) necesarios para desarrollar los contenidos prácticos del capítulo.
 

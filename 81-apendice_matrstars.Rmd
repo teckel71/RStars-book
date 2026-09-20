@@ -17,29 +17,29 @@ El repositorio con el código fuente completo del paquete se encuentra en:
 
 En las secciones siguientes se describe cada una de las funciones que integran el paquete: qué hacen, cómo se invocan, qué argumentos aceptan, qué devuelven y cómo utilizarlas.
 
-## `create_patchwork()`. {-}
+## `create_patchwork()`. {#c81-createpatchwork .unnumbered}
 
-### Propósito. {-}
+### Propósito. {#c81-proposito .unnumbered}
 
 Toma una lista de gráficos `ggplot` y los agrupa en **composiciones de 2 filas por 2 columnas** (cuatro gráficos por composición), utilizando los operadores de composición del paquete `{patchwork}`. Cuando el número total de gráficos no es múltiplo de cuatro, la última composición se completa con paneles vacíos (utilizando `theme_void()`) para mantener la retícula uniforme.
 
 Esta función resulta especialmente útil cuando se genera una batería de gráficos de forma programática (por ejemplo, mediante un bucle sobre un conjunto de variables) y se desean presentar de manera compacta y ordenada. Aparece en los capítulos de análisis clúster (tanto jerárquico como no-jerárquico), en el capítulo de regresión lineal múltiple y, en general, cuando conviene resumir una batería de gráficos comparativos.
 
-### Sintaxis. {-}
+### Sintaxis. {#c81-sintaxis .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 create_patchwork(plot_list)
 ```
 
-### Argumentos. {-}
+### Argumentos. {#c81-argumentos .unnumbered}
 
 - **`plot_list`**: lista de objetos `ggplot`. Si la lista está vacía, la función devuelve `NULL`.
 
-### Valor devuelto. {-}
+### Valor devuelto. {#c81-valor-devuelto .unnumbered}
 
 Una **lista de composiciones** `patchwork`. Cada elemento de la lista contiene, como máximo, cuatro gráficos dispuestos en una retícula 2x2. Para presentar las composiciones basta con recorrer la lista con un bucle `for` e imprimir cada elemento con `print()`, tal y como se muestra en el ejemplo siguiente.
 
-### Ejemplo. {-}
+### Ejemplo. {#c81-ejemplo .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 library(ggplot2)
@@ -64,21 +64,21 @@ length(composiciones)
 for (comp in composiciones) print(comp)
 ```
 
-### Código fuente. {-}
+### Código fuente. {#c81-codigo-fuente .unnumbered}
 
 El archivo con el código completo de la función, incluyendo la documentación en formato `{roxygen2}`, puede consultarse y descargarse desde el repositorio del paquete en GitHub:
 
 - [`R/create_patchwork.R`](https://github.com/teckel71/MATrstars/blob/main/R/create_patchwork.R)
 
-## `kable_rstars()`. {-}
+## `kable_rstars()`. {#c81-kablerstars .unnumbered}
 
-### Propósito. {-}
+### Propósito. {#c81-proposito-2 .unnumbered}
 
 Genera una tabla HTML con el estilo tipográfico utilizado sistemáticamente en el libro *R-Stars*: encabezado en negrita centrado, cuerpo con líneas alternas para facilitar la lectura, bordes discretos, ancho ajustado al contenido y celdas centradas. Internamente es un envoltorio de `knitr::kable()`, seguido de `kableExtra::kable_styling()` y `kableExtra::row_spec()`, con los ajustes habituales del libro configurados como valores por defecto. De este modo, cada tabla en los *scripts* se reduce de un bloque de 12-18 líneas a una llamada compacta de 4-6 líneas.
 
 Los valores por defecto (fuente de 11 puntos, punto como separador decimal, encabezado en negrita, cuerpo centrado, sin notación científica, opciones bootstrap `striped + bordered + condensed`) resuelven la práctica totalidad de las tablas del libro. Cuando alguna tabla concreta requiere un ajuste, basta con sobrescribir el argumento correspondiente.
 
-### Sintaxis. {-}
+### Sintaxis. {#c81-sintaxis-2 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 kable_rstars(x,
@@ -96,7 +96,7 @@ kable_rstars(x,
              ...)
 ```
 
-### Argumentos. {-}
+### Argumentos. {#c81-argumentos-2 .unnumbered}
 
 - **`x`**: *data frame* o matriz con los datos a mostrar.
 - **`caption`**: título de la tabla. Por defecto `NULL` (sin título).
@@ -112,11 +112,11 @@ kable_rstars(x,
 - **`format.args`**: lista con argumentos de formato numérico pasada a `knitr::kable()`. Por defecto, punto como separador decimal y notación científica desactivada.
 - **`...`**: argumentos adicionales pasados a `knitr::kable()`.
 
-### Valor devuelto. {-}
+### Valor devuelto. {#c81-valor-devuelto-2 .unnumbered}
 
 Un objeto de clase `knitr_kable` con el estilo del libro aplicado, listo para su inclusión en un documento R Markdown con salida HTML.
 
-### Ejemplo. {-}
+### Ejemplo. {#c81-ejemplo-2 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 library(dplyr)
@@ -132,13 +132,13 @@ mtcars %>%
                digits    = 2)
 ```
 
-### Código fuente. {-}
+### Código fuente. {#c81-codigo-fuente-2 .unnumbered}
 
 - [`R/kable_rstars.R`](https://github.com/teckel71/MATrstars/blob/main/R/kable_rstars.R)
 
-## `explora_na()`. {-}
+## `explora_na()`. {#c81-explorana .unnumbered}
 
-### Propósito. {-}
+### Propósito. {#c81-proposito-3 .unnumbered}
 
 Diagnostica los valores ausentes (`NA`) de un *data frame* sobre un conjunto de variables. Genera un gráfico `vis_miss()` del paquete `{visdat}` con el estilo tipográfico habitual del libro y, si se detectan `NA`s, una tabla con los casos afectados formateada con `kable_rstars()`. Si no se detecta ningún `NA`, la función se limita a emitir un mensaje informativo por la consola. Opcionalmente, elimina del *data frame* los casos con algún `NA` en las variables analizadas.
 
@@ -148,7 +148,7 @@ La selección de variables sigue el estilo *tidy-select* del *tidyverse*: se pue
 
 Esta función sustituye, a partir del capítulo 5, al bloque manual formado por `vis_miss()` + `labs()` + `scale_fill_manual()` + `theme()`, seguido de un `filter(is.na(...))` para listar los casos afectados y, en su caso, un `filter(!is.na(...))` para eliminarlos. Aparece en los capítulos 5 a 10, siempre en la fase de preparación previa de datos.
 
-### Sintaxis. {-}
+### Sintaxis. {#c81-sintaxis-3 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 explora_na(datos,
@@ -161,7 +161,7 @@ explora_na(datos,
            ...)
 ```
 
-### Argumentos. {-}
+### Argumentos. {#c81-argumentos-3 .unnumbered}
 
 - **`datos`**: *data frame* de entrada.
 - **`variables`**: variables a analizar, en sintaxis *tidy-select* (nombres sin comillas, `c(...)` o *helpers* de `dplyr::select()`). Si se omite, se analizan todas las columnas de `datos`.
@@ -172,13 +172,13 @@ explora_na(datos,
 - **`caption`**: título de la tabla `kable_rstars()` con los casos con `NA`. Si es `NULL` (por defecto), se genera automáticamente indicando el número de casos afectados y las variables analizadas.
 - **`...`**: argumentos adicionales reenviados a `kable_rstars()` (por ejemplo, `digits`, `font_size` o `bootstrap_options`).
 
-### Valor devuelto. {-}
+### Valor devuelto. {#c81-valor-devuelto-3 .unnumbered}
 
 El *data frame* (invisible): sin cambios si `accion = "documentar"`, o filtrado (solo casos completos en las variables analizadas) si `accion = "eliminar"`. Esto permite tanto sobrescribir el *data frame* de trabajo (`df <- explora_na(df, ..., accion = "eliminar")`) como utilizar la función solo con fines diagnósticos, sin alterar el objeto original.
 
 Como efectos colaterales, la función imprime el gráfico `vis_miss()` y la tabla `kable_rstars()` con los casos afectados (si los hay), o un mensaje informativo por la consola (si no los hay).
 
-### Ejemplo. {-}
+### Ejemplo. {#c81-ejemplo-3 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 library(MATrstars)
@@ -218,13 +218,13 @@ seleccion <- explora_na(
 )
 ```
 
-### Código fuente. {-}
+### Código fuente. {#c81-codigo-fuente-3 .unnumbered}
 
 - [`R/explora_na.R`](https://github.com/teckel71/MATrstars/blob/main/R/explora_na.R)
 
-## `explora_outliers()`. {-}
+## `explora_outliers()`. {#c81-exploraoutliers .unnumbered}
 
-### Propósito. {-}
+### Propósito. {#c81-proposito-4 .unnumbered}
 
 Diagnostica los *outliers* (valores atípicos) de un *data frame* sobre un conjunto de variables métricas, siguiendo la regla clásica de Tukey de 1,5 veces el rango intercuartílico (IQR). La función distingue automáticamente dos casos según el número de variables seleccionadas:
 
@@ -243,7 +243,7 @@ Cuando existen *outliers* muy extremos, la caja del *boxplot* puede aplastarse h
 
 Esta función sustituye, a partir del capítulo 5, al bloque manual formado por el `ggplot()` + `geom_boxplot()`, el cálculo de `Q1` y `Q3` con `quantile()`, el `filter(...)` para listar los casos y, en su caso, un segundo `filter(...)` para eliminarlos. En el caso multivariante, también absorbe la creación previa de una columna `MAHALANOBIS` con `mutate(MAHALANOBIS = mahalanobis(...))` y su posterior eliminación con `select(-MAHALANOBIS)`. Aparece en los capítulos 5 a 9, siempre en la fase de preparación previa de datos.
 
-### Sintaxis. {-}
+### Sintaxis. {#c81-sintaxis-4 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 explora_outliers(datos,
@@ -256,7 +256,7 @@ explora_outliers(datos,
                  ...)
 ```
 
-### Argumentos. {-}
+### Argumentos. {#c81-argumentos-4 .unnumbered}
 
 - **`datos`**: *data frame* de entrada.
 - **`variables`**: variables a analizar, en sintaxis *tidy-select* (nombres sin comillas, `c(...)` o *helpers* de `dplyr::select()`). Si se omite, se analizan todas las columnas numéricas de `datos`.
@@ -267,13 +267,13 @@ explora_outliers(datos,
 - **`caption`**: título de la tabla `kable_rstars()` con los casos *outliers*. Si es `NULL` (por defecto), se genera automáticamente indicando el número de casos y la variable analizada (o el conjunto de variables, en el caso multivariante).
 - **`...`**: argumentos adicionales reenviados a `kable_rstars()` (por ejemplo, `digits`, `font_size` o `bootstrap_options`).
 
-### Valor devuelto. {-}
+### Valor devuelto. {#c81-valor-devuelto-4 .unnumbered}
 
 El *data frame* (invisible): sin cambios si `accion = "documentar"`, o filtrado (sin los casos *outliers*) si `accion = "eliminar"`. En el caso multivariante, la columna auxiliar `MAHALANOBIS` calculada internamente **no se conserva** en el *data frame* devuelto.
 
 Como efectos colaterales, la función imprime el *boxplot* y la tabla `kable_rstars()` con los casos afectados (si los hay), o un mensaje informativo por la consola (si no los hay).
 
-### Ejemplo. {-}
+### Ejemplo. {#c81-ejemplo-4 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 library(MATrstars)
@@ -321,13 +321,13 @@ explora_outliers(
 )
 ```
 
-### Código fuente. {-}
+### Código fuente. {#c81-codigo-fuente-4 .unnumbered}
 
 - [`R/explora_outliers.R`](https://github.com/teckel71/MATrstars/blob/main/R/explora_outliers.R)
 
-## `presenta_modelo()`. {-}
+## `presenta_modelo()`. {#c81-presentamodelo .unnumbered}
 
-### Propósito. {-}
+### Propósito. {#c81-proposito-5 .unnumbered}
 
 Convierte el objeto devuelto por `stats::lm()` (u otros modelos compatibles con `broom::tidy()` y `broom::glance()`) en un conjunto de tres tablas formateadas con `kable_rstars()`, listas para su inclusión en un documento R Markdown con salida HTML. Las tres tablas son:
 
@@ -337,7 +337,7 @@ Convierte el objeto devuelto por `stats::lm()` (u otros modelos compatibles con 
 
 Internamente, cada una de las tres tablas se construye con `kable_rstars()`, por lo que heredan automáticamente el estilo tipográfico habitual del libro. Cualquier argumento adicional pasado a `presenta_modelo()` a través de `...` se reenvía a las tres llamadas internas de `kable_rstars()`, permitiendo ajustar de forma uniforme, por ejemplo, el tamaño de fuente o las opciones Bootstrap. Esta función se emplea en el capítulo 9 (regresión lineal múltiple) para presentar de manera homogénea los distintos modelos estimados a lo largo de la práctica.
 
-### Sintaxis. {-}
+### Sintaxis. {#c81-sintaxis-5 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 presenta_modelo(modelo,
@@ -347,17 +347,17 @@ presenta_modelo(modelo,
                 ...)
 ```
 
-### Argumentos. {-}
+### Argumentos. {#c81-argumentos-5 .unnumbered}
 
 - **`modelo`**: objeto de modelo lineal ajustado (habitualmente devuelto por `stats::lm()`). Debe ser compatible con `broom::tidy()`, `broom::glance()` y `car::vif()`. Este último requiere que el modelo tenga al menos dos variables explicativas.
 - **`captions`**: vector de caracteres de longitud 3 con los títulos de las tres tablas, en orden: coeficientes, estadísticos, VIF. Por defecto, `c("Modelo Lineal", "Estadísticos del modelo", "Factor de inflación de la varianza")`.
 - **`...`**: argumentos adicionales pasados a `kable_rstars()` (por ejemplo, `font_size` o `bootstrap_options`), aplicados por igual a las tres tablas.
 
-### Valor devuelto. {-}
+### Valor devuelto. {#c81-valor-devuelto-5 .unnumbered}
 
 Una **lista de tres elementos**, cada uno un objeto `knitr_kable` con el estilo del libro aplicado. Los elementos están nombrados como `coef`, `stats` y `vif`, de forma que se puede acceder a ellos tanto por posición (`x[[1]]`) como por nombre (`x$coef`).
 
-### Ejemplo. {-}
+### Ejemplo. {#c81-ejemplo-5 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 library(MATrstars)
@@ -379,13 +379,13 @@ presenta_modelo(modelo,
                 font_size = 12)
 ```
 
-### Código fuente. {-}
+### Código fuente. {#c81-codigo-fuente-5 .unnumbered}
 
 - [`R/presenta_modelo.R`](https://github.com/teckel71/MATrstars/blob/main/R/presenta_modelo.R)
 
-## `presenta_logit()`. {-}
+## `presenta_logit()`. {#c81-presentalogit .unnumbered}
 
-### Propósito. {-}
+### Propósito. {#c81-proposito-6 .unnumbered}
 
 Convierte el objeto devuelto por `stats::glm()` con `family = binomial(link = "logit")` en un conjunto de tablas formateadas con `kable_rstars()`, listas para su inclusión en un documento R Markdown con salida HTML. Es la función hermana de `presenta_modelo()`, adaptada a las particularidades de los modelos logit binomiales. Las tablas que genera son:
 
@@ -402,7 +402,7 @@ $$R^2_{\text{Nagelkerke}} = \frac{1 - \exp\!\left(-\tfrac{2}{n}(L_1 - L_0)\right
 
 La separación del *odd ratio* en una tabla independiente (tabla 3), distinta de la de coeficientes (tabla 1), es deliberada: la tabla 1 presenta el contraste estadístico formal (¿es el parámetro significativamente distinto de cero?), mientras que la tabla 3 ofrece la interpretación económica del efecto (¿cuánto cambia la ventaja del suceso cuando la variable sube una unidad?). Esta separación facilita la lectura secuencial en el capítulo.
 
-### Sintaxis. {-}
+### Sintaxis. {#c81-sintaxis-6 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 presenta_logit(modelo,
@@ -415,7 +415,7 @@ presenta_logit(modelo,
                ...)
 ```
 
-### Argumentos. {-}
+### Argumentos. {#c81-argumentos-6 .unnumbered}
 
 - **`modelo`**: objeto de clase `glm` ajustado con `family = binomial(link = "logit")`. Debe ser compatible con `broom::tidy()` y `broom::glance()`.
 - **`datos`**: *data frame* sobre el que calcular la matriz de confusión. Si se proporciona, se genera la tabla 4; si es `NULL` (por defecto), la tabla 4 no se genera. Esto permite pasar tanto la muestra de estimación como una muestra de test independiente.
@@ -423,11 +423,11 @@ presenta_logit(modelo,
 - **`captions`**: vector de caracteres de longitud 4 con los títulos de las cuatro tablas, en orden: coeficientes, bondad del ajuste, *odd ratios* y matriz de confusión. Por defecto, `c("Modelo Logit Binomial", "Bondad del ajuste", "Odd ratios", "Matriz de confusión")`.
 - **`...`**: argumentos adicionales pasados a `kable_rstars()` (por ejemplo, `font_size` o `bootstrap_options`), aplicados por igual a todas las tablas.
 
-### Valor devuelto. {-}
+### Valor devuelto. {#c81-valor-devuelto-6 .unnumbered}
 
 Una **lista de 3 o 4 elementos**, cada uno un objeto `knitr_kable` con el estilo del libro aplicado. Los elementos están nombrados como `coef`, `gof`, `or` y, opcionalmente, `conf`, de forma que se puede acceder a ellos tanto por posición (`x[[1]]`) como por nombre (`x$coef`).
 
-### Ejemplo. {-}
+### Ejemplo. {#c81-ejemplo-6 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 library(MATrstars)
@@ -462,13 +462,13 @@ presenta_logit(modelo,
                font_size = 12)
 ```
 
-### Código fuente. {-}
+### Código fuente. {#c81-codigo-fuente-6 .unnumbered}
 
 - [`R/presenta_logit.R`](https://github.com/teckel71/MATrstars/blob/main/R/presenta_logit.R)
 
-## `predict_from_excel_scenarios()`. {-}
+## `predict_from_excel_scenarios()`. {#c81-predictfromexcelscenarios .unnumbered}
 
-### Propósito. {-}
+### Propósito. {#c81-proposito-7 .unnumbered}
 
 Lee escenarios de simulación o previsión desde una hoja de un archivo Excel y devuelve las predicciones del modelo para cada escenario. La particularidad principal es que **las celdas del Excel pueden contener tanto valores numéricos como fórmulas de R** (por ejemplo, `mean(train$ACTIVO)` o `df1$IVENTAS[1]`), lo que permite al usuario del *script* definir escenarios de simulación desde Excel sin necesidad de codificarlos en R.
 
@@ -483,7 +483,7 @@ Opcionalmente, la función devuelve además una tabla con los resultados formate
 
 > **Detalle técnico (rama logit).** El intervalo de confianza sobre la probabilidad se construye en dos pasos: (1) se obtiene la predicción en la escala del logit ($\hat{\eta}$) con su error estándar ($\text{SE}_\eta$) mediante `predict(type = "link", se.fit = TRUE)`; (2) se construye el intervalo como $\hat{\eta} \pm z_{\alpha/2} \cdot \text{SE}_\eta$ y se transforma a probabilidades aplicando la función logística inversa $p = 1/(1 + e^{-\eta})$ a los tres valores (estimación central, extremo inferior, extremo superior). Esta estrategia garantiza que el intervalo quede siempre acotado entre 0 y 1, lo que no ocurriría si se construyera directamente en la escala de probabilidades.
 
-### Sintaxis. {-}
+### Sintaxis. {#c81-sintaxis-7 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 predict_from_excel_scenarios(model,
@@ -501,7 +501,7 @@ predict_from_excel_scenarios(model,
                              ...)
 ```
 
-### Argumentos. {-}
+### Argumentos. {#c81-argumentos-7 .unnumbered}
 
 - **`model`**: objeto de modelo ajustado, devuelto por `stats::lm()` o por `stats::glm()` con `family = binomial(link = "logit")`. La función detecta automáticamente el tipo y adapta la predicción.
 - **`train_df`**: *data frame* de entrenamiento del modelo. Se utiliza para determinar los niveles de las variables factor y para resolver las referencias a variables sin prefijo dentro de las fórmulas de Excel. Además, queda disponible bajo el alias `train` en dichas fórmulas.
@@ -517,7 +517,7 @@ predict_from_excel_scenarios(model,
 - **`caption`**: título base de la tabla formateada. La función lo completa automáticamente añadiendo el nombre de la variable dependiente, el tipo de intervalo, el nivel de confianza y, para modelos logit, el umbral de clasificación. Por defecto, `"Predicciones por escenario"`.
 - **`...`**: argumentos adicionales pasados a `kable_rstars()` (por ejemplo, `digits`, `font_size` o `bootstrap_options`). Si no se pasa `digits`, se aplica un valor por defecto de `3`.
 
-### Valor devuelto. {-}
+### Valor devuelto. {#c81-valor-devuelto-7 .unnumbered}
 
 Una **lista con dos elementos**:
 
@@ -526,7 +526,7 @@ Una **lista con dos elementos**:
   - *Modelos logit*: columna identificadora, variables explicativas evaluadas, probabilidad estimada (`.prob`), extremos del intervalo de confianza sobre la probabilidad (`.prob_lwr`, `.prob_upr`), error estándar en la escala del logit (`.se_link`), clasificación según el umbral (`.clasif`), y metadatos `.level` y `.umbral`.
 - **`table`**: objeto `knitr_kable` con el *data frame* anterior formateado con `kable_rstars()` (o `NULL` si `return_kable = FALSE`).
 
-### Ejemplo. {-}
+### Ejemplo. {#c81-ejemplo-7 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 library(MATrstars)
@@ -563,33 +563,33 @@ res2$table   # probabilidades estimadas con IC y clasificación
 res2$data    # data frame con .prob, .prob_lwr, .prob_upr, .clasif
 ```
 
-### Código fuente. {-}
+### Código fuente. {#c81-codigo-fuente-7 .unnumbered}
 
 - [`R/predict_from_excel_scenarios.R`](https://github.com/teckel71/MATrstars/blob/main/R/predict_from_excel_scenarios.R)
 
-## `detect_zeros_any()`. {-}
+## `detect_zeros_any()`. {#c81-detectzerosany .unnumbered}
 
-### Propósito. {-}
+### Propósito. {#c81-proposito-8 .unnumbered}
 
 Identifica de forma robusta todas las celdas con frecuencia cero en una tabla de contingencia de **cualquier número de dimensiones**. Es una herramienta diagnóstica útil como paso previo al ajuste de modelos log-lineales: localizar los ceros muestrales permite anticipar peculiaridades en la estimación del modelo saturado (los coeficientes de un saturado ajustado sobre una tabla con ceros muestrales serán `Inf`, `-Inf` o `NaN` — véase capítulo 10, y la ficha de `generar_solucion()` en este apéndice).
 
 Si la tabla tiene `dimnames`, la función mapea los índices numéricos a las etiquetas correspondientes de cada dimensión. Si no los tiene, devuelve los índices tal cual y crea nombres genéricos (`Var1`, `Var2`, etc.) para las columnas del *data frame* de salida. Se emplea en el capítulo 10, tanto como paso independiente en el flujo de análisis como internamente dentro de `impute_zeros_with_one()`.
 
-### Sintaxis. {-}
+### Sintaxis. {#c81-sintaxis-8 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 detect_zeros_any(tab)
 ```
 
-### Argumentos. {-}
+### Argumentos. {#c81-argumentos-8 .unnumbered}
 
 - **`tab`**: tabla de contingencia (objeto `table`, `array` o `matrix`) de cualquier número de dimensiones.
 
-### Valor devuelto. {-}
+### Valor devuelto. {#c81-valor-devuelto-8 .unnumbered}
 
 Un *data frame* con una fila por cada celda de frecuencia cero, con una columna por dimensión de la tabla y una columna adicional `Frecuencia_Original` con valor `0L`. Si no hay celdas con frecuencia cero, devuelve `NULL`.
 
-### Ejemplo. {-}
+### Ejemplo. {#c81-ejemplo-8 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 library(MATrstars)
@@ -606,13 +606,13 @@ if (is.null(zeros)) {
 }
 ```
 
-### Código fuente. {-}
+### Código fuente. {#c81-codigo-fuente-8 .unnumbered}
 
 - [`R/detect_zeros_any.R`](https://github.com/teckel71/MATrstars/blob/main/R/detect_zeros_any.R)
 
-## `impute_zeros_with_one()`. {-}
+## `impute_zeros_with_one()`. {#c81-imputezeroswithone .unnumbered}
 
-### Propósito. {-}
+### Propósito. {#c81-proposito-9 .unnumbered}
 
 Reemplaza en una tabla de contingencia los ceros por un valor mínimo (por defecto, `1L`), preservando el resto de las celdas (nunca modifica celdas con frecuencia positiva).
 
@@ -625,22 +625,22 @@ La tabla devuelta lleva dos atributos que documentan la operación:
 
 Utiliza internamente `detect_zeros_any()` para localizar las celdas afectadas.
 
-### Sintaxis. {-}
+### Sintaxis. {#c81-sintaxis-9 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 impute_zeros_with_one(tab, value = 1L)
 ```
 
-### Argumentos. {-}
+### Argumentos. {#c81-argumentos-9 .unnumbered}
 
 - **`tab`**: tabla de contingencia (objeto `table`, `array` o `matrix`) de cualquier número de dimensiones.
 - **`value`**: valor con el que sustituir las celdas con frecuencia cero. Por defecto, `1L`.
 
-### Valor devuelto. {-}
+### Valor devuelto. {#c81-valor-devuelto-9 .unnumbered}
 
 Una tabla del mismo tipo y dimensiones que `tab`, con los ceros sustituidos por `value` y con los atributos `zeros_imputados` y `nota_imputacion` adjuntos.
 
-### Ejemplo. {-}
+### Ejemplo. {#c81-ejemplo-9 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 library(MATrstars)
@@ -656,13 +656,13 @@ cat(attr(tab_use, "nota_imputacion"), "\n")
 attr(tab_use, "zeros_imputados")
 ```
 
-### Código fuente. {-}
+### Código fuente. {#c81-codigo-fuente-9 .unnumbered}
 
 - [`R/impute_zeros_with_one.R`](https://github.com/teckel71/MATrstars/blob/main/R/impute_zeros_with_one.R)
 
-## `extraer_coeficientes()`. {-}
+## `extraer_coeficientes()`. {#c81-extraercoeficientes .unnumbered}
 
-### Propósito. {-}
+### Propósito. {#c81-proposito-10 .unnumbered}
 
 Toma un modelo log-lineal ajustado (habitualmente devuelto por `MASS::loglm()`) y descompone sus parámetros (`modelo$param`) en un *data frame* plano con dos columnas: `Coefficient` (nombre) y `Value` (valor estimado). El nombre se construye combinando el término y los niveles asociados, separados por `":"`, para facilitar la lectura de modelos con múltiples interacciones.
 
@@ -675,24 +675,24 @@ La función contempla los distintos casos que puede presentar `modelo$param`:
 
 Se utiliza internamente en `generar_solucion()`, pero se expone como función pública del paquete para permitir su uso independiente si el usuario quiere construir su propia presentación de resultados.
 
-### Sintaxis. {-}
+### Sintaxis. {#c81-sintaxis-10 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 extraer_coeficientes(modelo)
 ```
 
-### Argumentos. {-}
+### Argumentos. {#c81-argumentos-10 .unnumbered}
 
 - **`modelo`**: modelo log-lineal ajustado (habitualmente devuelto por `MASS::loglm()`).
 
-### Valor devuelto. {-}
+### Valor devuelto. {#c81-valor-devuelto-10 .unnumbered}
 
 Un *data frame* con dos columnas:
 
 - **`Coefficient`**: nombre del coeficiente.
 - **`Value`**: valor estimado del coeficiente.
 
-### Ejemplo. {-}
+### Ejemplo. {#c81-ejemplo-10 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 library(MATrstars)
@@ -701,13 +701,13 @@ modelo <- MASS::loglm(~ GALAXIA + FJUR + EFLO, data = tab_use)
 extraer_coeficientes(modelo)
 ```
 
-### Código fuente. {-}
+### Código fuente. {#c81-codigo-fuente-10 .unnumbered}
 
 - [`R/extraer_coeficientes.R`](https://github.com/teckel71/MATrstars/blob/main/R/extraer_coeficientes.R)
 
-## `generar_solucion()`. {-}
+## `generar_solucion()`. {#c81-generarsolucion .unnumbered}
 
-### Propósito. {-}
+### Propósito. {#c81-proposito-11 .unnumbered}
 
 Automatiza la presentación de resultados de un modelo log-lineal ajustado (habitualmente devuelto por `MASS::loglm()`). A partir del modelo, la función:
 
@@ -721,7 +721,7 @@ Las dos tablas se devuelven en una lista de dos elementos: `Informacion` y `Coef
 
 > **Nota**: la versión anterior de esta función (previa a su integración en `{MATrstars}`) asignaba la lista de resultado directamente en el Global Environment con un nombre derivado del argumento (`solucion_<nombre_del_modelo>`). La versión del paquete requiere que el usuario **capture explícitamente el valor devuelto**: `solucion <- generar_solucion(modelo)`. Este cambio hace más transparente el flujo de datos y respeta la disciplina funcional habitual en R.
 
-### Sintaxis. {-}
+### Sintaxis. {#c81-sintaxis-11 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 generar_solucion(modelo,
@@ -731,21 +731,21 @@ generar_solucion(modelo,
                  ...)
 ```
 
-### Argumentos. {-}
+### Argumentos. {#c81-argumentos-11 .unnumbered}
 
 - **`modelo`**: objeto de modelo log-lineal ajustado (habitualmente devuelto por `MASS::loglm()`).
 - **`captions`**: vector de caracteres de longitud 2 con los títulos de las dos tablas, en orden: validación y coeficientes. Por defecto, `c("Validación del modelo", "Coeficientes del modelo")`.
 - **`mosaic_main`**: título del gráfico de mosaico. Por defecto, `"Residuos del modelo"`.
 - **`...`**: argumentos adicionales pasados a `kable_rstars()` (por ejemplo, `font_size` o `bootstrap_options`), aplicados por igual a las dos tablas. Si no se pasa `digits`, se aplica un valor por defecto de `3`.
 
-### Valor devuelto. {-}
+### Valor devuelto. {#c81-valor-devuelto-11 .unnumbered}
 
 Una **lista con dos elementos**:
 
 - **`Informacion`**: objeto `knitr_kable` con la tabla de las pruebas de bondad de ajuste.
 - **`Coeficientes`**: objeto `knitr_kable` con la tabla de coeficientes del modelo.
 
-### Ejemplo. {-}
+### Ejemplo. {#c81-ejemplo-11 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 library(MATrstars)
@@ -758,13 +758,13 @@ solucion$Coeficientes   # tabla de coeficientes
 # (el mosaico se dibuja automáticamente al llamar a la función)
 ```
 
-### Código fuente. {-}
+### Código fuente. {#c81-codigo-fuente-11 .unnumbered}
 
 - [`R/generar_solucion.R`](https://github.com/teckel71/MATrstars/blob/main/R/generar_solucion.R)
 
-## `step_loglm_backward()`. {-}
+## `step_loglm_backward()`. {#c81-steploglmbackward .unnumbered}
 
-### Propósito. {-}
+### Propósito. {#c81-proposito-12 .unnumbered}
 
 Implementa un procedimiento de selección de modelos log-lineales por eliminación progresiva de términos (*backward*) usando el criterio de información de Akaike (AIC). Es una alternativa a `stats::step()` pensada específicamente para modelos ajustados con `MASS::loglm()`.
 
@@ -778,24 +778,24 @@ Internamente, en cada iteración:
 2. Se ajusta un submodelo por cada término candidato y se calcula su AIC mediante `stats::extractAIC()`.
 3. Se selecciona el término cuya eliminación produce el menor AIC. Si el AIC mínimo no mejora el actual, el algoritmo termina y devuelve el modelo actual.
 
-### Sintaxis. {-}
+### Sintaxis. {#c81-sintaxis-12 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 step_loglm_backward(formula, data, trace = TRUE, steps = 1000)
 ```
 
-### Argumentos. {-}
+### Argumentos. {#c81-argumentos-12 .unnumbered}
 
 - **`formula`**: fórmula del modelo inicial (habitualmente el modelo saturado, como `~ A * B * C`).
 - **`data`**: tabla de contingencia sobre la que se ajusta el modelo (objeto `table`, `array` o `matrix` de cualquier número de dimensiones, compatible con `MASS::loglm()`).
 - **`trace`**: si `TRUE` (por defecto), imprime en la consola cada paso del algoritmo con el AIC actual, los términos candidatos y sus respectivos AIC.
 - **`steps`**: número máximo de iteraciones. Por defecto, `1000`. En la práctica, la selección termina mucho antes al no encontrar más términos que mejoren el AIC.
 
-### Valor devuelto. {-}
+### Valor devuelto. {#c81-valor-devuelto-12 .unnumbered}
 
 Objeto de clase `loglm` correspondiente al modelo final seleccionado, ajustado con `fitted = TRUE` (por lo que incluye las frecuencias ajustadas necesarias para diagnóstico posterior).
 
-### Ejemplo. {-}
+### Ejemplo. {#c81-ejemplo-12 .unnumbered}
 
 ```{r, eval=FALSE, echo=TRUE}
 library(MATrstars)
@@ -813,6 +813,6 @@ modelo_def <- step_loglm_backward(~ GALAXIA * EFLO * FJUR,
 generar_solucion(modelo_def)
 ```
 
-### Código fuente. {-}
+### Código fuente. {#c81-codigo-fuente-12 .unnumbered}
 
 - [`R/step_loglm_backward.R`](https://github.com/teckel71/MATrstars/blob/main/R/step_loglm_backward.R)

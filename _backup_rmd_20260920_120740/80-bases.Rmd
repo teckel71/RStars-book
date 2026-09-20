@@ -1,7 +1,3 @@
-```{r matrstars-numerado-setup-cap80, include=FALSE}
-options(matrstars.suppress_caption = TRUE)
-```
-
 # Apéndice: Bases de datos utilizadas en el libro. {.unnumbered}
 
 A lo largo del libro se utilizan **cinco bases de datos**, todas ellas ambientadas en el universo *R-Stars* (véase el apéndice correspondiente). Se distribuyen como ficheros de Excel con una estructura homogénea de tres hojas: una hoja `Inicio` con una breve descripción de la base y un aviso legal, una hoja `Variables` con la definición y las unidades de cada variable, y una hoja `Datos` con los registros propiamente dichos.
@@ -15,15 +11,15 @@ En este apéndice se documenta el contenido de las tres bases, indicando para ca
 
 Buena parte de las variables monetarias se expresan en **PAVOs**, la unidad de cuenta convencional del sector interestelar (siglas de *Patrón Anual de Valor Operativo*, unidad armonizada por el TLCI para permitir el comercio entre galaxias sin conversiones de tipo de cambio). Cuando el importe es elevado, se utiliza el múltiplo *Miles de PAVOs*.
 
-## `interestelar_300`. {#c80-interestelar300 .unnumbered}
+## `interestelar_300`. {.unnumbered}
 
-### Descripción general. {#c80-descripcion-general .unnumbered}
+### Descripción general. {.unnumbered}
 
 Contiene información **financiera y operativa** de una muestra representativa de **300 compañías** del sector del transporte interestelar de mercancías en un año de referencia. La base cubre las cinco galaxias operativas del sector y las tres formas jurídicas galácticas más habituales. Es la base principal del libro: se utiliza en la mayor parte de los capítulos, tanto en los de análisis univariante y bivariante como en los de análisis multivariante (regresión, análisis clúster y modelos log-lineales, entre otros).
 
 **Estructura**: 300 filas × 29 columnas.
 
-### Variables. {#c80-variables .unnumbered}
+### Variables. {.unnumbered}
 
 | Variable | Descripción | Unidades | Tipo |
 |------------------|------------------|------------------|------------------|
@@ -57,20 +53,15 @@ Contiene información **financiera y operativa** de una muestra representativa d
 | `DIST` | Distancia operada globalmente por la flota de la empresa. | Millones de años luz / año | Métrica |
 | `BMAL` | Beneficio medio obtenido por cada 1.000 años luz operados. | PAVOs / 1.000 años luz | Métrica |
 
-::: {style="text-align: center;"}
-**Tabla 80.1**
-:::
+## `trabajadores`. {.unnumbered}
 
-
-## `trabajadores`. {#c80-trabajadores .unnumbered}
-
-### Descripción general. {#c80-descripcion-general-2 .unnumbered}
+### Descripción general. {.unnumbered}
 
 Contiene información laboral básica sobre los **trabajadores de una compañía del sector** en un año de referencia. La base incluye el salario percibido, el nivel de estudios y el departamento de asignación de cada empleado. Se utiliza principalmente en los capítulos de análisis bivariante (comparación de medias entre grupos, análisis de la varianza y tablas de contingencia).
 
 **Estructura**: 49 filas × 4 columnas.
 
-### Variables. {#c80-variables-2 .unnumbered}
+### Variables. {.unnumbered}
 
 | Variable | Descripción | Unidades | Tipo |
 |------------------|------------------|------------------|------------------|
@@ -79,20 +70,15 @@ Contiene información laboral básica sobre los **trabajadores de una compañía
 | `NESTUDIOS` | Nivel de estudios alcanzado por el trabajador. Modalidades ordenadas de menor a mayor: `Básicos` \< `Medios` \< `Universitarios`. | Categórico (3 modalidades) | Atributo ordinal |
 | `DEP` | Departamento de la empresa en el que trabaja. Modalidades: `Almacén`, `Gestión Interna`, `Personal Navegación`, `Gestión Clientes`, `Marketing`, `Coordinación` y `Dirección`. | Categórico (7 modalidades) | Atributo nominal |
 
-::: {style="text-align: center;"}
-**Tabla 80.2**
-:::
+## `astilleros_48`. {.unnumbered}
 
-
-## `astilleros_48`. {#c80-astilleros48 .unnumbered}
-
-### Descripción general. {#c80-descripcion-general-3 .unnumbered}
+### Descripción general. {.unnumbered}
 
 Contiene información **técnica** sobre una muestra de **48 cargueros** fabricados por los tres grandes astilleros del sector: *Korrigan Heavy Works*, *Selene Dynamics* y *Arcturus Shipyards*. La base recoge indicadores de rendimiento energético, historial de incidencias graves, antigüedad y capacidad de carga. Constituye la base sobre la que se elabora el *Informe Crestfall* (véase el apéndice de la guía friki), y se utiliza en el libro en los capítulos dedicados a la comparación de medias entre más de dos poblaciones, al análisis de la covarianza y a la regresión.
 
 **Estructura**: 48 filas × 7 columnas.
 
-### Variables. {#c80-variables-3 .unnumbered}
+### Variables. {.unnumbered}
 
 | Variable | Descripción | Unidades | Tipo |
 |------------------|------------------|------------------|------------------|
@@ -104,20 +90,15 @@ Contiene información **técnica** sobre una muestra de **48 cargueros** fabrica
 | `ANTIGÜEDAD` | Años en servicio activo de la nave desde su puesta en operación. | Años | Métrica |
 | `TONELAJE` | Capacidad máxima de carga útil de la nave. | Miles de toneladas | Métrica |
 
-::: {style="text-align: center;"}
-**Tabla 80.3**
-:::
+## `licencias_100`. {.unnumbered}
 
-
-## `licencias_100`. {#c80-licencias100 .unnumbered}
-
-### Descripción general. {#c80-descripcion-general-4 .unnumbered}
+### Descripción general. {.unnumbered}
 
 Contiene información sobre **100 compañías** del sector del transporte interestelar de mercancías que solicitaron una **licencia de operación** en la ruta Coruscant (Galaxia de Andrómeda) – Arrakis (Gran Nube de Magallanes), gestionada por la Autoridad Galáctica de Transporte Interestelar (AGTI). De las 100 solicitantes, 40 obtuvieron la licencia y 60 fueron denegadas. La base recoge variables financieras, operativas y de calidad de servicio evaluadas por la AGTI en el proceso de concesión. Las 100 compañías están extraídas de `interestelar_300`, y las variables compartidas (`NOMBRE`, `SEDE`, `GALAXIA`, `SOLVENCIA`, `FLOTA`, `EFLO`, `IFIDE` y `RUTAS`) conservan exactamente sus valores originales. Se utiliza en el capítulo 10 (modelos de elección discreta) para la estimación de un modelo logit binomial.
 
 **Estructura**: 100 filas × 12 columnas.
 
-### Variables. {#c80-variables-4 .unnumbered}
+### Variables. {.unnumbered}
 
 | Variable | Descripción | Unidades | Tipo |
 |------------------|------------------|------------------|------------------|
@@ -134,20 +115,15 @@ Contiene información sobre **100 compañías** del sector del transporte intere
 | `EXPERIENCIA` | Años de experiencia de la compañía en rutas intergalácticas similares a la solicitada. | Años | Métrica |
 | `LICENCIA` | Resultado de la solicitud de licencia de operación en la ruta Coruscant–Arrakis. | Binario (1 = concedida, 0 = denegada) | Atributo nominal |
 
-::: {style="text-align: center;"}
-**Tabla 80.4**
-:::
+## `percepcion_interestelar`. {.unnumbered}
 
-
-## `percepcion_interestelar`. {#c80-percepcioninterestelar .unnumbered}
-
-### Descripción general. {#c80-descripcion-general-5 .unnumbered}
+### Descripción general. {.unnumbered}
 
 Contiene las **valoraciones medias** que 30 clientes frecuentes (pequeñas empresas que contratan servicios de transporte de mercancías) han otorgado a **15 compañías** del sector interestelar en **6 atributos de servicio**, utilizando una escala Likert de 1 (muy deficiente) a 7 (excelente). La encuesta fue diseñada por la consultora *Data-Evidence* por encargo de la Asociación Sectorial de Transporte Interestelar (ASTI), con el objetivo de construir un mapa perceptual del sector. Las 15 compañías están extraídas de `interestelar_300` y cubren los tres estados de flota (`RENOVADA`, `MADURA` y `ANTIGUA`), con tamaños y perfiles operativos muy diversos. Los valores de percepción son coherentes con las características financieras y operativas que las compañías presentan en la base principal. Se utiliza en el capítulo 12 (técnicas de mapeado perceptual: Escalado Multidimensional).
 
 **Estructura**: 15 filas × 7 columnas.
 
-### Variables. {#c80-variables-5 .unnumbered}
+### Variables. {.unnumbered}
 
 | Variable | Descripción | Unidades | Tipo |
 |------------------|------------------|------------------|------------------|
@@ -159,12 +135,7 @@ Contiene las **valoraciones medias** que 30 clientes frecuentes (pequeñas empre
 | `ATENCION` | Percepción de calidad de la atención al cliente y gestión de incidencias. | Escala Likert 1–7 | Métrica |
 | `INNOVACION` | Percepción de innovación tecnológica en los procesos logísticos. | Escala Likert 1–7 | Métrica |
 
-::: {style="text-align: center;"}
-**Tabla 80.5**
-:::
-
-
-## Nota sobre carga y uso de las bases. {#c80-nota-sobre-carga-y-uso-de-las-bases .unnumbered}
+## Nota sobre carga y uso de las bases. {.unnumbered}
 
 Las cinco bases se distribuyen como ficheros `.xlsx`. Para cargarlas en R desde los *scripts* del libro se utiliza la función `readxl::read_excel()`, indicando explícitamente la hoja `Datos`. Un ejemplo típico de carga —adaptable a cualquiera de las cinco bases— es el siguiente:
 

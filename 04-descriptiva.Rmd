@@ -10,7 +10,7 @@ Las **variables** son características de los casos o individuos en estudio que 
 
 Centrémonos en las variables. Podemos estudiar una sola de ellas, dejando de lado las demás características que describen a ese mismo grupo de casos: hablaremos entonces de un **análisis estadístico univariante**. Si el interés se desplaza hacia el modo en que dos variables caracterizan conjuntamente al grupo, y hacia la posible relación entre ambas, estaremos ante un **análisis bivariante**. Y si son varias las variables que examinamos de forma simultánea, el análisis pasa a ser **multivariante**.
 
-## ![](figuras/book.svg){.hicon} Análisis univariante.
+## ![](figuras/book.svg){.hicon} Análisis univariante. {#c04-analisis-univariante}
 
 En el análisis estadístico univariante estudiamos cómo una única característica —nos centraremos en una variable, aunque bien podría tratarse de un atributo— describe a un grupo de casos, individuos o elementos. Pensemos, por ejemplo, en el salario percibido por los trabajadores en nómina de una empresa. O en la rentabilidad económica obtenida por un conjunto de compañías de un mismo sector.
 
@@ -24,7 +24,7 @@ Antes de profundizar en esas medidas, en su significado y en su obtención, vere
 
 Nos serviremos, a modo de ilustración, de los salarios abonados por una de las empresas de transporte interestelar de mercancías del proyecto *R-Stars*.
 
-## ![](figuras/star.svg){.hicon} *Shuttlepod Movers*: ¿una estructura salarial demasiado plana?
+## ![](figuras/star.svg){.hicon} *Shuttlepod Movers*: ¿una estructura salarial demasiado plana? {#c04-shuttlepod-movers-una-estructura-salarial}
 
 *Shuttlepod Movers* es una empresa de transporte interestelar de mercancías fundada en el planeta **Arrakis**, en la **Gran Nube de Magallanes**. Constituida como Sociedad Anónima Galáctica (SAG), atiende rutas medianas y largas con una flota de 47 cargueros espaciales y una plantilla de 49 trabajadores. Su actual CEO es *Tasha Tachybaptus*.
 
@@ -62,7 +62,7 @@ A pesar de presentar márgenes y rentabilidades muy elevados, la empresa tiene u
 
 Respondamos a estas preguntas con las herramientas de la estadística descriptiva.
 
-## ![](figuras/pie-chart.svg){.hicon} Representando datos y distribuciones de frecuencias en tablas con R.
+## ![](figuras/pie-chart.svg){.hicon} Representando datos y distribuciones de frecuencias en tablas con R. {#c04-representando-datos-y-distribuciones-de}
 
 Para aprender a representar tanto los datos de las variables y atributos que caracterizan a un grupo de casos como sus distribuciones de frecuencias univariantes, supongamos que trabajamos dentro del proyecto "explora" que creamos anteriormente. En su carpeta guardaremos el *script* "describe_rstars.R" y el archivo de Microsoft® Excel® "trabajadores.xlsx", cuyos enlaces de descarga figuran en la sección final del capítulo.
 
@@ -388,7 +388,7 @@ conteo_intervalos_df %>%
 
 La distribución agrupada confirma la concentración salarial: casi tres cuartas partes de la plantilla perciben entre 8 y 20 cientos de PAVOs. Los tramos superiores están mucho menos poblados, pues solo un 10% supera los 23,7 cientos de PAVOs y el salario máximo, 30 cientos, corresponde a un único trabajador. La sospecha de Tasha va tomando forma, pero necesitamos medidas concretas para sostenerla.
 
-## ![](figuras/book.svg){.hicon}![](figuras/pie-chart.svg){.hicon} Medidas de posición.
+## ![](figuras/book.svg){.hicon}![](figuras/pie-chart.svg){.hicon} Medidas de posición. {#c04-medidas-de-posicion}
 
 Las medidas de posición son instrumentos matemáticos que aspiran a **caracterizar globalmente** la distribución de frecuencias de una variable mediante un único valor o unos pocos.
 
@@ -468,7 +468,7 @@ cuartiles
 
 El argumento `probs =` indica qué proporción de casos debe quedar por detrás —con valores menores o iguales— de cada una de las "fronteras". Para los cuartiles esas proporciones son `0.25`, `0.5` (valor que coincide con la mediana) y `0.75`. Obtenemos así unos cuartiles de 12, 15 y 20: el 50% central de la plantilla percibe entre 12 y 20 cientos de PAVOs, un recorrido de apenas 8 unidades. Esa diferencia entre Q3 y Q1 es el **rango intercuartílico** (IQR = 8) y confirma que la mitad de los salarios se comprime en una franja relativamente estrecha.
 
-## ![](figuras/book.svg){.hicon}![](figuras/pie-chart.svg){.hicon} Medidas de dispersión o variabilidad.
+## ![](figuras/book.svg){.hicon}![](figuras/pie-chart.svg){.hicon} Medidas de dispersión o variabilidad. {#c04-medidas-de-dispersion-o-variabilidad}
 
 Las medidas de dispersión cuantifican **cuán cerca o cuán lejos se sitúan, por lo general, los valores de una distribución respecto de una medida de posición central**. Un valor elevado de la dispersión nos advierte de que esa medida central representa mal al conjunto, pues los casos se alejan considerablemente de ella.
 
@@ -540,7 +540,7 @@ cvariacion
 
 El coeficiente de variación asciende a 0,344: la desviación típica supone un 34,4% de la media salarial. Se trata de un valor moderado, pues la dispersión existe, pero no es elevada. **La sospecha de Tasha se confirma solo en parte**: la estructura salarial de *Shuttlepod Movers* resulta relativamente compacta, aunque no extremadamente plana, y la mayoría de los salarios se mueve en una franja razonable en torno a la media.
 
-## ![](figuras/book.svg){.hicon}![](figuras/pie-chart.svg){.hicon} Medidas de forma.
+## ![](figuras/book.svg){.hicon}![](figuras/pie-chart.svg){.hicon} Medidas de forma. {#c04-medidas-de-forma}
 
 Las medidas de forma cuantifican el grado de deformación horizontal y vertical de la representación gráfica de una distribución de frecuencias. Son de dos tipos: medidas de asimetría y medidas de apuntamiento o curtosis.
 
@@ -607,7 +607,7 @@ ggplot(data = datos, aes(x = SALARIO)) +
 
 El carácter platicúrtico de la distribución indica que los salarios están **más uniformemente repartidos** de lo que cabría esperar en una distribución normal, con menos concentración alrededor de la media y colas menos pronunciadas. Esto es coherente con la percepción de la CEO: la empresa tiende a pagar salarios parecidos a la mayoría de la plantilla.
 
-## ![](figuras/book.svg){.hicon}![](figuras/pie-chart.svg){.hicon} Medidas de concentración.
+## ![](figuras/book.svg){.hicon}![](figuras/pie-chart.svg){.hicon} Medidas de concentración. {#c04-medidas-de-concentracion}
 
 Las medidas de dispersión nos han dicho cuánto se alejan los salarios de su media. Las **medidas de concentración** responden a una pregunta distinta y, para el encargo de Tasha, más directa: **¿cómo se reparte la masa salarial total entre los trabajadores de la empresa?**
 
@@ -619,7 +619,7 @@ Conviene imaginar los dos extremos entre los que puede moverse ese reparto:
 
 Reparemos en que la "estructura salarial demasiado plana" que sospecha Tasha no es otra cosa que una distribución muy próxima al primer extremo. Las medidas de concentración nos dirán, por tanto, a qué distancia se encuentra *Shuttlepod Movers* de un reparto perfectamente igualitario.
 
-### ![](figuras/key.svg){.hicon} La curva de Lorenz.
+### ![](figuras/key.svg){.hicon} La curva de Lorenz. {#c04-la-curva-de-lorenz}
 
 Para situar nuestra distribución entre esos dos extremos necesitamos dos series acumuladas, calculadas sobre los salarios ordenados de menor a mayor:
 
@@ -688,7 +688,7 @@ Hemos añadido al *data frame* "lorenz" un punto inicial (0, 0), que representa 
 
 Como puede apreciarse, la curva de *Shuttlepod Movers* discurre muy cerca de la diagonal.
 
-### ![](figuras/key.svg){.hicon} El índice de Gini.
+### ![](figuras/key.svg){.hicon} El índice de Gini. {#c04-el-indice-de-gini}
 
 La curva de Lorenz nos ofrece una impresión visual, pero necesitamos traducirla a un número. De ello se encarga el **índice de Gini**, que compara la suma de las distancias verticales entre la diagonal y la curva con la mayor suma que podrían alcanzar esas distancias:
 
@@ -714,7 +714,7 @@ El índice de Gini de los salarios de *Shuttlepod Movers* asciende a `r format(r
 
 Conviene subrayar la diferencia entre lo que nos dicen la dispersión y la concentración. El coeficiente de variación nos indicaba que los salarios se separan, en promedio, un 34,4% de la media. El índice de Gini añade algo distinto: que esa separación **no se traduce en un reparto desigual de la masa salarial**. Dicho de otro modo, las diferencias salariales existen, pero son demasiado pequeñas para generar una verdadera jerarquía retributiva. Justo lo que preocupaba a la CEO.
 
-## ![](figuras/book.svg){.hicon}![](figuras/pie-chart.svg){.hicon} Resumen del análisis descriptivo.
+## ![](figuras/book.svg){.hicon}![](figuras/pie-chart.svg){.hicon} Resumen del análisis descriptivo. {#c04-resumen-del-analisis-descriptivo}
 
 Para cerrar el análisis, reunimos todas las medidas calculadas en una única tabla resumen:
 
@@ -745,7 +745,7 @@ resumen %>%
 
 **Conclusión para Tasha Tachybaptus:** el análisis descriptivo confirma que la estructura salarial de *Shuttlepod Movers* es efectivamente **compacta y concentrada en los niveles intermedios**. El salario medio (16,04) y la mediana (15) están muy próximos, la dispersión es moderada (CV = 34,4%) y la distribución es platicúrtica, lo que indica salarios bastante uniformes. La asimetría positiva revela que, si bien existe un pequeño grupo de trabajadores con salarios superiores, la diferenciación retributiva hacia arriba es muy limitada. El índice de Gini, de solo `r format(round(gini, 3), decimal.mark = ",", nsmall = 3)`, cierra el diagnóstico: la masa salarial se reparte entre la plantilla de un modo muy próximo a la equidistribución. Si la CEO desea retener talento altamente cualificado, este análisis le da base empírica para considerar una revisión de la política salarial que introduzca una mayor diferenciación en los tramos superiores.
 
-## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo.
+## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo. {#c04-materiales-para-realizar-las-practicas-del}
 
 En esta sección se recogen los enlaces de acceso a los distintos materiales (*scripts*, datos...) necesarios para desarrollar los contenidos prácticos del capítulo.
 

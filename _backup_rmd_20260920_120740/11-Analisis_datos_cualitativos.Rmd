@@ -1,17 +1,9 @@
-```{r matrstars-numerado-setup-cap11, include=FALSE}
-options(matrstars.suppress_caption = TRUE)
-```
-
 # Análisis de Datos Cualitativos.
 
-![](figuras/10%20galaxias.jpg){width="100%"}
+![[Galaxias que
+recorrer...]{.smallcaps}](figuras/10%20galaxias.jpg){width="100%"}
 
-::: {style="text-align: center;"}
-**Figura 11.1.** [Galaxias que recorrer...]{.smallcaps}
-:::
-
-
-## ![](figuras/book.svg){.hicon} Introducción. {#c11-introduccion}
+## ![](figuras/book.svg){.hicon} Introducción.
 
 En numerosas ocasiones los datos con los que el analista debe
 enfrentarse son de naturaleza **cualitativa**, esto es, la información
@@ -36,9 +28,9 @@ puede afirmar que el hecho de que los casos de la muestra tomen ciertos
 niveles o categorías en unos factores, hace que estos mismos casos
 tiendan a tomar ciertos niveles o categorías de otro u otros factores.
 
-## ![](figuras/book.svg){.hicon} Tablas de contingencia, y asociación entre dos atributos o factores. {#c11-tablas-de-contingencia-y-asociacion-entre}
+## ![](figuras/book.svg){.hicon} Tablas de contingencia, y asociación entre dos atributos o factores.
 
-### ![](figuras/star.svg){.hicon} ![](figuras/pie-chart.svg){.hicon} El entramado comercial del cosmos. {#c11-el-entramado-comercial-del-cosmos}
+### ![](figuras/star.svg){.hicon} ![](figuras/pie-chart.svg){.hicon} El entramado comercial del cosmos.
 
 En el inmenso mapa del espacio conocido, las distintas galaxias no solo
 se distinguen por la luz de sus estrellas, sino también por la forma en
@@ -168,11 +160,6 @@ extensos, lo que podrá dificultar la elaboración posterior de gráficos:
     seleccion_df_graph
 ```
 
-::: {style="text-align: center;"}
-**Tabla 11.1**
-:::
-
-
 Para el diagnóstico y, en su caso, filtrado de los *missing values*, aplicamos la función auxiliar `explora_na()` del paquete `{MATrstars}` que ya se presentó en el capítulo 5. Como el *data frame* "seleccion" contiene únicamente las tres variables del análisis, no es necesario especificar el argumento `variables`. A continuación, con `mutate()` y `case_match()` se recodifican los niveles de GALAXIA:
 
 ```{r, eval=FALSE, echo=TRUE}
@@ -222,7 +209,7 @@ seleccion <- seleccion %>%
 No se ha localizado ninguna observación con *missing values*, luego no
 se ha de realizar ningún tipo de tratamiento.
 
-### ![](figuras/star.svg){.hicon} ![](figuras/pie-chart.svg){.hicon} La sospecha institucional (GALAXIA XFJUR). {#c11-la-sospecha-institucional-galaxia-xfjur}
+### ![](figuras/star.svg){.hicon} ![](figuras/pie-chart.svg){.hicon} La sospecha institucional (GALAXIA XFJUR).
 
 En el sector del transporte interestelar existe la percepción
 generalizada de que las condiciones institucionales y regulatorias de
@@ -288,17 +275,12 @@ library(kableExtra)
   tab.GA.FJ <- with(seleccion, table(GALAXIA, FJUR))
 
  addmargins(tab.GA.FJ) %>%
-  kable_rstars() %>%
+  kable_rstars(caption = "Empresas TMI") %>%
   add_header_above(c(GALAXIA = 1, FJUR = 3, " " = 1),
                    bold = T,
                    line = T) %>%
   column_spec(1, bold = T)
 ```
-
-::: {style="text-align: center;"}
-**Tabla 11.2.** Empresas TMI
-:::
-
 
 Es de destacar que, en el código de la tabla, se ha añadido la función
 `addmargin()` para que se añadan las frecuencias marginales de las
@@ -374,11 +356,6 @@ En nuestro caso, el resultado es:
             sub_gp = gpar(fontsize = 14))
 ```
 
-::: {style="text-align: center;"}
-**Figura 11.2**
-:::
-
-
 El gráfico de mosaico muestra, mediante el área de cada rectángulo, la
 distribución conjunta de las empresas según galaxia y forma jurídica.
 Cada fila corresponde a una galaxia y su anchura refleja el número total
@@ -428,11 +405,6 @@ variables:
     (g1 + g2) + plot_annotation(title = "Frecuencias Marginales.",
                   theme = theme(plot.title = element_text(size = 14)))
 ```
-
-::: {style="text-align: center;"}
-**Figura 11.3**
-:::
-
 
 La figura muestra las **frecuencias marginales** de las dos variables
 categóricas implicadas en el análisis. En el gráfico de la izquierda se
@@ -559,11 +531,6 @@ assoc(tab.GA.FJ,
       sub_gp = gpar(fontsize = 14))
 ```
 
-::: {style="text-align: center;"}
-**Figura 11.4**
-:::
-
-
 En esta llamada a `assoc()`, `tab.GA.FJ` es la tabla cuya asociación se
 representa, mientras que `main` y `sub` añaden título y subtítulo
 explicativos. El argumento `compress = FALSE` evita reducir visualmente
@@ -595,7 +562,7 @@ sugiere que los patrones observados no se deben al azar, sino a
 económicos** de cada galaxia, lo que justifica concluir que existe una
 asociación estadísticamente significativa entre ambas variables.
 
-### ![](figuras/star.svg){.hicon} ![](figuras/pie-chart.svg){.hicon} ¿Se Refleja la estructura jurídica en la renovación de la flota? (FJUR × EFLO). {#c11-se-refleja-la-estructura-juridica-en-la}
+### ![](figuras/star.svg){.hicon} ![](figuras/pie-chart.svg){.hicon} ¿Se Refleja la estructura jurídica en la renovación de la flota? (FJUR × EFLO).
 
 En la segunda fase de la investigación se examina si el **estado de la
 flota de las empresas (EFLO)** —renovada, madura o antigua— presenta
@@ -627,17 +594,12 @@ mostrando aquí los principales resultados.
   tab.FJ.EF <- with(seleccion, table(FJUR, EFLO))
 
  addmargins(tab.FJ.EF) %>%
-  kable_rstars() %>%
+  kable_rstars(caption = "Empresas TMI") %>%
   add_header_above(c(FJUR = 1, EFLO = 3, " " = 1),
                    bold = T,
                    line = T) %>%
   column_spec(1, bold = T)
 ```
-
-::: {style="text-align: center;"}
-**Tabla 11.3.** Empresas TMI
-:::
-
 
 La tabla de contingencia de la Fase 2 muestra cómo se distribuye el
 **estado de la flota (EFLO)** entre las distintas **formas jurídicas
@@ -665,11 +627,6 @@ la flota no depende de la forma jurídica, anticipando un escenario de
             main_gp = gpar(fontsize = 16),
             sub_gp = gpar(fontsize = 14))
 ```
-
-::: {style="text-align: center;"}
-**Figura 11.5**
-:::
-
 
 El mosaico representa la distribución conjunta entre **forma jurídica**
 y **estado de la flota**, mostrando mediante el área de cada rectángulo
@@ -702,11 +659,6 @@ anticipando un escenario de independencia entre ambas variables.
     (g1 + g2) + plot_annotation(title = "Frecuencias Marginales.",
                   theme = theme(plot.title = element_text(size = 14)))
 ```
-
-::: {style="text-align: center;"}
-**Figura 11.6**
-:::
-
 
 Los gráficos de barras muestran las **frecuencias marginales** de forma
 jurídica y del estado de la flota, permitiendo observar cómo se
@@ -760,11 +712,6 @@ proporción que otros.
         sub_gp = gpar(fontsize = 14))
 ```
 
-::: {style="text-align: center;"}
-**Figura 11.7**
-:::
-
-
 El gráfico de asociación muestra los **residuos estandarizados
 ajustados** de cada combinación entre forma jurídica y estado de la
 flota. Todas las barras aparecen en **gris**, lo que indica que **ningún
@@ -777,7 +724,7 @@ vincule la forma jurídica de las empresas con la antigüedad media de sus
 flotas**, reforzando la conclusión de que ambas variables son
 independientes.
 
-## ![](figuras/book.svg){.hicon} Modelos logaritmico-lineales aplicados a tablas de contingencia. {#c11-modelos-logaritmico-lineales-aplicados-a}
+## ![](figuras/book.svg){.hicon} Modelos logaritmico-lineales aplicados a tablas de contingencia.
 
 Cuando se trabaja en la verificación de la existencia de asociación
 entre variables categóricas, atributos o factores, hemos de tener en
@@ -879,7 +826,7 @@ frecuencias conjuntas de la tabla de contingencia, lo que informará no
 solo de si existe asociación entre factores o no; sino también de, en
 caso de existir, de cómo se materializa tal asociación.
 
-### ![](figuras/star.svg){.hicon} ![](figuras/pie-chart.svg){.hicon} La complejidad del sistema de relaciones (GALAXIA X FJUR X EFLO). {#c11-la-complejidad-del-sistema-de-relaciones}
+### ![](figuras/star.svg){.hicon} ![](figuras/pie-chart.svg){.hicon} La complejidad del sistema de relaciones (GALAXIA X FJUR X EFLO).
 
 En la Fase 3 se planteaba la necesidad de comprender de forma integrada
 cómo interactúan las tres dimensiones clave del sector: la **galaxia**
@@ -1033,11 +980,6 @@ seleccion_df_graph <- gt_plt_summary(seleccion)
 seleccion_df_graph
 ```
 
-::: {style="text-align: center;"}
-**Tabla 11.4**
-:::
-
-
 El resumen visual confirma que el *data frame* `seleccion` contiene
 exactamente las tres variables categóricas necesarias para el análisis
 log-lineal: **GALAXIA** (5 categorías), **FJUR** (3 categorías) y
@@ -1168,14 +1110,9 @@ if (is.null(zeros_report)) {
   message("No se han detectado celdas con frecuencia 0 en la tabla original.")
 } else {
     zeros_report %>%
-      kable_rstars()
+      kable_rstars(caption = "Combinaciones con frecuencia 0 detectadas")
 }
 ```
-
-::: {style="text-align: center;"}
-**Tabla 11.5.** Combinaciones con frecuencia 0 detectadas
-:::
-
 
 En nuestro caso, se detecta una única combinación con 0 observaciones:
 GALAXIA = "Pequeña Nube de Magallanes", FJUR = "CG" (cooperativa) y
@@ -1213,13 +1150,7 @@ estructurales antes de pasar al ajuste de los modelos log-lineales.
 
 pander("Tabla de contingencia GALAXIA × FJUR × EFLO")
 pander(tab0, style= "rmarkdown")
-```
 
-::: {style="text-align: center;"}
-**Tabla 11.6**
-:::
-
-```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 # Representación gráfica de la tabla con mosaico
 mosaic(tab0,
        main = "Galaxia, Forma Jurídica y Antigüedad media de la flota",
@@ -1230,11 +1161,6 @@ mosaic(tab0,
        main_gp = gpar(fontsize = 16),
        sub_gp = gpar(fontsize = 14))
 ```
-
-::: {style="text-align: center;"}
-**Figura 11.8**
-:::
-
 
 La tabla `tab0` muestra la distribución tridimensional original de las
 empresas según **galaxia**, **forma jurídica** y **antigüedad media de
@@ -1328,11 +1254,6 @@ modelo_indep <- MASS::loglm(~ GALAXIA + EFLO + FJUR,
 solucion_modelo_indep <- generar_solucion(modelo_indep)
 ```
 
-::: {style="text-align: center;"}
-**Figura 11.9**
-:::
-
-
 A partir del modelo de independencia podemos evaluar si la hipótesis de
 **no asociación global** entre GALAXIA, FJUR y EFLO resulta razonable o
 si, por el contrario, los datos sugieren la presencia de dependencias
@@ -1375,11 +1296,6 @@ chi-cuadrado de Pearson), mediante:
     solucion_modelo_indep$Informacion
 ```
 
-::: {style="text-align: center;"}
-**Tabla 11.7.** Validación del modelo
-:::
-
-
 La tabla resultante resume el **contraste** entre las frecuencias
 observadas y las que predice el modelo bajo la hipótesis de
 independencia entre los tres factores. En ambos casos, los p-valores son
@@ -1404,11 +1320,6 @@ tabla ejecutaremos:
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
     solucion_modelo_indep$Coeficientes
 ```
-
-::: {style="text-align: center;"}
-**Tabla 11.8.** Coeficientes del modelo
-:::
-
 
 La tabla de coeficientes estimados por el modelo de independencia
 muestra un parámetro o coeficiente para cada nivel de cada factor, ya
@@ -1450,11 +1361,6 @@ son:
 | Interpretación práctica | Valores grandes en valor absoluto indican celdas mal ajustadas | Igual, pero coherente con el criterio de ajuste por deviancia |
 | Ventaja principal | Cálculo simple, fórmula muy intuitiva | Más fiel al modelo log-lineal y más fiable con frecuencias bajas |
 | Uso típico en log-lineales | Diagnóstico básico y comparaciones rápidas | Residuo por defecto en mosaicos y diagnósticos detallados de ajuste del modelo |
-
-::: {style="text-align: center;"}
-**Tabla 11.9**
-:::
-
 
 **1. Celda con residuo pequeño: (Triángulo, SAG, MADURA):**
 
@@ -1611,11 +1517,6 @@ modelo_sat <- MASS::loglm(~ GALAXIA * EFLO * FJUR,
 solucion_modelo_sat <- generar_solucion(modelo_sat)
 ```
 
-::: {style="text-align: center;"}
-**Figura 11.10**
-:::
-
-
 El gráfico de mosaico muestra que, obviamente, todos los residuos son 0,
 ya que coinciden las frecuencias observadas y las estimadas por el
 modelo. En cuanto a la tabla de validación:
@@ -1623,11 +1524,6 @@ modelo. En cuanto a la tabla de validación:
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
     solucion_modelo_sat$Informacion
 ```
-
-::: {style="text-align: center;"}
-**Tabla 11.10.** Validación del modelo
-:::
-
 
 En ambas pruebas el *p-valor* es 1, dado que **no se rechaza la
 hipótesis de que el modelo representa adecuadamente la realidad** (de
@@ -1641,11 +1537,6 @@ o directos como a las interacciones:
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
     solucion_modelo_sat$Coeficientes
 ```
-
-::: {style="text-align: center;"}
-**Tabla 11.11.** Coeficientes del modelo
-:::
-
 
 En esta tabla se observa un fenómeno llamativo: **todos los
 coeficientes toman valores `Inf`, `-Inf` o `NaN`**. No se trata de un
@@ -1752,11 +1643,6 @@ obtenido es:
     solucion_modelo_def <- generar_solucion(modelo_def)
 ```
 
-::: {style="text-align: center;"}
-**Figura 11.11**
-:::
-
-
 El gráfico de residuos del modelo seleccionado muestra un ajuste
 considerablemente mejor que el del modelo de independencia. La mayoría
 de los rectángulos presentan tonalidades suaves, señal de que las
@@ -1787,11 +1673,6 @@ En cuanto a la tabla de validación:
     solucion_modelo_def$Informacion
 ```
 
-::: {style="text-align: center;"}
-**Tabla 11.12.** Validación del modelo
-:::
-
-
 Los resultados de la tabla de validación muestran que **ambas pruebas de
 ajuste global** —la razón de verosimilitud (*Likelihood Ratio*) y la
 prueba de *Pearson*— producen **p-valores muy elevados** (0.608 y
@@ -1811,11 +1692,6 @@ En lo que se refiere a los coeficientes estimados del modelo:
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
     solucion_modelo_def$Coeficientes
 ```
-
-::: {style="text-align: center;"}
-**Tabla 11.13.** Coeficientes del modelo
-:::
-
 
 La tabla de coeficientes del modelo final refleja, en primer lugar, los
 **efectos directos** de cada factor. Entre las galaxias, *Andrómeda* y
@@ -1863,7 +1739,7 @@ cada contexto, cómo influyen los marcos regulatorios locales y qué
 configuraciones organizativas resultan más estables o rentables en
 determinadas regiones del universo económico analizado.
 
-## ![](figuras/book.svg){.hicon} Análisis de correspondencias. {#c11-analisis-de-correspondencias}
+## ![](figuras/book.svg){.hicon} Análisis de correspondencias.
 
 El **análisis de correspondencias** es una técnica destinada a
 **representar visualmente** una tabla de contingencia, situando en un
@@ -1944,7 +1820,7 @@ utilizar el paquete `{FactoMineR}`, que dispone de la función `CA()`,
 encargada de realizar los cálculos del análisis. Para la visualización
 de los resultados nos apoyaremos en el paquete `{factoextra}`.
 
-### ![](figuras/star.svg){.hicon} ![](figuras/pie-chart.svg){.hicon} De la asociación a su mapa: Galaxia y Forma Jurídica revisitadas. {#c11-de-la-asociacion-a-su-mapa-galaxia-y-forma}
+### ![](figuras/star.svg){.hicon} ![](figuras/pie-chart.svg){.hicon} De la asociación a su mapa: Galaxia y Forma Jurídica revisitadas.
 
 En el apartado dedicado a las tablas de contingencia bidimensionales
 concluimos que existe **asociación estadísticamente significativa**
@@ -2026,11 +1902,6 @@ los gráficos:
     seleccion_df_graph
 ```
 
-::: {style="text-align: center;"}
-**Tabla 11.14**
-:::
-
-
 El resumen visual confirma que el *data frame* `seleccion` contiene
 las dos variables categóricas necesarias para el análisis de
 correspondencias simple: **GALAXIA** (5 categorías) y **FJUR** (3
@@ -2102,17 +1973,12 @@ cual se aplicará el análisis:
   tab.GA.FJ <- with(seleccion, table(GALAXIA, FJUR))
 
  addmargins(tab.GA.FJ) %>%
-  kable_rstars() %>%
+  kable_rstars(caption = "Empresas TMI: Galaxia y Forma Jurídica.") %>%
   add_header_above(c(GALAXIA = 1, FJUR = 3, " " = 1),
                    bold = T,
                    line = T) %>%
   column_spec(1, bold = T)
 ```
-
-::: {style="text-align: center;"}
-**Tabla 11.15.** Empresas TMI: Galaxia y Forma Jurídica.
-:::
-
 
 Ya disponemos de la tabla sobre la que se aplicará el análisis. Se
 trata de una tabla $5 \times 3$, por lo que el número máximo de
@@ -2174,7 +2040,7 @@ El código para construir las tres tablas es:
   # Tabla 1: Inercia principal por dimensión
 
     TableEigenCA <- EigenCA %>%
-      kable_rstars(
+      kable_rstars(caption = "Análisis de correspondencias: Galaxia vs Forma Jurídica.",
                    digits  = 3)
 
     SolucionCA[[1]] <- TableEigenCA
@@ -2194,8 +2060,8 @@ El código para construir las tres tablas es:
     rownames(rows_df) <- rownames(rows_data)
 
     TableRows <- rows_df %>%
-      kable_rstars(
-
+      kable_rstars(caption   = paste0("Análisis de correspondencias: ",
+                                      names(dimnames(tab.GA.FJ))[1], "."),
                    col.names = c("Inercia",
                                  "Coordenadas Dim. 1", "Cos2 Dim. 1",
                                  "Coordenadas Dim. 2", "Cos2 Dim. 2"),
@@ -2218,8 +2084,8 @@ El código para construir las tres tablas es:
     rownames(columns_df) <- rownames(columns_data)
 
     TableCols <- columns_df %>%
-      kable_rstars(
-
+      kable_rstars(caption   = paste0("Análisis de correspondencias: ",
+                                      names(dimnames(tab.GA.FJ))[2], "."),
                    col.names = c("Inercia",
                                  "Coordenadas Dim. 1", "Cos2 Dim. 1",
                                  "Coordenadas Dim. 2", "Cos2 Dim. 2"),
@@ -2234,11 +2100,6 @@ dimensiones extraídas:
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
     SolucionCA[[1]]
 ```
-
-::: {style="text-align: center;"}
-**Tabla 11.16**
-:::
-
 
 Como se aprecia, la **primera dimensión** recoge el **75.4%** de la
 inercia total (varianza o comportamiento asociativo de las categorías),
@@ -2269,11 +2130,6 @@ están representadas en cada dimensión:
     SolucionCA[[2]]
 ```
 
-::: {style="text-align: center;"}
-**Tabla 11.17**
-:::
-
-
 Se observa que las categorías con **mayor inercia** son la **Gran Nube
 de Magallanes** y la **Pequeña Nube de Magallanes**, es decir, son las
 galaxias que más "peso" tienen en la estructura de asociación con la
@@ -2293,11 +2149,6 @@ La tercera tabla recoge la información análoga para el factor FJUR:
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
     SolucionCA[[3]]
 ```
-
-::: {style="text-align: center;"}
-**Tabla 11.18**
-:::
-
 
 La categoría de forma jurídica con **mayor inercia** es **CG**,
 seguida de **SLG** y, a distancia, **SAG**. Esto indica que las
@@ -2346,11 +2197,6 @@ recurrirse a la función `fviz_screeplot()` del paquete `{factoextra}`:
 
     gcontrib
 ```
-
-::: {style="text-align: center;"}
-**Figura 11.12**
-:::
-
 
 El gráfico confirma visualmente lo que ya sabíamos por la primera
 tabla: la primera dimensión asume aproximadamente tres cuartas partes
@@ -2409,11 +2255,6 @@ conjuntamente con `{patchwork}`:
     gcontribs
 ```
 
-::: {style="text-align: center;"}
-**Figura 11.13**
-:::
-
-
 En la fila superior se observa que la **Dimensión 1** viene explicada,
 sobre todo, por **GN Magallanes** y **PN Magallanes**, mientras que
 la **Dimensión 2** se apoya especialmente en **Andrómeda**, con
@@ -2467,11 +2308,6 @@ de forma coherente:
     gbiplot
 ```
 
-::: {style="text-align: center;"}
-**Figura 11.14**
-:::
-
-
 En el mapa bidimensional se aprecia con claridad la **estructura de
 asociación** entre galaxias y formas jurídicas. En el extremo derecho
 del eje horizontal (Dimensión 1) se concentran la **Gran Nube de
@@ -2518,11 +2354,6 @@ contribuciones y el biplot, puede recurrirse nuevamente al paquete
     gcombinado
 ```
 
-::: {style="text-align: center;"}
-**Figura 11.15**
-:::
-
-
 El gráfico combinado ofrece una vista de conjunto muy útil para
 comunicar los resultados: la parte superior informa de la calidad de
 la representación bidimensional (qué porcentaje de la inercia total
@@ -2533,7 +2364,7 @@ análisis de correspondencias: **cuánta información** captura el
 gráfico y **qué asociaciones específicas** se producen entre las
 categorías de los factores.
 
-## ![](figuras/star.svg){.hicon} Cierre: el entramado al descubierto. {#c11-cierre-el-entramado-al-descubierto}
+## ![](figuras/star.svg){.hicon} Cierre: el entramado al descubierto.
 
 El informe solicitado por la *Agencia Interplanetaria de Transporte de Mercancías* queda completado con tres niveles de profundidad creciente:
 
@@ -2545,7 +2376,7 @@ El informe solicitado por la *Agencia Interplanetaria de Transporte de Mercancí
 
 Cuentan en los pasillos de la agencia que, al presentar el mapa de correspondencias en la sala de juntas, el director de la AITM señaló con el dedo la zona del gráfico donde se agrupaban las cooperativas de Andrómeda y murmuró: *"Así que ahí es donde se esconden..."*. La doctora *Bluebird*, presente como observadora, anotó mentalmente el comentario para su próximo informe.
 
-## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo. {#c11-materiales-para-realizar-las-practicas-del}
+## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo.
 
 En esta sección se muestran los links de acceso a los diferentes
 materiales (*scripts*, datos...) necesarios para llevar a cabo los
