@@ -4,6 +4,10 @@ options(matrstars.suppress_caption = TRUE)
 
 # Análisis Clúster.
 
+```{r setup-cap07, include=FALSE}
+source("_common.R")
+```
+
 ![](figuras/07%20naves%20en%20cluster.jpg){width="100%"}
 
 ::: {style="text-align: center;"}
@@ -116,6 +120,13 @@ La *Agencia Interplanetaria de Transporte de Mercancías* (AITM) tiene entre sus
 -   **Encargo 2 — Tipologías del sector (300 empresas).** El Consejo de la AITM ha solicitado un estudio de segmentación del sector completo, con **300 empresas**, orientado a identificar **tipologías o perfiles característicos** de compañías, más que a clasificar casos individuales. Aquí interesa descubrir patrones poblacionales, para lo cual se aplicará un método de **partición** (***k-medias*** con inicialización *kmeans++*).
 
 -   **Encargo 3 — Detección de anomalías y patrones de densidad (300 empresas).** Como validación cruzada del encargo anterior, y para responder a otra petición de la agencia —¿existen agrupaciones "naturales" en función de la densidad de casos, y qué empresas quedan fuera de esas zonas densas?—, Bluebird aplicará un método basado en densidad (***DBSCAN***). Este método tiene la ventaja añadida de identificar los *outliers* como ruido, sin necesidad de eliminarlos previamente.
+
+```{r video-preparando-bluebird, echo=FALSE, results='asis'}
+insertar_youtube(
+  id     = "I-lKgEEJUUk",
+  titulo = "Preparando el Informe Bluebird."
+)
+```
 
 En las tres variables clasificadoras coinciden los tres encargos: los índices de **fidelización de clientes (IFIDE)**, **diversificación del negocio (IDIVERSE)** y **digitalización de la compañía (IDIG)**. Al final del capítulo, en la sección de síntesis, compararemos los resultados de las tres técnicas.
 
