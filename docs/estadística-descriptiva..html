@@ -93,8 +93,7 @@
 <li><a class="" href="ap%C3%A9ndice-gu%C3%ADa-friki-del-universo-r-stars..html">Apéndice: Guía friki del universo R-Stars.</a></li>
 <li><a class="" href="licencia.html">Licencia</a></li>
 </ul>
-
-        <div class="book-extra">
+<div class="book-extra">
           
         </div>
       </nav>
@@ -111,9 +110,9 @@
 <p>Los datos se organizan en variables y/o atributos.</p>
 <p>Las <strong>variables</strong> son características de los casos o individuos en estudio que se plasman en valores que están expresados en <strong>escala métrica</strong>. Los <strong>atributos</strong> son características de los casos o individuos en estudio que se concretan en diversas categorías (si el atributo tiene <strong>escala nominal</strong>) o niveles (si el atributo tiene <strong>escala ordinal</strong>). Los atributos se denominan también variables categóricas, cualitativas o factores.</p>
 <p>Centrémonos en las variables. Podemos estudiar una sola de ellas, dejando de lado las demás características que describen a ese mismo grupo de casos: hablaremos entonces de un <strong>análisis estadístico univariante</strong>. Si el interés se desplaza hacia el modo en que dos variables caracterizan conjuntamente al grupo, y hacia la posible relación entre ambas, estaremos ante un <strong>análisis bivariante</strong>. Y si son varias las variables que examinamos de forma simultánea, el análisis pasa a ser <strong>multivariante</strong>.</p>
-<div id="análisis-univariante." class="section level2" number="4.1">
+<div id="c04-analisis-univariante" class="section level2" number="4.1">
 <h2>
-<span class="header-section-number">4.1</span> <img src="figuras/book.svg" class="hicon"> Análisis univariante.<a class="anchor" aria-label="anchor" href="#an%C3%A1lisis-univariante."><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.1</span> <img src="figuras/book.svg" class="hicon"> Análisis univariante.<a class="anchor" aria-label="anchor" href="#c04-analisis-univariante"><i class="fas fa-link"></i></a>
 </h2>
 <p>En el análisis estadístico univariante estudiamos cómo una única característica —nos centraremos en una variable, aunque bien podría tratarse de un atributo— describe a un grupo de casos, individuos o elementos. Pensemos, por ejemplo, en el salario percibido por los trabajadores en nómina de una empresa. O en la rentabilidad económica obtenida por un conjunto de compañías de un mismo sector.</p>
 <p>El conjunto de pares formado por cada valor que puede tomar la variable en estudio (o categoría o nivel, en el caso de un atributo) y el número de casos que toman tal valor se denomina <strong>distribución de frecuencias</strong> de la variable.</p>
@@ -122,9 +121,9 @@
 <p>Antes de profundizar en esas medidas, en su significado y en su obtención, veremos cómo presentar en R, mediante tablas, tanto los datos de un grupo de individuos y las variables o atributos que los caracterizan como sus distribuciones de frecuencias univariantes.</p>
 <p>Nos serviremos, a modo de ilustración, de los salarios abonados por una de las empresas de transporte interestelar de mercancías del proyecto <em>R-Stars</em>.</p>
 </div>
-<div id="shuttlepod-movers-una-estructura-salarial-demasiado-plana" class="section level2" number="4.2">
+<div id="c04-shuttlepod-movers-una-estructura-salarial" class="section level2" number="4.2">
 <h2>
-<span class="header-section-number">4.2</span> <img src="figuras/star.svg" class="hicon"><em>Shuttlepod Movers</em>: ¿una estructura salarial demasiado plana?<a class="anchor" aria-label="anchor" href="#shuttlepod-movers-una-estructura-salarial-demasiado-plana"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.2</span> <img src="figuras/star.svg" class="hicon"><em>Shuttlepod Movers</em>: ¿una estructura salarial demasiado plana?<a class="anchor" aria-label="anchor" href="#c04-shuttlepod-movers-una-estructura-salarial"><i class="fas fa-link"></i></a>
 </h2>
 <p><em>Shuttlepod Movers</em> es una empresa de transporte interestelar de mercancías fundada en el planeta <strong>Arrakis</strong>, en la <strong>Gran Nube de Magallanes</strong>. Constituida como Sociedad Anónima Galáctica (SAG), atiende rutas medianas y largas con una flota de 47 cargueros espaciales y una plantilla de 49 trabajadores. Su actual CEO es <em>Tasha Tachybaptus</em>.</p>
 <div class="inline-figure"><img src="figuras/04%20plano%20carguero.jpg" class="d-block mx-auto" width="500"></div>
@@ -231,59 +230,59 @@ Plantilla
 <p><strong>Tasha nos pide un análisis descriptivo de la variable SALARIO</strong> que responda a estas preguntas: ¿cuál es el nivel salarial típico de la plantilla? ¿Cuán dispersos están los salarios? ¿La distribución salarial es simétrica o está sesgada hacia algún extremo? En definitiva: ¿es cierto que la estructura salarial de <em>Shuttlepod Movers</em> es excesivamente homogénea?</p>
 <p>Respondamos a estas preguntas con las herramientas de la estadística descriptiva.</p>
 </div>
-<div id="representando-datos-y-distribuciones-de-frecuencias-en-tablas-con-r." class="section level2" number="4.3">
+<div id="c04-representando-datos-y-distribuciones-de" class="section level2" number="4.3">
 <h2>
-<span class="header-section-number">4.3</span> <img src="figuras/pie-chart.svg" class="hicon"> Representando datos y distribuciones de frecuencias en tablas con R.<a class="anchor" aria-label="anchor" href="#representando-datos-y-distribuciones-de-frecuencias-en-tablas-con-r."><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.3</span> <img src="figuras/pie-chart.svg" class="hicon"> Representando datos y distribuciones de frecuencias en tablas con R.<a class="anchor" aria-label="anchor" href="#c04-representando-datos-y-distribuciones-de"><i class="fas fa-link"></i></a>
 </h2>
 <p>Para aprender a representar tanto los datos de las variables y atributos que caracterizan a un grupo de casos como sus distribuciones de frecuencias univariantes, supongamos que trabajamos dentro del proyecto “explora” que creamos anteriormente. En su carpeta guardaremos el <em>script</em> “describe_rstars.R” y el archivo de Microsoft® Excel® “trabajadores.xlsx”, cuyos enlaces de descarga figuran en la sección final del capítulo.</p>
 <p>El archivo recoge, en su hoja “Datos”, información sobre la plantilla de <em>Shuttlepod Movers</em>: el salario percibido (variable <strong>SALARIO</strong>, expresada en cientos de PAVOs), el nivel de estudios (atributo <strong>NESTUDIOS</strong>) y el departamento al que pertenece cada trabajador (atributo <strong>DEP</strong>).</p>
 <p>Las primeras líneas del script se ocupan de tres tareas que ya nos resultan familiares: limpiar la memoria o <em>Global Environment</em> de los objetos creados con anterioridad, cargar los paquetes necesarios e importar los datos:</p>
-<div class="sourceCode" id="cb149"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb150"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Script para la construcción de tablas de datos </span></span>
 <span><span class="co"># y trabajo con distribuciones de frecuencias univariantes.</span></span>
 <span></span>
 <span><span class="co"># Limpiando el Global Environment</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><span>rm</span></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><span>ls</span></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Cargando paquetes</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jthomasmock/gtExtras">gtExtras</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://andrisignorell.github.io/DescTools/">DescTools</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.r-project.org">moments</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><span>library</span></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
+<span><span class="kw"><span>library</span></span><span class="op">(</span><span class="va"><a href="https://github.com/jthomasmock/gtExtras">gtExtras</a></span><span class="op">)</span></span>
+<span><span class="kw"><span>library</span></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span></span>
+<span><span class="kw"><span>library</span></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span></span>
+<span><span class="kw"><span>library</span></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><span>library</span></span><span class="op">(</span><span class="va"><a href="https://andrisignorell.github.io/DescTools/">DescTools</a></span><span class="op">)</span></span>
+<span><span class="kw"><span>library</span></span><span class="op">(</span><span class="va"><a href="https://www.r-project.org">moments</a></span><span class="op">)</span></span>
+<span><span class="kw"><span>library</span></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## DATOS</span></span>
 <span></span>
 <span><span class="co"># Importando datos desde Excel</span></span>
 <span><span class="va">datos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"trabajadores.xlsx"</span>,</span>
 <span>                    sheet <span class="op">=</span> <span class="st">"Datos"</span>,</span>
-<span>                    na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"n.d."</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">datos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">datos</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>                    na <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="st">"n.d."</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">datos</span> <span class="op">&lt;-</span> <span class="fu"><span>data.frame</span></span><span class="op">(</span><span class="va">datos</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># visualizando el data frame de modo elegante con {gtExtras}</span></span>
 <span><span class="va">datos_df_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary</a></span><span class="op">(</span><span class="va">datos</span><span class="op">)</span></span>
 <span><span class="va">datos_df_graph</span></span></code></pre></div>
-<div id="tkfagcxcnz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="jqyeiknmdz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#tkfagcxcnz table {
+#jqyeiknmdz table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#tkfagcxcnz thead, #tkfagcxcnz tbody, #tkfagcxcnz tfoot, #tkfagcxcnz tr, #tkfagcxcnz td, #tkfagcxcnz th {
+#jqyeiknmdz thead, #jqyeiknmdz tbody, #jqyeiknmdz tfoot, #jqyeiknmdz tr, #jqyeiknmdz td, #jqyeiknmdz th {
   border-style: none;
 }
 
-#tkfagcxcnz p {
+#jqyeiknmdz p {
   margin: 0;
   padding: 0;
 }
 
-#tkfagcxcnz .gt_table {
+#jqyeiknmdz .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -309,12 +308,12 @@ Plantilla
   border-left-color: #D3D3D3;
 }
 
-#tkfagcxcnz .gt_caption {
+#jqyeiknmdz .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#tkfagcxcnz .gt_title {
+#jqyeiknmdz .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -326,7 +325,7 @@ Plantilla
   border-bottom-width: 0;
 }
 
-#tkfagcxcnz .gt_subtitle {
+#jqyeiknmdz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -338,7 +337,7 @@ Plantilla
   border-top-width: 0;
 }
 
-#tkfagcxcnz .gt_heading {
+#jqyeiknmdz .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -350,13 +349,13 @@ Plantilla
   border-right-color: #D3D3D3;
 }
 
-#tkfagcxcnz .gt_bottom_border {
+#jqyeiknmdz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 0px;
   border-bottom-color: #D3D3D3;
 }
 
-#tkfagcxcnz .gt_col_headings {
+#jqyeiknmdz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 0px;
   border-top-color: #D3D3D3;
@@ -371,7 +370,7 @@ Plantilla
   border-right-color: #D3D3D3;
 }
 
-#tkfagcxcnz .gt_col_heading {
+#jqyeiknmdz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -391,7 +390,7 @@ Plantilla
   overflow-x: hidden;
 }
 
-#tkfagcxcnz .gt_column_spanner_outer {
+#jqyeiknmdz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -403,15 +402,15 @@ Plantilla
   padding-right: 4px;
 }
 
-#tkfagcxcnz .gt_column_spanner_outer:first-child {
+#jqyeiknmdz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#tkfagcxcnz .gt_column_spanner_outer:last-child {
+#jqyeiknmdz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#tkfagcxcnz .gt_column_spanner {
+#jqyeiknmdz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -423,11 +422,11 @@ Plantilla
   width: 100%;
 }
 
-#tkfagcxcnz .gt_spanner_row {
+#jqyeiknmdz .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#tkfagcxcnz .gt_group_heading {
+#jqyeiknmdz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -453,7 +452,7 @@ Plantilla
   text-align: left;
 }
 
-#tkfagcxcnz .gt_empty_group_heading {
+#jqyeiknmdz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -468,15 +467,15 @@ Plantilla
   vertical-align: middle;
 }
 
-#tkfagcxcnz .gt_from_md > :first-child {
+#jqyeiknmdz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#tkfagcxcnz .gt_from_md > :last-child {
+#jqyeiknmdz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#tkfagcxcnz .gt_row {
+#jqyeiknmdz .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -495,7 +494,7 @@ Plantilla
   overflow-x: hidden;
 }
 
-#tkfagcxcnz .gt_stub {
+#jqyeiknmdz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -508,7 +507,7 @@ Plantilla
   padding-right: 5px;
 }
 
-#tkfagcxcnz .gt_stub_row_group {
+#jqyeiknmdz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -522,15 +521,15 @@ Plantilla
   vertical-align: top;
 }
 
-#tkfagcxcnz .gt_row_group_first td {
+#jqyeiknmdz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#tkfagcxcnz .gt_row_group_first th {
+#jqyeiknmdz .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#tkfagcxcnz .gt_summary_row {
+#jqyeiknmdz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -540,16 +539,16 @@ Plantilla
   padding-right: 5px;
 }
 
-#tkfagcxcnz .gt_first_summary_row {
+#jqyeiknmdz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#tkfagcxcnz .gt_first_summary_row.thick {
+#jqyeiknmdz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#tkfagcxcnz .gt_last_summary_row {
+#jqyeiknmdz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -559,7 +558,7 @@ Plantilla
   border-bottom-color: #D3D3D3;
 }
 
-#tkfagcxcnz .gt_grand_summary_row {
+#jqyeiknmdz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -569,7 +568,7 @@ Plantilla
   padding-right: 5px;
 }
 
-#tkfagcxcnz .gt_first_grand_summary_row {
+#jqyeiknmdz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -579,7 +578,7 @@ Plantilla
   border-top-color: #D3D3D3;
 }
 
-#tkfagcxcnz .gt_last_grand_summary_row_top {
+#jqyeiknmdz .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -589,11 +588,11 @@ Plantilla
   border-bottom-color: #D3D3D3;
 }
 
-#tkfagcxcnz .gt_striped {
+#jqyeiknmdz .gt_striped {
   background-color: #FAFAFA;
 }
 
-#tkfagcxcnz .gt_table_body {
+#jqyeiknmdz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -602,7 +601,7 @@ Plantilla
   border-bottom-color: #D3D3D3;
 }
 
-#tkfagcxcnz .gt_footnotes {
+#jqyeiknmdz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -616,7 +615,7 @@ Plantilla
   border-right-color: #D3D3D3;
 }
 
-#tkfagcxcnz .gt_footnote {
+#jqyeiknmdz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -625,7 +624,7 @@ Plantilla
   padding-right: 5px;
 }
 
-#tkfagcxcnz .gt_sourcenotes {
+#jqyeiknmdz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -639,7 +638,7 @@ Plantilla
   border-right-color: #D3D3D3;
 }
 
-#tkfagcxcnz .gt_sourcenote {
+#jqyeiknmdz .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -647,72 +646,72 @@ Plantilla
   padding-right: 5px;
 }
 
-#tkfagcxcnz .gt_left {
+#jqyeiknmdz .gt_left {
   text-align: left;
 }
 
-#tkfagcxcnz .gt_center {
+#jqyeiknmdz .gt_center {
   text-align: center;
 }
 
-#tkfagcxcnz .gt_right {
+#jqyeiknmdz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#tkfagcxcnz .gt_font_normal {
+#jqyeiknmdz .gt_font_normal {
   font-weight: normal;
 }
 
-#tkfagcxcnz .gt_font_bold {
+#jqyeiknmdz .gt_font_bold {
   font-weight: bold;
 }
 
-#tkfagcxcnz .gt_font_italic {
+#jqyeiknmdz .gt_font_italic {
   font-style: italic;
 }
 
-#tkfagcxcnz .gt_super {
+#jqyeiknmdz .gt_super {
   font-size: 65%;
 }
 
-#tkfagcxcnz .gt_footnote_marks {
+#jqyeiknmdz .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#tkfagcxcnz .gt_asterisk {
+#jqyeiknmdz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#tkfagcxcnz .gt_indent_1 {
+#jqyeiknmdz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#tkfagcxcnz .gt_indent_2 {
+#jqyeiknmdz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#tkfagcxcnz .gt_indent_3 {
+#jqyeiknmdz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#tkfagcxcnz .gt_indent_4 {
+#jqyeiknmdz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#tkfagcxcnz .gt_indent_5 {
+#jqyeiknmdz .gt_indent_5 {
   text-indent: 25px;
 }
 
-#tkfagcxcnz .katex-display {
+#jqyeiknmdz .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#tkfagcxcnz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#jqyeiknmdz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -783,33 +782,33 @@ Personal Navegación, Almacén, Gestión Interna, Gestión Clientes, Dirección,
 <p><strong>Tabla 4.2</strong></p>
 </div>
 <p>Los datos han quedado almacenados en el <em>data frame</em> “datos”, cuyas variables hemos listado con la función <code><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary()</a></code> del paquete <a href="https://github.com/jthomasmock/gtExtras">gtExtras</a>. Sabemos que basta con escribir el nombre del <em>data frame</em> para que su contenido aparezca en la consola, pero el resultado dista de ser elegante. Mostrémoslo de un modo más amigable mediante la <strong>confección de una “tabla”</strong>.</p>
-<p>Uno de los paquetes más populares de R para construir tablas de datos es <a href="https://yihui.org/knitr/">knitr</a>, que incorpora la función <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code>. Con ella podemos generar tablas en varios formatos y ajustar diversas características, como su título. Y si deseamos afinar todavía más su apariencia, dispondremos de <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>, un paquete que amplía las posibilidades de <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code>.</p>
+<p>Uno de los paquetes más populares de R para construir tablas de datos es <a href="https://yihui.org/knitr/">knitr</a>, que incorpora la función <code><span>kable()</span></code>. Con ella podemos generar tablas en varios formatos y ajustar diversas características, como su título. Y si deseamos afinar todavía más su apariencia, dispondremos de <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>, un paquete que amplía las posibilidades de <code><span>kable()</span></code>.</p>
 <p>Para llevar nuestros casos y variables a una tabla —esto es, para mostrar el <em>data frame</em> “datos” de un modo más vistoso— activaremos ambos paquetes, si no lo hemos hecho ya, y construiremos la tabla a partir de su contenido. El código es el siguiente:</p>
-<div class="sourceCode" id="cb150"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb151"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Tabla de datos</span></span>
 <span><span class="va">datos</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Trabajadores de Shuttlepod Movers"</span>,</span>
-<span>        col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Trabajador"</span>, <span class="st">"Salario"</span>, <span class="st">"Nivel de estudios"</span>,</span>
+<span>  <span class="fu"><span>kable</span></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Trabajadores de Shuttlepod Movers"</span>,</span>
+<span>        col.names <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="st">"Trabajador"</span>, <span class="st">"Salario"</span>, <span class="st">"Nivel de estudios"</span>,</span>
 <span>                      <span class="st">"Departamento"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
-<span>                bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"bordered"</span>, <span class="st">"condensed"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><span>kable_styling</span></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                bootstrap_options <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"bordered"</span>, <span class="st">"condensed"</span><span class="op">)</span>,</span>
 <span>                position <span class="op">=</span> <span class="st">"center"</span>,</span>
 <span>                font_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">0</span>, bold<span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">datos</span><span class="op">)</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
-<p>Invocamos en primer lugar el <em>data frame</em> de partida, “datos”. Después, el operador <em>pipe</em> <code>%&gt;%</code> encadena ese contenido con el diseño de la tabla, que corre a cargo de la función <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code> de <a href="https://yihui.org/knitr/">knitr</a>. Entre los argumentos de <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code> destacan dos:</p>
+<span>  <span class="fu"><span>row_spec</span></span><span class="op">(</span><span class="fl">0</span>, bold<span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><span>row_spec</span></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><span>nrow</span></span><span class="op">(</span><span class="va">datos</span><span class="op">)</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
+<p>Invocamos en primer lugar el <em>data frame</em> de partida, “datos”. Después, el operador <em>pipe</em> <code>%&gt;%</code> encadena ese contenido con el diseño de la tabla, que corre a cargo de la función <code><span>kable()</span></code> de <a href="https://yihui.org/knitr/">knitr</a>. Entre los argumentos de <code><span>kable()</span></code> destacan dos:</p>
 <ul>
 <li><p><strong><code>caption =</code></strong>: fija el título de la tabla.</p></li>
 <li><p><strong><code>col.names =</code></strong>: opcional, asigna un nombre a cada columna de la tabla cuando no queremos que se muestren los que traen por defecto, es decir, los del propio <em>data frame</em>.</p></li>
 </ul>
-<p>A continuación, un nuevo <em>pipe</em> <code>%&gt;%</code> anuncia que vamos a completar el diseño con funciones complementarias de <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>. La primera es <code><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling()</a></code>, que dota a la tabla de características adicionales a través de sus argumentos:</p>
+<p>A continuación, un nuevo <em>pipe</em> <code>%&gt;%</code> anuncia que vamos a completar el diseño con funciones complementarias de <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>. La primera es <code><span>kable_styling()</span></code>, que dota a la tabla de características adicionales a través de sus argumentos:</p>
 <ul>
 <li><p><strong><code>full_width =</code></strong>: admite un valor lógico e indica si deseamos que la tabla ocupe todo el ancho del documento (TRUE) o solo el necesario (FALSE).</p></li>
 <li><p><strong><code>bootstrap_options =</code></strong>: de tipo alfanumérico, fija ciertos rasgos estéticos complementarios. Con “striped” las filas aparecen sombreadas de forma alterna; con “bordered”, cada una queda delimitada por finas líneas superior e inferior; y con “condensed”, la tabla adopta un aspecto más compacto.</p></li>
 <li><p><strong><code>position =</code></strong>: sitúa la tabla centrada, a la izquierda del párrafo o a la derecha.</p></li>
 <li><p><strong><code>font_size =</code></strong>: argumento numérico que regula el tamaño de los caracteres, aspecto nada menor cuando se trata de que la tabla “quepa” en un documento de anchura determinada.</p></li>
 </ul>
-<p>Cerramos con <code><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec()</a></code>, también de <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>, que permite personalizar las filas que nos interesen. Conviene saber que el encabezado se identifica como la fila “0”. En el ejemplo la empleamos dos veces: una para ese encabezado y otra para el resto de filas, desde la primera hasta la que contiene el último caso, la de posición <code>nrow(datos)</code>. El primer argumento señala, pues, las filas afectadas; los demás determinan si los caracteres aparecerán en negrita (<code>bold =</code>) y cómo se alinearán los elementos dentro de las columnas (<code>align =</code>).</p>
+<p>Cerramos con <code><span>row_spec()</span></code>, también de <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>, que permite personalizar las filas que nos interesen. Conviene saber que el encabezado se identifica como la fila “0”. En el ejemplo la empleamos dos veces: una para ese encabezado y otra para el resto de filas, desde la primera hasta la que contiene el último caso, la de posición <code>nrow(datos)</code>. El primer argumento señala, pues, las filas afectadas; los demás determinan si los caracteres aparecerán en negrita (<code>bold =</code>) y cómo se alinearán los elementos dentro de las columnas (<code>align =</code>).</p>
 <p>El resultado es:</p>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -1520,24 +1519,24 @@ Dirección
 </div>
 <p>En ocasiones solo nos interesa estudiar una variable, es decir, una columna del <em>data frame</em>. Puede suceder, además, que los casos sean muy numerosos y que varios de ellos compartan el mismo valor en esa variable. Cuando así ocurre, resulta más práctico llevar a la tabla, en lugar de todos los datos, la <strong>distribución de frecuencias</strong> de la variable o atributo que nos ocupa. Es lo que haremos a continuación, tomando SALARIO como objeto de análisis.</p>
 <p>Lo primero que debemos tener presente es que, en una distribución de frecuencias, <strong>los valores de la variable se disponen de menor a mayor</strong>. Ordenaremos, por tanto, las filas del <em>data frame</em> “datos” según el salario de cada caso; y, cuando dos trabajadores compartan salario, deshará el empate el orden alfabético de su nombre, que es el de la fila del <em>data frame</em>. Para esta reordenación recurriremos a la función <code><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange()</a></code> del paquete <a href="https://dplyr.tidyverse.org">dplyr</a>, que ya conocemos:</p>
-<div class="sourceCode" id="cb151"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb152"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Distribución de frecuencias del salario de los trabajadores de la empresa.</span></span>
 <span></span>
 <span><span class="co"># Colocar los datos</span></span>
-<span><span class="va">datos</span> <span class="op">&lt;-</span> <span class="va">datos</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">SALARIO</span>, <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">datos</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Con los casos ya ordenados de menor a mayor salario, contaremos cuántos de ellos comparten cada valor de la variable, esto es, su frecuencia absoluta. Crearemos para ello un objeto llamado “conteo”, de clase <code>table</code>, mediante la función <code><a href="https://rdrr.io/r/base/table.html">table()</a></code>, que contabiliza las veces que aparece cada valor:</p>
-<div class="sourceCode" id="cb152"><pre class="downlit sourceCode r">
+<span><span class="va">datos</span> <span class="op">&lt;-</span> <span class="va">datos</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">SALARIO</span>, <span class="fu"><span>row.names</span></span><span class="op">(</span><span class="va">datos</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Con los casos ya ordenados de menor a mayor salario, contaremos cuántos de ellos comparten cada valor de la variable, esto es, su frecuencia absoluta. Crearemos para ello un objeto llamado “conteo”, de clase <code>table</code>, mediante la función <code><span>table()</span></code>, que contabiliza las veces que aparece cada valor:</p>
+<div class="sourceCode" id="cb153"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Contar frecuencias</span></span>
-<span><span class="va">conteo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span></span>
+<span><span class="va">conteo</span> <span class="op">&lt;-</span> <span class="fu"><span>table</span></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span></span>
 <span><span class="va">conteo</span></span></code></pre></div>
 <pre><code>## 
 ##  8  9 10 12 15 20 22 25 30 
 ##  2  3  6  8 11  8  6  4  1</code></pre>
 <p>Al mostrar “conteo” en la consola comprobamos que consta de dos filas: la primera recoge los valores que adopta SALARIO en los distintos casos y la segunda, cuántos casos presentan cada valor, es decir, la <strong>frecuencia absoluta</strong>. El objeto “conteo” es, en suma, la distribución de frecuencias de la variable SALARIO.</p>
 <p>Convirtamos ahora ese objeto en un <em>data frame</em> llamado “conteo_df”, que nos permitirá representar la distribución con más elegancia. Para ello ejecutaremos:</p>
-<div class="sourceCode" id="cb154"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb155"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Convertir el resultado a un data frame para una mejor visualización</span></span>
-<span><span class="va">conteo_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">conteo</span><span class="op">)</span></span>
+<span><span class="va">conteo_df</span> <span class="op">&lt;-</span> <span class="fu"><span>as.data.frame</span></span><span class="op">(</span><span class="va">conteo</span><span class="op">)</span></span>
 <span><span class="va">conteo_df</span></span></code></pre></div>
 <pre><code>##   Var1 Freq
 ## 1    8    2
@@ -1550,40 +1549,40 @@ Dirección
 ## 8   25    4
 ## 9   30    1</code></pre>
 <p>El <em>data frame</em> “conteo_df” consta de dos columnas: Var1, con los valores que toma SALARIO en el grupo de casos, y Freq, con las frecuencias absolutas de cada uno de ellos. Renombrémoslas para que su contenido resulte más transparente:</p>
-<div class="sourceCode" id="cb156"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Renombrar las columnas para mayor claridad</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">conteo_df</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Valor"</span>, <span class="st">"Frecuencia"</span><span class="op">)</span></span></code></pre></div>
-<p>Calculemos a continuación el resto de frecuencias que habitualmente acompañan a una variable. La <strong>frecuencia total</strong>, N, suma de todas las frecuencias absolutas y, por tanto, número total de casos, se obtiene sin dificultad:</p>
 <div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Calcular y guardar la frecuencia total</span></span>
-<span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">conteo_df</span><span class="op">$</span><span class="va">Frecuencia</span><span class="op">)</span></span></code></pre></div>
-<p>La serie de frecuencias absolutas acumuladas se calculará del siguiente modo:</p>
+<code class="sourceCode R"><span><span class="co"># Renombrar las columnas para mayor claridad</span></span>
+<span><span class="fu"><span>colnames</span></span><span class="op">(</span><span class="va">conteo_df</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="st">"Valor"</span>, <span class="st">"Frecuencia"</span><span class="op">)</span></span></code></pre></div>
+<p>Calculemos a continuación el resto de frecuencias que habitualmente acompañan a una variable. La <strong>frecuencia total</strong>, N, suma de todas las frecuencias absolutas y, por tanto, número total de casos, se obtiene sin dificultad:</p>
 <div class="sourceCode" id="cb158"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Calcular frecuencias absolutas acumuladas</span></span>
-<span><span class="va">conteo_df</span><span class="op">$</span><span class="va">Frecuencia_acum</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="va">conteo_df</span><span class="op">$</span><span class="va">Frecuencia</span><span class="op">)</span></span></code></pre></div>
-<p>Como sabemos, la última frecuencia absoluta acumulada ha de coincidir con la frecuencia total. Nos restan las frecuencias relativas, cociente entre cada frecuencia absoluta y la frecuencia total, que expresan la proporción de casos que corresponde a cada valor de la variable:</p>
+<code class="sourceCode R"><span><span class="co"># Calcular y guardar la frecuencia total</span></span>
+<span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fu"><span>sum</span></span><span class="op">(</span><span class="va">conteo_df</span><span class="op">$</span><span class="va">Frecuencia</span><span class="op">)</span></span></code></pre></div>
+<p>La serie de frecuencias absolutas acumuladas se calculará del siguiente modo:</p>
 <div class="sourceCode" id="cb159"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Calcular frecuencias absolutas acumuladas</span></span>
+<span><span class="va">conteo_df</span><span class="op">$</span><span class="va">Frecuencia_acum</span> <span class="op">&lt;-</span> <span class="fu"><span>cumsum</span></span><span class="op">(</span><span class="va">conteo_df</span><span class="op">$</span><span class="va">Frecuencia</span><span class="op">)</span></span></code></pre></div>
+<p>Como sabemos, la última frecuencia absoluta acumulada ha de coincidir con la frecuencia total. Nos restan las frecuencias relativas, cociente entre cada frecuencia absoluta y la frecuencia total, que expresan la proporción de casos que corresponde a cada valor de la variable:</p>
+<div class="sourceCode" id="cb160"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calcular frecuencias relativas</span></span>
 <span><span class="va">conteo_df</span><span class="op">$</span><span class="va">Frecuencia_R</span> <span class="op">&lt;-</span> <span class="va">conteo_df</span><span class="op">$</span><span class="va">Frecuencia</span> <span class="op">/</span> <span class="va">N</span></span>
 <span></span>
 <span><span class="co"># Calcular frecuencias relativas acumuladas</span></span>
-<span><span class="va">conteo_df</span><span class="op">$</span><span class="va">Frecuencia_R_acum</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="va">conteo_df</span><span class="op">$</span><span class="va">Frecuencia_R</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">conteo_df</span><span class="op">$</span><span class="va">Frecuencia_R_acum</span> <span class="op">&lt;-</span> <span class="fu"><span>cumsum</span></span><span class="op">(</span><span class="va">conteo_df</span><span class="op">$</span><span class="va">Frecuencia_R</span><span class="op">)</span></span></code></pre></div>
 <p>La suma de las frecuencias relativas es siempre 1, esto es, el 100% de los casos; y, por la misma razón, la última frecuencia relativa acumulada vale también 1.</p>
-<p>Construyamos ya la tabla que recogerá la distribución de frecuencias de SALARIO con todos sus tipos de frecuencias. Bastará con aplicar al <em>data frame</em> “conteo_df” la función <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code> de <a href="https://yihui.org/knitr/">knitr</a> y las funciones auxiliares de <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>:</p>
-<div class="sourceCode" id="cb160"><pre class="downlit sourceCode r">
+<p>Construyamos ya la tabla que recogerá la distribución de frecuencias de SALARIO con todos sus tipos de frecuencias. Bastará con aplicar al <em>data frame</em> “conteo_df” la función <code><span>kable()</span></code> de <a href="https://yihui.org/knitr/">knitr</a> y las funciones auxiliares de <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a>:</p>
+<div class="sourceCode" id="cb161"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">conteo_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Distribución de frecuencias de salarios. Shuttlepod Movers"</span>,</span>
-<span>        col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"x(i) = Salario"</span>, <span class="st">"Frecuencia absoluta n(i)"</span>,</span>
+<span>  <span class="fu"><span>kable</span></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Distribución de frecuencias de salarios. Shuttlepod Movers"</span>,</span>
+<span>        col.names <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="st">"x(i) = Salario"</span>, <span class="st">"Frecuencia absoluta n(i)"</span>,</span>
 <span>                      <span class="st">"Frecuencia absoluta acum. N(i)"</span>, <span class="st">"Frecuencia relativa f(i)"</span>,</span>
 <span>                      <span class="st">"Frecuencia relativa acum. F(i)"</span><span class="op">)</span>,</span>
-<span>        digits  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>        format.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>decimal.mark <span class="op">=</span> <span class="st">"."</span>, scientific <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
-<span>                bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"bordered"</span>, <span class="st">"condensed"</span><span class="op">)</span>,</span>
+<span>        digits  <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>        format.args <span class="op">=</span> <span class="fu"><span>list</span></span><span class="op">(</span>decimal.mark <span class="op">=</span> <span class="st">"."</span>, scientific <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><span>kable_styling</span></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                bootstrap_options <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"bordered"</span>, <span class="st">"condensed"</span><span class="op">)</span>,</span>
 <span>                position <span class="op">=</span> <span class="st">"center"</span>,</span>
 <span>                font_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">0</span>, bold<span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">conteo_df</span><span class="op">)</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><span>row_spec</span></span><span class="op">(</span><span class="fl">0</span>, bold<span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><span>row_spec</span></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><span>nrow</span></span><span class="op">(</span><span class="va">conteo_df</span><span class="op">)</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -1761,46 +1760,46 @@ Frecuencia relativa acum. F(i)
 <div style="text-align: center;">
 <p><strong>Tabla 4.4.</strong> Distribución de frecuencias de salarios. Shuttlepod Movers</p>
 </div>
-<p>Conviene advertir que en <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code> han aparecido dos argumentos nuevos:</p>
+<p>Conviene advertir que en <code><span>kable()</span></code> han aparecido dos argumentos nuevos:</p>
 <ul>
 <li><p><strong><code>digits =</code></strong>: vector que establece, columna a columna, cuántos decimales se mostrarán en la tabla. A las columnas de datos categóricos se les asigna el valor NA.</p></li>
 <li><p><strong><code>format.args =</code></strong>: lista que gobierna aspectos de formato, como el uso del punto o la coma para los decimales, o el recurso a la notación científica en cifras muy grandes.</p></li>
 </ul>
 <p>Una primera mirada a la distribución ya apunta en la dirección que sospecha la CEO: la mayor parte de los trabajadores percibe entre 12 y 20 cientos de PAVOs, lo que supone cerca del 70% de la plantilla, mientras que los salarios bajos (8–10) y los más altos (25–30) resultan minoritarios. Todo indica, en efecto, una distribución <strong>concentrada en los niveles intermedios</strong>. Para confirmar esta impresión con rigor necesitaremos, sin embargo, las medidas de dispersión y de forma.</p>
 <p>En ocasiones, la variable analizada toma un número enorme de valores distintos. Puede deberse a que los casos sean muy numerosos o a que la variable, de naturaleza continua, admita una gran variedad de valores, incluso infinitos. Para que la distribución quepa entonces en una tabla de dimensiones razonables, la solución pasa por <strong>agrupar los valores en intervalos</strong>. Hagámoslo con SALARIO.</p>
-<p>La primera tarea consiste en formar los intervalos, para lo que disponemos de la función <code><a href="https://rdrr.io/r/base/cut.html">cut()</a></code>. Esta nos permite decidir en cuántos tramos de idéntica amplitud queremos dividir el recorrido que va del salario menor al mayor. Guardaremos ese número en una constante, <strong><em>k</em></strong>; y si preferimos no fijarlo nosotros, sino confiarlo a un criterio objetivo como la regla de <em>Sturges</em>, bastará con ligar <em>k</em> a dicho método:</p>
-<div class="sourceCode" id="cb161"><pre class="downlit sourceCode r">
+<p>La primera tarea consiste en formar los intervalos, para lo que disponemos de la función <code><span>cut()</span></code>. Esta nos permite decidir en cuántos tramos de idéntica amplitud queremos dividir el recorrido que va del salario menor al mayor. Guardaremos ese número en una constante, <strong><em>k</em></strong>; y si preferimos no fijarlo nosotros, sino confiarlo a un criterio objetivo como la regla de <em>Sturges</em>, bastará con ligar <em>k</em> a dicho método:</p>
+<div class="sourceCode" id="cb162"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Distribución de frecuencias agrupadas en intervalos</span></span>
 <span><span class="co"># del salario de los trabajadores de la empresa.</span></span>
 <span></span>
 <span><span class="co"># Crear los intervalos (método de Sturges)</span></span>
-<span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/nclass.html">nclass.Sturges</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span></span>
-<span><span class="va">datos</span><span class="op">$</span><span class="va">intervalos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span>, breaks <span class="op">=</span> <span class="va">k</span>, include.lowest <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">intervalos</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fu"><span>nclass.Sturges</span></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span></span>
+<span><span class="va">datos</span><span class="op">$</span><span class="va">intervalos</span> <span class="op">&lt;-</span> <span class="fu"><span>cut</span></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span>, breaks <span class="op">=</span> <span class="va">k</span>, include.lowest <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><span>levels</span></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">intervalos</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] "[7.98,11.1]" "(11.1,14.3]" "(14.3,17.4]" "(17.4,20.6]" "(20.6,23.7]" "(23.7,26.9]"
 ## [7] "(26.9,30]"</code></pre>
 <p>El código anterior añade al <em>data frame</em> “datos” una columna nueva, “intervalos”, que indica para cada caso en cuál de los tramos calculados se sitúa. El argumento lógico <code>include.lowest =</code> sirve para cerrar por la izquierda el intervalo inferior, de manera que el salario más bajo quede recogido en él. Los demás intervalos permanecen abiertos por ese lado y cerrados por la derecha: cuando un caso toma exactamente el valor de una frontera, se contabiliza en el intervalo para el que esa frontera es el extremo superior.</p>
-<p>La columna “intervalos” pertenece a la clase <strong><em>factor</em></strong>, y sus “niveles” son precisamente los intervalos que ha creado <code><a href="https://rdrr.io/r/base/cut.html">cut()</a></code>.</p>
+<p>La columna “intervalos” pertenece a la clase <strong><em>factor</em></strong>, y sus “niveles” son precisamente los intervalos que ha creado <code><span>cut()</span></code>.</p>
 <p>Las líneas que siguen reproducen el procedimiento de la distribución sin agrupar: se crea un objeto de clase <code>table</code> que cuenta cuántos casos alberga cada intervalo (las frecuencias absolutas), se transforma en un <em>data frame</em> para manejarlo con mayor comodidad y se renombran sus dos columnas:</p>
-<div class="sourceCode" id="cb163"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb164"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Contar las frecuencias de cada intervalo</span></span>
-<span><span class="va">conteo_intervalos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">intervalos</span><span class="op">)</span></span>
+<span><span class="va">conteo_intervalos</span> <span class="op">&lt;-</span> <span class="fu"><span>table</span></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">intervalos</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Convertir el resultado a un data frame para una mejor visualización</span></span>
-<span><span class="va">conteo_intervalos_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">conteo_intervalos</span><span class="op">)</span></span>
+<span><span class="va">conteo_intervalos_df</span> <span class="op">&lt;-</span> <span class="fu"><span>as.data.frame</span></span><span class="op">(</span><span class="va">conteo_intervalos</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Renombrar las columnas para mayor claridad</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">conteo_intervalos_df</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Intervalo"</span>, <span class="st">"Frecuencia"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><span>colnames</span></span><span class="op">(</span><span class="va">conteo_intervalos_df</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="st">"Intervalo"</span>, <span class="st">"Frecuencia"</span><span class="op">)</span></span></code></pre></div>
 <p>Obtenemos así el <em>data frame</em> “conteo_intervalos_df”, con dos columnas: “Intervalo”, que recoge los tramos calculados, y “Frecuencia”, que indica cuántos trabajadores perciben un salario comprendido en cada uno de ellos.</p>
-<p>Antes de diseñar con <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable()</a></code> la tabla de presentación, calcularemos algunas informaciones adicionales que suelen acompañar a las frecuencias absolutas de cada intervalo.</p>
+<p>Antes de diseñar con <code><span>kable()</span></code> la tabla de presentación, calcularemos algunas informaciones adicionales que suelen acompañar a las frecuencias absolutas de cada intervalo.</p>
 <p>La primera de ellas es la <strong><em>marca de clase</em></strong>, que no es otra cosa que el <strong>punto medio</strong> de cada intervalo. Para obtenerla reconstruiremos los puntos de corte que delimitan los tramos y promediaremos cada par de extremos consecutivos:</p>
-<div class="sourceCode" id="cb164"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Calcular la marca de clase de cada intervalo</span></span>
-<span><span class="va">breaks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="va">k</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">marca_clase</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">breaks</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">breaks</span><span class="op">)</span><span class="op">]</span> <span class="op">+</span> <span class="va">breaks</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span></span></code></pre></div>
-<p>La función <code><a href="https://rdrr.io/r/base/seq.html">seq()</a></code> genera una secuencia de <em>k + 1</em> puntos equidistantes entre el valor mínimo y el máximo de SALARIO, que hacen las veces de extremos de los <em>k</em> intervalos. A partir de ella, <code>breaks[-length(breaks)]</code> recoge los extremos inferiores y <code>breaks[-1]</code>, los superiores; el promedio de cada pareja es la marca de clase.</p>
-<p>El código restante incorpora el vector “marca_clase” al <em>data frame</em> “conteo_intervalos_df” como una variable más, reordena las columnas con <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code>, calcula las frecuencias que faltan —absoluta acumulada, relativa y relativa acumulada— y diseña la tabla de presentación:</p>
 <div class="sourceCode" id="cb165"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Calcular la marca de clase de cada intervalo</span></span>
+<span><span class="va">breaks</span> <span class="op">&lt;-</span> <span class="fu"><span>seq</span></span><span class="op">(</span><span class="fu"><span>min</span></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span>, <span class="fu"><span>max</span></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="va">k</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">marca_clase</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">breaks</span><span class="op">[</span><span class="op">-</span><span class="fu"><span>length</span></span><span class="op">(</span><span class="va">breaks</span><span class="op">)</span><span class="op">]</span> <span class="op">+</span> <span class="va">breaks</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span></span></code></pre></div>
+<p>La función <code><span>seq()</span></code> genera una secuencia de <em>k + 1</em> puntos equidistantes entre el valor mínimo y el máximo de SALARIO, que hacen las veces de extremos de los <em>k</em> intervalos. A partir de ella, <code>breaks[-length(breaks)]</code> recoge los extremos inferiores y <code>breaks[-1]</code>, los superiores; el promedio de cada pareja es la marca de clase.</p>
+<p>El código restante incorpora el vector “marca_clase” al <em>data frame</em> “conteo_intervalos_df” como una variable más, reordena las columnas con <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code>, calcula las frecuencias que faltan —absoluta acumulada, relativa y relativa acumulada— y diseña la tabla de presentación:</p>
+<div class="sourceCode" id="cb166"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Agregar la columna "marca_clase" al data frame</span></span>
 <span><span class="va">conteo_intervalos_df</span><span class="op">$</span><span class="va">marca_clase</span> <span class="op">&lt;-</span> <span class="va">marca_clase</span></span>
 <span></span>
@@ -1809,34 +1808,34 @@ Frecuencia relativa acum. F(i)
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Intervalo</span>, <span class="va">marca_clase</span>, <span class="va">Frecuencia</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Calcular y guardar la frecuencia total</span></span>
-<span><span class="va">N_agre</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">conteo_intervalos_df</span><span class="op">$</span><span class="va">Frecuencia</span><span class="op">)</span></span>
+<span><span class="va">N_agre</span> <span class="op">&lt;-</span> <span class="fu"><span>sum</span></span><span class="op">(</span><span class="va">conteo_intervalos_df</span><span class="op">$</span><span class="va">Frecuencia</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Calcular frecuencias absolutas acumuladas</span></span>
-<span><span class="va">conteo_intervalos_df</span><span class="op">$</span><span class="va">Frecuencia_acum</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="va">conteo_intervalos_df</span><span class="op">$</span><span class="va">Frecuencia</span><span class="op">)</span></span>
+<span><span class="va">conteo_intervalos_df</span><span class="op">$</span><span class="va">Frecuencia_acum</span> <span class="op">&lt;-</span> <span class="fu"><span>cumsum</span></span><span class="op">(</span><span class="va">conteo_intervalos_df</span><span class="op">$</span><span class="va">Frecuencia</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Calcular frecuencias relativas</span></span>
 <span><span class="va">conteo_intervalos_df</span><span class="op">$</span><span class="va">Frecuencia_R</span> <span class="op">&lt;-</span> <span class="va">conteo_intervalos_df</span><span class="op">$</span><span class="va">Frecuencia</span> <span class="op">/</span> <span class="va">N_agre</span></span>
 <span></span>
 <span><span class="co"># Calcular frecuencias relativas acumuladas</span></span>
-<span><span class="va">conteo_intervalos_df</span><span class="op">$</span><span class="va">Frecuencia_R_acum</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="va">conteo_intervalos_df</span><span class="op">$</span><span class="va">Frecuencia_R</span><span class="op">)</span></span>
+<span><span class="va">conteo_intervalos_df</span><span class="op">$</span><span class="va">Frecuencia_R_acum</span> <span class="op">&lt;-</span> <span class="fu"><span>cumsum</span></span><span class="op">(</span><span class="va">conteo_intervalos_df</span><span class="op">$</span><span class="va">Frecuencia_R</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Mostrar el resultado</span></span>
 <span><span class="va">conteo_intervalos_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Distribución de frecuencias agrupadas en intervalos de salarios. Shuttlepod Movers"</span>,</span>
-<span>        col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Intervalo salarial"</span>,</span>
+<span>  <span class="fu"><span>kable</span></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Distribución de frecuencias agrupadas en intervalos de salarios. Shuttlepod Movers"</span>,</span>
+<span>        col.names <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="st">"Intervalo salarial"</span>,</span>
 <span>                      <span class="st">"Marca de clase x(i)"</span>,</span>
 <span>                      <span class="st">"Frecuencia absoluta n(i)"</span>,</span>
 <span>                      <span class="st">"Frecuencia absoluta acum. N(i)"</span>,</span>
 <span>                      <span class="st">"Frecuencia relativa f(i)"</span>,</span>
 <span>                      <span class="st">"Frecuencia relativa acum. F(i)"</span><span class="op">)</span>,</span>
-<span>        digits  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>        format.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>decimal.mark <span class="op">=</span> <span class="st">"."</span>, scientific <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
-<span>                bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"bordered"</span>, <span class="st">"condensed"</span><span class="op">)</span>,</span>
+<span>        digits  <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>        format.args <span class="op">=</span> <span class="fu"><span>list</span></span><span class="op">(</span>decimal.mark <span class="op">=</span> <span class="st">"."</span>, scientific <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><span>kable_styling</span></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                bootstrap_options <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"bordered"</span>, <span class="st">"condensed"</span><span class="op">)</span>,</span>
 <span>                position <span class="op">=</span> <span class="st">"center"</span>,</span>
 <span>                font_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">0</span>, bold<span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">conteo_intervalos_df</span><span class="op">)</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><span>row_spec</span></span><span class="op">(</span><span class="fl">0</span>, bold<span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><span>row_spec</span></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><span>nrow</span></span><span class="op">(</span><span class="va">conteo_intervalos_df</span><span class="op">)</span><span class="op">)</span>, bold<span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -2006,9 +2005,9 @@ Frecuencia relativa acum. F(i)
 </div>
 <p>La distribución agrupada confirma la concentración salarial: casi tres cuartas partes de la plantilla perciben entre 8 y 20 cientos de PAVOs. Los tramos superiores están mucho menos poblados, pues solo un 10% supera los 23,7 cientos de PAVOs y el salario máximo, 30 cientos, corresponde a un único trabajador. La sospecha de Tasha va tomando forma, pero necesitamos medidas concretas para sostenerla.</p>
 </div>
-<div id="medidas-de-posición." class="section level2" number="4.4">
+<div id="c04-medidas-de-posicion" class="section level2" number="4.4">
 <h2>
-<span class="header-section-number">4.4</span> <img src="figuras/book.svg" class="hicon"><img src="figuras/pie-chart.svg" class="hicon"> Medidas de posición.<a class="anchor" aria-label="anchor" href="#medidas-de-posici%C3%B3n."><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.4</span> <img src="figuras/book.svg" class="hicon"><img src="figuras/pie-chart.svg" class="hicon"> Medidas de posición.<a class="anchor" aria-label="anchor" href="#c04-medidas-de-posicion"><i class="fas fa-link"></i></a>
 </h2>
 <p>Las medidas de posición son instrumentos matemáticos que aspiran a <strong>caracterizar globalmente</strong> la distribución de frecuencias de una variable mediante un único valor o unos pocos.</p>
 <p>Cabe clasificarlas en medidas de posición central y medidas de posición no central, estas últimas representadas sobre todo por los llamados cuantiles.</p>
@@ -2022,29 +2021,29 @@ Frecuencia relativa acum. F(i)
 <p><span class="math display">\[
 \overline{x} = \frac{1}{N} \sum_{i=1}^{N} x_i
 \]</span></p>
-<p>En R, la función que devuelve la media de una variable es <code><a href="https://rdrr.io/r/base/mean.html">mean()</a></code>. Así, para conocer el salario medio de la plantilla ejecutaremos:</p>
-<div class="sourceCode" id="cb166"><pre class="downlit sourceCode r">
+<p>En R, la función que devuelve la media de una variable es <code><span>mean()</span></code>. Así, para conocer el salario medio de la plantilla ejecutaremos:</p>
+<div class="sourceCode" id="cb167"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## MEDIDAS</span></span>
 <span></span>
 <span><span class="co"># Media aritmética.</span></span>
-<span><span class="va">media</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span></span>
+<span><span class="va">media</span> <span class="op">&lt;-</span> <span class="fu"><span>mean</span></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span></span>
 <span><span class="va">media</span></span></code></pre></div>
 <pre><code>## [1] 16.04082</code></pre>
 <p>El salario medio en <em>Shuttlepod Movers</em> asciende a 16,04 cientos de PAVOs, es decir, 1.604 PAVOs. Disponemos ya de un primer indicador del <strong>nivel salarial típico</strong> de la plantilla: si la masa salarial se repartiera por igual entre todos los trabajadores, cada uno percibiría esa cantidad.</p>
 <p>¿Qué significado encierra esta medida? La media aritmética es el “centro de gravedad” de la distribución, su punto de equilibrio: si todos los trabajadores cobraran el salario medio, desaparecerían las diferencias salariales y, sin embargo, la “masa” salarial desembolsada por la empresa seguiría siendo exactamente la misma. En otras palabras, <strong>la media aritmética equivale a repartir de forma igualitaria la masa total de la variable</strong>.</p>
 <p>Entre sus ventajas destaca que, tratándose de variables en escala métrica, siempre es calculable y siempre es única. Como inconvenientes, que pierde representatividad en presencia de casos atípicos u <em>outliers</em> y que no puede obtenerse cuando trabajamos con atributos, variables cualitativas o factores, esto es, con escalas nominales u ordinales.</p>
 <p>La <strong>mediana</strong> es el valor correspondiente al caso —o los casos— que parten la distribución en dos grupos con idéntico número de elementos, una vez ordenados de menor a mayor los valores de la variable. Cuando la frecuencia total es par, los casos “frontera” son dos; y si ambos presentan valores distintos, tendríamos dos medianas. Para evitarlo, el convenio establece tomar el promedio de esos dos valores.</p>
-<p>En R, la mediana se obtiene con la función <code><a href="https://rdrr.io/r/stats/median.html">median()</a></code>. Para conocer el salario mediano de la plantilla ejecutaremos:</p>
-<div class="sourceCode" id="cb168"><pre class="downlit sourceCode r">
+<p>En R, la mediana se obtiene con la función <code><span>median()</span></code>. Para conocer el salario mediano de la plantilla ejecutaremos:</p>
+<div class="sourceCode" id="cb169"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Mediana</span></span>
-<span><span class="va">mediana</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span></span>
+<span><span class="va">mediana</span> <span class="op">&lt;-</span> <span class="fu"><span>median</span></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span></span>
 <span><span class="va">mediana</span></span></code></pre></div>
 <pre><code>## [1] 15</code></pre>
 <p>La mediana se sitúa en 15 cientos de PAVOs: la mitad de la plantilla cobra esa cantidad o menos y la otra mitad, esa cantidad o más. Reparemos en que la mediana queda ligeramente por debajo de la media (16,04), señal de que existen algunos salarios altos que “tiran” de esta última hacia arriba.</p>
 <p>La mediana presenta dos ventajas notables: no se deja arrastrar por los casos atípicos u <em>outliers</em> y puede calcularse también con atributos o factores medidos en escala ordinal. A cambio, no es necesariamente única y desatiende buena parte de los valores de la distribución.</p>
 <p>La <strong>moda</strong>, por su parte, es el valor —o los valores— que presenta la mayor frecuencia absoluta.</p>
-<p>En R la calculamos con la función <code><a href="https://andrisignorell.github.io/DescTools/reference/Mode.html">Mode()</a></code> del paquete <a href="https://andrisignorell.github.io/DescTools/">DescTools</a>, que habremos activado previamente con <code><a href="https://rdrr.io/r/base/library.html">library()</a></code>:</p>
-<div class="sourceCode" id="cb170"><pre class="downlit sourceCode r">
+<p>En R la calculamos con la función <code><a href="https://andrisignorell.github.io/DescTools/reference/Mode.html">Mode()</a></code> del paquete <a href="https://andrisignorell.github.io/DescTools/">DescTools</a>, que habremos activado previamente con <code><span>library()</span></code>:</p>
+<div class="sourceCode" id="cb171"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Moda</span></span>
 <span><span class="va">moda</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://andrisignorell.github.io/DescTools/reference/Mode.html">Mode</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span></span>
 <span><span class="va">moda</span></span></code></pre></div>
@@ -2055,18 +2054,18 @@ Frecuencia relativa acum. F(i)
 <p>La moda ofrece la ventaja de poder calcularse incluso en atributos o factores medidos en escala nominal. Su principal inconveniente es que tampoco tiene por qué ser única, pues existen distribuciones multimodales.</p>
 <p>Existen también medidas de posición no central, entre las que sobresalen los <strong>cuantiles</strong>. Su naturaleza se comprende con facilidad si los vemos como una generalización de la mediana. Sabemos ya que, ordenados los casos de menor a mayor valor, la mediana parte la distribución en dos grupos de igual frecuencia. Pues bien, si en lugar de dos grupos formamos cuatro, necesitaremos tres valores para delimitarlos: son los <strong>cuartiles</strong> de la distribución.</p>
 <p>Con el mismo razonamiento, repartir la distribución en 10 grupos de idéntico tamaño exige 9 valores de separación, los <strong>deciles</strong>; y hacerlo en 100 grupos requiere 99, los <strong>percentiles</strong>.</p>
-<p>En R, los cuantiles se obtienen con la función <code><a href="https://rdrr.io/r/stats/quantile.html">quantile()</a></code>. Para los cuartiles de SALARIO procederemos así:</p>
-<div class="sourceCode" id="cb172"><pre class="downlit sourceCode r">
+<p>En R, los cuantiles se obtienen con la función <code><span>quantile()</span></code>. Para los cuartiles de SALARIO procederemos así:</p>
+<div class="sourceCode" id="cb173"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calcular los cuartiles</span></span>
-<span><span class="va">cuartiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span>, probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">cuartiles</span> <span class="op">&lt;-</span> <span class="fu"><span>quantile</span></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span>, probs <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">cuartiles</span></span></code></pre></div>
 <pre><code>## 25% 50% 75% 
 ##  12  15  20</code></pre>
 <p>El argumento <code>probs =</code> indica qué proporción de casos debe quedar por detrás —con valores menores o iguales— de cada una de las “fronteras”. Para los cuartiles esas proporciones son <code>0.25</code>, <code>0.5</code> (valor que coincide con la mediana) y <code>0.75</code>. Obtenemos así unos cuartiles de 12, 15 y 20: el 50% central de la plantilla percibe entre 12 y 20 cientos de PAVOs, un recorrido de apenas 8 unidades. Esa diferencia entre Q3 y Q1 es el <strong>rango intercuartílico</strong> (IQR = 8) y confirma que la mitad de los salarios se comprime en una franja relativamente estrecha.</p>
 </div>
-<div id="medidas-de-dispersión-o-variabilidad." class="section level2" number="4.5">
+<div id="c04-medidas-de-dispersion-o-variabilidad" class="section level2" number="4.5">
 <h2>
-<span class="header-section-number">4.5</span> <img src="figuras/book.svg" class="hicon"><img src="figuras/pie-chart.svg" class="hicon"> Medidas de dispersión o variabilidad.<a class="anchor" aria-label="anchor" href="#medidas-de-dispersi%C3%B3n-o-variabilidad."><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.5</span> <img src="figuras/book.svg" class="hicon"><img src="figuras/pie-chart.svg" class="hicon"> Medidas de dispersión o variabilidad.<a class="anchor" aria-label="anchor" href="#c04-medidas-de-dispersion-o-variabilidad"><i class="fas fa-link"></i></a>
 </h2>
 <p>Las medidas de dispersión cuantifican <strong>cuán cerca o cuán lejos se sitúan, por lo general, los valores de una distribución respecto de una medida de posición central</strong>. Un valor elevado de la dispersión nos advierte de que esa medida central representa mal al conjunto, pues los casos se alejan considerablemente de ella.</p>
 <p>La medida de posición central a la que suelen hacer referencia las medidas de dispersión es la media aritmética.</p>
@@ -2098,32 +2097,32 @@ S = +\sqrt{S^2}
 V = \frac{S}{|\overline{x}|}
 \]</span></p>
 <p>El coeficiente de variación nos dice qué proporción de la media aritmética representa la desviación típica. Cuanto mayor sea, mayor será la dispersión y menor la representatividad de la media respecto del conjunto. Y al tratarse de una medida relativa, sus valores son comparables entre distribuciones expresadas en unidades distintas.</p>
-<p>Calculemos ya en R la varianza, la desviación típica, la cuasivarianza y el coeficiente de variación. Conviene tener presente un detalle: la función <code><a href="https://rdrr.io/r/stats/cor.html">var()</a></code> de R devuelve en realidad la cuasivarianza, de modo que para obtener la varianza habremos de aplicarle una corrección. Cuando los casos son muy numerosos, no obstante, ambas medidas prácticamente coinciden:</p>
-<div class="sourceCode" id="cb174"><pre class="downlit sourceCode r">
+<p>Calculemos ya en R la varianza, la desviación típica, la cuasivarianza y el coeficiente de variación. Conviene tener presente un detalle: la función <code><span>var()</span></code> de R devuelve en realidad la cuasivarianza, de modo que para obtener la varianza habremos de aplicarle una corrección. Cuando los casos son muy numerosos, no obstante, ambas medidas prácticamente coinciden:</p>
+<div class="sourceCode" id="cb175"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Varianza</span></span>
-<span><span class="va">varianza</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span><span class="op">*</span><span class="op">(</span><span class="va">N</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="va">N</span> <span class="co"># recordar que la frecuencia total N ya fue calculada</span></span>
+<span><span class="va">varianza</span> <span class="op">&lt;-</span> <span class="fu"><span>var</span></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span><span class="op">*</span><span class="op">(</span><span class="va">N</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="va">N</span> <span class="co"># recordar que la frecuencia total N ya fue calculada</span></span>
 <span><span class="va">varianza</span></span></code></pre></div>
 <pre><code>## [1] 30.48813</code></pre>
-<div class="sourceCode" id="cb176"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb177"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Desviación típica</span></span>
 <span><span class="va">desv</span> <span class="op">&lt;-</span> <span class="va">varianza</span> <span class="op">^</span> <span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">desv</span></span></code></pre></div>
 <pre><code>## [1] 5.521606</code></pre>
-<div class="sourceCode" id="cb178"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb179"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Cuasivarianza</span></span>
-<span><span class="va">cuasivarianza</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span></span>
+<span><span class="va">cuasivarianza</span> <span class="op">&lt;-</span> <span class="fu"><span>var</span></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span></span>
 <span><span class="va">cuasivarianza</span></span></code></pre></div>
 <pre><code>## [1] 31.1233</code></pre>
-<div class="sourceCode" id="cb180"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb181"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Coeficiente de variación</span></span>
-<span><span class="va">cvariacion</span> <span class="op">&lt;-</span> <span class="va">desv</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">media</span><span class="op">)</span></span>
+<span><span class="va">cvariacion</span> <span class="op">&lt;-</span> <span class="va">desv</span> <span class="op">/</span> <span class="fu"><span>abs</span></span><span class="op">(</span><span class="va">media</span><span class="op">)</span></span>
 <span><span class="va">cvariacion</span></span></code></pre></div>
 <pre><code>## [1] 0.3442222</code></pre>
 <p>El coeficiente de variación asciende a 0,344: la desviación típica supone un 34,4% de la media salarial. Se trata de un valor moderado, pues la dispersión existe, pero no es elevada. <strong>La sospecha de Tasha se confirma solo en parte</strong>: la estructura salarial de <em>Shuttlepod Movers</em> resulta relativamente compacta, aunque no extremadamente plana, y la mayoría de los salarios se mueve en una franja razonable en torno a la media.</p>
 </div>
-<div id="medidas-de-forma." class="section level2" number="4.6">
+<div id="c04-medidas-de-forma" class="section level2" number="4.6">
 <h2>
-<span class="header-section-number">4.6</span> <img src="figuras/book.svg" class="hicon"><img src="figuras/pie-chart.svg" class="hicon"> Medidas de forma.<a class="anchor" aria-label="anchor" href="#medidas-de-forma."><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.6</span> <img src="figuras/book.svg" class="hicon"><img src="figuras/pie-chart.svg" class="hicon"> Medidas de forma.<a class="anchor" aria-label="anchor" href="#c04-medidas-de-forma"><i class="fas fa-link"></i></a>
 </h2>
 <p>Las medidas de forma cuantifican el grado de deformación horizontal y vertical de la representación gráfica de una distribución de frecuencias. Son de dos tipos: medidas de asimetría y medidas de apuntamiento o curtosis.</p>
 <p>Las <strong>medidas de asimetría</strong> evalúan el grado de deformación horizontal respecto de un “eje de simetría”, el que pasa por el valor medio de la distribución. Suponiendo que esta sea unimodal y campaniforme, se nos presentan los casos que recoge la figura:</p>
@@ -2131,19 +2130,19 @@ V = \frac{S}{|\overline{x}|}
 <div style="text-align: center;">
 <p><strong>Figura 4.3.</strong> <span class="smallcaps">Tipos de asimetría</span></p>
 </div>
-<p>El tipo y grado de asimetría se puede obtener mediante el <strong>coeficiente de asimetría de Fisher</strong>. Este coeficiente toma valor negativo si la distribución es <em>asimétrica negativa</em> (mayores frecuencias a la derecha de la media), valor positivo si la distribución es <em>asimétrica positiva</em> (mayores frecuencias a la izquierda de la media), y se acerca a 0 en caso de que la distribución sea aproximadamente <em>simétrica</em>, aunque pueden darse casos de distribuciones no simétricas con coeficiente 0. En R, se puede obtener el coeficiente de asimetría mediante la función <code><a href="https://rdrr.io/pkg/moments/man/skewness.html">skewness()</a></code> del paquete <a href="https://www.r-project.org">moments</a>:</p>
-<div class="sourceCode" id="cb182"><pre class="downlit sourceCode r">
+<p>El tipo y grado de asimetría se puede obtener mediante el <strong>coeficiente de asimetría de Fisher</strong>. Este coeficiente toma valor negativo si la distribución es <em>asimétrica negativa</em> (mayores frecuencias a la derecha de la media), valor positivo si la distribución es <em>asimétrica positiva</em> (mayores frecuencias a la izquierda de la media), y se acerca a 0 en caso de que la distribución sea aproximadamente <em>simétrica</em>, aunque pueden darse casos de distribuciones no simétricas con coeficiente 0. En R, se puede obtener el coeficiente de asimetría mediante la función <code><span>skewness()</span></code> del paquete <a href="https://www.r-project.org">moments</a>:</p>
+<div class="sourceCode" id="cb183"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Coeficiente de asimetría de Fisher</span></span>
-<span><span class="va">asimetria</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/moments/man/skewness.html">skewness</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span></span>
+<span><span class="va">asimetria</span> <span class="op">&lt;-</span> <span class="fu"><span>skewness</span></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span></span>
 <span><span class="va">asimetria</span></span></code></pre></div>
 <pre><code>## [1] 0.413764</code></pre>
 <p>El valor obtenido es positivo, lo que indica <strong>asimetría positiva</strong>: la cola de la distribución se extiende hacia los salarios altos. Esto se puede comprobar fácilmente construyendo el histograma de la variable SALARIO y trazando una línea vertical que pase por la media salarial:</p>
-<div class="sourceCode" id="cb184"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb185"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">datos</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">SALARIO</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="va">k</span>,</span>
 <span>                 colour <span class="op">=</span> <span class="st">"red"</span>,</span>
 <span>                 fill <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">SALARIO</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu"><span>mean</span></span><span class="op">(</span><span class="va">SALARIO</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>             colour <span class="op">=</span> <span class="st">"blue"</span>,</span>
 <span>             linetype <span class="op">=</span> <span class="st">"dashed"</span>,</span>
 <span>             linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
@@ -2161,21 +2160,21 @@ V = \frac{S}{|\overline{x}|}
 <div style="text-align: center;">
 <p><strong>Figura 4.5.</strong> <span class="smallcaps">Tipos de apuntamiento o curtosis</span></p>
 </div>
-<p>El tipo y grado de apuntamiento o curtosis se puede obtener mediante el <strong>coeficiente de apuntamiento de Fisher</strong>. Este coeficiente toma valor negativo si la distribución es <em>platicúrtica</em> (más aplastada que la distribución normal), valor positivo si la distribución es <em>leptocúrtica</em> (más apuntada que la distribución normal), y se acerca a 0 en caso de que la distribución sea aproximadamente igual de apuntada que la distribución normal. En R, se puede obtener el coeficiente de curtosis mediante la función <code><a href="https://rdrr.io/pkg/moments/man/kurtosis.html">kurtosis()</a></code> del paquete <a href="https://www.r-project.org">moments</a>. Hay que tener en cuenta que para que esta versión coincida con lo dicho anteriormente, al valor calculado hay que restarle el valor “3”:</p>
-<div class="sourceCode" id="cb185"><pre class="downlit sourceCode r">
+<p>El tipo y grado de apuntamiento o curtosis se puede obtener mediante el <strong>coeficiente de apuntamiento de Fisher</strong>. Este coeficiente toma valor negativo si la distribución es <em>platicúrtica</em> (más aplastada que la distribución normal), valor positivo si la distribución es <em>leptocúrtica</em> (más apuntada que la distribución normal), y se acerca a 0 en caso de que la distribución sea aproximadamente igual de apuntada que la distribución normal. En R, se puede obtener el coeficiente de curtosis mediante la función <code><span>kurtosis()</span></code> del paquete <a href="https://www.r-project.org">moments</a>. Hay que tener en cuenta que para que esta versión coincida con lo dicho anteriormente, al valor calculado hay que restarle el valor “3”:</p>
+<div class="sourceCode" id="cb186"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Coeficiente de apuntamiento o curtosis de Fisher</span></span>
-<span><span class="va">curtosis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/moments/man/kurtosis.html">kurtosis</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span> <span class="op">-</span> <span class="fl">3</span></span>
+<span><span class="va">curtosis</span> <span class="op">&lt;-</span> <span class="fu"><span>kurtosis</span></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span> <span class="op">-</span> <span class="fl">3</span></span>
 <span><span class="va">curtosis</span></span></code></pre></div>
 <pre><code>## [1] -0.8232965</code></pre>
 <p>El coeficiente corregido es menor que 0, de modo que la distribución de SALARIO resulta <strong>platicúrtica</strong>, más “aplastada” que la normal. Interpretémoslo, eso sí, con cierta cautela: acabamos de comprobar que la distribución no es aproximadamente simétrica, supuesto del que parte esta medida. Podemos verificarlo gráficamente superponiendo al histograma una curva normal con la misma moda. Para que ambas representaciones sean comparables, el eje “y” debe pasar de “frecuencias” a “densidad”, lo que se consigue añadiendo a <code><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram()</a></code> el argumento <code>aes(y = after_stat(density))</code>:</p>
-<div class="sourceCode" id="cb187"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb188"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">datos</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">SALARIO</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="va">k</span>,</span>
 <span>                 colour <span class="op">=</span> <span class="st">"red"</span>,</span>
 <span>                 fill <span class="op">=</span> <span class="st">"orange"</span>,</span>
 <span>                 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html">after_stat</a></span><span class="op">(</span><span class="va">density</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_function.html">stat_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">dnorm</span>,</span>
-<span>                args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="va">moda</span>, sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                args <span class="op">=</span> <span class="fu"><span>list</span></span><span class="op">(</span>mean <span class="op">=</span> <span class="va">moda</span>, sd <span class="op">=</span> <span class="fu"><span>sd</span></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                colour <span class="op">=</span> <span class="st">"darkblue"</span>,</span>
 <span>                linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"SALARIO MENSUAL"</span>,</span>
@@ -2188,9 +2187,9 @@ V = \frac{S}{|\overline{x}|}
 </div>
 <p>El carácter platicúrtico de la distribución indica que los salarios están <strong>más uniformemente repartidos</strong> de lo que cabría esperar en una distribución normal, con menos concentración alrededor de la media y colas menos pronunciadas. Esto es coherente con la percepción de la CEO: la empresa tiende a pagar salarios parecidos a la mayoría de la plantilla.</p>
 </div>
-<div id="medidas-de-concentración." class="section level2" number="4.7">
+<div id="c04-medidas-de-concentracion" class="section level2" number="4.7">
 <h2>
-<span class="header-section-number">4.7</span> <img src="figuras/book.svg" class="hicon"><img src="figuras/pie-chart.svg" class="hicon"> Medidas de concentración.<a class="anchor" aria-label="anchor" href="#medidas-de-concentraci%C3%B3n."><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.7</span> <img src="figuras/book.svg" class="hicon"><img src="figuras/pie-chart.svg" class="hicon"> Medidas de concentración.<a class="anchor" aria-label="anchor" href="#c04-medidas-de-concentracion"><i class="fas fa-link"></i></a>
 </h2>
 <p>Las medidas de dispersión nos han dicho cuánto se alejan los salarios de su media. Las <strong>medidas de concentración</strong> responden a una pregunta distinta y, para el encargo de Tasha, más directa: <strong>¿cómo se reparte la masa salarial total entre los trabajadores de la empresa?</strong></p>
 <p>Conviene imaginar los dos extremos entre los que puede moverse ese reparto:</p>
@@ -2199,9 +2198,9 @@ V = \frac{S}{|\overline{x}|}
 <li><p><strong>Concentración máxima</strong>: un único trabajador acapara toda la masa salarial y el resto de la plantilla no percibe nada.</p></li>
 </ul>
 <p>Reparemos en que la “estructura salarial demasiado plana” que sospecha Tasha no es otra cosa que una distribución muy próxima al primer extremo. Las medidas de concentración nos dirán, por tanto, a qué distancia se encuentra <em>Shuttlepod Movers</em> de un reparto perfectamente igualitario.</p>
-<div id="la-curva-de-lorenz." class="section level3" number="4.7.1">
+<div id="c04-la-curva-de-lorenz" class="section level3" number="4.7.1">
 <h3>
-<span class="header-section-number">4.7.1</span> <img src="figuras/key.svg" class="hicon"> La curva de Lorenz.<a class="anchor" aria-label="anchor" href="#la-curva-de-lorenz."><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.7.1</span> <img src="figuras/key.svg" class="hicon"> La curva de Lorenz.<a class="anchor" aria-label="anchor" href="#c04-la-curva-de-lorenz"><i class="fas fa-link"></i></a>
 </h3>
 <p>Para situar nuestra distribución entre esos dos extremos necesitamos dos series acumuladas, calculadas sobre los salarios ordenados de menor a mayor:</p>
 <ul>
@@ -2209,36 +2208,36 @@ V = \frac{S}{|\overline{x}|}
 <li><p><strong><em>q(i)</em></strong>: la proporción acumulada de <strong>masa salarial</strong>, esto es, qué parte del total de salarios pagados perciben esos mismos trabajadores.</p></li>
 </ul>
 <p>Ambas series se obtienen con dos instrucciones muy sencillas:</p>
-<div class="sourceCode" id="cb188"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb189"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## MEDIDAS DE CONCENTRACIÓN</span></span>
 <span></span>
 <span><span class="co"># Salarios ordenados de menor a mayor</span></span>
-<span><span class="va">salarios</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span></span>
+<span><span class="va">salarios</span> <span class="op">&lt;-</span> <span class="fu"><span>sort</span></span><span class="op">(</span><span class="va">datos</span><span class="op">$</span><span class="va">SALARIO</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Proporción acumulada de trabajadores (p) y de masa salarial (q)</span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">N</span><span class="op">)</span> <span class="op">/</span> <span class="va">N</span></span>
-<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="va">salarios</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">salarios</span><span class="op">)</span></span></code></pre></div>
-<p>La función <code><a href="https://rdrr.io/r/base/sort.html">sort()</a></code> ordena los salarios de menor a mayor. A partir de ahí, <code>(1:N) / N</code> genera las proporciones acumuladas de plantilla —un trabajador de cada N, dos de cada N, y así sucesivamente— mientras que <code><a href="https://rdrr.io/r/base/cumsum.html">cumsum()</a></code>, que ya utilizamos al calcular las frecuencias acumuladas, va sumando los salarios y los divide entre la masa salarial total. Recordemos que N, la frecuencia total, ya fue calculada al construir la distribución de frecuencias.</p>
+<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><span>cumsum</span></span><span class="op">(</span><span class="va">salarios</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><span>sum</span></span><span class="op">(</span><span class="va">salarios</span><span class="op">)</span></span></code></pre></div>
+<p>La función <code><span>sort()</span></code> ordena los salarios de menor a mayor. A partir de ahí, <code>(1:N) / N</code> genera las proporciones acumuladas de plantilla —un trabajador de cada N, dos de cada N, y así sucesivamente— mientras que <code><span>cumsum()</span></code>, que ya utilizamos al calcular las frecuencias acumuladas, va sumando los salarios y los divide entre la masa salarial total. Recordemos que N, la frecuencia total, ya fue calculada al construir la distribución de frecuencias.</p>
 <p>La comparación entre ambas series es inmediata: si todos los trabajadores cobraran lo mismo, el 40% de la plantilla percibiría exactamente el 40% de la masa salarial, de manera que <em>p(i)</em> y <em>q(i)</em> coincidirían en todos los casos. Cuanto más por debajo de <em>p(i)</em> se sitúe <em>q(i)</em>, mayor será la concentración. Veámoslo en tres tramos significativos de la plantilla:</p>
-<div class="sourceCode" id="cb189"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb190"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Reparto de la masa salarial entre tramos de la plantilla</span></span>
-<span><span class="va">tramos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
-<span>  Tramo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"25% peor pagado"</span>, <span class="st">"50% peor pagado"</span>, <span class="st">"25% mejor pagado"</span><span class="op">)</span>,</span>
-<span>  Masa  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">q</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fl">0.25</span> <span class="op">*</span> <span class="va">N</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>            <span class="va">q</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fl">0.50</span> <span class="op">*</span> <span class="va">N</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>            <span class="fl">1</span> <span class="op">-</span> <span class="va">q</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fl">0.75</span> <span class="op">*</span> <span class="va">N</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">tramos</span> <span class="op">&lt;-</span> <span class="fu"><span>data.frame</span></span><span class="op">(</span></span>
+<span>  Tramo <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="st">"25% peor pagado"</span>, <span class="st">"50% peor pagado"</span>, <span class="st">"25% mejor pagado"</span><span class="op">)</span>,</span>
+<span>  Masa  <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="va">q</span><span class="op">[</span><span class="fu"><span>round</span></span><span class="op">(</span><span class="fl">0.25</span> <span class="op">*</span> <span class="va">N</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>            <span class="va">q</span><span class="op">[</span><span class="fu"><span>round</span></span><span class="op">(</span><span class="fl">0.50</span> <span class="op">*</span> <span class="va">N</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>            <span class="fl">1</span> <span class="op">-</span> <span class="va">q</span><span class="op">[</span><span class="fu"><span>round</span></span><span class="op">(</span><span class="fl">0.75</span> <span class="op">*</span> <span class="va">N</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">tramos</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span></span>
-<span>        col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Tramo de la plantilla"</span>, <span class="st">"Masa salarial percibida"</span><span class="op">)</span>,</span>
-<span>        digits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
-<span>                bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"bordered"</span>, <span class="st">"condensed"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><span>kable</span></span><span class="op">(</span></span>
+<span>        col.names <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="st">"Tramo de la plantilla"</span>, <span class="st">"Masa salarial percibida"</span><span class="op">)</span>,</span>
+<span>        digits <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><span>kable_styling</span></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                bootstrap_options <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"bordered"</span>, <span class="st">"condensed"</span><span class="op">)</span>,</span>
 <span>                position <span class="op">=</span> <span class="st">"center"</span>,</span>
 <span>                font_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">0</span>, bold <span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">tramos</span><span class="op">)</span>, bold <span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><span>row_spec</span></span><span class="op">(</span><span class="fl">0</span>, bold <span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><span>row_spec</span></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><span>nrow</span></span><span class="op">(</span><span class="va">tramos</span><span class="op">)</span>, bold <span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -2280,9 +2279,9 @@ Masa salarial percibida
 </div>
 <p>Bajo equidistribución perfecta, las tres cifras de la tabla serían 0,25, 0,50 y 0,25. Las desviaciones que observamos respecto de esos valores de referencia son la medida intuitiva de la concentración salarial de la empresa.</p>
 <p>Esta misma información puede representarse gráficamente mediante la <strong>curva de Lorenz</strong>, que no es sino la representación de <em>q(i)</em> frente a <em>p(i)</em>:</p>
-<div class="sourceCode" id="cb190"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb191"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Curva de Lorenz</span></span>
-<span><span class="va">lorenz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">p</span><span class="op">)</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">q</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">lorenz</span> <span class="op">&lt;-</span> <span class="fu"><span>data.frame</span></span><span class="op">(</span>p <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="fl">0</span>, <span class="va">p</span><span class="op">)</span>, q <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="fl">0</span>, <span class="va">q</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">lorenz</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">p</span>, y <span class="op">=</span> <span class="va">q</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">q</span>, ymax <span class="op">=</span> <span class="va">p</span><span class="op">)</span>, fill <span class="op">=</span> <span class="st">"orange"</span>, alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span></span>
@@ -2300,9 +2299,9 @@ Masa salarial percibida
 <p>Hemos añadido al <em>data frame</em> “lorenz” un punto inicial (0, 0), que representa la situación de partida: cero trabajadores acumulan cero masa salarial. La diagonal discontinua azul es la <strong>línea de equidistribución</strong>, el lugar en el que se situaría la curva si todos los trabajadores cobrasen lo mismo. La curva roja recoge el reparto real, y la franja naranja sombreada entre ambas —el llamado <strong>área de concentración</strong>— es la traducción visual de la desigualdad salarial: cuanto más se pegue la curva a la diagonal, más plana será la estructura retributiva.</p>
 <p>Como puede apreciarse, la curva de <em>Shuttlepod Movers</em> discurre muy cerca de la diagonal.</p>
 </div>
-<div id="el-índice-de-gini." class="section level3" number="4.7.2">
+<div id="c04-el-indice-de-gini" class="section level3" number="4.7.2">
 <h3>
-<span class="header-section-number">4.7.2</span> <img src="figuras/key.svg" class="hicon"> El índice de Gini.<a class="anchor" aria-label="anchor" href="#el-%C3%ADndice-de-gini."><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.7.2</span> <img src="figuras/key.svg" class="hicon"> El índice de Gini.<a class="anchor" aria-label="anchor" href="#c04-el-indice-de-gini"><i class="fas fa-link"></i></a>
 </h3>
 <p>La curva de Lorenz nos ofrece una impresión visual, pero necesitamos traducirla a un número. De ello se encarga el <strong>índice de Gini</strong>, que compara la suma de las distancias verticales entre la diagonal y la curva con la mayor suma que podrían alcanzar esas distancias:</p>
 <p><span class="math display">\[
@@ -2311,9 +2310,9 @@ I_G = \frac{\sum_{i=1}^{N-1} \left( p_i - q_i \right)}{\sum_{i=1}^{N-1} p_i}
 <p>El numerador acumula las distancias entre ambas líneas y el denominador recoge el valor máximo que esa suma podría alcanzar, que se daría en el caso de concentración total. El último punto queda excluido del sumatorio porque en él siempre se cumple que <em>p(N)</em> = <em>q(N)</em> = 1: el 100% de la plantilla percibe, necesariamente, el 100% de la masa salarial.</p>
 <p>El índice se mueve así entre <strong>0</strong> (equidistribución: la curva coincide con la diagonal y el área de concentración desaparece) y <strong>1</strong> (concentración máxima). Geométricamente, equivale a la proporción que el área de concentración representa sobre el triángulo completo situado bajo la diagonal.</p>
 <p>Su cálculo en R es directo:</p>
-<div class="sourceCode" id="cb191"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb192"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Índice de Gini</span></span>
-<span><span class="va">gini</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">p</span><span class="op">[</span><span class="op">-</span><span class="va">N</span><span class="op">]</span> <span class="op">-</span> <span class="va">q</span><span class="op">[</span><span class="op">-</span><span class="va">N</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">p</span><span class="op">[</span><span class="op">-</span><span class="va">N</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">gini</span> <span class="op">&lt;-</span> <span class="fu"><span>sum</span></span><span class="op">(</span><span class="va">p</span><span class="op">[</span><span class="op">-</span><span class="va">N</span><span class="op">]</span> <span class="op">-</span> <span class="va">q</span><span class="op">[</span><span class="op">-</span><span class="va">N</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><span>sum</span></span><span class="op">(</span><span class="va">p</span><span class="op">[</span><span class="op">-</span><span class="va">N</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="va">gini</span></span></code></pre></div>
 <pre><code>## [1] 0.1973601</code></pre>
 <p>La expresión <code>p[-N]</code> selecciona todos los elementos del vector salvo el último, que es precisamente el punto que debemos excluir. El resto no es más que la traducción literal de la fórmula.</p>
@@ -2321,34 +2320,34 @@ I_G = \frac{\sum_{i=1}^{N-1} \left( p_i - q_i \right)}{\sum_{i=1}^{N-1} p_i}
 <p>Conviene subrayar la diferencia entre lo que nos dicen la dispersión y la concentración. El coeficiente de variación nos indicaba que los salarios se separan, en promedio, un 34,4% de la media. El índice de Gini añade algo distinto: que esa separación <strong>no se traduce en un reparto desigual de la masa salarial</strong>. Dicho de otro modo, las diferencias salariales existen, pero son demasiado pequeñas para generar una verdadera jerarquía retributiva. Justo lo que preocupaba a la CEO.</p>
 </div>
 </div>
-<div id="resumen-del-análisis-descriptivo." class="section level2" number="4.8">
+<div id="c04-resumen-del-analisis-descriptivo" class="section level2" number="4.8">
 <h2>
-<span class="header-section-number">4.8</span> <img src="figuras/book.svg" class="hicon"><img src="figuras/pie-chart.svg" class="hicon"> Resumen del análisis descriptivo.<a class="anchor" aria-label="anchor" href="#resumen-del-an%C3%A1lisis-descriptivo."><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.8</span> <img src="figuras/book.svg" class="hicon"><img src="figuras/pie-chart.svg" class="hicon"> Resumen del análisis descriptivo.<a class="anchor" aria-label="anchor" href="#c04-resumen-del-analisis-descriptivo"><i class="fas fa-link"></i></a>
 </h2>
 <p>Para cerrar el análisis, reunimos todas las medidas calculadas en una única tabla resumen:</p>
-<div class="sourceCode" id="cb193"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb194"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Tabla resumen de medidas descriptivas</span></span>
-<span><span class="va">resumen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
-<span>  Medida <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Media aritmética"</span>, <span class="st">"Mediana"</span>, <span class="st">"Moda"</span>,</span>
+<span><span class="va">resumen</span> <span class="op">&lt;-</span> <span class="fu"><span>data.frame</span></span><span class="op">(</span></span>
+<span>  Medida <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="st">"Media aritmética"</span>, <span class="st">"Mediana"</span>, <span class="st">"Moda"</span>,</span>
 <span>             <span class="st">"Cuartil 1 (Q1)"</span>, <span class="st">"Cuartil 3 (Q3)"</span>, <span class="st">"Rango intercuartílico (IQR)"</span>,</span>
 <span>             <span class="st">"Varianza"</span>, <span class="st">"Desviación típica"</span>, <span class="st">"Cuasivarianza"</span>,</span>
 <span>             <span class="st">"Coef. de variación"</span>, <span class="st">"Coef. de asimetría (Fisher)"</span>,</span>
 <span>             <span class="st">"Coef. de curtosis (Fisher)"</span>, <span class="st">"Índice de Gini"</span><span class="op">)</span>,</span>
-<span>  Valor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">media</span>, <span class="va">mediana</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">moda</span><span class="op">)</span>,</span>
+<span>  Valor <span class="op">=</span> <span class="fu"><span>round</span></span><span class="op">(</span><span class="fu"><span>c</span></span><span class="op">(</span><span class="va">media</span>, <span class="va">mediana</span>, <span class="fu"><span>as.numeric</span></span><span class="op">(</span><span class="va">moda</span><span class="op">)</span>,</span>
 <span>                  <span class="va">cuartiles</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">cuartiles</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>, <span class="va">cuartiles</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="va">cuartiles</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
 <span>                  <span class="va">varianza</span>, <span class="va">desv</span>, <span class="va">cuasivarianza</span>,</span>
 <span>                  <span class="va">cvariacion</span>, <span class="va">asimetria</span>, <span class="va">curtosis</span>, <span class="va">gini</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">resumen</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span></span>
-<span>        col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Medida"</span>, <span class="st">"Valor"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
-<span>                bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"bordered"</span>, <span class="st">"condensed"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><span>kable</span></span><span class="op">(</span></span>
+<span>        col.names <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="st">"Medida"</span>, <span class="st">"Valor"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><span>kable_styling</span></span><span class="op">(</span>full_width <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                bootstrap_options <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"bordered"</span>, <span class="st">"condensed"</span><span class="op">)</span>,</span>
 <span>                position <span class="op">=</span> <span class="st">"center"</span>,</span>
 <span>                font_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">0</span>, bold <span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">resumen</span><span class="op">)</span>, bold <span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><span>row_spec</span></span><span class="op">(</span><span class="fl">0</span>, bold <span class="op">=</span> <span class="cn">T</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><span>row_spec</span></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><span>nrow</span></span><span class="op">(</span><span class="va">resumen</span><span class="op">)</span>, bold <span class="op">=</span> <span class="cn">F</span>, align <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
@@ -2470,9 +2469,9 @@ Coef. de curtosis (Fisher)
 </div>
 <p><strong>Conclusión para Tasha Tachybaptus:</strong> el análisis descriptivo confirma que la estructura salarial de <em>Shuttlepod Movers</em> es efectivamente <strong>compacta y concentrada en los niveles intermedios</strong>. El salario medio (16,04) y la mediana (15) están muy próximos, la dispersión es moderada (CV = 34,4%) y la distribución es platicúrtica, lo que indica salarios bastante uniformes. La asimetría positiva revela que, si bien existe un pequeño grupo de trabajadores con salarios superiores, la diferenciación retributiva hacia arriba es muy limitada. El índice de Gini, de solo 0,197, cierra el diagnóstico: la masa salarial se reparte entre la plantilla de un modo muy próximo a la equidistribución. Si la CEO desea retener talento altamente cualificado, este análisis le da base empírica para considerar una revisión de la política salarial que introduzca una mayor diferenciación en los tramos superiores.</p>
 </div>
-<div id="materiales-para-realizar-las-prácticas-del-capítulo.-2" class="section level2" number="4.9">
+<div id="c04-materiales-para-realizar-las-practicas-del" class="section level2" number="4.9">
 <h2>
-<span class="header-section-number">4.9</span> <img src="figuras/arrow-down-circle.svg" class="hicon"> Materiales para realizar las prácticas del capítulo.<a class="anchor" aria-label="anchor" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-2"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.9</span> <img src="figuras/arrow-down-circle.svg" class="hicon"> Materiales para realizar las prácticas del capítulo.<a class="anchor" aria-label="anchor" href="#c04-materiales-para-realizar-las-practicas-del"><i class="fas fa-link"></i></a>
 </h2>
 <p>En esta sección se recogen los enlaces de acceso a los distintos materiales (<em>scripts</em>, datos…) necesarios para desarrollar los contenidos prácticos del capítulo.</p>
 <p><strong>Datos (en formato Microsoft® Excel®):</strong></p>
@@ -2492,26 +2491,23 @@ Coef. de curtosis (Fisher)
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
 <li><a class="nav-link" href="#estad%C3%ADstica-descriptiva."><span class="header-section-number">4</span> Estadística descriptiva.</a></li>
-<li><a class="nav-link" href="#an%C3%A1lisis-univariante."><span class="header-section-number">4.1</span>  Análisis univariante.</a></li>
-<li><a class="nav-link" href="#shuttlepod-movers-una-estructura-salarial-demasiado-plana"><span class="header-section-number">4.2</span> Shuttlepod Movers: ¿una estructura salarial demasiado plana?</a></li>
-<li><a class="nav-link" href="#representando-datos-y-distribuciones-de-frecuencias-en-tablas-con-r."><span class="header-section-number">4.3</span>  Representando datos y distribuciones de frecuencias en tablas con R.</a></li>
-<li><a class="nav-link" href="#medidas-de-posici%C3%B3n."><span class="header-section-number">4.4</span>  Medidas de posición.</a></li>
-<li><a class="nav-link" href="#medidas-de-dispersi%C3%B3n-o-variabilidad."><span class="header-section-number">4.5</span>  Medidas de dispersión o variabilidad.</a></li>
-<li><a class="nav-link" href="#medidas-de-forma."><span class="header-section-number">4.6</span>  Medidas de forma.</a></li>
+<li><a class="nav-link" href="#c04-analisis-univariante"><span class="header-section-number">4.1</span>  Análisis univariante.</a></li>
+<li><a class="nav-link" href="#c04-shuttlepod-movers-una-estructura-salarial"><span class="header-section-number">4.2</span> Shuttlepod Movers: ¿una estructura salarial demasiado plana?</a></li>
+<li><a class="nav-link" href="#c04-representando-datos-y-distribuciones-de"><span class="header-section-number">4.3</span>  Representando datos y distribuciones de frecuencias en tablas con R.</a></li>
+<li><a class="nav-link" href="#c04-medidas-de-posicion"><span class="header-section-number">4.4</span>  Medidas de posición.</a></li>
+<li><a class="nav-link" href="#c04-medidas-de-dispersion-o-variabilidad"><span class="header-section-number">4.5</span>  Medidas de dispersión o variabilidad.</a></li>
+<li><a class="nav-link" href="#c04-medidas-de-forma"><span class="header-section-number">4.6</span>  Medidas de forma.</a></li>
 <li>
-<a class="nav-link" href="#medidas-de-concentraci%C3%B3n."><span class="header-section-number">4.7</span>  Medidas de concentración.</a><ul class="nav navbar-nav">
-<li><a class="nav-link" href="#la-curva-de-lorenz."><span class="header-section-number">4.7.1</span>  La curva de Lorenz.</a></li>
-<li><a class="nav-link" href="#el-%C3%ADndice-de-gini."><span class="header-section-number">4.7.2</span>  El índice de Gini.</a></li>
+<a class="nav-link" href="#c04-medidas-de-concentracion"><span class="header-section-number">4.7</span>  Medidas de concentración.</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#c04-la-curva-de-lorenz"><span class="header-section-number">4.7.1</span>  La curva de Lorenz.</a></li>
+<li><a class="nav-link" href="#c04-el-indice-de-gini"><span class="header-section-number">4.7.2</span>  El índice de Gini.</a></li>
 </ul>
 </li>
-<li><a class="nav-link" href="#resumen-del-an%C3%A1lisis-descriptivo."><span class="header-section-number">4.8</span>  Resumen del análisis descriptivo.</a></li>
-<li><a class="nav-link" href="#materiales-para-realizar-las-pr%C3%A1cticas-del-cap%C3%ADtulo.-2"><span class="header-section-number">4.9</span>  Materiales para realizar las prácticas del capítulo.</a></li>
+<li><a class="nav-link" href="#c04-resumen-del-analisis-descriptivo"><span class="header-section-number">4.8</span>  Resumen del análisis descriptivo.</a></li>
+<li><a class="nav-link" href="#c04-materiales-para-realizar-las-practicas-del"><span class="header-section-number">4.9</span>  Materiales para realizar las prácticas del capítulo.</a></li>
 </ul>
-
-      <div class="book-extra">
-        <ul class="list-unstyled">
-          
-        </ul>
+<div class="book-extra">
+        <ul class="list-unstyled"></ul>
 </div>
     </nav>
 </div>

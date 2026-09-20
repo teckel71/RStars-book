@@ -70,6 +70,8 @@ library (patchwork)
 library (GGally)
 ```
 
+De este modo, solo quedará pendiente por activar el paquete "propio" `{MATrstars}`, del que hablaremos más adelante.
+
 ```{r include=FALSE}
 # Carga silenciosa del paquete {MATrstars} para que las funciones auxiliares
 # (explora_na, kable_rstars, etc.) esten disponibles desde el inicio del
@@ -82,11 +84,6 @@ if (!requireNamespace("MATrstars", quietly = TRUE)) {
 }
 library(MATrstars)
 ```
-
-::: {style="text-align: center;"}
-**Tabla 5.1**
-:::
-
 
 Para importar los datos alojados en la hoja "Datos" del archivo de Microsoft® Excel® y echar un primer vistazo a las variables que contiene, ejecutaremos:
 
@@ -125,7 +122,7 @@ datos_df_graph
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 5.2**
+**Tabla 5.1**
 :::
 
 
@@ -267,7 +264,7 @@ rm(muestra_demo)
 ```
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
-options(matrstars.figura_num = "5.3", matrstars.tabla_num = "5.3")
+options(matrstars.figura_num = "5.3", matrstars.tabla_num = "5.2")
 muestra_demo <- select(interestelar_100, RENECO)
 muestra_demo <- explora_na(
   muestra_demo,
@@ -404,7 +401,7 @@ muestra_demo <- explora_na(muestra_demo, RENECO, accion = "eliminar")
 ```
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
-options(matrstars.figura_num = "5.5", matrstars.tabla_num = "5.4")
+options(matrstars.figura_num = "5.5", matrstars.tabla_num = "5.3")
 muestra_demo <- explora_outliers(
   muestra_demo,
   variables = RENECO,
@@ -448,12 +445,7 @@ conteo_intervalos_df %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 5.5**
-:::
-
-
-::: {style="text-align: center;"}
-**Tabla 5.6.** Dist. frecuencias agrupadas: Rentabilidad Económica
+**Tabla 5.4.** Dist. frecuencias agrupadas: Rentabilidad Económica
 :::
 
 
@@ -604,7 +596,7 @@ estadisticos %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 5.7.** Principales Estadísticos de la Rentabilidad Económica
+**Tabla 5.5.** Principales Estadísticos de la Rentabilidad Económica
 :::
 
 
@@ -732,7 +724,7 @@ Imaginemos un análisis que tenga en cuenta cuatro variables: RENECO (rentabilid
 Generaremos primero una copia del *data frame* original para preservar su integridad, a la que llamaremos "muestra2". Sobre ella aplicaremos `explora_na()`, indicando en el argumento `variables` las cuatro del análisis y `accion = "eliminar"` para que, además de mostrar el gráfico y la tabla de casos afectados, los descarte del *data frame*:
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
-options(matrstars.figura_num = "5.11", matrstars.tabla_num = "5.8")
+options(matrstars.figura_num = "5.11", matrstars.tabla_num = "5.6")
 ## Trabajando con multiples variables.
 
 # Copia de df original.
@@ -894,7 +886,7 @@ muestra2_demo <- explora_na(muestra2_demo, accion = "eliminar")
 ```
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
-options(matrstars.figura_num = "5.13", matrstars.tabla_num = "5.9")
+options(matrstars.figura_num = "5.13", matrstars.tabla_num = "5.7")
 muestra2_demo <- explora_outliers(
   muestra2_demo,
   variables = c(RENECO, ACTIVO, MARGEN, RES),

@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 # =====================================================================
-# numerar_tablas_figuras.R  (v2)
+# numerar_tablas_figuras.R  (v3)
 # ---------------------------------------------------------------------
 # Postprocesador de ficheros .Rmd para numerar tablas y figuras
 # manualmente y de forma consistente.
@@ -23,6 +23,10 @@
 #       * Chunks que contienen un bucle (for/while/lapply/sapply/map*).
 #         Además, intenta quitar los `caption = ...` de esos bucles
 #         para que bookdown tampoco genere doble numeración rara.
+#   - Ignora los COMENTARIOS de R al analizar el codigo: una
+#     mencion a kable_rstars() o ggplot() dentro de un comentario
+#     ya no genera una etiqueta fantasma.
+#   - Los chunks con include=FALSE nunca consumen numeracion.
 #   - NO toca:
 #       * Iconos .hicon en titulares.
 #       * Chunks con eval = FALSE (código pedagógico).
@@ -385,8 +389,38 @@ procesar_rmd <- function(ruta_entrada,
       sum(strsplit(txt, "", fixed = TRUE)[[1]] == ch)
     }
 
+    # Helper: elimina el comentario de R de una línea de código.
+    # El analizador solo debe mirar código real: un comentario que
+    # mencione p.ej. `kable_rstars()` o `ggplot()` NO genera tabla ni
+    # figura, y sin este filtro el preprocesador emitiría una etiqueta
+    # fantasma ("**Tabla X.Y**" sin tabla debajo).
+    # Respeta las comillas, de modo que un `#` dentro de una cadena
+    # (colores hexadecimales como "#E69F00", títulos con almohadilla,
+    # etc.) no se confunde con el inicio de un comentario.
+    quitar_comentario <- function(txt) {
+      chars <- strsplit(txt, "", fixed = TRUE)[[1]]
+      if (length(chars) == 0L) return(txt)
+      comilla <- ""
+      for (k in seq_along(chars)) {
+        ch <- chars[k]
+        if (!nzchar(comilla) && (ch == '"' || ch == "'")) {
+          comilla <- ch
+        } else if (nzchar(comilla) && ch == comilla &&
+                   (k == 1L || chars[k - 1L] != "\\")) {
+          comilla <- ""
+        } else if (!nzchar(comilla) && ch == "#") {
+          return(if (k == 1L) "" else
+                 paste(chars[seq_len(k - 1L)], collapse = ""))
+        }
+      }
+      txt
+    }
+
     for (i in seq_along(buffer)) {
-      linea <- buffer[i]
+      # Se analiza la línea SIN su comentario. No se elimina la línea,
+      # solo se vacía su parte comentada, de modo que las posiciones
+      # (info$posiciones) siguen siendo válidas para dividir_chunk_mixto().
+      linea <- quitar_comentario(buffer[i])
 
       # ¿Abre una nueva definición de función?
       if (grepl("<-\\s*function\\s*\\(", linea, perl = TRUE)) {
@@ -1374,6 +1408,16 @@ procesar_rmd <- function(ruta_entrada,
         if (skip) {
           # Chunk eval=FALSE: dejar tal cual, no se renderiza.
           push(chunk_header); push(chunk_buffer); push(linea)
+        } else if (include_false) {
+          # Chunk include=FALSE: se ejecuta (por eso su estado ya se ha
+          # fusionado arriba en contenedores/tentativos globales), pero
+          # NADA de su salida aparece en el HTML. Por tanto no debe
+          # consumir numeración ni recibir etiquetas.
+          chunk_limpio <- quitar_todos_captions(chunk_buffer)
+          push(chunk_header); push(chunk_limpio); push(linea)
+          registro <- c(registro, sprintf(
+            "  (include=FALSE, chunk linea %d) - sin numerar",
+            i - length(chunk_buffer) - 1L))
         } else if (length(info$secuencia) == 0L) {
           # Chunk eval=TRUE pero sin tablas/figuras directas detectadas.
           # PUEDE contener definiciones de funciones cuyos kables se
