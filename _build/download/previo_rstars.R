@@ -13,7 +13,7 @@ library (knitr)
 library (kableExtra)
 library (moments) # paquete necesario para calcular la curtosis.
 library (patchwork)
-library (GGally) # Cáculo de matriz de correlaciones.
+library (GGally) # Cálculo de matriz de correlaciones.
 
 # Paquete MATrstars: funciones auxiliares del libro R-Stars.
 # Contiene, entre otras, la función kable_rstars(), que utilizaremos por
@@ -262,8 +262,8 @@ estadisticos <- muestra_so %>% summarise( Media = mean(RENECO),
 # Mostrar estadisticos
 estadisticos %>%
   kable_rstars(caption   = "Principales Estadísticos de la Rentabilidad Económica",
-               col.names = c("Media", "Mediana",
-                             "Desviación Típica", "Valor mínimo",
+               col.names = c("Media", "Desviación Típica",
+                             "Valor mínimo", "Mediana",
                              "Valor Máximo", "C. Asimetría Fisher",
                              "C. Curtosis Fisher"),
                digits    = c(2, 2, 2, 2, 2, 2, 2))
@@ -283,7 +283,6 @@ g4
 
 shapiro.test(x = muestra_so$RENECO)
 
-## Resumen gráfico
 ## Resumen gráfico
 
 resumen <- (g1 | g2)/(g3 | g4)

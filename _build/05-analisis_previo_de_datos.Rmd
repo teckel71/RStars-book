@@ -7,21 +7,21 @@ options(matrstars.suppress_caption = TRUE)
 ![](figuras/05%20la%20piloto.jpg){width="100%"}
 
 ::: {style="text-align: center;"}
-**Figura 5.1.** [Comandante de rogue one freight supervisando los datos de travesía.]{.smallcaps}
+**Figura 5.1.** [Comandante de *Rogue One Freight* supervisando los datos de travesía.]{.smallcaps}
 :::
 
 
 ## ![](figuras/book.svg){.hicon}![](figuras/pie-chart.svg){.hicon} Introducción.
 
-Antes de la aplicación de técnicas complejas que permitan extraer de los datos conclusiones relevantes, es necesario realizar unas **tareas previas** destinadas a conseguir dos objetivos:
+Antes de aplicar técnicas complejas que nos permitan extraer conclusiones relevantes, conviene detenerse en unas **tareas previas** que persiguen dos objetivos:
 
 -   **Preparar nuestros datos** para que puedan ser procesados correctamente sin provocar distorsiones en los resultados. En especial, hay dos puntos clave: el tratamiento de los datos faltantes (***missing values***) y de los casos atípicos o ***outliers***.
 
--   Obtener una **visión inicial de la información** que esconden los datos, fundamentalmente en cuanto a las medidas básicas que caracterizan la distribución de frecuencias de las variables en las que se estructuran estos, y, en el caso de contar con más de una variable, de la relación estadística que existe entre ellas.
+-   Obtener una **visión inicial de la información** que esconden los datos: las medidas básicas que caracterizan la distribución de frecuencias de cada variable y, cuando manejamos más de una, la relación estadística que existe entre ellas.
 
-Además, es preciso tener en cuenta que, usualmente, es conveniente que estos rasgos iniciales que caracterizan a nuestra muestra o población sean plasmados de un modo **visualmente amigable**, claro y conciso.
+Conviene además que esos rasgos iniciales de nuestra muestra o población se presenten de un modo **visualmente amigable**, claro y conciso. Un buen análisis previo que nadie entiende sirve de bien poco.
 
-En esta práctica, por medio de un ejemplo basado en una base de datos de las empresas dedicadas al transporte de mercancías interestelar, se mostrarán una serie de buenas prácticas y análisis básicos útiles a la hora de preparar y analizar inicialmente nuestro conjunto de datos.
+A lo largo de esta práctica, y sobre un ejemplo basado en una base de datos de empresas dedicadas al transporte interestelar de mercancías, recorreremos una serie de buenas prácticas y de análisis básicos con los que preparar y explorar cualquier conjunto de datos.
 
 ## ![](figuras/star.svg){.hicon} Encargo de la ARTI: auditoría sectorial.
 
@@ -33,17 +33,17 @@ Mara Qyà plantea dos preguntas concretas:
 
 2. **¿Cómo se relacionan entre sí los principales indicadores financieros** —rentabilidad, tamaño, margen y resultado—, y hay empresas que destaquen como atípicas cuando se examinan todas estas dimensiones a la vez? → Para ello, ampliaremos el análisis a cuatro variables: **RENECO**, **ACTIVO**, **MARGEN** y **RES**.
 
-Antes de responder, Mara Qyà exige que los datos estén **depurados**: sin valores faltantes que distorsionen los resultados, y con una decisión razonada sobre los posibles *outliers*. Además, quiere gráficos claros y medidas concretas. Vamos a ello.
+Antes de responder, Mara Qyà exige que los datos estén **depurados**: sin valores faltantes que distorsionen los resultados y con una decisión razonada sobre los posibles *outliers*. Quiere, además, gráficos claros y medidas concretas. Manos a la obra.
 
-Vamos a suponer que trabajamos dentro de un **proyecto** que hemos creado previamente, de nombre "explora". Dentro de la carpeta del proyecto guardaremos el *script* llamado "previo_rstars.R", y el archivo de Microsoft® Excel® llamado "interestelar_100.xlsx". Para descargar los ficheros, ve al final de este capítulo y pincha en los enlaces.
+Supongamos que trabajamos dentro del **proyecto** "explora" que creamos anteriormente. En su carpeta guardaremos el *script* "previo_rstars.R" y el archivo de Microsoft® Excel® "interestelar_100.xlsx", cuyos enlaces de descarga figuran en la sección final del capítulo.
 
-Si abrimos "interestelar_100.xlsx", comprobaremos que se compone de tres hojas. La primera muestra un aviso sobre el uso exclusivo que se debe dar a los datos incorporados; la segunda recoge la descripción de las variables consideradas; y la tercera (hoja "Datos") guarda los datos que debemos **importar** desde R-Studio. Estos datos se corresponden con diferentes variables económico-financieras y de diversa índole de una muestra de empresas que se dedican al transporte de mercancías interestelar.
+Si abrimos "interestelar_100.xlsx", comprobaremos que consta de tres hojas: la primera recoge un aviso sobre el uso exclusivo que debe darse a los datos; la segunda describe las variables consideradas; y la tercera (hoja "Datos") contiene la información que vamos a **importar** desde RStudio. Se trata de variables económico-financieras y de otra índole, referidas a una muestra de empresas dedicadas al transporte interestelar de mercancías.
 
-Es muy importante observar que, en la hoja de cálculo, existen variables con datos faltantes (*missing values*). En concreto, podemos identificar estas faltas de dato por la presencia de celdas en blanco; pero también por la existencia de celdas con el texto, por ejemplo, "n.d." (no dato). Así, es clave identificar el modo en que quedan recogidos los datos faltantes en la hoja de cálculo, ya que **tendremos que aplicar código adicional** en el comando de importación de R **para que estos casos queden correctamente recogidos como *NAs*** (*not available*).
+Merece la pena fijarse en un detalle: la hoja de cálculo contiene variables con datos faltantes (*missing values*). Unos se reconocen por la presencia de celdas en blanco, pero otros aparecen como celdas con el texto "n.d." (no disponible). Identificar cómo se anota cada ausencia resulta clave, porque **tendremos que añadir código adicional** a la instrucción de importación **para que R los registre correctamente como *NAs*** (*not available*).
 
-Cerraremos el archivo de Microsoft® Excel®, "interestelar_100.xlsx" y volveremos a RStudio. Después, abriremos nuestro *script* "previo_rstars.R" con `File → Open File…` Este *script* contiene el código que vamos a ir ejecutando en la práctica.
+Cerremos el archivo "interestelar_100.xlsx" y volvamos a RStudio para abrir el *script* "previo_rstars.R" con `File → Open File…` (o haciendo clic sobre él en la ventana inferior derecha, pestaña "Files"). Este *script* contiene el código que iremos ejecutando a lo largo de la práctica.
 
-La primera línea / instrucción en el *script* es:
+Su primera instrucción es:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 ## Tratamiento y análisis previo de datos.
@@ -52,9 +52,9 @@ La primera línea / instrucción en el *script* es:
 rm(list = ls())
 ```
 
-La instrucción tiene como objeto limpiar el *Global Environment* (memoria) de objetos de anteriores sesiones de trabajo.
+Esta instrucción persigue limpiar el *Global Environment* (la memoria) de los objetos que hayan quedado de sesiones de trabajo anteriores.
 
-Luego, si queremos despreocuparnos de la carga de los paquetes que utilizaremos en el script, podemos activarlos ahora:
+A continuación, si preferimos despreocuparnos más adelante de la carga de los paquetes que necesitaremos, podemos activarlos todos de una vez:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 # Cargando paquetes
@@ -88,7 +88,7 @@ library(MATrstars)
 :::
 
 
-Para importar los datos que hay en la hoja "Datos" del archivo de Microsoft® Excel® y hacer una primera inspección de las variables que contiene, ejecutaremos el código:
+Para importar los datos alojados en la hoja "Datos" del archivo de Microsoft® Excel® y echar un primer vistazo a las variables que contiene, ejecutaremos:
 
 ```{r, eval=FALSE, echo=TRUE, message=FALSE}
 ## DATOS
@@ -114,9 +114,9 @@ interestelar_100 <- read_excel("interestelar_100.xlsx",
 interestelar_100 <- data.frame(interestelar_100, row.names = 1)
 ```
 
-Por defecto, R considera las celdas en blanco de la hoja de cálculo como NAs; pero hemos de advertirle del resto de posibilidades que existen en la hoja para comunicar que falta un dato determinado, como ya se ha comentado. Para ello, hemos añadido en la función `read_excel()` el argumento `na =`, que recoge los contenidos de celda de la hoja de cálculo que indican que falta el dato en cuestión.
+R interpreta por defecto como NAs las celdas vacías de la hoja de cálculo, pero, como acabamos de ver, esa no es la única manera de señalar una ausencia. De ahí que hayamos añadido a `read_excel()` el argumento `na =`, que recoge los contenidos de celda que deben traducirse como dato faltante.
 
-Por otro lado, R ha tomado la primera columna como una variable categórica. En realidad, esta columna no es una variable, sino que está formada por los nombres de los diferentes casos u observaciones. Para evitar que R vea la columna de los nombres de los casos como una variable más, hemos redefinido nuestro *data frame* diciéndole que tome esa primera columna como el conjunto de los *nombres* de los casos (filas).
+Por otro lado, R ha interpretado la primera columna como una variable categórica cuando, en realidad, no es una variable, sino el nombre de cada caso u observación. Para evitarlo, hemos redefinido el *data frame* indicándole que tome esa columna como los *nombres de las filas*.
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
 # visualizando el data frame de modo elegante con {gtExtras}
@@ -129,22 +129,22 @@ datos_df_graph
 :::
 
 
-En la "tabla" de variables obtenida, se comprueba que 24 variables son métricas, mientras que 4 son categóricas.
+La "tabla" de variables resultante nos confirma que 24 de ellas son métricas y 4, categóricas.
 
 ## ![](figuras/book.svg){.hicon}![](figuras/pie-chart.svg){.hicon} Análisis de una variable.
 
 ### ![](figuras/key.svg){.hicon} Buscando *missing values* y *outliers*.
 
-Vamos a suponer que la variable que queremos estudiar es la variable *Rentabilidad Económica* (RENECO), que nos permitirá responder a la primera pregunta de Mara Qyà. Es una buena práctica el trabajar con una copia del *data frame* original para mantener su integridad:
+Centrémonos en la *Rentabilidad Económica* (RENECO), la variable que nos permitirá responder a la primera pregunta de Mara Qyà. Como toda buena práctica aconseja, trabajaremos sobre una copia del *data frame* original para preservar su integridad:
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, message=FALSE}
 # Copia de df
 muestra <- interestelar_100
 ```
 
-La primera acción que debe realizarse es comprobar que todos los casos (empresas) tienen su correspondiente dato o valor para la variable (RENECO), es decir, que no existen **valores perdidos o *missing values***.
+Lo primero es comprobar que todas las empresas tienen su correspondiente valor de RENECO, es decir, que no existen **valores perdidos o *missing values***.
 
-Para tener una idea general, se puede utilizar la función `vis_miss()` del paquete `{visdat}`, que localizará gráficamente los *missing values* de las diferentes variables, y calculará el porcentaje de casos que supone, con respecto al total de observaciones. Para limitar el análisis solo a la variable RENECO, filtraremos de *data frame* con la función `select()` del paquete `{dplyr}`:
+Para hacernos una idea general recurriremos a la función `vis_miss()` del paquete `{visdat}`, que localiza gráficamente los *missing values* de cada variable y calcula qué porcentaje representan sobre el total de observaciones. Como aquí solo nos interesa RENECO, acotaremos antes el *data frame* con la función `select()` del paquete `{dplyr}`:
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, message=FALSE}
 ## Analisis de una variable.
@@ -172,11 +172,11 @@ muestra %>%
 
 La explicación detallada del código es la siguiente:
 
--   **`muestra %>%:`** Usa el *pipe* de **dplyr** para encadenar operaciones de forma legible.
+-   **`muestra %>%`**: el *pipe* de `{dplyr}` encadena las operaciones de forma legible.
 
--   **`select(RENECO):`** Te quedas solo con la columna `RENECO`. Así, el gráfico se centra en esa variable (una sola columna en la visualización).
+-   **`select(RENECO)`**: nos quedamos únicamente con la columna `RENECO`, de modo que el gráfico se centre en esa variable y muestre una sola columna.
 
--   **`vis_miss():`** Función del paquete **visdat** que crea un mapa de celdas **Present/Missing**:
+-   **`vis_miss()`**: función del paquete `{visdat}` que dibuja un mapa de celdas **Present/Missing**:
 
     -   Eje **Y** = observaciones (filas del data frame).
 
@@ -184,30 +184,30 @@ La explicación detallada del código es la siguiente:
 
     -   Cada celda indica si el valor está presente o es NA.
 
--   **`labs(...):`**
+-   **`labs(...)`**:
 
     -   `title` y `subtitle`: títulos del gráfico.
 
     -   `y = "Observación"`: etiqueta del eje Y.
 
-    -   `fill = NULL`: **quita el título de la leyenda** (por defecto aparecería algo tipo “valueType” o similar).
+    -   `fill = NULL`: **suprime el título de la leyenda**, que por defecto mostraría una etiqueta poco informativa.
 
--   **`scale_fill_manual(...):`** Personaliza los colores y las etiquetas de la leyenda:
+-   **`scale_fill_manual(...)`**: personaliza los colores y las etiquetas de la leyenda:
 
-    -   `values = c("TRUE" = "red", "FALSE" = "grey"):` En `vis_miss`, internamente se codifica si falta el dato (`TRUE`) o no (`FALSE`). Aquí dices: rojo para `TRUE` (hay NA) y gris para `FALSE` (dato presente).
+    -   `values = c("TRUE" = "red", "FALSE" = "grey")`: internamente, `vis_miss()` codifica con `TRUE` la ausencia de dato y con `FALSE` su presencia. Aquí pedimos rojo para `TRUE` y gris para `FALSE`.
 
-    -   `labels = c("TRUE" = "NA", "FALSE" = "Presente"):` Cambias el texto mostrado en la leyenda: en lugar de `TRUE/FALSE`, se verá NA/Presente.
+    -   `labels = c("TRUE" = "NA", "FALSE" = "Presente")`: sustituye el texto de la leyenda, de modo que en lugar de `TRUE/FALSE` leamos NA/Presente.
 
--   **`theme(plot.title = element_text(face = "bold", size = 14)):`** Pone el título en negrita y con tamaño 14.
+-   **`theme(plot.title = element_text(face = "bold", size = 14))`**: pone el título en negrita y a tamaño 14.
 
-Puede observarse cómo, en el caso concreto de la variable RENECO, un 1% (aproximadamente) de los casos no tienen dato (es decir, uno de los 104 casos). Para localizar el caso concreto, recurriremos a las herramientas de manejo de *data frames* del paquete `{dplyr}`. En concreto, filtraremos los casos para detectar aquellos que carecen de valor en la variable RENECO:
+El gráfico revela que, en RENECO, aproximadamente un 1% de los casos carece de dato, es decir, uno de los 104. Para saber de cuál se trata recurriremos de nuevo a `{dplyr}`, filtrando las empresas que no tienen valor en esa variable:
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE}
 # Mostrar casos concretos de NAs
 muestra %>% filter(is.na(RENECO)) %>% select(RENECO)
 ```
 
-La función `is.na()` comprueba si, en la posición correspondiente a una fila o caso, para la variable escrita en el argumento; hay o no un dato o valor. Como resultado se obtiene una empresa, para la que se puede corroborar que no hay valor para la variable RENECO:
+La función `is.na()` responde, caso por caso, a una pregunta muy simple: ¿falta el dato de esta variable en esta fila? El filtro devuelve una única empresa, en la que efectivamente no consta valor alguno de RENECO:
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 # Hacer copia del df y mostrar casos concretos de NAs
@@ -232,11 +232,13 @@ En nuestro ejemplo, dado que los *missing values* representan un porcentaje muy 
 muestra <- muestra %>% filter(! is.na(RENECO))
 ```
 
-El operador **`!`** significa "no".
+El operador **`!`** significa "no", de manera que `!is.na(RENECO)` se lee como "que RENECO no sea un dato faltante".
 
-Podemos comprobar cómo en el *Global Environment* aparece el *data frame* "muestra" con un caso menos (103).
+En el *Global Environment* podemos comprobar que el *data frame* "muestra" tiene ahora un caso menos: 103.
 
-Como se puede apreciar, el procedimiento de detección y eliminación de *missing values* requiere una **secuencia recurrente** de instrucciones: una llamada a `vis_miss()` con `labs()`, `scale_fill_manual()` y `theme()` para el gráfico; un `filter(is.na(...))` para listar los casos afectados; y un `filter(!is.na(...))` para eliminarlos. Ese mismo bloque —con muy ligeras variaciones— se repite cada vez que se aborda esta tarea, tanto en el resto de este capítulo como en los capítulos siguientes. Además, el gráfico de `vis_miss()` presenta un pequeño problema estético cuando el número de variables analizadas es reducido: los nombres de las variables aparecen, por defecto, muy alejados del panel superior. Para aligerar los *scripts* del libro sin renunciar a la uniformidad de la presentación —y de paso corregir ese detalle estético—, el paquete `{MATrstars}` incorpora la función auxiliar `explora_na()`. Esta función encapsula todo el bloque anterior (gráfico + listado de NAs + eliminación opcional), coloca correctamente los nombres de variable en el gráfico y presenta la tabla de casos afectados con el estilo tipográfico habitual del libro (mediante `kable_rstars()`, internamente).
+Detengámonos un momento en lo que acabamos de hacer. La detección y eliminación de *missing values* exige una **secuencia recurrente** de instrucciones: una llamada a `vis_miss()` acompañada de `labs()`, `scale_fill_manual()` y `theme()` para el gráfico; un `filter(is.na(...))` para listar los casos afectados; y un `filter(!is.na(...))` para descartarlos. Ese mismo bloque, con variaciones mínimas, reaparecerá cada vez que abordemos esta tarea, tanto en lo que resta de capítulo como en los siguientes.
+
+El gráfico de `vis_miss()` arrastra además un pequeño defecto estético cuando analizamos pocas variables: los nombres aparecen, por defecto, muy despegados del panel superior. Para aligerar los *scripts* del libro sin renunciar a la uniformidad de la presentación —y, de paso, corregir ese detalle—, el paquete `{MATrstars}` incorpora la función auxiliar `explora_na()`, que encapsula todo el bloque anterior (gráfico, listado de NAs y eliminación opcional), coloca correctamente los nombres de variable y presenta la tabla de casos afectados con el estilo tipográfico habitual del libro, mediante `kable_rstars()`.
 
 De este modo, todo el bloque de código anterior podría haberse escrito de forma mucho más compacta como:
 
@@ -250,7 +252,7 @@ muestra <- explora_na(
 )
 ```
 
-Como en este punto ya hemos eliminado el caso con NA de "muestra", vamos a comprobar el funcionamiento de la función sobre una **copia limpia** del *data frame* original que contenga únicamente la variable RENECO (a esa copia auxiliar la llamaremos "muestra_demo"). El resultado será el mismo que se obtuvo con el bloque manual, pero presentado con las mejoras estéticas comentadas:
+Como a estas alturas ya hemos eliminado de "muestra" el caso con NA, comprobaremos el funcionamiento de la función sobre una **copia limpia** del *data frame* original que contenga solo la variable RENECO; la llamaremos "muestra_demo". El resultado coincidirá con el del bloque manual, pero presentado con las mejoras comentadas:
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE}
 muestra_demo <- select(interestelar_100, RENECO)
@@ -279,7 +281,7 @@ rm(muestra_demo)
 
 **A partir de aquí, y en los capítulos siguientes, el tratamiento de *missing values* se realizará con `explora_na()`**. La ficha completa de la función —argumentos, valores por defecto, ejemplos de uso y enlace al código fuente en GitHub— puede consultarse en el **Apéndice: Funciones auxiliares del paquete `{MATrstars}`** al final del libro.
 
-Una vez tratados los casos con valores perdidos o *missing values*, **conviene detectar la posible presencia en la muestra de *outliers*** o casos atípicos, que pudieran desvirtuar los resultados derivados de ciertos análisis. Al trabajar con una sola variable métrica (la rentabilidad económica, RENECO), podemos realizar esta tarea representando gráficamente la variable mediante un ***boxplot*** o *gráfico de caja*. Aplicaremos, por ejemplo, el código siguiente, que utiliza la gramática del paquete `{ggplot2}`:
+Resueltos los valores perdidos, **conviene rastrear la posible presencia de *outliers*** o casos atípicos, capaces de desvirtuar los resultados de ciertos análisis. Como trabajamos con una sola variable métrica, la rentabilidad económica, nos basta con representarla mediante un ***box-plot*** o gráfico de caja. Recurriremos para ello a la gramática de `{ggplot2}`:
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE}
 ## Localizando outliers
@@ -308,9 +310,9 @@ ggplot(data = muestra, aes(y = RENECO)) +
 :::
 
 
-La "caja" contiene el 50% de los valores de la variable que toman los casos centrales (los que van del primer cuartil al tercero, cuya diferencia se llama *rango intercuartílico*), y contiene una línea horizontal que es la mediana (segundo cuartil). Por arriba sobresale un segmento que llega al mayor valor de la variable que toma algún caso y que no llega a ser atípico; y por debajo de la caja otro segmento que llega al menor valor de la variable que toma algún caso y que no llega a ser atípico. Los casos atípicos o *outliers* son aquellos que toman valores que se alejan más de 1.5 veces del rango intercuartílico (altura de la caja) del tercer cuartil, por arriba; o del primer cuartil, por abajo. Se registran mediante puntos.
+Recordemos brevemente cómo se lee este gráfico, que ya conocemos del capítulo 4. La "caja" alberga el 50% central de los casos, los comprendidos entre el primer y el tercer cuartil, cuya diferencia es el *rango intercuartílico*; la línea horizontal que la atraviesa es la mediana. De la caja salen dos segmentos o "bigotes": el superior alcanza el mayor valor que no llega a considerarse atípico y el inferior, el menor. Los casos atípicos u *outliers* son precisamente los que quedan más allá, a más de **1,5 veces** el rango intercuartílico por encima del tercer cuartil o por debajo del primero, y se dibujan como puntos sueltos.
 
-En nuestro caso, el *boxplot* ratifica la existencia de dos casos atípicos. Para identificar esos dos casos concretos, podemos recurrir al paquete `{dplyr}`, y **establecer un filtro** con el siguiente código:
+En nuestro caso, el *box-plot* delata dos empresas atípicas. Para identificarlas recurriremos de nuevo a `{dplyr}` y **estableceremos un filtro**:
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE}
 # Mostrar casos concretos de outliers
@@ -323,7 +325,7 @@ muestra %>%
   select(RENECO)
 ```
 
-En el código anterior, las dos primeras filas calculan los cuartiles primero (Q1) y tercero (Q3) mediante la función `quantile()`. En esta función, es preciso poner como segundo argumento la proporción de casos que van a quedar por debajo del "cuantil" en cuestión (por ejemplo, el primer cuartil se calcula poniendo 0.25, dado que deja por debajo al 25% de casos con menor valor en la variable). Luego se filtran los *outliers* mediante la función `filter()` de `{dplyr}` , calculados como aquellos casos con valores de RENECO mayores que Q3 más 1,5 veces el rango intercuartílico de la variable; o menores que Q1 menos 1,5 veces dicho rango intercuartílico. Para calcular el rango intercuartílico se recurre a la función `IQR()`. Finalmente, con `select()`, se muestran los casos en la consola de R-Studio:
+Las dos primeras líneas calculan el primer cuartil (Q1) y el tercero (Q3) con la función `quantile()`, a la que se pasa como segundo argumento la proporción de casos que deben quedar por debajo del cuantil buscado: `0.25` para el primer cuartil, puesto que deja por debajo al 25% de empresas con menor rentabilidad. Después, `filter()` retiene los *outliers*, definidos como los casos cuyo RENECO supera a Q3 más 1,5 veces el rango intercuartílico, o bien no alcanza a Q1 menos esa misma cantidad; el rango intercuartílico lo proporciona la función `IQR()`. Por último, `select()` muestra el resultado en la consola:
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE}
 # Mostrar casos concretos de outliers
@@ -340,9 +342,9 @@ Los casos atípicos o *outliers* en la variable RENECO son *Jovian Logistics* y 
 
 Como ocurría con los *missing values*, el **tratamiento de los *outliers*** depende de la información que se tenga, y del enfoque que se quiera seguir en la aplicación de las diferentes técnicas. Es un tema que a veces resulta **complejo**, y que no está exento de divergencias en la opinión de los investigadores. Las principales alternativas son:
 
--   **Eliminar el caso**: adecuado cuando son pocos casos, representan una proporción reducida de la muestra, y se sospecha que el valor extremo se debe a un error de medida o registro. Es la opción que aplicaremos en este libro.
+-   **Eliminar el caso**: adecuado cuando son pocos, representan una proporción reducida de la muestra y se sospecha que el valor extremo obedece a un error de medida o de registro. Es la opción que adoptaremos en este libro.
 
--   **Winsorizar**: sustituir los valores extremos por el valor del percentil 5 (o 95), o por el límite del bigote del boxplot. El caso se conserva, pero su influencia queda acotada.
+-   **Winsorizar**: sustituir los valores extremos por el del percentil 5 (o el 95), o por el límite del bigote del *box-plot*. El caso se conserva, pero su influencia queda acotada.
 
 -   **Mantener y documentar**: a veces el *outlier* es un dato real y relevante (una empresa genuinamente excepcional). Eliminarlo supondría perder información legítima. En estos casos, conviene reportar los resultados con y sin *outliers* para valorar su impacto.
 
@@ -350,7 +352,7 @@ Como ocurría con los *missing values*, el **tratamiento de los *outliers*** dep
 
 La decisión depende en última instancia del contexto del análisis. Al final de este capítulo veremos, precisamente, cómo la presencia o ausencia de *outliers* puede alterar las correlaciones entre variables, lo que subraya la importancia de esta decisión.
 
-En nuestro ejemplo, dado que los *outliers* son solo dos y no representan una gran proporción de la muestra, **eliminaremos estas dos empresas con comportamiento atípico** en la rentabilidad económica (RENECO), a fin de que su presencia en la muestra **no distorsione los resultados** en la aplicación posterior de ciertas técnicas (por ejemplo, un ANOVA o un análisis de regresión). Podemos hacerlo creando un nuevo *data frame* a partir de "muestra"; pero sin esos dos casos. Ese nuevo *data frame* se llamará, por ejemplo, "muestra_so":
+En nuestro ejemplo, dado que los *outliers* son solo dos y apenas representan una fracción de la muestra, **prescindiremos de esas dos empresas de comportamiento atípico** para que **no distorsionen los resultados** de las técnicas que apliquemos después, como un ANOVA o un análisis de regresión. Bastará con crear a partir de "muestra" un nuevo *data frame* sin esos dos casos, al que llamaremos "muestra_so":
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE}
 # Eliminar outliers
@@ -359,11 +361,11 @@ muestra_so <- muestra %>%
                      RENECO >= Q1 - 1.5*IQR(RENECO))
 ```
 
-Es importante observar que, en el código de la función `filter()`, las desigualdades deben cambiar, así como el operador "**\|**" por el operador "**&**". En el *Global Environment* podemos comprobar cómo el *data frame* "muestra_so" posee el mismo número de variables que el *data frame* "muestra"; pero con dos observaciones o casos menos (101).
+Conviene reparar en que, dentro de `filter()`, ahora pedimos justo lo contrario que antes: por eso hay que invertir el sentido de las desigualdades y sustituir el operador "**\|**" por "**&**". En el *Global Environment* comprobamos que "muestra_so" conserva las mismas variables que "muestra", pero con dos casos menos: 101.
 
-Como ocurría con los *missing values*, el procedimiento de detección y eliminación de *outliers* se repite en muchos capítulos siguientes: un *boxplot* con `ggplot()` + cálculo de Q1 y Q3 con `quantile()` + `filter()` para listar los casos + `filter()` para eliminarlos. Para aligerar el código, el paquete `{MATrstars}` incluye la función auxiliar `explora_outliers()`, que encapsula todo el bloque anterior en una sola llamada y presenta la tabla de casos afectados con el estilo tipográfico habitual del libro (mediante `kable_rstars()`, internamente).
+Como sucedía con los *missing values*, este procedimiento reaparecerá una y otra vez en los capítulos siguientes: un *box-plot* con `ggplot()`, el cálculo de Q1 y Q3 con `quantile()`, un `filter()` para listar los casos y otro para eliminarlos. Para aligerar el código, el paquete `{MATrstars}` incluye la función auxiliar `explora_outliers()`, que reúne todo ese bloque en una sola llamada y presenta la tabla de casos afectados con el estilo tipográfico habitual del libro, mediante `kable_rstars()`.
 
-Además, la función incorpora una mejora visual importante: cuando los *outliers* son tan extremos que "aplastan" la caja del *boxplot* hasta hacerla ilegible, `explora_outliers()` activa automáticamente una **escala pseudologarítmica** en el eje Y. Esta transformación (`pseudo_log` en `{ggplot2}`, activable manualmente con `scale_y_continuous(trans = "pseudo_log")`) comprime los valores grandes sin alterar los pequeños, y a diferencia del logaritmo puro, admite valores cero y negativos. La función detecta cuándo es necesario aplicarla comparando el rango de los datos con el rango intercuartílico: si la diferencia es muy acusada, aplica la transformación automáticamente; en caso contrario, mantiene la escala lineal habitual.
+Además, la función incorpora una mejora visual importante: cuando los *outliers* son tan extremos que "aplastan" la caja del *box-plot* hasta hacerla ilegible, `explora_outliers()` activa automáticamente una **escala pseudologarítmica** en el eje Y. Esta transformación (`pseudo_log` en `{ggplot2}`, activable manualmente con `scale_y_continuous(trans = "pseudo_log")`) comprime los valores grandes sin alterar los pequeños, y a diferencia del logaritmo puro, admite valores cero y negativos. La función detecta cuándo es necesario aplicarla comparando el rango de los datos con el rango intercuartílico: si la diferencia es muy acusada, aplica la transformación automáticamente; en caso contrario, mantiene la escala lineal habitual.
 
 De este modo, todo el bloque de código anterior podría haberse escrito de forma mucho más compacta como:
 
@@ -377,7 +379,7 @@ muestra_so <- explora_outliers(
 )
 ```
 
-Como en este punto ya hemos eliminado los *outliers* de "muestra_so", vamos a comprobar el funcionamiento de la función sobre una **copia limpia** del *data frame* original que contenga únicamente la variable RENECO (a esa copia auxiliar la llamaremos "muestra_demo"). Aplicamos primero `explora_na()` para descartar los NAs, y a continuación `explora_outliers()`. El resultado será el mismo que se obtuvo con el bloque manual, pero presentado con las mejoras estéticas comentadas:
+Como "muestra_so" ya viene depurada, volveremos a apoyarnos en una **copia limpia** del *data frame* original con la sola variable RENECO, de nuevo bajo el nombre "muestra_demo". Aplicamos primero `explora_na()` para descartar los NAs y después `explora_outliers()`. El resultado coincidirá con el del bloque manual, ahora con las mejoras comentadas:
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE}
 muestra_demo <- select(interestelar_100, RENECO)
@@ -420,9 +422,9 @@ Más adelante, tras trabajar con varias variables simultáneamente, veremos cóm
 
 ### ![](figuras/key.svg){.hicon} Descripción de una variable.
 
-Una vez que se tiene preparada la base de datos, con un tratamiento adecuado de los *missing values* y de los *outliers,* y **antes** de proceder a la aplicación de una técnica adecuada según los objetivos perseguidos en el estudio; suelen presentarse una serie de **gráficos** básicos y **medidas** descriptivas que proporcionan una **idea inicial de la estructura** del sector para la variable o variables analizadas. Nos referimos a medidas y/o gráficos de posición, dispersión y forma (asimetría y curtosis).
+Con la base de datos ya depurada de *missing values* y *outliers*, y **antes** de aplicar la técnica que corresponda a los objetivos del estudio, se acostumbra a presentar una batería de **gráficos** básicos y **medidas** descriptivas que ofrecen una **idea inicial de la estructura** del sector en la variable analizada. Hablamos de medidas y gráficos de posición, de dispersión y de forma, esto es, de asimetría y curtosis.
 
-Antes de ello, es conveniente presentar una tabla donde se recoja la distribución de frecuencias de la variable. Si son muchos los casos (en el ejemplo, 101), la distribución podría presentarse agrupada en intervalos, como ya aprendimos en el capítulo 4. Aquí la generamos directamente con `kable_rstars()`, la función de presentación tabular del paquete `{MATrstars}` (que presentaremos a continuación):
+Conviene abrir ese recorrido con una tabla que recoja la distribución de frecuencias de la variable. Cuando los casos son numerosos —101 en nuestro ejemplo—, lo razonable es agruparlos en intervalos, tal como aprendimos en el capítulo 4. Aquí construiremos la tabla con `kable_rstars()`, la función de presentación tabular del paquete `{MATrstars}`, de la que hablaremos enseguida:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE}
 # Tabla de datos (distribución de frecuencias agrupadas en intervalos)
@@ -455,7 +457,7 @@ conteo_intervalos_df %>%
 :::
 
 
-En el código anterior, `kable_rstars()` pertenece al paquete `{MATrstars}`, un pequeño **paquete propio** de R que reúne las **funciones auxiliares** utilizadas a lo largo del libro. No está en CRAN; se distribuye a través de GitHub ([https://github.com/teckel71/MATrstars](https://github.com/teckel71/MATrstars)) y se instala automáticamente la primera vez que se ejecuta el bloque siguiente:
+La función `kable_rstars()` pertenece a `{MATrstars}`, un pequeño **paquete propio** que reúne las **funciones auxiliares** empleadas a lo largo del libro. No está alojado en CRAN, sino en GitHub ([https://github.com/teckel71/MATrstars](https://github.com/teckel71/MATrstars)), y se instala de forma automática la primera vez que se ejecuta el bloque siguiente:
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 # Paquete MATrstars: funciones auxiliares del libro R-Stars.
@@ -468,11 +470,11 @@ library(MATrstars)
 
 `kable_rstars()` es un **envoltorio** de `kable()` y `kable_styling()` que aplica automáticamente los ajustes tipográficos habituales del libro: encabezado en negrita centrado, filas alternas rayadas, bordes discretos, cuerpo centrado, fuente de 11 puntos, punto como separador decimal y notación científica desactivada. El usuario solo indica lo específico de cada tabla (`caption`, `col.names`, `digits`); el resto está preconfigurado.
 
-**A partir de aquí, la práctica totalidad de las tablas del libro se generarán con `kable_rstars()`**. La ficha completa puede consultarse en el **Apéndice: Funciones auxiliares del paquete `MATrstars`** al final del libro.
+**A partir de aquí, la práctica totalidad de las tablas del libro se generarán con `kable_rstars()`**. La ficha completa puede consultarse en el **Apéndice: Funciones auxiliares del paquete `{MATrstars}`** al final del libro.
 
-En conjunto, la **rentabilidad económica** de estas empresas se concentra en valores **medios–altos**: la gran mayoría se mueve en torno al 50–60%, y dos de cada cuatro intervalos centrales (47,4–53,9 y 53,9–60,3) reúnen la mayor parte de los casos. En términos prácticos, alrededor de ocho de cada diez compañías quedan entre 41% y 66,8%, lo que sugiere un sector relativamente estable, con resultados parecidos entre sí. En los extremos hay pocas: apenas un 5% presenta rentabilidades muy bajas (por debajo del 34,5%) y sólo un 2% llega a niveles muy altos (por encima del 73,2%). Económicamente, esto indica que la competencia y la eficiencia operativa tienden a “empujar” a las empresas hacia un rendimiento **razonable y sostenido**, mientras que los casos de fracaso o de éxito excepcional son **minoría**. **Primera respuesta parcial para Mara Qyà:** el sector muestra una rentabilidad bastante homogénea, pero aún necesitamos confirmar esta impresión con las medidas descriptivas y comprobar si existen anomalías.
+La lectura de la tabla es clara: la **rentabilidad económica** de estas empresas se concentra en valores **medios-altos**, en torno al 50-60%, y son los dos intervalos centrales (47,4-53,9 y 53,9-60,3) los que reúnen la mayor parte de los casos. Alrededor de ocho de cada diez compañías quedan entre el 41% y el 66,8%, lo que apunta a un sector relativamente estable, con resultados parecidos entre sí. Los extremos están poco poblados: apenas un 5% presenta rentabilidades por debajo del 34,5% y solo un 2% supera el 73,2%. En términos económicos, la competencia y la eficiencia operativa parecen empujar a las empresas hacia un rendimiento **razonable y sostenido**, de modo que tanto el fracaso como el éxito excepcional resultan **minoritarios**. **Primera respuesta parcial para Mara Qyà:** el sector exhibe una rentabilidad bastante homogénea, si bien aún debemos confirmar esta impresión con las medidas descriptivas y descartar la presencia de anomalías.
 
-Por otro lado, el **análisis gráfico** suele dar una idea atractiva e intuitiva de la estructura de la distribución de frecuencias de nuestro conjunto de casos en relación con la variable a analizar.
+El **análisis gráfico**, por su parte, ofrece una imagen mucho más intuitiva de cómo se distribuyen nuestros casos en la variable estudiada.
 
 Un gráfico fundamental es el **histograma** de la variable estudiada. Para ello, utilizaremos la gramática del paquete `{ggplot2}`:
 
@@ -502,9 +504,9 @@ g1
 :::
 
 
-En el gráfico vemos de un modo nítido la distribución de frecuencias en cuanto a la rentabilidad económica (RENECO). Se ha incorporado una línea vertical azul (mediante `geom_vline()`) para localizar la rentabilidad media. Entre otras cosas, se puede apreciar que la distribución de frecuencias es acampanada y prácticamente simétrica.
+El gráfico muestra con nitidez cómo se reparten las empresas según su rentabilidad económica. La línea vertical azul, incorporada mediante `geom_vline()`, señala la rentabilidad media. A simple vista, la distribución resulta acampanada y prácticamente simétrica.
 
-Como complemento al histograma, podemos realizar un gráfico de densidad de RENECO, al que añadiremos una curva normal con la misma media y desviación típica que nuestra distribución de frecuencias, y que se añade mediante `stat_function()` y el argumento `fun = dnorm`. Este gráfico representa la distribución de probabilidad empírica de la muestra, es una especie de histograma "suavizado". De este modo, se podrán verificar de un modo fácil algunas de las características avanzadas con la observación del histograma, como una ligera asimetría. El código es:
+Como complemento del histograma podemos dibujar un gráfico de densidad de RENECO, que no es sino una versión "suavizada" de aquel y que representa la distribución de probabilidad empírica de la muestra. Sobre él superpondremos, mediante `stat_function()` y el argumento `fun = dnorm`, una curva normal con la misma media y desviación típica que nuestros datos. La comparación entre ambas curvas permite confirmar de un vistazo los rasgos que el histograma solo dejaba intuir, como una ligera asimetría. El código es:
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE}
 g2 <-
@@ -536,7 +538,7 @@ g2
 
 La curva naranja muestra cómo se distribuye la **rentabilidad económica**: tiene forma de “campana”, con la mayoría de empresas concentradas alrededor del 50–60%. La línea vertical azul marca el valor central (media), en torno al 52%. Comparada con la curva azul de referencia (la normal), la distribución real es muy parecida, aunque algo más ancha y con un ligero peso extra en rentabilidades algo por debajo del centro; en el extremo alto hay menos casos de lo que predeciría una campana perfecta. En términos económicos: el sector muestra un rendimiento **bastante estable** y similar entre compañías, con **pocas** muy rezagadas o extraordinariamente rentables.
 
-Un tercer gráfico útil es el ***box-plot*** una vez se eliminaron los casos *outliers*, con la incorporación de los valores que toman los casos que componen la muestra, para lo cual se utiliza el `geom_jitter`:
+Un tercer gráfico útil es el ***box-plot***, construido ya sobre la muestra sin *outliers* y enriquecido con los valores individuales de cada empresa, que incorporamos con `geom_jitter()`:
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE}
 g3 <-
@@ -563,9 +565,9 @@ g3
 :::
 
 
-El *box-plot* confirma que la rentabilidad económica está bastante concentrada en la zona central. La **mediana** ronda el **50%** (línea dentro de la caja) y la mitad de las empresas cae aproximadamente entre 46% y 59% (altura de la caja, IQR), lo que sugiere variabilidad moderada. El rombo azul (media) está muy cerca de la mediana, indicando casi simetría. Los bigotes se extienden hacia valores en torno a 35–70% y aparecen pocos *outliers* tanto por abajo (≈30%) como por arriba (hasta ≈80%). En términos económicos: la mayoría de compañías rinde de forma similar y estable alrededor del 50–60%, con casos extremos poco frecuentes.
+El *box-plot* confirma que la rentabilidad económica se concentra en la zona central. La **mediana** ronda el **50%** —la línea que atraviesa la caja— y la mitad de las empresas se sitúa aproximadamente entre el 46% y el 59%, altura de la caja o rango intercuartílico, lo que denota una variabilidad moderada. El punto azul, que marca la media, queda muy próximo a la mediana, señal de una distribución casi simétrica. Los bigotes se extienden hasta valores en torno al 28% y al 80%, y ya no aparece ningún caso atípico, puesto que los dos detectados se eliminaron previamente. La nube de puntos rojos que dibuja `geom_jitter()` confirma lo esencial: la mayoría de las compañías rinde de forma parecida y estable en el entorno del 50-60%.
 
-Por otro lado, conviene tener conocimiento del valor de las principales **medidas descriptivas** (de posición, dispersión, forma) que caracterizan a la distribución de la variable a analizar. Para ello, vamos a crear un *data frame* llamado, por ejemplo, "estadisticos", que recogerá las diferentes medidas, calculadas al aplicar a la variable RENECO del *data frame* "muestra_so" la función de `{dplyr}` llamada `summarise()`. Se calcularán la media, desviación típica, valor mínimo, mediana, valor máximo, el coeficiente de asimetría de *Fisher*, y el coeficiente de apuntamiento o curtosis de *Fisher*. Precisamente, para poder calcular esta última medida, es preciso activar el paquete `{moments}`, que contiene la función `kurtosis()`. La versión del coeficiente de apuntamiento de esta función dispone como distribución perfectamente mesocúrtica el valor de 3, por lo que se le restará 3 en la versión que manejaremos para que la distribución mesocúrtica se sitúe en un coeficiente de 0. El código es:
+Conviene, además, conocer el valor de las principales **medidas descriptivas** —de posición, dispersión y forma— que caracterizan la distribución. Crearemos para ello un *data frame* llamado "estadisticos", que las recogerá todas, aplicando a la variable RENECO de "muestra_so" la función `summarise()` de `{dplyr}`. Calcularemos la media, la desviación típica, el valor mínimo, la mediana, el valor máximo, el coeficiente de asimetría de *Fisher* y el coeficiente de apuntamiento o curtosis de *Fisher*. Esta última medida procede de la función `kurtosis()` del paquete `{moments}`, que debemos tener activado. Un matiz importante: esa función sitúa la distribución perfectamente mesocúrtica en el valor 3, de modo que le restaremos 3 para que la referencia vuelva a ser 0, tal como vimos en el capítulo 4. El código es:
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE}
 # Calcular estadísticos
@@ -578,14 +580,14 @@ estadisticos <- muestra_so %>% summarise( Media = mean(RENECO),
                                           Curtosis = kurtosis(RENECO) - 3)
 ```
 
-La ventaja de volcar las medidas y estadísticos en el *data frame* (de un solo caso) "estadisticos" es que se pueden mostrar los valores en una tabla elegante generada a partir de él mismo mediante la función `kable_rstars()` del paquete `{MATrstars}`, presentada antes:
+Volcar todas las medidas en un *data frame* de un único caso tiene una ventaja evidente: podemos mostrarlas en una tabla elegante generada a partir de él con `kable_rstars()`:
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE}
 # Mostrar estadisticos
 estadisticos %>%
   kable_rstars(caption   = "Principales Estadísticos de la Rentabilidad Económica",
-               col.names = c("Media", "Mediana",
-                             "Desviación Típica", "Valor mínimo",
+               col.names = c("Media", "Desviación Típica",
+                             "Valor mínimo", "Mediana",
                              "Valor Máximo", "C. Asimetría Fisher",
                              "C. Curtosis Fisher"),
                digits    = c(2, 2, 2, 2, 2, 2, 2))
@@ -594,8 +596,8 @@ estadisticos %>%
 ```{r eval=TRUE, echo=FALSE, message=FALSE}
   estadisticos %>%
   kable_rstars(
-               col.names = c("Media", "Mediana",
-                             "Desviación Típica", "Valor mínimo",
+               col.names = c("Media", "Desviación Típica",
+                             "Valor mínimo", "Mediana",
                              "Valor Máximo", "C. Asimetría Fisher",
                              "C. Curtosis Fisher"),
                digits    = c(2, 2, 2, 2, 2, 2, 2))
@@ -606,7 +608,7 @@ estadisticos %>%
 :::
 
 
-La interpretación de estas medidas fueron comentadas en el capítulo 4. En general, puede decirse que:
+El significado de estas medidas quedó explicado en el capítulo 4. En conjunto, cabe afirmar lo siguiente:
 
 -   La rentabilidad típica del sector está en torno al 51–52% (media ≈ 51,6% y mediana ≈ 50,4%), lo que indica un nivel medio-alto y sin sesgos fuertes.
 
@@ -614,7 +616,7 @@ La interpretación de estas medidas fueron comentadas en el capítulo 4. En gene
 
 -   La asimetría ligeramente positiva (0,14) sugiere que hay algunas compañías con rentabilidades algo superiores a lo habitual, pero no dominan el panorama.
 
--   La curtosis negativa (−0,19, platicúrtica) implica una distribución más “plana” que la normal: menos extremos (tanto muy altos como muy bajos) y también algo menos de concentración en el centro. Económicamente: hay diversidad razonable de resultados, pero pocos casos extremos de fracaso o de éxito extraordinario.
+-   La curtosis negativa (−0,19, platicúrtica) revela una distribución más "plana" que la normal: menos casos extremos, tanto por arriba como por abajo, y algo menos de concentración en el centro. En términos económicos, existe una diversidad razonable de resultados, pero escasean los fracasos sonados y los éxitos extraordinarios.
 
 -   Los extremos observados (≈ 28% mínimo y ≈ 80% máximo) existen, pero son minoría.
 
@@ -622,9 +624,9 @@ La interpretación de estas medidas fueron comentadas en el capítulo 4. En gene
 
 ### ![](figuras/key.svg){.hicon} Normalidad.
 
-En muchas técnicas multivariantes basadas en métodos inferenciales (por ejemplo, análisis de la varianza, o en la regresión lineal), se requiere que las variables sigan una **distribución normal**. Para comprobarlo, se puede a recurrir a análisis gráficos o a análisis formales, estos últimos basados en contrastar la hipótesis nula de normalidad.
+Numerosas técnicas multivariantes de corte inferencial —el análisis de la varianza o la regresión lineal, por citar dos— exigen que las variables sigan una **distribución normal**. Para comprobarlo disponemos de dos caminos: el análisis gráfico y el análisis formal, este último basado en contrastar la hipótesis nula de normalidad.
 
-Vamos a mostrar un **método gráfico** muy extendido. Comprobaremos la normalidad de la variable RENECO mediante un ***gráfico qq*** (cuantil-cuantil), que compara los cuantiles de nuestra muestra con los de una distribución normal teórica (con la misma media y desviación típica). Si los puntos se sitúan cercanos a la diagonal, entonces se asumirá un comportamiento (aproximadamente) normal. El código para realizar el gráfico con las herramientas del paquete `{ggplot2}` es:
+Empecemos por el **método gráfico** más extendido: el ***gráfico qq*** o cuantil-cuantil, que enfrenta los cuantiles de nuestra muestra con los de una distribución normal teórica de idéntica media y desviación típica. Si los puntos se alinean sobre la diagonal, asumiremos un comportamiento aproximadamente normal. El código, con las herramientas de `{ggplot2}`, es el siguiente:
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE}
 ## Normalidad
@@ -659,9 +661,9 @@ g4
 :::
 
 
-A veces, es difícil obtener una conclusión sólida con el gráfico *qq*; aunque en el ejemplo la separación de los puntos respecto al eje diagonal induce a pensar en que podría seguirse una distribución normal.
+No siempre resulta fácil extraer una conclusión firme de un gráfico *qq*. En nuestro ejemplo, sin embargo, los puntos se ciñen a la diagonal con bastante fidelidad, lo que invita a pensar que RENECO podría seguir una distribución normal.
 
-Si queremos ser más precisos, en lugar de un análisis gráfico se puede recurrir a realizar un análisis formal, basado en la realización de **contrastes de hipótesis**. Una prueba muy usual es la **prueba de normalidad de *Shapiro y Wilk***, que tiene un buen comportamiento en muestras relativamente reducidas. En esta prueba, la hipótesis nula equivale al supuesto de normalidad. Para un 5% de significación estadística, un p-valor superior a 0.05 implicará el no-rechazo de la hipótesis de normalidad. Para realizar la prueba, se ejecutará el código:
+Si queremos ser más precisos, al análisis gráfico podemos añadir uno formal, apoyado en un **contraste de hipótesis**. La prueba más habitual es la **de normalidad de *Shapiro y Wilk***, que se comporta bien en muestras relativamente reducidas. Su hipótesis nula es, justamente, el supuesto de normalidad; así que, para una significación del 5%, un p-valor superior a 0,05 nos llevará a no rechazarla. La ejecutamos así:
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE}
 # Prueba de Shapiro-Wilk
@@ -677,11 +679,11 @@ El resultado obtenido en la consola es:
 shapiro.test(x = muestra_so$RENECO)
 ```
 
-Como el p-valor es (muy) superior a 0.05, **no se rechaza la hipótesis nula de normalidad en la distribución**, lo que implica que, para una significación estadística del 5%, la muestra apoya la hipótesis de que RENECO sigue un comportamiento normal, como ya se anticipó con el gráfico *qq*.
+El p-valor obtenido supera con holgura el umbral de 0,05, de modo que **no se rechaza la hipótesis nula de normalidad**: con una significación del 5%, la muestra respalda que RENECO se comporta de forma normal, tal como ya anticipaba el gráfico *qq*.
 
 ### ![](figuras/paperclip.svg){.hicon} Resumen: 4 gráficos básicos en la descripción de una variable.
 
-En definitiva, para describir de un modo inicial una distribución de frecuencias de una variable (en escala métrica), podrían analizarse los 4 gráficos que se han comentado anteriormente. Estos gráficos se pueden presentar conjuntamente, para ahorrar espacio en un informe, utilizando el paquete `{patchwork}`, que permite combinar e integrar en una sola imagen varios gráficos generados con `{ggplot2}`. En nuestro ejemplo, vamos a generar una figura que integra los 4 gráficos anteriores (que hemos denominado "g1", "g2", "g3" y "g4"). Para ello creamos el objeto "resumen", que integra los gráficos, mediante una asignación con la sintaxis del paquete `{patchwork}`: El operador `/` indica que los gráficos siguientes se dispondrán inmediatamente debajo; mientras que `|` indica que el gráfico siguiente se dispone al lado del anterior. Luego, se le añade también un título y un subtítulo personalizados:
+En definitiva, para describir inicialmente la distribución de frecuencias de una variable métrica basta con los cuatro gráficos que acabamos de recorrer. Y como en un informe el espacio siempre escasea, podemos reunirlos en una sola imagen gracias al paquete `{patchwork}`, que combina gráficos generados con `{ggplot2}`. Crearemos así el objeto "resumen" a partir de "g1", "g2", "g3" y "g4", con una sintaxis de lo más intuitiva: el operador `/` coloca debajo lo que viene a continuación, mientras que `|` lo sitúa al lado. Después añadiremos un título y un subtítulo para el conjunto:
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE}
 ## Resumen gráfico
@@ -709,25 +711,25 @@ resumen
 :::
 
 
-La composición gráfica se guarda en el *Global Environment* con el nombre "resumen". El bloque `plot_annotation()` determina y caracteriza el título y subtítulo del conjunto de gráficos.
+La composición queda guardada en el *Global Environment* con el nombre "resumen". El bloque `plot_annotation()` es el encargado de definir y dar formato al título y al subtítulo del conjunto.
 
 ## ![](figuras/book.svg){.hicon}![](figuras/pie-chart.svg){.hicon} Análisis de múltiples variables.
 
-Son muchas las técnicas aplicadas al análisis de datos económicos basadas en una distribución de frecuencias multivariante. En este apartado nos centraremos en el caso de **variables métricas**, ya que al caso de atributos, variables categóricas o factores; le dedicaremos un capítulo en exclusiva. Algunas técnicas multivariantes son: el análisis de componentes principales, el análisis de regresión o el análisis clúster...
+Muchas de las técnicas que se aplican al análisis de datos económicos —el análisis de componentes principales, la regresión o el análisis clúster, entre otras— parten de una distribución de frecuencias multivariante. En este apartado nos ceñiremos a las **variables métricas**, pues a los atributos, variables categóricas o factores les dedicaremos un capítulo entero.
 
 Pasamos ahora a la segunda pregunta de Mara Qyà: ¿cómo se relacionan entre sí los principales indicadores financieros, y hay empresas que destaquen como atípicas al examinar varias dimensiones a la vez?
 
-Todas estas metodologías requieren, de nuevo, de una fase inicial que ponga a punto la base de datos y ofrezca una fotografía de cómo es la situación en cuanto a las variables en estudio. En este sentido, es conveniente aplicar, para cada variable por separado, algunos de los análisis gráficos básicos vistos anteriormente.
+Todas ellas reclaman, una vez más, una fase inicial que ponga a punto la base de datos y ofrezca una fotografía de las variables implicadas. Lo aconsejable es aplicar a cada variable por separado algunos de los análisis gráficos que acabamos de ver.
 
-A estos análisis básicos hay que añadir, principalmente, algún análisis previo adicional, destinado fundamentalmente a cuantificar el **grado de intensidad en la relación estadística** entre las variables implicadas, mediante el estudio de la ***correlación***. Antes de abordar esta cuestión, hemos de pararnos en una casuística específica que se presenta cuando trabajamos con numerosas variables: la detección de casos atípicos o *outliers*.
+A ese examen individual hay que sumar uno adicional, dirigido a cuantificar el **grado de intensidad de la relación estadística** entre las variables: el estudio de la ***correlación***. Pero antes debemos detenernos en un problema específico que surge en cuanto manejamos varias variables a la vez: la detección de casos atípicos.
 
 ### ![](figuras/key.svg){.hicon} Localización de *missing values* y *outliers*.
 
-Para trabajar con múltiples variables, en primer lugar es preciso localizar los casos con **valores perdidos o *missing values***, para decidir cómo procesarlos (eliminación del caso, estimación del valor faltante, etc.)
+También aquí el primer paso consiste en localizar los casos con **valores perdidos o *missing values***, para decidir después cómo tratarlos: eliminar el caso, estimar el valor ausente, etc.
 
-Vamos a imaginar que queremos realizar un análisis en el que tendremos en cuenta las variables RENECO (rentabilidad económica), ACTIVO (volumen de activos de la empresa), MARGEN (margen de beneficio) y RES (resultado del ejercicio).
+Imaginemos un análisis que tenga en cuenta cuatro variables: RENECO (rentabilidad económica), ACTIVO (volumen de activos de la empresa), MARGEN (margen de beneficio) y RES (resultado del ejercicio). Son, precisamente, las cuatro dimensiones por las que pregunta Mara Qyà.
 
-En primer lugar, generaremos una copia del *data frame* original, "interestelar_100", para preservar su integridad. A esa copia la hemos llamado "muestra2". Aplicamos entonces la función `explora_na()` del paquete `{MATrstars}`, indicando en el argumento `variables` las cuatro variables del análisis (RENECO, ACTIVO, MARGEN y RES) y `accion = "eliminar"` para que, además de mostrar el gráfico y la tabla con los casos afectados, se descarten esos casos del *data frame*:
+Generaremos primero una copia del *data frame* original para preservar su integridad, a la que llamaremos "muestra2". Sobre ella aplicaremos `explora_na()`, indicando en el argumento `variables` las cuatro del análisis y `accion = "eliminar"` para que, además de mostrar el gráfico y la tabla de casos afectados, los descarte del *data frame*:
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
 options(matrstars.figura_num = "5.11", matrstars.tabla_num = "5.8")
@@ -748,7 +750,7 @@ muestra2 <- explora_na(
 
 El *data frame* "muestra2" contiene los mismos datos que "interestelar_100", salvo los 3 casos con *missing values* que han sido eliminados (101): *Vega Transport*, *Photon Pack Freight* y *Poe Dameron Cargo*.
 
-Para la **detección de *outliers***, si las variables que entran en el análisis son numerosas, podría ser poco operativo estudiar las variables una a una. Una alternativa consiste en calcular la ***distancia de Mahalanobis*** de las variables del estudio, como **"resumen" del comportamiento de cada caso** en todas las variables del análisis, consideradas conjuntamente. En concreto, se puede considerar como una suerte de “z-score multivariante”: mide cuántas desviaciones típicas se aleja una observación del “centro” del conjunto, teniendo en cuenta todas las variables a la vez y cómo se relacionan entre sí.
+En cuanto a la **detección de *outliers***, examinar las variables de una en una resulta poco operativo cuando son numerosas. La alternativa consiste en calcular la ***distancia de Mahalanobis***, que actúa como **"resumen" del comportamiento de cada caso** en todas las variables consideradas a la vez. Podemos verla como una especie de "z-score multivariante": mide cuántas desviaciones típicas se aleja una observación del "centro" del conjunto, teniendo en cuenta todas las variables y el modo en que se relacionan entre sí.
 
 Su utilización, intuitivamente, se puede justificar de este modo:
 
@@ -771,7 +773,7 @@ D_M(\mathbf{x})
 = \sqrt{(\mathbf{x}-\boldsymbol{\mu})^{\top}\,\mathbf{\Sigma}^{-1}\,(\mathbf{x}-\boldsymbol{\mu})}.
 $$
 
-Así, primero vamos a calcular una columna más en el *data frame* "muestra2" con los valores de la *distancia de* *Mahalanobis* del conjunto de las 4 variables en cada uno de los casos. Esta columna o variable la denominaremos, por ejemplo, MAHALANOBIS*.* Para ello, se utiliza las funciones `mutate()` y `pick()` del paquete `{dplyr}`, y como argumento de esta la función `mahalanobis()`, en la que hay que especificar:
+Añadiremos, pues, una columna más al *data frame* "muestra2" con la *distancia de Mahalanobis* que corresponde a cada caso en el conjunto de las cuatro variables. La llamaremos MAHALANOBIS. Para calcularla nos valdremos de las funciones `mutate()` y `pick()` de `{dplyr}`, que alimentan a su vez a la función `mahalanobis()`, en la que hay que especificar tres elementos:
 
 -   Las columnas de "muestra2" para las que se van a calcular las distancias.
 
@@ -794,7 +796,7 @@ muestra2 <- muestra2 %>%
   )
 ```
 
-Posteriormente, se puede construir el diagrama de caja de la variable MAHALANOBIS, como cualquier otra variable:
+Hecho esto, podemos construir el diagrama de caja de MAHALANOBIS igual que haríamos con cualquier otra variable:
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE}
 ggplot(data = muestra2, aes(y = MAHALANOBIS)) +
@@ -809,7 +811,7 @@ ggplot(data = muestra2, aes(y = MAHALANOBIS)) +
 :::
 
 
-Se observa cómo existen varios casos *outliers*. Para saber de qué casos concretos se trata, se podrá ejecutar el código:
+El gráfico delata varios casos atípicos. Para identificarlos ejecutaremos:
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE}
 Q1M <- quantile (muestra2$MAHALANOBIS, c(0.25))
@@ -845,7 +847,7 @@ rm(df)
 rm(columnas_por_bloque)
 ```
 
-Si se opta por eliminar estos casos cara al análisis a aplicar posteriormente, se podrá crear un nuevo *data frame*, por ejemplo "muestra2_so", con el código siguiente:
+Si optamos por eliminarlos con vistas al análisis posterior, crearemos un nuevo *data frame*, "muestra2_so", mediante el código siguiente:
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE}
 muestra2_so <- muestra2 %>%
@@ -853,9 +855,9 @@ muestra2_so <- muestra2 %>%
            MAHALANOBIS >= Q1M - 1.5*IQR(MAHALANOBIS)) 
 ```
 
-El *data frame* "muestra2_so" será una réplica de "muestra2", aunque sin incluir los casos detectados como atípicos o *outliers* (91 casos).
+El *data frame* "muestra2_so" será una réplica de "muestra2" sin los casos detectados como atípicos: 91 empresas en total.
 
-Como ocurría en el caso univariante, este bloque también se puede sintetizar aplicando la función auxiliar `explora_outliers()` del paquete `{MATrstars}`. Cuando se le pasan varias variables, la función detecta automáticamente el caso multivariante y calcula internamente la distancia de Mahalanobis, sobre la que aplica la regla 1.5·IQR. Es decir, **la misma función sirve para uno y varios ámbitos**: si se le pasa una sola variable, trabaja sobre ella; si se le pasan varias, sintetiza su comportamiento con Mahalanobis. De este modo, el bloque manual anterior podría reescribirse así:
+Como sucedía en el caso univariante, todo este bloque puede sintetizarse con `explora_outliers()`. Cuando se le pasan varias variables, la función reconoce automáticamente que estamos ante un caso multivariante, calcula por su cuenta la distancia de Mahalanobis y le aplica la regla de 1,5·IQR. Dicho de otro modo, **una misma función resuelve ambos escenarios**: con una sola variable trabaja directamente sobre ella; con varias, sintetiza su comportamiento mediante Mahalanobis. El bloque manual anterior quedaría así:
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE}
 muestra2_so <- explora_outliers(
@@ -867,7 +869,7 @@ muestra2_so <- explora_outliers(
 )
 ```
 
-De nuevo, como en este punto ya hemos eliminado los *outliers* de "muestra2_so", vamos a comprobar el funcionamiento sobre una **copia limpia** del *data frame* original con únicamente las cuatro variables de interés (la llamaremos "muestra2_demo"). Aplicamos primero `explora_na()` para descartar los tres casos con NAs, y a continuación `explora_outliers()` sobre el resultado:
+De nuevo, como "muestra2_so" ya está depurada, comprobaremos el funcionamiento sobre una **copia limpia** del *data frame* original que contenga solo las cuatro variables de interés, a la que llamaremos "muestra2_demo". Aplicamos primero `explora_na()` para descartar los tres casos con NAs y después `explora_outliers()` sobre el resultado:
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE}
 muestra2_demo <- select(interestelar_100, RENECO, ACTIVO, MARGEN, RES)
@@ -910,7 +912,7 @@ rm(muestra2_demo)
 
 ### ![](figuras/key.svg){.hicon} Correlación entre variables.
 
-Cuando trabajamos con más de una variable, una característica muy importante viene dada por la intensidad con la que tales variables están relacionadas estadísticamente entre sí, es decir, el estudio de las correlaciones. Un modo atractivo y rápido de visualizar la **matriz de correlaciones** de las variables es a través de la función `ggpairs()` del paquete `{GGally}`. Para aplicar la función, hemos creado el *data frame* "temporal" con las variables (métricas) del estudio, que borramos tras general el gráfico:
+Cuando manejamos más de una variable, un rasgo de primer orden es la intensidad con que esas variables se relacionan estadísticamente entre sí: el estudio de las correlaciones. Una forma rápida y vistosa de visualizar la **matriz de correlaciones** es la función `ggpairs()` del paquete `{GGally}`. Para aplicarla hemos creado el *data frame* auxiliar "temporal", con las variables métricas del estudio, que borramos una vez generado el gráfico:
 
 ```{r eval=TRUE, echo=TRUE, warning=FALSE, error=FALSE, message=FALSE}
 ## Correlaciones entre variables.
@@ -932,9 +934,9 @@ corr_plot_so
 
 La interpretación detallada del código es la siguiente:
 
--   **`ggpairs(temporal)`**: crea una cuadrícula con una fila/columna por variable del data frame `temporal`.
+-   **`ggpairs(temporal)`**: crea una cuadrícula con una fila y una columna por cada variable del *data frame* "temporal".
 
-    -   **Triángulo inferior (`lower`)**: lo personalizamos para que muestre números de correlación.
+    -   **Triángulo inferior (`lower`)**: lo personalizamos para que muestre los coeficientes de correlación.
 
 -   **`lower = list(continuous = wrap("cor", ...))`**\
     En las celdas del triángulo inferior, cuando ambas variables son numéricas (“continuous”):
@@ -945,15 +947,15 @@ La interpretación detallada del código es la siguiente:
 
     -   **`size = 4.5`**: tamaño del número que aparece.
 
-    -   **`stars = TRUE`**: añade asteriscos de significación estadística junto al número. Habitual: `*` p \< 0.05, `**` p \< 0.01, `***` p \< 0.001 (más asteriscos ⇒ relación menos probable por azar).
+    -   **`stars = TRUE`**: añade junto al número los asteriscos de significación estadística. La convención habitual es `*` para p \< 0,05, `**` para p \< 0,01 y `***` para p \< 0,001; cuantos más asteriscos, menos probable resulta que la relación observada se deba al azar.
 
--   **`title = "Matriz de Correlación sin outliers"`**: título del conjunto.
+-   **`title = "Matriz de Correlación (sin outliers)"`**: título del conjunto.
 
 -   **Asignación `corr_plot_so <- ...`**: guarda la figura en el objeto `corr_plot_so`. Para verla, basta con escribir `corr_plot_so` en la consola.
 
-Un coeficiente de correlación puede tomar un valor entre **-1** (fuerte relación, en sentido opuesto) y **+1** (fuerte relación, en el mismo sentido). Como puede apreciarse en el gráfico, las variables ACTIVO y RES mantienen una relación muy intensa y en sentido positivo. Entre MARGEN y RENECO existe también una relación de intensidad destacable. En cambio, ACTIVO y MARGEN; y RENECO y ACTIVO apenas están estadísticamente relacionadas.
+Un coeficiente de correlación se mueve entre **-1**, que indica una relación intensa en sentido opuesto, y **+1**, que señala una relación igualmente intensa pero en el mismo sentido. El gráfico muestra que ACTIVO y RES mantienen una relación muy fuerte y positiva, y que entre MARGEN y RENECO existe también un vínculo apreciable. En cambio, ACTIVO y MARGEN, por un lado, y RENECO y ACTIVO, por otro, apenas guardan relación estadística.
 
-Para finalizar, vamos a comparar las correlaciones anteriores con las que se dan si se incluyen los casos outliers en la muestra:
+Para terminar, comparemos las correlaciones anteriores con las que resultan si mantenemos en la muestra los casos *outliers*:
 
 ```{r eval=TRUE, echo=FALSE, warning=FALSE, error=FALSE, message=FALSE}
 temporal <- muestra2 %>% select(RENECO, ACTIVO, MARGEN, RES)
@@ -977,15 +979,15 @@ grid.arrange(corr_plot_so_gg, corr_plot_co_gg, ncol = 2, top = "CORRELACIONES")
 :::
 
 
-Se aprecia cómo la presencia de outliers puede variar la relación entre las variables. Salvo el caso de la correlación entre ACTIVO y RES, que se fortalece; las correlaciones entre RENECO y MARGEN, y RENECO y RES se debilitan. Esto redunda en la idea, ya expuesta, de que **la decisión de trabajar con o sin los casos *outliers*** es una cuestión, a veces, muy **relevante** y compleja.
+El contraste es elocuente: la presencia de *outliers* altera las relaciones entre las variables. La correlación entre ACTIVO y RES se refuerza, mientras que las de RENECO con MARGEN y con RES se debilitan. Todo ello confirma lo que ya apuntábamos: **decidir si se trabaja con o sin los casos atípicos** es una cuestión tan **relevante** como delicada.
 
 **Conclusión para el informe de Mara Qyà (parte 2):** los principales indicadores financieros del sector están moderadamente correlacionados, con una relación especialmente fuerte entre el tamaño (ACTIVO) y el resultado (RES). No obstante, estas correlaciones son sensibles a la presencia de *outliers*, por lo que cualquier análisis más profundo deberá documentar explícitamente la decisión adoptada al respecto. Mara Qyà ya tiene los elementos clave para su auditoría.
 
 ## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo.
 
-En esta sección se muestran los links de acceso a los diferentes materiales (scripts, datos...) necesarios para llevar a cabo los contenidos prácticos del capítulo.
+En esta sección se recogen los enlaces de acceso a los distintos materiales (*scripts*, datos...) necesarios para desarrollar los contenidos prácticos del capítulo.
 
-**Datos (en formato Microsoft (R) Excel (R)):**
+**Datos (en formato Microsoft® Excel®):**
 
 -   interestelar_100.xlsx ([obtener aquí](https://raw.githubusercontent.com/teckel71/RStars-book/main/download/interestelar_100.xlsx))
 
