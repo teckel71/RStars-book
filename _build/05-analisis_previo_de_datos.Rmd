@@ -6,6 +6,28 @@ options(matrstars.suppress_caption = TRUE)
 
 ```{r setup-cap05, include=FALSE}
 source("_common.R")
+
+# NOTA DE CONSTRUCCIÓN (no se publica)
+#
+# 1. Los bloques de código de este capítulo se corresponden uno a uno con los
+#    dos scripts de la práctica:
+#       download/previo_rstars.R       (versión con {MATrstars})
+#       download/previo_puro_rstars.R  (versión "pura", en los desplegables)
+#    Ambos llevan etiquetas de chunk del tipo  ## ---- uni-na ----  para poder
+#    pasar a fuente única con knitr::read_chunk() y evitar que el libro y los
+#    scripts vuelvan a divergir:
+#       knitr::read_chunk("download/previo_rstars.R")
+#       knitr::read_chunk("download/previo_puro_rstars.R")
+#    (las etiquetas de la versión pura van prefijadas con "p-" para que no
+#    colisionen). Hecho eso, cada chunk del capítulo queda vacío y con solo su
+#    etiqueta.
+#
+# 2. Las llamadas a explora_na() y explora_outliers() necesitan results='asis'
+#    y que el preprocesador numerar_tablas_figuras.R inyecte los números de
+#    figura y tabla. Conviene que esa inyección deje de hacerse en el código
+#    fuente del chunk (con echo=TRUE, la línea options(matrstars.*) se muestra
+#    al lector, como ocurría en el apartado multivariante de la versión
+#    anterior) y pase a hacerse mediante knitr::opts_hooks$set().
 ```
 
 ![](figuras/05%20la%20piloto.jpg){width="100%"}
@@ -46,17 +68,21 @@ insertar_youtube(
 )
 ```
 
-Supongamos que trabajamos dentro del **proyecto** "explora" que creamos anteriormente. En su carpeta guardaremos el *script* "previo_rstars.R" y el archivo de Microsoft® Excel® "interestelar_100.xlsx", cuyos enlaces de descarga figuran en la sección final del capítulo.
+### ![](figuras/key.svg){.hicon} Dos versiones del *script*. {#c05-dos-versiones-del-script}
 
-Si abrimos "interestelar_100.xlsx", comprobaremos que consta de tres hojas: la primera recoge un aviso sobre el uso exclusivo que debe darse a los datos; la segunda describe las variables consideradas; y la tercera (hoja "Datos") contiene la información que vamos a **importar** desde RStudio. Se trata de variables económico-financieras y de otra índole, referidas a una muestra de empresas dedicadas al transporte interestelar de mercancías.
+Supongamos que trabajamos dentro del **proyecto** "explora" que creamos anteriormente. En su carpeta guardaremos el *script* de la práctica y el archivo de Microsoft® Excel® "interestelar_100.xlsx", cuyos enlaces de descarga figuran en la sección final del capítulo.
 
-Merece la pena fijarse en un detalle: la hoja de cálculo contiene variables con datos faltantes (*missing values*). Unos se reconocen por la presencia de celdas en blanco, pero otros aparecen como celdas con el texto "n.d." (no disponible). Identificar cómo se anota cada ausencia resulta clave, porque **tendremos que añadir código adicional** a la instrucción de importación **para que R los registre correctamente como *NAs*** (*not available*).
+Y aquí conviene detenerse un momento, porque **el *script* de esta práctica existe en dos versiones**, que conducen exactamente a los mismos *data frames*, a los mismos gráficos y a los mismos resultados:
 
-Cerremos el archivo "interestelar_100.xlsx" y volvamos a RStudio para abrir el *script* "previo_rstars.R" con `File → Open File…` (o haciendo clic sobre él en la ventana inferior derecha, pestaña "Files"). Este *script* contiene el código que iremos ejecutando a lo largo de la práctica.
+-   **"previo_rstars.R"** es la versión que seguiremos en el libro. Se apoya en tres funciones auxiliares del paquete `{MATrstars}` —`explora_na()`, `explora_outliers()` y `kable_rstars()`— que **condensan en una sola línea** tareas que, escritas paso a paso, ocupan una docena. La ventaja no es solo la brevedad: al aligerar el código podemos concentrarnos en lo que de verdad importa, que es **la estrategia de análisis y la interpretación de los resultados**.
 
-Su primera instrucción es:
+-   **"previo_puro_rstars.R"** es la versión **"pura"**: ni carga `{MATrstars}` ni lo necesita. Cada una de esas tareas se resuelve "a mano", con las herramientas de `{visdat}`, `{dplyr}`, `{ggplot2}` y `{kableExtra}` que ya conocemos.
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
+A lo largo del capítulo, **la primera vez que aparezca cada función de `{MATrstars}`** encontrarás un **bloque desplegable** con el código equivalente de la versión pura. Quien prefiera trabajar sin el paquete tiene ahí, y en el segundo *script*, todo lo necesario. Ambos ficheros son autónomos y comparten los nombres de los objetos, de modo que se puede pasar de uno a otro sin perder el hilo.
+
+Abramos, pues, uno de los dos *scripts* con `File → Open File…` (o haciendo clic sobre él en la ventana inferior derecha, pestaña "Files"). Su primera instrucción es:
+
+```{r eval=TRUE, echo=TRUE, message=FALSE}
 ## Tratamiento y análisis previo de datos.
 
 # Limpiando el Global Environment
@@ -67,7 +93,7 @@ Esta instrucción persigue limpiar el *Global Environment* (la memoria) de los o
 
 A continuación, si preferimos despreocuparnos más adelante de la carga de los paquetes que necesitaremos, podemos activarlos todos de una vez:
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
+```{r eval=TRUE, echo=TRUE, message=FALSE}
 # Cargando paquetes
 library (readxl)
 library (gtExtras)
@@ -78,17 +104,18 @@ library (knitr)
 library (kableExtra)
 library (moments) # paquete necesario para calcular la curtosis.
 library (patchwork)
-library (GGally)
+library (GGally)    # cálculo de la matriz de correlaciones.
+library (gridExtra)
 ```
 
-De este modo, solo quedará pendiente por activar el paquete "propio" `{MATrstars}`, del que hablaremos más adelante.
+La lista es la misma en las dos versiones del *script*, de manera que se puede cambiar de una a otra sin tocar nada. Conviene saber, eso sí, que `{visdat}`, `{knitr}` y `{kableExtra}` solo se usan de forma explícita en la versión pura: en la otra trabajan igualmente, pero desde dentro de las funciones de `{MATrstars}`.
 
-```{r include=FALSE}
-# Carga silenciosa del paquete {MATrstars} para que las funciones auxiliares
-# (explora_na, kable_rstars, etc.) esten disponibles desde el inicio del
-# capitulo. La presentacion pedagogica del paquete se realiza mas adelante,
-# donde aparece por primera vez kable_rstars(). En el script .R equivalente,
-# la carga se hace ya al principio junto al resto de librerias.
+### ![](figuras/key.svg){.hicon} El paquete `{MATrstars}`. {#c05-el-paquete-matrstars}
+
+Falta un paquete más, y este es "de la casa". `{MATrstars}` reúne las **funciones auxiliares** que se emplean a lo largo del libro. No está alojado en CRAN, sino en GitHub ([https://github.com/teckel71/MATrstars](https://github.com/teckel71/MATrstars)), de modo que se instala de forma automática la primera vez que se ejecuta el bloque siguiente:
+
+```{r eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+# Paquete MATrstars: funciones auxiliares del libro R-Stars.
 if (!requireNamespace("MATrstars", quietly = TRUE)) {
   if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
   remotes::install_github("teckel71/MATrstars")
@@ -96,9 +123,25 @@ if (!requireNamespace("MATrstars", quietly = TRUE)) {
 library(MATrstars)
 ```
 
-Para importar los datos alojados en la hoja "Datos" del archivo de Microsoft® Excel® y echar un primer vistazo a las variables que contiene, ejecutaremos:
+Tres de sus funciones nos acompañarán desde este capítulo hasta el final del libro:
 
-```{r, eval=FALSE, echo=TRUE, message=FALSE}
+-   **`explora_na()`**: localiza los ***missing values*** de una o varias variables, dibuja el mapa de ausencias, lista los casos afectados y, si se le pide, los elimina.
+
+-   **`explora_outliers()`**: detecta los ***outliers*** mediante la regla de 1,5·IQR, dibuja el *box-plot*, lista los casos atípicos y, si se le pide, los elimina. Funciona tanto con una variable como con varias, en cuyo caso recurre a la distancia de *Mahalanobis*.
+
+-   **`kable_rstars()`**: presenta cualquier *data frame* como una **tabla** con el estilo tipográfico habitual del libro.
+
+Las tres comparten una misma filosofía: **no hacen nada que no pudiéramos hacer nosotros**; se limitan a empaquetar secuencias de instrucciones que, de otro modo, repetiríamos decenas de veces a lo largo de los próximos capítulos. La ficha completa de cada una —argumentos, valores por defecto, ejemplos de uso y enlace al código fuente en GitHub— puede consultarse en el **Apéndice: Funciones auxiliares del paquete `{MATrstars}`** al final del libro.
+
+### ![](figuras/key.svg){.hicon} Importando los datos. {#c05-importando-los-datos}
+
+Si abrimos "interestelar_100.xlsx", comprobaremos que consta de tres hojas: la primera recoge un aviso sobre el uso exclusivo que debe darse a los datos; la segunda describe las variables consideradas; y la tercera (hoja "Datos") contiene la información que vamos a **importar** desde RStudio. Se trata de variables económico-financieras y de otra índole, referidas a una muestra de empresas dedicadas al transporte interestelar de mercancías.
+
+Merece la pena fijarse en un detalle: la hoja de cálculo contiene variables con datos faltantes (*missing values*). Unos se reconocen por la presencia de celdas en blanco, pero otros aparecen como celdas con el texto "n.d." (no disponible). Identificar cómo se anota cada ausencia resulta clave, porque **tendremos que añadir código adicional** a la instrucción de importación **para que R los registre correctamente como *NAs*** (*not available*).
+
+Cerremos el archivo "interestelar_100.xlsx" y volvamos a RStudio. Para importar los datos alojados en la hoja "Datos" y echar un primer vistazo a las variables que contiene, ejecutaremos:
+
+```{r eval=TRUE, echo=TRUE, message=FALSE}
 ## DATOS
 
 # Importando datos desde Excel
@@ -107,26 +150,6 @@ interestelar_100 <- read_excel("interestelar_100.xlsx",
                                na = c("n.d."))
 interestelar_100 <- data.frame(interestelar_100, row.names = 1)
 
-# visualizando el data frame de modo elegante con {gtExtras}
-datos_df_graph <- gt_plt_summary(interestelar_100)
-datos_df_graph
-```
-
-```{r, eval=TRUE, echo=FALSE, message=FALSE}
-## DATOS
-
-# Importando datos desde Excel
-interestelar_100 <- read_excel("interestelar_100.xlsx",
-                               sheet = "Datos",
-                               na = c("n.d."))
-interestelar_100 <- data.frame(interestelar_100, row.names = 1)
-```
-
-R interpreta por defecto como NAs las celdas vacías de la hoja de cálculo, pero, como acabamos de ver, esa no es la única manera de señalar una ausencia. De ahí que hayamos añadido a `read_excel()` el argumento `na =`, que recoge los contenidos de celda que deben traducirse como dato faltante.
-
-Por otro lado, R ha interpretado la primera columna como una variable categórica cuando, en realidad, no es una variable, sino el nombre de cada caso u observación. Para evitarlo, hemos redefinido el *data frame* indicándole que tome esa columna como los *nombres de las filas*.
-
-```{r, eval=TRUE, echo=FALSE, message=FALSE}
 # visualizando el data frame de modo elegante con {gtExtras}
 datos_df_graph <- gt_plt_summary(interestelar_100)
 datos_df_graph
@@ -137,6 +160,10 @@ datos_df_graph
 :::
 
 
+R interpreta por defecto como NAs las celdas vacías de la hoja de cálculo, pero, como acabamos de ver, esa no es la única manera de señalar una ausencia. De ahí que hayamos añadido a `read_excel()` el argumento `na =`, que recoge los contenidos de celda que deben traducirse como dato faltante.
+
+Por otro lado, R ha interpretado la primera columna como una variable categórica cuando, en realidad, no es una variable, sino el nombre de cada caso u observación. Para evitarlo, hemos redefinido el *data frame* indicándole que tome esa columna como los *nombres de las filas*.
+
 La "tabla" de variables resultante nos confirma que 24 de ellas son métricas y 4, categóricas.
 
 ## ![](figuras/book.svg){.hicon}![](figuras/pie-chart.svg){.hicon} Análisis de una variable. {#c05-analisis-de-una-variable}
@@ -145,112 +172,20 @@ La "tabla" de variables resultante nos confirma que 24 de ellas son métricas y 
 
 Centrémonos en la *Rentabilidad Económica* (RENECO), la variable que nos permitirá responder a la primera pregunta de Mara Qyà. Como toda buena práctica aconseja, trabajaremos sobre una copia del *data frame* original para preservar su integridad:
 
-```{r eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, message=FALSE}
+```{r eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+## Analisis de una variable.
+
 # Copia de df
 muestra <- interestelar_100
 ```
 
 Lo primero es comprobar que todas las empresas tienen su correspondiente valor de RENECO, es decir, que no existen **valores perdidos o *missing values***.
 
-Para hacernos una idea general recurriremos a la función `vis_miss()` del paquete `{visdat}`, que localiza gráficamente los *missing values* de cada variable y calcula qué porcentaje representan sobre el total de observaciones. Como aquí solo nos interesa RENECO, acotaremos antes el *data frame* con la función `select()` del paquete `{dplyr}`:
+El diagnóstico exige siempre los mismos tres pasos: **representar** gráficamente dónde están las ausencias, **identificar** los casos concretos que las padecen y **decidir** qué hacer con ellos. La función `explora_na()` reúne los tres. Le indicamos el *data frame*, la variable o variables que deben examinarse, la acción a realizar y los títulos del gráfico:
 
-```{r eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, message=FALSE}
-## Analisis de una variable.
-
-# Localizando missing values.
-muestra %>%
-  select (RENECO) %>%
-  vis_miss() +
-    labs(title = "Rentabilidad Económica: valores ausentes",
-      subtitle = "Transporte de mercancías interestelar",
-      y = "Observación",
-      fill = NULL) +
-    scale_fill_manual(
-      values = c("TRUE" = "red", "FALSE" = "grey"),
-      labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
-  theme(
-    plot.title = element_text(face = "bold", size = 14),
-    axis.text.x = element_text(margin = margin(t = -20)))
-```
-
-::: {style="text-align: center;"}
-**Figura 5.2**
-:::
-
-
-La explicación detallada del código es la siguiente:
-
--   **`muestra %>%`**: el *pipe* de `{dplyr}` encadena las operaciones de forma legible.
-
--   **`select(RENECO)`**: nos quedamos únicamente con la columna `RENECO`, de modo que el gráfico se centre en esa variable y muestre una sola columna.
-
--   **`vis_miss()`**: función del paquete `{visdat}` que dibuja un mapa de celdas **Present/Missing**:
-
-    -   Eje **Y** = observaciones (filas del data frame).
-
-    -   Eje **X** = variables (aquí, solo `RENECO`).
-
-    -   Cada celda indica si el valor está presente o es NA.
-
--   **`labs(...)`**:
-
-    -   `title` y `subtitle`: títulos del gráfico.
-
-    -   `y = "Observación"`: etiqueta del eje Y.
-
-    -   `fill = NULL`: **suprime el título de la leyenda**, que por defecto mostraría una etiqueta poco informativa.
-
--   **`scale_fill_manual(...)`**: personaliza los colores y las etiquetas de la leyenda:
-
-    -   `values = c("TRUE" = "red", "FALSE" = "grey")`: internamente, `vis_miss()` codifica con `TRUE` la ausencia de dato y con `FALSE` su presencia. Aquí pedimos rojo para `TRUE` y gris para `FALSE`.
-
-    -   `labels = c("TRUE" = "NA", "FALSE" = "Presente")`: sustituye el texto de la leyenda, de modo que en lugar de `TRUE/FALSE` leamos NA/Presente.
-
--   **`theme(plot.title = element_text(face = "bold", size = 14))`**: pone el título en negrita y a tamaño 14.
-
-El gráfico revela que, en RENECO, aproximadamente un 1% de los casos carece de dato, es decir, uno de los 104. Para saber de cuál se trata recurriremos de nuevo a `{dplyr}`, filtrando las empresas que no tienen valor en esa variable:
-
-```{r eval=FALSE, echo=TRUE, message=FALSE}
-# Mostrar casos concretos de NAs
-muestra %>% filter(is.na(RENECO)) %>% select(RENECO)
-```
-
-La función `is.na()` responde, caso por caso, a una pregunta muy simple: ¿falta el dato de esta variable en esta fila? El filtro devuelve una única empresa, en la que efectivamente no consta valor alguno de RENECO:
-
-```{r eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
-# Hacer copia del df y mostrar casos concretos de NAs
-muestra %>% filter(is.na(RENECO)) %>% select(RENECO)
-```
-
-Comprobamos que la empresa sin valor en RENECO es *Photon Pack Freight*.
-
-Ante la existencia de *missing values*, se puede actuar de varios modos. La decisión no es trivial y depende de la proporción de datos faltantes, de si su ausencia es aleatoria o sistemática, y del tipo de análisis posterior. Las principales estrategias son:
-
--   **Eliminación del caso** (*listwise deletion*): se descartan las observaciones con algún valor faltante. Es la opción más sencilla, pero implica perder información. Si los datos no faltan de forma completamente aleatoria (MCAR, *Missing Completely At Random*), la eliminación puede introducir sesgos en los resultados.
-
--   **Imputación por media o mediana**: se sustituye el valor faltante por la media (o la mediana) de la variable. Conserva el tamaño muestral, pero subestima la variabilidad real y puede distorsionar las relaciones entre variables.
-
--   **Imputación múltiple** (paquete `{mice}` en R): genera varios conjuntos de datos completos con valores simulados, analiza cada uno por separado y combina los resultados. Es el enfoque de referencia en investigación, ya que refleja la incertidumbre asociada a la imputación.
-
--   **Imputación por k-vecinos más próximos** (función `kNN()` del paquete `{VIM}`): estima el valor faltante a partir de los casos más parecidos en las demás variables. Intuitivo y eficaz cuando las variables están relacionadas entre sí.
-
-En nuestro ejemplo, dado que los *missing values* representan un porcentaje muy reducido respecto al total (apenas 1 caso de 104 para RENECO), **optaremos por la eliminación del caso**, que es la vía más directa y no introduce distorsión apreciable en este contexto. En situaciones con mayor proporción de datos faltantes, o cuando se sospeche que la ausencia no es aleatoria, convendría considerar las técnicas de imputación mencionadas. Esta **eliminación de casos** se podrá realizar mediante el código:
-
-```{r, eval=TRUE, echo=TRUE}
-muestra <- muestra %>% filter(! is.na(RENECO))
-```
-
-El operador **`!`** significa "no", de manera que `!is.na(RENECO)` se lee como "que RENECO no sea un dato faltante".
-
-En el *Global Environment* podemos comprobar que el *data frame* "muestra" tiene ahora un caso menos: 103.
-
-Detengámonos un momento en lo que acabamos de hacer. La detección y eliminación de *missing values* exige una **secuencia recurrente** de instrucciones: una llamada a `vis_miss()` acompañada de `labs()`, `scale_fill_manual()` y `theme()` para el gráfico; un `filter(is.na(...))` para listar los casos afectados; y un `filter(!is.na(...))` para descartarlos. Ese mismo bloque, con variaciones mínimas, reaparecerá cada vez que abordemos esta tarea, tanto en lo que resta de capítulo como en los siguientes.
-
-El gráfico de `vis_miss()` arrastra además un pequeño defecto estético cuando analizamos pocas variables: los nombres aparecen, por defecto, muy despegados del panel superior. Para aligerar los *scripts* del libro sin renunciar a la uniformidad de la presentación —y, de paso, corregir ese detalle—, el paquete `{MATrstars}` incorpora la función auxiliar `explora_na()`, que encapsula todo el bloque anterior (gráfico, listado de NAs y eliminación opcional), coloca correctamente los nombres de variable y presenta la tabla de casos afectados con el estilo tipográfico habitual del libro, mediante `kable_rstars()`.
-
-De este modo, todo el bloque de código anterior podría haberse escrito de forma mucho más compacta como:
-
-```{r eval=FALSE, echo=TRUE, message=FALSE}
+```{r eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
+options(matrstars.figura_num = "5.2", matrstars.tabla_num = "5.2")
+# Localizando y eliminando missing values.
 muestra <- explora_na(
   muestra,
   variables = RENECO,
@@ -260,93 +195,147 @@ muestra <- explora_na(
 )
 ```
 
-Como a estas alturas ya hemos eliminado de "muestra" el caso con NA, comprobaremos el funcionamiento de la función sobre una **copia limpia** del *data frame* original que contenga solo la variable RENECO; la llamaremos "muestra_demo". El resultado coincidirá con el del bloque manual, pero presentado con las mejoras comentadas:
+Los argumentos merecen un comentario:
+
+-   **`variables = RENECO`**: la columna que se examina. Si se omite, la función revisa todas las del *data frame*; si son varias, se indican como `c(VAR1, VAR2, ...)`.
+
+-   **`accion = "eliminar"`**: además de mostrar el gráfico y la tabla, descarta del *data frame* los casos afectados. Si no queremos eliminarlos todavía, basta con omitir este argumento y limitarnos al diagnóstico.
+
+-   **`titulo`** y **`subtitulo`**: encabezan el gráfico de ausencias.
+
+El **gráfico de ausencias** dibuja un mapa de celdas en el que cada fila es una observación y cada columna, una variable: en rojo, los datos que faltan; en gris, los presentes. Revela que, en RENECO, aproximadamente un 1% de los casos carece de dato, es decir, uno de los 104. La **tabla** que lo acompaña nos dice de cuál se trata: *Photon Pack Freight*.
+
+<details>
+
+<summary>**Cómo se hace sin `{MATrstars}`**</summary>
+
+El mapa de ausencias procede de la función `vis_miss()` del paquete `{visdat}`, a la que hay que añadir los retoques de presentación habituales del libro. Como aquí solo nos interesa RENECO, acotamos antes el *data frame* con `select()`:
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE}
-muestra_demo <- select(interestelar_100, RENECO)
-muestra_demo <- explora_na(
-  muestra_demo,
-  variables = RENECO,
-  accion    = "eliminar",
-  titulo    = "Rentabilidad Económica: valores ausentes",
-  subtitulo = "Transporte de mercancías interestelar"
-)
-rm(muestra_demo)
+# Localizando missing values.
+muestra %>%
+  select (RENECO) %>%
+  vis_miss() +
+    labs(title = "Rentabilidad Económica: valores ausentes",
+         subtitle = "Transporte de mercancías interestelar",
+         y = "Observación",
+         fill = NULL) +
+    scale_fill_manual(
+      values = c("TRUE" = "red", "FALSE" = "grey"),
+      labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
+    theme(
+      plot.title = element_text(face = "bold", size = 14),
+      axis.text.x.top = element_text(angle  = 0,
+                                     hjust  = 0.5,
+                                     vjust  = 1,
+                                     margin = margin(b = 2)))
 ```
 
-```{r eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
-options(matrstars.figura_num = "5.3", matrstars.tabla_num = "5.2")
-muestra_demo <- select(interestelar_100, RENECO)
-muestra_demo <- explora_na(
-  muestra_demo,
-  variables = RENECO,
-  accion    = "eliminar",
-  titulo    = "Rentabilidad Económica: valores ausentes",
-  subtitulo = "Transporte de mercancías interestelar"
-)
-rm(muestra_demo)
+-   **`vis_miss()`**: dibuja el mapa de celdas **Present/Missing**, con las observaciones en el eje Y y las variables en el eje X.
+
+-   **`labs(...)`**: títulos del gráfico y etiqueta del eje Y. `fill = NULL` suprime el título de la leyenda, que por defecto sería poco informativo.
+
+-   **`scale_fill_manual(...)`**: internamente, `vis_miss()` codifica con `TRUE` la ausencia de dato y con `FALSE` su presencia. Aquí pedimos rojo para `TRUE` y gris para `FALSE`, y sustituimos el texto de la leyenda para que leamos NA/Presente en lugar de TRUE/FALSE.
+
+-   **`theme(...)`**: pone el título en negrita a tamaño 14 y recoloca las etiquetas del eje X superior, que `vis_miss()` deja por defecto muy despegadas del panel cuando las variables son pocas.
+
+Para saber qué empresa carece de dato, filtramos con `{dplyr}`. La función `is.na()` responde, caso por caso, a una pregunta muy simple: ¿falta el dato de esta variable en esta fila?
+
+```{r eval=FALSE, echo=TRUE, message=FALSE}
+# Localizar los casos concretos con NA
+casos_na <- muestra %>% filter(is.na(RENECO)) %>% select(RENECO)
 ```
 
-**A partir de aquí, y en los capítulos siguientes, el tratamiento de *missing values* se realizará con `explora_na()`**. La ficha completa de la función —argumentos, valores por defecto, ejemplos de uso y enlace al código fuente en GitHub— puede consultarse en el **Apéndice: Funciones auxiliares del paquete `{MATrstars}`** al final del libro.
+Guardamos el listado en el objeto "casos_na" porque a continuación hay que darle formato: en el *script* "previo_puro_rstars.R" se presenta con el patrón `kable()` + `kable_styling()` + `row_spec()` que veremos en el apartado siguiente, y que es justamente lo que `explora_na()` aplica por dentro.
 
-Resueltos los valores perdidos, **conviene rastrear la posible presencia de *outliers*** o casos atípicos, capaces de desvirtuar los resultados de ciertos análisis. Como trabajamos con una sola variable métrica, la rentabilidad económica, nos basta con representarla mediante un ***box-plot*** o gráfico de caja. Recurriremos para ello a la gramática de `{ggplot2}`:
+Y para descartarla, el mismo filtro con el operador **`!`**, que significa "no", de manera que `!is.na(RENECO)` se lee como "que RENECO no sea un dato faltante":
+
+```{r eval=FALSE, echo=TRUE, message=FALSE}
+# Eliminar casos con NAs
+muestra <- muestra %>% filter(! is.na(RENECO))
+```
+
+</details>
+
+Ahora bien, ¿por qué hemos elegido *eliminar* el caso? Ante la existencia de *missing values*, se puede actuar de varios modos. La decisión no es trivial y depende de la proporción de datos faltantes, de si su ausencia es aleatoria o sistemática, y del tipo de análisis posterior. Las principales estrategias son:
+
+-   **Eliminación del caso** (*listwise deletion*): se descartan las observaciones con algún valor faltante. Es la opción más sencilla, pero implica perder información. Si los datos no faltan de forma completamente aleatoria (MCAR, *Missing Completely At Random*), la eliminación puede introducir sesgos en los resultados.
+
+-   **Imputación por media o mediana**: se sustituye el valor faltante por la media (o la mediana) de la variable. Conserva el tamaño muestral, pero subestima la variabilidad real y puede distorsionar las relaciones entre variables.
+
+-   **Imputación múltiple** (paquete `{mice}` en R): genera varios conjuntos de datos completos con valores simulados, analiza cada uno por separado y combina los resultados. Es el enfoque de referencia en investigación, ya que refleja la incertidumbre asociada a la imputación.
+
+-   **Imputación por k-vecinos más próximos** (función `kNN()` del paquete `{VIM}`): estima el valor faltante a partir de los casos más parecidos en las demás variables. Intuitivo y eficaz cuando las variables están relacionadas entre sí.
+
+En nuestro ejemplo, dado que los *missing values* representan un porcentaje muy reducido respecto al total (apenas 1 caso de 104 para RENECO), **optaremos por la eliminación del caso**, que es la vía más directa y no introduce distorsión apreciable en este contexto. En situaciones con mayor proporción de datos faltantes, o cuando se sospeche que la ausencia no es aleatoria, convendría considerar las técnicas de imputación mencionadas. De ahí el `accion = "eliminar"` del código anterior. En el *Global Environment* podemos comprobar que el *data frame* "muestra" tiene ahora un caso menos: 103.
+
+Resueltos los valores perdidos, **conviene rastrear la posible presencia de *outliers*** o casos atípicos, capaces de desvirtuar los resultados de ciertos análisis. Como trabajamos con una sola variable métrica, la rentabilidad económica, nos basta con representarla mediante un ***box-plot*** o gráfico de caja, localizar los casos que quedan fuera de los bigotes y decidir qué hacer con ellos. De nuevo son tres pasos, y de nuevo `{MATrstars}` los reúne en una sola llamada, esta vez con `explora_outliers()`:
+
+```{r eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
+options(matrstars.figura_num = "5.3", matrstars.tabla_num = "5.3")
+## Localizando y eliminando outliers
+muestra_so <- explora_outliers(
+  muestra,
+  variables = RENECO,
+  accion    = "eliminar",
+  titulo    = "Rentabilidad Económica",
+  subtitulo = "Empresas de transporte interestelar"
+)
+```
+
+Los argumentos son los mismos que los de `explora_na()`. Obsérvese que aquí **no sobrescribimos "muestra"**, sino que creamos un *data frame* nuevo, "muestra_so" (*sin outliers*), porque más adelante nos interesará comparar los resultados con y sin casos atípicos.
+
+Recordemos brevemente cómo se lee este gráfico, que ya conocemos del capítulo 4. La "caja" alberga el 50% central de los casos, los comprendidos entre el primer y el tercer cuartil, cuya diferencia es el *rango intercuartílico*; la línea horizontal que la atraviesa es la mediana. De la caja salen dos segmentos o "bigotes": el superior alcanza el mayor valor que no llega a considerarse atípico y el inferior, el menor. Los casos atípicos u *outliers* son precisamente los que quedan más allá, a más de **1,5 veces** el rango intercuartílico por encima del tercer cuartil o por debajo del primero, y se dibujan como puntos sueltos. Esa es exactamente la regla que aplica la función, y la tabla que acompaña al gráfico nos da los nombres: *Jovian Logistics* y *Sandworm Freight*.
+
+`explora_outliers()` incorpora además una mejora visual que conviene conocer: cuando los *outliers* son tan extremos que "aplastan" la caja del *box-plot* hasta hacerla ilegible, activa automáticamente una **escala pseudologarítmica** en el eje Y. Esta transformación (`pseudo_log` en `{ggplot2}`, activable manualmente con `scale_y_continuous(trans = "pseudo_log")`) comprime los valores grandes sin alterar los pequeños y, a diferencia del logaritmo puro, admite valores cero y negativos. La función detecta cuándo es necesario aplicarla comparando el rango de los datos con el rango intercuartílico: si la diferencia es muy acusada, la aplica; en caso contrario, mantiene la escala lineal habitual.
+
+<details>
+
+<summary>**Cómo se hace sin `{MATrstars}`**</summary>
+
+El *box-plot* se construye con la gramática de `{ggplot2}`:
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE}
 ## Localizando outliers
 ggplot(data = muestra, aes(y = RENECO)) +
-    geom_boxplot(fill = "orange") +
-    ggtitle("Rentabilidad Económica",
-            subtitle = "Empresas de transporte interestelar") +
-            ylab("Rentabilidad Económica (%)") +
-    theme(plot.title = element_text(face = "bold", size = 14))
+  geom_boxplot(fill = "orange", alpha = 0.9) +
+  labs(title    = "Rentabilidad Económica",
+       subtitle = "Empresas de transporte interestelar",
+       y        = "RENECO",
+       x        = NULL) +
+  theme(plot.title   = element_text(face = "bold", size = 14),
+        axis.text.x  = element_blank(),
+        axis.ticks.x = element_blank())
 ```
 
-Obteniéndose el gráfico:
-
-```{r eval=TRUE, echo=FALSE, message=FALSE}
-## Localizando outliers
-ggplot(data = muestra, aes(y = RENECO)) +
-    geom_boxplot(fill = "orange") +
-    ggtitle("Rentabilidad Económica",
-            subtitle = "Empresas de transporte interestelar") +
-            ylab("Rentabilidad Económica (%)") +
-    theme(plot.title = element_text(face = "bold", size = 14))
-```
-
-::: {style="text-align: center;"}
-**Figura 5.4**
-:::
-
-
-Recordemos brevemente cómo se lee este gráfico, que ya conocemos del capítulo 4. La "caja" alberga el 50% central de los casos, los comprendidos entre el primer y el tercer cuartil, cuya diferencia es el *rango intercuartílico*; la línea horizontal que la atraviesa es la mediana. De la caja salen dos segmentos o "bigotes": el superior alcanza el mayor valor que no llega a considerarse atípico y el inferior, el menor. Los casos atípicos u *outliers* son precisamente los que quedan más allá, a más de **1,5 veces** el rango intercuartílico por encima del tercer cuartil o por debajo del primero, y se dibujan como puntos sueltos.
-
-En nuestro caso, el *box-plot* delata dos empresas atípicas. Para identificarlas recurriremos de nuevo a `{dplyr}` y **estableceremos un filtro**:
+Para identificar los casos atípicos hay que traducir la regla de 1,5·IQR a un filtro:
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE}
 # Mostrar casos concretos de outliers
 Q1 <- quantile (muestra$RENECO, c(0.25))
 Q3 <- quantile (muestra$RENECO, c(0.75))
 
-muestra %>% 
+casos_out <- muestra %>%
   filter(RENECO > Q3 + 1.5*IQR(RENECO) |
          RENECO < Q1 - 1.5*IQR(RENECO)) %>%
-  select(RENECO)
+  select(RENECO) %>%
+  arrange(RENECO)
 ```
 
-Las dos primeras líneas calculan el primer cuartil (Q1) y el tercero (Q3) con la función `quantile()`, a la que se pasa como segundo argumento la proporción de casos que deben quedar por debajo del cuantil buscado: `0.25` para el primer cuartil, puesto que deja por debajo al 25% de empresas con menor rentabilidad. Después, `filter()` retiene los *outliers*, definidos como los casos cuyo RENECO supera a Q3 más 1,5 veces el rango intercuartílico, o bien no alcanza a Q1 menos esa misma cantidad; el rango intercuartílico lo proporciona la función `IQR()`. Por último, `select()` muestra el resultado en la consola:
+Las dos primeras líneas calculan el primer cuartil (Q1) y el tercero (Q3) con la función `quantile()`, a la que se pasa como segundo argumento la proporción de casos que deben quedar por debajo del cuantil buscado: `0.25` para el primer cuartil, puesto que deja por debajo al 25% de empresas con menor rentabilidad. Después, `filter()` retiene los *outliers*, definidos como los casos cuyo RENECO supera a Q3 más 1,5 veces el rango intercuartílico, o bien no alcanza a Q1 menos esa misma cantidad; el rango intercuartílico lo proporciona la función `IQR()`.
 
-```{r eval=TRUE, echo=FALSE, message=FALSE}
-# Mostrar casos concretos de outliers
-Q1 <- quantile (muestra$RENECO, c(0.25))
-Q3 <- quantile (muestra$RENECO, c(0.75))
+Y para crear el *data frame* depurado, el filtro contrario:
 
-muestra %>% 
-  filter(RENECO > Q3 + 1.5*IQR(RENECO) |
-         RENECO < Q1 - 1.5*IQR(RENECO)) %>%
-  select(RENECO)
+```{r eval=FALSE, echo=TRUE, message=FALSE}
+# Eliminar outliers
+muestra_so <- muestra %>%
+  filter(RENECO <= Q3 + 1.5*IQR(RENECO) &
+         RENECO >= Q1 - 1.5*IQR(RENECO))
 ```
 
-Los casos atípicos o *outliers* en la variable RENECO son *Jovian Logistics* y *Sandworm Freight*.
+Conviene reparar en que, dentro de `filter()`, ahora pedimos justo lo contrario que antes: por eso hay que invertir el sentido de las desigualdades y sustituir el operador "**\|**" por "**&**".
+
+</details>
 
 Como ocurría con los *missing values*, el **tratamiento de los *outliers*** depende de la información que se tenga, y del enfoque que se quiera seguir en la aplicación de las diferentes técnicas. Es un tema que a veces resulta **complejo**, y que no está exento de divergencias en la opinión de los investigadores. Las principales alternativas son:
 
@@ -360,81 +349,15 @@ Como ocurría con los *missing values*, el **tratamiento de los *outliers*** dep
 
 La decisión depende en última instancia del contexto del análisis. Al final de este capítulo veremos, precisamente, cómo la presencia o ausencia de *outliers* puede alterar las correlaciones entre variables, lo que subraya la importancia de esta decisión.
 
-En nuestro ejemplo, dado que los *outliers* son solo dos y apenas representan una fracción de la muestra, **prescindiremos de esas dos empresas de comportamiento atípico** para que **no distorsionen los resultados** de las técnicas que apliquemos después, como un ANOVA o un análisis de regresión. Bastará con crear a partir de "muestra" un nuevo *data frame* sin esos dos casos, al que llamaremos "muestra_so":
-
-```{r eval=TRUE, echo=TRUE, message=FALSE}
-# Eliminar outliers
-muestra_so <- muestra %>%
-              filter(RENECO <= Q3 + 1.5*IQR(RENECO) &
-                     RENECO >= Q1 - 1.5*IQR(RENECO))
-```
-
-Conviene reparar en que, dentro de `filter()`, ahora pedimos justo lo contrario que antes: por eso hay que invertir el sentido de las desigualdades y sustituir el operador "**\|**" por "**&**". En el *Global Environment* comprobamos que "muestra_so" conserva las mismas variables que "muestra", pero con dos casos menos: 101.
-
-Como sucedía con los *missing values*, este procedimiento reaparecerá una y otra vez en los capítulos siguientes: un *box-plot* con `ggplot()`, el cálculo de Q1 y Q3 con `quantile()`, un `filter()` para listar los casos y otro para eliminarlos. Para aligerar el código, el paquete `{MATrstars}` incluye la función auxiliar `explora_outliers()`, que reúne todo ese bloque en una sola llamada y presenta la tabla de casos afectados con el estilo tipográfico habitual del libro, mediante `kable_rstars()`.
-
-Además, la función incorpora una mejora visual importante: cuando los *outliers* son tan extremos que "aplastan" la caja del *box-plot* hasta hacerla ilegible, `explora_outliers()` activa automáticamente una **escala pseudologarítmica** en el eje Y. Esta transformación (`pseudo_log` en `{ggplot2}`, activable manualmente con `scale_y_continuous(trans = "pseudo_log")`) comprime los valores grandes sin alterar los pequeños, y a diferencia del logaritmo puro, admite valores cero y negativos. La función detecta cuándo es necesario aplicarla comparando el rango de los datos con el rango intercuartílico: si la diferencia es muy acusada, aplica la transformación automáticamente; en caso contrario, mantiene la escala lineal habitual.
-
-De este modo, todo el bloque de código anterior podría haberse escrito de forma mucho más compacta como:
-
-```{r eval=FALSE, echo=TRUE, message=FALSE}
-muestra_so <- explora_outliers(
-  muestra,
-  variables = RENECO,
-  accion    = "eliminar",
-  titulo    = "Rentabilidad Económica",
-  subtitulo = "Empresas de transporte interestelar"
-)
-```
-
-Como "muestra_so" ya viene depurada, volveremos a apoyarnos en una **copia limpia** del *data frame* original con la sola variable RENECO, de nuevo bajo el nombre "muestra_demo". Aplicamos primero `explora_na()` para descartar los NAs y después `explora_outliers()`. El resultado coincidirá con el del bloque manual, ahora con las mejoras comentadas:
-
-```{r eval=FALSE, echo=TRUE, message=FALSE}
-muestra_demo <- select(interestelar_100, RENECO)
-muestra_demo <- explora_na(muestra_demo, RENECO, accion = "eliminar")
-muestra_demo <- explora_outliers(
-  muestra_demo,
-  variables = RENECO,
-  accion    = "eliminar",
-  titulo    = "Rentabilidad Económica",
-  subtitulo = "Empresas de transporte interestelar"
-)
-rm(muestra_demo)
-```
-
-```{r include=FALSE}
-# Preparacion silenciosa: crear la copia y descartar los NAs con explora_na().
-# Se hace en un chunk oculto para que el numerador no reserve Figura/Tabla
-# aqui (las etiquetas del explora_na univariante ya se emitieron mas arriba
-# en el chunk 5.3).
-muestra_demo <- select(interestelar_100, RENECO)
-muestra_demo <- explora_na(muestra_demo, RENECO, accion = "eliminar")
-```
-
-```{r eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
-options(matrstars.figura_num = "5.5", matrstars.tabla_num = "5.3")
-muestra_demo <- explora_outliers(
-  muestra_demo,
-  variables = RENECO,
-  accion    = "eliminar",
-  titulo    = "Rentabilidad Económica",
-  subtitulo = "Empresas de transporte interestelar"
-)
-```
-
-```{r include=FALSE}
-rm(muestra_demo)
-```
-
-Más adelante, tras trabajar con varias variables simultáneamente, veremos cómo esta misma función `explora_outliers()` se aplica también al caso multivariante, calculando internamente la distancia de Mahalanobis. En los capítulos que siguen, la detección y eliminación de *outliers* se realizará con `explora_outliers()`, cuya ficha completa —argumentos, valores por defecto y enlace al código fuente en GitHub— puede consultarse en el **Apéndice: Funciones auxiliares del paquete `{MATrstars}`** al final del libro.
+En nuestro ejemplo, dado que los *outliers* son solo dos y apenas representan una fracción de la muestra, **prescindiremos de esas dos empresas de comportamiento atípico** para que **no distorsionen los resultados** de las técnicas que apliquemos después, como un ANOVA o un análisis de regresión. En el *Global Environment* comprobamos que "muestra_so" conserva las mismas variables que "muestra", pero con dos casos menos: 101.
 
 ### ![](figuras/key.svg){.hicon} Descripción de una variable. {#c05-descripcion-de-una-variable}
 
 Con la base de datos ya depurada de *missing values* y *outliers*, y **antes** de aplicar la técnica que corresponda a los objetivos del estudio, se acostumbra a presentar una batería de **gráficos** básicos y **medidas** descriptivas que ofrecen una **idea inicial de la estructura** del sector en la variable analizada. Hablamos de medidas y gráficos de posición, de dispersión y de forma, esto es, de asimetría y curtosis.
 
-Conviene abrir ese recorrido con una tabla que recoja la distribución de frecuencias de la variable. Cuando los casos son numerosos —101 en nuestro ejemplo—, lo razonable es agruparlos en intervalos, tal como aprendimos en el capítulo 4. Aquí construiremos la tabla con `kable_rstars()`, la función de presentación tabular del paquete `{MATrstars}`, de la que hablaremos enseguida:
+Conviene abrir ese recorrido con una tabla que recoja la distribución de frecuencias de la variable. Cuando los casos son numerosos —101 en nuestro ejemplo—, lo razonable es agruparlos en intervalos, tal como aprendimos en el capítulo 4. La construcción de la tabla es idéntica en las dos versiones del *script*; lo único que cambia es la última instrucción, la que la presenta en pantalla, donde recurrimos a `kable_rstars()`:
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
+```{r eval=TRUE, echo=TRUE, message=FALSE}
 # Tabla de datos (distribución de frecuencias agrupadas en intervalos)
 muestra_so <- muestra_so %>% arrange(RENECO, row.names(muestra_so))
 k <- nclass.Sturges(muestra_so$RENECO)
@@ -460,24 +383,41 @@ conteo_intervalos_df %>%
 :::
 
 
-La función `kable_rstars()` pertenece a `{MATrstars}`, un pequeño **paquete propio** que reúne las **funciones auxiliares** empleadas a lo largo del libro. No está alojado en CRAN, sino en GitHub ([https://github.com/teckel71/MATrstars](https://github.com/teckel71/MATrstars)), y se instala de forma automática la primera vez que se ejecuta el bloque siguiente:
-
-```{r eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-# Paquete MATrstars: funciones auxiliares del libro R-Stars.
-if (!requireNamespace("MATrstars", quietly = TRUE)) {
-  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
-  remotes::install_github("teckel71/MATrstars")
-}
-library(MATrstars)
-```
-
 `kable_rstars()` es un **envoltorio** de `kable()` y `kable_styling()` que aplica automáticamente los ajustes tipográficos habituales del libro: encabezado en negrita centrado, filas alternas rayadas, bordes discretos, cuerpo centrado, fuente de 11 puntos, punto como separador decimal y notación científica desactivada. El usuario solo indica lo específico de cada tabla (`caption`, `col.names`, `digits`); el resto está preconfigurado.
 
-**A partir de aquí, la práctica totalidad de las tablas del libro se generarán con `kable_rstars()`**. La ficha completa puede consultarse en el **Apéndice: Funciones auxiliares del paquete `{MATrstars}`** al final del libro.
+<details>
+
+<summary>**Cómo se hace sin `{MATrstars}`**</summary>
+
+Con `{knitr}` y `{kableExtra}`, esos mismos ajustes hay que escribirlos uno a uno cada vez:
+
+```{r eval=FALSE, echo=TRUE, message=FALSE}
+conteo_intervalos_df %>%
+  kable(caption     = "Dist. frecuencias agrupadas: Rentabilidad Económica",
+        col.names   = c("Intervalo", "n(i)", "N(i)", "f(i)", "F(i)"),
+        digits      = c(NA, 0, 0, 2, 2),
+        format.args = list(decimal.mark = ".", scientific = FALSE)) %>%
+  kable_styling(full_width = FALSE,
+                bootstrap_options = c("striped", "bordered", "condensed"),
+                position = "center",
+                font_size = 11) %>%
+  row_spec(0, bold = TRUE,  align = "c") %>%
+  row_spec(1:nrow(conteo_intervalos_df), bold = FALSE, align = "c")
+```
+
+-   **`kable()`**: genera la tabla. `format.args` fija el punto como separador decimal y desactiva la notación científica.
+
+-   **`kable_styling()`**: define el aspecto general (anchura, filas rayadas, bordes, posición y tamaño de fuente).
+
+-   **`row_spec(0, ...)`**: da formato a la fila de encabezados; **`row_spec(1:nrow(...), ...)`**, al cuerpo de la tabla.
+
+El resultado visual es idéntico. La diferencia es que estas doce líneas reaparecerían en cada una de las tablas del libro.
+
+</details>
 
 La lectura de la tabla es clara: la **rentabilidad económica** de estas empresas se concentra en valores **medios-altos**, en torno al 50-60%, y son los dos intervalos centrales (47,4-53,9 y 53,9-60,3) los que reúnen la mayor parte de los casos. Alrededor de ocho de cada diez compañías quedan entre el 41% y el 66,8%, lo que apunta a un sector relativamente estable, con resultados parecidos entre sí. Los extremos están poco poblados: apenas un 5% presenta rentabilidades por debajo del 34,5% y solo un 2% supera el 73,2%. En términos económicos, la competencia y la eficiencia operativa parecen empujar a las empresas hacia un rendimiento **razonable y sostenido**, de modo que tanto el fracaso como el éxito excepcional resultan **minoritarios**. **Primera respuesta parcial para Mara Qyà:** el sector exhibe una rentabilidad bastante homogénea, si bien aún debemos confirmar esta impresión con las medidas descriptivas y descartar la presencia de anomalías.
 
-El **análisis gráfico**, por su parte, ofrece una imagen mucho más intuitiva de cómo se distribuyen nuestros casos en la variable estudiada.
+El **análisis gráfico**, por su parte, ofrece una imagen mucho más intuitiva de cómo se distribuyen nuestros casos en la variable estudiada. Los cuatro gráficos que siguen son idénticos en las dos versiones del *script*: aquí no interviene `{MATrstars}`.
 
 Un gráfico fundamental es el **histograma** de la variable estudiada. Para ello, utilizaremos la gramática del paquete `{ggplot2}`:
 
@@ -495,7 +435,7 @@ ggplot(data = muestra_so, aes(x = RENECO)) +
              color = "dark blue",
              linewidth = 1.2,
              alpha = 0.8) +
-  ggtitle("Histograma")+
+  ggtitle("Histograma") +
   xlab("Rentabilidad Económica (%)") +
   ylab("Frecuencias")
 
@@ -503,7 +443,7 @@ g1
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.6**
+**Figura 5.4**
 :::
 
 
@@ -523,11 +463,11 @@ ggplot(data = muestra_so, aes(x = RENECO)) +
              alpha = 0.8) +
   stat_function(fun = dnorm, args = list(mean = mean(muestra_so$RENECO),
                                          sd = sd(muestra_so$RENECO)),
-                                         geom = "area",
-                                         color = "darkblue", 
-                                         fill = "yellow",
-                                         alpha = 0.2) +
-  ggtitle("Gráfico de densidad vs curva normal")+
+                geom = "area",
+                color = "darkblue",
+                fill = "yellow",
+                alpha = 0.2) +
+  ggtitle("Gráfico de densidad vs curva normal") +
   xlab("Rentabilidad Económica (%)") +
   ylab("Densidad")
 
@@ -535,11 +475,11 @@ g2
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.7**
+**Figura 5.5**
 :::
 
 
-La curva naranja muestra cómo se distribuye la **rentabilidad económica**: tiene forma de “campana”, con la mayoría de empresas concentradas alrededor del 50–60%. La línea vertical azul marca el valor central (media), en torno al 52%. Comparada con la curva azul de referencia (la normal), la distribución real es muy parecida, aunque algo más ancha y con un ligero peso extra en rentabilidades algo por debajo del centro; en el extremo alto hay menos casos de lo que predeciría una campana perfecta. En términos económicos: el sector muestra un rendimiento **bastante estable** y similar entre compañías, con **pocas** muy rezagadas o extraordinariamente rentables.
+La curva naranja muestra cómo se distribuye la **rentabilidad económica**: tiene forma de "campana", con la mayoría de empresas concentradas alrededor del 50–60%. La línea vertical azul marca el valor central (media), en torno al 52%. Comparada con la curva azul de referencia (la normal), la distribución real es muy parecida, aunque algo más ancha y con un ligero peso extra en rentabilidades algo por debajo del centro; en el extremo alto hay menos casos de lo que predeciría una campana perfecta. En términos económicos: el sector muestra un rendimiento **bastante estable** y similar entre compañías, con **pocas** muy rezagadas o extraordinariamente rentables.
 
 Un tercer gráfico útil es el ***box-plot***, construido ya sobre la muestra sin *outliers* y enriquecido con los valores individuales de cada empresa, que incorporamos con `geom_jitter()`:
 
@@ -564,13 +504,15 @@ g3
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.8**
+**Figura 5.6**
 :::
 
 
 El *box-plot* confirma que la rentabilidad económica se concentra en la zona central. La **mediana** ronda el **50%** —la línea que atraviesa la caja— y la mitad de las empresas se sitúa aproximadamente entre el 46% y el 59%, altura de la caja o rango intercuartílico, lo que denota una variabilidad moderada. El punto azul, que marca la media, queda muy próximo a la mediana, señal de una distribución casi simétrica. Los bigotes se extienden hasta valores en torno al 28% y al 80%, y ya no aparece ningún caso atípico, puesto que los dos detectados se eliminaron previamente. La nube de puntos rojos que dibuja `geom_jitter()` confirma lo esencial: la mayoría de las compañías rinde de forma parecida y estable en el entorno del 50-60%.
 
-Conviene, además, conocer el valor de las principales **medidas descriptivas** —de posición, dispersión y forma— que caracterizan la distribución. Crearemos para ello un *data frame* llamado "estadisticos", que las recogerá todas, aplicando a la variable RENECO de "muestra_so" la función `summarise()` de `{dplyr}`. Calcularemos la media, la desviación típica, el valor mínimo, la mediana, el valor máximo, el coeficiente de asimetría de *Fisher* y el coeficiente de apuntamiento o curtosis de *Fisher*. Esta última medida procede de la función `kurtosis()` del paquete `{moments}`, que debemos tener activado. Un matiz importante: esa función sitúa la distribución perfectamente mesocúrtica en el valor 3, de modo que le restaremos 3 para que la referencia vuelva a ser 0, tal como vimos en el capítulo 4. El código es:
+Conviene, además, conocer el valor de las principales **medidas descriptivas** —de posición, dispersión y forma— que caracterizan la distribución. Crearemos para ello un *data frame* llamado "estadisticos", que las recogerá todas, aplicando a la variable RENECO de "muestra_so" la función `summarise()` de `{dplyr}`. Calcularemos la media, la desviación típica, el valor mínimo, la mediana, el valor máximo, el coeficiente de asimetría de *Fisher* y el coeficiente de apuntamiento o curtosis de *Fisher*. Esta última medida procede de la función `kurtosis()` del paquete `{moments}`, que debemos tener activado. Un matiz importante: esa función sitúa la distribución perfectamente mesocúrtica en el valor 3, de modo que le restaremos 3 para que la referencia vuelva a ser 0, tal como vimos en el capítulo 4.
+
+Volcar todas las medidas en un *data frame* de un único caso tiene una ventaja evidente: podemos mostrarlas en una tabla elegante generada a partir de él con `kable_rstars()`:
 
 ```{r eval=TRUE, echo=TRUE, message=FALSE}
 # Calcular estadísticos
@@ -581,23 +523,9 @@ estadisticos <- muestra_so %>% summarise( Media = mean(RENECO),
                                           Maximo = max(RENECO),
                                           Asimetria = skewness(RENECO),
                                           Curtosis = kurtosis(RENECO) - 3)
-```
 
-Volcar todas las medidas en un *data frame* de un único caso tiene una ventaja evidente: podemos mostrarlas en una tabla elegante generada a partir de él con `kable_rstars()`:
-
-```{r eval=FALSE, echo=TRUE, message=FALSE}
 # Mostrar estadisticos
 estadisticos %>%
-  kable_rstars(caption   = "Principales Estadísticos de la Rentabilidad Económica",
-               col.names = c("Media", "Desviación Típica",
-                             "Valor mínimo", "Mediana",
-                             "Valor Máximo", "C. Asimetría Fisher",
-                             "C. Curtosis Fisher"),
-               digits    = c(2, 2, 2, 2, 2, 2, 2))
-```
-
-```{r eval=TRUE, echo=FALSE, message=FALSE}
-  estadisticos %>%
   kable_rstars(
                col.names = c("Media", "Desviación Típica",
                              "Valor mínimo", "Mediana",
@@ -615,7 +543,7 @@ El significado de estas medidas quedó explicado en el capítulo 4. En conjunto,
 
 -   La rentabilidad típica del sector está en torno al 51–52% (media ≈ 51,6% y mediana ≈ 50,4%), lo que indica un nivel medio-alto y sin sesgos fuertes.
 
--   La variabilidad es moderada (desv. típica ≈ 10 p.p.): la mayoría de empresas se mueve, grosso modo, entre \~42% y \~62%. Es un sector relativamente estable.
+-   La variabilidad es moderada (desv. típica ≈ 10 p.p.): la mayoría de empresas se mueve, grosso modo, entre ~42% y ~62%. Es un sector relativamente estable.
 
 -   La asimetría ligeramente positiva (0,14) sugiere que hay algunas compañías con rentabilidades algo superiores a lo habitual, pero no dominan el panorama.
 
@@ -623,7 +551,7 @@ El significado de estas medidas quedó explicado en el capítulo 4. En conjunto,
 
 -   Los extremos observados (≈ 28% mínimo y ≈ 80% máximo) existen, pero son minoría.
 
--   **Conclusión:** el negocio de transporte interestelar muestra una **rentabilidad sostenida y relativamente homogénea**; hay diferencias entre empresas (gestión, escala, rutas, mix tecnológico), pero el **riesgo de resultados extremos** parece **contenido**, y los “superéxitos” son poco frecuentes.
+-   **Conclusión:** el negocio de transporte interestelar muestra una **rentabilidad sostenida y relativamente homogénea**; hay diferencias entre empresas (gestión, escala, rutas, mix tecnológico), pero el **riesgo de resultados extremos** parece **contenido**, y los "superéxitos" son poco frecuentes.
 
 ### ![](figuras/key.svg){.hicon} Normalidad. {#c05-normalidad}
 
@@ -631,28 +559,13 @@ Numerosas técnicas multivariantes de corte inferencial —el análisis de la va
 
 Empecemos por el **método gráfico** más extendido: el ***gráfico qq*** o cuantil-cuantil, que enfrenta los cuantiles de nuestra muestra con los de una distribución normal teórica de idéntica media y desviación típica. Si los puntos se alinean sobre la diagonal, asumiremos un comportamiento aproximadamente normal. El código, con las herramientas de `{ggplot2}`, es el siguiente:
 
-```{r eval=FALSE, echo=TRUE, message=FALSE}
+```{r eval=TRUE, echo=TRUE, message=FALSE}
 ## Normalidad
 
 # Grafico QQ
 g4 <-
 ggplot(data = muestra_so, aes(sample = RENECO)) +
-  stat_qq(colour = "red") + 
-  stat_qq_line(colour = "dark blue") +
-  ggtitle("QQ-Plot")
-
-g4
-```
-
-Y el resultado:
-
-```{r eval=TRUE, echo=FALSE, message=FALSE}
-## Normalidad
-
-# Grafico QQ
-g4 <-
-ggplot(data = muestra_so, aes(sample = RENECO)) +
-  stat_qq(colour = "red") + 
+  stat_qq(colour = "red") +
   stat_qq_line(colour = "dark blue") +
   ggtitle("QQ-Plot")
 
@@ -660,7 +573,7 @@ g4
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.9**
+**Figura 5.7**
 :::
 
 
@@ -668,15 +581,7 @@ No siempre resulta fácil extraer una conclusión firme de un gráfico *qq*. En 
 
 Si queremos ser más precisos, al análisis gráfico podemos añadir uno formal, apoyado en un **contraste de hipótesis**. La prueba más habitual es la **de normalidad de *Shapiro y Wilk***, que se comporta bien en muestras relativamente reducidas. Su hipótesis nula es, justamente, el supuesto de normalidad; así que, para una significación del 5%, un p-valor superior a 0,05 nos llevará a no rechazarla. La ejecutamos así:
 
-```{r eval=FALSE, echo=TRUE, message=FALSE}
-# Prueba de Shapiro-Wilk
-
-shapiro.test(x = muestra_so$RENECO)
-```
-
-El resultado obtenido en la consola es:
-
-```{r eval=TRUE, echo=FALSE, message=FALSE}
+```{r eval=TRUE, echo=TRUE, message=FALSE}
 # Prueba de Shapiro-Wilk
 
 shapiro.test(x = muestra_so$RENECO)
@@ -692,7 +597,7 @@ En definitiva, para describir inicialmente la distribución de frecuencias de un
 ## Resumen gráfico
 
 resumen <- (g1 | g2)/(g3 | g4)
-resumen <- resumen + 
+resumen <- resumen +
   plot_annotation(
     title = "Rentabilidad Económica",
     subtitle = "Empresas TMI (sin outliers)",
@@ -700,7 +605,7 @@ resumen <- resumen +
       # TÍTULO de la composición
       plot.title = element_text(
         size = 16,          # tamaño
-        face = "bold",      # negrita
+        face = "bold"       # negrita
       ),
       # SUBTÍTULO de la composición
       plot.subtitle = element_text(
@@ -710,7 +615,7 @@ resumen
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.10**
+**Figura 5.8**
 :::
 
 
@@ -732,10 +637,20 @@ También aquí el primer paso consiste en localizar los casos con **valores perd
 
 Imaginemos un análisis que tenga en cuenta cuatro variables: RENECO (rentabilidad económica), ACTIVO (volumen de activos de la empresa), MARGEN (margen de beneficio) y RES (resultado del ejercicio). Son, precisamente, las cuatro dimensiones por las que pregunta Mara Qyà.
 
-Generaremos primero una copia del *data frame* original para preservar su integridad, a la que llamaremos "muestra2". Sobre ella aplicaremos `explora_na()`, indicando en el argumento `variables` las cuatro del análisis y `accion = "eliminar"` para que, además de mostrar el gráfico y la tabla de casos afectados, los descarte del *data frame*:
+Generaremos primero una copia del *data frame* original para preservar su integridad, a la que llamaremos "muestra2". Sobre ella aplicaremos `explora_na()`, que ya conocemos, indicando esta vez en el argumento `variables` las cuatro del análisis:
+
+```{r include=FALSE}
+# NOTA DE CONSTRUCCIÓN: puente temporal. Fija los números de figura y tabla
+# que explora_na() emitirá en el chunk siguiente, porque ese chunk lleva
+# echo=TRUE y la inyección del preprocesador en el código fuente quedaría a
+# la vista del lector. Ajusta estos dos valores a la numeración definitiva
+# del capítulo, o elimina el chunk una vez que numerar_tablas_figuras.R
+# inyecte mediante knitr::opts_hooks$set() en lugar de reescribir la fuente.
+options(matrstars.figura_num = "5.9", matrstars.tabla_num = "5.6")
+```
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
-options(matrstars.figura_num = "5.11", matrstars.tabla_num = "5.6")
+options(matrstars.figura_num = "5.9", matrstars.tabla_num = "5.6")
 ## Trabajando con multiples variables.
 
 # Copia de df original.
@@ -751,23 +666,23 @@ muestra2 <- explora_na(
 )
 ```
 
-El *data frame* "muestra2" contiene los mismos datos que "interestelar_100", salvo los 3 casos con *missing values* que han sido eliminados (101): *Vega Transport*, *Photon Pack Freight* y *Poe Dameron Cargo*.
+Obsérvese que ahora el mapa de ausencias tiene cuatro columnas, una por variable, y que la eliminación es *listwise*: se descarta el caso entero si le falta el dato en **cualquiera** de las cuatro. El *data frame* "muestra2" contiene, pues, los mismos datos que "interestelar_100" salvo los 3 casos con *missing values* (101): *Vega Transport*, *Photon Pack Freight* y *Poe Dameron Cargo*.
 
 En cuanto a la **detección de *outliers***, examinar las variables de una en una resulta poco operativo cuando son numerosas. La alternativa consiste en calcular la ***distancia de Mahalanobis***, que actúa como **"resumen" del comportamiento de cada caso** en todas las variables consideradas a la vez. Podemos verla como una especie de "z-score multivariante": mide cuántas desviaciones típicas se aleja una observación del "centro" del conjunto, teniendo en cuenta todas las variables y el modo en que se relacionan entre sí.
 
 Su utilización, intuitivamente, se puede justificar de este modo:
 
--   Con una sola variable, el “raro” es el que está a muchos **z-scores** de la media.
+-   Con una sola variable, el "raro" es el que está a muchos **z-scores** de la media.
 
--   Con varias variables (p. ej., rentabilidad, activo, margen, resultado), el “centro” es el vector de medias y la forma de la nube viene dada por la covarianza (las variables pueden estar en escalas distintas y estar correlacionadas).
+-   Con varias variables (p. ej., rentabilidad, activo, margen, resultado), el "centro" es el vector de medias y la forma de la nube viene dada por la covarianza (las variables pueden estar en escalas distintas y estar correlacionadas).
 
 -   La *distancia de Mahalanobis:*
 
     -   **Estandariza** las escalas (una variable en millones no pesa más que otra en porcentajes).
 
-    -   **Gira y estira** el espacio según las correlaciones (si dos variables están muy correlacionadas, moverte a lo largo de su diagonal “cuesta” menos que moverte perpendicularmente).
+    -   **Gira y estira** el espacio según las correlaciones (si dos variables están muy correlacionadas, moverte a lo largo de su diagonal "cuesta" menos que moverte perpendicularmente).
 
--   En 2D lo verías como **elipses** alrededor del centro (no círculos). Los puntos fuera de la elipse “grande” son **potenciales *outliers***.
+-   En 2D lo verías como **elipses** alrededor del centro (no círculos). Los puntos fuera de la elipse "grande" son **potenciales *outliers***.
 
 La distancia de Mahalanobis de un vector $\mathbf{x}\in\mathbb{R}^p$ respecto del centro $\boldsymbol{\mu}$ y la matriz de covarianzas $\mathbf{\Sigma}$ es:
 
@@ -776,19 +691,64 @@ D_M(\mathbf{x})
 = \sqrt{(\mathbf{x}-\boldsymbol{\mu})^{\top}\,\mathbf{\Sigma}^{-1}\,(\mathbf{x}-\boldsymbol{\mu})}.
 $$
 
-Añadiremos, pues, una columna más al *data frame* "muestra2" con la *distancia de Mahalanobis* que corresponde a cada caso en el conjunto de las cuatro variables. La llamaremos MAHALANOBIS. Para calcularla nos valdremos de las funciones `mutate()` y `pick()` de `{dplyr}`, que alimentan a su vez a la función `mahalanobis()`, en la que hay que especificar tres elementos:
+Una vez calculada esa distancia para cada empresa, el procedimiento es exactamente el mismo que en el caso univariante: se representa mediante un *box-plot* y se consideran atípicos los casos que superan el umbral de 1,5·IQR. Por eso **no necesitamos una función nueva**: cuando a `explora_outliers()` se le pasan varias variables, reconoce automáticamente que estamos ante un caso multivariante, calcula por su cuenta la distancia de Mahalanobis y le aplica la regla de 1,5·IQR sobre ella. Dicho de otro modo, **una misma función resuelve ambos escenarios**: con una sola variable trabaja directamente sobre ella; con varias, sintetiza su comportamiento mediante Mahalanobis.
 
--   Las columnas de "muestra2" para las que se van a calcular las distancias.
-
--   El vector de medias de las variables para las que se calcula la distancia (argumento `center =`).
-
--   La matriz de varianzas y covarianzas de las variables para las que se calcula la distancia (argumento `cov =`).
-
-En definitiva, el código es:
-
-```{r eval=TRUE, echo=TRUE, message=FALSE}
+```{r eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
+options(matrstars.figura_num = "5.10", matrstars.tabla_num = "5.7")
 # Identificando y descartando outliers con distancia de Mahalanobis.
+muestra2_so <- explora_outliers(
+  muestra2,
+  variables = c(RENECO, ACTIVO, MARGEN, RES),
+  accion    = "eliminar",
+  titulo    = "DISTANCIA DE MAHALANOBIS",
+  subtitulo = "RENECO, ACTIVO, MARGEN, RES. Empresas TMI."
+)
+```
+
+El *box-plot* delata varios casos atípicos, y la tabla los identifica junto con sus valores en las cuatro variables, ordenados de mayor a menor distancia. El *data frame* "muestra2_so" es una réplica de "muestra2" sin esos casos: 91 empresas en total.
+
+<details>
+
+<summary>**Cómo se hace sin `{MATrstars}`**</summary>
+
+En el caso multivariante, el diagnóstico de *missing values* sigue apoyándose en `vis_miss()`, ahora sobre las cuatro variables. El listado y la eliminación *listwise* son los mismos filtros de antes, encadenando las cuatro condiciones:
+
+```{r eval=FALSE, echo=TRUE, message=FALSE}
+# Localizando missing values.
+muestra2 %>%
+  select (RENECO, ACTIVO, MARGEN, RES) %>%
+  vis_miss() +
+    labs(title = "Variables económico-financieras: valores ausentes",
+         subtitle = "Transporte de mercancías interestelar",
+         y = "Observación",
+         fill = NULL) +
+    scale_fill_manual(
+      values = c("TRUE" = "red", "FALSE" = "grey"),
+      labels = c("TRUE" = "NA", "FALSE" = "Presente")) +
+    theme(
+      plot.title = element_text(face = "bold", size = 14),
+      axis.text.x.top = element_text(angle  = 0,
+                                     hjust  = 0.5,
+                                     vjust  = 1,
+                                     margin = margin(b = 2)))
+
+# Localizar los casos con algún NA: basta con que falte uno de los cuatro
+# datos, de ahí el operador "|".
+casos_na2 <- muestra2 %>%
+  filter(is.na(RENECO) | is.na(ACTIVO) | is.na(MARGEN) | is.na(RES)) %>%
+  select(RENECO, ACTIVO, MARGEN, RES)
+
+# Eliminarlos: como pedimos justo lo contrario, hay que negar cada condición
+# y cambiar el "|" por el "&".
 muestra2 <- muestra2 %>%
+  filter(!is.na(RENECO) & !is.na(ACTIVO) & !is.na(MARGEN) & !is.na(RES))
+```
+
+Para los *outliers*, hay que calcular explícitamente la distancia de Mahalanobis y añadirla como una columna más. Nos valdremos de las funciones `mutate()` y `pick()` de `{dplyr}`, que alimentan a su vez a la función `mahalanobis()`, en la que hay que especificar tres elementos: las columnas para las que se calculan las distancias, el vector de medias de esas variables (argumento `center =`) y su matriz de varianzas y covarianzas (argumento `cov =`). Lo hacemos sobre una copia auxiliar, "muestra2_mah", porque la distancia es una medida de trabajo y no una variable más del análisis: no debe quedarse en el *data frame* definitivo.
+
+```{r eval=FALSE, echo=TRUE, message=FALSE}
+# Identificando outliers con distancia de Mahalanobis.
+muestra2_mah <- muestra2 %>%
   mutate(
     MAHALANOBIS = {
       X <- pick(RENECO, ACTIVO, MARGEN, RES)
@@ -799,119 +759,42 @@ muestra2 <- muestra2 %>%
   )
 ```
 
-Hecho esto, podemos construir el diagrama de caja de MAHALANOBIS igual que haríamos con cualquier otra variable:
-
-```{r eval=TRUE, echo=TRUE, message=FALSE}
-ggplot(data = muestra2, aes(y = MAHALANOBIS)) +
-    geom_boxplot(fill = "orange") +
-    ggtitle("DISTANCIA DE MAHALANOBIS",
-            subtitle = "RENECO, ACTIVO, MARGEN, RES. Empresas TMI.") +
-    ylab("MAHALANOBIS")
-```
-
-::: {style="text-align: center;"}
-**Figura 5.12**
-:::
-
-
-El gráfico delata varios casos atípicos. Para identificarlos ejecutaremos:
+Hecho esto, MAHALANOBIS se trata como cualquier otra variable métrica: *box-plot*, cuartiles y filtros, igual que en el caso univariante. Con una salvedad: aquí los valores extremos son tan grandes que aplastarían la caja hasta hacerla ilegible, de modo que hay que activar a mano la escala pseudologarítmica que `explora_outliers()` aplica por su cuenta.
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE}
-Q1M <- quantile (muestra2$MAHALANOBIS, c(0.25))
-Q3M <- quantile (muestra2$MAHALANOBIS, c(0.75))
+ggplot(data = muestra2_mah, aes(y = MAHALANOBIS)) +
+  geom_boxplot(fill = "orange", alpha = 0.9) +
+  labs(title    = "DISTANCIA DE MAHALANOBIS",
+       subtitle = paste("RENECO, ACTIVO, MARGEN, RES. Empresas TMI.",
+                        "(eje Y en escala pseudo-logaritmica por rango extremo)",
+                        sep = "\n"),
+       y        = "Distancia de Mahalanobis",
+       x        = NULL) +
+  scale_y_continuous(trans = "pseudo_log") +
+  theme(plot.title   = element_text(face = "bold", size = 14),
+        axis.text.x  = element_blank(),
+        axis.ticks.x = element_blank())
 
-muestra2 %>%
+Q1M <- quantile (muestra2_mah$MAHALANOBIS, c(0.25))
+Q3M <- quantile (muestra2_mah$MAHALANOBIS, c(0.75))
+
+casos_out2 <- muestra2_mah %>%
   filter(MAHALANOBIS > Q3M + 1.5*IQR(MAHALANOBIS) |
-         MAHALANOBIS < Q1M - 1.5*IQR(MAHALANOBIS))%>%
-  select(MAHALANOBIS, RENECO, ACTIVO, MARGEN, RES) 
-```
+         MAHALANOBIS < Q1M - 1.5*IQR(MAHALANOBIS)) %>%
+  select(MAHALANOBIS, RENECO, ACTIVO, MARGEN, RES) %>%
+  arrange(desc(MAHALANOBIS))
 
-En la consola se obtendrá el listado:
-
-```{r eval=TRUE, echo=FALSE, message=FALSE}
-Q1M <- quantile (muestra2$MAHALANOBIS, c(0.25))
-Q3M <- quantile (muestra2$MAHALANOBIS, c(0.75))
-
-df <- muestra2 %>%
-  filter(MAHALANOBIS > Q3M + 1.5*IQR(MAHALANOBIS) |
-           MAHALANOBIS < Q1M - 1.5*IQR(MAHALANOBIS))%>%
-           select(MAHALANOBIS, RENECO, ACTIVO, MARGEN, RES)
-  
-# Número de columnas por bloque
-columnas_por_bloque <- 3
-
-# Dividir las columnas en bloques y mostrar los datos en la consola
-for (i in seq(1, ncol(df), columnas_por_bloque)) {
-  print(df[, i:min(i + columnas_por_bloque - 1, ncol(df))])
-  cat("\n")
-}
-rm(i)
-rm(df)
-rm(columnas_por_bloque)
-```
-
-Si optamos por eliminarlos con vistas al análisis posterior, crearemos un nuevo *data frame*, "muestra2_so", mediante el código siguiente:
-
-```{r eval=TRUE, echo=TRUE, message=FALSE}
-muestra2_so <- muestra2 %>%
+muestra2_so <- muestra2_mah %>%
   filter(MAHALANOBIS <= Q3M + 1.5*IQR(MAHALANOBIS) &
-           MAHALANOBIS >= Q1M - 1.5*IQR(MAHALANOBIS)) 
+         MAHALANOBIS >= Q1M - 1.5*IQR(MAHALANOBIS)) %>%
+  select(-MAHALANOBIS)
+
+rm(muestra2_mah)
 ```
 
-El *data frame* "muestra2_so" será una réplica de "muestra2" sin los casos detectados como atípicos: 91 empresas en total.
+El `select(-MAHALANOBIS)` final no es un capricho: `explora_outliers()` **no conserva** la columna auxiliar en el *data frame* que devuelve, así que descartarla aquí es lo que garantiza que ambas versiones terminen con exactamente los mismos objetos.
 
-Como sucedía en el caso univariante, todo este bloque puede sintetizarse con `explora_outliers()`. Cuando se le pasan varias variables, la función reconoce automáticamente que estamos ante un caso multivariante, calcula por su cuenta la distancia de Mahalanobis y le aplica la regla de 1,5·IQR. Dicho de otro modo, **una misma función resuelve ambos escenarios**: con una sola variable trabaja directamente sobre ella; con varias, sintetiza su comportamiento mediante Mahalanobis. El bloque manual anterior quedaría así:
-
-```{r eval=FALSE, echo=TRUE, message=FALSE}
-muestra2_so <- explora_outliers(
-  muestra2,
-  variables = c(RENECO, ACTIVO, MARGEN, RES),
-  accion    = "eliminar",
-  titulo    = "DISTANCIA DE MAHALANOBIS",
-  subtitulo = "RENECO, ACTIVO, MARGEN, RES. Empresas TMI."
-)
-```
-
-De nuevo, como "muestra2_so" ya está depurada, comprobaremos el funcionamiento sobre una **copia limpia** del *data frame* original que contenga solo las cuatro variables de interés, a la que llamaremos "muestra2_demo". Aplicamos primero `explora_na()` para descartar los tres casos con NAs y después `explora_outliers()` sobre el resultado:
-
-```{r eval=FALSE, echo=TRUE, message=FALSE}
-muestra2_demo <- select(interestelar_100, RENECO, ACTIVO, MARGEN, RES)
-muestra2_demo <- explora_na(muestra2_demo, accion = "eliminar")
-muestra2_demo <- explora_outliers(
-  muestra2_demo,
-  variables = c(RENECO, ACTIVO, MARGEN, RES),
-  accion    = "eliminar",
-  titulo    = "DISTANCIA DE MAHALANOBIS",
-  subtitulo = "RENECO, ACTIVO, MARGEN, RES. Empresas TMI."
-)
-rm(muestra2_demo)
-```
-
-```{r include=FALSE}
-# Preparacion silenciosa: crear la copia y descartar los 3 NAs con
-# explora_na(). Se hace en un chunk oculto para que el numerador no
-# reserve Figura/Tabla aqui (las etiquetas del explora_na multivariante
-# ya se emitieron mas arriba, en el chunk 5.3.1).
-muestra2_demo <- select(interestelar_100, RENECO, ACTIVO, MARGEN, RES)
-muestra2_demo <- explora_na(muestra2_demo, accion = "eliminar")
-```
-
-```{r eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
-options(matrstars.figura_num = "5.13", matrstars.tabla_num = "5.7")
-muestra2_demo <- explora_outliers(
-  muestra2_demo,
-  variables = c(RENECO, ACTIVO, MARGEN, RES),
-  accion    = "eliminar",
-  titulo    = "DISTANCIA DE MAHALANOBIS",
-  subtitulo = "RENECO, ACTIVO, MARGEN, RES. Empresas TMI."
-)
-```
-
-```{r include=FALSE}
-rm(muestra2_demo)
-```
-
-**A partir de aquí, y en los capítulos siguientes, la detección y eliminación de *outliers* se realizará con `explora_outliers()`**, ya sea en el caso univariante o multivariante. La ficha completa de la función —argumentos, valores por defecto, ejemplos de uso y enlace al código fuente en GitHub— puede consultarse en el **Apéndice: Funciones auxiliares del paquete `{MATrstars}`** al final del libro.
+</details>
 
 ### ![](figuras/key.svg){.hicon} Correlación entre variables. {#c05-correlacion-entre-variables}
 
@@ -931,7 +814,7 @@ corr_plot_so
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.14**
+**Figura 5.11**
 :::
 
 
@@ -958,9 +841,9 @@ La interpretación detallada del código es la siguiente:
 
 Un coeficiente de correlación se mueve entre **-1**, que indica una relación intensa en sentido opuesto, y **+1**, que señala una relación igualmente intensa pero en el mismo sentido. El gráfico muestra que ACTIVO y RES mantienen una relación muy fuerte y positiva, y que entre MARGEN y RENECO existe también un vínculo apreciable. En cambio, ACTIVO y MARGEN, por un lado, y RENECO y ACTIVO, por otro, apenas guardan relación estadística.
 
-Para terminar, comparemos las correlaciones anteriores con las que resultan si mantenemos en la muestra los casos *outliers*:
+Para terminar, comparemos las correlaciones anteriores con las que resultan si mantenemos en la muestra los casos *outliers*. Repetimos el cálculo sobre "muestra2", que todavía los conserva, y presentamos ambas matrices una junto a otra con `grid.arrange()` del paquete `{gridExtra}`:
 
-```{r eval=TRUE, echo=FALSE, warning=FALSE, error=FALSE, message=FALSE}
+```{r eval=TRUE, echo=TRUE, warning=FALSE, error=FALSE, message=FALSE}
 temporal <- muestra2 %>% select(RENECO, ACTIVO, MARGEN, RES)
 corr_plot_co <- ggpairs(temporal, 
                         lower = list(continuous = wrap("cor",
@@ -969,16 +852,15 @@ corr_plot_co <- ggpairs(temporal,
                                                        stars = TRUE)),
                         title = "Matriz de Correlación (con outliers)")
 rm(temporal)
+
 corr_plot_so_gg <- ggmatrix_gtable(corr_plot_so)
 corr_plot_co_gg <- ggmatrix_gtable(corr_plot_co)
-
-library (gridExtra)
 
 grid.arrange(corr_plot_so_gg, corr_plot_co_gg, ncol = 2, top = "CORRELACIONES")
 ```
 
 ::: {style="text-align: center;"}
-**Figura 5.15**
+**Figura 5.12**
 :::
 
 
@@ -996,4 +878,8 @@ En esta sección se recogen los enlaces de acceso a los distintos materiales (*s
 
 **Scripts:**
 
--   previo_rstars.R ([obtener aquí](https://raw.githubusercontent.com/teckel71/RStars-book/main/download/previo_rstars.R))
+Como se explicó al comienzo del capítulo, la práctica está disponible en **dos versiones equivalentes**, que conducen a los mismos *data frames* y a los mismos resultados. La primera es la que se ha seguido en el texto:
+
+-   previo_rstars.R, con las funciones de `{MATrstars}` ([obtener aquí](https://raw.githubusercontent.com/teckel71/RStars-book/main/download/previo_rstars.R))
+
+-   previo_puro_rstars.R, sin `{MATrstars}`, con todo el código "a mano" ([obtener aquí](https://raw.githubusercontent.com/teckel71/RStars-book/main/download/previo_puro_rstars.R))
