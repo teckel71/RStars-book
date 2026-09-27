@@ -1065,7 +1065,7 @@
 <h3>Propósito.<a class="anchor" aria-label="anchor" href="#c81-proposito-12"><i class="fas fa-link"></i></a>
 </h3>
 <p>Implementa un procedimiento de selección de modelos log-lineales por eliminación progresiva de términos (<em>backward</em>) usando el criterio de información de Akaike (AIC). Es una alternativa a <code><span>stats::step()</span></code> pensada específicamente para modelos ajustados con <code><span>MASS::loglm()</span></code>.</p>
-<p>La motivación para no usar <code><span>stats::step()</span></code> es puramente técnica: <code><span>step()</span></code> localiza la tabla de datos de cada submodelo mediante <code><span>eval.parent()</span></code>, que sube por la pila de llamadas hasta encontrarla por su nombre. Este mecanismo funciona en una sesión interactiva, pero es <strong>frágil cuando el código se ejecuta a través de varias capas de funciones envolventes</strong> (por ejemplo, al compilar un libro con <code><span>bookdown::render_book()</span></code> desde una función como <code>build_book()</code>), porque el número de saltos en la pila cambia y <code><span>step()</span></code> deja de localizar la tabla, produciendo un error difícil de diagnosticar.</p>
+<p>La motivación para no usar <code><span>stats::step()</span></code> es puramente técnica: <code><span>step()</span></code> localiza la tabla de datos de cada submodelo mediante <code><span>eval.parent()</span></code>, que sube por la pila de llamadas hasta encontrarla por su nombre. Este mecanismo funciona en una sesión interactiva, pero es <strong>frágil cuando el código se ejecuta a través de varias capas de funciones envolventes</strong> (por ejemplo, al compilar un libro con <code><a href="https://pkgs.rstudio.com/bookdown/reference/render_book.html">bookdown::render_book()</a></code> desde una función como <code>build_book()</code>), porque el número de saltos en la pila cambia y <code><span>step()</span></code> deja de localizar la tabla, produciendo un error difícil de diagnosticar.</p>
 <p><code><span>step_loglm_backward()</span></code> reimplementa el algoritmo <em>backward</em> por AIC sin depender de <code><span>eval.parent()</span></code>: la tabla de datos se pasa como argumento explícito y queda capturada en el <em>closure</em> de una función auxiliar interna, resolviéndose por alcance léxico (no dinámico). El resultado es equivalente al de <code><span>step()</span></code> en sesión interactiva, pero es robusto en cualquier contexto de ejecución (consola, <code>knitr</code>, <code>bookdown</code>, <code>pkgdown</code>, funciones envolventes, etc.).</p>
 <p>Internamente, en cada iteración:</p>
 <ol style="list-style-type: decimal">
@@ -1266,7 +1266,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón Morán. It was last built on 2026-09-26.</p>
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón Morán. It was last built on 2026-09-27.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

@@ -43,6 +43,10 @@ library (GGally)    # cálculo de la matriz de correlaciones.
 library (gridExtra)
 
 # (Aquí NO se carga {MATrstars}: todo se hará con código "puro".)
+# Por esa misma razón hay tres paquetes que en "previo_rstars.R" no aparecen:
+# {visdat}, {knitr} y {kableExtra}. Allí los usa {MATrstars} desde dentro de
+# sus funciones; aquí las llamadas a vis_miss(), kable(), kable_styling() y
+# row_spec() las escribimos nosotros, así que hay que activarlos.
 
 
 ## ---- p-datos-importacion ----------------------------------------------------

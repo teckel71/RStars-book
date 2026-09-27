@@ -15,6 +15,8 @@
 ## Ambos scripts comparten los nombres de los objetos (muestra, muestra_so,
 ## muestra2, muestra2_so, k, estadisticos, g1...g4, resumen, corr_plot_so...),
 ## de modo que se puede pasar de uno a otro sin perder el hilo de la práctica.
+## La lista de paquetes sí difiere: esta versión no necesita activar {visdat},
+## {knitr} ni {kableExtra}, porque quien los usa es {MATrstars}.
 ## =============================================================================
 
 
@@ -30,14 +32,18 @@ rm(list = ls())
 library (readxl)
 library (gtExtras)
 library (dplyr)
-library (visdat)
 library (ggplot2)
-library (knitr)
-library (kableExtra)
 library (moments)   # paquete necesario para calcular la curtosis.
 library (patchwork)
 library (GGally)    # cálculo de la matriz de correlaciones.
 library (gridExtra)
+
+# Faltan de esta lista {visdat}, {knitr} y {kableExtra}, que sí son necesarios
+# en "previo_puro_rstars.R". Aquí no hace falta activarlos: {MATrstars} los
+# declara como dependencias suyas (se instalan solos con él) y llama por su
+# cuenta a vis_miss(), kable(), kable_styling() y row_spec() desde dentro de
+# explora_na(), explora_outliers() y kable_rstars(). Solo habría que añadir
+# su library() si quisiéramos usar esas funciones directamente.
 
 
 ## ---- prep-matrstars ---------------------------------------------------------

@@ -38,3 +38,40 @@ insertar_youtube <- function(id, titulo = "Ver vídeo en YouTube") {
     cat(sprintf("\n> **Vídeo:** [%s](%s)\n", titulo, url_watch))
   }
 }
+
+
+# ---------------------------------------------------------------------------
+# Limpieza del código que se muestra al lector.
+#
+# El preprocesador `numerar_tablas_figuras.R` inyecta en algunos chunks una
+# linea del tipo
+#     options(matrstars.figura_num = "5.3", matrstars.tabla_num = "5.3")
+# para que las funciones de {MATrstars} sepan que numero de figura y de tabla
+# deben rotular. Esa linea no forma parte del analisis, no figura en los
+# scripts .R de las practicas y, en los chunks con `echo = TRUE`, quedaba a la
+# vista en el libro renderizado.
+#
+# El hook siguiente la retira del codigo que se MUESTRA, sin tocar el que se
+# EJECUTA. Delega en el hook anterior en lugar de sustituirlo, de modo que la
+# coloracion de sintaxis y los enlaces a documentacion que genera `downlit` en
+# bs4_book() siguen funcionando igual.
+#
+# La opcion de sesion evita que el envoltorio se anide una vez por capitulo,
+# ya que el libro se teje en una unica sesion de R y cada capitulo hace su
+# propio source("_common.R").
+# ---------------------------------------------------------------------------
+if (!isTRUE(getOption("rstars.hook_matrstars"))) {
+  local({
+    hook_anterior <- knitr::knit_hooks$get("source")
+    knitr::knit_hooks$set(source = function(x, options) {
+      if (length(x) == 1L && grepl("\n", x)) {
+        x <- strsplit(x, "\n", fixed = TRUE)[[1]]
+      }
+      x <- x[!grepl("^\\s*options\\(\\s*matrstars\\.", x)]
+      while (length(x) && !nzchar(trimws(x[1]))) x <- x[-1]
+      if (!length(x)) return("")
+      hook_anterior(x, options)
+    })
+  })
+  options(rstars.hook_matrstars = TRUE)
+}
