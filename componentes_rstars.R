@@ -12,6 +12,7 @@ library(visdat)
 library (GGally)
 library (kableExtra)
 library (patchwork)
+library (psych)      # KMO()
 
 # Paquete MATrstars: funciones auxiliares del libro R-Stars.
 # Contiene, entre otras, la función kable_rstars(), utilizada más adelante.
@@ -64,6 +65,32 @@ corr_plot_so <- ggpairs(seleccion_so,
                                                        stars = TRUE)),
                         title = "Matriz de Correlación sin outliers")
 corr_plot_so
+
+# Adecuacion muestral: KMO global y MSA de cada variable.
+kmo <- KMO(cor(seleccion_so))
+
+# Calificacion del KMO global, segun la escala de Kaiser:
+# >= 0.90 excelente / 0.80 notable / 0.70 aceptable / 0.60 mediocre /
+# 0.50 bajo / < 0.50 inaceptable.
+kaiser <- cut(kmo$MSA,
+              breaks = c(0, 0.5, 0.6, 0.7, 0.8, 0.9, Inf),
+              labels = c("inaceptable", "bajo", "mediocre",
+                         "aceptable", "notable", "excelente"),
+              right  = FALSE)
+
+# Tabla de resultados. Los MSA se comparan con el umbral de 0.50: por debajo
+# de el, conviene plantearse excluir la variable del analisis y recalcular.
+adecuacion <- data.frame(
+  Valor          = c(kmo$MSA, kmo$MSAi),
+  Interpretacion = c(as.character(kaiser),
+                     ifelse(kmo$MSAi >= 0.5, "Adecuada", "Revisar su inclusión")),
+  row.names      = c("KMO global", paste("MSA:", names(kmo$MSAi))))
+
+adecuacion %>%
+  kable_rstars(caption   = "Adecuación muestral del PCA (KMO y MSA)",
+               col.names = c("Medida", "Valor", "Interpretación"),
+               digits    = c(3, 0)) %>%
+  column_spec(1, bold = TRUE, extra_css = "text-align: left;")
 
 # Obtencion de componentes.
 componentes <- prcomp (seleccion_so, scale=T)

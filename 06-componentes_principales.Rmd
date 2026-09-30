@@ -95,6 +95,7 @@ library (GGally)
 library (knitr)
 library (kableExtra)
 library (patchwork)
+library (psych)      # KMO()
 
 ## DATOS
 
@@ -166,7 +167,7 @@ seleccion_so <- explora_outliers(
 
 El gráfico y la tabla anteriores confirman que hay 13 empresas que se comportan como *outliers*, considerando conjuntamente las tres variables del análisis. El *data frame* "seleccion_so" contiene los 89 casos restantes (los que **no** son *outliers* y no contenían *missing values*). Con él es con el que se procederá al cálculo de las componentes.
 
-## ![](figuras/pie-chart.svg){.hicon} Cálculo de componentes. {#c06-calculo-de-componentes}
+## ![](figuras/pie-chart.svg){.hicon} Correlaciones e idoneidad del análisis. {#c06-correlaciones-e-idoneidad-del-analisis}
 
 La **condición previa** para el **cálculo de componentes** es que las variables originales del análisis contengan información redundante, es decir, que en buena medida tengan una capacidad para diferenciar a los casos (empresas) parecida. Esto se verifica con la existencia de **altas correlaciones**, en valor absoluto, entre ellas (al menos, entre *algunas*). Por tanto, hemos de calcular la matriz de correlaciones correspondiente. Un modo gráfico visualmente efectivo es utilizar las posibilidades que nos ofrece el paquete `{GGally}`, mediante la función `ggpairs()`:
 
@@ -182,6 +183,67 @@ corr_plot_so
 ```
 
 Puede apreciarse cómo existen altas correlaciones (en valor absoluto) entre todas las variables. Por tanto, tiene sentido hacer un análisis de componentes principales, ya que hay variables que parecen **compartir información**.
+
+Ahora bien, este diagnóstico es **visual y, en buena medida, subjetivo**: ¿a partir de qué valor consideramos que una correlación es "alta"? ¿Y qué hacemos si unas variables correlacionan mucho y otras poco? Afortunadamente, existe una **medida objetiva** que ayuda a responder a estas preguntas: la **medida de adecuación muestral KMO** (*Kaiser-Meyer-Olkin*), heredada de la tradición del *análisis factorial*, y que se calcula siempre **antes** de extraer las componentes.
+
+Su filosofía es la siguiente. El KMO compara la magnitud de las correlaciones *simples* entre las variables con la de las correlaciones *parciales*, esto es, las que quedan entre cada par de variables una vez descontado el efecto del resto. El razonamiento es que, si las variables comparten una estructura común —que es justamente lo que una componente trata de capturar—, al descontar el efecto de las demás la correlación entre dos de ellas debería reducirse mucho. En ese caso las correlaciones parciales serán pequeñas frente a las simples, y el KMO tomará un valor próximo a 1. Si, por el contrario, cada par de variables correlaciona "por su cuenta", las parciales seguirán siendo altas y el KMO se aproximará a 0. Formalmente:
+
+$$
+\text{KMO} = \frac{\sum_{i \neq j} r_{ij}^{2}}{\sum_{i \neq j} r_{ij}^{2} + \sum_{i \neq j} a_{ij}^{2}}
+$$
+
+donde $r_{ij}$ son las correlaciones simples entre cada par de variables, y $a_{ij}$ las correlaciones parciales (los elementos de la denominada *matriz anti-imagen*).
+
+Kaiser propuso la siguiente escala para interpretar el resultado:
+
+-   KMO ≥ 0.90: excelente.
+
+-   0.80 ≤ KMO \< 0.90: notable.
+
+-   0.70 ≤ KMO \< 0.80: aceptable.
+
+-   0.60 ≤ KMO \< 0.70: mediocre.
+
+-   0.50 ≤ KMO \< 0.60: bajo.
+
+-   KMO \< 0.50: inaceptable (no debería plantearse el análisis).
+
+Junto a este KMO global, que se refiere al conjunto del análisis, puede calcularse un KMO **individual** para cada variable: es la medida *MSA* (*Measure of Sampling Adequacy*). Resulta muy útil en la práctica, porque permite detectar variables que no encajan en la estructura común del conjunto: si alguna presenta un MSA inferior a 0.50, lo razonable es plantearse excluirla del análisis y recalcular.
+
+Ambas medidas se obtienen de una sola vez con la función `KMO()` del paquete `{psych}` (que hemos de añadir a la lista de paquetes cargados al comienzo del *script*), aplicada sobre la matriz de correlaciones del *data frame* con el que vamos a calcular las componentes ("seleccion_so"). El KMO global queda guardado en el elemento "MSA" del objeto resultante, y los MSA de cada variable, en el elemento "MSAi":
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+# Adecuacion muestral: KMO global y MSA de cada variable.
+kmo <- KMO(cor(seleccion_so))
+
+# Calificacion del KMO global, segun la escala de Kaiser.
+kaiser <- cut(kmo$MSA,
+              breaks = c(0, 0.5, 0.6, 0.7, 0.8, 0.9, Inf),
+              labels = c("inaceptable", "bajo", "mediocre",
+                         "aceptable", "notable", "excelente"),
+              right  = FALSE)
+
+# Tabla de resultados.
+adecuacion <- data.frame(
+  Valor          = c(kmo$MSA, kmo$MSAi),
+  Interpretacion = c(as.character(kaiser),
+                     ifelse(kmo$MSAi >= 0.5, "Adecuada", "Revisar su inclusión")),
+  row.names      = c("KMO global", paste("MSA:", names(kmo$MSAi))))
+
+adecuacion %>%
+  kable_rstars(caption   = "Adecuación muestral del PCA (KMO y MSA)",
+               col.names = c("Medida", "Valor", "Interpretación"),
+               digits    = c(3, 0)) %>%
+  column_spec(1, bold = TRUE, extra_css = "text-align: left;")
+```
+
+En nuestro caso, el KMO global asciende a `r round(kmo$MSA, 3)`, un valor que la escala de Kaiser califica como **`r as.character(kaiser)`**: queda algo por debajo del umbral de 0.70 que marcaría una adecuación claramente aceptable, pero bastante por encima del 0.50 a partir del cual habría que descartar el análisis. Dicho de otro modo, las tres variables comparten información suficiente para justificar el PCA, aunque no estemos ante un caso de libro. Conviene no perder de vista, en este sentido, que solo manejamos tres variables, de modo que cada correlación parcial se calcula descontando el efecto de una única variable.
+
+En cuanto a los MSA individuales, los tres superan con holgura el umbral de 0.50 —el menor corresponde a `r names(which.min(kmo$MSAi))`, con `r round(min(kmo$MSAi), 3)`—, por lo que ninguna de las variables desentona del conjunto y no hay motivo para excluir a ninguna del análisis.
+
+Conviene cerrar el apartado con una precisión. El KMO nació en el ámbito del *análisis factorial*, una técnica emparentada con el PCA, pero no idéntica. El análisis de componentes principales es, en esencia, una técnica **descriptiva**: no exige supuestos distribucionales ni pretende inferir una estructura latente, por lo que, en rigor, ningún indicador "autoriza" o "prohíbe" su aplicación. El KMO debe entenderse, por tanto, como una **ayuda a la decisión** que complementa —pero no sustituye— al examen de la matriz de correlaciones y al criterio del analista.
+
+## ![](figuras/pie-chart.svg){.hicon} Cálculo de componentes. {#c06-calculo-de-componentes}
 
 La obtención de las componentes se va a realizar mediante la función `prcomp()` del paquete `{stats}`, que es un paquete cargado por defecto al abrir R. Es conveniente que activemos el argumento `scale =` con “T” (*true*) para que las variables originales sean consideradas en sus **versiones tipificadas**. Vamos a asignar los resultados a un objeto de nombre, por ejemplo, “componentes”. Por último, guardaremos el `summary()` o resumen de los resultados con un nombre provisional, por ejemplo, "temporal". El código es el siguiente:
 
