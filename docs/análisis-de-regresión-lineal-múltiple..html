@@ -2685,6 +2685,92 @@ EFLO
 <li>Un caso con <strong>alta distancia de Cook</strong> es una empresa <strong>influyente</strong>: si la eliminásemos, los coeficientes del modelo cambiarían sustancialmente.</li>
 </ul>
 <p>Un punto puede tener un residuo grande sin ser influyente (porque está rodeado de muchas empresas similares que “anclan” la recta), y viceversa: un punto puede tener un residuo pequeño pero estar en una posición tan “solitaria” en el espacio de las variables explicativas que “arrastra” toda la recta hacia sí. Por ello, no debe eliminarse automáticamente una observación con alta distancia de Cook: es una señal para investigar, no para descartar.</p>
+<p>Conviene, de hecho, distinguir <strong>tres conceptos</strong> que con frecuencia se confunden, porque se detectan con herramientas distintas y en momentos distintos del análisis:</p>
+<div class="inline-table"><table class="table table-sm">
+<colgroup>
+<col width="25%">
+<col width="25%">
+<col width="25%">
+<col width="25%">
+</colgroup>
+<thead><tr class="header">
+<th>Concepto</th>
+<th>Qué significa</th>
+<th>Con qué se detecta</th>
+<th>Cuándo</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Atípico en los datos</strong></td>
+<td>Está lejos del resto en la nube de las variables</td>
+<td>
+<em>Box-plot</em> y distancia de Mahalanobis</td>
+<td>
+<strong>Antes</strong> de estimar (lo hicimos con <code><span>explora_outliers()</span></code>)</td>
+</tr>
+<tr class="even">
+<td><strong>Residuo grande</strong></td>
+<td>El modelo se equivoca mucho al predecirlo</td>
+<td>Gráficos 1 y 2 de los anteriores</td>
+<td>
+<strong>Después</strong> de estimar</td>
+</tr>
+<tr class="odd">
+<td><strong>Caso influyente</strong></td>
+<td>Si se elimina, los coeficientes cambian</td>
+<td>Gráfico 4: distancia de Cook</td>
+<td>
+<strong>Después</strong> de estimar</td>
+</tr>
+</tbody>
+</table></div>
+<div style="text-align: center;">
+<p><strong>Tabla 9.13</strong></p>
+</div>
+<p>Para ver la diferencia con claridad conviene recurrir a un ejemplo mínimo, con <strong>una sola variable explicativa</strong>, de manera que la recta de regresión pueda dibujarse. Partimos de una muestra sin problemas y le añadimos, de una en una, tres observaciones de naturaleza distinta:</p>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-318-1.png" alt="" width="672"></div>
+<p>En los cuatro paneles la <strong>recta discontinua gris</strong> es siempre la estimada con la muestra limpia, y la <strong>continua azul</strong> la estimada tras añadir el caso en rojo. Las cifras son las siguientes:</p>
+<div class="inline-table"><table class="table table-sm">
+<thead><tr class="header">
+<th></th>
+<th>Caso 2</th>
+<th>Caso 3</th>
+<th>Caso 4</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Posición</td>
+<td>Centro de la nube</td>
+<td>Alejado</td>
+<td>Muy alejado</td>
+</tr>
+<tr class="even">
+<td>Residuo</td>
+<td>4.05</td>
+<td>-2.17</td>
+<td>-0.16</td>
+</tr>
+<tr class="odd">
+<td>Distancia de Cook</td>
+<td>0.41</td>
+<td>11.59</td>
+<td>27.73</td>
+</tr>
+<tr class="even">
+<td>Pendiente resultante</td>
+<td>0.819</td>
+<td>0.536</td>
+<td>0.741</td>
+</tr>
+</tbody>
+</table></div>
+<div style="text-align: center;">
+<p><strong>Tabla 9.14</strong></p>
+</div>
+<p>La lectura es muy instructiva. El <strong>caso 2</strong> tiene el residuo más grande de los tres —el modelo falla estrepitosamente al predecirlo—, pero está situado en el centro de la nube, rodeado de observaciones que sujetan la recta: la pendiente <strong>no se mueve ni una milésima</strong>. El <strong>caso 3</strong>, en cambio, se equivoca <em>menos</em> (su residuo es menor en valor absoluto) y, sin embargo, hace girar la recta: su distancia de Cook es muchísimo mayor.</p>
+<p>Resulta útil pensar en un <strong>balancín</strong> cuyo punto de apoyo está en el centro de la nube de datos. Una observación situada sobre el eje puede empujar todo lo que quiera: la tabla sube o baja, pero <strong>no gira</strong>. Otra situada en el extremo del brazo la hace girar con un empujón mínimo. Lo que convierte a un caso en influyente no es, por tanto, equivocarse mucho con él, sino <strong>dónde está situado</strong> en el espacio de las variables explicativas.</p>
+<p>El <strong>caso 4</strong> es el más peligroso de todos, y merece atención aparte. Está tan alejado y tan solo que <strong>nadie le hace contrapeso</strong>: la recta va hacia él. Y una recta que pasa por encima de una observación le deja, por fuerza, un residuo pequeño. De hecho su residuo (-0.16) es <strong>el menor de los tres</strong>, hasta el punto de que en un gráfico de residuos no llamaría la atención en absoluto. Y es, con diferencia, el que más mueve la recta. Dicho de otro modo: <strong>cuanto más poder tiene una observación para torcer la recta, más pequeño acaba siendo su residuo</strong>; el caso se fabrica su propia coartada. Los gráficos de residuos detectan bien las observaciones con las que el modelo <em>se equivoca</em>, pero son ciegos a aquellas ante las que el modelo <em>se ha rendido</em>. Solo la distancia de Cook las delata.</p>
+<p>Esto explica por qué el gráfico de la distancia de Cook es imprescindible <strong>aunque ya hayamos depurado los atípicos</strong> al principio del análisis. Son dos redes con mallas distintas: la depuración del capítulo 5 examina las variables en bruto mediante la distancia de Mahalanobis, mientras que la influencia depende del modelo <strong>tal como se ha especificado</strong>, con sus logaritmos y sus variables ficticias. En nuestro propio caso puede comprobarse: de las 13 empresas que superan el umbral de Cook —todas ellas supervivientes del filtrado de Mahalanobis—, la mayoría ocupa posiciones <strong>perfectamente corrientes</strong> en el <em>ranking</em> de atipicidad de aquella depuración. No son empresas raras: son empresas situadas en lugares del espacio de las explicativas donde hay pocas compañías que les hagan contrapeso.</p>
 <p>En cuanto a la tabla con los casos con valores de la <em>distancia de Cook</em> más relevantes:</p>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -2803,8 +2889,11 @@ pike freight co.
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 9.13</strong></p>
+<p><strong>Tabla 9.15</strong></p>
 </div>
+<p>La tabla recoge las 13 empresas cuya distancia de Cook supera el umbral de <span class="math inline">\(4/n\)</span>. Conviene, sin embargo, poner esa cifra en perspectiva. El umbral <span class="math inline">\(4/n\)</span> es <strong>deliberadamente exigente</strong>: con 272 observaciones vale apenas 0.015, de modo que es normal que un pequeño porcentaje de casos lo rebase aunque el modelo sea sano. Las referencias clásicas para considerar que una observación resulta <em>verdaderamente</em> problemática son bastante más altas: valores de la distancia de Cook por encima de <strong>0,5</strong>, y sobre todo por encima de <strong>1</strong>. En nuestro modelo, el valor máximo es 0.057 —unas 3.9 veces el umbral, pero <strong>muy lejos</strong> de 0,5—, y <strong>ninguna</strong> empresa se aproxima siquiera a esas referencias. Ningún caso individual domina, por tanto, la estimación.</p>
+<p><strong>¿Convendría aun así reestimar el modelo sin esas empresas?</strong> En rigor, sí: la práctica recomendable ante casos influyentes consiste en <strong>reestimar sin ellos y comparar los coeficientes</strong>, para saber de qué observaciones depende el resultado. No lo haremos aquí para no alargar en exceso la práctica del capítulo, pero sí conviene adelantar lo que ese ejercicio revelaría, porque es ilustrativo: al eliminar las 13 empresas, los coeficientes de <code>log(DIST)</code> y de las variables ficticias de EFLO apenas se mueven (menos de un 2.7 %), mientras que el de <code>log(IDIVERSE)</code> cambia un 39.9 %.</p>
+<p>El resultado no es casual, y conviene retenerlo: <strong>la parte robusta del modelo es robusta, y la parte frágil es frágil</strong>. Las conclusiones estructurales de fondo —la elasticidad de BMAL respecto a la distancia media recorrida y el efecto del estado de la flota— no dependen de ninguna empresa en particular. En cambio, el efecto de la diversificación, que es pequeño y cuya significación estadística resulta ya dudosa (como confirmará el apartado de errores robustos), sí es sensible a un puñado de observaciones. Dos diagnósticos independientes —la distancia de Cook y los errores estándar robustos— apuntan en la misma dirección sobre la misma variable, lo que refuerza la cautela con que debe interpretarse.</p>
 <p>Tras estudiar los gráficos, vamos a pasar a <strong>contrastar las hipótesis básicas del modelo básico de regresión lineal</strong> referidas a la <em>forma funcional</em>, y la <em>normalidad</em> y <em>comportamiento homoscedástico</em> de la perturbación aleatoria. Para ello se aplicarán las pruebas de <em>Ramsey-Reset</em>, <em>Shapiro-Wilk</em> y <em>Breusch-Pagan</em>, respectivamente. Los resultados de las tres pruebas se presentarán condensados en una tabla, en la que, además, se incluirá la conclusión del contraste, para una significación de 0,05. Para crear la tabla, primero se generará un <em>data frame</em> con sus elementos, denominado, por ejemplo, “check_hipotesis”. El código es:</p>
 <div class="sourceCode" id="cb348"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Hipótesis básicas MBR.</span></span>
@@ -2928,7 +3017,7 @@ Heteroscedasticidad
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 9.14</strong></p>
+<p><strong>Tabla 9.16</strong></p>
 </div>
 <p>A partir de la tabla de resultados de los contrastes de las hipótesis básicas, encontramos los siguientes resultados:</p>
 <ol style="list-style-type: decimal">
@@ -2951,7 +3040,8 @@ Heteroscedasticidad
 <span class="header-section-number">9.3.1</span> <img src="figuras/pie-chart.svg"> Estimación con errores estándar robustos a heteroscedasticidad.<a class="anchor" aria-label="anchor" href="#c09-estimacion-con-errores-estandar-robustos-a"><i class="fas fa-link"></i></a>
 </h3>
 <p>El contraste de Breusch-Pagan ha revelado la presencia de <strong>heteroscedasticidad</strong>: la varianza de la perturbación no es constante a lo largo de las observaciones. Como ya se mencionó, los estimadores MCO siguen siendo insesgados y consistentes, pero <strong>dejan de ser eficientes</strong>, y los contrastes t y F pueden dar resultados incorrectos (significaciones que no lo son, o al revés).</p>
-<p>La solución estándar en econometría aplicada moderna es utilizar <strong>errores estándar robustos a heteroscedasticidad</strong> (errores <strong>HC</strong>, propuestos por White, 1980). No se re-estima el modelo: los coeficientes estimados son los mismos. Lo que cambia son los <strong>errores estándar</strong> de esos coeficientes, y en consecuencia los estadísticos <em>t</em> y los <em>p-valores</em> asociados. De este modo, la inferencia se corrige sin alterar la estimación. En R, los errores HC se obtienen con los paquetes <a href="https://sandwich.R-Forge.R-project.org/">sandwich</a> y <code>{lmtest}</code>:</p>
+<p>Conviene entender <strong>dónde falla exactamente</strong> el cálculo convencional. La desviación típica de los coeficientes se obtiene a partir de la expresión <span class="math inline">\(\widehat{\mathrm{Var}}(\hat\beta) = \hat\sigma^{2}(X'X)^{-1}\)</span>, donde <span class="math inline">\(\hat\sigma^{2}\)</span> es la varianza del vector de residuos: <strong>un único número</strong>, que se aplica por igual a todas las observaciones. Eso es, precisamente, la hipótesis de homoscedasticidad. Cuando la varianza real no es constante, ese número resulta un promedio engañoso —queda inflado por las zonas de mucha dispersión y se queda corto en las de poca—, y las desviaciones típicas de los coeficientes salen sistemáticamente mal, unas por exceso y otras por defecto. Como el estadístico <span class="math inline">\(t\)</span> es el cociente entre el coeficiente y su desviación típica, si el denominador está mal calculado el <em>p-valor</em> está mal, y la conclusión sobre la significación de una variable <strong>puede estar mal</strong>.</p>
+<p>La solución estándar en econometría aplicada moderna es utilizar <strong>errores estándar robustos a heteroscedasticidad</strong> (errores <strong>HC</strong>, propuestos por White, 1980). La corrección sustituye ese <span class="math inline">\(\hat\sigma^{2}\)</span> único por <strong>el residuo de cada observación</strong>, de manera que cada caso aporta su propia dispersión en lugar de la media de todas; por eso no hace falta saber de qué depende la heteroscedasticidad ni modelizarla. No se re-estima el modelo: los coeficientes estimados son los mismos. Lo que cambia son los <strong>errores estándar</strong> de esos coeficientes, y en consecuencia los estadísticos <em>t</em> y los <em>p-valores</em> asociados. De este modo, la inferencia se corrige sin alterar la estimación. En R, los errores HC se obtienen con los paquetes <a href="https://sandwich.R-Forge.R-project.org/">sandwich</a> y <code>{lmtest}</code>:</p>
 <div class="sourceCode" id="cb349"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="co"># Estimación con errores estándar robustos (HC1, tipo White)</span></span>
 <span>    <span class="va">robust_ecuaDEF</span> <span class="op">&lt;-</span> <span class="fu"><span>coeftest</span></span><span class="op">(</span><span class="va">ecuaDEF</span>, vcov <span class="op">=</span> <span class="fu"><span>vcovHC</span></span><span class="op">(</span><span class="va">ecuaDEF</span>, type <span class="op">=</span> <span class="st">"HC1"</span><span class="op">)</span><span class="op">)</span></span>
@@ -3093,7 +3183,7 @@ EFLORENOVADA
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 9.15.</strong> Comparación MCO vs errores robustos HC1</p>
+<p><strong>Tabla 9.17.</strong> Comparación MCO vs errores robustos HC1</p>
 </div>
 <p>La tabla permite verificar si los errores estándar robustos confirman o matizan las conclusiones extraídas con los errores convencionales. Si los p-valores apenas cambian, la heteroscedasticidad detectada tiene escasa influencia práctica sobre la inferencia. Si algún coeficiente cambia de significativo a no significativo (o viceversa), la estimación con errores robustos es la que debe prevalecer.</p>
 <p><strong>Nota importante.</strong> Los errores estándar robustos solo afectan a la <strong>inferencia</strong> (errores estándar, estadísticos t, p-valores), no a los <strong>coeficientes estimados</strong> ni a las <strong>predicciones</strong> del modelo. El modelo <code>ecuaDEF</code> sigue siendo exactamente el mismo; lo que cambia es nuestra evaluación de la precisión de sus coeficientes. Por ello, la sección de simulación que viene a continuación sigue utilizando <code>ecuaDEF</code> para generar predicciones, ya que los valores predichos son idénticos con o sin corrección HC.</p>
@@ -3340,7 +3430,7 @@ TRUE
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 9.16</strong></p>
+<p><strong>Tabla 9.18</strong></p>
 </div>
 <p>Los cuatro escenarios muestran cómo la predicción de BMAL depende sensiblemente del valor asignado a DIST. Cuando DIST se calcula con la media, los valores son más altos (Esc. A y B) y, al introducir outliers (Esc. B), la media aumenta notablemente, lo que reduce la predicción de BMAL, ya que en el modelo BMAL disminuye cuando DIST crece. En cambio, cuando DIST se calcula con la mediana (Esc. C y D), los valores son mucho menores y más estables, tanto si se incluyen los outliers como si no; esto produce predicciones de BMAL mucho más elevadas debido a que DIST entra con coeficiente negativo. Además, la diferencia entre usar la media o la mediana es mucho mayor que la diferencia entre usar la muestra completa o la depurada, lo que muestra que la media es muy sensible a los outliers, mientras que la mediana es mucho más robusta. En conjunto, el ejercicio demuestra que la elección entre media y mediana (y entre incluir o no outliers) <strong>puede afectar de forma importante a las simulaciones</strong>, especialmente cuando la variable afecta negativamente al resultado económico.</p>
 <p>En cuanto al segundo ejercicio, los escenarios planteados son los siguientes:</p>
@@ -3516,7 +3606,7 @@ TRUE
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 9.17</strong></p>
+<p><strong>Tabla 9.19</strong></p>
 </div>
 <p>Los resultados del segundo ejercicio muestran con gran claridad el <strong>enorme impacto que tiene el grado de renovación tecnológica de la flota sobre el rendimiento económico BMAL</strong>, exactamente en la línea del objetivo de <em>Dixitaliza</em>. Una empresa con flota antigua obtiene un BMAL estimado de apenas 165,9 unidades por cada 1.000 años luz; si pasa a una flota madura, su capacidad de generación de beneficio se multiplica por más de 4, alcanzando 698,7 (+532,8 respecto al escenario antiguo). El salto es aún más notable cuando la flota es renovada, donde el BMAL se sitúa en 1878,2, es decir, 1.712,3 unidades más que con flota antigua y 1.179,5 más que con flota madura. Estas diferencias representan incrementos porcentuales de enorme magnitud (≈ +320% al pasar de antigua a madura, y ≈ +1.030% al pasar de antigua a renovada), lo que evidencia que la modernización tecnológica no solo mejora la eficiencia operativa sino que <strong>transforma radicalmente la rentabilidad de una empresa media del sector</strong>. Para <em>Dixitaliza</em>, estos resultados constituyen una demostración empírica sólida del valor económico de sus soluciones tecnológicas: <strong>invertir en renovar la flota no es un coste, sino una palanca directa y masiva de creación de beneficios</strong>.</p>
 </div>

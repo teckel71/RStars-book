@@ -721,6 +721,101 @@ Es importante recalcar que la *distancia de Cook* y la *presencia de outliers* e
 
 Un punto puede tener un residuo grande sin ser influyente (porque está rodeado de muchas empresas similares que "anclan" la recta), y viceversa: un punto puede tener un residuo pequeño pero estar en una posición tan "solitaria" en el espacio de las variables explicativas que "arrastra" toda la recta hacia sí. Por ello, no debe eliminarse automáticamente una observación con alta distancia de Cook: es una señal para investigar, no para descartar.
 
+Conviene, de hecho, distinguir **tres conceptos** que con frecuencia se confunden, porque se detectan con herramientas distintas y en momentos distintos del análisis:
+
+| Concepto | Qué significa | Con qué se detecta | Cuándo |
+|---|---|---|---|
+| **Atípico en los datos** | Está lejos del resto en la nube de las variables | *Box-plot* y distancia de Mahalanobis | **Antes** de estimar (lo hicimos con `explora_outliers()`) |
+| **Residuo grande** | El modelo se equivoca mucho al predecirlo | Gráficos 1 y 2 de los anteriores | **Después** de estimar |
+| **Caso influyente** | Si se elimina, los coeficientes cambian | Gráfico 4: distancia de Cook | **Después** de estimar |
+
+::: {style="text-align: center;"}
+**Tabla 9.13**
+:::
+
+
+Para ver la diferencia con claridad conviene recurrir a un ejemplo mínimo, con **una sola variable explicativa**, de manera que la recta de regresión pueda dibujarse. Partimos de una muestra sin problemas y le añadimos, de una en una, tres observaciones de naturaleza distinta:
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+# EJEMPLO DIDACTICO (datos construidos, no son los de TMI).
+# Se construye a proposito: en una muestra real no es posible localizar a
+# voluntad un caso con distancia de Cook muy alta y residuo diminuto.
+
+  set.seed(11)
+  .n  <- 24
+  .mu <- data.frame(x = runif(.n, 2, 8))
+  .mu$y <- 2 + 0.8 * .mu$x + rnorm(.n, 0, 0.55)
+  .xm <- mean(.mu$x)
+
+  # (2) residuo grande, en el CENTRO de la nube.
+  .c2 <- data.frame(x = .xm, y = 2 + 0.8 * .xm + 4.0)
+  # (3) influyente clasico: alejado y fuera de la tendencia.
+  .c3 <- data.frame(x = 14,  y = 2 + 0.8 * 14  - 5.0)
+  # (4) influyente que NO se delata: tan alejado que la recta va hacia el.
+  .c4 <- data.frame(x = 40,  y = 2 + 0.8 * 40  - 2.5)
+
+  .b0 <- coef(lm(y ~ x, .mu))
+
+  .diag <- function(extra) {
+    d <- rbind(.mu, extra); m <- lm(y ~ x, d); i <- nrow(d)
+    c(res = unname(resid(m)[i]), cook = unname(cooks.distance(m)[i]),
+      pend = unname(coef(m)[2]))
+  }
+  .d2 <- .diag(.c2); .d3 <- .diag(.c3); .d4 <- .diag(.c4)
+
+  .panel <- function(extra, titulo, subtitulo, xmax) {
+    d <- if (is.null(extra)) .mu else rbind(.mu, extra)
+    b <- coef(lm(y ~ x, d))
+    g <- ggplot() +
+      geom_abline(intercept = .b0[1], slope = .b0[2],
+                  colour = "grey60", linetype = "dashed", linewidth = 0.8) +
+      geom_point(data = .mu, aes(x, y), colour = "steelblue4",
+                 size = 1.8, alpha = 0.8) +
+      geom_abline(intercept = b[1], slope = b[2],
+                  colour = "steelblue4", linewidth = 1)
+    if (!is.null(extra))
+      g <- g + geom_point(data = extra, aes(x, y), colour = "red3", size = 3.6)
+    g + coord_cartesian(xlim = c(0, xmax),
+                        ylim = c(1, 2 + 0.8 * xmax + 2)) +
+      ggtitle(titulo, subtitle = subtitulo) +
+      xlab("x") + ylab("y") + theme_bw(base_size = 10)
+  }
+
+  .f3 <- function(x) formatC(x, format = "f", digits = 3)
+  .f2 <- function(x) formatC(x, format = "f", digits = 2)
+
+  ( .panel(NULL, "1. Muestra limpia",
+           paste0("Pendiente: ", .f3(.b0[2])), 15) |
+    .panel(.c2, "2. Caso con residuo grande",
+           paste0("Pendiente: ", .f3(.d2["pend"]), ". La recta NO gira"), 15) ) /
+  ( .panel(.c3, "3. Caso influyente",
+           paste0("Pendiente: ", .f3(.d3["pend"]), ". La recta SI gira"), 15) |
+    .panel(.c4, "4. Influyente con residuo diminuto",
+           paste0("Pendiente: ", .f3(.d4["pend"]), ". La recta SI gira"), 44) )
+```
+
+En los cuatro paneles la **recta discontinua gris** es siempre la estimada con la muestra limpia, y la **continua azul** la estimada tras añadir el caso en rojo. Las cifras son las siguientes:
+
+| | Caso 2 | Caso 3 | Caso 4 |
+|---|---|---|---|
+| Posición | Centro de la nube | Alejado | Muy alejado |
+| Residuo | `r .f2(.d2["res"])` | `r .f2(.d3["res"])` | `r .f2(.d4["res"])` |
+| Distancia de Cook | `r .f2(.d2["cook"])` | `r .f2(.d3["cook"])` | `r .f2(.d4["cook"])` |
+| Pendiente resultante | `r .f3(.d2["pend"])` | `r .f3(.d3["pend"])` | `r .f3(.d4["pend"])` |
+
+::: {style="text-align: center;"}
+**Tabla 9.14**
+:::
+
+
+La lectura es muy instructiva. El **caso 2** tiene el residuo más grande de los tres —el modelo falla estrepitosamente al predecirlo—, pero está situado en el centro de la nube, rodeado de observaciones que sujetan la recta: la pendiente **no se mueve ni una milésima**. El **caso 3**, en cambio, se equivoca *menos* (su residuo es menor en valor absoluto) y, sin embargo, hace girar la recta: su distancia de Cook es muchísimo mayor.
+
+Resulta útil pensar en un **balancín** cuyo punto de apoyo está en el centro de la nube de datos. Una observación situada sobre el eje puede empujar todo lo que quiera: la tabla sube o baja, pero **no gira**. Otra situada en el extremo del brazo la hace girar con un empujón mínimo. Lo que convierte a un caso en influyente no es, por tanto, equivocarse mucho con él, sino **dónde está situado** en el espacio de las variables explicativas.
+
+El **caso 4** es el más peligroso de todos, y merece atención aparte. Está tan alejado y tan solo que **nadie le hace contrapeso**: la recta va hacia él. Y una recta que pasa por encima de una observación le deja, por fuerza, un residuo pequeño. De hecho su residuo (`r .f2(.d4["res"])`) es **el menor de los tres**, hasta el punto de que en un gráfico de residuos no llamaría la atención en absoluto. Y es, con diferencia, el que más mueve la recta. Dicho de otro modo: **cuanto más poder tiene una observación para torcer la recta, más pequeño acaba siendo su residuo**; el caso se fabrica su propia coartada. Los gráficos de residuos detectan bien las observaciones con las que el modelo *se equivoca*, pero son ciegos a aquellas ante las que el modelo *se ha rendido*. Solo la distancia de Cook las delata.
+
+Esto explica por qué el gráfico de la distancia de Cook es imprescindible **aunque ya hayamos depurado los atípicos** al principio del análisis. Son dos redes con mallas distintas: la depuración del capítulo 5 examina las variables en bruto mediante la distancia de Mahalanobis, mientras que la influencia depende del modelo **tal como se ha especificado**, con sus logaritmos y sus variables ficticias. En nuestro propio caso puede comprobarse: de las `r sum(series_ecuaDEF$cooksd > 4/nrow(series_ecuaDEF))` empresas que superan el umbral de Cook —todas ellas supervivientes del filtrado de Mahalanobis—, la mayoría ocupa posiciones **perfectamente corrientes** en el *ranking* de atipicidad de aquella depuración. No son empresas raras: son empresas situadas en lugares del espacio de las explicativas donde hay pocas compañías que les hagan contrapeso.
+
 En cuanto a la tabla con los casos con valores de la *distancia de Cook* más relevantes:
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
@@ -734,9 +829,40 @@ tablaCook <- series_ecuaDEF %>%
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 9.13**
+**Tabla 9.15**
 :::
 
+
+```{r include=FALSE}
+# Calculos auxiliares para el comentario que sigue. No se muestran al lector:
+# en el texto solo aparecen las cifras ya interpretadas.
+
+  .umbral  <- 4 / nrow(series_ecuaDEF)
+  .cook    <- series_ecuaDEF$cooksd
+  .n_infl  <- sum(.cook > .umbral)
+  .max_ck  <- max(.cook)
+  .veces   <- .max_ck / .umbral
+
+  # Reestimacion sin los casos influyentes, solo para cuantificar su efecto.
+  .sin_infl <- seleccion_so[.cook <= .umbral, ]
+  .ecua_sin <- lm(formula(ecuaDEF), data = .sin_infl)
+
+  .cmp <- data.frame(con = coef(ecuaDEF), sin = coef(.ecua_sin))
+  .cmp$var <- 100 * (.cmp$sin - .cmp$con) / abs(.cmp$con)
+
+  .idx_div <- grep("IDIVERSE", rownames(.cmp))
+  .var_div <- .cmp$var[.idx_div]
+  .var_res <- max(abs(.cmp$var[-.idx_div]))
+
+  .f1 <- function(x) formatC(x, format = "f", digits = 1)
+  .f3 <- function(x) formatC(x, format = "f", digits = 3)
+```
+
+La tabla recoge las `r .n_infl` empresas cuya distancia de Cook supera el umbral de $4/n$. Conviene, sin embargo, poner esa cifra en perspectiva. El umbral $4/n$ es **deliberadamente exigente**: con `r nrow(series_ecuaDEF)` observaciones vale apenas `r .f3(.umbral)`, de modo que es normal que un pequeño porcentaje de casos lo rebase aunque el modelo sea sano. Las referencias clásicas para considerar que una observación resulta *verdaderamente* problemática son bastante más altas: valores de la distancia de Cook por encima de **0,5**, y sobre todo por encima de **1**. En nuestro modelo, el valor máximo es `r .f3(.max_ck)` —unas `r .f1(.veces)` veces el umbral, pero **muy lejos** de 0,5—, y **ninguna** empresa se aproxima siquiera a esas referencias. Ningún caso individual domina, por tanto, la estimación.
+
+**¿Convendría aun así reestimar el modelo sin esas empresas?** En rigor, sí: la práctica recomendable ante casos influyentes consiste en **reestimar sin ellos y comparar los coeficientes**, para saber de qué observaciones depende el resultado. No lo haremos aquí para no alargar en exceso la práctica del capítulo, pero sí conviene adelantar lo que ese ejercicio revelaría, porque es ilustrativo: al eliminar las `r .n_infl` empresas, los coeficientes de `log(DIST)` y de las variables ficticias de EFLO apenas se mueven (menos de un `r .f1(.var_res)` %), mientras que el de `log(IDIVERSE)` cambia un `r .f1(abs(.var_div))` %.
+
+El resultado no es casual, y conviene retenerlo: **la parte robusta del modelo es robusta, y la parte frágil es frágil**. Las conclusiones estructurales de fondo —la elasticidad de BMAL respecto a la distancia media recorrida y el efecto del estado de la flota— no dependen de ninguna empresa en particular. En cambio, el efecto de la diversificación, que es pequeño y cuya significación estadística resulta ya dudosa (como confirmará el apartado de errores robustos), sí es sensible a un puñado de observaciones. Dos diagnósticos independientes —la distancia de Cook y los errores estándar robustos— apuntan en la misma dirección sobre la misma variable, lo que refuerza la cautela con que debe interpretarse.
 
 Tras estudiar los gráficos, vamos a pasar a **contrastar las hipótesis básicas del modelo básico de regresión lineal** referidas a la *forma funcional*, y la *normalidad* y *comportamiento homoscedástico* de la perturbación aleatoria. Para ello se aplicarán las pruebas de *Ramsey-Reset*, *Shapiro-Wilk* y *Breusch-Pagan*, respectivamente. Los resultados de las tres pruebas se presentarán condensados en una tabla, en la que, además, se incluirá la conclusión del contraste, para una significación de 0,05. Para crear la tabla, primero se generará un *data frame* con sus elementos, denominado, por ejemplo, "check_hipotesis". El código es:
 
@@ -842,7 +968,7 @@ Y la tabla:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 9.14**
+**Tabla 9.16**
 :::
 
 
@@ -870,7 +996,9 @@ Si el modelo supera razonablemente la fase de contraste de las hipótesis básic
 
 El contraste de Breusch-Pagan ha revelado la presencia de **heteroscedasticidad**: la varianza de la perturbación no es constante a lo largo de las observaciones. Como ya se mencionó, los estimadores MCO siguen siendo insesgados y consistentes, pero **dejan de ser eficientes**, y los contrastes t y F pueden dar resultados incorrectos (significaciones que no lo son, o al revés).
 
-La solución estándar en econometría aplicada moderna es utilizar **errores estándar robustos a heteroscedasticidad** (errores **HC**, propuestos por White, 1980). No se re-estima el modelo: los coeficientes estimados son los mismos. Lo que cambia son los **errores estándar** de esos coeficientes, y en consecuencia los estadísticos *t* y los *p-valores* asociados. De este modo, la inferencia se corrige sin alterar la estimación. En R, los errores HC se obtienen con los paquetes `{sandwich}` y `{lmtest}`:
+Conviene entender **dónde falla exactamente** el cálculo convencional. La desviación típica de los coeficientes se obtiene a partir de la expresión $\widehat{\mathrm{Var}}(\hat\beta) = \hat\sigma^{2}(X'X)^{-1}$, donde $\hat\sigma^{2}$ es la varianza del vector de residuos: **un único número**, que se aplica por igual a todas las observaciones. Eso es, precisamente, la hipótesis de homoscedasticidad. Cuando la varianza real no es constante, ese número resulta un promedio engañoso —queda inflado por las zonas de mucha dispersión y se queda corto en las de poca—, y las desviaciones típicas de los coeficientes salen sistemáticamente mal, unas por exceso y otras por defecto. Como el estadístico $t$ es el cociente entre el coeficiente y su desviación típica, si el denominador está mal calculado el *p-valor* está mal, y la conclusión sobre la significación de una variable **puede estar mal**.
+
+La solución estándar en econometría aplicada moderna es utilizar **errores estándar robustos a heteroscedasticidad** (errores **HC**, propuestos por White, 1980). La corrección sustituye ese $\hat\sigma^{2}$ único por **el residuo de cada observación**, de manera que cada caso aporta su propia dispersión en lugar de la media de todas; por eso no hace falta saber de qué depende la heteroscedasticidad ni modelizarla. No se re-estima el modelo: los coeficientes estimados son los mismos. Lo que cambia son los **errores estándar** de esos coeficientes, y en consecuencia los estadísticos *t* y los *p-valores* asociados. De este modo, la inferencia se corrige sin alterar la estimación. En R, los errores HC se obtienen con los paquetes `{sandwich}` y `{lmtest}`:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
     # Estimación con errores estándar robustos (HC1, tipo White)
@@ -904,7 +1032,7 @@ Comparemos ahora los resultados del modelo con errores estándar **convencionale
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 9.15.** Comparación MCO vs errores robustos HC1
+**Tabla 9.17.** Comparación MCO vs errores robustos HC1
 :::
 
 
@@ -1008,7 +1136,7 @@ Y el resultado será:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 9.16**
+**Tabla 9.18**
 :::
 
 
@@ -1054,7 +1182,7 @@ Y el resultado será:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 9.17**
+**Tabla 9.19**
 :::
 
 
