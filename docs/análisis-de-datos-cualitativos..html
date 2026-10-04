@@ -181,7 +181,7 @@ mercancías.</p></li>
 la primera parte del código está dedicada a la limpieza de la memoria
 (<em>Global Environment</em>). Además, se cargan los paquetes que harán falta para
 ejecutar el código:</p>
-<div class="sourceCode" id="cb407"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb409"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#### Analisis de Tablas de Contingencia Bidimensionales ########################</span></span>
 <span><span class="co">################################################################################</span></span>
 <span></span>
@@ -204,7 +204,7 @@ nombre <code>custom_shading()</code>, que será utilizada posteriormente para
 colorear, según la significación estadística, la representación de los
 residuos en los gráficos de asociación realizados mediante la función
 <code><span>assoc()</span></code> del paquete <code>{vcd}</code>:</p>
-<div class="sourceCode" id="cb408"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb410"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#### Función: cambio de color de residuos en Gráficos vcd de Asociación ########</span></span>
 <span></span>
 <span><span class="co"># Definir una función de sombreado personalizada</span></span>
@@ -227,7 +227,7 @@ sino que se compone de los nombres de los casos o empresas. Con una
 línea de código adicional transformaremos esa primera columna en el
 <em>nombre de las filas</em>, de modo que tal columna abandona su papel como
 variable. En definitiva, el código para importar los datos es:</p>
-<div class="sourceCode" id="cb409"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb411"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># DATOS</span></span>
 <span></span>
 <span>  <span class="co"># Importando datos</span></span>
@@ -241,7 +241,7 @@ values</em>. Si existen casos con datos faltantes, se eliminarán.</p>
 <p>Además, se renombran los niveles de la variable “GALAXIA” con las
 funciones <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> y <code><a href="https://dplyr.tidyverse.org/reference/case_match.html">case_match()</a></code>, ya que los nombres originales son muy
 extensos, lo que podrá dificultar la elaboración posterior de gráficos:</p>
-<div class="sourceCode" id="cb410"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb412"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="co"># Seleccionando variables para el analisis.</span></span>
 <span>    <span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="va">interestelar_300</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">GALAXIA</span>,</span>
@@ -770,7 +770,7 @@ ANTIGUA, MADURA and RENOVADA
 <p><strong>Tabla 11.1</strong></p>
 </div>
 <p>Para el diagnóstico y, en su caso, filtrado de los <em>missing values</em>, aplicamos la función auxiliar <code><span>explora_na()</span></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a> que ya se presentó en el capítulo 5. Como el <em>data frame</em> “seleccion” contiene únicamente las tres variables del análisis, no es necesario especificar el argumento <code>variables</code>. A continuación, con <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> y <code><a href="https://dplyr.tidyverse.org/reference/case_match.html">case_match()</a></code> se recodifican los niveles de GALAXIA:</p>
-<div class="sourceCode" id="cb411"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb413"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="co"># Diagnóstico y filtrado de missing values.</span></span>
 <span>    <span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="fu"><span>explora_na</span></span><span class="op">(</span></span>
 <span>      <span class="va">seleccion</span>,</span>
@@ -828,7 +828,7 @@ construye una tabla de contingencia mediante la formulación de una tabla
 de doble entrada. En nuestro ejemplo, a la tabla de contingencia la
 hemos denominado, por ejemplo, “tab.GA.FJ”. Luego, la hemos presentado
 con un formato de tabla elaborado con la función <code><span>kable_rstars()</span></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a> presentado en el capítulo 5, complementada con <code><span>add_header_above()</span></code> y <code><span>column_spec()</span></code> de <a href="http://haozhu233.github.io/kableExtra/">kableExtra</a> para el encabezado agrupado y la negrita de la primera columna:</p>
-<div class="sourceCode" id="cb412"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb414"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># TABLA DE CONTINGENCIA GALAXIA FJUR</span></span>
 <span></span>
 <span> <span class="va">tab.GA.FJ</span> <span class="op">&lt;-</span> <span class="fu"><span>with</span></span><span class="op">(</span><span class="va">seleccion</span>, <span class="fu"><span>table</span></span><span class="op">(</span><span class="va">GALAXIA</span>, <span class="va">FJUR</span><span class="op">)</span><span class="op">)</span></span>
@@ -1002,7 +1002,7 @@ un análisis formal de asociación.</p>
 <code><span>mosaic()</span></code> de la librería <code>{vcd}</code>, con lo que se percibirá mejor la
 magnitud de las frecuencias conjuntas (celdas de la tabla). A mayor
 frecuencia, mayor área del rectángulo correspondiente:</p>
-<div class="sourceCode" id="cb413"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb415"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Representación gráfica de la tabla con mosaico (paquete vcd)</span></span>
 <span></span>
 <span>    <span class="fu"><span>mosaic</span></span><span class="op">(</span><span class="va">tab.GA.FJ</span>,</span>
@@ -1033,7 +1033,7 @@ del título y subtítulo. En conjunto, el código genera un mosaico claro,
 bien rotulado y con un sombreado estético basado en la información de la
 propia tabla.</p>
 <p>En nuestro caso, el resultado es:</p>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-369-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-370-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.2</strong></p>
 </div>
@@ -1066,7 +1066,7 @@ títulos, ejes claros y etiquetas informativas. Finalmente, la expresión
 y <code><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html">plot_annotation()</a></code> añade un título general, logrando una presentación
 conjunta y coherente de las distribuciones marginales de las dos
 variables:</p>
-<div class="sourceCode" id="cb414"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb416"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>   <span class="co"># Representando frecuencias de categorias en factores</span></span>
 <span></span>
 <span>    <span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">seleccion</span>, mapping<span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span> <span class="va">GALAXIA</span>, fill <span class="op">=</span> <span class="va">FJUR</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1083,7 +1083,7 @@ variables:</p>
 <span></span>
 <span>    <span class="op">(</span><span class="va">g1</span> <span class="op">+</span> <span class="va">g2</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Frecuencias Marginales."</span>,</span>
 <span>                  theme <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-370-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-371-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.3</strong></p>
 </div>
@@ -1162,7 +1162,7 @@ distribución conjunta difiere significativamente de la esperada. El
 siguiente código ejecuta el test y extrae los <strong>residuos estandarizados
 ajustados</strong>, útiles para identificar qué celdas contribuyen más a la
 posible asociación detectada:</p>
-<div class="sourceCode" id="cb415"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb417"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Prueba_asoc_Pearson</span> <span class="op">&lt;-</span> <span class="fu"><span>chisq.test</span></span><span class="op">(</span><span class="va">tab.GA.FJ</span><span class="op">)</span></span>
 <span><span class="va">Prueba_asoc_Pearson</span></span></code></pre></div>
 <pre><code>## 
@@ -1170,7 +1170,7 @@ posible asociación detectada:</p>
 ## 
 ## data:  tab.GA.FJ
 ## X-squared = 18.209, df = 8, p-value = 0.01971</code></pre>
-<div class="sourceCode" id="cb417"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb419"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Residuos_std</span> <span class="op">&lt;-</span> <span class="va">Prueba_asoc_Pearson</span><span class="op">$</span><span class="va">stdres</span></span></code></pre></div>
 <p>El resultado de la prueba ofrece un estadístico (<span class="math inline">\(\chi^2\)</span> = 18.209) con
 8 grados de libertad y un <strong>p-valor de 0.0197</strong>, inferior al nivel
@@ -1190,7 +1190,7 @@ mediante un esquema de colores personalizado. Para ello, utilizamos la
 función <code>custom_shading()</code>, definida previamente, que se aplica mediante
 el argumento <code>gp=</code> para asignar a cada barra un color en función de su
 residuo.</p>
-<div class="sourceCode" id="cb418"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb420"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><span>assoc</span></span><span class="op">(</span><span class="va">tab.GA.FJ</span>,</span>
 <span>      main <span class="op">=</span> <span class="st">"Galaxia y Forma Jurídica"</span>,</span>
 <span>      sub <span class="op">=</span> <span class="st">"Residuos de Pearson Tipificados. Naranja: significativos con sig. = 0.05"</span>,</span>
@@ -1200,7 +1200,7 @@ residuo.</p>
 <span>                           gp_labels <span class="op">=</span> <span class="fu"><span>gpar</span></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>      main_gp <span class="op">=</span> <span class="fu"><span>gpar</span></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">16</span><span class="op">)</span>,</span>
 <span>      sub_gp <span class="op">=</span> <span class="fu"><span>gpar</span></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-372-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-373-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.4</strong></p>
 </div>
@@ -1378,7 +1378,7 @@ en CG y SAG. Este patrón paralelo entre filas sugiere que el estado de
 la flota no depende de la forma jurídica, anticipando un escenario de
 <strong>independencia</strong> entre ambas variables.</p>
 <p><strong>2. Visualización en <em>mosaico</em> de la tabla.</strong></p>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-374-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-375-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.5</strong></p>
 </div>
@@ -1393,7 +1393,7 @@ apenas varía entre tipos de empresa. Visualmente, este gráfico refuerza
 la idea de que <strong>no existe una relación clara entre FJUR y EFLO</strong>,
 anticipando un escenario de independencia entre ambas variables.</p>
 <p><strong>3. Frecuencias marginales.</strong></p>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-375-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-376-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.6</strong></p>
 </div>
@@ -1426,7 +1426,7 @@ por el azar, y no existe evidencia estadística de que ciertos tipos de
 empresa presenten flotas más antiguas, maduras o renovadas en mayor
 proporción que otros.</p>
 <p><strong>5. Gráfico de asociación (residuos ajustados).</strong></p>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-377-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-378-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.7</strong></p>
 </div>
@@ -1580,7 +1580,7 @@ mercancías.</p></li>
 la primera parte del código está dedicada a la limpieza de la memoria
 (<em>Global Environment</em>). Además, se cargan los paquetes que harán falta para
 ejecutar el código:</p>
-<div class="sourceCode" id="cb420"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb422"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#### Modelos log-lineales para Tablas de Contingencia Multidimensionales #######</span></span>
 <span><span class="co">################################################################################</span></span>
 <span></span>
@@ -1656,7 +1656,7 @@ instrucción <code>gt_plt_summary(seleccion)</code> genera un resumen visual rá
 del contenido de estas variables, permitiendo comprobar de forma
 inmediata su estructura y distribución antes de continuar con el
 análisis:</p>
-<div class="sourceCode" id="cb421"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb423"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># DATOS</span></span>
 <span></span>
 <span><span class="co">## Importando datos</span></span>
@@ -2218,7 +2218,7 @@ cada una como un atributo categórico. Este flujo prepara un conjunto de
 datos consistente, depurado y listo para construir la tabla de
 contingencia tridimensional y avanzar hacia el ajuste de los modelos
 log-lineales.</p>
-<div class="sourceCode" id="cb422"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb424"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Diagnóstico y filtrado de missing values.</span></span>
 <span><span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="fu"><span>explora_na</span></span><span class="op">(</span></span>
 <span>  <span class="va">seleccion</span>,</span>
@@ -2264,7 +2264,7 @@ procedimiento <code><span>step()</span></code> funciona correctamente sobre el m
 aunque sus coeficientes contengan valores no finitos, porque opera
 sobre la <strong>desvianza</strong> (que es 0 por construcción para el saturado, un
 valor perfectamente finito) y no sobre los coeficientes.</p>
-<div class="sourceCode" id="cb423"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb425"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Construir tabla original</span></span>
 <span><span class="va">tab0</span> <span class="op">&lt;-</span> <span class="fu"><span>xtabs</span></span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">+</span> <span class="va">FJUR</span> <span class="op">+</span> <span class="va">EFLO</span>, data <span class="op">=</span> <span class="va">seleccion</span><span class="op">)</span></span>
 <span></span>
@@ -2338,12 +2338,12 @@ Los argumentos <code>main_gp</code> y <code>sub_gp</code> ajustan el tamaño de 
 principal y secundario, de modo que el gráfico sea claro y equilibrado.
 En conjunto, esta visualización facilita identificar relaciones
 estructurales antes de pasar al ajuste de los modelos log-lineales.</p>
-<div class="sourceCode" id="cb424"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb426"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Mostrar tabla</span></span>
 <span></span>
 <span><span class="fu"><span>pander</span></span><span class="op">(</span><span class="st">"Tabla de contingencia GALAXIA × FJUR × EFLO"</span><span class="op">)</span></span></code></pre></div>
 <p>Tabla de contingencia GALAXIA × FJUR × EFLO</p>
-<div class="sourceCode" id="cb425"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb427"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><span>pander</span></span><span class="op">(</span><span class="va">tab0</span>, style<span class="op">=</span> <span class="st">"rmarkdown"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-sm"><tbody>
 <tr class="odd">
@@ -2486,7 +2486,7 @@ estructurales antes de pasar al ajuste de los modelos log-lineales.</p>
 <div style="text-align: center;">
 <p><strong>Tabla 11.6</strong></p>
 </div>
-<div class="sourceCode" id="cb426"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb428"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Representación gráfica de la tabla con mosaico</span></span>
 <span><span class="fu"><span>mosaic</span></span><span class="op">(</span><span class="va">tab0</span>,</span>
 <span>       main <span class="op">=</span> <span class="st">"Galaxia, Forma Jurídica y Antigüedad media de la flota"</span>,</span>
@@ -2496,7 +2496,7 @@ estructurales antes de pasar al ajuste de los modelos log-lineales.</p>
 <span>                            gp_labels <span class="op">=</span> <span class="fu"><span>gpar</span></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>       main_gp <span class="op">=</span> <span class="fu"><span>gpar</span></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">16</span><span class="op">)</span>,</span>
 <span>       sub_gp <span class="op">=</span> <span class="fu"><span>gpar</span></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-385-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-386-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.8</strong></p>
 </div>
@@ -2576,14 +2576,14 @@ GALAXIA, EFLO y FJUR). El siguiente código ajusta este modelo a la tabla
 <code>tab0</code> y captura la lista devuelta por <code><span>generar_solucion()</span></code> en el
 objeto <code>solucion_modelo_indep</code>, además de dibujar el mosaico de residuos
 correspondiente:</p>
-<div class="sourceCode" id="cb427"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb429"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Modelo de independencia (solo efectos principales, sin interacciones)</span></span>
 <span><span class="va">modelo_indep</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><span>loglm</span></span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">+</span> <span class="va">EFLO</span> <span class="op">+</span> <span class="va">FJUR</span>,</span>
 <span>                            data   <span class="op">=</span> <span class="va">tab0</span>,</span>
 <span>                            fitted <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">solucion_modelo_indep</span> <span class="op">&lt;-</span> <span class="fu"><span>generar_solucion</span></span><span class="op">(</span><span class="va">modelo_indep</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-386-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-387-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.9</strong></p>
 </div>
@@ -2621,7 +2621,7 @@ conjunta de la distribución de las empresas intergalácticas.</p>
 acceder al primer elemento de la lista solucion_modelo_indep, que
 contiene las pruebas de validez del modelo (ratio de verosimilitud y
 chi-cuadrado de Pearson), mediante:</p>
-<div class="sourceCode" id="cb428"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb430"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_indep</span><span class="op">$</span><span class="va">Informacion</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -2690,7 +2690,7 @@ relevantes que justifican avanzar hacia modelos con interacciones.</strong></p>
 parámetros o <strong>coeficientes estimados</strong> del modelo, que en este caso
 corresponden solo a efectos directos o principales. Para obtener la
 tabla ejecutaremos:</p>
-<div class="sourceCode" id="cb429"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb431"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_indep</span><span class="op">$</span><span class="va">Coeficientes</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -2883,6 +2883,19 @@ son:</p>
 <div style="text-align: center;">
 <p><strong>Tabla 11.9</strong></p>
 </div>
+<p>Conviene retener una propiedad del residuo de la deviancia que explica
+por qué es el que se representa por defecto en los mosaicos: <strong>la suma de
+sus cuadrados en todas las celdas es, exactamente, el estadístico
+<span class="math inline">\(G^2\)</span></strong> del modelo.</p>
+<p><span class="math display">\[
+\sum_{ijk} \left(r^{(dev)}_{ijk}\right)^2 = G^2
+\]</span></p>
+<p>Es decir, cada residuo informa de <strong>cuánto desajuste aporta esa celda
+concreta</strong> al desajuste global del modelo. El mosaico de residuos no es,
+por tanto, un gráfico meramente ilustrativo: es el <strong>desglose celda a
+celda del estadístico de bondad de ajuste</strong> que aparece en la tabla de
+validación. Una celda de color intenso es una celda que está “pagando”
+una parte importante del <span class="math inline">\(G^2\)</span>.</p>
 <p><strong>1. Celda con residuo pequeño: (Triángulo, SAG, MADURA):</strong></p>
 <p>Según la tabla <code>tab0</code>, la frecuencia observada es:</p>
 <p><span class="math display">\[
@@ -2995,6 +3008,36 @@ galaxias.</p>
 interacciones, estos coeficientes ofrecen una primera visión de los
 <strong>patrones globales de presencia relativa</strong> de cada categoría en el
 conjunto del sector.</p>
+<p>Hasta aquí hemos leído únicamente el <strong>signo</strong> de los coeficientes. Pero
+su <strong>magnitud</strong> también es interpretable, y de forma muy directa. Como el
+modelo es aditivo en logaritmos, al deshacer el logaritmo los efectos se
+vuelven <strong>multiplicativos</strong>:</p>
+<p><span class="math display">\[
+\hat{n}_{ijk} = e^{\lambda} \cdot e^{\lambda_i^{(\text{GALAXIA})}}
+\cdot e^{\lambda_j^{(\text{FJUR})}} \cdot e^{\lambda_k^{(\text{EFLO})}}
+\]</span></p>
+<p>De manera que <strong><span class="math inline">\(e^{\lambda}\)</span> es el factor por el que se multiplica la
+frecuencia esperada</strong> cuando se pasa de un nivel “promedio” al nivel
+concreto en cuestión. Y esa cifra se traduce cómodamente a porcentaje:</p>
+<p><span class="math display">\[
+\text{desviación porcentual} = \left(e^{\lambda} - 1\right)\cdot 100
+\]</span></p>
+<p>Así, el coeficiente de <em>Andrómeda</em> (<span class="math inline">\(\lambda = 0.399\)</span>) equivale a
+<span class="math inline">\(e^{0.399} = 1.49\)</span>: en esa galaxia hay un <strong>49% más</strong> de empresas de las
+que correspondería al promedio. El de <em>PN Magallanes</em> (<span class="math inline">\(\lambda =
+-0.535\)</span>) equivale a <span class="math inline">\(e^{-0.535} = 0.59\)</span>, es decir, un <strong>41% menos</strong>. Y el
+de <em>ANTIGUA</em> (<span class="math inline">\(\lambda = 0.456\)</span>) supone un <strong>58% más</strong> de flotas
+envejecidas de lo que cabría esperar si los tres estados de flota se
+repartieran por igual.</p>
+<p>Una última observación sobre la <strong>restricción de suma cero</strong>. La tabla
+muestra un coeficiente por cada nivel de cada factor: 1 término
+independiente, 5 de GALAXIA, 3 de FJUR y 3 de EFLO, doce en total. Pero
+no todos son <strong>libres</strong>: dentro de cada factor los coeficientes han de
+sumar cero, de modo que el último de cada bloque queda determinado por
+los anteriores. Los parámetros realmente estimados son, por tanto,
+<span class="math inline">\(1 + 4 + 2 + 2 = 9\)</span>, que es exactamente la diferencia entre el número de
+celdas de la tabla (45) y los grados de libertad del modelo (36) que
+figuran en la tabla de validación.</p>
 <p>Pasamos ahora al <strong>modelo saturado</strong>, en el cual se especifican todos
 los efectos directos o principales de los factores, y todas las
 interacciones posibles entre dichos factores (interacciones dos a dos, y
@@ -3005,7 +3048,7 @@ atributos y sus interacciones son los más importantes (modelo
 <em>redundante</em>).</p>
 <p>Para su estimación, simplemente se sustituyen los signos “+” del modelo
 anterior por los signos “*”. El modelo se denominará “modelo_sat”:</p>
-<div class="sourceCode" id="cb430"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb432"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Modelo Saturado.</span></span>
 <span></span>
 <span><span class="va">modelo_sat</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><span>loglm</span></span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">*</span> <span class="va">EFLO</span> <span class="op">*</span> <span class="va">FJUR</span>,</span>
@@ -3013,14 +3056,14 @@ anterior por los signos “*”. El modelo se denominará “modelo_sat”:</p>
 <span>                          fitted <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">solucion_modelo_sat</span> <span class="op">&lt;-</span> <span class="fu"><span>generar_solucion</span></span><span class="op">(</span><span class="va">modelo_sat</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-389-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-390-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.10</strong></p>
 </div>
 <p>El gráfico de mosaico muestra que, obviamente, todos los residuos son 0,
 ya que coinciden las frecuencias observadas y las estimadas por el
 modelo. En cuanto a la tabla de validación:</p>
-<div class="sourceCode" id="cb431"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb433"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_sat</span><span class="op">$</span><span class="va">Informacion</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -3079,7 +3122,7 @@ punto de vista del <em>análisis estructural</em>, el modelo saturado no es muy
 los que son poco importantes. Por último, mostraremos la tabla con los
 coeficientes estimados, correspondientes tanto a los efectos principales
 o directos como a las interacciones:</p>
-<div class="sourceCode" id="cb432"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb434"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_sat</span><span class="op">$</span><span class="va">Coeficientes</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -3938,7 +3981,7 @@ número máximo de iteraciones (<code>steps</code>, con valor por defecto <code>
 óptima según el AIC, más simple que el modelo saturado pero
 suficientemente expresiva para captar los patrones esenciales de
 asociación entre los factores:</p>
-<div class="sourceCode" id="cb433"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb435"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Elección del modelo final.</span></span>
 <span></span>
 <span><span class="va">modelo_def</span> <span class="op">&lt;-</span> <span class="fu"><span>step_loglm_backward</span></span><span class="op">(</span><span class="op">~</span> <span class="va">GALAXIA</span> <span class="op">*</span> <span class="va">EFLO</span> <span class="op">*</span> <span class="va">FJUR</span>,</span>
@@ -3985,9 +4028,9 @@ interacciones triples entre los tres factores.</p>
 <p>Luego, se pasa el modelo a la función <code>generar_solución()</code> para obtener
 los resultados (el gráfico de mosaico y las dos tablas). El gráfico
 obtenido es:</p>
-<div class="sourceCode" id="cb435"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb437"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_def</span> <span class="op">&lt;-</span> <span class="fu"><span>generar_solucion</span></span><span class="op">(</span><span class="va">modelo_def</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-393-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-394-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.11</strong></p>
 </div>
@@ -4014,7 +4057,7 @@ modelo final proporciona una representación parsimoniosa y
 estadísticamente coherente de las dependencias esenciales entre los
 factores analizados.</p>
 <p>En cuanto a la tabla de validación:</p>
-<div class="sourceCode" id="cb436"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb438"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_def</span><span class="op">$</span><span class="va">Informacion</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -4079,7 +4122,7 @@ concluimos que <strong>no es necesario añadir interacciones adicionales</strong
 que la especificación elegida representa correctamente la estructura de
 dependencias presente en la tabla de contingencia tridimensional.</p>
 <p>En lo que se refiere a los coeficientes estimados del modelo:</p>
-<div class="sourceCode" id="cb437"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb439"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">solucion_modelo_def</span><span class="op">$</span><span class="va">Coeficientes</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -4328,13 +4371,13 @@ maduras o renovadas, un patrón que podría relacionarse con barreras
 tecnológicas o de inversión.</p>
 <p>Las <strong>interacciones GALAXIA × FJUR</strong> aportan una lectura más matizada y
 son la clave del modelo seleccionado. Por ejemplo, <em>GN Mag.</em> presenta
-una interacción muy positiva con <em>CG</em> (+0.537), lo que indica que —más
+una interacción muy positiva con <em>CG</em> (+0.566), lo que indica que —más
 allá de los efectos directos— en esta galaxia las empresas tipo <em>CG</em>
 aparecen con una frecuencia muy superior a la esperada. Del mismo modo,
-<em>PN Mag.</em> muestra una interacción muy positiva con <em>SLG</em> (+0.530),
+<em>PN Mag.</em> muestra una interacción muy positiva con <em>SLG</em> (+0.589),
 sugiriendo que este tipo societario es especialmente dominante en esa
 región concreta. En cambio, varias combinaciones presentan coeficientes
-negativos, como <em>Andrómeda:SLG</em> (–0.097) o <em>GN Mag.:SLG</em> (–0.331), lo
+negativos, como <em>Andrómeda:SLG</em> (–0.112) o <em>GN Mag.:SLG</em> (–0.345), lo
 que indica una menor afinidad entre esas formas jurídicas y dichos
 entornos galácticos.</p>
 <p>La combinación de efectos directos e interacciones permite entender
@@ -4354,6 +4397,145 @@ decisiones estratégicas relevantes: qué forma societaria encaja mejor en
 cada contexto, cómo influyen los marcos regulatorios locales y qué
 configuraciones organizativas resultan más estables o rentables en
 determinadas regiones del universo económico analizado.</p>
+<p><strong>Reconstruyendo una celda con el modelo final.</strong></p>
+<p>Igual que hicimos con el modelo de independencia, los coeficientes del
+modelo definitivo permiten <strong>reconstruir la frecuencia estimada de
+cualquier celda</strong> de la tabla. La única novedad es que ahora hay que
+añadir, cuando proceda, el término de <strong>interacción</strong>:</p>
+<p><span class="math display">\[
+\hat{n}_{ijk} = \exp\Big(
+\lambda +
+\lambda_i^{(\text{GALAXIA})} +
+\lambda_j^{(\text{FJUR})} +
+\lambda_k^{(\text{EFLO})} +
+\lambda_{ij}^{(\text{GALAXIA} \times \text{FJUR})}
+\Big)
+\]</span></p>
+<p>Tomemos la celda <strong>(GN Mag., CG, ANTIGUA)</strong>, cuya frecuencia observada
+es <span class="math inline">\(n_{ijk} = 7\)</span>. Los coeficientes implicados son:</p>
+<ul>
+<li><span class="math inline">\(\lambda = 1.694\)</span></li>
+<li><span class="math inline">\(\lambda_{\text{GN Mag.}}^{(\text{GALAXIA})} = -0.039\)</span></li>
+<li><span class="math inline">\(\lambda_{\text{CG}}^{(\text{FJUR})} = -0.249\)</span></li>
+<li><span class="math inline">\(\lambda_{\text{ANTIGUA}}^{(\text{EFLO})} = 0.456\)</span></li>
+<li><span class="math inline">\(\lambda_{\text{GN Mag.,CG}}^{(\text{GALAXIA}\times\text{FJUR})} = 0.566\)</span></li>
+</ul>
+<p>Por tanto:</p>
+<p><span class="math display">\[
+\log(\hat{n}) = 1.694 -0.039 -0.249 + 0.456 + 0.566 = 2.429
+\]</span>
+<span class="math display">\[
+\hat{n} = \exp(2.429) = 11.35
+\]</span></p>
+<p>El residuo de la deviancia correspondiente es:</p>
+<p><span class="math display">\[
+r^{(dev)} \approx \text{sign}(7 - 11.35)
+\sqrt{2\left[7\log\left(\frac{7}{11.35}\right) - (7 - 11.35)\right]}
+\approx -1.39
+\]</span></p>
+<p>Se trata, en este caso, de un residuo <strong>negativo</strong>: el modelo espera más
+empresas de las que realmente se observan en esa combinación. Es el
+mayor residuo negativo de toda la tabla, y explica el tono rojizo de esa
+celda en el mosaico de la figura correspondiente. En el extremo opuesto,
+la celda <strong>(Andrómeda, SLG, ANTIGUA)</strong> arroja <span class="math inline">\(\hat{n} = 17.27\)</span>
+frente a 23 observadas, con un residuo de <span class="math inline">\(1.31\)</span>. Ambos valores son moderados,
+coherentes con el buen ajuste global del modelo.</p>
+<p>Conviene subrayar que, también aquí, los coeficientes <strong>mostrados</strong> son
+más que los <strong>libres</strong>: la tabla recoge 1 término independiente, 5 de
+GALAXIA, 3 de FJUR, 3 de EFLO y 15 de la interacción, 27 en total; pero
+la restricción de suma cero —que opera tanto por filas como por columnas
+en la matriz de interacción— reduce los parámetros realmente estimados a
+<span class="math inline">\(1 + 4 + 2 + 2 + 8 = 17\)</span>, que es la diferencia entre las 45
+celdas de la tabla y los 28 grados de libertad del modelo.</p>
+<p><strong>La magnitud de los coeficientes: el cociente de ventajas.</strong></p>
+<p>Los comentarios anteriores se apoyan en el <strong>signo</strong> de los coeficientes.
+Pero, como vimos con el modelo de independencia, la <strong>magnitud</strong> también
+se interpreta sin dificultad sin más que exponenciar. Aplicado a las
+interacciones, <span class="math inline">\(e^{\lambda}\)</span> indica en qué proporción esa combinación
+concreta de galaxia y forma jurídica se da por encima o por debajo de lo
+que predirían los efectos principales por separado:</p>
+<div class="inline-table"><table class="table table-sm">
+<thead><tr class="header">
+<th>Combinación</th>
+<th><span class="math inline">\(\lambda\)</span></th>
+<th><span class="math inline">\(e^{\lambda}\)</span></th>
+<th>Desviación</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>GN Mag. × CG</td>
+<td><span class="math inline">\(0.566\)</span></td>
+<td><span class="math inline">\(1.762\)</span></td>
+<td><span class="math inline">\(+76\%\)</span></td>
+</tr>
+<tr class="even">
+<td>PN Mag. × SLG</td>
+<td><span class="math inline">\(0.589\)</span></td>
+<td><span class="math inline">\(1.803\)</span></td>
+<td><span class="math inline">\(+80\%\)</span></td>
+</tr>
+<tr class="odd">
+<td>PN Mag. × CG</td>
+<td><span class="math inline">\(-0.506\)</span></td>
+<td><span class="math inline">\(0.603\)</span></td>
+<td><span class="math inline">\(-40\%\)</span></td>
+</tr>
+<tr class="even">
+<td>GN Mag. × SLG</td>
+<td><span class="math inline">\(-0.345\)</span></td>
+<td><span class="math inline">\(0.708\)</span></td>
+<td><span class="math inline">\(-29\%\)</span></td>
+</tr>
+</tbody>
+</table></div>
+<div style="text-align: center;">
+<p><strong>Tabla 11.14</strong></p>
+</div>
+<p>Ahora bien, estas cifras dependen de la <strong>parametrización</strong> empleada
+—aquí, la de suma cero— y por ello no siempre son fáciles de trasladar a
+un informe. Existe una lectura alternativa de la magnitud que <strong>no
+depende de la parametrización</strong> y que se enuncia en lenguaje corriente:
+el <strong>cociente de ventajas</strong> (<em>odds ratio</em>).</p>
+<p>La idea es sencilla. Se eligen <strong>dos galaxias y dos formas jurídicas</strong>, y
+se compara la “ventaja” de una forma jurídica sobre la otra en cada una
+de las dos galaxias. Tomemos CG frente a SLG, en GN Mag. y en PN Mag.. Partiendo de las frecuencias que el modelo estima:</p>
+<ul>
+<li>Ventaja de CG sobre SLG <strong>en GN Mag.</strong>: <span class="math inline">\(23 / 17 = 1.35\)</span>
+</li>
+<li>Ventaja de CG sobre SLG <strong>en PN Mag.</strong>: <span class="math inline">\(4 / 22 = 0.18\)</span>
+</li>
+<li>Cociente entre ambas: <span class="math inline">\(1.35 / 0.18 = 7.44\)</span>
+</li>
+</ul>
+<p>Es decir: <strong>la ventaja de constituirse como CG en lugar de como SLG es
+7.4 veces mayor en GN Mag. que en PN Mag.</strong> Una frase que puede figurar tal cual en las conclusiones
+de un informe.</p>
+<p>Lo interesante es que <strong>ese mismo número se obtiene directamente de los
+coeficientes de la interacción</strong>, sin necesidad de recurrir a las
+frecuencias ajustadas. Basta con exponenciar los cuatro coeficientes
+implicados y dividirlos del mismo modo:</p>
+<ul>
+<li>En GN Mag.: <span class="math inline">\(e^{0.566} / e^{-0.345} = 1.762 / 0.708 = 2.489\)</span>
+</li>
+<li>En PN Mag.: <span class="math inline">\(e^{-0.506} / e^{0.589} = 0.603 / 1.803 = 0.334\)</span>
+</li>
+<li>Cociente: <span class="math inline">\(2.489 / 0.334 = 7.44\)</span>
+</li>
+</ul>
+<p>La coincidencia no es casual. Al dividir las ventajas de las dos
+galaxias, los <strong>efectos principales de GALAXIA y de FJUR son los mismos
+en el numerador y en el denominador, y se cancelan</strong>. Lo que sobrevive a
+la división es, exclusivamente, la <strong>asociación</strong> entre ambos factores,
+limpia ya de las frecuencias globales de cada categoría. Por eso el
+cociente de ventajas es la medida de la magnitud <strong>más defendible</strong> en la
+redacción de conclusiones: no se ve afectada por el hecho de que
+<em>Andrómeda</em> tenga muchas empresas y <em>PN Mag.</em> pocas, ni por el
+hecho de que las <em>SLG</em> sean la forma jurídica más abundante del sector.</p>
+<p>Repitiendo el cálculo para otros pares de categorías se obtiene el mapa
+completo de la asociación. Por ejemplo, la ventaja de ser SLG en lugar
+de CG es <strong>3.7 veces mayor</strong> en PN Mag. que en V. Láctea, lo
+que cuantifica la afinidad entre esa galaxia y esa forma societaria que
+los coeficientes ya sugerían cualitativamente.</p>
 </div>
 </div>
 <div id="c11-analisis-de-correspondencias" class="section level2" number="11.4">
@@ -4461,7 +4643,7 @@ conocido de los apartados anteriores.</p></li>
 la primera parte del código está dedicada a la limpieza de la memoria
 (<em>Global Environment</em>). Además, se cargan los paquetes que harán falta para
 ejecutar el código:</p>
-<div class="sourceCode" id="cb438"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb440"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#### Análisis de Correspondencias Simple. Universo R-Stars ####################</span></span>
 <span><span class="co">################################################################################</span></span>
 <span></span>
@@ -4487,7 +4669,7 @@ categóricas</strong> que intervendrán en el análisis: GALAXIA y FJUR. Se
 comprueban los posibles <em>missing values</em> con <code><span>vis_miss()</span></code>, y se
 recodifican los nombres de las galaxias para facilitar la lectura de
 los gráficos:</p>
-<div class="sourceCode" id="cb439"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb441"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># DATOS</span></span>
 <span></span>
 <span>  <span class="co"># Importando datos</span></span>
@@ -5005,13 +5187,13 @@ SLG, SAG and CG
 </table></div>
 </div>
 <div style="text-align: center;">
-<p><strong>Tabla 11.14</strong></p>
+<p><strong>Tabla 11.15</strong></p>
 </div>
 <p>El resumen visual confirma que el <em>data frame</em> <code>seleccion</code> contiene
 las dos variables categóricas necesarias para el análisis de
 correspondencias simple: <strong>GALAXIA</strong> (5 categorías) y <strong>FJUR</strong> (3
 categorías). Ambas aparecen completas, sin valores perdidos:</p>
-<div class="sourceCode" id="cb440"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb442"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Diagnóstico y filtrado de missing values.</span></span>
 <span></span>
 <span>    <span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="fu"><span>explora_na</span></span><span class="op">(</span></span>
@@ -5034,7 +5216,7 @@ categorías). Ambas aparecen completas, sin valores perdidos:</p>
 <p>Confirmado que no hay valores perdidos y renombradas las categorías de
 GALAXIA, construimos la <strong>tabla de contingencia</strong> de partida, sobre la
 cual se aplicará el análisis:</p>
-<div class="sourceCode" id="cb441"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb443"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># TABLA DE CONTINGENCIA (GALAXIA X FJUR)</span></span>
 <span></span>
 <span>  <span class="va">tab.GA.FJ</span> <span class="op">&lt;-</span> <span class="fu"><span>with</span></span><span class="op">(</span><span class="va">seleccion</span>, <span class="fu"><span>table</span></span><span class="op">(</span><span class="va">GALAXIA</span>, <span class="va">FJUR</span><span class="op">)</span><span class="op">)</span></span>
@@ -5184,7 +5366,7 @@ Sum
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 11.15.</strong> Empresas TMI: Galaxia y Forma Jurídica.</p>
+<p><strong>Tabla 11.16.</strong> Empresas TMI: Galaxia y Forma Jurídica.</p>
 </div>
 <p>Ya disponemos de la tabla sobre la que se aplicará el análisis. Se
 trata de una tabla <span class="math inline">\(5 \times 3\)</span>, por lo que el número máximo de
@@ -5201,7 +5383,7 @@ recoge la información de las <strong>dimensiones</strong> (autovalores, porcent
 de inercia principal y porcentaje acumulado), la segunda desglosa la
 información de las <strong>filas</strong> (categorías de GALAXIA) y la tercera
 desglosa la información de las <strong>columnas</strong> (categorías de FJUR):</p>
-<div class="sourceCode" id="cb442"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb444"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ANALISIS DE CORRESPONDENCIAS SIMPLE</span></span>
 <span></span>
 <span>  <span class="co"># Cálculo del análisis con la función CA() de {FactoMineR}</span></span>
@@ -5235,7 +5417,7 @@ esa dimensión; valores bajos indican una representación pobre. La
 suma del coseno cuadrado en todas las dimensiones no triviales es 1.</p></li>
 </ul>
 <p>El código para construir las tres tablas es:</p>
-<div class="sourceCode" id="cb443"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb445"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Tabla 1: Inercia principal por dimensión</span></span>
 <span></span>
 <span>    <span class="va">TableEigenCA</span> <span class="op">&lt;-</span> <span class="va">EigenCA</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -5293,7 +5475,7 @@ suma del coseno cuadrado en todas las dimensiones no triviales es 1.</p></li>
 <span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">TableCols</span></span></code></pre></div>
 <p>La primera tabla resume la <strong>descomposición de la inercia</strong> entre las
 dimensiones extraídas:</p>
-<div class="sourceCode" id="cb444"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb446"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -5343,7 +5525,7 @@ Acumulada
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 11.16</strong></p>
+<p><strong>Tabla 11.17</strong></p>
 </div>
 <p>Como se aprecia, la <strong>primera dimensión</strong> recoge el <strong>75.4%</strong> de la
 inercia total (varianza o comportamiento asociativo de las categorías),
@@ -5367,7 +5549,7 @@ respecto a sus asociaciones.</p>
 <p>La segunda tabla, correspondiente al factor GALAXIA, permite
 identificar qué categorías contribuyen más a la inercia y qué tan bien
 están representadas en cada dimensión:</p>
-<div class="sourceCode" id="cb445"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb447"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -5493,7 +5675,7 @@ Vía Láctea
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 11.17</strong></p>
+<p><strong>Tabla 11.18</strong></p>
 </div>
 <p>Se observa que las categorías con <strong>mayor inercia</strong> son la <strong>Gran Nube
 de Magallanes</strong> y la <strong>Pequeña Nube de Magallanes</strong>, es decir, son las
@@ -5509,7 +5691,7 @@ respectivamente), mientras que <strong>Andrómeda</strong>, <strong>Triángulo</
 Láctea</strong> encuentran mejor representación en la <strong>Dimensión 2</strong> (cos²
 entre 0.68 y 0.86 en el segundo eje).</p>
 <p>La tercera tabla recoge la información análoga para el factor FJUR:</p>
-<div class="sourceCode" id="cb446"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb448"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">SolucionCA</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -5595,7 +5777,7 @@ SLG
 </tbody>
 </table></div>
 <div style="text-align: center;">
-<p><strong>Tabla 11.18</strong></p>
+<p><strong>Tabla 11.19</strong></p>
 </div>
 <p>La categoría de forma jurídica con <strong>mayor inercia</strong> es <strong>CG</strong>,
 seguida de <strong>SLG</strong> y, a distancia, <strong>SAG</strong>. Esto indica que las
@@ -5623,7 +5805,7 @@ grado extremo), habría que ponderar con especial atención la posición
 de las categorías en la primera dimensión a la hora de establecer
 conclusiones. Para crear este gráfico de contribuciones puede
 recurrirse a la función <code><span>fviz_screeplot()</span></code> del paquete <a href="https://github.com/kassambara/factoextra">factoextra</a>:</p>
-<div class="sourceCode" id="cb447"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb449"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># GRÁFICOS DEL ANÁLISIS DE CORRESPONDENCIAS</span></span>
 <span></span>
 <span>  <span class="co"># Gráfico de contribuciones de las dimensiones a la Inercia Total</span></span>
@@ -5640,7 +5822,7 @@ recurrirse a la función <code><span>fviz_screeplot()</span></code> del paquete 
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">gcontrib</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-407-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-409-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.12</strong></p>
 </div>
@@ -5658,7 +5840,7 @@ uniformidad; las barras que la superan corresponden a las categorías
 que “explican” más ese eje. A continuación se construyen los cuatro
 gráficos (filas y columnas × dimensiones 1 y 2) y se disponen
 conjuntamente con <a href="https://patchwork.data-imaginist.com">patchwork</a>:</p>
-<div class="sourceCode" id="cb448"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb450"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Contribución de las categorías (filas y columnas) a las dimensiones</span></span>
 <span></span>
 <span>    <span class="va">grow_dim1</span> <span class="op">&lt;-</span> <span class="fu"><span>fviz_contrib</span></span><span class="op">(</span><span class="va">acinterestelar</span>,</span>
@@ -5697,7 +5879,7 @@ conjuntamente con <a href="https://patchwork.data-imaginist.com">patchwork</a>:<
 <span>                                    plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">gcontribs</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-408-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-410-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.13</strong></p>
 </div>
@@ -5730,7 +5912,7 @@ tamaño del texto en el gráfico.</p></li>
 <p>Es especialmente relevante la elección de <code>map = "symmetric"</code>, ya que
 permite interpretar las cercanías entre categorías de uno y otro factor
 de forma coherente:</p>
-<div class="sourceCode" id="cb449"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb451"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Gráfico bidimensional (biplot simétrico) de categorías</span></span>
 <span></span>
 <span>    <span class="va">gbiplot</span> <span class="op">&lt;-</span> <span class="fu"><span>fviz_ca_biplot</span></span><span class="op">(</span><span class="va">acinterestelar</span>,</span>
@@ -5745,7 +5927,7 @@ de forma coherente:</p>
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">gbiplot</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-409-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-411-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.14</strong></p>
 </div>
@@ -5777,7 +5959,7 @@ prueba ji-cuadrado.</p>
 <p>Para una presentación más compacta que combine el gráfico de
 contribuciones y el biplot, puede recurrirse nuevamente al paquete
 <a href="https://patchwork.data-imaginist.com">patchwork</a>:</p>
-<div class="sourceCode" id="cb450"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb452"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Presentación compacta: contribuciones + biplot</span></span>
 <span></span>
 <span>    <span class="va">gcombinado</span> <span class="op">&lt;-</span> <span class="va">gcontrib</span> <span class="op">/</span> <span class="va">gbiplot</span></span>
@@ -5790,7 +5972,7 @@ contribuciones y el biplot, puede recurrirse nuevamente al paquete
 <span>                                    plot.caption <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="va">gcombinado</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-410-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-412-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 11.15</strong></p>
 </div>
@@ -5876,7 +6058,7 @@ aquí</a>)</p></li>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón Morán. It was last built on 2026-09-30.</p>
+    <p>"<strong>R-Stars: La Guía</strong>" was written by Miguel-Ángel Tarancón Morán. It was last built on 2026-10-04.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

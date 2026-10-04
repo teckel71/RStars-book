@@ -108,6 +108,18 @@ rm(list = ls())
   library (vcd)
 ```
 
+```{r include=FALSE}
+# Paquete MATrstars: funciones auxiliares del libro R-Stars.
+# Se carga aqui, al principio del capitulo, porque explora_na() se utiliza mas
+# abajo. En la compilacion del libro completo ya viene cargado del capitulo 5,
+# pero al renderizar este capitulo por separado hace falta esta llamada.
+if (!requireNamespace("MATrstars", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+  remotes::install_github("teckel71/MATrstars")
+}
+library(MATrstars)
+```
+
 Después, se integra el código de una función realizada *ad hoc*, de
 nombre `custom_shading()`, que será utilizada posteriormente para
 colorear, según la significación estadística, la representación de los
@@ -1456,6 +1468,22 @@ son:
 :::
 
 
+Conviene retener una propiedad del residuo de la deviancia que explica
+por qué es el que se representa por defecto en los mosaicos: **la suma de
+sus cuadrados en todas las celdas es, exactamente, el estadístico
+$G^2$** del modelo.
+
+$$
+\sum_{ijk} \left(r^{(dev)}_{ijk}\right)^2 = G^2
+$$
+
+Es decir, cada residuo informa de **cuánto desajuste aporta esa celda
+concreta** al desajuste global del modelo. El mosaico de residuos no es,
+por tanto, un gráfico meramente ilustrativo: es el **desglose celda a
+celda del estadístico de bondad de ajuste** que aparece en la tabla de
+validación. Una celda de color intenso es una celda que está "pagando"
+una parte importante del $G^2$.
+
 **1. Celda con residuo pequeño: (Triángulo, SAG, MADURA):**
 
 Según la tabla `tab0`, la frecuencia observada es:
@@ -1588,6 +1616,42 @@ En conjunto, aunque el modelo de independencia no considera
 interacciones, estos coeficientes ofrecen una primera visión de los
 **patrones globales de presencia relativa** de cada categoría en el
 conjunto del sector.
+
+Hasta aquí hemos leído únicamente el **signo** de los coeficientes. Pero
+su **magnitud** también es interpretable, y de forma muy directa. Como el
+modelo es aditivo en logaritmos, al deshacer el logaritmo los efectos se
+vuelven **multiplicativos**:
+
+$$
+\hat{n}_{ijk} = e^{\lambda} \cdot e^{\lambda_i^{(\text{GALAXIA})}}
+\cdot e^{\lambda_j^{(\text{FJUR})}} \cdot e^{\lambda_k^{(\text{EFLO})}}
+$$
+
+De manera que **$e^{\lambda}$ es el factor por el que se multiplica la
+frecuencia esperada** cuando se pasa de un nivel "promedio" al nivel
+concreto en cuestión. Y esa cifra se traduce cómodamente a porcentaje:
+
+$$
+\text{desviación porcentual} = \left(e^{\lambda} - 1\right)\cdot 100
+$$
+
+Así, el coeficiente de *Andrómeda* ($\lambda = 0.399$) equivale a
+$e^{0.399} = 1.49$: en esa galaxia hay un **49% más** de empresas de las
+que correspondería al promedio. El de *PN Magallanes* ($\lambda =
+-0.535$) equivale a $e^{-0.535} = 0.59$, es decir, un **41% menos**. Y el
+de *ANTIGUA* ($\lambda = 0.456$) supone un **58% más** de flotas
+envejecidas de lo que cabría esperar si los tres estados de flota se
+repartieran por igual.
+
+Una última observación sobre la **restricción de suma cero**. La tabla
+muestra un coeficiente por cada nivel de cada factor: 1 término
+independiente, 5 de GALAXIA, 3 de FJUR y 3 de EFLO, doce en total. Pero
+no todos son **libres**: dentro de cada factor los coeficientes han de
+sumar cero, de modo que el último de cada bloque queda determinado por
+los anteriores. Los parámetros realmente estimados son, por tanto,
+$1 + 4 + 2 + 2 = 9$, que es exactamente la diferencia entre el número de
+celdas de la tabla (45) y los grados de libertad del modelo (36) que
+figuran en la tabla de validación.
 
 Pasamos ahora al **modelo saturado**, en el cual se especifican todos
 los efectos directos o principales de los factores, y todas las
@@ -1834,13 +1898,13 @@ tecnológicas o de inversión.
 
 Las **interacciones GALAXIA × FJUR** aportan una lectura más matizada y
 son la clave del modelo seleccionado. Por ejemplo, *GN Mag.* presenta
-una interacción muy positiva con *CG* (+0.537), lo que indica que —más
+una interacción muy positiva con *CG* (+0.566), lo que indica que —más
 allá de los efectos directos— en esta galaxia las empresas tipo *CG*
 aparecen con una frecuencia muy superior a la esperada. Del mismo modo,
-*PN Mag.* muestra una interacción muy positiva con *SLG* (+0.530),
+*PN Mag.* muestra una interacción muy positiva con *SLG* (+0.589),
 sugiriendo que este tipo societario es especialmente dominante en esa
 región concreta. En cambio, varias combinaciones presentan coeficientes
-negativos, como *Andrómeda:SLG* (–0.097) o *GN Mag.:SLG* (–0.331), lo
+negativos, como *Andrómeda:SLG* (–0.112) o *GN Mag.:SLG* (–0.345), lo
 que indica una menor afinidad entre esas formas jurídicas y dichos
 entornos galácticos.
 
@@ -1862,6 +1926,182 @@ decisiones estratégicas relevantes: qué forma societaria encaja mejor en
 cada contexto, cómo influyen los marcos regulatorios locales y qué
 configuraciones organizativas resultan más estables o rentables en
 determinadas regiones del universo económico analizado.
+
+```{r include=FALSE}
+# Calculos auxiliares para los comentarios que siguen. No se muestran al
+# lector: en el texto solo aparecen las cifras ya interpretadas. Se calculan
+# aqui, en lugar de escribirlas a mano, para que no queden obsoletas si
+# cambian los datos o el modelo.
+
+  .p  <- modelo_def$param
+  .gf <- .p$GALAXIA.FJUR
+
+  # Formateo con dos o tres decimales.
+  .f1 <- function(x) formatC(x, format = "f", digits = 1)
+  .f2 <- function(x) formatC(x, format = "f", digits = 2)
+  .f3 <- function(x) formatC(x, format = "f", digits = 3)
+  .pc <- function(lam) paste0(ifelse(lam > 0, "+", "-"),
+                              formatC(abs(100 * (exp(lam) - 1)),
+                                      format = "f", digits = 0), "\\%")
+
+  # Celda que se reconstruye en el texto.
+  .cel <- c("GN Magallanes", "CG", "ANTIGUA")
+  .ter <- c(.p$`(Intercept)`, .p$GALAXIA[[.cel[1]]], .p$FJUR[[.cel[2]]],
+            .p$EFLO[[.cel[3]]], .gf[.cel[1], .cel[2]])
+  .sum <- sum(.ter)
+  .est <- exp(.sum)
+  .obs <- tab0[.cel[1], .cel[2], .cel[3]]
+  .rdv <- sign(.obs - .est) *
+          sqrt(2 * (.obs * log(.obs / .est) - (.obs - .est)))
+
+  # Segunda celda, de residuo positivo.
+  .cel2 <- c("Andrómeda", "SLG", "ANTIGUA")
+  .est2 <- exp(.p$`(Intercept)` + .p$GALAXIA[[.cel2[1]]] + .p$FJUR[[.cel2[2]]] +
+               .p$EFLO[[.cel2[3]]] + .gf[.cel2[1], .cel2[2]])
+  .obs2 <- tab0[.cel2[1], .cel2[2], .cel2[3]]
+  .rdv2 <- sign(.obs2 - .est2) *
+           sqrt(2 * (.obs2 * log(.obs2 / .est2) - (.obs2 - .est2)))
+
+  # Cociente de ventajas: CG frente a SLG, GN Mag. frente a PN Mag.
+  .F   <- apply(fitted(modelo_def), c("GALAXIA", "FJUR"), sum)
+  .v1  <- .F["GN Magallanes", "CG"] / .F["GN Magallanes", "SLG"]
+  .v2  <- .F["PN Magallanes", "CG"] / .F["PN Magallanes", "SLG"]
+  .or  <- .v1 / .v2
+  .e1  <- exp(.gf["GN Magallanes", "CG"]) / exp(.gf["GN Magallanes", "SLG"])
+  .e2  <- exp(.gf["PN Magallanes", "CG"]) / exp(.gf["PN Magallanes", "SLG"])
+
+  # Segundo ejemplo: SLG frente a CG, PN Mag. frente a V. Láctea.
+  .or2 <- (exp(.gf["PN Magallanes", "SLG"]) / exp(.gf["PN Magallanes", "CG"])) /
+          (exp(.gf["Vía Láctea",    "SLG"]) / exp(.gf["Vía Láctea",    "CG"]))
+
+  # Recuento de coeficientes mostrados y libres.
+  .ncel  <- length(tab0)
+  .nmos  <- 1 + length(.p$GALAXIA) + length(.p$FJUR) + length(.p$EFLO) + length(.gf)
+  .nlib  <- .ncel - modelo_def$df
+```
+
+**Reconstruyendo una celda con el modelo final.**
+
+Igual que hicimos con el modelo de independencia, los coeficientes del
+modelo definitivo permiten **reconstruir la frecuencia estimada de
+cualquier celda** de la tabla. La única novedad es que ahora hay que
+añadir, cuando proceda, el término de **interacción**:
+
+$$
+\hat{n}_{ijk} = \exp\Big(
+\lambda +
+\lambda_i^{(\text{GALAXIA})} +
+\lambda_j^{(\text{FJUR})} +
+\lambda_k^{(\text{EFLO})} +
+\lambda_{ij}^{(\text{GALAXIA} \times \text{FJUR})}
+\Big)
+$$
+
+Tomemos la celda **(GN Mag., CG, ANTIGUA)**, cuya frecuencia observada
+es $n_{ijk} = `r .obs`$. Los coeficientes implicados son:
+
+- $\lambda = `r .f3(.ter[1])`$
+- $\lambda_{\text{GN Mag.}}^{(\text{GALAXIA})} = `r .f3(.ter[2])`$
+- $\lambda_{\text{CG}}^{(\text{FJUR})} = `r .f3(.ter[3])`$
+- $\lambda_{\text{ANTIGUA}}^{(\text{EFLO})} = `r .f3(.ter[4])`$
+- $\lambda_{\text{GN Mag.,CG}}^{(\text{GALAXIA}\times\text{FJUR})} = `r .f3(.ter[5])`$
+
+Por tanto:
+
+$$
+\log(\hat{n}) = `r .f3(.ter[1])` `r .f3(.ter[2])` `r .f3(.ter[3])` + `r .f3(.ter[4])` + `r .f3(.ter[5])` = `r .f3(.sum)`
+$$
+$$
+\hat{n} = \exp(`r .f3(.sum)`) = `r .f2(.est)`
+$$
+
+El residuo de la deviancia correspondiente es:
+
+$$
+r^{(dev)} \approx \text{sign}(`r .obs` - `r .f2(.est)`)
+\sqrt{2\left[`r .obs`\log\left(\frac{`r .obs`}{`r .f2(.est)`}\right) - (`r .obs` - `r .f2(.est)`)\right]}
+\approx `r .f2(.rdv)`
+$$
+
+Se trata, en este caso, de un residuo **negativo**: el modelo espera más
+empresas de las que realmente se observan en esa combinación. Es el
+mayor residuo negativo de toda la tabla, y explica el tono rojizo de esa
+celda en el mosaico de la figura correspondiente. En el extremo opuesto,
+la celda **(Andrómeda, SLG, ANTIGUA)** arroja $\hat{n} = `r .f2(.est2)`$
+frente a `r .obs2` observadas, con un residuo de $`r .f2(.rdv2)`$. Ambos valores son moderados,
+coherentes con el buen ajuste global del modelo.
+
+Conviene subrayar que, también aquí, los coeficientes **mostrados** son
+más que los **libres**: la tabla recoge 1 término independiente, 5 de
+GALAXIA, 3 de FJUR, 3 de EFLO y 15 de la interacción, `r .nmos` en total; pero
+la restricción de suma cero —que opera tanto por filas como por columnas
+en la matriz de interacción— reduce los parámetros realmente estimados a
+$1 + 4 + 2 + 2 + 8 = `r .nlib`$, que es la diferencia entre las `r .ncel`
+celdas de la tabla y los `r modelo_def$df` grados de libertad del modelo.
+
+**La magnitud de los coeficientes: el cociente de ventajas.**
+
+Los comentarios anteriores se apoyan en el **signo** de los coeficientes.
+Pero, como vimos con el modelo de independencia, la **magnitud** también
+se interpreta sin dificultad sin más que exponenciar. Aplicado a las
+interacciones, $e^{\lambda}$ indica en qué proporción esa combinación
+concreta de galaxia y forma jurídica se da por encima o por debajo de lo
+que predirían los efectos principales por separado:
+
+| Combinación | $\lambda$ | $e^{\lambda}$ | Desviación |
+|---|---|---|---|
+| GN Mag. × CG | $`r .f3(.gf['GN Magallanes','CG'])`$ | $`r .f3(exp(.gf['GN Magallanes','CG']))`$ | $`r .pc(.gf['GN Magallanes','CG'])`$ |
+| PN Mag. × SLG | $`r .f3(.gf['PN Magallanes','SLG'])`$ | $`r .f3(exp(.gf['PN Magallanes','SLG']))`$ | $`r .pc(.gf['PN Magallanes','SLG'])`$ |
+| PN Mag. × CG | $`r .f3(.gf['PN Magallanes','CG'])`$ | $`r .f3(exp(.gf['PN Magallanes','CG']))`$ | $`r .pc(.gf['PN Magallanes','CG'])`$ |
+| GN Mag. × SLG | $`r .f3(.gf['GN Magallanes','SLG'])`$ | $`r .f3(exp(.gf['GN Magallanes','SLG']))`$ | $`r .pc(.gf['GN Magallanes','SLG'])`$ |
+
+::: {style="text-align: center;"}
+**Tabla 11.14**
+:::
+
+
+Ahora bien, estas cifras dependen de la **parametrización** empleada
+—aquí, la de suma cero— y por ello no siempre son fáciles de trasladar a
+un informe. Existe una lectura alternativa de la magnitud que **no
+depende de la parametrización** y que se enuncia en lenguaje corriente:
+el **cociente de ventajas** (*odds ratio*).
+
+La idea es sencilla. Se eligen **dos galaxias y dos formas jurídicas**, y
+se compara la "ventaja" de una forma jurídica sobre la otra en cada una
+de las dos galaxias. Tomemos CG frente a SLG, en GN Mag. y en PN Mag.. Partiendo de las frecuencias que el modelo estima:
+
+- Ventaja de CG sobre SLG **en GN Mag.**: $`r round(.F['GN Magallanes','CG'])` / `r round(.F['GN Magallanes','SLG'])` = `r .f2(.v1)`$
+- Ventaja de CG sobre SLG **en PN Mag.**: $`r round(.F['PN Magallanes','CG'])` / `r round(.F['PN Magallanes','SLG'])` = `r .f2(.v2)`$
+- Cociente entre ambas: $`r .f2(.v1)` / `r .f2(.v2)` = `r .f2(.or)`$
+
+Es decir: **la ventaja de constituirse como CG en lugar de como SLG es
+`r .f1(.or)` veces mayor en GN Mag. que en PN Mag.** Una frase que puede figurar tal cual en las conclusiones
+de un informe.
+
+Lo interesante es que **ese mismo número se obtiene directamente de los
+coeficientes de la interacción**, sin necesidad de recurrir a las
+frecuencias ajustadas. Basta con exponenciar los cuatro coeficientes
+implicados y dividirlos del mismo modo:
+
+- En GN Mag.: $e^{`r .f3(.gf['GN Magallanes','CG'])`} / e^{`r .f3(.gf['GN Magallanes','SLG'])`} = `r .f3(exp(.gf['GN Magallanes','CG']))` / `r .f3(exp(.gf['GN Magallanes','SLG']))` = `r .f3(.e1)`$
+- En PN Mag.: $e^{`r .f3(.gf['PN Magallanes','CG'])`} / e^{`r .f3(.gf['PN Magallanes','SLG'])`} = `r .f3(exp(.gf['PN Magallanes','CG']))` / `r .f3(exp(.gf['PN Magallanes','SLG']))` = `r .f3(.e2)`$
+- Cociente: $`r .f3(.e1)` / `r .f3(.e2)` = `r .f2(.or)`$
+
+La coincidencia no es casual. Al dividir las ventajas de las dos
+galaxias, los **efectos principales de GALAXIA y de FJUR son los mismos
+en el numerador y en el denominador, y se cancelan**. Lo que sobrevive a
+la división es, exclusivamente, la **asociación** entre ambos factores,
+limpia ya de las frecuencias globales de cada categoría. Por eso el
+cociente de ventajas es la medida de la magnitud **más defendible** en la
+redacción de conclusiones: no se ve afectada por el hecho de que
+*Andrómeda* tenga muchas empresas y *PN Mag.* pocas, ni por el
+hecho de que las *SLG* sean la forma jurídica más abundante del sector.
+
+Repitiendo el cálculo para otros pares de categorías se obtiene el mapa
+completo de la asociación. Por ejemplo, la ventaja de ser SLG en lugar
+de CG es **`r .f1(.or2)` veces mayor** en PN Mag. que en V. Láctea, lo
+que cuantifica la afinidad entre esa galaxia y esa forma societaria que
+los coeficientes ya sugerían cualitativamente.
 
 ## ![](figuras/book.svg){.hicon} Análisis de correspondencias. {#c11-analisis-de-correspondencias}
 
@@ -2027,7 +2267,7 @@ los gráficos:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 11.14**
+**Tabla 11.15**
 :::
 
 
@@ -2110,7 +2350,7 @@ cual se aplicará el análisis:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 11.15.** Empresas TMI: Galaxia y Forma Jurídica.
+**Tabla 11.16.** Empresas TMI: Galaxia y Forma Jurídica.
 :::
 
 
@@ -2236,7 +2476,7 @@ dimensiones extraídas:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 11.16**
+**Tabla 11.17**
 :::
 
 
@@ -2270,7 +2510,7 @@ están representadas en cada dimensión:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 11.17**
+**Tabla 11.18**
 :::
 
 
@@ -2295,7 +2535,7 @@ La tercera tabla recoge la información análoga para el factor FJUR:
 ```
 
 ::: {style="text-align: center;"}
-**Tabla 11.18**
+**Tabla 11.19**
 :::
 
 
