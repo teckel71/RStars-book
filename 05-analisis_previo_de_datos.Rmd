@@ -624,7 +624,50 @@ muestra2 <- explora_na(
 
 Obsérvese que ahora el mapa de ausencias tiene cuatro columnas, una por variable, y que la eliminación es *listwise*: se descarta el caso entero si le falta el dato en **cualquiera** de las cuatro. El *data frame* "muestra2" contiene, pues, los mismos datos que "interestelar_100" salvo los 3 casos con *missing values* (101): *Vega Transport*, *Photon Pack Freight* y *Poe Dameron Cargo*.
 
-En cuanto a la **detección de *outliers***, examinar las variables de una en una resulta poco operativo cuando son numerosas. La alternativa consiste en calcular la ***distancia de Mahalanobis***, que actúa como **"resumen" del comportamiento de cada caso** en todas las variables consideradas a la vez. Podemos verla como una especie de "z-score multivariante": mide cuántas desviaciones típicas se aleja una observación del "centro" del conjunto, teniendo en cuenta todas las variables y el modo en que se relacionan entre sí.
+En cuanto a la **detección de *outliers***, examinar las variables de una en una no es solo poco operativo cuando son numerosas: es, sobre todo, **incompleto**. Y conviene detenerse en este punto, porque es la razón de fondo por la que hace falta un procedimiento distinto.
+
+Una empresa puede presentar valores **perfectamente normales en cada variable por separado** y ser, sin embargo, un caso atípico **en el conjunto**: lo raro no es ninguno de sus valores, sino la **combinación** de todos ellos. El *box-plot* aplicado variable a variable nunca detectará algo así, porque mira cada dimensión por separado y es ciego a cómo se relacionan entre sí.
+
+Podemos comprobarlo con nuestros propios datos. El gráfico siguiente enfrenta RENECO con MARGEN. La banda sombreada delimita el rango que la regla de 1,5·IQR considera normal **en cada una de las dos variables**, y la elipse roja recoge el 95 % de la nube atendiendo a su forma, es decir, a la relación que existe entre ambas:
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=6.4, fig.height=4.3}
+# Ilustracion: un caso atipico en la combinacion de dos variables, pero no en
+# ninguna de ellas por separado. Se usan los datos de la propia practica.
+
+  .i  <- 1
+  .va <- function(v) { q <- quantile(v, c(.25, .75)); r <- q[2] - q[1]
+    c(unname(q[1] - 1.5*r), unname(q[2] + 1.5*r)) }
+  .fR <- .va(muestra2$RENECO); .fM <- .va(muestra2$MARGEN)
+
+  ggplot(muestra2, aes(RENECO, MARGEN)) +
+    annotate("rect", xmin = .fR[1], xmax = .fR[2], ymin = .fM[1], ymax = .fM[2],
+             fill = "steelblue", alpha = .06) +
+    geom_vline(xintercept = .fR, colour = "steelblue4",
+               linetype = "dotted", linewidth = .4) +
+    geom_hline(yintercept = .fM, colour = "steelblue4",
+               linetype = "dotted", linewidth = .4) +
+    stat_ellipse(level = .95, colour = "red3", linewidth = .8) +
+    geom_point(colour = "steelblue4", size = 1.6, alpha = .75) +
+    geom_point(data = muestra2[.i, ], colour = "red3", size = 3.4) +
+    annotate("segment",
+             x = muestra2$RENECO[.i] - 8,   y = muestra2$MARGEN[.i] - 16,
+             xend = muestra2$RENECO[.i] - 1.2, yend = muestra2$MARGEN[.i] - 2.2,
+             colour = "red3", linewidth = .4,
+             arrow = arrow(length = unit(.14, "cm"))) +
+    annotate("text", x = muestra2$RENECO[.i] - 9, y = muestra2$MARGEN[.i] - 19,
+             label = "atípico en la combinación,\nno en ninguna variable",
+             colour = "red3", size = 2.9, fontface = "bold",
+             hjust = 1, lineheight = .95) +
+    labs(x = "RENECO (rentabilidad económica)",
+         y = "MARGEN (margen de beneficio)") +
+    theme_bw(base_size = 9) + theme(panel.grid.minor = element_blank())
+```
+
+El caso señalado en rojo tiene una rentabilidad económica de `r round(muestra2$RENECO[.i], 1)` y un margen de `r round(muestra2$MARGEN[.i], 1)`. **Ninguno de los dos valores sobrepasa las vallas de 1,5·IQR** de su respectiva variable: analizadas por separado, ambas cifras pasarían el filtro sin levantar sospecha. Y, sin embargo, el punto queda **claramente fuera de la elipse**. La razón es económica, no estadística: en esta muestra, rentabilidad y margen van de la mano, de modo que una empresa con una rentabilidad de las más altas del sector y un margen de los más bajos constituye una combinación insólita. Eso es exactamente lo que un examen variable a variable deja escapar.
+
+Obsérvese también la diferencia entre la **banda** y la **elipse**. La banda es un rectángulo: trata cada variable como si fuera independiente de la otra. La elipse está **girada**, porque incorpora la correlación entre ambas. Es esa inclinación la que convierte en atípico a un punto que, proyectado sobre cada eje, resultaría de lo más corriente.
+
+Necesitamos, por tanto, una medida que **resuma el comportamiento de cada caso en todas las variables a la vez**, teniendo en cuenta además cómo se relacionan entre sí. Esa medida es la ***distancia de Mahalanobis***, que actúa como **"resumen" del comportamiento de cada caso** en todas las variables consideradas a la vez. Podemos verla como una especie de "z-score multivariante": mide cuántas desviaciones típicas se aleja una observación del "centro" del conjunto, teniendo en cuenta todas las variables y el modo en que se relacionan entre sí.
 
 Su utilización, intuitivamente, se puede justificar de este modo:
 

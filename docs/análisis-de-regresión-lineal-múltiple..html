@@ -940,7 +940,7 @@ ANTIGUA, MADURA and RENOVADA
 <span>  titulo    <span class="op">=</span> <span class="st">"DISTANCIA DE MAHALANOBIS"</span>,</span>
 <span>  subtitulo <span class="op">=</span> <span class="st">"BMAL, DIST, IDIVERSE, ACTIVO, LIQUIDEZ. Empresas TMI."</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-305-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-308-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 9.3</strong></p>
 </div>
@@ -2668,7 +2668,7 @@ EFLO
 <span></span>
 <span>    <span class="va">tablaCook</span></span></code></pre></div>
 <p>Los gráficos obtenidos son:</p>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-323-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-326-1.png" alt="" width="672"></div>
 <div style="text-align: center;">
 <p><strong>Figura 9.4</strong></p>
 </div>
@@ -2728,7 +2728,7 @@ EFLO
 <p><strong>Tabla 9.13</strong></p>
 </div>
 <p>Para ver la diferencia con claridad conviene recurrir a un ejemplo mínimo, con <strong>una sola variable explicativa</strong>, de manera que la recta de regresión pueda dibujarse. Partimos de una muestra sin problemas y le añadimos, de una en una, tres observaciones de naturaleza distinta:</p>
-<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-324-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="RStarS_files/figure-html/unnamed-chunk-327-1.png" alt="" width="672"></div>
 <p>En los cuatro paneles la <strong>recta discontinua gris</strong> es siempre la estimada con la muestra limpia, y la <strong>continua azul</strong> la estimada tras añadir el caso en rojo. Las cifras son las siguientes:</p>
 <div class="inline-table"><table class="table table-sm">
 <thead><tr class="header">
@@ -3044,7 +3044,7 @@ Heteroscedasticidad
 <p>La solución estándar en econometría aplicada moderna es utilizar <strong>errores estándar robustos a heteroscedasticidad</strong> (errores <strong>HC</strong>, propuestos por White, 1980). La corrección sustituye ese <span class="math inline">\(\hat\sigma^{2}\)</span> único por <strong>el residuo de cada observación</strong>, de manera que cada caso aporta su propia dispersión en lugar de la media de todas; por eso no hace falta saber de qué depende la heteroscedasticidad ni modelizarla. No se re-estima el modelo: los coeficientes estimados son los mismos. Lo que cambia son los <strong>errores estándar</strong> de esos coeficientes, y en consecuencia los estadísticos <em>t</em> y los <em>p-valores</em> asociados. De este modo, la inferencia se corrige sin alterar la estimación. En R, los errores HC se obtienen con los paquetes <a href="https://sandwich.R-Forge.R-project.org/">sandwich</a> y <code>{lmtest}</code>:</p>
 <div class="sourceCode" id="cb349"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="co"># Estimación con errores estándar robustos (HC1, tipo White)</span></span>
-<span>    <span class="va">robust_ecuaDEF</span> <span class="op">&lt;-</span> <span class="fu"><span>coeftest</span></span><span class="op">(</span><span class="va">ecuaDEF</span>, vcov <span class="op">=</span> <span class="fu"><a href="https://sandwich.R-Forge.R-project.org/reference/vcovHC.html">vcovHC</a></span><span class="op">(</span><span class="va">ecuaDEF</span>, type <span class="op">=</span> <span class="st">"HC1"</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">robust_ecuaDEF</span> <span class="op">&lt;-</span> <span class="fu"><span>coeftest</span></span><span class="op">(</span><span class="va">ecuaDEF</span>, vcov <span class="op">=</span> <span class="fu"><span>vcovHC</span></span><span class="op">(</span><span class="va">ecuaDEF</span>, type <span class="op">=</span> <span class="st">"HC1"</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="va">robust_ecuaDEF</span></span></code></pre></div>
 <pre><code>## 
 ## t test of coefficients:
