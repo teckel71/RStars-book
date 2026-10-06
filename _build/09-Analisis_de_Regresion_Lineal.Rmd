@@ -736,10 +736,12 @@ Conviene, de hecho, distinguir **tres conceptos** que con frecuencia se confunde
 
 Para ver la diferencia con claridad conviene recurrir a un ejemplo mínimo, con **una sola variable explicativa**, de manera que la recta de regresión pueda dibujarse. Partimos de una muestra sin problemas y le añadimos, de una en una, tres observaciones de naturaleza distinta:
 
-```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
-# EJEMPLO DIDACTICO (datos construidos, no son los de TMI).
-# Se construye a proposito: en una muestra real no es posible localizar a
-# voluntad un caso con distancia de Cook muy alta y residuo diminuto.
+```{r include=FALSE}
+# Calculos del ejemplo didactico de outlier vs. influyente (datos construidos).
+# No se dibuja aqui: la figura es estatica (figuras/outlier_vs_influyente.png,
+# generada por gen9.R). Este bloque solo deja disponibles los objetos que el
+# texto que sigue cita de forma dinamica (.d2, .d3, .d4) y las funciones de
+# formato (.f2, .f3). No produce salida visible.
 
   set.seed(11)
   .n  <- 24
@@ -747,14 +749,9 @@ Para ver la diferencia con claridad conviene recurrir a un ejemplo mínimo, con 
   .mu$y <- 2 + 0.8 * .mu$x + rnorm(.n, 0, 0.55)
   .xm <- mean(.mu$x)
 
-  # (2) residuo grande, en el CENTRO de la nube.
-  .c2 <- data.frame(x = .xm, y = 2 + 0.8 * .xm + 4.0)
-  # (3) influyente clasico: alejado y fuera de la tendencia.
-  .c3 <- data.frame(x = 14,  y = 2 + 0.8 * 14  - 5.0)
-  # (4) influyente que NO se delata: tan alejado que la recta va hacia el.
-  .c4 <- data.frame(x = 40,  y = 2 + 0.8 * 40  - 2.5)
-
-  .b0 <- coef(lm(y ~ x, .mu))
+  .c2 <- data.frame(x = .xm, y = 2 + 0.8 * .xm + 4.0)   # residuo grande, centro
+  .c3 <- data.frame(x = 14,  y = 2 + 0.8 * 14  - 5.0)   # influyente clasico
+  .c4 <- data.frame(x = 40,  y = 2 + 0.8 * 40  - 2.5)   # influyente encubierto
 
   .diag <- function(extra) {
     d <- rbind(.mu, extra); m <- lm(y ~ x, d); i <- nrow(d)
@@ -763,36 +760,16 @@ Para ver la diferencia con claridad conviene recurrir a un ejemplo mínimo, con 
   }
   .d2 <- .diag(.c2); .d3 <- .diag(.c3); .d4 <- .diag(.c4)
 
-  .panel <- function(extra, titulo, subtitulo, xmax) {
-    d <- if (is.null(extra)) .mu else rbind(.mu, extra)
-    b <- coef(lm(y ~ x, d))
-    g <- ggplot() +
-      geom_abline(intercept = .b0[1], slope = .b0[2],
-                  colour = "grey60", linetype = "dashed", linewidth = 0.8) +
-      geom_point(data = .mu, aes(x, y), colour = "steelblue4",
-                 size = 1.8, alpha = 0.8) +
-      geom_abline(intercept = b[1], slope = b[2],
-                  colour = "steelblue4", linewidth = 1)
-    if (!is.null(extra))
-      g <- g + geom_point(data = extra, aes(x, y), colour = "red3", size = 3.6)
-    g + coord_cartesian(xlim = c(0, xmax),
-                        ylim = c(1, 2 + 0.8 * xmax + 2)) +
-      ggtitle(titulo, subtitle = subtitulo) +
-      xlab("x") + ylab("y") + theme_bw(base_size = 10)
-  }
-
   .f3 <- function(x) formatC(x, format = "f", digits = 3)
   .f2 <- function(x) formatC(x, format = "f", digits = 2)
-
-  ( .panel(NULL, "1. Muestra limpia",
-           paste0("Pendiente: ", .f3(.b0[2])), 15) |
-    .panel(.c2, "2. Caso con residuo grande",
-           paste0("Pendiente: ", .f3(.d2["pend"]), ". La recta NO gira"), 15) ) /
-  ( .panel(.c3, "3. Caso influyente",
-           paste0("Pendiente: ", .f3(.d3["pend"]), ". La recta SI gira"), 15) |
-    .panel(.c4, "4. Influyente con residuo diminuto",
-           paste0("Pendiente: ", .f3(.d4["pend"]), ". La recta SI gira"), 44) )
 ```
+
+![](figuras/outlier_vs_influyente.png){width="55%"}
+
+::: {style="text-align: center;"}
+**Figura 9.5.** [Residuo grande frente a caso influyente. El caso 2, con un residuo enorme pero situado en el centro de la nube, no altera la pendiente; los casos 3 y 4, con residuos menores pero alejados, la hacen girar. El caso 4 se delata solo por la distancia de Cook, no por su residuo.]{.smallcaps}
+:::
+
 
 En los cuatro paneles la **recta discontinua gris** es siempre la estimada con la muestra limpia, y la **continua azul** la estimada tras añadir el caso en rojo. Las cifras son las siguientes:
 
@@ -1091,7 +1068,7 @@ Centrándonos en el primer ejercicio, los escenarios planteados, que se encuentr
 ![](figuras/Escenario_lm_01.jpg){width="100%"}
 
 ::: {style="text-align: center;"}
-**Figura 9.5.** [Escenarios ejercicio 1.]{.smallcaps}
+**Figura 9.6.** [Escenarios ejercicio 1.]{.smallcaps}
 :::
 
 
@@ -1147,7 +1124,7 @@ En cuanto al segundo ejercicio, los escenarios planteados son los siguientes:
 ![](figuras/Escenario_lm_02.jpg){width="100%"}
 
 ::: {style="text-align: center;"}
-**Figura 9.6.** [Escenarios ejercicio 2.]{.smallcaps}
+**Figura 9.7.** [Escenarios ejercicio 2.]{.smallcaps}
 :::
 
 
