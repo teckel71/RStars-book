@@ -230,56 +230,7 @@ En cada paso del proceso hay varias fusiones posibles. Ward las evalúa **todas*
 
 Veámoslo con un ejemplo mínimo. Supongamos que, en una etapa intermedia, el proceso ha formado ya **tres grupos** (A, B y C) y debe fusionar dos de ellos, dejando el tercero suelto. Hay, por tanto, tres opciones:
 
-```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=3.1}
-# EJEMPLO DIDACTICO (datos construidos). Ilustra el criterio de Ward.
-
-  .pts <- data.frame(
-    x = c(0.8,1.2,0.9,1.4, 2.4,2.8,2.2,2.9, 6.2,6.8,6.4,7.0),
-    y = c(4.8,5.1,4.2,4.5, 4.2,4.6,3.7,3.9, 1.4,1.8,1.0,1.5),
-    g = rep(c("A","B","C"), each = 4))
-  .colW <- c(A = "steelblue4", B = "skyblue3", C = "red3")
-
-  .env <- function(d, pad = .45) {
-    h <- chull(d$x, d$y); q <- d[h, ]
-    cx <- mean(d$x); cy <- mean(d$y)
-    dx <- q$x - cx; dy <- q$y - cy
-    r <- sqrt(dx^2 + dy^2); r[r == 0] <- 1e-9
-    data.frame(x = cx + dx*(1 + pad/r), y = cy + dy*(1 + pad/r)) }
-  .sc <- function(d) sum((d$x - mean(d$x))^2 + (d$y - mean(d$y))^2)
-  .sumas <- sapply(list(c("A","B"), c("B","C"), c("A","C")), function(par)
-    .sc(.pts[.pts$g %in% par, ]) + .sc(.pts[!.pts$g %in% par, ]))
-  names(.sumas) <- c("A+B","B+C","A+C")
-
-  .panelW <- function(par, tit) {
-    fus <- .pts[.pts$g %in% par, ]; ais <- .pts[!.pts$g %in% par, ]
-    cf <- data.frame(x = mean(fus$x), y = mean(fus$y))
-    ca <- data.frame(x = mean(ais$x), y = mean(ais$y))
-    ggplot() +
-      geom_polygon(data = .env(fus), aes(x, y), fill = "grey40", alpha = .10,
-                   colour = "grey25", linetype = "dashed", linewidth = .8) +
-      geom_polygon(data = .env(ais), aes(x, y), fill = NA,
-                   colour = "grey75", linetype = "dotted") +
-      geom_segment(data = fus, aes(x = x, y = y, xend = cf$x, yend = cf$y),
-                   colour = "grey50", linewidth = .3) +
-      geom_segment(data = ais, aes(x = x, y = y, xend = ca$x, yend = ca$y),
-                   colour = "grey70", linewidth = .3) +
-      geom_point(data = .pts, aes(x, y, colour = g), size = 2.4) +
-      geom_point(data = ca, aes(x, y), shape = 23, size = 3.4,
-                 fill = "grey70", colour = "white", stroke = .9) +
-      geom_point(data = cf, aes(x, y), shape = 23, size = 4.2,
-                 fill = "grey25", colour = "white", stroke = 1) +
-      scale_colour_manual(values = .colW) +
-      coord_cartesian(xlim = c(-.6, 8.4), ylim = c(-.4, 6.4)) +
-      ggtitle(tit, subtitle = paste0("Suma de cuadrados: ",
-              formatC(.sumas[[paste(par, collapse = "+")]], format = "f", digits = 1))) +
-      xlab(NULL) + ylab(NULL) + theme_bw(base_size = 9) +
-      theme(legend.position = "none", axis.text = element_blank(),
-            axis.ticks = element_blank(), panel.grid = element_blank()) }
-
-  .panelW(c("A","B"), "Opción 1: unir A + B") |
-  .panelW(c("B","C"), "Opción 2: unir B + C") |
-  .panelW(c("A","C"), "Opción 3: unir A + C")
-```
+![[Criterio del método de Ward: las tres fusiones posibles de tres grupos previos y la suma de cuadrados de cada una. Se elige la de menor suma (opción 1).]{.smallcaps}](figuras/ward_opciones.png){width="48%"}
 
 En los tres paneles los **casos son los mismos y ocupan las mismas posiciones**; lo único que cambia es qué dos grupos quedan envueltos juntos por la línea discontinua. Los **rombos** son los centroides —el oscuro, el del grupo fusionado; el gris, el del grupo que queda aparte— y los radios finos unen cada caso con el centroide de su grupo: la suma de sus cuadrados es justamente la cifra del subtítulo.
 
@@ -351,52 +302,7 @@ Donde:
 
 Conviene visualizar estas dos distancias, porque de su comparación sale todo lo demás. En el ejemplo siguiente hay dos grupos, A (en azul) y B (en rojo), y se han destacado en negro **tres casos asignados al grupo A** de naturaleza muy distinta. Las líneas discontinuas azules son las distancias que promedia $a_i$; las rojas, las que promedia $b_i$:
 
-```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10.5, fig.height=3.3}
-# EJEMPLO DIDACTICO (datos construidos, no son los de TMI).
-# Ilustra el calculo de a, b y s para tres casos de distinta naturaleza.
-
-  set.seed(12)
-  .A <- data.frame(x = rnorm(14, 2.2, .50), y = rnorm(14, 5.0, .50), g = "A")
-  .B <- data.frame(x = rnorm(14, 6.2, .50), y = rnorm(14, 3.2, .50), g = "B")
-
-  # Tres casos, todos asignados al grupo A: uno en el nucleo de su grupo,
-  # otro en la frontera y otro situado de lleno dentro del grupo B.
-  .esp <- data.frame(x = c(2.0, 4.0, 5.9), y = c(5.1, 4.2, 3.5), g = "A")
-  .P   <- rbind(.A, .B, .esp)
-  .idx <- nrow(.A) + nrow(.B) + 1:3
-
-  .ab <- function(i) {
-    mi <- .P$g[i]
-    d  <- sqrt((.P$x - .P$x[i])^2 + (.P$y - .P$y[i])^2)
-    a  <- mean(d[.P$g == mi & seq_len(nrow(.P)) != i])
-    b  <- mean(d[.P$g != mi])
-    c(a = a, b = b, s = (b - a) / max(a, b)) }
-  .res <- t(sapply(.idx, .ab))
-
-  .colS <- c(A = "steelblue4", B = "red3")
-  .panelS <- function(k, tit) {
-    i <- .idx[k]; mi <- .P$g[i]
-    prop  <- .P[.P$g == mi & seq_len(nrow(.P)) != i, ]
-    otros <- .P[.P$g != mi, ]
-    ggplot() +
-      geom_segment(data = prop, aes(x = .P$x[i], y = .P$y[i], xend = x, yend = y),
-                   colour = "steelblue3", linetype = "dashed", linewidth = .25) +
-      geom_segment(data = otros, aes(x = .P$x[i], y = .P$y[i], xend = x, yend = y),
-                   colour = "red2", linetype = "dashed", linewidth = .25) +
-      geom_point(data = .P[-.idx, ], aes(x, y, colour = g), size = 1.9, alpha = .85) +
-      geom_point(data = .P[i, ], aes(x, y), colour = "black", size = 3.4) +
-      scale_colour_manual(values = .colS) +
-      coord_cartesian(xlim = c(.4, 8), ylim = c(1.4, 6.6)) +
-      ggtitle(tit, subtitle = sprintf("a = %.2f    b = %.2f    s = %.2f",
-              .res[k, "a"], .res[k, "b"], .res[k, "s"])) +
-      xlab(NULL) + ylab(NULL) + theme_bw(base_size = 9) +
-      theme(legend.position = "none", axis.text = element_blank(),
-            axis.ticks = element_blank(), panel.grid = element_blank()) }
-
-  .panelS(1, "Caso bien agrupado") |
-  .panelS(2, "Caso en la frontera") |
-  .panelS(3, "Caso mal clasificado")
-```
+![[Cálculo del ancho de silueta para tres casos de distinta naturaleza: bien agrupado, en la frontera y mal clasificado.]{.smallcaps}](figuras/silueta_casos.png){width="55%"}
 
 La lectura de los tres paneles resume el significado del indicador:
 
@@ -708,66 +614,11 @@ El método de ***k-medias*** es iterativo. Se establece un *centroide* inicial (
 
 Conviene visualizar este procedimiento, porque es lo que explica tanto su eficacia como su principal debilidad. En el ejemplo siguiente, construido con tres grupos bien separados, las semillas se han colocado **a propósito las tres juntas en la zona central**, que es el peor escenario posible:
 
-```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=6}
-# EJEMPLO DIDACTICO (datos construidos, no son los de TMI).
-
-  set.seed(7)
-  .nube <- rbind(
-    data.frame(x = rnorm(45, 2.2, .60), y = rnorm(45, 6.2, .60)),
-    data.frame(x = rnorm(45, 6.8, .60), y = rnorm(45, 5.6, .60)),
-    data.frame(x = rnorm(45, 4.4, .60), y = rnorm(45, 2.0, .60)))
-  .cK <- c(`1` = "steelblue4", `2` = "red3", `3` = "skyblue3")
-  .mkK <- function(p, tit, sub) p +
-    coord_cartesian(xlim = c(.3, 8.6), ylim = c(.2, 8)) +
-    ggtitle(tit, subtitle = sub) + xlab(NULL) + ylab(NULL) +
-    theme_bw(base_size = 9) +
-    theme(legend.position = "none", axis.text = element_blank(),
-          axis.ticks = element_blank(), panel.grid = element_blank())
-
-  # Semillas DELIBERADAMENTE mal colocadas: las tres en la zona central.
-  .sem <- data.frame(x = c(3.6, 4.2, 4.8), y = c(4.6, 4.2, 3.8))
-  .asig <- function(X, C) {
-    dm <- as.matrix(dist(rbind(as.matrix(C), as.matrix(X))))[-(1:nrow(C)), 1:nrow(C)]
-    max.col(-dm, ties.method = "first") }
-  .rec <- function(X, a, C) { for (j in 1:nrow(C)) if (any(a == j)) {
-    C$x[j] <- mean(X$x[a == j]); C$y[j] <- mean(X$y[a == j]) }; C }
-
-  C <- .sem; .est <- list(); aa <- NULL
-  repeat { a <- .asig(.nube, C)
-    .est[[length(.est)+1]] <- list(C = C, a = a,
-                                   cam = if (is.null(aa)) NA else sum(a != aa))
-    if (!is.null(aa) && all(a == aa)) break
-    aa <- a; C <- .rec(.nube, a, C) }
-
-  .pK <- function(i, tit, sub, asig = TRUE, marcar = TRUE) {
-    e <- .est[[i]]
-    d <- .nube
-    d$g   <- factor(e$a, levels = 1:3)
-    d$cam <- if (marcar && i > 1) e$a != .est[[i-1]]$a else FALSE
-    p <- ggplot()
-    p <- p + if (asig) geom_point(data = d, aes(x, y, colour = g), size = 1.3, alpha = .8)
-             else      geom_point(data = d, aes(x, y), colour = "grey25", size = 1.3, alpha = .85)
-    if (any(d$cam))
-      p <- p + geom_point(data = d[d$cam, ], aes(x, y), shape = 21, size = 2.6,
-                          fill = NA, colour = "black", stroke = .5)
-    Cg <- e$C; Cg$g <- factor(seq_len(nrow(Cg)), levels = 1:3)
-    .mkK(p +
-      geom_point(data = e$C, aes(x, y), shape = 21, size = 4.6,
-                 fill = "white", colour = "white") +
-      geom_point(data = Cg, aes(x, y, colour = g), shape = 4, size = 3.2, stroke = 1.5) +
-      scale_colour_manual(values = .cK, drop = FALSE), tit, sub) }
-
-  ( .pK(1, "1. Semillas iniciales", "Las tres, juntas y mal colocadas",
-        asig = FALSE, marcar = FALSE) |
-    .pK(1, "2. Primera asignación", "Cada caso, al centroide más próximo",
-        marcar = FALSE) ) /
-  ( .pK(3, "3. Tercera iteración", paste0("Cambian de grupo ", .est[[3]]$cam, " casos")) |
-    .pK(length(.est), "4. Solución convergente", "Ningún caso cambia: el algoritmo para") )
-```
+![[Las cinco iteraciones del método de k-medias partiendo de unas semillas mal colocadas, hasta la solución convergente.]{.smallcaps}](figuras/kmedias_iteraciones.png){width="48%"}
 
 Las **aspas** son los centroides, y cada una lleva el color de su grupo. En el primer panel los casos aún están **sin asignar**, por eso aparecen en gris. Los casos rodeados por un **anillo negro** son los que acaban de cambiar de grupo respecto a la iteración anterior.
 
-Obsérvese el mecanismo: los centroides **se desplazan** hacia las zonas densas, arrastrados por los casos que les van llegando, y al desplazarse vuelven a cambiar las asignaciones. El número de casos que cambian de grupo decrece rápidamente —`r .est[[2]]$cam`, luego `r .est[[3]]$cam`, luego `r .est[[4]]$cam`— hasta que no cambia ninguno: ahí termina el proceso. Aun partiendo de unas semillas pésimas, el algoritmo recupera la estructura real en apenas cuatro iteraciones.
+Obsérvese el mecanismo: los centroides **se desplazan** hacia las zonas densas, arrastrados por los casos que les van llegando, y al desplazarse vuelven a cambiar las asignaciones. El número de casos que cambian de grupo decrece rápidamente —22, luego 23, luego 2— hasta que no cambia ninguno: ahí termina el proceso. Aun partiendo de unas semillas pésimas, el algoritmo recupera la estructura real en apenas cinco iteraciones.
 
 Esto ilustra también la **ventaja** del método frente a los jerárquicos: la pertenencia de un caso a un grupo **es reversible**, puede alterarse en las sucesivas iteraciones. En un método jerárquico, una vez unidos dos casos ya no se separan nunca.
 
@@ -777,44 +628,7 @@ Esto ilustra también la **ventaja** del método frente a los jerárquicos: la p
 
 La lógica del **centroide más lejano** se aprecia bien gráficamente. Sobre la misma nube de casos del ejemplo anterior:
 
-```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=11, fig.height=3.1}
-# EJEMPLO DIDACTICO (datos construidos, no son los de TMI).
-
-  set.seed(7)
-  .nube <- rbind(
-    data.frame(x = rnorm(45, 2.2, .60), y = rnorm(45, 6.2, .60)),
-    data.frame(x = rnorm(45, 6.8, .60), y = rnorm(45, 5.6, .60)),
-    data.frame(x = rnorm(45, 4.4, .60), y = rnorm(45, 2.0, .60)))
-  .cK <- c(`1` = "steelblue4", `2` = "red3", `3` = "skyblue3")
-  .mkK <- function(p, tit, sub) p +
-    coord_cartesian(xlim = c(.3, 8.6), ylim = c(.2, 8)) +
-    ggtitle(tit, subtitle = sub) + xlab(NULL) + ylab(NULL) +
-    theme_bw(base_size = 9) +
-    theme(legend.position = "none", axis.text = element_blank(),
-          axis.ticks = element_blank(), panel.grid = element_blank())
-
-  .Pm <- as.matrix(.nube); .Dm <- as.matrix(dist(.Pm))
-  .el <- 118L
-  for (k in 2:3) .el <- c(.el, which.max(apply(.Dm[, .el, drop = FALSE], 1, min)))
-
-  .fo <- geom_point(data = .nube, aes(x, y), colour = "grey60", size = 1.2, alpha = .75)
-  .as <- function(idx) geom_point(data = .nube[idx, ], aes(x, y), shape = 4,
-                                  size = 3.4, stroke = 1.5,
-                                  colour = unname(.cK)[seq_along(idx)])
-  .un <- function(a, b) annotate("segment",
-    x = .nube$x[.el[a]], y = .nube$y[.el[a]],
-    xend = .nube$x[.el[b]], yend = .nube$y[.el[b]],
-    colour = "grey25", linetype = "dashed", linewidth = .5)
-
-  ( .mkK(ggplot() + .fo + .as(.el[1]), "1. Primer centroide",
-         "Se elige un caso al azar") |
-    .mkK(ggplot() + .fo + .un(1,2) + .as(.el[1:2]), "2. Segundo centroide",
-         "El caso MÁS ALEJADO del primero") |
-    .mkK(ggplot() + .fo + .un(3,1) + .un(3,2) + .as(.el), "3. Tercer centroide",
-         "Mayor distancia MÍNIMA a los anteriores") |
-    .mkK(ggplot() + .fo + .as(.el), "4. Las tres semillas",
-         "Una por zona densa") )
-```
+![[Determinación de semillas por el método del centroide más lejano: cada nuevo centroide maximiza la distancia mínima a los ya elegidos.]{.smallcaps}](figuras/centroide_lejano.png){width="48%"}
 
 El paso decisivo es el tercero. **No** se busca el caso más alejado del segundo centroide, ni el que maximiza la suma de distancias a los dos anteriores: se busca el que está **razonablemente lejos de todos** ellos, y por eso el criterio consiste en maximizar la distancia **mínima** a los centroides ya elegidos. Las dos líneas discontinuas del tercer panel muestran esas dos distancias, de las cuales el algoritmo atiende a la menor.
 
@@ -1201,50 +1015,7 @@ En este método, cada punto o caso se clasifica según su *vecindad*:
 
 Esta clasificación se ve con claridad sobre un ejemplo. En el conjunto siguiente, con `eps` = 0,95 y `minPts` = 4, se han destacado tres casos, uno de cada tipo, dibujando alrededor de cada uno su círculo de radio `eps` y marcando los vecinos que caen dentro:
 
-```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=3.4}
-# EJEMPLO DIDACTICO (datos construidos, no son los de TMI). El cluster en
-# forma de ARCO es deliberado: ilustra que DBSCAN encuentra formas arbitrarias.
-
-  set.seed(5)
-  .ang <- seq(pi*.92, pi*.08, length.out = 34)
-  .P <- rbind(
-    data.frame(x = 4.6 + 3.1*cos(.ang) + rnorm(34,0,.17),
-               y = 2.0 + 3.1*sin(.ang) + rnorm(34,0,.17)),
-    data.frame(x = rnorm(22, 4.6, .52), y = rnorm(22, 1.6, .52)),
-    data.frame(x = c(.8,8.5,4.6,8.6,1,6.9), y = c(1,1.2,3.6,5.6,5.4,6.3)))
-
-  .eps <- .95; .mp <- 4
-  .Dd  <- as.matrix(dist(.P))
-  .vec <- lapply(1:nrow(.P), function(i) setdiff(which(.Dd[i, ] <= .eps), i))
-  .nv  <- lengths(.vec); .nuc <- .nv >= .mp
-  .tipo <- ifelse(.nuc, "Núcleo",
-            ifelse(sapply(.vec, function(v) any(.nuc[v])), "Borde", "Ruido"))
-
-  .ct  <- c(`Núcleo` = "steelblue4", Borde = "skyblue3", Ruido = "red3")
-  .cir <- function(i, col, lt = "dashed") { t <- seq(0, 2*pi, length.out = 160)
-    annotate("path", x = .P$x[i] + .eps*cos(t), y = .P$y[i] + .eps*sin(t),
-             colour = col, linetype = lt, linewidth = .6) }
-  .mkD <- function(p, tit, sub) p + coord_equal(xlim = c(.3,9.1), ylim = c(.3,7.6)) +
-    ggtitle(tit, subtitle = sub) + xlab(NULL) + ylab(NULL) + theme_bw(base_size = 9) +
-    theme(legend.position = "none", axis.text = element_blank(),
-          axis.ticks = element_blank(), panel.grid = element_blank())
-  .foD <- function() geom_point(data = .P, aes(x, y), colour = "grey70",
-                                size = 1.2, alpha = .85)
-
-  .des <- function(i, col) list(.cir(i, col),
-    geom_point(data = .P[.vec[[i]], ], aes(x, y), colour = col, size = 1.6, alpha = .9),
-    geom_point(data = .P[i, ], aes(x, y), colour = col, size = 3),
-    annotate("text", x = .P$x[i], y = .P$y[i] + .eps + .45,
-             label = paste0(.tipo[i], "\n", .nv[i], " vecinos"),
-             colour = col, size = 2.7, fontface = "bold", lineheight = .95))
-
-  ( .mkD(ggplot() + .foD() + .des(37, .ct[["Núcleo"]]), "Punto núcleo",
-         paste0("Tiene ", .nv[37], " vecinos dentro de eps (≥ ", .mp, ")")) |
-    .mkD(ggplot() + .foD() + .des(53, .ct[["Borde"]]), "Punto borde",
-         paste0("Solo ", .nv[53], ", pero uno de ellos es núcleo")) |
-    .mkD(ggplot() + .foD() + .des(60, .ct[["Ruido"]]), "Ruido",
-         "Ningún vecino dentro de eps") )
-```
+![[Los tres tipos de punto en DBSCAN: núcleo, borde y ruido, con su círculo de radio eps y el recuento de vecinos.]{.smallcaps}](figuras/dbscan_tipos.png){width="55%"}
 
 La distinción entre **núcleo** y **borde** es la que hace funcionar el algoritmo: un punto borde **entra** en el clúster, pero **no lo propaga**, porque a su alrededor no hay densidad suficiente. La cadena se detiene en él. Son, por así decirlo, la frontera del grupo.
 
@@ -1252,58 +1023,7 @@ El proceso se repite hasta que todos los puntos han sido etiquetados. De este mo
 
 Conviene ver **cómo se propaga** un clúster, porque es lo que diferencia a DBSCAN de los métodos basados en centroides. Partiendo de un punto núcleo cualquiera —en el ejemplo, uno del extremo izquierdo del arco— se incorporan sus vecinos; de ellos, los que a su vez son núcleo siguen propagando, y así sucesivamente:
 
-```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=11, fig.height=3.4}
-# EJEMPLO DIDACTICO (datos construidos, no son los de TMI). El cluster en
-# forma de ARCO es deliberado: ilustra que DBSCAN encuentra formas arbitrarias.
-
-  set.seed(5)
-  .ang <- seq(pi*.92, pi*.08, length.out = 34)
-  .P <- rbind(
-    data.frame(x = 4.6 + 3.1*cos(.ang) + rnorm(34,0,.17),
-               y = 2.0 + 3.1*sin(.ang) + rnorm(34,0,.17)),
-    data.frame(x = rnorm(22, 4.6, .52), y = rnorm(22, 1.6, .52)),
-    data.frame(x = c(.8,8.5,4.6,8.6,1,6.9), y = c(1,1.2,3.6,5.6,5.4,6.3)))
-
-  .eps <- .95; .mp <- 4
-  .Dd  <- as.matrix(dist(.P))
-  .vec <- lapply(1:nrow(.P), function(i) setdiff(which(.Dd[i, ] <= .eps), i))
-  .nv  <- lengths(.vec); .nuc <- .nv >= .mp
-  .tipo <- ifelse(.nuc, "Núcleo",
-            ifelse(sapply(.vec, function(v) any(.nuc[v])), "Borde", "Ruido"))
-
-  .ct  <- c(`Núcleo` = "steelblue4", Borde = "skyblue3", Ruido = "red3")
-  .cir <- function(i, col, lt = "dashed") { t <- seq(0, 2*pi, length.out = 160)
-    annotate("path", x = .P$x[i] + .eps*cos(t), y = .P$y[i] + .eps*sin(t),
-             colour = col, linetype = lt, linewidth = .6) }
-  .mkD <- function(p, tit, sub) p + coord_equal(xlim = c(.3,9.1), ylim = c(.3,7.6)) +
-    ggtitle(tit, subtitle = sub) + xlab(NULL) + ylab(NULL) + theme_bw(base_size = 9) +
-    theme(legend.position = "none", axis.text = element_blank(),
-          axis.ticks = element_blank(), panel.grid = element_blank())
-  .foD <- function() geom_point(data = .P, aes(x, y), colour = "grey70",
-                                size = 1.2, alpha = .85)
-
-  .sem <- 1L; .niv <- rep(NA_integer_, nrow(.P)); .niv[.sem] <- 0L
-  fr <- .sem; k <- 0L
-  repeat { k <- k + 1L
-    nu <- setdiff(unique(unlist(.vec[fr[.nuc[fr]]])), which(!is.na(.niv)))
-    if (!length(nu)) break
-    .niv[nu] <- k; fr <- nu }
-
-  .cortes <- c(0, 3, 7, max(.niv, na.rm = TRUE))
-  .titD <- c("1. Punto núcleo inicial", "2. Se añaden sus vecinos",
-             "3. La densidad se propaga", "4. Clúster cerrado")
-  .pan <- lapply(seq_along(.cortes), function(j) {
-    dentro <- which(!is.na(.niv) & .niv <= .cortes[j])
-    nuevos <- which(!is.na(.niv) & .niv <= .cortes[j] &
-                    .niv > (if (j == 1) -1 else .cortes[j-1]))
-    .mkD(ggplot() + .foD() +
-      geom_point(data = .P[dentro, ], aes(x, y), colour = "steelblue4", size = 1.8) +
-      (if (j < 4) .cir(.sem, "steelblue4", "dotted") else NULL) +
-      geom_point(data = .P[nuevos, ], aes(x, y), shape = 21, size = 2.8,
-                 fill = NA, colour = "black", stroke = .5),
-      .titD[j], paste0(length(dentro), " casos en el clúster")) })
-  wrap_plots(.pan, nrow = 1)
-```
+![[Propagación de un clúster en DBSCAN: desde un punto núcleo inicial, la densidad se extiende por los vecinos que a su vez son núcleo.]{.smallcaps}](figuras/dbscan_propagacion.png){width="55%"}
 
 Los casos con **anillo negro** son los que acaban de incorporarse en esa etapa. El clúster **crece siguiendo la zona densa**, sin ninguna noción de centro ni de distancia a un centroide: por eso acaba adoptando la forma de arco que tienen realmente los datos. Un método de partición como *k-medias* habría partido ese arco en dos o tres trozos, porque solo sabe construir grupos en torno a un punto central. Cuando ya no quedan vecinos nuevos, el clúster se cierra y el algoritmo busca otro punto no visitado para empezar de nuevo; lo que queda fuera será otro clúster, o bien ruido.
 
