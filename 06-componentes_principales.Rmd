@@ -88,11 +88,10 @@ rm(list = ls())
 # Cargando paquetes
 library(readxl)
 library(dplyr)
-library(visdat)
 library(ggplot2)
 library(gtExtras)
+library(visdat)
 library (GGally)
-library (knitr)
 library (kableExtra)
 library (patchwork)
 library (psych)      # KMO()
@@ -178,7 +177,7 @@ corr_plot_so <- ggpairs(seleccion_so,
                                                        size = 4.5,
                                                        method = "pearson",
                                                        stars = TRUE)),
-                        title = "Matriz de Correlación (sin outliers).")
+                        title = "Matriz de Correlación sin outliers")
 corr_plot_so
 ```
 
@@ -236,14 +235,17 @@ Ambas medidas se obtienen de una sola vez con la función `KMO()` del paquete `{
 # Adecuacion muestral: KMO global y MSA de cada variable.
 kmo <- KMO(cor(seleccion_so))
 
-# Calificacion del KMO global, segun la escala de Kaiser.
+# Calificacion del KMO global, segun la escala de Kaiser:
+# >= 0.90 excelente / 0.80 notable / 0.70 aceptable / 0.60 mediocre /
+# 0.50 bajo / < 0.50 inaceptable.
 kaiser <- cut(kmo$MSA,
               breaks = c(0, 0.5, 0.6, 0.7, 0.8, 0.9, Inf),
               labels = c("inaceptable", "bajo", "mediocre",
                          "aceptable", "notable", "excelente"),
               right  = FALSE)
 
-# Tabla de resultados.
+# Tabla de resultados. Los MSA se comparan con el umbral de 0.50: por debajo
+# de el, conviene plantearse excluir la variable del analisis y recalcular.
 adecuacion <- data.frame(
   Valor          = c(kmo$MSA, kmo$MSAi),
   Interpretacion = c(as.character(kaiser),
@@ -675,11 +677,15 @@ En la tabla se comprueba que existen leves variaciones con respecto a las clasif
 
 ## ![](figuras/star.svg){.hicon} La decisión de *Arg-Us Korp*. {#c06-la-decision-de-arg-us-korp}
 
-¿Cuál de los tres rankings elegiríamos? La elección no es trivial, y depende de la confianza que tengamos en la calidad de los datos. Si creemos que los *outliers* son errores o casos irrelevantes para la comparación, el ranking sin ellos (método clásico) es la opción más limpia. Si preferimos no descartar ninguna observación, el método robusto de Hubert ofrece una protección natural contra la distorsión, sin necesidad de eliminar casos.
+¿Cuál de los rankings elegiríamos? La elección no es trivial, y depende de la confianza que tengamos en la calidad de los datos. Si creemos que los *outliers* son errores o casos irrelevantes para la comparación, el ranking construido sin ellos (método clásico) es la opción más limpia. Si preferimos no descartar ninguna observación, el método robusto de *Hubert* ofrece una protección natural contra la distorsión, sin necesidad de eliminar casos.
 
-En cualquiera de los tres rankings, una empresa aparece consistentemente en las primeras posiciones: ***Home One Cargo***. Su combinación de alta diversificación, fuerte fidelización de clientes y nivel de digitalización avanzado la sitúa como la candidata más sólida para afrontar el futuro del sector.
+Conviene reparar, eso sí, en que **el primer ranking no es comparable con los demás**. Se elaboró únicamente sobre las 89 compañías que entraron en el cálculo, de modo que las trece calificadas como atípicas no podían figurar en él: no es que obtuvieran peores puntuaciones, es que sencillamente no se las puntuó. Por eso lo encabezan *Shuttlepod Movers*, *Kamino Movers* e *Ícarus Star Transport*, que son las mejor preparadas **del núcleo** del sector.
 
-Cuentan las crónicas que *Arg-us Korp* —siguiendo los consejos de su equipo de analistas, armados con R y un buen análisis de componentes principales— **adquirió *Home One Cargo*** pocas semanas después. El precio de la operación no se ha hecho público, pero los analistas del sector coinciden en que fue una compra inteligente. Korp, fiel a su estilo, cerró la reunión de adquisición antes de que nadie más pudiera hablar.
+En cuanto se permite puntuar a todas las compañías —ya sea aplicándoles las componentes calculadas sin ellas, ya sea incluyéndolas en el propio cálculo, ya sea por la vía robusta—, el panorama cambia, y lo hace de forma consistente: ***Arrakis Freight*** encabeza la clasificación, seguida de ***Chakotay Cargo Systems*** e ***Hyperdrive Express***. No es casualidad: *Arrakis Freight* presenta valores muy por encima de la media del sector en las tres dimensiones consideradas —diversificación, fidelización y digitalización—, y es justamente esa combinación excepcional la que la había convertido en un caso atípico.
+
+La conclusión metodológica es, quizá, la más valiosa del capítulo: **la decisión sobre los *outliers* no es un detalle de depuración previa, sino que determina la respuesta**. Si *Korp* se niega a considerar a las empresas atípicas, su compra es *Shuttlepod Movers*; si acepta considerarlas, una vez verificado que sus datos son correctos, su compra es *Arrakis Freight*.
+
+Cuentan las crónicas que *Arg-us Korp* —siguiendo los consejos de su equipo de analistas, armados con R y un buen análisis de componentes principales— encargó una auditoría de los datos de las tres finalistas y, confirmada su veracidad, **adquirió *Arrakis Freight*** pocas semanas después. El precio de la operación no se ha hecho público, pero los analistas del sector coinciden en que fue una compra inteligente. Korp, fiel a su estilo, cerró la reunión de adquisición antes de que nadie más pudiera hablar.
 
 ## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo. {#c06-materiales-para-realizar-las-practicas-del}
 
