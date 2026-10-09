@@ -212,8 +212,6 @@ library (dplyr)
 library (ggplot2)
 library (gtExtras)
 library (visdat)
-library (knitr)
-library (kableExtra)
 library (patchwork)
 library (broom) # para augment()
 library (lmtest)    # para resettest, bptest, coeftest
@@ -281,7 +279,7 @@ seleccion_df_graph
 Para el diagnóstico y, en su caso, filtrado de los *missing values*, aplicamos la función auxiliar `explora_na()` del paquete `{MATrstars}` que ya se presentó en el capítulo 5. Como el *data frame* "seleccion" contiene únicamente las seis variables del análisis, no es necesario especificar el argumento `variables`:
 
 ```{r, eval=FALSE, echo=TRUE}
-# Diagnóstico y filtrado de missing values.
+# Diagnóstico y filtrado de missing values con explora_na().
 seleccion <- explora_na(
   seleccion,
   accion    = "eliminar",
@@ -310,7 +308,7 @@ El siguiente paso es la **identificación de *outliers***. Como en el análisis 
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
 options(matrstars.figura_num = "9.3", matrstars.tabla_num = "9.3")
-# Diagnóstico y filtrado de outliers.
+# Diagnóstico y filtrado de outliers con explora_outliers().
 seleccion_so <- explora_outliers(
   seleccion,
   variables = c(BMAL, DIST, IDIVERSE, ACTIVO, LIQUIDEZ),
@@ -530,7 +528,7 @@ La comparación entre el modelo *ecua1* y el modelo seleccionado automáticament
 
 **Nota importante**: El valor de AIC mostrado por `step()` puede diferir del obtenido con `glance()` (que es el utilizado en la segunda tabla generada por la función `presenta_modelo()`) porque ambas funciones emplean definiciones distintas del criterio. Esto no afecta a la comparación relativa entre modelos.
 
-Desde el punto de vista de los resultados, ambos modelos presentan prácticamente la misma capacidad explicativa: el R² ajustado pasa de 0.9677 en *ecua1* a 0.9674 en *ecuaDEF*, una diferencia insignificante, y el error estándar residual permanece prácticamente constante (0.2653 frente a 0.2656). Asimismo, los coeficientes de log(DIST), log(IDIVERSE) y especialmente de las categorías de EFLO se mantienen prácticamente inalterados, conservando su significación estadística y el mismo sentido económico. En conjunto, el modelo seleccionado por *stepwise* ofrece una especificación más parsimoniosa (al eliminar un predictor irrelevante) sin sacrificar capacidad explicativa, por lo que constituye una mejora razonable sobre la especificación inicial.
+Desde el punto de vista de los resultados, ambos modelos presentan prácticamente la misma capacidad explicativa: el R² ajustado pasa de 0,9670 en *ecua1* a 0,9670 en *ecuaDEF* (el R² sin ajustar, de 0,9677 a 0,9674), una diferencia insignificante, y el error estándar residual permanece prácticamente constante (0,2653 frente a 0,2656). Asimismo, los coeficientes de log(DIST), log(IDIVERSE) y especialmente de las categorías de EFLO se mantienen prácticamente inalterados, conservando su significación estadística y el mismo sentido económico. En conjunto, el modelo seleccionado por *stepwise* ofrece una especificación más parsimoniosa (al eliminar un predictor irrelevante) sin sacrificar capacidad explicativa, por lo que constituye una mejora razonable sobre la especificación inicial.
 
 Una vez decidida la especificación (final) del modelo, es necesario desarrollar la **etapa de contrastación de las hipótesis básicas del modelo básico de regresión lineal**, con la intención de determinar el grado en que los estimadores obtenidos mediante *mínimos cuadrados ordinarios* **(MCO)** gozan de buenas propiedades, o si es necesario aplicar métodos de estimación alternativos, métodos econométricos específicos, o incluso re-especificar el modelo).
 
@@ -846,7 +844,7 @@ Tras estudiar los gráficos, vamos a pasar a **contrastar las hipótesis básica
 ```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
   # Hipótesis básicas MBR.
 
-    reset_test <- resettest(ecuaDEF, data= originales_so) # F. Funcional
+    reset_test <- resettest(ecuaDEF, data= seleccion_so) # F. Funcional
     shapiro_test <- shapiro.test(series_ecuaDEF$residuos) # Normalidad
     bp_test <- bptest(ecuaDEF) # Homoscedasticidad
 
@@ -898,7 +896,7 @@ Y la tabla:
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
   # Hipótesis básicas MBR.
 
-    reset_test <- resettest(ecuaDEF, data= originales_so) # F. Funcional
+    reset_test <- resettest(ecuaDEF, data= seleccion_so) # F. Funcional
     shapiro_test <- shapiro.test(series_ecuaDEF$residuos) # Normalidad
     bp_test <- bptest(ecuaDEF) # Homoscedasticidad
 
@@ -1029,9 +1027,9 @@ En segundo lugar, la **simulación** permite generar predicciones bajo escenario
 
 Por último, el **análisis estructural** estudia la importancia relativa y el mecanismo causal mediante el cual cada variable explicativa influye sobre la variable dependiente. Este uso del modelo permite *interpretar los coeficientes*, identificar relaciones clave, evaluar elasticidades o propensiones marginales y comprender el funcionamiento interno del proceso económico modelizado. Se trata, por tanto, de un enfoque orientado no tanto a predecir, sino a **explicar**.
 
-En las secciones anteriores, al comentar la significación estadística y el signo de los corficientes estimados, hemos realizado ya, de facto, un ejercicio de *análisis estructural*. En esta sección nos vamos a ocupar de realizar una **simulación de escenarios**.
+En las secciones anteriores, al comentar la significación estadística y el signo de los coeficientes estimados, hemos realizado ya, de facto, un ejercicio de *análisis estructural*. En esta sección nos vamos a ocupar de realizar una **simulación de escenarios**.
 
-La función `predict()` de R es una herramienta fundamental para utilizar un modelo ya estimado, permitiendo **obtener valores predichos de la variable dependiente a partir de nuevos valores de las variables explicativas**. Su funcionamiento es sencillo: recibe como argumento principal el objeto del modelo (por ejemplo, un `lm(()` o un `glm()`) y un argumento opcional `newdata`, que contiene un *data frame* con los valores que queremos simular o prever. Si no se aporta `newdata`, predict() devuelve las predicciones sobre la propia muestra con la que se estimó el modelo. Además, puede generar intervalos de predicción o de confianza mediante los argumentos `interval` y `level`. El **output** es generalmente un vector numérico o una matriz con las predicciones y, en su caso, los intervalos correspondientes.
+La función `predict()` de R es una herramienta fundamental para utilizar un modelo ya estimado, permitiendo **obtener valores predichos de la variable dependiente a partir de nuevos valores de las variables explicativas**. Su funcionamiento es sencillo: recibe como argumento principal el objeto del modelo (por ejemplo, un `lm()` o un `glm()`) y un argumento opcional `newdata`, que contiene un *data frame* con los valores que queremos simular o prever. Si no se aporta `newdata`, predict() devuelve las predicciones sobre la propia muestra con la que se estimó el modelo. Además, puede generar intervalos de predicción o de confianza mediante los argumentos `interval` y `level`. El **output** es generalmente un vector numérico o una matriz con las predicciones y, en su caso, los intervalos correspondientes.
 
 En este ejemplo, se ha incorporado la función `predict_from_excel_scenarios()`. Esta función utiliza `predict`; pero permite obtener el escenario a aplicar desde un fichero de Microsoft® Excel®, en el que se pueden explicitar los valores concretos de las variables explicativas, o las fórmulas de R necesarias para que se calculen automáticamente. Además, como output, además de un *data frame* con los resultados, estos pueden ser presentados en una tabla diseñada con `kable_rstars()`.
 
@@ -1133,8 +1131,6 @@ Como se ve, el segundo ejercicio plantea tres escenarios de renovación tecnoló
 En esta ocasión, se aplicará el código:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
-# SIMULACIÓN
-    
     res_Simula2 <- predict_from_excel_scenarios(
       model        = ecuaDEF,
       train_df     = seleccion_so,
@@ -1173,7 +1169,7 @@ El equipo de *Data-Evidence* entrega su informe a *Dixitaliza* con tres conclusi
 
 2.  **El modelo estimado es robusto**: supera los contrastes de forma funcional, y la corrección con errores estándar robustos a heteroscedasticidad confirma la significación de los coeficientes clave. La capacidad explicativa (R² ajustado ≈ 97%) es excepcionalmente elevada.
 
-3.  **La distancia recorrida y la diversificación de servicios son los otros factores relevantes**: la primera con un efecto negativo (más kilómetros → menor rendimiento unitario), la segunda con un efecto positivo (más diversificación → mayor eficiencia global).
+3.  **La distancia recorrida y la diversificación de servicios son los otros factores a considerar**, aunque con muy distinto grado de solidez: la primera tiene un efecto negativo, grande y robusto (más distancia recorrida → menor rendimiento unitario); la segunda, un efecto positivo pero pequeño y frágil (más diversificación → mayor eficiencia global), que pierde la significación al 5 % cuando se corrige por heteroscedasticidad y que, además, es el único que se altera apreciablemente al reestimar sin los casos influyentes. Debe interpretarse, por tanto, como un indicio y no como un resultado establecido.
 
 Con este informe en la mano, *Dixitaliza* lanza su campaña de renovación tecnológica dirigida a las empresas del sector con flotas antiguas. El eslogan —"*Renueva tu flota, multiplica tu beneficio*"— no es un mero recurso publicitario: es una conclusión respaldada por un modelo econométrico sólido.
 

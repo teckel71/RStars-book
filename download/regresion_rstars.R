@@ -53,7 +53,7 @@ seleccion <- explora_na(
 
 # Diagnóstico y filtrado de outliers con explora_outliers().
 # Se pasan explícitamente las 5 variables métricas del análisis: EFLO,
-# aunque llega como numérica desde Excel, es conceptualmente categórica
+# que llega como texto desde Excel, es conceptualmente categórica
 # y se convertirá a factor a continuación. La función calcula
 # internamente la distancia de Mahalanobis y aplica la regla 1.5·IQR.
 seleccion_so <- explora_outliers(
@@ -81,7 +81,7 @@ seleccion_so$EFLO <- as.factor(seleccion_so$EFLO)
                   EFLO)
     summary(ecua0)
 
-# Diseña salida ordenador y presentar
+# Diseña salida ordenada y presentarla
     
   modelo_0 <- presenta_modelo(ecua0)
 
