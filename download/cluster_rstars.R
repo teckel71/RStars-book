@@ -143,7 +143,7 @@ tablamedias %>%
                              "I. Diversif.",
                              "I. Fidelizac.",
                              "I. Digitalizac."),
-               digits    = c(0, 3, 3, 3))
+               digits    = c(0, 0, 3, 3, 3))
 
 # Gráficos de centroides
 
@@ -157,13 +157,13 @@ tablamedias %>%
     for (i in seq_along(variables)) {
     var1 <- variables[[i]]
     grafico <- ggplot(data= tablamedias,
-                      aes_string(y = var1, x = "whatcluster_j")) +
+                      aes(y = .data[[var1]], x = whatcluster_j)) +
                geom_bar(stat = "identity",
                         colour = "red",
                         fill = "orange",
                         alpha = 0.7) +
                ggtitle(paste0(var1, ". Media por grupos."),
-                       subtitle = "Empresas MIT.")+
+                       subtitle = "Empresas TMI.")+
                xlab ("Grupo") +
                ylab(var1)
     graficos.centroides[[paste0("grafico_", var1)]] <- grafico
@@ -194,7 +194,7 @@ tablamedias %>%
                    col.names = c("I. Diversificación",
                                  "I. Fidelización",
                                  "I. Digitalización"),
-                   digits    = c(0, 3, 3, 3))
+                   digits    = c(3, 3, 3))
       tablascompo[[n]] <- tabla
   }
 
@@ -219,9 +219,9 @@ tablamedias %>%
       var1 <- combinaciones[[i]][1]
       var2 <- combinaciones[[i]][2]
       grafico <- ggplot(seleccion,
-                        aes_string(x = var1,
-                                         y = var2,
-                                         color = "whatcluster_j")) +
+                        aes(x = .data[[var1]],
+                            y = .data[[var2]],
+                            color = whatcluster_j)) +
                  geom_point() +
                  labs(title = paste("GRÁFICO", var1, "-", var2),
                       subtitle = "Empresas TMI") +

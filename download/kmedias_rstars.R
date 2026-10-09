@@ -138,7 +138,7 @@ ggplot(df_sil, aes(x = k, y = Silhouette)) +
   for (i in seq_along(variables)) {
     var1 <- variables[[i]]
     grafico <- ggplot(data= tablamedias,
-                      aes_string(y = var1, x = "whatcluster_k")) +
+                      aes(y = .data[[var1]], x = whatcluster_k)) +
       geom_bar(stat = "identity",
                colour = "red",
                fill = "orange",
@@ -174,9 +174,9 @@ ggplot(df_sil, aes(x = k, y = Silhouette)) +
          var1 <- combinaciones[[i]][1]
          var2 <- combinaciones[[i]][2]
          grafico <- ggplot(seleccion_so,
-                           aes_string(x = var1,
-                                            y = var2,
-                                            color = "whatcluster_k")) +
+                           aes(x = .data[[var1]],
+                               y = .data[[var2]],
+                               color = whatcluster_k)) +
          geom_point() +
          labs(title = paste("GRÁFICO", var1, "-", var2),
               subtitle = "Empresas TMI.") +

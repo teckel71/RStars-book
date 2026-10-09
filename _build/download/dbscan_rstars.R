@@ -122,7 +122,7 @@ graficos.centroides <- list()
 for (i in seq_along(variables)) {
   var1 <- variables[[i]]
   grafico <- ggplot(data= tablamedias,
-                    aes_string(y = var1, x = "whatcluster_dbs")) +
+                    aes(y = .data[[var1]], x = whatcluster_dbs)) +
     geom_bar(stat = "identity",
              colour = "red",
              fill = "orange",
@@ -158,9 +158,9 @@ for (i in seq_along(combinaciones)) {
   var1 <- combinaciones[[i]][1]
   var2 <- combinaciones[[i]][2]
   grafico <- ggplot(seleccion,
-                    aes_string(x = var1,
-                                     y = var2,
-                                     color = "whatcluster_dbs")) +
+                    aes(x = .data[[var1]],
+                        y = .data[[var2]],
+                        color = whatcluster_dbs)) +
     geom_point() +
     labs(title = paste("GRÁFICO", var1, "-", var2),
          subtitle = "Empresas TMI.") +
@@ -196,12 +196,11 @@ seleccion_out <- seleccion %>%
 seleccion_out %>%
   kable_rstars(caption   = "¿Outliers son ruido? (Grupo 0 = Ruido)",
                col.names = c("Caso",
-                             "Observaciones",
                              "Grupo (0=ruido)",
                              "D. Mahalanobis",
                              "I. Diversificación",
                              "I. Fidelizac.",
                              "I. Digitalizac."),
-               digits    = c(NA, 0, 3, 3, 3))
+               digits    = c(NA, 3, 3, 3, 3))
 
 # Fin del Script :)

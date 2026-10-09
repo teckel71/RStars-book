@@ -167,8 +167,6 @@ library(ggplot2)
 library(gtExtras)
 library(visdat)
 library (factoextra)
-library (knitr)
-library (kableExtra)
 library (patchwork)
 
 # Paquete MATrstars: funciones auxiliares del libro R-Stars.
@@ -246,7 +244,7 @@ explora_outliers(
 )
 ```
 
-De la tabla anterior se desprende que los *outliers* identificados son las empresas *Chakotay Cargo Systems*, *Home One Cargo*, y de modo más moderado, *Tannhäuser Freight* e *Hyperion Star Haulage*. Estos son, en definitiva, los 4 casos en los que nos fijaremos específicamente más adelante, al analizar los resultados del análisis clúster.
+De la tabla anterior se desprende que los *outliers* identificados son las empresas *Chakotay Cargo Systems*, *Home One Cargo*, y de modo más moderado, *Tannhäuser Freight* e *Io Star Transport*. Estos son, en definitiva, los 4 casos en los que nos fijaremos específicamente más adelante, al analizar los resultados del análisis clúster.
 
 Estas empresas cuentan con un valor atípico en la distancia de Mahalanobis, lo que, a su vez, implica que muestren valores atípicos en una o varias de las variables originales (IDIVERSE, IFIDE, IDIG). En el desarrollo de otras técnicas, en este punto localizaríamos y eliminaríamos los *outliers*. En este caso **no** lo vamos a hacer, ya que queremos agrupar **todos los casos** que tenemos en el análisis. Precisamente, si hay algún caso que permanece aislado, sin agruparse con otros en el proceso de agrupación hasta las últimas etapas, quizá se trate de un candidato a *outlier*, por lo que el análisis clúster **también puede considerarse una técnica de localización de casos atípicos**.
 
@@ -521,20 +519,20 @@ Obviamente, también se podrían comparar las medias de los grupos, para cada va
     for (i in seq_along(variables)) {
     var1 <- variables[[i]]
     grafico <- ggplot(data= tablamedias,
-                      aes_string(y = var1, x = "whatcluster_j")) +
+                      aes(y = .data[[var1]], x = whatcluster_j)) +
                geom_bar(stat = "identity",
                         colour = "red",
                         fill = "orange",
                         alpha = 0.7) +
                ggtitle(paste0(var1, ". Media por grupos."),
-                       subtitle = "Empresas TMI")+
+                       subtitle = "Empresas TMI.")+
                xlab ("Grupo") +
                ylab(var1)
     graficos.centroides[[paste0("grafico_", var1)]] <- grafico
 }  
 ```
 
-En el código anterior, `setdiff()` crea un vector "variables" que contiene todos los nombres de las columnas del *data frame* "tablamedias", excepto `whatcluster_j` y `obs`, que no son las variables originales. Luego se crea una lista vacía "graficos.centroides" para almacenar los gráficos generados. Con `for (i in seq_along(variables))` comienza el bucle, que recorre cada elemento del vector "variables". En el código de gráfico, "var1" toma el nombre, en cada iteración, de la variable a representar. En el "mapeo", es importante utilizar `aes_string()`, que requiere que los nombres de las variables se pasen como cadenas de texto (entre comillas), lo que es útil cuando los nombres de las variables se generan dinámicamente o se pasan como argumentos de función, y cuando se necesitan construir *mapeos estéticos* de manera programática. Finalmente, con `graficos.centroides[[paste0("grafico_", var1)]] <- grafico` se guarda el gráfico en la lista "graficos.centroides" con un nombre basado en "var1".
+En el código anterior, `setdiff()` crea un vector "variables" que contiene todos los nombres de las columnas del *data frame* "tablamedias", excepto `whatcluster_j` y `obs`, que no son las variables originales. Luego se crea una lista vacía "graficos.centroides" para almacenar los gráficos generados. Con `for (i in seq_along(variables))` comienza el bucle, que recorre cada elemento del vector "variables". En el código de gráfico, "var1" toma el nombre, en cada iteración, de la variable a representar. En el "mapeo" aparece una construcción que conviene conocer: `.data[[var1]]`. Cuando el nombre de la variable que queremos representar no se conoce al escribir el código, sino que viaja dentro de un objeto —aquí "var1", que cambia en cada vuelta del bucle—, no podemos escribirlo tal cual dentro de `aes()`. El **pronombre** `.data` resuelve justamente eso: `.data[[var1]]` significa "la columna del *data frame* cuyo nombre está guardado en var1", y es la forma recomendada de construir *mapeos estéticos* de manera programática. La función `aes_string()`, que cumplía este papel en versiones antiguas de [ggplot2], está **obsoleta** desde la versión 3.0 del paquete y emite un aviso al utilizarse. Finalmente, con `graficos.centroides[[paste0("grafico_", var1)]] <- grafico` se guarda el gráfico en la lista "graficos.centroides" con un nombre basado en "var1".
 
 Los gráficos guardados en la lista "gráficos.centroides" se pueden agrupar en composiciones, por ejemplo de 2x2 gráficos, utilizando el paquete `{patchwork}`. Para automatizar el proceso emplearemos la función `create_patchwork()`, incluida en el paquete `{MATrstars}` que hemos cargado al inicio del *script*. Esta función recibe una **lista de gráficos** generados con `{ggplot2}` y devuelve una **lista de composiciones** en las que los gráficos se disponen en retículas de 2 filas por 2 columnas (cuatro gráficos por composición); si el número total de gráficos no es múltiplo de cuatro, la última composición se completa con paneles vacíos para que la retícula quede uniforme. En el **Apéndice: Funciones auxiliares del paquete `MATrstars`** puede consultarse su descripción detallada y el enlace al código fuente.
 
@@ -579,7 +577,7 @@ Por otro lado, se pueden presentar en diferentes **tablas** las informaciones de
                    col.names = c("I. Diversificación",
                                  "I. Fidelización",
                                  "I. Digitalización"),
-                   digits    = c(0, 3, 3, 3))
+                   digits    = c(3, 3, 3))
       tablascompo[[n]] <- tabla
   }
 
@@ -609,7 +607,7 @@ for (n in 1:numclusters){
                    col.names = c("I. Diversificación",
                                  "I. Fidelización",
                                  "I. Digitalización"),
-                   digits    = c(0, 3, 3, 3))
+                   digits    = c(3, 3, 3))
       tablascompo[[n]] <- tabla
 }
   # Presentar las tablas
@@ -678,9 +676,9 @@ El siguiente paso consiste en utilizar un bucle para generar los gráficos de di
       var1 <- combinaciones[[i]][1]
       var2 <- combinaciones[[i]][2]
       grafico <- ggplot(seleccion,
-                        aes_string(x = var1,
-                                         y = var2,
-                                         color = "whatcluster_j")) +
+                        aes(x = .data[[var1]],
+                            y = .data[[var2]],
+                            color = whatcluster_j)) +
                  geom_point() +
                  labs(title = paste("GRÁFICO", var1, "-", var2),
                       subtitle = "Empresas TMI") +
@@ -691,7 +689,7 @@ El siguiente paso consiste en utilizar un bucle para generar los gráficos de di
 }
 ```
 
-Una vez generados los gráficos de todas las combinaciones de variables (6 gráficos en el ejemplo), y almacenados en la lista "graficos", se podrán reagrupar y presentar en composiciones de 2x2 mediante el empleo de la función `create_patchwork()`:
+Una vez generados los gráficos de todas las combinaciones de variables (3 gráficos en el ejemplo, puesto que con tres variables solo hay tres pares posibles), y almacenados en la lista "graficos", se podrán reagrupar y presentar en una composición de 2x2 mediante el empleo de la función `create_patchwork()`:
 
 ```{r, eval=TRUE, echo=TRUE, message=FALSE, results='asis', warning=FALSE}
   # Hacer agrupaciones con la función de patchworks creada anteriormente
@@ -782,8 +780,6 @@ library(gtExtras)
 library(visdat)
 library (cluster)
 library (ClusterR)
-library (knitr)
-library (kableExtra)
 library (patchwork)
 
 # Paquete MATrstars: funciones auxiliares del libro R-Stars.
@@ -1043,7 +1039,7 @@ Obviamente, también se podrían comparar las medias de los grupos, para cada va
   for (i in seq_along(variables)) {
     var1 <- variables[[i]]
     grafico <- ggplot(data= tablamedias,
-                      aes_string(y = var1, x = "whatcluster_k")) +
+                      aes(y = .data[[var1]], x = whatcluster_k)) +
       geom_bar(stat = "identity",
                colour = "red",
                fill = "orange",
@@ -1110,9 +1106,9 @@ Una vez almacenados los elementos anteriores, procederemos a crear los gráficos
          var1 <- combinaciones[[i]][1]
          var2 <- combinaciones[[i]][2]
          grafico <- ggplot(seleccion_so,
-                           aes_string(x = var1,
-                                            y = var2,
-                                            color = "whatcluster_k")) +
+                           aes(x = .data[[var1]],
+                               y = .data[[var2]],
+                               color = whatcluster_k)) +
          geom_point() +
          labs(title = paste("GRÁFICO", var1, "-", var2),
               subtitle = "Empresas TMI") +
@@ -1234,8 +1230,6 @@ library(ggplot2)
 library(gtExtras)
 library(visdat)
 library(dbscan)
-library (knitr)
-library (kableExtra)
 library (patchwork)
 
 # Paquete MATrstars: funciones auxiliares del libro R-Stars.
@@ -1296,8 +1290,6 @@ library(ggplot2)
 library(gtExtras)
 library(visdat)
 library(dbscan)
-library (knitr)
-library (kableExtra)
 library (patchwork)
 
 # Paquete MATrstars
@@ -1462,7 +1454,7 @@ graficos.centroides <- list()
 for (i in seq_along(variables)) {
   var1 <- variables[[i]]
   grafico <- ggplot(data= tablamedias,
-                    aes_string(y = var1, x = "whatcluster_dbs")) +
+                    aes(y = .data[[var1]], x = whatcluster_dbs)) +
     geom_bar(stat = "identity",
              colour = "red",
              fill = "orange",
@@ -1498,9 +1490,9 @@ for (i in seq_along(combinaciones)) {
   var1 <- combinaciones[[i]][1]
   var2 <- combinaciones[[i]][2]
   grafico <- ggplot(seleccion,
-                    aes_string(x = var1,
-                                     y = var2,
-                                     color = "whatcluster_dbs")) +
+                    aes(x = .data[[var1]],
+                        y = .data[[var2]],
+                        color = whatcluster_dbs)) +
     geom_point() +
     labs(title = paste("GRÁFICO", var1, "-", var2),
          subtitle = "Empresas TMI.") +
@@ -1561,7 +1553,7 @@ graficos.centroides <- list()
 for (i in seq_along(variables)) {
   var1 <- variables[[i]]
   grafico <- ggplot(data= tablamedias,
-                    aes_string(y = var1, x = "whatcluster_dbs")) +
+                    aes(y = .data[[var1]], x = whatcluster_dbs)) +
     geom_bar(stat = "identity",
              colour = "red",
              fill = "orange",
@@ -1603,9 +1595,9 @@ for (i in seq_along(combinaciones)) {
   var1 <- combinaciones[[i]][1]
   var2 <- combinaciones[[i]][2]
   grafico <- ggplot(seleccion,
-                    aes_string(x = var1,
-                                     y = var2,
-                                     color = "whatcluster_dbs")) +
+                    aes(x = .data[[var1]],
+                        y = .data[[var2]],
+                        color = whatcluster_dbs)) +
     geom_point() +
     labs(title = paste("GRÁFICO", var1, "-", var2),
          subtitle = "Empresas TMI.") +
@@ -1654,7 +1646,6 @@ seleccion_out <- seleccion %>%
 seleccion_out %>%
   kable_rstars(caption   = "¿Outliers son ruido? (Grupo 0 = Ruido)",
                col.names = c("Caso",
-                             "Observaciones",
                              "Grupo (0=ruido)",
                              "D. Mahalanobis",
                              "I. Diversificación",
@@ -1681,13 +1672,12 @@ seleccion_out <- seleccion %>%
 seleccion_out %>%
   kable_rstars(
                col.names = c("Caso",
-                             "Observaciones",
                              "Grupo (0=ruido)",
                              "D. Mahalanobis",
                              "I. Diversificación",
                              "I. Fidelizac.",
                              "I. Digitalizac."),
-               digits    = c(NA, 0, 3, 3, 3))
+               digits    = c(NA, 3, 3, 3, 3))
 ```
 
 ::: {style="text-align: center;"}

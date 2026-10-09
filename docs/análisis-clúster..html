@@ -280,7 +280,7 @@ Detectar patrones densos y filtrar anomalías
 <li><p>El archivo de Microsoft® Excel® llamado “interestelar_25.xlsx”. Si abrimos este último archivo, comprobaremos que se compone de tres hojas. La primera muestra un mensaje sobre el uso de los datos, la segunda recoge la descripción de las variables consideradas, y la tercera (hoja “Datos”) almacena los datos que debemos importar. Estos datos se corresponden con diferentes variables económicas y financieras de 25 empresas dedicadas a los servicios de transporte interestelar de mercancías.</p></li>
 </ul>
 <p>Comenzaremos a ejecutar el código del <em>script</em>. En primer lugar, el código se ocupa de limpiar el <em>Global Environment</em> y cargar los paquetes necesarios. Uno de ellos es <a href="https://github.com/teckel71/MATrstars">MATrstars</a>, un paquete propio del libro que reúne funciones auxiliares utilizadas a lo largo de los distintos capítulos. Como no está disponible en CRAN, se instala directamente desde GitHub la primera vez; en las siguientes ocasiones bastará con activarlo con <code><a href="https://github.com/teckel71/MATrstars">library(MATrstars)</a></code>. Los detalles del paquete y de las funciones que contiene se recogen en el <strong>Apéndice: Funciones auxiliares del paquete <code>MATrstars</code></strong>.</p>
-<div class="sourceCode" id="cb259"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb258"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### CLUSTER jerárquico 25 empresas TMI.###</span></span>
 <span></span>
 <span><span class="co"># Limpiando el Global Environment</span></span>
@@ -293,8 +293,6 @@ Detectar patrones densos y filtrar anomalías
 <span><span class="kw"><span>library</span></span><span class="op">(</span><span class="va"><a href="https://github.com/jthomasmock/gtExtras">gtExtras</a></span><span class="op">)</span></span>
 <span><span class="kw"><span>library</span></span><span class="op">(</span><span class="va"><span>visdat</span></span><span class="op">)</span></span>
 <span><span class="kw"><span>library</span></span> <span class="op">(</span><span class="va"><a href="https://github.com/kassambara/factoextra">factoextra</a></span><span class="op">)</span></span>
-<span><span class="kw"><span>library</span></span> <span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span></span>
-<span><span class="kw"><span>library</span></span> <span class="op">(</span><span class="va"><a href="https://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span></span>
 <span><span class="kw"><span>library</span></span> <span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Paquete MATrstars: funciones auxiliares del libro R-Stars.</span></span>
@@ -305,7 +303,7 @@ Detectar patrones densos y filtrar anomalías
 <span><span class="op">}</span></span>
 <span><span class="kw"><span>library</span></span><span class="op">(</span><span class="va"><a href="https://github.com/teckel71/MATrstars">MATrstars</a></span><span class="op">)</span></span></code></pre></div>
 <p>Posteriormente importaremos los datos del archivo de Excel®, y trataremos los casos con datos faltantes o <em>missing values</em>:</p>
-<div class="sourceCode" id="cb260"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb259"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## DATOS</span></span>
 <span></span>
 <span><span class="co"># Importando datos desde Excel</span></span>
@@ -319,24 +317,24 @@ Detectar patrones densos y filtrar anomalías
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">IDIVERSE</span>, <span class="va">IFIDE</span>, <span class="va">IDIG</span><span class="op">)</span></span>
 <span><span class="va">seleccion_df_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary</a></span><span class="op">(</span><span class="va">seleccion</span><span class="op">)</span></span>
 <span><span class="va">seleccion_df_graph</span></span></code></pre></div>
-<div id="aevgucbyge" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="hlfmabnfsf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#aevgucbyge table {
+#hlfmabnfsf table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#aevgucbyge thead, #aevgucbyge tbody, #aevgucbyge tfoot, #aevgucbyge tr, #aevgucbyge td, #aevgucbyge th {
+#hlfmabnfsf thead, #hlfmabnfsf tbody, #hlfmabnfsf tfoot, #hlfmabnfsf tr, #hlfmabnfsf td, #hlfmabnfsf th {
   border-style: none;
 }
 
-#aevgucbyge p {
+#hlfmabnfsf p {
   margin: 0;
   padding: 0;
 }
 
-#aevgucbyge .gt_table {
+#hlfmabnfsf .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -362,12 +360,12 @@ Detectar patrones densos y filtrar anomalías
   border-left-color: #D3D3D3;
 }
 
-#aevgucbyge .gt_caption {
+#hlfmabnfsf .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#aevgucbyge .gt_title {
+#hlfmabnfsf .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -379,7 +377,7 @@ Detectar patrones densos y filtrar anomalías
   border-bottom-width: 0;
 }
 
-#aevgucbyge .gt_subtitle {
+#hlfmabnfsf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -391,7 +389,7 @@ Detectar patrones densos y filtrar anomalías
   border-top-width: 0;
 }
 
-#aevgucbyge .gt_heading {
+#hlfmabnfsf .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -403,13 +401,13 @@ Detectar patrones densos y filtrar anomalías
   border-right-color: #D3D3D3;
 }
 
-#aevgucbyge .gt_bottom_border {
+#hlfmabnfsf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 0px;
   border-bottom-color: #D3D3D3;
 }
 
-#aevgucbyge .gt_col_headings {
+#hlfmabnfsf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 0px;
   border-top-color: #D3D3D3;
@@ -424,7 +422,7 @@ Detectar patrones densos y filtrar anomalías
   border-right-color: #D3D3D3;
 }
 
-#aevgucbyge .gt_col_heading {
+#hlfmabnfsf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -444,7 +442,7 @@ Detectar patrones densos y filtrar anomalías
   overflow-x: hidden;
 }
 
-#aevgucbyge .gt_column_spanner_outer {
+#hlfmabnfsf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -456,15 +454,15 @@ Detectar patrones densos y filtrar anomalías
   padding-right: 4px;
 }
 
-#aevgucbyge .gt_column_spanner_outer:first-child {
+#hlfmabnfsf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#aevgucbyge .gt_column_spanner_outer:last-child {
+#hlfmabnfsf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#aevgucbyge .gt_column_spanner {
+#hlfmabnfsf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -476,11 +474,11 @@ Detectar patrones densos y filtrar anomalías
   width: 100%;
 }
 
-#aevgucbyge .gt_spanner_row {
+#hlfmabnfsf .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#aevgucbyge .gt_group_heading {
+#hlfmabnfsf .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -506,7 +504,7 @@ Detectar patrones densos y filtrar anomalías
   text-align: left;
 }
 
-#aevgucbyge .gt_empty_group_heading {
+#hlfmabnfsf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -521,15 +519,15 @@ Detectar patrones densos y filtrar anomalías
   vertical-align: middle;
 }
 
-#aevgucbyge .gt_from_md > :first-child {
+#hlfmabnfsf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#aevgucbyge .gt_from_md > :last-child {
+#hlfmabnfsf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#aevgucbyge .gt_row {
+#hlfmabnfsf .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -548,7 +546,7 @@ Detectar patrones densos y filtrar anomalías
   overflow-x: hidden;
 }
 
-#aevgucbyge .gt_stub {
+#hlfmabnfsf .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -561,7 +559,7 @@ Detectar patrones densos y filtrar anomalías
   padding-right: 5px;
 }
 
-#aevgucbyge .gt_stub_row_group {
+#hlfmabnfsf .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -575,15 +573,15 @@ Detectar patrones densos y filtrar anomalías
   vertical-align: top;
 }
 
-#aevgucbyge .gt_row_group_first td {
+#hlfmabnfsf .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#aevgucbyge .gt_row_group_first th {
+#hlfmabnfsf .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#aevgucbyge .gt_summary_row {
+#hlfmabnfsf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -593,16 +591,16 @@ Detectar patrones densos y filtrar anomalías
   padding-right: 5px;
 }
 
-#aevgucbyge .gt_first_summary_row {
+#hlfmabnfsf .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#aevgucbyge .gt_first_summary_row.thick {
+#hlfmabnfsf .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#aevgucbyge .gt_last_summary_row {
+#hlfmabnfsf .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -612,7 +610,7 @@ Detectar patrones densos y filtrar anomalías
   border-bottom-color: #D3D3D3;
 }
 
-#aevgucbyge .gt_grand_summary_row {
+#hlfmabnfsf .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -622,7 +620,7 @@ Detectar patrones densos y filtrar anomalías
   padding-right: 5px;
 }
 
-#aevgucbyge .gt_first_grand_summary_row {
+#hlfmabnfsf .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -632,7 +630,7 @@ Detectar patrones densos y filtrar anomalías
   border-top-color: #D3D3D3;
 }
 
-#aevgucbyge .gt_last_grand_summary_row_top {
+#hlfmabnfsf .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -642,11 +640,11 @@ Detectar patrones densos y filtrar anomalías
   border-bottom-color: #D3D3D3;
 }
 
-#aevgucbyge .gt_striped {
+#hlfmabnfsf .gt_striped {
   background-color: #FAFAFA;
 }
 
-#aevgucbyge .gt_table_body {
+#hlfmabnfsf .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -655,7 +653,7 @@ Detectar patrones densos y filtrar anomalías
   border-bottom-color: #D3D3D3;
 }
 
-#aevgucbyge .gt_footnotes {
+#hlfmabnfsf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -669,7 +667,7 @@ Detectar patrones densos y filtrar anomalías
   border-right-color: #D3D3D3;
 }
 
-#aevgucbyge .gt_footnote {
+#hlfmabnfsf .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -678,7 +676,7 @@ Detectar patrones densos y filtrar anomalías
   padding-right: 5px;
 }
 
-#aevgucbyge .gt_sourcenotes {
+#hlfmabnfsf .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -692,7 +690,7 @@ Detectar patrones densos y filtrar anomalías
   border-right-color: #D3D3D3;
 }
 
-#aevgucbyge .gt_sourcenote {
+#hlfmabnfsf .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -700,72 +698,72 @@ Detectar patrones densos y filtrar anomalías
   padding-right: 5px;
 }
 
-#aevgucbyge .gt_left {
+#hlfmabnfsf .gt_left {
   text-align: left;
 }
 
-#aevgucbyge .gt_center {
+#hlfmabnfsf .gt_center {
   text-align: center;
 }
 
-#aevgucbyge .gt_right {
+#hlfmabnfsf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#aevgucbyge .gt_font_normal {
+#hlfmabnfsf .gt_font_normal {
   font-weight: normal;
 }
 
-#aevgucbyge .gt_font_bold {
+#hlfmabnfsf .gt_font_bold {
   font-weight: bold;
 }
 
-#aevgucbyge .gt_font_italic {
+#hlfmabnfsf .gt_font_italic {
   font-style: italic;
 }
 
-#aevgucbyge .gt_super {
+#hlfmabnfsf .gt_super {
   font-size: 65%;
 }
 
-#aevgucbyge .gt_footnote_marks {
+#hlfmabnfsf .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#aevgucbyge .gt_asterisk {
+#hlfmabnfsf .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#aevgucbyge .gt_indent_1 {
+#hlfmabnfsf .gt_indent_1 {
   text-indent: 5px;
 }
 
-#aevgucbyge .gt_indent_2 {
+#hlfmabnfsf .gt_indent_2 {
   text-indent: 10px;
 }
 
-#aevgucbyge .gt_indent_3 {
+#hlfmabnfsf .gt_indent_3 {
   text-indent: 15px;
 }
 
-#aevgucbyge .gt_indent_4 {
+#hlfmabnfsf .gt_indent_4 {
   text-indent: 20px;
 }
 
-#aevgucbyge .gt_indent_5 {
+#hlfmabnfsf .gt_indent_5 {
   text-indent: 25px;
 }
 
-#aevgucbyge .katex-display {
+#hlfmabnfsf .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#aevgucbyge div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#hlfmabnfsf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -828,7 +826,7 @@ Detectar patrones densos y filtrar anomalías
 <p><strong>Tabla 7.2</strong></p>
 </div>
 <p>Para el diagnóstico y, en su caso, filtrado de los <em>missing values</em> aplicamos la función auxiliar <code><span>explora_na()</span></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a> que ya se presentó en el capítulo 5:</p>
-<div class="sourceCode" id="cb261"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb260"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Diagnóstico y filtrado de missing values.</span></span>
 <span><span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="fu"><span>explora_na</span></span><span class="op">(</span></span>
 <span>  <span class="va">seleccion</span>,</span>
@@ -839,7 +837,7 @@ Detectar patrones densos y filtrar anomalías
 <p>No se ha localizado ninguna observación con <em>missing values</em>, luego no se ha de realizar ningún tipo de tratamiento.</p>
 <p>El siguiente paso es la <strong>identificación de <em>outliers</em></strong>. Como en el análisis contamos con 3 variables métricas, “resumiremos” el valor que toma cada caso en el conjunto de las variables mediante el cálculo de la <strong><em>distancia de Mahalanobis</em></strong>, sobre la que aplicaremos la regla clásica de 1.5 veces el rango intercuartílico para identificar los casos atípicos.</p>
 <p>Todo este proceso —cálculo de Mahalanobis, <em>boxplot</em> de la distancia, identificación de los casos atípicos y presentación en una tabla— se realiza en una sola llamada mediante la función auxiliar <code><span>explora_outliers()</span></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a> que ya se presentó en el capítulo 5. Cuando se le pasa un <em>data frame</em> con varias variables métricas, la función detecta el caso multivariante y calcula internamente la distancia de Mahalanobis. Como en “seleccion” solo hay ya las tres variables del análisis, no es necesario especificar el argumento <code>variables</code>. Además, en esta ocasión usamos <code>accion = "documentar"</code> porque <strong>no</strong> queremos eliminar los <em>outliers</em>, sino solo identificarlos:</p>
-<div class="sourceCode" id="cb262"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb261"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Diagnóstico de outliers.</span></span>
 <span><span class="fu"><span>explora_outliers</span></span><span class="op">(</span></span>
 <span>  <span class="va">seleccion</span>,</span>
@@ -942,7 +940,7 @@ io star transport
 <div style="text-align: center;">
 <p><strong>Tabla 7.3</strong></p>
 </div>
-<p>De la tabla anterior se desprende que los <em>outliers</em> identificados son las empresas <em>Chakotay Cargo Systems</em>, <em>Home One Cargo</em>, y de modo más moderado, <em>Tannhäuser Freight</em> e <em>Hyperion Star Haulage</em>. Estos son, en definitiva, los 4 casos en los que nos fijaremos específicamente más adelante, al analizar los resultados del análisis clúster.</p>
+<p>De la tabla anterior se desprende que los <em>outliers</em> identificados son las empresas <em>Chakotay Cargo Systems</em>, <em>Home One Cargo</em>, y de modo más moderado, <em>Tannhäuser Freight</em> e <em>Io Star Transport</em>. Estos son, en definitiva, los 4 casos en los que nos fijaremos específicamente más adelante, al analizar los resultados del análisis clúster.</p>
 <p>Estas empresas cuentan con un valor atípico en la distancia de Mahalanobis, lo que, a su vez, implica que muestren valores atípicos en una o varias de las variables originales (IDIVERSE, IFIDE, IDIG). En el desarrollo de otras técnicas, en este punto localizaríamos y eliminaríamos los <em>outliers</em>. En este caso <strong>no</strong> lo vamos a hacer, ya que queremos agrupar <strong>todos los casos</strong> que tenemos en el análisis. Precisamente, si hay algún caso que permanece aislado, sin agruparse con otros en el proceso de agrupación hasta las últimas etapas, quizá se trate de un candidato a <em>outlier</em>, por lo que el análisis clúster <strong>también puede considerarse una técnica de localización de casos atípicos</strong>.</p>
 <p>La siguiente etapa se refiere a la aplicación propia del análisis clúster al grupo de 25 compañías que toman valores para las tres variables incluidas en el análisis.</p>
 </div>
@@ -965,7 +963,7 @@ io star transport
 <span class="header-section-number">7.3.3</span> <img src="figuras/pie-chart.svg"> Aplicación del método de <em>Ward</em>.<a class="anchor" aria-label="anchor" href="#c07-aplicacion-del-metodo-de-ward"><i class="fas fa-link"></i></a>
 </h3>
 <p>Los métodos de agrupación usualmente se basan en la <strong>distancia euclídea</strong>. Como la distancia euclídea es sensible a las unidades de medida de las diferentes variables clasificadoras, es preciso trabajar con las <strong>variables tipificadas</strong>, lo que lograremos creando, por ejemplo, un <em>data frame</em> “zseleccion” con la función <code><span>scale()</span></code>. Luego, aplicaremos el método elegido a este <em>data frame,</em> en lugar de al <em>data frame</em> que contiene los datos originales sin tipificar:</p>
-<div class="sourceCode" id="cb263"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb262"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># CLUSTER JERARQUICO CON VARIABLES ORIGINALES.</span></span>
 <span></span>
 <span><span class="co"># Tipificando variables</span></span>
@@ -980,7 +978,7 @@ io star transport
 ##  Max.   : 2.2679   Max.   : 3.71756   Max.   : 3.1734</code></pre>
 <p>Este nuevo <em>data frame</em> contiene las mismas variables del análisis; pero tipificadas (obsérvese, en el <code><span>summary()</span></code>, las medias de las variables).</p>
 <p>Previamente a aplicar un método de agrupación concreto, es necesario calcular la <strong>matriz de distancias</strong> entre los casos, a la que llamaremos, por ejemplo, <strong>“d”</strong>. Esta matriz se calcula con la función <code><span>dist()</span></code>. Para visualizarla, una opción es representarla mediante el <em>gráfico de temperatura</em> que ofrece la función <code><a href="https://rpkgs.datanovia.com/factoextra/reference/dist.html">fviz_dist()</a></code> del paquete <a href="https://github.com/kassambara/factoextra">factoextra</a>:</p>
-<div class="sourceCode" id="cb265"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb264"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Matriz de distancias</span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><span>dist</span></span><span class="op">(</span><span class="va">zseleccion</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rpkgs.datanovia.com/factoextra/reference/dist.html">fviz_dist</a></span><span class="op">(</span><span class="va">d</span>, lab_size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>  <span class="co"># Del paquete {factoextra}</span></span></code></pre></div>
@@ -990,7 +988,7 @@ io star transport
 </div>
 <p>Los casos con intersecciones en tonos anaranjados tenderán a agruparse con mayor facilidad (o a agruparse antes); mientras que los casos cuyas intersecciones están en tonos azulados tenderán a pertenecer a grupos diferentes (o a agruparse más tarde). Cabe destacar los colores azulados asociados a las empresas <em>Chakotay Cargo Systems</em>, <em>Home One Cargo</em>, que precisamente eran las dos compañías identificadas más claramente como <em>outliers</em>.</p>
 <p>Vamos a realizar el análisis clúster jerárquico mediante uno de los métodos más habituales, el de <strong><em>Ward</em></strong>, como es común en las aplicaciones prácticas, ya que este método proporciona grupos muy homogéneos (mínima varianza). La función a utilizar es <code><span>hclust()</span></code>. La solución la guardaremos en el objeto (lista) que hemos llamado, por ejemplo, “cluster_j”. Luego se visualizará el <strong><em>dendograma</em></strong> construido con la función <code><a href="https://rpkgs.datanovia.com/factoextra/reference/fviz_dend.html">fviz_dend()</a></code> del paquete <a href="https://github.com/kassambara/factoextra">factoextra</a>, que permite personalizar el gráfico con una gramática similar a la utilizada con los gráficos del paquete <a href="https://ggplot2.tidyverse.org">ggplot2</a>:</p>
-<div class="sourceCode" id="cb266"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb265"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Método de Ward.</span></span>
 <span><span class="va">cluster_j</span><span class="op">&lt;-</span><span class="fu"><span>hclust</span></span><span class="op">(</span><span class="va">d</span>, method<span class="op">=</span><span class="st">"ward.D2"</span><span class="op">)</span></span>
 <span></span>
@@ -1044,7 +1042,7 @@ s_i = \frac{b_i - a_i}{\max(a_i, b_i)}
 </ol>
 <p>De todos modos, es necesario insistir en que estos métodos no llevan a una conclusión única ni irrevocable; por lo que puede ser preferible que el <strong>propio investigador</strong> decida el número de grupos a crear, mediante la observación del dendograma, y de acuerdo a los objetivos de su propia investigación, tomando los métodos cuantitativos solo como <strong>orientación</strong>.</p>
 <p>En nuestro caso, el gráfico del <em>método de la silueta</em> se obtiene a partir de la función <code>fviz_nbclust</code> del paquete <a href="https://github.com/kassambara/factoextra">factoextra</a>, con el código:</p>
-<div class="sourceCode" id="cb267"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb266"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Método de obtención de número de grupos (k) del Ancho de Silueta.</span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rpkgs.datanovia.com/factoextra/reference/fviz_nbclust.html">fviz_nbclust</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">zseleccion</span>, </span>
@@ -1060,7 +1058,7 @@ s_i = \frac{b_i - a_i}{\max(a_i, b_i)}
 </div>
 <p>El método aconseja una división de los casos en 8 grupos o conglomerados diferentes. Sin embargo, parece un número excesivo si se quieren caracterizar posteriormente los grupos e incidir en sus diferencias. Un segundo número de grupos apropiado según el método es 2; pero podría ocurrir lo contrario que el caso anterior: sería un valor demasiado bajo, lo que provocaría que tan solo se distinguiese un grupo con los dos outliers de otro con los 23 casos restantes. Así, el investigador puede decidir qué número de grupos parece equilibrado y se ajusta a sus intereses. En este ejemplo, <strong>un número de grupos razonable podría ser 5</strong>, que contaría con el aval de mantener individualizadas a 2 de las empresas etiquetadas como <em>outliers</em>.</p>
 <p>Si se acepta esta opción, se podrá visualizar de nuevo el dendograma coloreando los grupos formados, con el código siguiente (debe modificarse el código para igualar el argumento <code>k =</code> al número de grupos seleccionado):</p>
-<div class="sourceCode" id="cb268"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb267"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ngrupos</span> <span class="op">=</span> <span class="fl">5</span>   <span class="co"># números de conglomerados decidido! #############################</span></span>
 <span><span class="va">d2</span><span class="op">&lt;-</span><span class="fu"><a href="https://rpkgs.datanovia.com/factoextra/reference/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">cluster_j</span>,</span>
 <span>          cex <span class="op">=</span> <span class="fl">0.6</span>,</span>
@@ -1086,7 +1084,7 @@ s_i = \frac{b_i - a_i}{\max(a_i, b_i)}
 <p>A continuación vamos a <strong>identificar con mayor detalle los casos</strong> que integran cada uno de los grupos, así como a <strong>caracterizar tales grupos</strong> en función de los valores medios de las variables originales. Para ello, crearemos el vector de valores enteros que indica el grupo al que pertenece cada caso (empresa). A este vector se le llamará, por ejemplo, “whatcluster_j”, y se construirá mediante la función <code><span>cutree()</span></code>, donde el primer argumento es el nombre del objeto que guarda la solución del análisis clúster (“cluster_j”), y el segundo argumento es el número de grupos que hemos decidido crear (k = 5).</p>
 <p>Lamentablemente, el “número de grupo” que <code><span>cutree()</span></code> asigna a cada caso no tiene por qué coincidir con el orden de grupos del dendograma (es decir, el segundo grupo del dendograma puede ser denominado por <code><span>cutree()</span></code>, por ejemplo, grupo “4”). Para que los grupos se llamen según el orden en que se disponen en el dendograma, hay que hacer varios ajustes adicionales, como se muestra en el código. La idea general es re-etiquetar los grupos de cutree() para que sus ids (1, 2, …, k) sigan el orden visual de izquierda→derecha del dendrograma (el que se ve con fviz_dend). cutree() no garantiza ese orden: puede llamar “1” a un grupo que está en el centro o a la derecha. Este código crea un mapa de ids que arregla eso.</p>
 <p>Además, conviene convertir esta variable “whatcluster_j” en un factor con la función <code><span>as.factor()</span></code>, para que deje de ser variable métrica, a efectos de incorporar una leyenda en gráficos posteriores, . Finalmente, ese factor se incorporará al <em>data frame</em> “seleccion” (importante: <strong>no a ”zseleccion”</strong>; sino al <em>data frame</em> que contiene a las variables no tipificadas):</p>
-<div class="sourceCode" id="cb269"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb268"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## CARACTERIZACIÓN Y COMPOSICIÓN DE GRUPOS.</span></span>
 <span></span>
 <span><span class="co"># cortando árbol en grupos</span></span>
@@ -1113,7 +1111,7 @@ s_i = \frac{b_i - a_i}{\max(a_i, b_i)}
 <span class="header-section-number">7.3.4</span> <img src="figuras/pie-chart.svg"> Caracterización de los grupos o conglomerados.<a class="anchor" aria-label="anchor" href="#c07-caracterizacion-de-los-grupos-o-conglomerados"><i class="fas fa-link"></i></a>
 </h3>
 <p>Una vez incorporado el grupo de pertenencia de cada empresa al <em>data frame</em> “seleccion”, se podrán calcular y almacenar las medias de cada grupo de las distintas variables originales, usando las funciones <code>by_group()</code> y <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>. Toda la información se asigna al <em>data frame</em> “tablamedias” para poder representarla en una tabla mediante <code><span>kable_rstars()</span></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a> presentado en el capítulo 5:</p>
-<div class="sourceCode" id="cb270"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb269"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Tabla con centroides de grupos.</span></span>
 <span><span class="va">tablamedias</span> <span class="op">&lt;-</span> <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>               <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">whatcluster_j</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -1240,7 +1238,7 @@ I. Digitalizac.
 <p><strong>Tabla 7.4.</strong> Método de Ward. 5 grupos. Medias de variables</p>
 </div>
 <p>Obviamente, también se podrían comparar las medias de los grupos, para cada variable, con un simple gráfico de barras. A fin de crear un método que valga para cualquier número de variables, realizaremos la tarea con un bucle. El código es el siguiente:</p>
-<div class="sourceCode" id="cb271"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb270"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Gráficos de centroides</span></span>
 <span></span>
 <span>  <span class="co"># Vector de nombre de variables excluyendo la variable no deseada</span></span>
@@ -1253,21 +1251,21 @@ I. Digitalizac.
 <span>    <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><span>seq_along</span></span><span class="op">(</span><span class="va">variables</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">var1</span> <span class="op">&lt;-</span> <span class="va">variables</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span></span>
 <span>    <span class="va">grafico</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span> <span class="va">tablamedias</span>,</span>
-<span>                      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_.html">aes_string</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">var1</span>, x <span class="op">=</span> <span class="st">"whatcluster_j"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">.data</span><span class="op">[[</span><span class="va">var1</span><span class="op">]</span><span class="op">]</span>, x <span class="op">=</span> <span class="va">whatcluster_j</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span>,</span>
 <span>                        colour <span class="op">=</span> <span class="st">"red"</span>,</span>
 <span>                        fill <span class="op">=</span> <span class="st">"orange"</span>,</span>
 <span>                        alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
 <span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="fu"><span>paste0</span></span><span class="op">(</span><span class="va">var1</span>, <span class="st">". Media por grupos."</span><span class="op">)</span>,</span>
-<span>                       subtitle <span class="op">=</span> <span class="st">"Empresas TMI"</span><span class="op">)</span><span class="op">+</span></span>
+<span>                       subtitle <span class="op">=</span> <span class="st">"Empresas TMI."</span><span class="op">)</span><span class="op">+</span></span>
 <span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span> <span class="op">(</span><span class="st">"Grupo"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="va">var1</span><span class="op">)</span></span>
 <span>    <span class="va">graficos.centroides</span><span class="op">[[</span><span class="fu"><span>paste0</span></span><span class="op">(</span><span class="st">"grafico_"</span>, <span class="va">var1</span><span class="op">)</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">grafico</span></span>
 <span><span class="op">}</span>  </span></code></pre></div>
-<p>En el código anterior, <code><a href="https://generics.r-lib.org/reference/setops.html">setdiff()</a></code> crea un vector “variables” que contiene todos los nombres de las columnas del <em>data frame</em> “tablamedias”, excepto <code>whatcluster_j</code> y <code>obs</code>, que no son las variables originales. Luego se crea una lista vacía “graficos.centroides” para almacenar los gráficos generados. Con <code>for (i in seq_along(variables))</code> comienza el bucle, que recorre cada elemento del vector “variables”. En el código de gráfico, “var1” toma el nombre, en cada iteración, de la variable a representar. En el “mapeo”, es importante utilizar <code><a href="https://ggplot2.tidyverse.org/reference/aes_.html">aes_string()</a></code>, que requiere que los nombres de las variables se pasen como cadenas de texto (entre comillas), lo que es útil cuando los nombres de las variables se generan dinámicamente o se pasan como argumentos de función, y cuando se necesitan construir <em>mapeos estéticos</em> de manera programática. Finalmente, con <code>graficos.centroides[[paste0("grafico_", var1)]] &lt;- grafico</code> se guarda el gráfico en la lista “graficos.centroides” con un nombre basado en “var1”.</p>
+<p>En el código anterior, <code><a href="https://generics.r-lib.org/reference/setops.html">setdiff()</a></code> crea un vector “variables” que contiene todos los nombres de las columnas del <em>data frame</em> “tablamedias”, excepto <code>whatcluster_j</code> y <code>obs</code>, que no son las variables originales. Luego se crea una lista vacía “graficos.centroides” para almacenar los gráficos generados. Con <code>for (i in seq_along(variables))</code> comienza el bucle, que recorre cada elemento del vector “variables”. En el código de gráfico, “var1” toma el nombre, en cada iteración, de la variable a representar. En el “mapeo” aparece una construcción que conviene conocer: <code>.data[[var1]]</code>. Cuando el nombre de la variable que queremos representar no se conoce al escribir el código, sino que viaja dentro de un objeto —aquí “var1”, que cambia en cada vuelta del bucle—, no podemos escribirlo tal cual dentro de <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>. El <strong>pronombre</strong> <code>.data</code> resuelve justamente eso: <code>.data[[var1]]</code> significa “la columna del <em>data frame</em> cuyo nombre está guardado en var1”, y es la forma recomendada de construir <em>mapeos estéticos</em> de manera programática. La función <code><a href="https://ggplot2.tidyverse.org/reference/aes_.html">aes_string()</a></code>, que cumplía este papel en versiones antiguas de [ggplot2], está <strong>obsoleta</strong> desde la versión 3.0 del paquete y emite un aviso al utilizarse. Finalmente, con <code>graficos.centroides[[paste0("grafico_", var1)]] &lt;- grafico</code> se guarda el gráfico en la lista “graficos.centroides” con un nombre basado en “var1”.</p>
 <p>Los gráficos guardados en la lista “gráficos.centroides” se pueden agrupar en composiciones, por ejemplo de 2x2 gráficos, utilizando el paquete <a href="https://patchwork.data-imaginist.com">patchwork</a>. Para automatizar el proceso emplearemos la función <code><span>create_patchwork()</span></code>, incluida en el paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a> que hemos cargado al inicio del <em>script</em>. Esta función recibe una <strong>lista de gráficos</strong> generados con <a href="https://ggplot2.tidyverse.org">ggplot2</a> y devuelve una <strong>lista de composiciones</strong> en las que los gráficos se disponen en retículas de 2 filas por 2 columnas (cuatro gráficos por composición); si el número total de gráficos no es múltiplo de cuatro, la última composición se completa con paneles vacíos para que la retícula quede uniforme. En el <strong>Apéndice: Funciones auxiliares del paquete <code>MATrstars</code></strong> puede consultarse su descripción detallada y el enlace al código fuente.</p>
 <p>Con esta función, crearemos la lista de composiciones de gráficos denominada, por ejemplo, “grupos.graficos.centroides”:</p>
-<div class="sourceCode" id="cb272"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb271"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Aplicar función de composiciones a gráficos de centroides.</span></span>
 <span>  <span class="va">grupos.graficos.centroides</span> <span class="op">&lt;-</span> <span class="fu"><span>create_patchwork</span></span><span class="op">(</span><span class="va">graficos.centroides</span><span class="op">)</span></span>
 <span>  </span>
@@ -1282,7 +1280,7 @@ I. Digitalizac.
 <p>Como solo hay 3 variables originales en el análisis; “grupos.graficos.centroides” solo cuenta con un elemento o composición, que contiene tres gráficos (valores medios de IDIVERSE, IFIDE e IDIG, por conglomerado).</p>
 <p>Hablando siempre en términos de la media (centroides), puede comprobarse cómo el grupo 4 (compañía <em>Chakotay Cargo Systems</em>) destaca por su alto valor en el índice de diversificación y en el Fidelización, quedando en segunda posición en el índice de digitalización. El otro grupo de una única compañía, el grupo 5, que contiene a la empresa <em>Home One Cargo</em>, destaca por poseer el mayor índice de digitalización. En adición, ocupa la segunda posición en el índice de fidelización. Por último, en cuanto al índice de diversificación, ocupa una posición media. En cuanto al grupo 3, en promedio es un conglomerado formado por empresas con índices de fidelización y digitalización medios, mientras que en cuando a la diversificación ocupa una destacada segunda posición, solo por detrás del grupo 4. Por su parte, las empresas del grupo 2, en promedio, presentan un índice de fidelización medio, mientras que los índices de diversificación y digitalización son más bien bajos. Por último, el grupo 1, compuesto por las compañías <em>Hyperion Star Haulage</em> y <em>Event Horizon Haulage</em>, se caracteriza por mostrar los menores valores medios en los tres indicadores.</p>
 <p>Por otro lado, se pueden presentar en diferentes <strong>tablas</strong> las informaciones de <strong>cada grupo</strong>. Vamos a automatizar de nuevo el proceso de generación de las tablas mediante el empleo de un <em>bucle.</em> Las diferentes tablas se irán guardando en una lista de nombre, por ejemplo, “tablascompo”:</p>
-<div class="sourceCode" id="cb273"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb272"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Tablas con composiciones de grupos</span></span>
 <span></span>
 <span>  <span class="co"># Número de tablas y lista para guardarlas</span></span>
@@ -1300,7 +1298,7 @@ I. Digitalizac.
 <span>                   col.names <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="st">"I. Diversificación"</span>,</span>
 <span>                                 <span class="st">"I. Fidelización"</span>,</span>
 <span>                                 <span class="st">"I. Digitalización"</span><span class="op">)</span>,</span>
-<span>                   digits    <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span>                   digits    <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span>      <span class="va">tablascompo</span><span class="op">[[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">tabla</span></span>
 <span>  <span class="op">}</span></span>
 <span></span>
@@ -1329,7 +1327,7 @@ I. Digitalización
 hyperion star haulage
 </td>
 <td style="text-align:right;text-align: center;">
-12
+11.715
 </td>
 <td style="text-align:right;text-align: center;">
 26.444
@@ -1343,7 +1341,7 @@ hyperion star haulage
 event horizon haulage
 </td>
 <td style="text-align:right;text-align: center;">
-10
+10.039
 </td>
 <td style="text-align:right;text-align: center;">
 29.634
@@ -1377,7 +1375,7 @@ I. Digitalización
 assimilator haulage
 </td>
 <td style="text-align:right;text-align: center;">
-24
+23.746
 </td>
 <td style="text-align:right;text-align: center;">
 44.533
@@ -1391,7 +1389,7 @@ assimilator haulage
 harkonnen heavy haul
 </td>
 <td style="text-align:right;text-align: center;">
-15
+15.384
 </td>
 <td style="text-align:right;text-align: center;">
 37.327
@@ -1405,7 +1403,7 @@ harkonnen heavy haul
 raddus logistics
 </td>
 <td style="text-align:right;text-align: center;">
-9
+8.859
 </td>
 <td style="text-align:right;text-align: center;">
 41.290
@@ -1419,7 +1417,7 @@ raddus logistics
 bib fortuna haulage
 </td>
 <td style="text-align:right;text-align: center;">
-12
+11.699
 </td>
 <td style="text-align:right;text-align: center;">
 41.293
@@ -1433,7 +1431,7 @@ bib fortuna haulage
 kashyyyk freight lines
 </td>
 <td style="text-align:right;text-align: center;">
-20
+20.016
 </td>
 <td style="text-align:right;text-align: center;">
 37.426
@@ -1447,7 +1445,7 @@ kashyyyk freight lines
 solar flare logistics
 </td>
 <td style="text-align:right;text-align: center;">
-15
+14.649
 </td>
 <td style="text-align:right;text-align: center;">
 39.952
@@ -1461,7 +1459,7 @@ solar flare logistics
 dagobah deliveries
 </td>
 <td style="text-align:right;text-align: center;">
-29
+28.546
 </td>
 <td style="text-align:right;text-align: center;">
 39.594
@@ -1475,7 +1473,7 @@ dagobah deliveries
 tatooine movers
 </td>
 <td style="text-align:right;text-align: center;">
-26
+26.202
 </td>
 <td style="text-align:right;text-align: center;">
 38.074
@@ -1489,7 +1487,7 @@ tatooine movers
 orion intergalactic freight
 </td>
 <td style="text-align:right;text-align: center;">
-16
+15.535
 </td>
 <td style="text-align:right;text-align: center;">
 38.370
@@ -1503,7 +1501,7 @@ orion intergalactic freight
 andor cargo lines
 </td>
 <td style="text-align:right;text-align: center;">
-12
+12.282
 </td>
 <td style="text-align:right;text-align: center;">
 36.643
@@ -1517,7 +1515,7 @@ andor cargo lines
 sy snootles haulage
 </td>
 <td style="text-align:right;text-align: center;">
-22
+22.086
 </td>
 <td style="text-align:right;text-align: center;">
 38.396
@@ -1531,7 +1529,7 @@ sy snootles haulage
 sdf-1 freightworks
 </td>
 <td style="text-align:right;text-align: center;">
-29
+29.387
 </td>
 <td style="text-align:right;text-align: center;">
 39.361
@@ -1545,7 +1543,7 @@ sdf-1 freightworks
 borg freight lines
 </td>
 <td style="text-align:right;text-align: center;">
-10
+9.758
 </td>
 <td style="text-align:right;text-align: center;">
 40.071
@@ -1559,7 +1557,7 @@ borg freight lines
 razor star freight
 </td>
 <td style="text-align:right;text-align: center;">
-13
+13.079
 </td>
 <td style="text-align:right;text-align: center;">
 37.215
@@ -1593,7 +1591,7 @@ I. Digitalización
 io star transport
 </td>
 <td style="text-align:right;text-align: center;">
-38
+38.021
 </td>
 <td style="text-align:right;text-align: center;">
 33.829
@@ -1607,7 +1605,7 @@ io star transport
 icarus star transport
 </td>
 <td style="text-align:right;text-align: center;">
-35
+35.055
 </td>
 <td style="text-align:right;text-align: center;">
 41.709
@@ -1621,7 +1619,7 @@ icarus star transport
 rebel alliance transport
 </td>
 <td style="text-align:right;text-align: center;">
-35
+35.200
 </td>
 <td style="text-align:right;text-align: center;">
 39.025
@@ -1635,7 +1633,7 @@ rebel alliance transport
 adama transport
 </td>
 <td style="text-align:right;text-align: center;">
-43
+42.547
 </td>
 <td style="text-align:right;text-align: center;">
 40.666
@@ -1649,7 +1647,7 @@ adama transport
 tannhäuser freight
 </td>
 <td style="text-align:right;text-align: center;">
-48
+47.888
 </td>
 <td style="text-align:right;text-align: center;">
 42.641
@@ -1663,7 +1661,7 @@ tannhäuser freight
 betazoid transport
 </td>
 <td style="text-align:right;text-align: center;">
-37
+36.825
 </td>
 <td style="text-align:right;text-align: center;">
 40.267
@@ -1677,7 +1675,7 @@ betazoid transport
 skywalker freight co.
 </td>
 <td style="text-align:right;text-align: center;">
-36
+35.983
 </td>
 <td style="text-align:right;text-align: center;">
 39.847
@@ -1710,7 +1708,7 @@ I. Digitalización
 chakotay cargo systems
 </td>
 <td style="text-align:right;text-align: center;">
-54
+54.368
 </td>
 <td style="text-align:right;text-align: center;">
 64.26
@@ -1742,7 +1740,7 @@ I. Digitalización
 home one cargo
 </td>
 <td style="text-align:right;text-align: center;">
-22
+22.176
 </td>
 <td style="text-align:right;text-align: center;">
 46.776
@@ -1757,7 +1755,7 @@ home one cargo
 </div>
 <p>Para representar los grupos gráficamente, tenemos la dificultad de contar con más de dos variables clasificadoras. Una idea es <strong>generar todas las combinaciones de variables posibles</strong> y los correspondientes gráficos de dispersión con los casos coloreados de modo diferente según el grupo de pertenencia. Finalmente, esos gráficos se presentan de modo compacto utilizando de nuevo la función <code><span>create_patchwork()</span></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a>, ya empleada antes, para hacer mediante <a href="https://patchwork.data-imaginist.com">patchwork</a> composiciones de 2x2 gráficos.</p>
 <p>Vamos a realizar la tarea de generar todos los gráficos de modo automatizado. Primero generaremos un vector con el nombre de todas las variables (excluyendo al <em>factor</em> whatcluster_j) mediante la función <code><a href="https://generics.r-lib.org/reference/setops.html">setdiff()</a></code>. Luego, crearemos una lista para ir almacenando los gráficos (lista “graficos”). Por último, calcularemos todas las combinaciones de nombres de variables posibles, con la función <code><span>combn()</span></code>, y las almacenaremos en la lista “combinaciones”. En esta función, el argumento <strong><code>simplify = FALSE</code></strong> le dice a la función que no vuelque el resultado a una matriz. En su lugar, devuelve una lista donde cada elemento de la misma es una combinación de los elementos del vector original.</p>
-<div class="sourceCode" id="cb274"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb273"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Gráficos Variable vs Variable</span></span>
 <span></span>
 <span>  <span class="co"># Lista de variables excluyendo la variable no deseada</span></span>
@@ -1769,15 +1767,15 @@ home one cargo
 <span>  <span class="co"># Generar todas las combinaciones posibles de pares de variables</span></span>
 <span>    <span class="va">combinaciones</span> <span class="op">&lt;-</span> <span class="fu"><span>combn</span></span><span class="op">(</span><span class="va">variables</span>, <span class="fl">2</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>El siguiente paso consiste en utilizar un bucle para generar los gráficos de dispersión de acuerdo a las combinaciones de variables obtenidas y guardarlos en la lista “graficos”. El bucle itera tantas veces como elementos guarda la lista “combinaciones” (argumento/función <code><span>seq_along()</span></code>):</p>
-<div class="sourceCode" id="cb275"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb274"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Bucle para crear y almacenar los gráficos</span></span>
 <span>    <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><span>seq_along</span></span><span class="op">(</span><span class="va">combinaciones</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">var1</span> <span class="op">&lt;-</span> <span class="va">combinaciones</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span>      <span class="va">var2</span> <span class="op">&lt;-</span> <span class="va">combinaciones</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
 <span>      <span class="va">grafico</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">seleccion</span>,</span>
-<span>                        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_.html">aes_string</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">var1</span>,</span>
-<span>                                         y <span class="op">=</span> <span class="va">var2</span>,</span>
-<span>                                         color <span class="op">=</span> <span class="st">"whatcluster_j"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">.data</span><span class="op">[[</span><span class="va">var1</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                            y <span class="op">=</span> <span class="va">.data</span><span class="op">[[</span><span class="va">var2</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                            color <span class="op">=</span> <span class="va">whatcluster_j</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>                 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>                 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="fu"><span>paste</span></span><span class="op">(</span><span class="st">"GRÁFICO"</span>, <span class="va">var1</span>, <span class="st">"-"</span>, <span class="va">var2</span><span class="op">)</span>,</span>
 <span>                      subtitle <span class="op">=</span> <span class="st">"Empresas TMI"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1786,8 +1784,8 @@ home one cargo
 <span>                 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> </span>
 <span>      <span class="va">graficos</span><span class="op">[[</span><span class="fu"><span>paste0</span></span><span class="op">(</span><span class="st">"grafico_"</span>, <span class="va">var1</span>, <span class="st">"_"</span>, <span class="va">var2</span><span class="op">)</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">grafico</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>Una vez generados los gráficos de todas las combinaciones de variables (6 gráficos en el ejemplo), y almacenados en la lista “graficos”, se podrán reagrupar y presentar en composiciones de 2x2 mediante el empleo de la función <code><span>create_patchwork()</span></code>:</p>
-<div class="sourceCode" id="cb276"><pre class="downlit sourceCode r">
+<p>Una vez generados los gráficos de todas las combinaciones de variables (3 gráficos en el ejemplo, puesto que con tres variables solo hay tres pares posibles), y almacenados en la lista “graficos”, se podrán reagrupar y presentar en una composición de 2x2 mediante el empleo de la función <code><span>create_patchwork()</span></code>:</p>
+<div class="sourceCode" id="cb275"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Hacer agrupaciones con la función de patchworks creada anteriormente</span></span>
 <span>    <span class="va">gruposgraficos</span> <span class="op">&lt;-</span> <span class="fu"><span>create_patchwork</span></span><span class="op">(</span><span class="va">graficos</span><span class="op">)</span></span>
 <span></span>
@@ -1841,7 +1839,7 @@ home one cargo
 <li>Los <em>outliers</em>, en esta ocasión, sí son eliminados, con lo que se trabajará con un <em>data frame</em> sin casos atípicos, denominado “seleccion_so”.</li>
 </ul>
 <p>Dicho esto, pasamos a transcribir el código correspondiente a la limpieza del <em>Global Environment</em>, carga de paquetes (incluido el paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a>, que contiene la función auxiliar <code><span>create_patchwork()</span></code> que ya utilizamos en el ejemplo anterior) e importación de datos:</p>
-<div class="sourceCode" id="cb277"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb276"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### CLUSTER de k-medias empresas TMI. ###</span></span>
 <span></span>
 <span><span class="co"># Limpiando el Global Environment</span></span>
@@ -1855,8 +1853,6 @@ home one cargo
 <span><span class="kw"><span>library</span></span><span class="op">(</span><span class="va"><span>visdat</span></span><span class="op">)</span></span>
 <span><span class="kw"><span>library</span></span> <span class="op">(</span><span class="va"><a href="https://svn.r-project.org/R-packages/trunk/cluster/">cluster</a></span><span class="op">)</span></span>
 <span><span class="kw"><span>library</span></span> <span class="op">(</span><span class="va"><a href="https://github.com/mlampros/ClusterR">ClusterR</a></span><span class="op">)</span></span>
-<span><span class="kw"><span>library</span></span> <span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span></span>
-<span><span class="kw"><span>library</span></span> <span class="op">(</span><span class="va"><a href="https://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span></span>
 <span><span class="kw"><span>library</span></span> <span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Paquete MATrstars: funciones auxiliares del libro R-Stars.</span></span>
@@ -1880,24 +1876,24 @@ home one cargo
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">IDIVERSE</span>, <span class="va">IFIDE</span>, <span class="va">IDIG</span><span class="op">)</span></span>
 <span><span class="va">seleccion_df_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_summary.html">gt_plt_summary</a></span><span class="op">(</span><span class="va">seleccion</span><span class="op">)</span></span>
 <span><span class="va">seleccion_df_graph</span></span></code></pre></div>
-<div id="rcnsltbifg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="nasjhwjfgl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#rcnsltbifg table {
+#nasjhwjfgl table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#rcnsltbifg thead, #rcnsltbifg tbody, #rcnsltbifg tfoot, #rcnsltbifg tr, #rcnsltbifg td, #rcnsltbifg th {
+#nasjhwjfgl thead, #nasjhwjfgl tbody, #nasjhwjfgl tfoot, #nasjhwjfgl tr, #nasjhwjfgl td, #nasjhwjfgl th {
   border-style: none;
 }
 
-#rcnsltbifg p {
+#nasjhwjfgl p {
   margin: 0;
   padding: 0;
 }
 
-#rcnsltbifg .gt_table {
+#nasjhwjfgl .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1923,12 +1919,12 @@ home one cargo
   border-left-color: #D3D3D3;
 }
 
-#rcnsltbifg .gt_caption {
+#nasjhwjfgl .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#rcnsltbifg .gt_title {
+#nasjhwjfgl .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -1940,7 +1936,7 @@ home one cargo
   border-bottom-width: 0;
 }
 
-#rcnsltbifg .gt_subtitle {
+#nasjhwjfgl .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1952,7 +1948,7 @@ home one cargo
   border-top-width: 0;
 }
 
-#rcnsltbifg .gt_heading {
+#nasjhwjfgl .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -1964,13 +1960,13 @@ home one cargo
   border-right-color: #D3D3D3;
 }
 
-#rcnsltbifg .gt_bottom_border {
+#nasjhwjfgl .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 0px;
   border-bottom-color: #D3D3D3;
 }
 
-#rcnsltbifg .gt_col_headings {
+#nasjhwjfgl .gt_col_headings {
   border-top-style: solid;
   border-top-width: 0px;
   border-top-color: #D3D3D3;
@@ -1985,7 +1981,7 @@ home one cargo
   border-right-color: #D3D3D3;
 }
 
-#rcnsltbifg .gt_col_heading {
+#nasjhwjfgl .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -2005,7 +2001,7 @@ home one cargo
   overflow-x: hidden;
 }
 
-#rcnsltbifg .gt_column_spanner_outer {
+#nasjhwjfgl .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -2017,15 +2013,15 @@ home one cargo
   padding-right: 4px;
 }
 
-#rcnsltbifg .gt_column_spanner_outer:first-child {
+#nasjhwjfgl .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#rcnsltbifg .gt_column_spanner_outer:last-child {
+#nasjhwjfgl .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#rcnsltbifg .gt_column_spanner {
+#nasjhwjfgl .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2037,11 +2033,11 @@ home one cargo
   width: 100%;
 }
 
-#rcnsltbifg .gt_spanner_row {
+#nasjhwjfgl .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#rcnsltbifg .gt_group_heading {
+#nasjhwjfgl .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2067,7 +2063,7 @@ home one cargo
   text-align: left;
 }
 
-#rcnsltbifg .gt_empty_group_heading {
+#nasjhwjfgl .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2082,15 +2078,15 @@ home one cargo
   vertical-align: middle;
 }
 
-#rcnsltbifg .gt_from_md > :first-child {
+#nasjhwjfgl .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#rcnsltbifg .gt_from_md > :last-child {
+#nasjhwjfgl .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#rcnsltbifg .gt_row {
+#nasjhwjfgl .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -2109,7 +2105,7 @@ home one cargo
   overflow-x: hidden;
 }
 
-#rcnsltbifg .gt_stub {
+#nasjhwjfgl .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -2122,7 +2118,7 @@ home one cargo
   padding-right: 5px;
 }
 
-#rcnsltbifg .gt_stub_row_group {
+#nasjhwjfgl .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2136,15 +2132,15 @@ home one cargo
   vertical-align: top;
 }
 
-#rcnsltbifg .gt_row_group_first td {
+#nasjhwjfgl .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#rcnsltbifg .gt_row_group_first th {
+#nasjhwjfgl .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#rcnsltbifg .gt_summary_row {
+#nasjhwjfgl .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2154,16 +2150,16 @@ home one cargo
   padding-right: 5px;
 }
 
-#rcnsltbifg .gt_first_summary_row {
+#nasjhwjfgl .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#rcnsltbifg .gt_first_summary_row.thick {
+#nasjhwjfgl .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#rcnsltbifg .gt_last_summary_row {
+#nasjhwjfgl .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2173,7 +2169,7 @@ home one cargo
   border-bottom-color: #D3D3D3;
 }
 
-#rcnsltbifg .gt_grand_summary_row {
+#nasjhwjfgl .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2183,7 +2179,7 @@ home one cargo
   padding-right: 5px;
 }
 
-#rcnsltbifg .gt_first_grand_summary_row {
+#nasjhwjfgl .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2193,7 +2189,7 @@ home one cargo
   border-top-color: #D3D3D3;
 }
 
-#rcnsltbifg .gt_last_grand_summary_row_top {
+#nasjhwjfgl .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2203,11 +2199,11 @@ home one cargo
   border-bottom-color: #D3D3D3;
 }
 
-#rcnsltbifg .gt_striped {
+#nasjhwjfgl .gt_striped {
   background-color: #FAFAFA;
 }
 
-#rcnsltbifg .gt_table_body {
+#nasjhwjfgl .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2216,7 +2212,7 @@ home one cargo
   border-bottom-color: #D3D3D3;
 }
 
-#rcnsltbifg .gt_footnotes {
+#nasjhwjfgl .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2230,7 +2226,7 @@ home one cargo
   border-right-color: #D3D3D3;
 }
 
-#rcnsltbifg .gt_footnote {
+#nasjhwjfgl .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2239,7 +2235,7 @@ home one cargo
   padding-right: 5px;
 }
 
-#rcnsltbifg .gt_sourcenotes {
+#nasjhwjfgl .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2253,7 +2249,7 @@ home one cargo
   border-right-color: #D3D3D3;
 }
 
-#rcnsltbifg .gt_sourcenote {
+#nasjhwjfgl .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2261,72 +2257,72 @@ home one cargo
   padding-right: 5px;
 }
 
-#rcnsltbifg .gt_left {
+#nasjhwjfgl .gt_left {
   text-align: left;
 }
 
-#rcnsltbifg .gt_center {
+#nasjhwjfgl .gt_center {
   text-align: center;
 }
 
-#rcnsltbifg .gt_right {
+#nasjhwjfgl .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#rcnsltbifg .gt_font_normal {
+#nasjhwjfgl .gt_font_normal {
   font-weight: normal;
 }
 
-#rcnsltbifg .gt_font_bold {
+#nasjhwjfgl .gt_font_bold {
   font-weight: bold;
 }
 
-#rcnsltbifg .gt_font_italic {
+#nasjhwjfgl .gt_font_italic {
   font-style: italic;
 }
 
-#rcnsltbifg .gt_super {
+#nasjhwjfgl .gt_super {
   font-size: 65%;
 }
 
-#rcnsltbifg .gt_footnote_marks {
+#nasjhwjfgl .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#rcnsltbifg .gt_asterisk {
+#nasjhwjfgl .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#rcnsltbifg .gt_indent_1 {
+#nasjhwjfgl .gt_indent_1 {
   text-indent: 5px;
 }
 
-#rcnsltbifg .gt_indent_2 {
+#nasjhwjfgl .gt_indent_2 {
   text-indent: 10px;
 }
 
-#rcnsltbifg .gt_indent_3 {
+#nasjhwjfgl .gt_indent_3 {
   text-indent: 15px;
 }
 
-#rcnsltbifg .gt_indent_4 {
+#nasjhwjfgl .gt_indent_4 {
   text-indent: 20px;
 }
 
-#rcnsltbifg .gt_indent_5 {
+#nasjhwjfgl .gt_indent_5 {
   text-indent: 25px;
 }
 
-#rcnsltbifg .katex-display {
+#nasjhwjfgl .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#rcnsltbifg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#nasjhwjfgl div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2389,7 +2385,7 @@ home one cargo
 <p><strong>Tabla 7.10</strong></p>
 </div>
 <p>Para el diagnóstico y, en su caso, filtrado de los <em>missing values</em>, aplicamos de nuevo la función auxiliar <code><span>explora_na()</span></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a>:</p>
-<div class="sourceCode" id="cb278"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb277"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Diagnóstico y filtrado de missing values.</span></span>
 <span><span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="fu"><span>explora_na</span></span><span class="op">(</span></span>
 <span>  <span class="va">seleccion</span>,</span>
@@ -2399,7 +2395,7 @@ home one cargo
 <span><span class="op">)</span></span></code></pre></div>
 <p>Aunque se ha incluido el código para identificar y eliminar los casos con <strong><em>missing values</em></strong>, en las 300 empresas no hay ningún dato ausente en las tres variables de interés, almacenadas en el <em>data frame</em> “seleccion”, luego se siguen manteniendo los 300 casos.</p>
 <p>Para la detección de <strong><em>outliers</em></strong>, se aplica también la función auxiliar <code><span>explora_outliers()</span></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a>, análoga a la usada en el análisis clúster jerárquico. Con <code>accion = "eliminar"</code> la función devuelve un nuevo <em>data frame</em> sin los casos identificados, que en el resto del análisis será el que utilicemos:</p>
-<div class="sourceCode" id="cb279"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb278"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Diagnóstico y filtrado de outliers.</span></span>
 <span><span class="va">seleccion_so</span> <span class="op">&lt;-</span> <span class="fu"><span>explora_outliers</span></span><span class="op">(</span></span>
 <span>  <span class="va">seleccion</span>,</span>
@@ -2883,7 +2879,7 @@ bb-8 haulage
 <span class="header-section-number">7.4.2</span> <img src="figuras/pie-chart.svg"> Determinación del número de grupos o clústeres a formar.<a class="anchor" aria-label="anchor" href="#c07-determinacion-del-numero-de-grupos-o"><i class="fas fa-link"></i></a>
 </h3>
 <p>Una vez preparados los datos, vamos a proceder a aplicar la técnica de formación de conglomerados no-jerárquica de <strong>k-medias</strong>. Primero, y puesto que se basa en el cálculo de las distancias euclídeas entre casos, procederemos a tipificar los valores de las variables, utilizando la función <code><span>scale()</span></code>, y creando el data frame “zseleccion_so”. Después, calcularemos la matriz de distancias <strong>d</strong>:</p>
-<div class="sourceCode" id="cb280"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb279"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## CLUSTER K-MEDIAS CON VARIABLES ORIGINALES</span></span>
 <span></span>
 <span><span class="co"># Tipificando variables</span></span>
@@ -2896,11 +2892,11 @@ bb-8 haulage
 ##  Mean   : 0.0000   Mean   : 0.0000   Mean   : 0.0000  
 ##  3rd Qu.: 0.8489   3rd Qu.: 0.4783   3rd Qu.: 0.7754  
 ##  Max.   : 2.2253   Max.   : 3.5385   Max.   : 2.7621</code></pre>
-<div class="sourceCode" id="cb282"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb281"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><span>dist</span></span><span class="op">(</span><span class="va">zseleccion_so</span><span class="op">)</span></span></code></pre></div>
 <p>Una cuestión clave es la determinación previa del número de grupos a formar. Si no se tiene decidido un número de conglomerados <em>a priori</em> como consecuencia del interés o de los objetivos de la propia investigación, se puede recurrir como orientación a algún método o algoritmo “objetivo”. De nuevo, puede recurrirse al **método de la *anchura media de silueta**, proponiendo diferentes números de grupos (parámetro <em>k</em>).</p>
 <p>La función <code><a href="https://mlampros.github.io/ClusterR/reference/KMeans_rcpp.html">KMeans_rcpp()</a></code> del paquete <a href="https://github.com/mlampros/ClusterR">ClusterR</a> permite calcular la <em>anchura media de Silueta</em> para cada número de grupos propuesto, estimando los grupos mediante el método de <strong>k-medias++</strong>. Aplicaremos el método para cada número de grupos <em>k</em> propuesto, mediante una función que guarda el ancho medio de silueta en un vector:</p>
-<div class="sourceCode" id="cb283"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb282"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># --- Calcular el ancho medio de silueta para distintos k ---</span></span>
 <span><span class="fu"><span>set.seed</span></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">res_sil</span> <span class="op">&lt;-</span> <span class="fu"><span>sapply</span></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">10</span>, </span>
@@ -2944,7 +2940,7 @@ bb-8 haulage
 <li><p><code>mean(...)</code> hace la media: se obtiene el ancho medio de la silueta para ese k.</p></li>
 </ul>
 <p>El resultado final es el vector “res_sil”, con 9 valores (para k = 2, 3, …, 10). Cada valor es el ancho medio de silueta correspondiente. Servirá para crear, junto a cada valor de “k”, un pequeño <em>data frame</em> de nombre “df_sil” que será la base, a su vez, para representar los <em>anchos de silueta</em> gráficamente con <a href="https://ggplot2.tidyverse.org">ggplot2</a>:</p>
-<div class="sourceCode" id="cb284"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb283"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># --- Crear data frame para graficar ---</span></span>
 <span><span class="va">df_sil</span> <span class="op">&lt;-</span> <span class="fu"><span>data.frame</span></span><span class="op">(</span></span>
 <span>  k <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">10</span>,</span>
@@ -2970,7 +2966,7 @@ bb-8 haulage
 <span class="header-section-number">7.4.3</span> <img src="figuras/pie-chart.svg"> Aplicación del método de k-medias con determinación de semillas <em>kmeans++</em>.<a class="anchor" aria-label="anchor" href="#c07-aplicacion-del-metodo-de-k-medias-con"><i class="fas fa-link"></i></a>
 </h3>
 <p>Una vez decidido el número de grupos (en el ejemplo, 7), se aplica (de nuevo) el método de <strong><em>k-medias</em></strong>, en la versión de la función <code><a href="https://mlampros.github.io/ClusterR/reference/KMeans_rcpp.html">KMeans_rcpp()</a></code> del paquete <a href="https://github.com/mlampros/ClusterR">ClusterR</a>, que permite obtener las “semillas” (centroides iniciales) mediante el algoritmo <em>kmeans++</em>, que ofrece buenos resultados frente a otras posibilidades de obtención de “semillas”, como la generación puramente aleatoria. La solución final se guarda en el objeto “cluster_k”:</p>
-<div class="sourceCode" id="cb285"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb284"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Aplicación definitiva de k-medias.</span></span>
 <span>  <span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">7</span>  <span class="co"># poner aquí número de grupos decidido!!!!</span></span>
 <span></span>
@@ -2983,7 +2979,7 @@ bb-8 haulage
 <span>                           initializer <span class="op">=</span> <span class="st">"kmeans++"</span><span class="op">)</span></span></code></pre></div>
 <p>Como se acaba de explicar, en la función <code><a href="https://mlampros.github.io/ClusterR/reference/KMeans_rcpp.html">KMeans_rcpp()</a></code>, el primer argumento es el <em>data frame</em> con las variables clasificadoras (en sus versiones tipificadas). El segundo es el número de clústeres o grupos a obtener (que lo hemos asignado anteriormente al parámetro “<strong>k</strong>”). El tercero, <code>num_init =</code>, es el número de veces que se repite el procedimiento a fin de retener la mejor solución. <code>Max_iters =</code> fija el máximo de iteraciones del procedimiento de <em>k-medias</em> hasta obtener una solución estable. <code>Initializer =</code> define el método de obtención de las semillas (en nuestro caso, <em>k-means++</em>). La solución final se guarda en el objeto “cluster_k”, como se puede apreciar en el <em>Global Environment</em>.</p>
 <p>Dentro de la solución, el vector con el grupo de pertenencia de cada empresa se obtiene con el elemento “$clusters”. Conviene guardar ese vector como factor. En concreto, se ha añadido como el factor <strong><code>whatcluster_k</code></strong>, integrado dentro del <em>data frame</em> “seleccion_so”.</p>
-<div class="sourceCode" id="cb286"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb285"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">seleccion_so</span><span class="op">$</span><span class="va">whatcluster_k</span> <span class="op">&lt;-</span> <span class="fu"><span>as.factor</span></span><span class="op">(</span><span class="va">cluster_k</span><span class="op">$</span><span class="va">clusters</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="c07-caracterizacion-de-los-grupos-o-conglomerados-2" class="section level3" number="7.4.4">
@@ -2991,7 +2987,7 @@ bb-8 haulage
 <span class="header-section-number">7.4.4</span> <img src="figuras/pie-chart.svg"> Caracterización de los grupos o conglomerados.<a class="anchor" aria-label="anchor" href="#c07-caracterizacion-de-los-grupos-o-conglomerados-2"><i class="fas fa-link"></i></a>
 </h3>
 <p>A continuación vamos a <strong>caracterizar los grupos</strong> formados en función de las medias de las variables originales (coordenadas de los <em>centroides</em>). Así, se podrán mostrar en pantalla las medias de cada grupo de las distintas variables originales, usando las funciones <code>by_group()</code> y <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code> de <a href="https://dplyr.tidyverse.org">dplyr</a>. Toda la información se asigna al <em>data frame</em> “tablamedias”; para poder, posteriormente, representarla en una tabla mediante las facilidades que ofrecen los paquetes <a href="https://yihui.org/knitr/">knitr</a> y <a href="https://haozhu233.github.io/kableExtra/">kableExtra</a>:</p>
-<div class="sourceCode" id="cb287"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb286"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># CARACTERIZANDO GRUPOS FORMADOS</span></span>
 <span>  </span>
 <span>  <span class="co"># Tabla con centroides de grupos.</span></span>
@@ -3154,7 +3150,7 @@ I. Digitalizac.
 <p><strong>Tabla 7.12.</strong> Método de k-medias. 7 grupos. Medias de variables</p>
 </div>
 <p>Obviamente, también se podrían comparar las medias de los grupos, para cada variable, con un gráfico de barras. El código es el siguiente:</p>
-<div class="sourceCode" id="cb288"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb287"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Gráficos de centroides</span></span>
 <span>  </span>
 <span>  <span class="co"># Vector de nombre de variables excluyendo la variable no deseada</span></span>
@@ -3167,7 +3163,7 @@ I. Digitalizac.
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><span>seq_along</span></span><span class="op">(</span><span class="va">variables</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">var1</span> <span class="op">&lt;-</span> <span class="va">variables</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span></span>
 <span>    <span class="va">grafico</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span> <span class="va">tablamedias</span>,</span>
-<span>                      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_.html">aes_string</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">var1</span>, x <span class="op">=</span> <span class="st">"whatcluster_k"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">.data</span><span class="op">[[</span><span class="va">var1</span><span class="op">]</span><span class="op">]</span>, x <span class="op">=</span> <span class="va">whatcluster_k</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span>,</span>
 <span>               colour <span class="op">=</span> <span class="st">"red"</span>,</span>
 <span>               fill <span class="op">=</span> <span class="st">"orange"</span>,</span>
@@ -3179,7 +3175,7 @@ I. Digitalizac.
 <span>    <span class="va">graficos.centroides</span><span class="op">[[</span><span class="fu"><span>paste0</span></span><span class="op">(</span><span class="st">"grafico_"</span>, <span class="va">var1</span><span class="op">)</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">grafico</span></span>
 <span>  <span class="op">}</span>          </span></code></pre></div>
 <p>Para hacer composiciones de 4 gráficos (que en este caso será solo una, dado que hemos almacenado en la lista “graficos.centroides” 4 elementos correspondientes a las 4 variables clasificadoras), volveremos a utilizar la función <code><span>create_patchwork()</span></code> del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a>, ya empleada en el ejemplo de clúster jerárquico. La función se aplica directamente a la lista de gráficos “graficos.centroides”:</p>
-<div class="sourceCode" id="cb289"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb288"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Aplicar función de composiciones a gráficos de centroides.</span></span>
 <span>  <span class="va">grupos.graficos.centroides</span> <span class="op">&lt;-</span> <span class="fu"><span>create_patchwork</span></span><span class="op">(</span><span class="va">graficos.centroides</span><span class="op">)</span></span>
 <span>  </span>
@@ -3201,7 +3197,7 @@ I. Digitalizac.
 <p><strong>Conclusión general.</strong> El grupo 6 marca el estándar competitivo del sector. El grupo 4 y buena parte del grupo 5 concentran los mayores desafíos estructurales. Los grupos 1 y 7 tienen potencial de convertirse en líderes si aceleran su digitalización. En conjunto, <strong>la digitalización aparece como el factor diferenciador clave</strong> para el crecimiento y la supervivencia en el sector, actuando como catalizador tanto de la fidelidad como de la diversificación.</p>
 <p><strong>Nota estadística.</strong> La caracterización realizada es puramente descriptiva. Para verificar formalmente si las diferencias observadas entre las medias de los grupos son estadísticamente significativas, se pueden aplicar pruebas de <strong>comparaciones múltiples</strong>, como el test de <em>Tukey</em> (basado en el ANOVA) o el test no paramétrico de <em>Kruskal-Wallis</em> con comparaciones a posteriori. Ambos enfoques se estudiarán en detalle en el capítulo siguiente, dedicado al Análisis de la Varianza.</p>
 <p>Finalmente, es interesante mostrar cómo los elementos de cada grupo se disponen en los diagramas de dispersión producto de cruzar las variables clasificadoras entre sí. Para generar estos gráficos de un modo automatizado, primero generaremos un vector con el nombre de todas las variables (excluyendo al <em>factor</em> whatcluster_k mediante la función <code><a href="https://generics.r-lib.org/reference/setops.html">setdiff()</a></code>. Luego, crearemos una lista para ir almacenando los gráficos (lista “graficos”).a continuación, calcularemos todas las combinaciones de nombres de variables posibles, con la función <code><span>combn()</span></code>, y las almacenaremos en la lista “combinaciones”. En esta función, el argumento <strong><code>simplify = FALSE</code></strong> le dice a la función que no vuelque el resultado a una matriz:</p>
-<div class="sourceCode" id="cb290"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb289"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># GRÁFICOS Variable vs Variable</span></span>
 <span></span>
 <span>  <span class="co"># Lista de variables excluyendo la variable no deseada</span></span>
@@ -3213,15 +3209,15 @@ I. Digitalizac.
 <span>  <span class="co"># Generar todas las combinaciones posibles de pares de variables</span></span>
 <span>    <span class="va">combinaciones</span> <span class="op">&lt;-</span> <span class="fu"><span>combn</span></span><span class="op">(</span><span class="va">variables</span>, <span class="fl">2</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>Una vez almacenados los elementos anteriores, procederemos a crear los gráficos de dispersión mediante un bucle. Estos gráficos se guardarán en la lista “graficos”, que se pasará por la función <code><span>create_patchwork()</span></code> para que se sinteticen en composiciones de 4 (o menos) gráficos. Estas composiciones se almacenan en la lista “gruposgraficos”, y se presentan mediante un nuevo bucle:</p>
-<div class="sourceCode" id="cb291"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb290"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Bucle para crear y almacenar los gráficos</span></span>
 <span>    <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><span>seq_along</span></span><span class="op">(</span><span class="va">combinaciones</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>         <span class="va">var1</span> <span class="op">&lt;-</span> <span class="va">combinaciones</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span>         <span class="va">var2</span> <span class="op">&lt;-</span> <span class="va">combinaciones</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
 <span>         <span class="va">grafico</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">seleccion_so</span>,</span>
-<span>                           <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_.html">aes_string</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">var1</span>,</span>
-<span>                                            y <span class="op">=</span> <span class="va">var2</span>,</span>
-<span>                                            color <span class="op">=</span> <span class="st">"whatcluster_k"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                           <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">.data</span><span class="op">[[</span><span class="va">var1</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                               y <span class="op">=</span> <span class="va">.data</span><span class="op">[[</span><span class="va">var2</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                               color <span class="op">=</span> <span class="va">whatcluster_k</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="fu"><span>paste</span></span><span class="op">(</span><span class="st">"GRÁFICO"</span>, <span class="va">var1</span>, <span class="st">"-"</span>, <span class="va">var2</span><span class="op">)</span>,</span>
 <span>              subtitle <span class="op">=</span> <span class="st">"Empresas TMI"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -3328,7 +3324,7 @@ I. Digitalizac.
 <span class="header-section-number">7.5.1</span> <img src="figuras/pie-chart.svg"> Preparación de los datos.<a class="anchor" aria-label="anchor" href="#c07-preparacion-de-los-datos-3"><i class="fas fa-link"></i></a>
 </h3>
 <p>La primera parte del script reproduce esencialmente el mismo esquema que en el ejemplo de <em>k-medias</em>: limpieza del <em>Global Environment</em>, activación de paquetes (con carga del paquete <a href="https://github.com/teckel71/MATrstars">MATrstars</a> para disponer de la función <code><span>create_patchwork()</span></code>), importación de los datos, selección y presentación de las variables del análisis, tratamiento de <em>missing values</em> e identificación de <em>outliers</em>:</p>
-<div class="sourceCode" id="cb292"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb291"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### CLUSTER por algoritmo DBScan empresas TMI. ###</span></span>
 <span></span>
 <span><span class="co"># Limpiando el Global Environment</span></span>
@@ -3341,8 +3337,6 @@ I. Digitalizac.
 <span><span class="kw"><span>library</span></span><span class="op">(</span><span class="va"><a href="https://github.com/jthomasmock/gtExtras">gtExtras</a></span><span class="op">)</span></span>
 <span><span class="kw"><span>library</span></span><span class="op">(</span><span class="va"><span>visdat</span></span><span class="op">)</span></span>
 <span><span class="kw"><span>library</span></span><span class="op">(</span><span class="va"><a href="https://github.com/mhahsler/dbscan">dbscan</a></span><span class="op">)</span></span>
-<span><span class="kw"><span>library</span></span> <span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span></span>
-<span><span class="kw"><span>library</span></span> <span class="op">(</span><span class="va"><a href="https://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span></span>
 <span><span class="kw"><span>library</span></span> <span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Paquete MATrstars: funciones auxiliares del libro R-Stars.</span></span>
@@ -3864,7 +3858,7 @@ bb-8 haulage
 <span class="header-section-number">7.5.2</span> <img src="figuras/pie-chart.svg"> Aplicación de la técnica.<a class="anchor" aria-label="anchor" href="#c07-aplicacion-de-la-tecnica"><i class="fas fa-link"></i></a>
 </h3>
 <p>Antes de calcular distancias, es imprescindible que todas las variables estén en la <strong>misma escala</strong>. Si no lo hacemos, aquellas con un rango numérico más amplio dominarán el cálculo de distancias y distorsionarán la formación de los grupos. Para evitarlo, aplicamos una <strong>tipificación estándar (z-score)</strong> a cada variable: restamos su media y dividimos entre su desviación típica.</p>
-<div class="sourceCode" id="cb293"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb292"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## APLICACION DE DBSCAN</span></span>
 <span></span>
 <span><span class="co"># 1) Tipificación (z-scores)</span></span>
@@ -3883,7 +3877,7 @@ bb-8 haulage
 <li>Identificar el <strong>codo</strong> de la curva: el punto donde la pendiente cambia bruscamente, marcando la frontera entre las zonas densas (puntos con vecinos cercanos, curva plana) y las zonas dispersas (puntos aislados, curva ascendente pronunciada).</li>
 <li>Tomar como <em>eps</em> el valor de la distancia en ese codo.</li>
 </ol>
-<div class="sourceCode" id="cb294"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb293"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## APLICACION DE DBSCAN</span></span>
 <span></span>
 <span><span class="co"># 1) Parámetro minPts (regla empírica: 2·p)</span></span>
@@ -3899,7 +3893,7 @@ bb-8 haulage
 <span>  distancia <span class="op">=</span> <span class="va">d_sorted</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Con estos datos, representamos gráficamente la curva kNN. El “codo” es la zona donde la curva se dispara verticalmente:</p>
-<div class="sourceCode" id="cb295"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb294"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">df_knn</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">punto</span>, y <span class="op">=</span> <span class="va">distancia</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"steelblue"</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Curva kNN para determinación de eps"</span>,</span>
@@ -3912,11 +3906,11 @@ bb-8 haulage
 <p><strong>Figura 7.22</strong></p>
 </div>
 <p>Observando el gráfico, el codo se sitúa aproximadamente en torno al valor <strong>eps ≈ 0,55</strong> (donde la curva deja de ser prácticamente plana y comienza a crecer con fuerza). Este valor será el que utilizaremos para el ajuste final de DBSCAN:</p>
-<div class="sourceCode" id="cb296"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb295"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 3) Valor de eps elegido en el codo de la curva kNN</span></span>
 <span><span class="va">eps_final</span> <span class="op">&lt;-</span> <span class="fl">0.55</span></span></code></pre></div>
 <p>Con los dos parámetros ya determinados (<code>minPts = 6</code>, <code>eps = 0.55</code>), aplicamos el algoritmo DBSCAN:</p>
-<div class="sourceCode" id="cb297"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb296"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 4) Modelo DBSCAN definitivo</span></span>
 <span><span class="va">modelo_db</span> <span class="op">&lt;-</span> <span class="fu">dbscan</span><span class="fu">::</span><span class="fu"><a href="http://michael.hahsler.net/dbscan/reference/dbscan.html">dbscan</a></span><span class="op">(</span><span class="va">zseleccion</span>, eps <span class="op">=</span> <span class="va">eps_final</span>, minPts <span class="op">=</span> <span class="va">minPts0</span><span class="op">)</span></span>
 <span><span class="va">modelo_db</span></span></code></pre></div>
@@ -3929,12 +3923,12 @@ bb-8 haulage
 ##  30  11  13 246 
 ## 
 ## Available fields: cluster, eps, minPts, metric, borderPoints</code></pre>
-<div class="sourceCode" id="cb299"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb298"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><span>table</span></span><span class="op">(</span>Cluster <span class="op">=</span> <span class="va">modelo_db</span><span class="op">$</span><span class="va">cluster</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Cluster
 ##   0   1   2   3 
 ##  30  11  13 246</code></pre>
-<div class="sourceCode" id="cb301"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb300"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seleccion</span><span class="op">$</span><span class="va">whatcluster_dbs</span> <span class="op">&lt;-</span> <span class="fu"><span>as.factor</span></span><span class="op">(</span><span class="va">modelo_db</span><span class="op">$</span><span class="va">cluster</span><span class="op">)</span></span></code></pre></div>
 <p>El resultado muestra el número de clústeres detectados y la cantidad de casos por clúster. El <strong>clúster 0</strong> contiene los puntos clasificados como <em>ruido</em> (no pertenecen a ninguna región densa). La instrucción final añade una columna <code>whatcluster_dbs</code> al <em>data frame</em> <code>seleccion</code> con la etiqueta de clúster asignada a cada empresa, para poder caracterizar los grupos a continuación.</p>
 </div>
@@ -3943,7 +3937,7 @@ bb-8 haulage
 <span class="header-section-number">7.5.3</span> <img src="figuras/pie-chart.svg"> Caracterización de los clústeres o grupos formados.<a class="anchor" aria-label="anchor" href="#c07-caracterizacion-de-los-clusteres-o-grupos"><i class="fas fa-link"></i></a>
 </h3>
 <p>Una vez obtenidos los clústeres, y asignados los elementos (teniendo en cuenta que el <em>grupo 0</em> no es realmente un clúster; sino que reúne a los casos considerados atípicos, <em>ouliers</em> o <em>ruido</em>), puede aplicarse el mismo código que se empleó en el caso de <em>k-medias</em> a la hora de caracterizar tales grupos (omitimos por no extender el código la prueba de comparaciones múltiples de <em>Kruskal-Wallis</em>):</p>
-<div class="sourceCode" id="cb302"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb301"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># CARACTERIZANDO GRUPOS FORMADOS</span></span>
 <span></span>
 <span><span class="co"># Tabla con centroides de grupos.</span></span>
@@ -3975,7 +3969,7 @@ bb-8 haulage
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><span>seq_along</span></span><span class="op">(</span><span class="va">variables</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">var1</span> <span class="op">&lt;-</span> <span class="va">variables</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span></span>
 <span>  <span class="va">grafico</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span> <span class="va">tablamedias</span>,</span>
-<span>                    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_.html">aes_string</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">var1</span>, x <span class="op">=</span> <span class="st">"whatcluster_dbs"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">.data</span><span class="op">[[</span><span class="va">var1</span><span class="op">]</span><span class="op">]</span>, x <span class="op">=</span> <span class="va">whatcluster_dbs</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span>,</span>
 <span>             colour <span class="op">=</span> <span class="st">"red"</span>,</span>
 <span>             fill <span class="op">=</span> <span class="st">"orange"</span>,</span>
@@ -4011,9 +4005,9 @@ bb-8 haulage
 <span>  <span class="va">var1</span> <span class="op">&lt;-</span> <span class="va">combinaciones</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span>  <span class="va">var2</span> <span class="op">&lt;-</span> <span class="va">combinaciones</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
 <span>  <span class="va">grafico</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">seleccion</span>,</span>
-<span>                    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_.html">aes_string</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">var1</span>,</span>
-<span>                                     y <span class="op">=</span> <span class="va">var2</span>,</span>
-<span>                                     color <span class="op">=</span> <span class="st">"whatcluster_dbs"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">.data</span><span class="op">[[</span><span class="va">var1</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                        y <span class="op">=</span> <span class="va">.data</span><span class="op">[[</span><span class="va">var2</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                        color <span class="op">=</span> <span class="va">whatcluster_dbs</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="fu"><span>paste</span></span><span class="op">(</span><span class="st">"GRÁFICO"</span>, <span class="va">var1</span>, <span class="st">"-"</span>, <span class="va">var2</span><span class="op">)</span>,</span>
 <span>         subtitle <span class="op">=</span> <span class="st">"Empresas TMI."</span><span class="op">)</span> <span class="op">+</span></span>
@@ -4136,7 +4130,7 @@ I. Digitalizac.
 <p>Se deja al lector, como ejercicio práctico, la interpretación de estos gráficos a fin de caracterizar los clústeres identificados (ha de tenerse en cuenta que el grupo 0 no es un clúster, sino que recoge los elementos <em>ruido</em>, y por tanto, su interpretación carece de sentido, al menos en términos de valores medios de las variables).</p>
 <p>Para concluir, conviene hacerse una pregunta relevante: <strong>¿Cómo ha clasificado <em>DBSCAN</em> a los casos 26 que fueron identificados como <em>outliers</em>?</strong> ¿Los ha etiquetado como “ruido”, como sería lo coherente?</p>
 <p>La siguiente tabla nos muestra la respuesta:</p>
-<div class="sourceCode" id="cb303"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb302"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ¿Los outliers son ruido?</span></span>
 <span></span>
 <span><span class="va">seleccion</span> <span class="op">&lt;-</span> <span class="va">seleccion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -4154,7 +4148,6 @@ I. Digitalizac.
 <span><span class="va">seleccion_out</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><span>kable_rstars</span></span><span class="op">(</span>caption   <span class="op">=</span> <span class="st">"¿Outliers son ruido? (Grupo 0 = Ruido)"</span>,</span>
 <span>               col.names <span class="op">=</span> <span class="fu"><span>c</span></span><span class="op">(</span><span class="st">"Caso"</span>,</span>
-<span>                             <span class="st">"Observaciones"</span>,</span>
 <span>                             <span class="st">"Grupo (0=ruido)"</span>,</span>
 <span>                             <span class="st">"D. Mahalanobis"</span>,</span>
 <span>                             <span class="st">"I. Diversificación"</span>,</span>
@@ -4164,7 +4157,7 @@ I. Digitalizac.
 <div class="inline-table"><table class="table table-striped table-bordered table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;font-weight: bold;text-align: center;">
-Observaciones
+Caso
 </th>
 <th style="text-align:left;font-weight: bold;text-align: center;">
 Grupo (0=ruido)
@@ -4191,7 +4184,7 @@ arrakis freight
 0
 </td>
 <td style="text-align:right;text-align: center;">
-35
+34.784
 </td>
 <td style="text-align:right;text-align: center;">
 38.881
@@ -4211,7 +4204,7 @@ vader and company
 0
 </td>
 <td style="text-align:right;text-align: center;">
-24
+23.777
 </td>
 <td style="text-align:right;text-align: center;">
 34.387
@@ -4231,7 +4224,7 @@ excalibur freight systems
 0
 </td>
 <td style="text-align:right;text-align: center;">
-44
+43.615
 </td>
 <td style="text-align:right;text-align: center;">
 36.183
@@ -4251,7 +4244,7 @@ hyperdrive express
 0
 </td>
 <td style="text-align:right;text-align: center;">
-22
+22.160
 </td>
 <td style="text-align:right;text-align: center;">
 35.790
@@ -4271,7 +4264,7 @@ kaiju haulage co.
 0
 </td>
 <td style="text-align:right;text-align: center;">
-26
+25.591
 </td>
 <td style="text-align:right;text-align: center;">
 49.848
@@ -4291,7 +4284,7 @@ starship express
 0
 </td>
 <td style="text-align:right;text-align: center;">
-14
+14.235
 </td>
 <td style="text-align:right;text-align: center;">
 33.533
@@ -4311,7 +4304,7 @@ chakotay cargo systems
 0
 </td>
 <td style="text-align:right;text-align: center;">
-15
+15.212
 </td>
 <td style="text-align:right;text-align: center;">
 54.368
@@ -4331,7 +4324,7 @@ home one cargo
 0
 </td>
 <td style="text-align:right;text-align: center;">
-27
+26.706
 </td>
 <td style="text-align:right;text-align: center;">
 22.176
@@ -4351,7 +4344,7 @@ ezra bridger haulage
 2
 </td>
 <td style="text-align:right;text-align: center;">
-6
+5.949
 </td>
 <td style="text-align:right;text-align: center;">
 12.492
@@ -4371,7 +4364,7 @@ peacekeeper freightlines
 2
 </td>
 <td style="text-align:right;text-align: center;">
-7
+6.588
 </td>
 <td style="text-align:right;text-align: center;">
 17.376
@@ -4391,7 +4384,7 @@ kyber crystal shipping
 0
 </td>
 <td style="text-align:right;text-align: center;">
-9
+8.893
 </td>
 <td style="text-align:right;text-align: center;">
 22.627
@@ -4411,7 +4404,7 @@ hal intergalactic freight
 2
 </td>
 <td style="text-align:right;text-align: center;">
-8
+8.338
 </td>
 <td style="text-align:right;text-align: center;">
 7.489
@@ -4431,7 +4424,7 @@ europa cargo systems
 0
 </td>
 <td style="text-align:right;text-align: center;">
-13
+13.192
 </td>
 <td style="text-align:right;text-align: center;">
 8.675
@@ -4451,7 +4444,7 @@ yavin cargo lines
 0
 </td>
 <td style="text-align:right;text-align: center;">
-6
+5.779
 </td>
 <td style="text-align:right;text-align: center;">
 47.624
@@ -4471,7 +4464,7 @@ io star transport
 0
 </td>
 <td style="text-align:right;text-align: center;">
-8
+7.573
 </td>
 <td style="text-align:right;text-align: center;">
 38.021
@@ -4491,7 +4484,7 @@ bb-8 haulage
 3
 </td>
 <td style="text-align:right;text-align: center;">
-6
+5.647
 </td>
 <td style="text-align:right;text-align: center;">
 43.169
@@ -4511,7 +4504,7 @@ andromeda cargo
 0
 </td>
 <td style="text-align:right;text-align: center;">
-7
+6.871
 </td>
 <td style="text-align:right;text-align: center;">
 46.054
@@ -4531,7 +4524,7 @@ rey skywalker logistics
 0
 </td>
 <td style="text-align:right;text-align: center;">
-17
+16.896
 </td>
 <td style="text-align:right;text-align: center;">
 5.413
@@ -4551,7 +4544,7 @@ togruta freight
 0
 </td>
 <td style="text-align:right;text-align: center;">
-6
+5.960
 </td>
 <td style="text-align:right;text-align: center;">
 45.828
@@ -4571,7 +4564,7 @@ martian dust cargo
 0
 </td>
 <td style="text-align:right;text-align: center;">
-16
+15.658
 </td>
 <td style="text-align:right;text-align: center;">
 32.676
@@ -4591,7 +4584,7 @@ jovian logistics
 0
 </td>
 <td style="text-align:right;text-align: center;">
-6
+6.230
 </td>
 <td style="text-align:right;text-align: center;">
 22.392
@@ -4611,7 +4604,7 @@ outer rim logistics
 0
 </td>
 <td style="text-align:right;text-align: center;">
-32
+31.998
 </td>
 <td style="text-align:right;text-align: center;">
 2.083
@@ -4631,7 +4624,7 @@ tannhäuser freight
 0
 </td>
 <td style="text-align:right;text-align: center;">
-11
+11.305
 </td>
 <td style="text-align:right;text-align: center;">
 47.888
@@ -4651,7 +4644,7 @@ pandora cargo
 0
 </td>
 <td style="text-align:right;text-align: center;">
-6
+6.014
 </td>
 <td style="text-align:right;text-align: center;">
 0.000
@@ -4671,7 +4664,7 @@ endor movers
 0
 </td>
 <td style="text-align:right;text-align: center;">
-43
+43.420
 </td>
 <td style="text-align:right;text-align: center;">
 78.298
@@ -4691,7 +4684,7 @@ ripley interstellar freight
 0
 </td>
 <td style="text-align:right;text-align: center;">
-36
+36.179
 </td>
 <td style="text-align:right;text-align: center;">
 71.351
