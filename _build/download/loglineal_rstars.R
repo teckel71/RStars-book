@@ -51,13 +51,15 @@ seleccion <- explora_na(
 )
 
 # Renombrando los niveles de GALAXIA (nombres originales muy extensos).
+# Se emplean las mismas etiquetas que en contingencia_rstars.R.
 seleccion <- seleccion %>%
-  mutate(GALAXIA = recode(GALAXIA,
-                          "Gran Nube de Magallanes" = "GN Mag.",
-                          "Pequeña Nube de Magallanes" = "PN Mag.",
-                          "Galaxia de Andrómeda" = "Andrómeda",
-                          "Galaxia del Triángulo" = "Triángulo",
-                          "Vía Láctea" = "V. Láctea"))
+  mutate(GALAXIA = case_match(GALAXIA,
+                              "Gran Nube de Magallanes"    ~ "GN Magallanes",
+                              "Pequeña Nube de Magallanes" ~ "PN Magallanes",
+                              "Galaxia de Andrómeda"       ~ "Andrómeda",
+                              "Galaxia del Triángulo"      ~ "Triángulo",
+                              "Vía Láctea"                 ~ "Vía Láctea",
+                              .default = GALAXIA))
 
 # Pasar variables categóricas a factores
 seleccion <- seleccion %>% mutate(across(everything(), as.factor))

@@ -94,13 +94,16 @@ rm(list = ls())
   library (ggplot2)
   library (gtExtras)
   library (visdat)
-  library (knitr)
   library (kableExtra)
   library (patchwork)
   library (vcd)
 ```
 
 ```{r include=FALSE}
+# Carga silenciosa de knitr (necesario para renderizar las tablas del
+# capitulo, pero no forma parte del script que ejecuta el lector).
+library(knitr)
+
 # Paquete MATrstars: funciones auxiliares del libro R-Stars.
 # Se carga aqui, al principio del capitulo, porque explora_na() se utiliza mas
 # abajo. En la compilacion del libro completo ya viene cargado del capitulo 5,
@@ -304,13 +307,14 @@ cantidades de columnas.
 La tabla de contingencia muestra cómo se distribuyen las formas
 jurídicas de las empresas (CG, SAG y SLG) en cada galaxia del estudio.
 Se observa que **Andrómeda** y **Vía Láctea** son las que concentran el
-mayor número de compañías (84 cada una), mientras que **PN Mag.** es la
-menos representada. En todas las galaxias, la forma jurídica **SLG**
-aparece como la más frecuente, aunque con intensidades diferentes:
-destaca especialmente en **PN Mag.**, donde representa dos tercios de
+mayor número de compañías (84 cada una), mientras que **PN Magallanes** es la
+menos representada. La forma jurídica **SLG** es la más
+frecuente en el conjunto del sector y también dentro de cada galaxia,
+con una excepción llamativa: en **GN Magallanes** la forma dominante es **CG**
+(23 empresas, frente a 17 SLG). El predominio de las SLG es, en cambio,
+especialmente acusado en **PN Magallanes**, donde representa dos tercios de
 las empresas. Por el contrario, las distribuciones de **CG** y **SAG**
-varían más según galaxia, con valores relativamente altos de CG en GN
-Mag. y de SAG en Andrómeda. En conjunto, la tabla sugiere posibles
+varían más según galaxia, con valores relativamente altos de CG en GN Magallanes y de SAG en Andrómeda. En conjunto, la tabla sugiere posibles
 diferencias estructurales entre galaxias, lo que motiva la necesidad de
 un análisis formal de asociación.
 
@@ -373,8 +377,8 @@ distribución conjunta de las empresas según galaxia y forma jurídica.
 Cada fila corresponde a una galaxia y su anchura refleja el número total
 de empresas que operan en ella; dentro de cada fila, las columnas
 representan las formas jurídicas (CG, SAG y SLG) en proporción a su
-frecuencia dentro de esa galaxia. Puede verse, por ejemplo, que la Vía
-Láctea y la Gran Nube de Magallanes albergan un mayor número total de
+frecuencia dentro de esa galaxia. Puede verse, por ejemplo, que Andrómeda
+y la Vía Láctea albergan un mayor número total de
 empresas, y que en la mayoría de galaxias predominan claramente las SLG,
 mientras que las CG y SAG ocupan menos espacio relativo. La disposición
 y tamaño de los rectángulos facilita comparar visualmente cómo varía la
@@ -905,7 +909,6 @@ library (dplyr)
 library (ggplot2)
 library (gtExtras)
 library (visdat)
-library (kableExtra)
 library (pander)     # Tablas multifactoriales compactas en Rmarkdown
 library (vcd)        # Visualización tablas de contingencia
 library (MASS)       # Estimación log-lineales
@@ -1127,7 +1130,7 @@ if (is.null(zeros_report)) {
 ```
 
 En nuestro caso, se detecta una única combinación con 0 observaciones:
-GALAXIA = "Pequeña Nube de Magallanes", FJUR = "CG" (cooperativa) y
+GALAXIA = "PN Magallanes", FJUR = "CG" (cooperativa) y
 EFLO = "RENOVADA". Se toma nota de esta particularidad y se continúa
 el análisis directamente sobre `tab0`.
 
@@ -1177,7 +1180,7 @@ mosaic(tab0,
 La tabla `tab0` muestra la distribución tridimensional original de las
 empresas según **galaxia**, **forma jurídica** y **antigüedad media de
 la flota**. En ella se aprecia que algunas combinaciones presentan
-frecuencias muy bajas, e incluso una con frecuencia cero (PN Mag. – CG
+frecuencias muy bajas, e incluso una con frecuencia cero (PN Magallanes – CG
 – Renovada). Como se ha comentado, se trabaja directamente sobre esta
 tabla, sin imputar valor alguno a la celda vacía.
 
@@ -1193,8 +1196,8 @@ destacables: las **SLG** tienden a concentrar más empresas en casi todas
 las galaxias, lo que se visualiza en rectángulos más anchos dentro de su
 columna. En conjunto, la tabla y el mosaico permiten ver que la
 distribución está lejos de ser uniforme, que existen dependencias
-estructurales entre los factores y que la tabla imputada respeta
-fielmente estos patrones, manteniendo la información necesaria para el
+estructurales entre los factores y que la tabla original conserva
+íntegramente la información necesaria para el
 análisis log-lineal posterior.
 
 Los modelos log-lineales se **estiman** con la función `loglm()` del
@@ -1400,20 +1403,20 @@ $$
 
 Los coeficientes relevantes son:
 
--   $(\lambda = 1.757)$
--   $(\lambda_{\text{Triángulo}}^{(\text{GALAXIA})} = -0.188)$
--   $(\lambda_{\text{SAG}}^{(\text{FJUR})} = -0.121)$
--   $(\lambda_{\text{MADURA}}^{(\text{EFLO})} = -0.047)$
+-   $(\lambda = 1.748)$
+-   $(\lambda_{\text{Triángulo}}^{(\text{GALAXIA})} = -0.182)$
+-   $(\lambda_{\text{SAG}}^{(\text{FJUR})} = -0.117)$
+-   $(\lambda_{\text{MADURA}}^{(\text{EFLO})} = -0.042)$
 
 Por tanto,
 
 $$
 \log(\hat{n})
-= 1.757 - 0.188 - 0.121 - 0.047
-= 1.401
+= 1.748 - 0.182 - 0.117 - 0.042
+= 1.408
 $$
 $$
-\hat{n} = \exp(1.401) = 4.06
+\hat{n} = \exp(1.408) = 4.09
 $$
 El residuo de desviancia del modelo es:
 
@@ -1424,8 +1427,8 @@ Sustituyendo valores:
 
 $$
 r^{(dev)} \approx
-\text{sign}(4 - 4.06)\sqrt{2\left[4\log\left(\frac{4}{4.06}\right)-(4-4.06)\right]}
-\approx -0.08
+\text{sign}(4 - 4.09)\sqrt{2\left[4\log\left(\frac{4}{4.09}\right)-(4-4.09)\right]}
+\approx -0.04
 $$
 Lo que confirma el buen ajuste en esta combinación.
 
@@ -1433,56 +1436,63 @@ Por otro lado, el residuo ajustado de Pearson se obtiene como:
 
 $$
 r^{(P)} = \frac{n - \hat{n}}{\sqrt{\hat{n}}}
-= \frac{4 - 4.06}{\sqrt{4.06}}
-= -0.03
+= \frac{4 - 4.09}{\sqrt{4.09}}
+= -0.04
 $$
 
-**2. Celda con residuo grande: (PN Mag., SLG, ANTIGUA):**
+**2. Celda con residuo grande: (GN Magallanes, CG, RENOVADA):**
 
-En la tabla `tab0` la frecuencia observada es:
+Se trata de la celda peor ajustada de toda la tabla. En `tab0` la
+frecuencia observada es:
 
 $$
-n_{ijk} = 11
+n_{ijk} = 9
 $$
 Los coeficientes correspondientes son:
 
--   $(\lambda = 1.757)$
--   $(\lambda_{\text{PN Mag.}}^{(\text{GALAXIA})} = -0.512)$
--   $(\lambda_{\text{SLG}}^{(\text{FJUR})} = 0.289)$
--   $(\lambda_{\text{ANTIGUA}}^{(\text{EFLO})} = 0.450)$
+-   $(\lambda = 1.748)$
+-   $(\lambda_{\text{GN Magallanes}}^{(\text{GALAXIA})} = -0.081)$
+-   $(\lambda_{\text{CG}}^{(\text{FJUR})} = -0.176)$
+-   $(\lambda_{\text{RENOVADA}}^{(\text{EFLO})} = -0.414)$
 
 Por tanto,
 
 $$
 \log(\hat{n})
-= 1.757 - 0.512 + 0.289 + 0.450
-= 1.984
+= 1.748 - 0.081 - 0.176 - 0.414
+= 1.077
 $$
 $$
-\hat{\mu} = \exp(1.984) = 7.28
+\hat{\mu} = \exp(1.077) = 2.94
 $$
 El residuo de desviancia es:
 
 $$
 r^{(dev)}
 \approx
-\text{sign}(11 - 7.28)
+\text{sign}(9 - 2.94)
 \sqrt{2\left[
-11\log\left(\frac{11}{7.28}\right) - (11 - 7.28)
+9\log\left(\frac{9}{2.94}\right) - (9 - 2.94)
 \right]}
-\approx 2.48
+\approx 2.83
 $$
-Lo anterior indica un **desajuste notable**, coherente con la intensidad
-del color en el mosaico.
+Lo anterior indica un **desajuste notable**: el modelo de independencia
+espera menos de tres cooperativas con flota renovada en la Gran Nube de
+Magallanes y se observan nueve. Es coherente con la intensidad del color
+de esa celda en el mosaico.
 
 Por su lado, el residuo de Pearson correspondiente es:
 
 $$
-r^{(P)} = \frac{11 - 7.28}{\sqrt{7.28}} = 1.38
+r^{(P)} = \frac{9 - 2.94}{\sqrt{2.94}} = 3.54
 $$
 
-Este residuo confirma la existencia de una discrepancia apreciable entre
+Este residuo confirma la existencia de una discrepancia importante entre
 el modelo de independencia y los datos en esta combinación de niveles.
+Nótese, además, que la combinación GN Magallanes–CG ya había aparecido
+como el residuo tipificado más alto del contraste bivariante de la
+*fase 1*: dos herramientas distintas señalando el mismo punto de la
+tabla.
 
 La **interpretación económica de los coeficientes** del modelo de
 independencia se basa en el hecho de que cada parámetro refleja la
@@ -1494,8 +1504,7 @@ que cabría esperar en promedio**, mientras que un coeficiente negativo
 indica el efecto contrario: menor presencia relativa. Por ejemplo, las
 galaxias *Andrómeda* y *Vía Láctea* presentan coeficientes positivos, lo
 que sugiere que, en términos agregados, concentran más empresas de lo
-que predeciría una distribución totalmente homogénea, mientras que *PN
-Mag.* presenta un coeficiente claramente negativo, coherente con su
+que predeciría una distribución totalmente homogénea, mientras que *PN Magallanes* presenta un coeficiente claramente negativo, coherente con su
 menor número de compañías en la muestra.
 
 Algo similar ocurre con las formas jurídicas. El coeficiente positivo de
@@ -1739,8 +1748,8 @@ En cuanto a la tabla de validación:
 
 Los resultados de la tabla de validación muestran que **ambas pruebas de
 ajuste global** —la razón de verosimilitud (*Likelihood Ratio*) y la
-prueba de *Pearson*— producen **p-valores muy elevados** (0.608 y
-0.596). Esto significa que, bajo la hipótesis nula de que el modelo
+prueba de *Pearson*— producen **p-valores muy elevados** (0.506 y
+0.503). Esto significa que, bajo la hipótesis nula de que el modelo
 especificado se ajusta correctamente a los datos, **no encontramos
 evidencia estadística para rechazarla**. En otras palabras, las
 discrepancias entre las frecuencias observadas y las estimadas por el
@@ -1761,7 +1770,7 @@ La tabla de coeficientes del modelo final refleja, en primer lugar, los
 **efectos directos** de cada factor. Entre las galaxias, *Andrómeda* y
 *Vía Láctea* presentan coeficientes claramente positivos, lo que indica
 que, en promedio, estas regiones concentran un número de empresas mayor
-del esperado bajo una distribución homogénea. En contraste, *PN Mag.*
+del esperado bajo una distribución homogénea. En contraste, *PN Magallanes*
 muestra un coeficiente muy negativo, coherente con su menor presencia en
 la muestra. En cuanto a la forma jurídica, las *SLG* tienen un
 coeficiente directo positivo, reflejando que este tipo societario
@@ -1773,23 +1782,22 @@ maduras o renovadas, un patrón que podría relacionarse con barreras
 tecnológicas o de inversión.
 
 Las **interacciones GALAXIA × FJUR** aportan una lectura más matizada y
-son la clave del modelo seleccionado. Por ejemplo, *GN Mag.* presenta
+son la clave del modelo seleccionado. Por ejemplo, *GN Magallanes* presenta
 una interacción muy positiva con *CG* (+0.566), lo que indica que —más
 allá de los efectos directos— en esta galaxia las empresas tipo *CG*
 aparecen con una frecuencia muy superior a la esperada. Del mismo modo,
-*PN Mag.* muestra una interacción muy positiva con *SLG* (+0.589),
+*PN Magallanes* muestra una interacción muy positiva con *SLG* (+0.589),
 sugiriendo que este tipo societario es especialmente dominante en esa
 región concreta. En cambio, varias combinaciones presentan coeficientes
-negativos, como *Andrómeda:SLG* (–0.112) o *GN Mag.:SLG* (–0.345), lo
+negativos, como *Andrómeda:SLG* (–0.112) o *GN Magallanes:SLG* (–0.345), lo
 que indica una menor afinidad entre esas formas jurídicas y dichos
 entornos galácticos.
 
 La combinación de efectos directos e interacciones permite entender
 mejor el comportamiento económico del sector. Por ejemplo, aunque las
 *SLG* son, en promedio, más frecuentes, su distribución no es homogénea:
-prosperan especialmente en *PN Mag.*, pero no tanto en *Andrómeda* o *GN
-Mag.*. Por el contrario, aunque *CG* tiene un efecto directo negativo
-(menos frecuencia global), sí aparece reforzada en *GN Mag.*, lo que
+prosperan especialmente en *PN Magallanes*, pero no tanto en *Andrómeda* o *GN Magallanes*. Por el contrario, aunque *CG* tiene un efecto directo negativo
+(menos frecuencia global), sí aparece reforzada en *GN Magallanes*, lo que
 podría deberse a condiciones normativas, institucionales o históricas
 particulares de esa galaxia.
 
@@ -1838,7 +1846,7 @@ determinadas regiones del universo económico analizado.
   .rdv2 <- sign(.obs2 - .est2) *
            sqrt(2 * (.obs2 * log(.obs2 / .est2) - (.obs2 - .est2)))
 
-  # Cociente de ventajas: CG frente a SLG, GN Mag. frente a PN Mag.
+  # Cociente de ventajas: CG frente a SLG, GN Magallanes frente a PN Magallanes
   .F   <- apply(fitted(modelo_def), c("GALAXIA", "FJUR"), sum)
   .v1  <- .F["GN Magallanes", "CG"] / .F["GN Magallanes", "SLG"]
   .v2  <- .F["PN Magallanes", "CG"] / .F["PN Magallanes", "SLG"]
@@ -1846,7 +1854,7 @@ determinadas regiones del universo económico analizado.
   .e1  <- exp(.gf["GN Magallanes", "CG"]) / exp(.gf["GN Magallanes", "SLG"])
   .e2  <- exp(.gf["PN Magallanes", "CG"]) / exp(.gf["PN Magallanes", "SLG"])
 
-  # Segundo ejemplo: SLG frente a CG, PN Mag. frente a V. Láctea.
+  # Segundo ejemplo: SLG frente a CG, PN Magallanes frente a Vía Láctea.
   .or2 <- (exp(.gf["PN Magallanes", "SLG"]) / exp(.gf["PN Magallanes", "CG"])) /
           (exp(.gf["Vía Láctea",    "SLG"]) / exp(.gf["Vía Láctea",    "CG"]))
 
@@ -1873,14 +1881,14 @@ $$
 \Big)
 $$
 
-Tomemos la celda **(GN Mag., CG, ANTIGUA)**, cuya frecuencia observada
+Tomemos la celda **(GN Magallanes, CG, ANTIGUA)**, cuya frecuencia observada
 es $n_{ijk} = `r .obs`$. Los coeficientes implicados son:
 
 - $\lambda = `r .f3(.ter[1])`$
-- $\lambda_{\text{GN Mag.}}^{(\text{GALAXIA})} = `r .f3(.ter[2])`$
+- $\lambda_{\text{GN Magallanes}}^{(\text{GALAXIA})} = `r .f3(.ter[2])`$
 - $\lambda_{\text{CG}}^{(\text{FJUR})} = `r .f3(.ter[3])`$
 - $\lambda_{\text{ANTIGUA}}^{(\text{EFLO})} = `r .f3(.ter[4])`$
-- $\lambda_{\text{GN Mag.,CG}}^{(\text{GALAXIA}\times\text{FJUR})} = `r .f3(.ter[5])`$
+- $\lambda_{\text{GN Magallanes,CG}}^{(\text{GALAXIA}\times\text{FJUR})} = `r .f3(.ter[5])`$
 
 Por tanto:
 
@@ -1926,10 +1934,10 @@ que predirían los efectos principales por separado:
 
 | Combinación | $\lambda$ | $e^{\lambda}$ | Desviación |
 |---|---|---|---|
-| GN Mag. × CG | $`r .f3(.gf['GN Magallanes','CG'])`$ | $`r .f3(exp(.gf['GN Magallanes','CG']))`$ | $`r .pc(.gf['GN Magallanes','CG'])`$ |
-| PN Mag. × SLG | $`r .f3(.gf['PN Magallanes','SLG'])`$ | $`r .f3(exp(.gf['PN Magallanes','SLG']))`$ | $`r .pc(.gf['PN Magallanes','SLG'])`$ |
-| PN Mag. × CG | $`r .f3(.gf['PN Magallanes','CG'])`$ | $`r .f3(exp(.gf['PN Magallanes','CG']))`$ | $`r .pc(.gf['PN Magallanes','CG'])`$ |
-| GN Mag. × SLG | $`r .f3(.gf['GN Magallanes','SLG'])`$ | $`r .f3(exp(.gf['GN Magallanes','SLG']))`$ | $`r .pc(.gf['GN Magallanes','SLG'])`$ |
+| GN Magallanes × CG | $`r .f3(.gf['GN Magallanes','CG'])`$ | $`r .f3(exp(.gf['GN Magallanes','CG']))`$ | $`r .pc(.gf['GN Magallanes','CG'])`$ |
+| PN Magallanes × SLG | $`r .f3(.gf['PN Magallanes','SLG'])`$ | $`r .f3(exp(.gf['PN Magallanes','SLG']))`$ | $`r .pc(.gf['PN Magallanes','SLG'])`$ |
+| PN Magallanes × CG | $`r .f3(.gf['PN Magallanes','CG'])`$ | $`r .f3(exp(.gf['PN Magallanes','CG']))`$ | $`r .pc(.gf['PN Magallanes','CG'])`$ |
+| GN Magallanes × SLG | $`r .f3(.gf['GN Magallanes','SLG'])`$ | $`r .f3(exp(.gf['GN Magallanes','SLG']))`$ | $`r .pc(.gf['GN Magallanes','SLG'])`$ |
 
 Ahora bien, estas cifras dependen de la **parametrización** empleada
 —aquí, la de suma cero— y por ello no siempre son fáciles de trasladar a
@@ -1939,14 +1947,14 @@ el **cociente de ventajas** (*odds ratio*).
 
 La idea es sencilla. Se eligen **dos galaxias y dos formas jurídicas**, y
 se compara la "ventaja" de una forma jurídica sobre la otra en cada una
-de las dos galaxias. Tomemos CG frente a SLG, en GN Mag. y en PN Mag.. Partiendo de las frecuencias que el modelo estima:
+de las dos galaxias. Tomemos CG frente a SLG, en GN Magallanes y en PN Magallanes. Partiendo de las frecuencias que el modelo estima:
 
-- Ventaja de CG sobre SLG **en GN Mag.**: $`r round(.F['GN Magallanes','CG'])` / `r round(.F['GN Magallanes','SLG'])` = `r .f2(.v1)`$
-- Ventaja de CG sobre SLG **en PN Mag.**: $`r round(.F['PN Magallanes','CG'])` / `r round(.F['PN Magallanes','SLG'])` = `r .f2(.v2)`$
+- Ventaja de CG sobre SLG **en GN Magallanes**: $`r round(.F['GN Magallanes','CG'])` / `r round(.F['GN Magallanes','SLG'])` = `r .f2(.v1)`$
+- Ventaja de CG sobre SLG **en PN Magallanes**: $`r round(.F['PN Magallanes','CG'])` / `r round(.F['PN Magallanes','SLG'])` = `r .f2(.v2)`$
 - Cociente entre ambas: $`r .f2(.v1)` / `r .f2(.v2)` = `r .f2(.or)`$
 
 Es decir: **la ventaja de constituirse como CG en lugar de como SLG es
-`r .f1(.or)` veces mayor en GN Mag. que en PN Mag.** Una frase que puede figurar tal cual en las conclusiones
+`r .f1(.or)` veces mayor en GN Magallanes que en PN Magallanes** Una frase que puede figurar tal cual en las conclusiones
 de un informe.
 
 Lo interesante es que **ese mismo número se obtiene directamente de los
@@ -1954,8 +1962,8 @@ coeficientes de la interacción**, sin necesidad de recurrir a las
 frecuencias ajustadas. Basta con exponenciar los cuatro coeficientes
 implicados y dividirlos del mismo modo:
 
-- En GN Mag.: $e^{`r .f3(.gf['GN Magallanes','CG'])`} / e^{`r .f3(.gf['GN Magallanes','SLG'])`} = `r .f3(exp(.gf['GN Magallanes','CG']))` / `r .f3(exp(.gf['GN Magallanes','SLG']))` = `r .f3(.e1)`$
-- En PN Mag.: $e^{`r .f3(.gf['PN Magallanes','CG'])`} / e^{`r .f3(.gf['PN Magallanes','SLG'])`} = `r .f3(exp(.gf['PN Magallanes','CG']))` / `r .f3(exp(.gf['PN Magallanes','SLG']))` = `r .f3(.e2)`$
+- En GN Magallanes: $e^{`r .f3(.gf['GN Magallanes','CG'])`} / e^{`r .f3(.gf['GN Magallanes','SLG'])`} = `r .f3(exp(.gf['GN Magallanes','CG']))` / `r .f3(exp(.gf['GN Magallanes','SLG']))` = `r .f3(.e1)`$
+- En PN Magallanes: $e^{`r .f3(.gf['PN Magallanes','CG'])`} / e^{`r .f3(.gf['PN Magallanes','SLG'])`} = `r .f3(exp(.gf['PN Magallanes','CG']))` / `r .f3(exp(.gf['PN Magallanes','SLG']))` = `r .f3(.e2)`$
 - Cociente: $`r .f3(.e1)` / `r .f3(.e2)` = `r .f2(.or)`$
 
 La coincidencia no es casual. Al dividir las ventajas de las dos
@@ -1965,12 +1973,12 @@ la división es, exclusivamente, la **asociación** entre ambos factores,
 limpia ya de las frecuencias globales de cada categoría. Por eso el
 cociente de ventajas es la medida de la magnitud **más defendible** en la
 redacción de conclusiones: no se ve afectada por el hecho de que
-*Andrómeda* tenga muchas empresas y *PN Mag.* pocas, ni por el
+*Andrómeda* tenga muchas empresas y *PN Magallanes* pocas, ni por el
 hecho de que las *SLG* sean la forma jurídica más abundante del sector.
 
 Repitiendo el cálculo para otros pares de categorías se obtiene el mapa
 completo de la asociación. Por ejemplo, la ventaja de ser SLG en lugar
-de CG es **`r .f1(.or2)` veces mayor** en PN Mag. que en V. Láctea, lo
+de CG es **`r .f1(.or2)` veces mayor** en PN Magallanes que en Vía Láctea, lo
 que cuantifica la afinidad entre esa galaxia y esa forma societaria que
 los coeficientes ya sugerían cualitativamente.
 
@@ -2603,13 +2611,13 @@ categorías de los factores.
 
 El informe solicitado por la *Agencia Interplanetaria de Transporte de Mercancías* queda completado con tres niveles de profundidad creciente:
 
-1.  **Tablas de contingencia y asociación (Fase 1 y 2).** El análisis bivariante ha revelado que la galaxia donde opera la sede de una empresa **sí está asociada** con su forma jurídica: determinadas galaxias favorecen ciertos marcos legales (sociedades cooperativas en Andrómeda, sociedades anónimas en la Vía Láctea…). En cambio, la relación entre forma jurídica y estado de la flota, aunque sugerente, no alcanza significación estadística con los datos disponibles.
+1.  **Tablas de contingencia y asociación (Fase 1 y 2).** El análisis bivariante ha revelado que la galaxia donde opera la sede de una empresa **sí está asociada** con su forma jurídica: determinadas galaxias favorecen ciertos marcos legales. Toda la asociación se concentra, de hecho, en las dos Nubes de Magallanes: la Gran Nube presenta un exceso significativo de sociedades cooperativas, y la Pequeña, un exceso de sociedades limitadas a costa de las cooperativas. En cambio, la relación entre forma jurídica y estado de la flota no alcanza significación estadística con los datos disponibles.
 
-2.  **Modelo log-lineal (Fase 3).** Al considerar simultáneamente las tres dimensiones —galaxia, forma jurídica y estado de la flota—, el modelo log-lineal ha identificado una estructura de asociaciones que el análisis bivariante no podía captar: las interacciones entre pares de factores son necesarias para explicar cómo se distribuyen las empresas, confirmando que el sector tiene un **entramado de relaciones más complejo** que la simple suma de asociaciones individuales.
+2.  **Modelo log-lineal (Fase 3).** Al considerar simultáneamente las tres dimensiones —galaxia, forma jurídica y estado de la flota—, el modelo log-lineal ha permitido contrastar de una sola vez qué dependencias hacen falta y cuáles no. El resultado es más nítido de lo que cabía temer: de las cuatro asociaciones posibles entre los tres factores, **solo sobrevive la interacción GALAXIA × FJUR**. Ni la antigüedad de la flota se asocia con la galaxia o con la forma jurídica, ni existe interacción triple. El sector no tiene, por tanto, un entramado enmarañado de relaciones: tiene **una sola dependencia real**, y el modelo que la recoge emplea 17 parámetros frente a los 45 del saturado.
 
 3.  **Análisis de correspondencias.** Finalmente, el mapa de correspondencias ha proporcionado una representación visual que traduce las asociaciones detectadas en proximidades geográficas sobre un plano: las galaxias más pequeñas y las formas jurídicas más simples tienden a agruparse, mientras que las grandes galaxias se asocian con estructuras empresariales más sofisticadas. Esta visualización ha resultado ser la herramienta más eficaz para comunicar los resultados a los directivos de la AITM, poco habituados a interpretar tablas de residuos estandarizados pero muy receptivos a un buen gráfico.
 
-Cuentan en los pasillos de la agencia que, al presentar el mapa de correspondencias en la sala de juntas, el director de la AITM señaló con el dedo la zona del gráfico donde se agrupaban las cooperativas de Andrómeda y murmuró: *"Así que ahí es donde se esconden..."*. La doctora *Bluebird*, presente como observadora, anotó mentalmente el comentario para su próximo informe.
+Cuentan en los pasillos de la agencia que, al presentar el mapa de correspondencias en la sala de juntas, el director de la AITM señaló con el dedo la zona del gráfico donde se agrupaban las cooperativas de la Gran Nube de Magallanes y murmuró: *"Así que ahí es donde se esconden..."*. La doctora *Bluebird*, presente como observadora, anotó mentalmente el comentario para su próximo informe.
 
 ## ![](figuras/arrow-down-circle.svg){.hicon} Materiales para realizar las prácticas del capítulo. {#c11-materiales-para-realizar-las-practicas-del}
 
