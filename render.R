@@ -140,6 +140,19 @@ for (f in data_files) {
   copiados_datos <- copiados_datos + 1
 }
 
+# Datos de las practicas: la fuente unica es download/ (lo mismo que
+# descargan los estudiantes). Se copian a la raiz de _build/ para que los
+# chunks los lean por nombre simple, p. ej. read_excel("interestelar_100.xlsx").
+datos_download <- list.files(
+  "download",
+  pattern = "\\.(xlsx|xls|csv|tsv|rds|RData|rda|txt|json|parquet)$",
+  ignore.case = TRUE, full.names = TRUE
+)
+for (f in datos_download) {
+  file.copy(f, file.path(build_dir, basename(f)), overwrite = TRUE)
+  copiados_datos <- copiados_datos + 1
+}
+
 cat(sprintf("[2/4] Copiados %d archivos de config, %d carpetas de assets y %d ficheros de datos.\n",
             copiados_config, copiados_assets, copiados_datos))
 

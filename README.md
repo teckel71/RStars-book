@@ -1,13 +1,31 @@
-Welcome! 
+# R-Stars: La Guía
 
-This is a minimal example of a book based on R Markdown and **bookdown** (https://github.com/rstudio/bookdown). 
+Manual de R y técnicas multivariantes, de Miguel Ángel Tarancón Morán
+(Universidad de Castilla-La Mancha).
 
-This template provides a skeleton file structure that you can edit to create your book. 
+- Libro en línea: <https://teckel71.github.io/RStars-book/>
+- Licencia: CC BY-NC-ND 4.0 (véase `LICENSE.md`).
 
-The contents inside the .Rmd files provide some pointers to help you get started, but feel free to also delete the content in each file and start fresh.
+## Estructura del proyecto
 
-Additional resources:
+| Elemento | Contenido |
+|---|---|
+| `index.Rmd`, `NN-*.Rmd` | Fuentes del libro (portada, capítulos y apéndices) |
+| `_bookdown.yml`, `_output.yml` | Configuración de bookdown (salida en `docs/`) |
+| `_common.R` | Funciones auxiliares que cargan los capítulos |
+| `Build.R` | **Punto de entrada para compilar** el libro |
+| `render.R`, `numerar_tablas_figuras.R` | Flujo de compilación (los usa `Build.R`) |
+| `assets/styles.css` | Hoja de estilos del libro web |
+| `figuras/`, `images/` | Imágenes del libro |
+| `download/` | Material de prácticas para los estudiantes (scripts y Excel). **Fuente única de los datos**: el libro también los lee de aquí |
+| `lola.bib`, `packages.bib`, `apa.csl` | Bibliografía |
+| `preamble.tex` | Preámbulo LaTeX para la salida PDF |
+| `herramientas/` | Scripts auxiliares (generación de figuras didácticas, ids de encabezados). Se ejecutan desde la raíz, p. ej. `source("herramientas/gen7.R")` |
+| `docs/` | Libro publicado (GitHub Pages). Se genera, no se edita a mano |
 
-The **bookdown** book: https://bookdown.org/yihui/bookdown/
+## Compilar
 
-The **bookdown** package reference site: https://pkgs.rstudio.com/bookdown
+En RStudio, con el proyecto abierto: `source("Build.R")`.
+Después, *commit* y *push* (GitHub Desktop) para publicar.
+
+La carpeta `_build/` es temporal y se regenera en cada compilación.
