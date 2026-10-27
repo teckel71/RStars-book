@@ -1,38 +1,169 @@
-% preamble.tex
+% =====================================================================
+% preamble.tex - Diseño de la versión PDF (A4) de R-Stars: La Guía.
+% Solo lo usa bookdown::pdf_book (ver _output.yml). La web no lo lee.
+% =====================================================================
 
-\ifxetex
-  \usepackage{polyglossia}
-  \setmainlanguage{spanish}
-% Tabla en lugar de cuadro
-  \gappto\captionsspanish{\renewcommand{\tablename}{Tabla}  
-          \renewcommand{\listtablename}{Índice de tablas}}
-\else
-  \usepackage[spanish,es-tabla]{babel}
-\fi
+% --- Idioma ----------------------------------------------------------
+% El español lo activa pandoc (lang=es en _output.yml, mediante babel).
+% Aquí solo se cambia "Cuadro" por "Tabla", como en la web.
+\addto\captionsspanish{%
+  \renewcommand{\tablename}{Tabla}%
+  \renewcommand{\listtablename}{Índice de tablas}}
 
-% Configuración de márgenes
-\usepackage[left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm, headheight=15pt]{geometry}
+% --- Tipografía (la misma familia que la web) -------------------------
+\usepackage{sourceserifpro}
+\usepackage{sourcesanspro}
+\usepackage[scale=0.86]{sourcecodepro}
+\linespread{1.08}
 
-% Números de página en la parte inferior
+% --- Página A4 --------------------------------------------------------
+% Doble cara: los capítulos empiezan siempre en página impar (openright,
+% en _output.yml). Márgenes interior y exterior iguales: vale también
+% para imprimir a una cara.
+\usepackage[a4paper, top=2.6cm, bottom=2.6cm, inner=2.5cm, outer=2.5cm,
+            headheight=15pt, headsep=0.8cm]{geometry}
+\usepackage{emptypage}   % las páginas que se dejan en blanco, sin cabecera
+\setlength{\emergencystretch}{3em}   % menos líneas que se salen del margen
+\raggedbottom
+\widowpenalty=10000
+\clubpenalty=10000
+
+% --- Colores (los de la web: primary #475569) --------------------------
+\usepackage{xcolor}
+\definecolor{rstars}{HTML}{475569}
+\definecolor{rstarsclaro}{HTML}{F1F5F9}
+\definecolor{rstarsgris}{HTML}{64748B}
+\definecolor{rstarsfila}{HTML}{F1F5F9}  % filas alternas de las tablas
+
+% --- Títulos ----------------------------------------------------------
+\usepackage{titlesec}
+% Los títulos van sin justificar (alineados a la izquierda) y sin partir
+% palabras con guion (p. ej. "MATrstars" no se rompe nunca).
+\newcommand{\titulorstars}{\raggedright\hyphenpenalty=10000\exhyphenpenalty=10000}
+\titleformat{\chapter}[display]
+  {\sffamily\bfseries\color{rstars}\titulorstars}
+  {\large\MakeUppercase{\chaptertitlename}\ \thechapter}
+  {6pt}
+  {\huge}
+  [\vspace{4pt}{\color{rstars}\titlerule[1pt]}]
+\titleformat{name=\chapter, numberless}[display]
+  {\sffamily\bfseries\color{rstars}\titulorstars}{}{0pt}{\huge}
+  [\vspace{4pt}{\color{rstars}\titlerule[1pt]}]
+\titlespacing*{\chapter}{0pt}{0pt}{28pt}
+\titleformat{\section}
+  {\sffamily\Large\bfseries\color{rstars}\titulorstars}{\thesection}{0.7em}{}
+\titleformat{\subsection}
+  {\sffamily\large\bfseries\color{rstars}\titulorstars}{\thesubsection}{0.7em}{}
+% Un título nunca se queda solo al pie de una página: si no caben tras él
+% unas líneas de su contenido, pasa a la página siguiente.
+\usepackage{needspace}
+\usepackage{etoolbox}
+\preto\section{\Needspace{9\baselineskip}}
+\preto\subsection{\Needspace{7\baselineskip}}
+\preto\subsubsection{\Needspace{6\baselineskip}}
+\titleformat{\subsubsection}
+  {\sffamily\normalsize\bfseries\titulorstars}{\thesubsubsection}{0.7em}{}
+
+% --- Cabeceras y pies -------------------------------------------------
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
-\fancyfoot[C]{\thepage}
-\renewcommand{\headrulewidth}{0pt}
+\fancyhead[LE]{\small\sffamily\color{rstarsgris}R-Stars: La Guía}
+\fancyhead[RO]{\small\sffamily\color{rstarsgris}\nouppercase{\leftmark}}
+\fancyfoot[C]{\small\sffamily\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\fancypagestyle{plain}{%
+  \fancyhf{}\fancyfoot[C]{\small\sffamily\thepage}%
+  \renewcommand{\headrulewidth}{0pt}}
 
-% Otras configuraciones personalizadas (si las necesitas)
-\usepackage{graphicx}
+% --- Figuras y tablas: en su sitio, junto a su rótulo -------------------
+\usepackage{float}
+\floatplacement{figure}{H}
+\floatplacement{table}{H}
+
+% Figura o tabla + su rótulo: pdf/filtro.lua los encierra en un bloque
+% que no se puede partir entre páginas. Si el bloque es más alto que la
+% página (p. ej. una tabla muy larga), se reduce lo justo para que quepa.
+\usepackage{adjustbox}
+\usepackage{calc}   % anchos de columna de las tablas de markdown
+\usepackage{booktabs}
+\usepackage{colortbl}
+\newsavebox{\rstarsbloquecaja}
+\newenvironment{rstarsbloque}
+  {\par\medskip\begin{lrbox}{\rstarsbloquecaja}\begin{minipage}{\linewidth}\centering}
+  {\end{minipage}\end{lrbox}%
+   \typeout{RStars bloque: alto \the\dimexpr\ht\rstarsbloquecaja+\dp\rstarsbloquecaja\relax\space (pagina \the\textheight), pag. \thepage}%
+   {\centering
+    \ifdim\dimexpr\ht\rstarsbloquecaja+\dp\rstarsbloquecaja\relax>0.97\textheight
+      \resizebox*{!}{0.97\textheight}{\usebox{\rstarsbloquecaja}}%
+    \else
+      \usebox{\rstarsbloquecaja}%
+    \fi\par}%
+   \medskip}
+
+% Rótulos "Tabla X.Y." / "Figura X.Y." (los centra pdf/filtro.lua)
+\newenvironment{rotulo}
+  {\par\nopagebreak[4]\vspace{0.4\baselineskip}\begingroup\centering\small}
+  {\par\endgroup\medskip}
+
+% --- Código -----------------------------------------------------------
+\usepackage{fvextra}
+% Salida de consola de R: parte las líneas largas en vez de desbordar.
+\DefineVerbatimEnvironment{SalidaR}{Verbatim}{%
+  breaklines, breakanywhere, fontsize=\small,
+  xleftmargin=0.8em, formatcom=\color{rstars}}
+% Código R resaltado: mismo comportamiento de corte de línea.
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\AtBeginDocument{%
+  \@ifundefined{Highlighting}{}{%
+    \RecustomVerbatimEnvironment{Highlighting}{Verbatim}{%
+      commandchars=\\\{\}, breaklines, breakanywhere, fontsize=\small}}}
 \makeatother
-\let\Oldincludegraphics\includegraphics
-\renewcommand{\includegraphics}[2][]{%
-  \Oldincludegraphics[#1]{#2}%
-}
 
-\usepackage{caption}
-\captionsetup[table]{singlelinecheck=false, justification=justified}
+% Recuadros "sin MATrstars" (en la web son desplegables)
+\newenvironment{rstarspuro}[1]
+  {\par\medskip\noindent{\color{rstars}\rule{\linewidth}{0.8pt}}\par\nopagebreak
+   \noindent{\sffamily\small\colorbox{rstars}{\textcolor{white}{\bfseries sin MATrstars}}%
+   \hspace{0.5em}\textcolor{rstars}{\bfseries #1}}\par\nopagebreak\smallskip}
+  {\par\noindent{\color{rstars}\rule{\linewidth}{0.8pt}}\par\medskip}
 
-% Fin del archivo preamble.tex
+% --- Tablas anchas -----------------------------------------------------
+% pdf/filtro.lua envuelve cada tabla en \tablarstars{...}, que la
+% mide: si cabe, la deja igual; si se pasa hasta un 40 %, la reduce al
+% ancho del texto; si es más ancha, la gira 90° y la ajusta al alto de la
+% página. El ancho de cada tabla queda anotado en el .log ("RStars tabla").
+\newsavebox{\rstarscaja}
+\newcommand{\tablarstars}[1]{%
+  \sbox{\rstarscaja}{#1}%
+  \typeout{RStars tabla: \the\wd\rstarscaja\space (texto \the\linewidth), pag. \thepage}%
+  \ifdim\wd\rstarscaja>1.4\linewidth
+    % muy ancha: se gira 90 grados y se ajusta al alto y al ancho disponibles
+    \sbox{\rstarscaja}{\rotatebox{90}{\usebox{\rstarscaja}}}%
+    \ifdim\dimexpr\ht\rstarscaja+\dp\rstarscaja\relax>0.85\textheight
+      \sbox{\rstarscaja}{\resizebox*{!}{0.85\textheight}{\usebox{\rstarscaja}}}%
+    \fi
+    \ifdim\wd\rstarscaja>\linewidth
+      \sbox{\rstarscaja}{\resizebox{\linewidth}{!}{\usebox{\rstarscaja}}}%
+    \fi
+    \usebox{\rstarscaja}%
+  \else
+    \ifdim\wd\rstarscaja>\linewidth
+      \resizebox{\linewidth}{!}{\usebox{\rstarscaja}}%
+    \else
+      \usebox{\rstarscaja}%
+    \fi
+  \fi}
 
+% (Los colores de los enlaces se fijan en _output.yml: colorlinks, linkcolor...)
 
+% --- Contraportada: el libro termina siempre en página par ----------------
+% Si la última página con contenido es impar, se añade una en blanco.
+\AtEndDocument{%
+  \clearpage
+  \ifodd\ReadonlyShipoutCounter
+    \thispagestyle{empty}\null\clearpage
+  \fi}
+
+% --- La portada la pone pdf/portada.tex ---------------------------------
+\renewcommand{\maketitle}{}

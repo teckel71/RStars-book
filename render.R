@@ -56,6 +56,7 @@ asset_dirs <- c(
   "images",
   "data",
   "download",
+  "pdf",          # filtro, portada y ajustes de la versión PDF
   "css",
   "js"
 )
@@ -78,6 +79,11 @@ SIMULAR_AUTOENLACES <- FALSE
 # proyecto).
 args <- commandArgs(trailingOnly = TRUE)
 formato <- if (length(args) >= 1) args[1] else NULL
+es_pdf  <- !is.null(formato) && grepl("pdf", formato)
+
+# El PDF se compila en una carpeta aparte (fuera de git). Build.R copia
+# después el PDF final a docs/ con un nombre legible.
+if (es_pdf) output_dir <- "_pdf"
 
 # --- 2. Limpiar y crear _build/ ---------------------------------------
 
@@ -165,10 +171,29 @@ if (length(rmds) == 0) {
   warning("No se encontraron ficheros tipo 'NN-titulo.Rmd' en la raíz.")
 }
 
-for (f in rmds) {
-  procesar_rmd(f,
-               ruta_salida = file.path(build_dir, f),
+# Número de capítulo de cada fichero, según su prefijo ("05-..." -> 5).
+# Los apéndices (prefijo 80 o mayor) se identifican con letras por orden
+# (A, B, C...), de modo que sus tablas y figuras salen como "Tabla A.1" y
+# no como "Tabla 80.1".
+PRIMER_APENDICE <- 80
+prefijos  <- as.integer(sub("^([0-9]+).*$", "\\1", rmds))
+etiquetas <- as.list(prefijos)
+es_apendice <- prefijos >= PRIMER_APENDICE
+etiquetas[es_apendice] <- as.list(LETTERS[seq_len(sum(es_apendice))])
+
+for (k in seq_along(rmds)) {
+  procesar_rmd(rmds[k],
+               ruta_salida  = file.path(build_dir, rmds[k]),
+               num_capitulo = etiquetas[[k]],
                verbose = FALSE)
+}
+
+# En el PDF, ajustes de R propios de esa salida (ver pdf/pdf_hooks.R). Se
+# añaden al final de index.Rmd, que va antes que todos los capítulos.
+if (es_pdf) {
+  cat("\n\n```{r rstars-pdf-hooks, include=FALSE}\n",
+      "source(\"pdf/pdf_hooks.R\", encoding = \"UTF-8\")\n```\n",
+      sep = "", file = file.path(build_dir, "index.Rmd"), append = TRUE)
 }
 
 cat(sprintf("[3/4] Procesados %d capítulos.\n", length(rmds)))
@@ -196,6 +221,8 @@ output_dir_abs <- normalizePath(output_dir)
 render_libro <- function(build_dir, formato, output_dir_abs) {
   on.exit(setwd(.proyecto_dir), add = TRUE)
   setwd(build_dir)
+  # Conserva el .log de LaTeX en _build/ para poder diagnosticar errores.
+  if (!is.null(formato) && grepl("pdf", formato)) options(tinytex.clean = FALSE)
   bookdown::render_book(
     input         = ".",
     output_format = formato,
@@ -332,6 +359,7 @@ paquetes_citados <- unique(unlist(lapply(rmds, function(f) {
   gsub("[`{}]", "", unlist(m))
 })))
 
+if (!es_pdf) {
 cat(sprintf("[5/5] Depurando autoenlaces (%d paquetes citados con llaves)...\n",
             length(paquetes_citados)))
 
@@ -341,5 +369,6 @@ limpiar_autoenlaces(
   paquetes         = paquetes_citados,
   simular          = SIMULAR_AUTOENLACES
 )
+}
 
 cat(sprintf("\n[OK] Libro renderizado en '%s/'\n", output_dir))

@@ -34,6 +34,9 @@
 #
 # Uso:
 #   Rscript numerar_tablas_figuras.R entrada.Rmd [salida.Rmd] [num_cap]
+#
+# num_capitulo puede ser un número (capítulos: "Tabla 5.3") o un texto
+# (apéndices: render.R pasa "A", "B"... y se obtiene "Tabla A.3").
 #   procesar_rmd("foo.Rmd")                                       # desde R
 # =====================================================================
 
@@ -1258,7 +1261,7 @@ procesar_rmd <- function(ruta_entrada,
   # colisiones al fusionar los .Rmd de todos los capítulos en un único
   # RStarS.Rmd durante el render final (bookdown detecta labels
   # duplicados y aborta).
-  push(sprintf("```{r matrstars-numerado-setup-cap%d, include=FALSE}",
+  push(sprintf("```{r matrstars-numerado-setup-cap%s, include=FALSE}",
                num_capitulo))
   push("options(matrstars.suppress_caption = TRUE)")
   push("```")
@@ -1284,7 +1287,7 @@ procesar_rmd <- function(ruta_entrada,
         desc <- if (incluir_caption_tabla && !is.na(td$caption)) td$caption else NULL
         push(bloque_numeracion("tabla", num_capitulo, cont_tabla, desc))
         registro <- c(registro, sprintf(
-          "  Tabla  %d.%d  (markdown manual, linea %d)%s",
+          "  Tabla  %s.%d  (markdown manual, linea %d)%s",
           num_capitulo, cont_tabla, i,
           if (!is.na(td$caption))
             sprintf(" - caption: \"%s\"", td$caption) else ""))
@@ -1299,7 +1302,7 @@ procesar_rmd <- function(ruta_entrada,
           desc <- if (incluir_alt_figura) res$alt else NULL
           push(bloque_numeracion("figura", num_capitulo, cont_figura, desc))
           registro <- c(registro, sprintf(
-            "  Figura %d.%d  (imagen markdown, linea %d)",
+            "  Figura %s.%d  (imagen markdown, linea %d)",
             num_capitulo, cont_figura, i))
           i <- i + 1L
           next
@@ -1367,22 +1370,22 @@ procesar_rmd <- function(ruta_entrada,
               cont_figura <- cont_figura + 1L
               opciones_pairs <- c(
                 opciones_pairs,
-                sprintf('matrstars.figura_num = "%d.%d"',
+                sprintf('matrstars.figura_num = "%s.%d"',
                         num_capitulo, cont_figura)
               )
               registro <- c(registro, sprintf(
-                "  Figura %d.%d  (side-effect, chunk linea %d)",
+                "  Figura %s.%d  (side-effect, chunk linea %d)",
                 num_capitulo, cont_figura,
                 i - length(chunk_buffer) - 1L))
             } else if (elem == "tabla") {
               cont_tabla <- cont_tabla + 1L
               opciones_pairs <- c(
                 opciones_pairs,
-                sprintf('matrstars.tabla_num = "%d.%d"',
+                sprintf('matrstars.tabla_num = "%s.%d"',
                         num_capitulo, cont_tabla)
               )
               registro <- c(registro, sprintf(
-                "  Tabla  %d.%d  (side-effect, chunk linea %d)",
+                "  Tabla  %s.%d  (side-effect, chunk linea %d)",
                 num_capitulo, cont_tabla,
                 i - length(chunk_buffer) - 1L))
             }
@@ -1462,7 +1465,7 @@ procesar_rmd <- function(ruta_entrada,
                   push(bloque_numeracion("tabla", num_capitulo,
                                         cont_tabla, desc))
                   registro <- c(registro, sprintf(
-                    "  Tabla  %d.%d  (sub-chunk de mixto)%s",
+                    "  Tabla  %s.%d  (sub-chunk de mixto)%s",
                     num_capitulo, cont_tabla,
                     if (!is.na(b$elem_caption))
                       sprintf(" - caption: \"%s\"", b$elem_caption) else ""))
@@ -1470,7 +1473,7 @@ procesar_rmd <- function(ruta_entrada,
                   cont_figura <- cont_figura + 1L
                   push(bloque_numeracion("figura", num_capitulo, cont_figura))
                   registro <- c(registro, sprintf(
-                    "  Figura %d.%d  (sub-chunk de mixto)",
+                    "  Figura %s.%d  (sub-chunk de mixto)",
                     num_capitulo, cont_figura))
                 }
               }
@@ -1487,7 +1490,7 @@ procesar_rmd <- function(ruta_entrada,
                 desc <- if (incluir_caption_tabla && !is.na(cap)) cap else NULL
                 push(bloque_numeracion("tabla", num_capitulo, cont_tabla, desc))
                 registro <- c(registro, sprintf(
-                  "  Tabla  %d.%d  (chunk linea %d)%s",
+                  "  Tabla  %s.%d  (chunk linea %d)%s",
                   num_capitulo, cont_tabla,
                   i - length(chunk_buffer) - 1L,
                   if (!is.na(cap)) sprintf(" - caption: \"%s\"", cap) else ""))
@@ -1495,7 +1498,7 @@ procesar_rmd <- function(ruta_entrada,
                 cont_figura <- cont_figura + 1L
                 push(bloque_numeracion("figura", num_capitulo, cont_figura))
                 registro <- c(registro, sprintf(
-                  "  Figura %d.%d  (chunk linea %d)",
+                  "  Figura %s.%d  (chunk linea %d)",
                   num_capitulo, cont_figura,
                   i - length(chunk_buffer) - 1L))
               }
@@ -1523,7 +1526,7 @@ procesar_rmd <- function(ruta_entrada,
   if (verbose) {
     cat(sprintf("[OK] %s -> %s\n",
                 basename(ruta_entrada), basename(ruta_salida)))
-    cat(sprintf("     Capítulo %d. Tablas: %d. Figuras: %d.\n",
+    cat(sprintf("     Capítulo %s. Tablas: %d. Figuras: %d.\n",
                 num_capitulo, cont_tabla, cont_figura))
     if (length(registro) > 0) {
       cat("     Detalle:\n")

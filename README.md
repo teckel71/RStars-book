@@ -19,13 +19,18 @@ Manual de R y técnicas multivariantes, de Miguel Ángel Tarancón Morán
 | `figuras/`, `images/` | Imágenes del libro |
 | `download/` | Material de prácticas para los estudiantes (scripts y Excel). **Fuente única de los datos**: el libro también los lee de aquí |
 | `lola.bib`, `packages.bib`, `apa.csl` | Bibliografía |
-| `preamble.tex` | Preámbulo LaTeX para la salida PDF |
+| `preamble.tex` | Diseño de la versión PDF (A4): tipografía, márgenes, títulos, código |
+| `pdf/` | Filtro, portada y ajustes de R que solo usa la versión PDF |
 | `herramientas/` | Scripts auxiliares (generación de figuras didácticas, ids de encabezados). Se ejecutan desde la raíz, p. ej. `source("herramientas/gen7.R")` |
-| `docs/` | Libro publicado (GitHub Pages). Se genera, no se edita a mano |
+| `docs/` | Libro publicado (GitHub Pages), incluido `RStars-La-Guia.pdf`. Se genera, no se edita a mano |
 
 ## Compilar
 
-En RStudio, con el proyecto abierto: `source("Build.R")`.
+En RStudio, con el proyecto abierto: `source("Build.R")`. Genera la web y,
+si `generar_pdf <- TRUE` (al principio de `Build.R`), también el PDF en A4,
+enlazado desde la portada de la web. El PDF necesita LaTeX
+(`tinytex::install_tinytex()`). Si el PDF falla, la web se genera igual y
+el diagnóstico está en `_build/RStarS.log`.
 Después, *commit* y *push* (GitHub Desktop) para publicar.
 
-La carpeta `_build/` es temporal y se regenera en cada compilación.
+Las carpetas `_build/` y `_pdf/` son temporales y se regenera en cada compilación.

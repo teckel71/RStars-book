@@ -18,6 +18,18 @@
 # de confusión, así que ahora hay una sola.
 # =====================================================================
 
+# ---------------------------------------------------------------------
+# QUÉ GENERAR
+#   generar_web: el libro HTML en docs/ (lo de siempre).
+#   generar_pdf: además, la versión PDF (A4) en docs/RStars-La-Guia.pdf,
+#                enlazada desde la portada de la web. Tarda más o menos
+#                lo mismo que la web, porque vuelve a ejecutar el código.
+# Para corregir erratas deprisa: generar_pdf <- FALSE (y recompilar el
+# PDF antes de publicar la versión definitiva).
+# ---------------------------------------------------------------------
+generar_web <- TRUE
+generar_pdf <- TRUE
+
 build_book <- function(formato = NULL) {
 
   # --------------------------------------------------------------------
@@ -103,4 +115,54 @@ build_book <- function(formato = NULL) {
           "docs/. Ahora haz Commit + Push en GitHub Desktop.")
 }
 
-build_book()
+
+# =====================================================================
+# Versión PDF
+# =====================================================================
+build_pdf <- function(destino = "docs/RStars-La-Guia.pdf") {
+
+  if (!requireNamespace("tinytex", quietly = TRUE) ||
+      !nzchar(Sys.which("xelatex")) && !tinytex::is_tinytex()) {
+    warning("No hay LaTeX instalado: no se genera el PDF (la web sí). ",
+            "Instálalo con tinytex::install_tinytex().", call. = FALSE)
+    return(invisible(FALSE))
+  }
+
+  t0 <- Sys.time()
+  message("\n=== Generando la versión PDF... ===")
+
+  # El PDF se compila en una sesión de R NUEVA (proceso aparte). Si se
+  # compilara en esta misma sesión, heredaría los paquetes que ha cargado
+  # la web (p. ej. {MASS}, cuya select() tapa a la de {dplyr}) y los
+  # capítulos fallarían. Un fallo aquí no afecta a la web, ya generada.
+  rscript <- file.path(R.home("bin"), "Rscript")
+  estado  <- system2(rscript,
+                     c("--no-save", "--no-restore", "render.R",
+                       "bookdown::pdf_book"),
+                     stdout = "", stderr = "")
+  ok <- identical(as.integer(estado), 0L)
+  if (!ok) message("ERROR al generar el PDF (código ", estado, ").")
+
+  pdf_generado <- "_pdf/RStarS.pdf"
+  if (ok && file.exists(pdf_generado)) {
+    if (!dir.exists(dirname(destino))) dir.create(dirname(destino))
+    file.copy(pdf_generado, destino, overwrite = TRUE)
+    mb  <- round(file.size(destino) / 1024^2, 1)
+    min <- round(as.numeric(difftime(Sys.time(), t0, units = "mins")), 1)
+    message(sprintf("PDF listo: %s (%s MB, %s min).", destino, mb, min))
+    invisible(TRUE)
+  } else {
+    warning("No se ha podido generar el PDF. La web SÍ está actualizada. ",
+            "Para diagnosticar, revisa _build/RStarS.log.", call. = FALSE)
+    invisible(FALSE)
+  }
+}
+
+
+# =====================================================================
+# Ejecución
+# =====================================================================
+if (generar_web) build_book()
+if (generar_pdf) build_pdf()
+message("\nListo. Revisa el resultado y haz Commit + Push en GitHub Desktop.")
+

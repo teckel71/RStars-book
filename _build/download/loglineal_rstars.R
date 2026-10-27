@@ -103,7 +103,8 @@ mosaic(tab0,
 # Modelo Independencia.
 
 modelo_indep <- MASS::loglm(~ GALAXIA + EFLO + FJUR,
-                            data= tab0)
+                            data   = tab0,
+                            fitted = TRUE)
 
 solucion_modelo_indep <- generar_solucion(modelo_indep)
 
@@ -113,7 +114,8 @@ solucion_modelo_indep$Coeficientes
 # Modelo Saturado.
 
 modelo_sat <- MASS::loglm(~ GALAXIA * EFLO * FJUR,
-                          data= tab0)
+                          data   = tab0,
+                          fitted = TRUE)
 
 solucion_modelo_sat <- generar_solucion(modelo_sat)
 solucion_modelo_sat$Informacion
