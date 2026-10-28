@@ -19,6 +19,9 @@ Solo actua cuando la salida es LaTeX (bookdown::pdf_book).
      con su titulo.
   7. Omite la portada web (index.Rmd): el PDF tiene la suya propia
      (pdf/portada.tex).
+  8. Videos de YouTube (en el PDF, insertar_youtube() de _common.R deja
+     una cita "> **Video:** [titulo](url)"): recuadro con el titulo, el
+     enlace y un codigo QR para verlo desde el movil.
 ]]
 
 if not FORMAT:match('latex') then return {} end
@@ -276,6 +279,23 @@ local function rotulo_latex(div)
   return out
 end
 
+-- 8. Videos: cita "> **Video:** [titulo](url)" -> \rsvideo{titulo}{url}
+local function video(b)
+  if b.t ~= 'BlockQuote' or #b.content ~= 1 then return nil end
+  local p = b.content[1]
+  if p.t ~= 'Para' and p.t ~= 'Plain' then return nil end
+  local primero = p.content[1]
+  if not (primero and primero.t == 'Strong' and
+          pandoc.utils.stringify(primero):match('^V.-deo')) then return nil end  -- 'í' son 2 bytes
+  for _, el in ipairs(p.content) do
+    if el.t == 'Link' then
+      local titulo = a_latex({ pandoc.Plain(el.content) }):gsub('\n', ' ')
+      return latex('\\rsvideo{' .. titulo .. '}{' .. el.target .. '}')
+    end
+  end
+  return nil
+end
+
 local procesar   -- declaracion adelantada (recursiva)
 
 procesar = function(bl)
@@ -290,6 +310,11 @@ procesar = function(bl)
       while i <= n and not (bl[i].t == 'Header' and bl[i].level == 1) do
         i = i + 1
       end
+
+    elseif video(b) then
+      -- 8. Video de YouTube: recuadro con QR
+      out:insert(video(b))
+      i = i + 1
 
     elseif es_html(b, '<details') then
       -- 6. Desplegables "sin MATrstars"

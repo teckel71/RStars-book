@@ -128,6 +128,27 @@
    \hspace{0.5em}\textcolor{rstars}{\bfseries #1}}\par\nopagebreak\smallskip}
   {\par\noindent{\color{rstars}\rule{\linewidth}{0.8pt}}\par\medskip}
 
+% --- Vídeos -----------------------------------------------------------
+% En la web son vídeos de YouTube incrustados; en papel, un recuadro con
+% el título, la dirección y un código QR para verlo desde el móvil.
+\usepackage{qrcode}
+\usepackage[most]{tcolorbox}
+\newcommand{\rsvideo}[2]{%
+  \par\medskip\noindent
+  \begin{tcolorbox}[enhanced, breakable=false, colback=rstarsclaro,
+      colframe=rstarsclaro, boxrule=0pt, arc=2mm,
+      left=3mm, right=3mm, top=2.5mm, bottom=2.5mm]
+    \begin{minipage}[c]{2.3cm}\qrcode[height=2.1cm, nolink]{#2}\end{minipage}%
+    \hspace{4mm}%
+    \begin{minipage}[c]{\dimexpr\linewidth-2.3cm-4mm\relax}
+      {\sffamily\scriptsize\bfseries\color{rstarsgris}\MakeUppercase{Vídeo}}\par
+      \smallskip
+      {\sffamily\bfseries\color{rstars}#1}\par
+      \smallskip
+      {\small\href{#2}{\nolinkurl{#2}}}
+    \end{minipage}
+  \end{tcolorbox}\par\medskip}
+
 % --- Tablas anchas -----------------------------------------------------
 % pdf/filtro.lua envuelve cada tabla en \tablarstars{...}, que la
 % mide: si cabe, la deja igual; si se pasa hasta un 40 %, la reduce al
